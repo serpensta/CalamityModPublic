@@ -372,6 +372,12 @@ namespace CalamityMod.CalPlayer
                     cgn.somaShredApplicator = Player.whoAmI;
                 }
 
+                // Similarly, all shots from Animosity are also marked
+                if (cgp.brimstoneBullets)
+                {
+                    target.AddBuff(BuffType<BrimstoneFlames>(), 90);
+                }
+
                 ProjLifesteal(target, proj, damage, crit);
                 ProjOnHit(proj, target.Center, crit, (target.damage > 5 || target.boss) && !target.SpawnedFromStatue);
                 NPCDebuffs(target, proj.CountsAsClass<MeleeDamageClass>(), proj.CountsAsClass<RangedDamageClass>(), proj.CountsAsClass<MagicDamageClass>(), proj.CountsAsClass<SummonDamageClass>(), proj.CountsAsClass<ThrowingDamageClass>(), proj.CountsAsClass<SummonMeleeSpeedDamageClass>(), true);

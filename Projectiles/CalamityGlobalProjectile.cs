@@ -7,6 +7,7 @@ using CalamityMod.EntitySources;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.NPCs;
+using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Projectiles.Ranged;
@@ -56,7 +57,7 @@ namespace CalamityMod.Projectiles
         // For every 100% critical strike chance over 100%, "supercrit" projectiles do a guaranteed +100% damage.
         // They then take the remainder (e.g. the remaining 16%) and roll against that for a final +100% (like normal crits).
         // For example if you have 716% critical strike chance, you are guaranteed +700% damage and then have a 16% chance for +800% damage instead.
-        // These are currently only enabled for Soma Prime, but any bullet fired from that gun can supercrit.
+        // Examples of these are Soma Prime and Animosity's sniper mode, but any bullet fired from that gun can supercrit when this bool is activated.
         // Set this to -1 if you want the projectile to supercrit forever, and to any positive value to make it supercrit only x times
         public int supercritHits  = 0;
 
@@ -69,6 +70,9 @@ namespace CalamityMod.Projectiles
 
         // If true, this projectile can apply the infinitely-stacking Shred debuff iconic to Soma Prime.
         public bool appliesSomaShred = false;
+
+        // Adds Brimstone flames to bullets, currently only used by Animosity
+        public bool brimstoneBullets = false;
 
         // Amount of extra updates that are set in SetDefaults.
         public int defExtraUpdates = -1;
@@ -1989,6 +1993,7 @@ namespace CalamityMod.Projectiles
         {
             Player player = Main.player[projectile.owner];
             CalamityPlayer modPlayer = player.Calamity();
+            CalamityGlobalProjectile cgp = projectile.Calamity(); // In case for marked projectiles like Soma Prime or Animosity so that we can add dusts or some other stuff to them
 
             if (!frameOneHacksExecuted)
             {
@@ -2369,6 +2374,18 @@ namespace CalamityMod.Projectiles
                             Main.gore[index].velocity.X += Main.rand.Next(-50, 51) * 0.05f;
                             Main.gore[index].velocity.Y += Main.rand.Next(-50, 51) * 0.05f;
                         }
+                    }
+                }
+                if (cgp.brimstoneBullets) 
+                {
+                    for (int flames = 0; flames < 3; flames++)
+                    {
+                        Dust fireTrail = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, (int)CalamityDusts.Brimstone, projectile.velocity.X, projectile.velocity.Y, 100, default, 1f)];
+                        fireTrail.velocity = Vector2.Zero;
+                        fireTrail.position -= projectile.velocity / 5f * (float)flames;
+                        fireTrail.noGravity = true;
+                        fireTrail.scale = 1f;
+                        fireTrail.noLight = true;
                     }
                 }
             }
