@@ -38,9 +38,9 @@ Animosity: {
 	DisplayName: Animosity
 	Tooltip:
 		'''
-		Fires a powerful sniper round
-		Press <right> to fire a burst of bullets
-		50% chance to save ammo
+		Fires a powerful shotgun blast
+		Right click to fire a powerful brimstone round
+		All bullets fired from this gun are imbued with Brimstone Flames
 		'''
 }
 

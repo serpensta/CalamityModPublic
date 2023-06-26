@@ -7,27 +7,21 @@ using Terraria.Audio;
 using static CalamityMod.CalamityUtils;
 using CalamityMod.Projectiles;
 using System;
+using CalamityMod.Projectiles.Ranged;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
     public class Animosity : ModItem, ILocalizedModType
     {
-        public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.2f }; // Very cool sound and it would be a shame for it to not be used elsewhere
+        public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.2f }; 
+        // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
         // If stuff is here then DragonLens can easily detect it so it can change it for balancing
         private static float ShotgunBulletSpeed = 11.5f;
         private static float SniperBulletSpeed = 15f;
-        private static float SniperDmgMult = 5.8f;
+        private static float SniperDmgMult = 3.4f;
         public new string LocalizationCategory => "Items.Weapons.Ranged";
-        public override void SetStaticDefaults()
-        {
-            //DisplayName.SetDefault("Animosity");
-            //Tooltip.SetDefault(@"Fires a powerful shotgun blast
-//Right click to fire a powerful brimstone round
-//All bullets fired from this gun are imbued with Brimstone Flames");
-// These are temporary til I fix the localization
-            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
-        }
+        public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
         public override void SetDefaults()
         {
@@ -91,7 +85,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                // TO DO: Replace with actual bullet shells, surprised no one has even tried this
+                // TO DO: Replace with actual bullet shells
                 Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f,-0.35f), Mod.Find<ModGore>("Polt5").Type);
             }
 
@@ -105,8 +99,8 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
 
 
-                // TO DO: Make a custom big explosive bullet, it should actually look like a bullet being fired and not a line or whatever I'm using as a placeholder
-                Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, velocity, ProjectileID.RocketI, (int)(damage * SniperDmgMult), knockback, player.whoAmI, 0f, 0f);
+                // TO DO: Get a spriter to make a bullet texture for this thing
+                Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, velocity, ModContent.ProjectileType<BrimstoneRound>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI, 0f, 0f);
                 CalamityGlobalProjectile cgp = shot.Calamity();
                 cgp.supercritHits = 1;
                 cgp.brimstoneBullets = true;
