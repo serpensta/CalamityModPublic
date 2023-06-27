@@ -2024,7 +2024,6 @@ namespace CalamityMod.Projectiles
         {
             Player player = Main.player[projectile.owner];
             CalamityPlayer modPlayer = player.Calamity();
-            CalamityGlobalProjectile cgp = projectile.Calamity(); // In case for marked projectiles like Soma Prime or Animosity so that we can add dusts or some other stuff to them
 
             if (!frameOneHacksExecuted)
             {
@@ -2443,7 +2442,7 @@ namespace CalamityMod.Projectiles
                         }
                     }
                 }
-                if (cgp.brimstoneBullets) 
+                if (brimstoneBullets) 
                 {
                     for (int flames = 0; flames < 3; flames++)
                     {

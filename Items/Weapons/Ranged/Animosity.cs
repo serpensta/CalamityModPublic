@@ -100,10 +100,13 @@ namespace CalamityMod.Items.Weapons.Ranged
 
 
                 // TO DO: Get a spriter to make a bullet texture for this thing
-                Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, velocity, ModContent.ProjectileType<BrimstoneRound>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI, 0f, 0f);
-                CalamityGlobalProjectile cgp = shot.Calamity();
-                cgp.supercritHits = 1;
-                cgp.brimstoneBullets = true;
+                int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<BrimstoneRound>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI);
+                if (p.WithinBounds(Main.maxProjectiles))
+                {
+                    Main.projectile[p].Calamity().supercritHits = 1;
+                    Main.projectile[p].Calamity().brimstoneBullets = true;
+                }
+
 
             }
             else

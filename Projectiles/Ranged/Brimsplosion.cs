@@ -69,15 +69,13 @@ namespace CalamityMod.Projectiles.Ranged
 
                 // Fire variants.
                 int dustType = (int)CalamityDusts.Brimstone;
-                if (Main.rand.NextBool(4))
-                    dustType = 60;
 
                 // Smoke.
                 if (Main.rand.NextBool(7))
                     dustType = 31;
 
                 Dust flame = Dust.NewDustPerfect(Projectile.Center + dustSpawnOffset, dustType, dustVelocity);
-                flame.scale = Main.rand.NextFloat(0.3f, 0.8f);
+                flame.scale = Main.rand.NextFloat(0.5f, 1f);
                 flame.noGravity = true;
             }
         }
