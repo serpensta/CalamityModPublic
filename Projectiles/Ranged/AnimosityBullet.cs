@@ -8,11 +8,9 @@ using CalamityMod.Projectiles;
 
 namespace CalamityMod.Projectiles.Ranged
 {
-    internal class BrimstoneRound : ModProjectile, ILocalizedModType
+    internal class AnimosityBullet : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
-        public override string Texture => "CalamityMod/Projectiles/Ranged/BrimstoneRoundPlaceholder"; //Temporary
-
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
@@ -20,8 +18,8 @@ namespace CalamityMod.Projectiles.Ranged
         }
         public override void SetDefaults()
         {
-            Projectile.width = 16;
-            Projectile.height = 10;
+            Projectile.width = 18;
+            Projectile.height = 12;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Ranged;
@@ -38,7 +36,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             // Dust
             Projectile.localAI[0] += 1f;
-            if (Projectile.localAI[0] > 4f)
+            if (Projectile.localAI[0] > 6f)
             {
                 float scale = Main.rand.NextFloat(0.6f, 0.9f);
                 Dust d = Dust.NewDustDirect(Projectile.Center, 0, 0, (int)CalamityDusts.Brimstone);

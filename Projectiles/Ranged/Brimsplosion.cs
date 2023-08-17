@@ -11,6 +11,7 @@ namespace CalamityMod.Projectiles.Ranged
 {
     public class Brimsplosion : ModProjectile, ILocalizedModType
     {
+        //REDO THIS SHIT FUCK DUST SPAM
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
 

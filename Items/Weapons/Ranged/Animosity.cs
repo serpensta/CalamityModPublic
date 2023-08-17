@@ -6,8 +6,11 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using static CalamityMod.CalamityUtils;
 using CalamityMod.Projectiles;
-using System;
 using CalamityMod.Projectiles.Ranged;
+
+using System;
+using System.Collections.Generic;
+using Terraria.Localization;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
@@ -17,10 +20,15 @@ namespace CalamityMod.Items.Weapons.Ranged
         // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
         // If stuff is here then DragonLens can easily detect it so it can change it for balancing
-        private static float ShotgunBulletSpeed = 11.5f;
-        private static float SniperBulletSpeed = 15f;
-        private static float SniperDmgMult = 3.4f;
+        public static float ShotgunBulletSpeed = 11.5f;
+        public static float SniperBulletSpeed = 15f;
+        public static float SniperDmgMult = 3.4f;
+        public static float SniperRecoil = -8f;
         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
+        //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
+        public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.AnimosityGfb") : GetText("Items.Weapons.Ranged.Animosity.DisplayName");
+
         public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
         public override void SetDefaults()
@@ -80,12 +88,12 @@ namespace CalamityMod.Items.Weapons.Ranged
             }
             return base.CanUseItem(player);
         }
-
+        #region Shooting
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                // TO DO: Replace with actual bullet shells
+                // TO DO: Replace with actual bullet shells or used casings
                 Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f,-0.35f), Mod.Find<ModGore>("Polt5").Type);
             }
 
@@ -98,9 +106,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
                 Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
 
-
-                // TO DO: Get a spriter to make a bullet texture for this thing
-                int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<BrimstoneRound>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI);
+                int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<AnimosityBullet>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
                 {
                     Main.projectile[p].Calamity().supercritHits = 1;
@@ -127,13 +133,14 @@ namespace CalamityMod.Items.Weapons.Ranged
                     Vector2 randomVelocity = baseVelocity + new Vector2(dx, dy);
                     Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, randomVelocity, type, damage, knockback, player.whoAmI);
                     CalamityGlobalProjectile cgp = shot.Calamity();
-                    cgp.brimstoneBullets = true;
+                    cgp.brimstoneBullets = true; //add a brimstone trail to all bullets
                 }
             }
             return false;
         }
+        #endregion
 
-        // Animation zone
+        #region Animations
         public override void HoldItem(Player player) => player.Calamity().mouseWorldListener = true;
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
@@ -152,6 +159,20 @@ namespace CalamityMod.Items.Weapons.Ranged
                 base.UseStyle(player, heldItemFrame);
             }
             // TO DO: Make Sniper have horizontal recoil
+            else
+            {
+                    player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+                    float itemRotation = MathHelper.PiOver2 * player.gravDir; //this one is gonna be a pain in the ass aint it?
+
+                    Vector2 itemPosition = player.MountedCenter;
+                    itemPosition.X += SniperRecoil;
+
+                    Vector2 itemSize = new Vector2(Item.width, Item.height);
+                    Vector2 itemOrigin = new Vector2(-5, 6);
+
+                    CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
+                    base.UseStyle(player, heldItemFrame);
+            }
         }
 
         // Recoil + Not having the gun aim downwards
@@ -174,5 +195,6 @@ namespace CalamityMod.Items.Weapons.Ranged
                 player.SetCompositeArmBack(true, stretch, backArmRotation);
             }
         }
+        #endregion
     }
 }

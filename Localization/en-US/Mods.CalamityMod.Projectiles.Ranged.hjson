@@ -4,6 +4,7 @@ AdamantiteAcceleratorHoldout.DisplayName: Adamantite Particle Accelerator
 AMR2.DisplayName: AMR
 AMRShot.DisplayName: AMR
 AngelicBeam.DisplayName: Angelic Beam
+AnimosityBullet.DisplayName: Brimstone Round
 AquaBlast.DisplayName: Aqua Blast
 AquaBlastToxic.DisplayName: Aqua Blast Toxic
 Aquashard.DisplayName: Aquashard
@@ -33,7 +34,6 @@ BouncingShotgunPellet.DisplayName: Shotgun Pellet
 Brimsplosion.DisplayName: Explosion
 BrimstoneBolt.DisplayName: Bolt
 BrimstoneFireFriendly.DisplayName: Fire
-BrimstoneRound.DisplayName: Brimstone Round
 BubonicRoundProj.DisplayName: Bubonic Round
 ButcherGun.DisplayName: Butcher
 CardClub.DisplayName: Club
