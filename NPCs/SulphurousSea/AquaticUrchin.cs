@@ -50,10 +50,9 @@ namespace CalamityMod.NPCs.SulphurousSea
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("A relative of its brethren in the far ocean, this one's spines have been hardened by the sulphuric waters. They drip with the venom they inhabit, so it's better to not be struck by them.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.AquaticUrchin")
             });
         }
 
@@ -137,14 +136,11 @@ namespace CalamityMod.NPCs.SulphurousSea
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.PlayerSafe)
-            {
                 return 0f;
-            }
-            if ((spawnInfo.Player.Calamity().ZoneSulphur || spawnInfo.Player.Calamity().ZoneAbyssLayer1) && 
-            spawnInfo.Water && NPC.CountNPCS(ModContent.NPCType<AquaticUrchin>()) < 12)
-            {
+
+            if ((spawnInfo.Player.Calamity().ZoneSulphur || spawnInfo.Player.Calamity().ZoneAbyssLayer1) && spawnInfo.Water && NPC.CountNPCS(ModContent.NPCType<AquaticUrchin>()) < 12)
                 return 2.2f;
-            }
+
             return 0f;
         }
 

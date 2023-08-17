@@ -53,20 +53,22 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("Though these creatures may look adorable, they are a vicious invasive species. If not dealt with quickly, they may drive the nearby fauna to extinction.")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.WildBumblefuck")
             });
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.PlayerSafe || !NPC.downedMoonlord || spawnInfo.Player.Calamity().ZoneSunkenSea || NPC.AnyNPCs(NPC.type))
-            {
+            if (spawnInfo.PlayerSafe || !NPC.downedMoonlord || spawnInfo.Player.Calamity().ZoneSunkenSea || !spawnInfo.Player.ZoneJungle)
                 return 0f;
-            }
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
+                return 0f;
+
             return SpawnCondition.SurfaceJungle.Chance * 0.14f;
         }
 
@@ -78,16 +80,19 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ModContent.ItemType<EffulgentFeather>(), 1, 5, 7);
         public override void OnKill()
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient && CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 SoundEngine.PlaySound(CommonCalamitySounds.LightningSound, NPC.Center - Vector2.UnitY * 300f);
-                for (int i = 0; i < 5; i++)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Vector2 fireFrom = new Vector2(NPC.Center.X + (40 * i) - 120, NPC.Center.Y - 900f);
-                    Vector2 ai0 = NPC.Center - fireFrom;
-                    float ai = Main.rand.Next(100);
-                    Vector2 velocity = Vector2.Normalize(ai0.RotatedByRandom(MathHelper.PiOver4)) * 7f;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), NPC.damage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Vector2 fireFrom = new Vector2(NPC.Center.X + (40 * i) - 120, NPC.Center.Y - 900f);
+                        Vector2 ai0 = NPC.Center - fireFrom;
+                        float ai = Main.rand.Next(100);
+                        Vector2 velocity = Vector2.Normalize(ai0.RotatedByRandom(MathHelper.PiOver4)) * 7f;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), NPC.damage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
+                    }
                 }
             }
         }
@@ -95,7 +100,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter += NPC.ai[0] == 2.1f ? 1.5 : 1D;
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 NPC.frameCounter += 2D;
             }

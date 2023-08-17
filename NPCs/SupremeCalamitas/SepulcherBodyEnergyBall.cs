@@ -32,6 +32,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.width = 20;
             NPC.height = 20;
             NPC.lifeMax = CalamityWorld.revenge ? 345000 : 300000;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
             NPC.knockBackResist = 0f;
@@ -102,7 +104,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.alpha = HeadSegment.alpha;
 
             AttackTimer += BossRushEvent.BossRushActive ? 1.5f : 1f;
-            float attackgate = !HeadSegment.Calamity().unbreakableDR && CalamityWorld.getFixedBoi ? 450f : 900f;
+            float attackgate = !HeadSegment.Calamity().unbreakableDR && Main.zenithWorld ? 450f : 900f;
             if (AttackTimer >= attackgate)
             {
                 AttackTimer = 0f;

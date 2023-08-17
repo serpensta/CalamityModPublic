@@ -2,6 +2,7 @@
 using CalamityMod.Items.Mounts;
 using CalamityMod.Items.Placeables.Furniture;
 using CalamityMod.Items.Potions.Alcohol;
+using CalamityMod.NPCs.SupremeCalamitas;
 using CalamityMod.Projectiles.Magic;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.World;
@@ -70,12 +71,10 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheHallow,                
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("No one knows where she came from, but no one minds her either. She's a good person to share a drink with, given you don't make her mad.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.FAP")
             });
         }
 
@@ -87,6 +86,9 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override bool CanTownNPCSpawn(int numTownNPCs)
         {
+            if (NPC.AnyNPCs(ModContent.NPCType<SupremeCalamitas.SupremeCalamitas>()) && Main.zenithWorld)
+                return false;
+
             if (CalamityWorld.spawnedCirrus)
                 return true;
 
@@ -105,7 +107,7 @@ namespace CalamityMod.NPCs.TownNPCs
         public override string GetChat()
         {
             Player player = Main.player[Main.myPlayer];
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 player.Hurt(PlayerDeathReason.ByCustomReason(CalamityUtils.GetText("Status.Death.CirrusSlap").Format(player.name)), player.statLife / 2, -player.direction, false, false, -1, false);
                 SoundEngine.PlaySound(CnidarianJellyfishOnTheString.SlapSound, player.Center);
@@ -151,8 +153,8 @@ namespace CalamityMod.NPCs.TownNPCs
             }
 
             int permadong = NPC.FindFirstNPC(ModContent.NPCType<DILF>());
-            if (permadong != -1 && ChildSafety.Disabled)
-                dialogue.Add(this.GetLocalization("Chat.Archmage").Format(Main.npc[wife].GivenName));
+            if (permadong != -1)
+                dialogue.Add(this.GetLocalization("Chat.Archmage").Format(Main.npc[permadong].GivenName));
 
             int witch = NPC.FindFirstNPC(ModContent.NPCType<WITCH>());
             if (witch != -1)
@@ -298,13 +300,11 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void AddShops()
         {
-            Condition potionSells = new("While the Town NPC Potion Selling configuration option is enabled", () => CalamityConfig.Instance.PotionSelling);
-            Condition downedAureus = new("If Astrum Aureus has been defeated", () => DownedBossSystem.downedAstrumAureus);
+            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
+            Condition downedAureus = new(CalamityUtils.GetText("Condition.PostAureus"), () => DownedBossSystem.downedAstrumAureus);
 
             NPCShop shop = new(Type);
-            shop.AddWithCustomValue(ItemID.HeartreachPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.LifeforcePotion, Item.buyPrice(gold: 8), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.LovePotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
+            shop.AddWithCustomValue(ItemID.LovePotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
                 .AddWithCustomValue(ModContent.ItemType<GrapeBeer>(), Item.buyPrice(silver: 30))
                 .AddWithCustomValue(ModContent.ItemType<RedWine>(), Item.buyPrice(gold: 1))
                 .AddWithCustomValue(ModContent.ItemType<Whiskey>(), Item.buyPrice(gold: 2))
@@ -338,22 +338,6 @@ namespace CalamityMod.NPCs.TownNPCs
                 .AddWithCustomValue(ItemID.UnicornHorn, Item.buyPrice(0, 2, 50), Condition.HappyEnough, Condition.InHallow)
                 .AddWithCustomValue(ItemID.Milkshake, Item.buyPrice(gold: 5), Condition.HappyEnough, Condition.InHallow, Condition.NpcIsPresent(NPCID.Stylist))
                 .Register();
-        }
-
-        public override void ModifyActiveShop(string shopName, Item[] items)
-        {
-            foreach (Item i in items)
-            {
-                if (i == null || i.type == ItemID.None)
-                    continue;
-
-                // Double the price of Lifeforce Potion PML
-                if (i.type == ItemID.LifeforcePotion && NPC.downedMoonlord)
-                {
-                    int oldValue = i.shopCustomPrice ?? i.value;
-                    i.shopCustomPrice = oldValue * 2;
-                }
-            }
         }
 
         // Make this Town NPC teleport to the Queen statue when triggered.

@@ -91,6 +91,9 @@ namespace CalamityMod.NPCs.AquaticScourge
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.IsABestiaryIconDummy)
+                return true;
+
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
@@ -103,7 +106,7 @@ namespace CalamityMod.NPCs.AquaticScourge
             vector43 += vector11 * NPC.scale + new Vector2(0f, NPC.gfxOffY);
             Color color = NPC.GetAlpha(drawColor);
 
-            if (CalamityWorld.revenge || BossRushEvent.BossRushActive || CalamityWorld.getFixedBoi)
+            if (CalamityWorld.revenge || BossRushEvent.BossRushActive || Main.zenithWorld)
             {
                 if (Main.npc[(int)NPC.ai[2]].Calamity().newAI[3] > 300f)
                     color = Color.Lerp(color, Color.SandyBrown, MathHelper.Clamp((Main.npc[(int)NPC.ai[2]].Calamity().newAI[3] - 300f) / 180f, 0f, 1f));

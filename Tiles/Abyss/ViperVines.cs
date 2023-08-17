@@ -27,24 +27,24 @@ namespace CalamityMod.Tiles.Abyss
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 		{
-			Tile tileAbove = Framing.GetTileSafely(i, j - 1);
-
-			if (!tileAbove.HasTile)
+            if (WorldGen.loadSuccess)
             {
-                WorldGen.KillTile(i, j);
-				return true;
-			}
-
+                Tile tileAbove = Framing.GetTileSafely(i, j - 1);
+                if (!tileAbove.HasTile)
+                {
+                    WorldGen.KillTile(i, j);
+                    return true;
+                }
+            }
 			return true;
 		}
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            //GIVE VINE ROPE IF SPECIAL VINE BOOK
-            if (WorldGen.genRand.Next(2) == 0 && Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].cordage)
-            {
+            // GIVE VINE ROPE IF SPECIAL VINE BOOK
+            if (WorldGen.genRand.NextBool() && Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].cordage)
                 Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i * 16 + 8f, j * 16 + 8f), ItemID.VineRope);
-            }
+
             if (Main.tile[i, j + 1] != null)
             {
                 if (Main.tile[i, j + 1].HasTile)
@@ -53,9 +53,7 @@ namespace CalamityMod.Tiles.Abyss
                     {
                         WorldGen.KillTile(i, j + 1, false, false, false);
                         if (!Main.tile[i, j + 1].HasTile && Main.netMode != NetmodeID.SinglePlayer)
-                        {
                             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, (float)i, (float)j + 1, 0f, 0, 0, 0);
-                        }
                     }
                 }
             }

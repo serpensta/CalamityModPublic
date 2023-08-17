@@ -47,10 +47,12 @@ namespace CalamityMod.NPCs
                 NPC npc = info.npc;
                 if (npc is null)
                     return false;
+
                 if (npc.type == NPCID.Retinazer)
                     return !NPC.AnyNPCs(NPCID.Spazmatism);
                 else if (npc.type == NPCID.Spazmatism)
                     return !NPC.AnyNPCs(NPCID.Retinazer);
+
                 return false;
             }
 
@@ -135,12 +137,6 @@ namespace CalamityMod.NPCs
                     npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<CrawCarapace>(), 7, 4));
                     break;
 
-                // Anomura Fungus
-                // Fungal Carapace @ 14.29% Normal, 25% Expert+
-                case NPCID.AnomuraFungus:
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<FungalCarapace>(), 7, 4));
-                    break;
-
                 // Tim
                 // Plasma Rod @ 33.33% Normal, 50% Expert+
                 case NPCID.Tim:
@@ -179,12 +175,6 @@ namespace CalamityMod.NPCs
                 #endregion
 
                 #region Desert
-                // Vulture
-                // 1-2 Desert Feather @ 100%
-                case NPCID.Vulture:
-                    npcLoot.Add(ModContent.ItemType<DesertFeather>(), 1, 1, 2);
-                    break;
-
                 // Tomb Crawler
                 // Burnt Sienna @ 4% Normal, 6.67% Expert+
                 case NPCID.TombCrawlerHead:
@@ -259,9 +249,9 @@ namespace CalamityMod.NPCs
                     break;
 
                 // Blue Jellyfish
-                // Mana Jelly @ 14.29% Normal, 25% Expert+
+                // Cleansing Jelly @ 14.29% Normal, 25% Expert+
                 case NPCID.BlueJellyfish:
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<ManaJelly>(), 7, 4));
+                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<CleansingJelly>(), 7, 4));
                     break;
 
                 // Green Jellyfish
@@ -327,7 +317,7 @@ namespace CalamityMod.NPCs
                     );
                     npcLoot.DefineConditionalDropSet(DropHelper.If(() => !CalamityWorld.death, () => !CalamityWorld.death)).Add(ItemID.CursedFlame, 1, 2, 5);
                     npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, () => CalamityWorld.death)).Add(ItemID.CursedFlame, 1, 6, 15);
-                    npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, () => CalamityWorld.death, "This is a Death Mode drop rate")).Add(ItemID.SoulofNight, 1, 4, 8);
+                    npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, () => CalamityWorld.death, CalamityUtils.GetTextValue("Condition.Drops.IsDeath"))).Add(ItemID.SoulofNight, 1, 4, 8);
                     break;
                 case NPCID.SeekerBody:
                 case NPCID.SeekerTail:
@@ -338,7 +328,7 @@ namespace CalamityMod.NPCs
                     );
                     npcLoot.DefineConditionalDropSet(DropHelper.If(() => !CalamityWorld.death, () => !CalamityWorld.death)).Add(ItemID.CursedFlame, 1, 2, 5);
                     npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, () => CalamityWorld.death)).Add(ItemID.CursedFlame, 1, 6, 15);
-                    npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, () => CalamityWorld.death, "This is a Death Mode drop rate")).Add(ItemID.SoulofNight, 1, 4, 8);
+                    npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, () => CalamityWorld.death, CalamityUtils.GetTextValue("Condition.Drops.IsDeath"))).Add(ItemID.SoulofNight, 1, 4, 8);
 
                     npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death, false)).Add(ItemID.MeatGrinder, 200);
                     npcLoot.DefineConditionalDropSet(DropHelper.If(() => CalamityWorld.death && Main.WindyEnoughForKiteDrops, false)).Add(ItemID.KiteWorldFeeder, 25);
@@ -346,14 +336,7 @@ namespace CalamityMod.NPCs
                 #endregion
 
                 #region Jungle
-                // All Moss Hornets
-                // Stinger @ 50% Normal, 100% Expert+
-                // Needler @ 4% Normal, 6.67% Expert+
-                if (CalamityLists.mossHornetList.Contains(npc.type))
-                {
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.Stinger, 2, 1));
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<Needler>(), 25, 15));
-                }
+                //Moss hornets are after all of this switching since it no longer works if placed here
 
                 // Jungle Slime, Spiked Jungle Slime, Arapaima
                 // Murky Paste @ 33.33% Normal, 50% Expert+
@@ -361,12 +344,6 @@ namespace CalamityMod.NPCs
                 case NPCID.SpikedJungleSlime:
                 case NPCID.Arapaima:
                     npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<MurkyPaste>(), 3, 2));
-                    break;
-
-                // Giant Tortoise
-                // Giant Tortoise Shell @ 14.29% Normal, 25% Expert+
-                case NPCID.GiantTortoise:
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<GiantTortoiseShell>(), 7, 4));
                     break;
 
                 // Angry Trapper
@@ -396,14 +373,11 @@ namespace CalamityMod.NPCs
                 // Shinobi Blade @ 4% Normal, 6.67% Expert+
                 // Staff of Necrosteocytes @ 4% Normal, 6.67% Expert+
                 case NPCID.DarkCaster:
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<ShinobiBlade>(), 25, 15));
-                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<StaffOfNecrosteocytes>(), 25, 15));
+                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<ShinobiBlade>(), 15, 10));
+                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<StaffOfNecrosteocytes>(), 15, 10));
                     break;
 
-                // All Hardmode Dungeon Enemies
-                // Ectoplasm @ 20%
-                if (CalamityLists.dungeonEnemyBuffList.Contains(npc.type))
-                    npcLoot.Add(ItemID.Ectoplasm, 5);
+                //The ectoplasm extra drops got moved to the list section; just like moss hornets
 
                 // Hardmode Dungeon Melee Skeletons
                 // Wisp in a Bottle @ 0.5% INSTEAD OF 0.25%
@@ -484,6 +458,15 @@ namespace CalamityMod.NPCs
                     npcLoot.ChangeDropRate(ItemID.FireFeather, 1, 10);
                     npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<DemonicBoneAsh>(), 3, 2));
                     npcLoot.Add(ModContent.ItemType<EssenceofHavoc>(), 2);
+                    break;
+                #endregion
+
+                #region Graveyard
+                // Alternate Blood Orb obtainment methods (10%)
+                case NPCID.MaggotZombie:
+                case NPCID.TheBride:
+                case NPCID.TheGroom:
+                    npcLoot.Add(ModContent.ItemType<BloodOrb>(), 10);
                     break;
                 #endregion
 
@@ -797,7 +780,7 @@ namespace CalamityMod.NPCs
                         };
 
                         npcLoot.Add(DropHelper.CalamityStyle(DropHelper.NormalWeaponDropRateFraction, saucerItems));
-                        
+
                         //Cosmic Car Key is also in the vanilla selection pool. Pull it out.
                         npcLoot.Add(ItemID.CosmicCarKey, 4);
                     }
@@ -1218,7 +1201,7 @@ namespace CalamityMod.NPCs
                     // Master items drop in Revengeance
                     rev.Add(ItemID.DestroyerMasterTrophy);
                     rev.Add(ItemID.DestroyerPetItem, 4);
-                    
+
                     // GFB Bloodworm drop
                     GFB.Add(ModContent.ItemType<BloodwormItem>());
 
@@ -1640,13 +1623,30 @@ namespace CalamityMod.NPCs
 
                 default:
                     break;
-                #endregion
+                    #endregion
+            }
+            //If the enemy is part of a list (Hornets, Skeletons, etc,) place it here as in the section before it no longer works
+            #region Enemy Lists
+
+            // All Moss Hornets
+            // Stinger @ 50% Normal, 100% Expert+
+            // Needler @ 4% Normal, 6.67% Expert+
+            if (CalamityLists.mossHornetList.Contains(npc.type))
+            {
+                npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.Stinger, 2, 1));
+                npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<Needler>(), 25, 15));
             }
 
             // All Skeletons
             // Ancient Bone Dust @ 20% Normal, 33.33% Expert+
             if (CalamityLists.skeletonList.Contains(npc.type))
                 npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<AncientBoneDust>(), 5, 3));
+
+            // All Hardmode Dungeon Enemies
+            // Ectoplasm @ 20%
+            if (CalamityLists.dungeonEnemyBuffList.Contains(npc.type))
+                npcLoot.Add(ItemID.Ectoplasm, 5);
+            #endregion
         }
         #endregion
 
@@ -1781,6 +1781,7 @@ namespace CalamityMod.NPCs
                     // First kill: Notify of Abyss chests being unlocked.
                     if (!NPC.downedBoss3)
                     {
+                        World.Abyss.AbleToUnlockChests = true;
                         World.Abyss.UnlockAllAbyssChests();
 
                         string keysk = "Mods.CalamityMod.Status.Progression.SkeletronAbyssChestNotification";
@@ -1955,7 +1956,7 @@ namespace CalamityMod.NPCs
                             CalamityNetcode.SyncWorld();
                     }
 
-                    // Spawn Exodium planetoids and send messages about Providence, Bloodstone, Phantoplasm, etc. if ML has not been killed yet
+                    // Spawn Exodium planetoids and send messages about Providence, Bloodstone, Polterplasm, etc. if ML has not been killed yet
                     if (!NPC.downedMoonlord)
                     {
                         CalamityUtils.DisplayLocalizedText(key5, messageColor5);
@@ -2092,7 +2093,7 @@ namespace CalamityMod.NPCs
             }
 
             bool normalShark = npc.type == NPCID.SandShark || npc.type == NPCID.SandsharkHallow || npc.type == NPCID.SandsharkCorrupt || npc.type == NPCID.SandsharkCrimson;
-            if (NPC.downedPlantBoss && (normalShark || (npc.type == ModContent.NPCType<FusionFeeder>() && CalamityWorld.getFixedBoi)) && !NPC.AnyNPCs(ModContent.NPCType<GreatSandShark.GreatSandShark>()))
+            if (NPC.downedPlantBoss && (normalShark || (npc.type == ModContent.NPCType<FusionFeeder>() && Main.zenithWorld)) && !NPC.AnyNPCs(ModContent.NPCType<GreatSandShark.GreatSandShark>()))
             {
                 CalamityMod.sharkKillCount++;
                 if (CalamityMod.sharkKillCount == 4)

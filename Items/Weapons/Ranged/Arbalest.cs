@@ -20,8 +20,9 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.width = 82;
             Item.height = 34;
             Item.useTime = 7;
+            Item.useAnimation = 21;
             Item.reuseDelay = 30;
-            Item.useAnimation = 28;
+            Item.useLimitPerAnimation = 3;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 4f;
@@ -42,7 +43,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             SoundEngine.PlaySound(SoundID.Item5, player.Center);
 
-            if (totalProjectiles > 4)
+            if (totalProjectiles > 3)
             {
                 totalProjectiles = 1;
 

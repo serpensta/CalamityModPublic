@@ -60,10 +60,11 @@ namespace CalamityMod.NPCs
         public static int TaxesToCollectLimit => (int)(Item.buyPrice(0, 50, 0, 0) * TaxYieldFactor);
 
         // TODO -- Update all Discord tags here to new Discord usernames.
-		#region Town NPC Patreon Name Sets
+        #region Town NPC Patreon Name Sets
         private static readonly string[] AnglerNames =
         {
             "Dazren",
+            "Johnny Test", // <@!589966747977777197> (konorango)
         };
         private static readonly string[] ArmsDealerNames =
         {
@@ -75,7 +76,7 @@ namespace CalamityMod.NPCs
             "XiaoEn0426", // <@!440448864772816896> (XiaoEn0426#9157)
             "Jeffred", // <@!295362230038560768> (Knight Solaire#0873)
             "The Cooler Arthur", // <@!568263512523014154> (better artilery#0001)
-			"Markie", // <@!291141964039061504> (Markie#6969)
+            "Markie", // <@!291141964039061504> (Markie#6969)
         };
         private static readonly string[] ClothierNames =
         {
@@ -95,7 +96,7 @@ namespace CalamityMod.NPCs
             "Izuna",
             "Jasmine", // <@!430532867479699456> (phantasmagoria#6777)
             "Cybil", // <@!486507232666845185> (Captain Doofus#????)
-			"Ruth", // <@!1001307586068492388> (Briny_Coffee#4393)
+            "Ruth", // <@!1001307586068492388> (Briny_Coffee#4393)
         };
         private static readonly string[] DyeTraderNames = null;
         private static readonly string[] GoblinTinkererNames =
@@ -107,7 +108,7 @@ namespace CalamityMod.NPCs
             "Eddie Spaghetti", // <@!466397267407011841> (Eddie Spaghetti#0002)
             "G'tok", // <@!335192200956608535> (gtoktas#7589)
             "Katto", // <@!175972165504466944> (Katto#2858)
-            "Him", // <@!931019614958256139> (Him#3088)
+            "Him", // <@!931019614958256139> (@himtheguy1)
             "Tooshiboots", // <@!333532730593771522> (ulmod)
         };
         private static readonly string[] GolferNames = null;
@@ -125,8 +126,8 @@ namespace CalamityMod.NPCs
             "Danmaku", // <@!756259562268524555> (Danmaku#2659)
             "Grylken", // <@!299970404435361802> (Grylken#1569)
             "Outlaw", // <@!918311619480657922> (TheChosenOutlaw#8746)
-			"Alfred Rend", // <@!606301806481375255> (Deadsqurp300#0907)
-			"Leeman", // <@!281999243168841728> (Tweee#5831)
+            "Alfred Rend", // <@!606301806481375255> (Deadsqurp300#0907)
+            "Leeman", // <@!281999243168841728> (Tweee#5831)
         };
         private static readonly string[] MechanicNames =
         {
@@ -143,7 +144,7 @@ namespace CalamityMod.NPCs
         {
             "Farsni",
             "Fanny", // <@!799749125720637460> (zombiewolf511#4581)
-			"Mausi", // <@!194156349347594241> (Sadouken | Daniel#3996)
+            "Mausi", // <@!194156349347594241> (Sadouken | Daniel#3996)
         };
         private static readonly string[] PainterNames =
         {
@@ -166,7 +167,6 @@ namespace CalamityMod.NPCs
             "Nyapano", // <@!120976656826368003> (Emi - Nyapano She/Her#4040)
             "Jade", // <@!187395834625785869> (VeryMasterNinja#7728)
             "Nyavi Aceso", // <@!270260920888852480> (Navigator#8739)
-			"Octo", // <@!796112889353994281> (OctolingGrimm#8888)
         };
         private static readonly string[] SkeletonMerchantNames =
         {
@@ -214,7 +214,7 @@ namespace CalamityMod.NPCs
         };
         private static readonly string[] WizardNames =
         {
-            "Mage One-Trick",
+            "Mage One-Trick", // <@!340996105460514816> (pixlgray) - going of off memory on this one
             "Inorim, son of Ivukey",
             "Jensen",
             "Merasmus", // <@!288066987819663360> (Spider pee pee#3328)
@@ -227,7 +227,8 @@ namespace CalamityMod.NPCs
         private static readonly string[] ZoologistNames =
         {
             "Kiriku", // <@!395312478160027668> (rulosss#6814)
-			"Lacuna", // <@!790746689211203604> (Lacuna#8629)
+            "Lacuna", // <@!790746689211203604> (Lacuna#8629)
+            "Mae Borowski", //<@!219158690433990656> (justakkolite)
         };
 
         // The following sets are for the 1.4 Town Pets: Town Dogs, Cats and Bunnies.
@@ -245,13 +246,13 @@ namespace CalamityMod.NPCs
             "Ozymandias", // <@!146333264871686145> (Ozzatron#0001)
         };
         private static readonly string[] TownDogLabradorNames =
-		{
-			"Riley", // <@!260875558592708619> (potion pal#9979)
-		};
+        {
+            "Riley", // <@!260875558592708619> (potion pal#9979)
+        };
         private static readonly string[] TownDogPitBullNames =
-		{
-			"Splinter", // <@!320320801213775873> (Kaimonick#1738)
-		};
+        {
+            "Splinter", // <@!320320801213775873> (Kaimonick#1738)
+        };
         private static readonly string[] TownDogBeagleNames =
         {
             "Kendra", // <@!237247188005158912> (LordMetarex#6407)
@@ -274,7 +275,9 @@ namespace CalamityMod.NPCs
             "Smoogle", // <@!709968379334623274> (smoogle#5672)
             "The Meowurer of Gods", // <@!385949114271268864> (GP#7876)
             "Katsafaros", // <@!190595401328492544> (NavyGuy#2650)
-			"Lucerne", // <@!271954788676141066> (lord_lucerne)
+            "Lucerne", // <@!271954788676141066> (lord_lucerne)
+            "Milo", // <@!401849201597874179> (maskedmilo)
+			"Octo", // <@!796112889353994281> (OctolingGrimm#8888)
         };
         private static readonly string[] TownCatSiameseNames = null;
         private static readonly string[] TownCatBlackNames =
@@ -1268,23 +1271,21 @@ namespace CalamityMod.NPCs
 
             bool happy = Main.LocalPlayer.currentShoppingSettings.PriceAdjustment <= 0.9;
 
-            Condition potionSells = new("While the Town NPC Potion Selling configuration option is enabled", () => CalamityConfig.Instance.PotionSelling);
-            Condition hasFlareGunUpgrade = new("While holding a Flare Gun upgrade", () => (Main.LocalPlayer.HasItem(ItemType<FirestormCannon>()) || Main.LocalPlayer.HasItem(ItemType<SpectralstormCannon>())) && !Main.LocalPlayer.HasItem(ItemID.FlareGun));
-            Condition roguePlayer = new("While wearing rogue armor", () => Main.LocalPlayer.Calamity().rogueStealthMax > 0f && Main.LocalPlayer.Calamity().wearingRogueArmor);
-            Condition wingedPlayer = new("While wearing wings", () => Main.LocalPlayer.wingTimeMax > 0);
-            Condition revengeance = new("In Revengeance Mode", () => CalamityWorld.revenge);
-            Condition drunk = new("While inflicted with Alcohol Poisoning", () => Main.LocalPlayer.Calamity().alcoholPoisoning);
-            Condition downedPolterghast = new("After Polterghast has been defeated", () => DownedBossSystem.downedPolterghast);
-            Condition downedDoG = new("After The Devourer of Gods has been defeated", () => DownedBossSystem.downedDoG);
+            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
+            Condition hasFlareGunUpgrade = new(CalamityUtils.GetText("Condition.HasFlareGun"), () => (Main.LocalPlayer.HasItem(ItemType<FirestormCannon>()) || Main.LocalPlayer.HasItem(ItemType<SpectralstormCannon>())) && !Main.LocalPlayer.HasItem(ItemID.FlareGun));
+            Condition roguePlayer = new(CalamityUtils.GetText("Condition.HasRogueArmor"), () => Main.LocalPlayer.Calamity().rogueStealthMax > 0f && Main.LocalPlayer.Calamity().wearingRogueArmor);
+            Condition wingedPlayer = new(CalamityUtils.GetText("Condition.HasWings"), () => Main.LocalPlayer.wingTimeMax > 0);
+            Condition revengeance = new(CalamityUtils.GetText("Condition.InRev"), () => CalamityWorld.revenge);
+            Condition drunk = new(CalamityUtils.GetText("Condition.AlcoholPoison"), () => Main.LocalPlayer.Calamity().alcoholPoisoning);
+            Condition downedPolterghast = new(CalamityUtils.GetText("Condition.PostPolter"), () => DownedBossSystem.downedPolterghast);
+            Condition downedDoG = new(CalamityUtils.GetText("Condition.PostDoG"), () => DownedBossSystem.downedDoG);
 
             if (type == NPCID.Merchant)
             {
                 shop.AddWithCustomValue(ItemID.Bottle, Item.buyPrice(copper: 20), potionSells, Condition.HappyEnough)
                 .AddWithCustomValue(ItemID.WormholePotion, Item.buyPrice(copper: 25), potionSells, Condition.HappyEnough);
-                AddScalingPotion(ref shop, ItemID.ArcheryPotion, Condition.DownedEyeOfCthulhu);
                 shop.Add(ItemID.HealingPotion, potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
                 .Add(ItemID.ManaPotion, potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
-                .AddWithCustomValue(ItemID.TitanPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedSkeletron)
                 .Add(ItemID.Flare, hasFlareGunUpgrade)
                 .Add(ItemID.BlueFlare, hasFlareGunUpgrade)
                 .Add(ItemID.ApprenticeBait, Condition.DownedEyeOfCthulhu)
@@ -1304,13 +1305,6 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.Demolitionist)
             {
-
-                shop.AddWithCustomValue(ItemID.MiningPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedEyeOfCthulhu);
-                AddScalingPotion(ref shop, ItemID.IronskinPotion, Condition.DownedEyeOfCthulhu);
-                shop.AddWithCustomValue(ItemID.ShinePotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
-                .AddWithCustomValue(ItemID.SpelunkerPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
-                .AddWithCustomValue(ItemID.ObsidianSkinPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedSkeletron);
-                AddScalingPotion(ref shop, ItemID.EndurancePotion, Condition.DownedSkeletron);
                 shop.Add(ModContent.ItemType<DeepcoreGK2>(), Condition.DownedMechBossAny);
             }
 
@@ -1323,10 +1317,7 @@ namespace CalamityMod.NPCs
                 .AddWithCustomValue(ItemID.Uzi, Item.buyPrice(gold: 45), Condition.DownedPlantera)
                 .AddWithCustomValue(ItemID.TacticalShotgun, Item.buyPrice(gold: 60), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.SniperRifle, Item.buyPrice(gold: 60), Condition.DownedGolem)
-                .AddWithCustomValue(ItemID.RifleScope, Item.buyPrice(gold: 60), Condition.DownedGolem)
-                .AddWithCustomValue(ItemID.AmmoReservationPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.HunterPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.BattlePotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc);
+                .AddWithCustomValue(ItemID.RifleScope, Item.buyPrice(gold: 60), Condition.DownedGolem);
             }
 
             if (type == NPCID.Stylist)
@@ -1349,10 +1340,6 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.Dryad)
             {
-                shop.AddWithCustomValue(ItemID.ThornsPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.FeatherfallPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.RegenerationPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc);
-                AddScalingPotion(ref shop, ItemID.SwiftnessPotion, Condition.DownedEowOrBoc);
                 shop.AddWithCustomValue(ItemID.JungleRose, Item.buyPrice(gold: 2))
                 .AddWithCustomValue(ItemID.NaturesGift, Item.buyPrice(gold: 10))
                 .Add(ItemType<RomajedaOrchid>())
@@ -1390,17 +1377,14 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.Steampunker)
             {
-                shop.AddWithCustomValue(ItemType<AstralSolution>(), Item.buyPrice(silver: 5))
-                .AddWithCustomValue(ItemID.PurpleSolution, Item.buyPrice(silver: 5), Condition.InGraveyard, Condition.CrimsonWorld)
-                .AddWithCustomValue(ItemID.RedSolution, Item.buyPrice(silver: 5), Condition.InGraveyard, Condition.CorruptWorld);
+                shop.Add(ItemType<AstralSolution>(), Condition.NotRemixWorld)
+                .Add(ItemID.PurpleSolution, Condition.InGraveyard, Condition.CrimsonWorld, Condition.NotRemixWorld)
+                .Add(ItemID.RedSolution, Condition.InGraveyard, Condition.CorruptWorld, Condition.NotRemixWorld);
             }
 
             if (type == NPCID.Wizard)
             {
-                AddScalingPotion(ref shop, ItemID.ManaRegenerationPotion);
-                AddScalingPotion(ref shop, ItemID.MagicPowerPotion);
-                shop.AddWithCustomValue(ItemID.GravitationPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .Add(ItemType<HowlsHeart>())
+                shop.Add(ItemType<HowlsHeart>())
                 .AddWithCustomValue(ItemID.MagicMissile, Item.buyPrice(gold: 5))
                 .AddWithCustomValue(ItemID.RodofDiscord, Item.buyPrice(gold: 10), Condition.Hardmode, Condition.InHallow)
                 .AddWithCustomValue(ItemID.SpectreStaff, Item.buyPrice(gold: 25), Condition.DownedGolem)
@@ -1411,12 +1395,7 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.WitchDoctor)
             {
-                AddScalingPotion(ref shop, ItemID.SummoningPotion);
-                shop.AddWithCustomValue(ItemID.CalmingPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough);
-                AddScalingPotion(ref shop, ItemID.RagePotion);
-                AddScalingPotion(ref shop, ItemID.WrathPotion);
-                shop.AddWithCustomValue(ItemID.InfernoPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .Add(ItemType<SunkenSeaFountain>())
+                shop.Add(ItemType<SunkenSeaFountain>())
                 .Add(ItemType<SulphurousFountainItem>())
                 .Add(ItemType<AbyssFountainItem>(), Condition.Hardmode)
                 .Add(ItemType<AstralFountainItem>(), Condition.Hardmode)
@@ -1445,9 +1424,11 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.SkeletonMerchant)
             {
-                shop.AddWithCustomValue(ItemType<CalciumPotion>(), Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
+                shop.AddWithCustomValue(ItemType<CalciumPotion>(), Item.buyPrice(silver: 25), potionSells)
                 .Add(ItemID.MilkCarton)
-                .AddWithCustomValue(ItemID.Marrow, Item.buyPrice(gold: 25), Condition.Hardmode);
+                .AddWithCustomValue(ItemID.Marrow, Item.buyPrice(gold: 25), Condition.Hardmode)
+                .AddWithCustomValue(ItemType<GiantShell>(), Item.buyPrice(gold: 12))
+                .AddWithCustomValue(ItemType<CrawCarapace>(), Item.buyPrice(gold: 12));
             }
 
             if (type == NPCID.Golfer)
@@ -1468,16 +1449,6 @@ namespace CalamityMod.NPCs
                 shop[nextSlot] = ItemType<FrostBarrier>();
                 nextSlot++;
             }
-        }
-
-        public static NPCShop AddScalingPotion(ref NPCShop shop, int itemID, Condition extraCondition = null)
-        {
-            Condition potionSells = new("While the Town NPC Potion Selling configuration option is enabled", () => CalamityConfig.Instance.PotionSelling);
-
-            return shop
-            .AddWithCustomValue(itemID, Item.buyPrice(gold: 4), extraCondition, potionSells, Condition.HappyEnough, Condition.PreHardmode)
-            .AddWithCustomValue(itemID, Item.buyPrice(gold: 8), extraCondition, potionSells, Condition.HappyEnough, Condition.Hardmode, Condition.NotDownedMoonLord)
-            .AddWithCustomValue(itemID, Item.buyPrice(gold: 12), extraCondition, potionSells, Condition.HappyEnough, Condition.DownedMoonLord);
         }
         #endregion
     }

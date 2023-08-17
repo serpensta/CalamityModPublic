@@ -5,7 +5,7 @@ namespace CalamityMod
     public class CalamityKeybinds : ModSystem
     {
         public static ModKeybind NormalityRelocatorHotKey { get; private set; }
-        public static ModKeybind AegisHotKey { get; private set; }
+        public static ModKeybind BlazingCoreHotKey { get; private set; }
         public static ModKeybind SetBonusHotKey { get; private set; }
         public static ModKeybind RageHotKey { get; private set; }
         public static ModKeybind AdrenalineHotKey { get; private set; }
@@ -18,6 +18,7 @@ namespace CalamityMod
         public static ModKeybind GodSlayerDashHotKey { get; private set; }
         public static ModKeybind ExoChairSlowdownHotkey { get; private set; }
         public static ModKeybind DashHotkey { get; private set; }
+        public static ModKeybind GravistarSabatonHotkey { get; private set; }
 
         public override void Load()
         {
@@ -25,7 +26,7 @@ namespace CalamityMod
             NormalityRelocatorHotKey = KeybindLoader.RegisterKeybind(Mod, "NormalityRelocator", "Z");
             RageHotKey = KeybindLoader.RegisterKeybind(Mod, "RageMode", "V");
             AdrenalineHotKey = KeybindLoader.RegisterKeybind(Mod, "AdrenalineMode", "B");
-            AegisHotKey = KeybindLoader.RegisterKeybind(Mod, "ElysianGuard", "N");
+            BlazingCoreHotKey = KeybindLoader.RegisterKeybind(Mod, "BlazingCoreParry", "N");
             SetBonusHotKey = KeybindLoader.RegisterKeybind(Mod, "ArmorSetBonus", "Y");
             AstralTeleportHotKey = KeybindLoader.RegisterKeybind(Mod, "AstralTeleport", "P");
             AstralArcanumUIHotkey = KeybindLoader.RegisterKeybind(Mod, "AstralArcanumUIToggle", "O");
@@ -36,6 +37,7 @@ namespace CalamityMod
             GodSlayerDashHotKey = KeybindLoader.RegisterKeybind(Mod, "GodSlayerDash", "H");
             ExoChairSlowdownHotkey = KeybindLoader.RegisterKeybind(Mod, "ExoChairSlowDown", "RightShift");
             DashHotkey = KeybindLoader.RegisterKeybind(Mod, "DashDoubleTapOverride", "F");
+            GravistarSabatonHotkey = KeybindLoader.RegisterKeybind(Mod, "GravistarSabatonHotkey", "X");
         }
 
         public override void Unload()
@@ -43,7 +45,7 @@ namespace CalamityMod
             NormalityRelocatorHotKey = null;
             RageHotKey = null;
             AdrenalineHotKey = null;
-            AegisHotKey = null;
+            BlazingCoreHotKey = null;
             SetBonusHotKey = null;
             AstralTeleportHotKey = null;
             AstralArcanumUIHotkey = null;
@@ -54,6 +56,7 @@ namespace CalamityMod
             GodSlayerDashHotKey = null;
             ExoChairSlowdownHotkey = null;
             DashHotkey = null;
+            GravistarSabatonHotkey = null;
         }
     }
 }

@@ -46,10 +46,9 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Heavy, large fish which can easily resist the crushing pressure of the depths and any weapon which might attempt to pierce its tough skin.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Bloatfish")
             });
         }
 
@@ -184,9 +183,8 @@ namespace CalamityMod.NPCs.Abyss
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.Calamity().ZoneAbyssLayer4 && spawnInfo.Water && NPC.CountNPCS(ModContent.NPCType<Bloatfish>()) < 3)
-            {
                 return Main.remixWorld ? 4.5f : SpawnCondition.CaveJellyfish.Chance * 0.5f;
-            }
+
             return 0f;
         }
 
@@ -216,7 +214,7 @@ namespace CalamityMod.NPCs.Abyss
                     Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("Bloatfish3").Type, NPC.scale);
                 }
             }
-            if (NPC.scale < 2f || CalamityWorld.getFixedBoi)
+            if (NPC.scale < 2f || Main.zenithWorld)
             {
                 NPC.scale += 0.05f;
             }

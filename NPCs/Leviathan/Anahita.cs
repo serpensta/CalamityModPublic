@@ -77,17 +77,16 @@ namespace CalamityMod.NPCs.Leviathan
             if (Main.getGoodWorld)
                 NPC.scale *= 0.8f;
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
                 NPC.scale *= 4f;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Boasting flawless manipulation of water, this elemental was known for almost limitless strength in her home turf. However, those days are long gone.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Anahita")
             });
         }
 
@@ -123,6 +122,10 @@ namespace CalamityMod.NPCs.Leviathan
         {
             // whoAmI variable
             CalamityGlobalNPC.siren = NPC.whoAmI;
+
+            // This dictates the Leviathan music scene
+            if (HasBegunSummoningLeviathan && CalamityGlobalNPC.LeviAndAna == -1)
+                CalamityGlobalNPC.LeviAndAna = NPC.whoAmI;
 
             // Set to false so she doesn't do it constantly
             NPC.Calamity().canBreakPlayerDefense = false;
@@ -192,7 +195,7 @@ namespace CalamityMod.NPCs.Leviathan
             // Spawn Leviathan and change music
             if (phase3 || death)
             {
-                if (!HasBegunSummoningLeviathan)
+                if (!HasBegunSummoningLeviathan && !Main.zenithWorld)
                 {
                     // Use charging frames.
                     NPC.ai[0] = 3f;
@@ -224,9 +227,11 @@ namespace CalamityMod.NPCs.Leviathan
                     {
                         int oldAlpha = NPC.alpha;
                         NPC.alpha = Utils.Clamp(NPC.alpha + 9, 0, 255);
-                        if (Main.netMode != NetmodeID.MultiplayerClient && NPC.alpha >= 255 && oldAlpha < 255)
+                        if (NPC.alpha >= 255 && oldAlpha < 255)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<LeviathanSpawner>(), 0, 0f);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<LeviathanSpawner>(), 0, 0f);
+
                             HasBegunSummoningLeviathan = true;
                             NPC.netUpdate = true;
                         }
@@ -288,7 +293,7 @@ namespace CalamityMod.NPCs.Leviathan
             }
 
             // Hover near the target, invisible if the Leviathan is present and not sufficiently injured.
-            if ((phase3 || death) && WaitingForLeviathan)
+            if ((phase3 || death) && WaitingForLeviathan && !Main.zenithWorld)
             {
                 ChargeRotation(player, vector);
                 ChargeLocation(player, vector, false, true);
@@ -332,7 +337,7 @@ namespace CalamityMod.NPCs.Leviathan
             }
 
             // Play sound
-            float extrapitch = CalamityWorld.getFixedBoi ? -0.5f : 0;
+            float extrapitch = Main.zenithWorld ? -0.5f : 0;
             if (Main.rand.NextBool(300))
                 SoundEngine.PlaySound(SoundID.Zombie35 with { Pitch = SoundID.Zombie35.Pitch + extrapitch}, NPC.Center);
 
@@ -581,7 +586,7 @@ namespace CalamityMod.NPCs.Leviathan
             {
                 NPC.rotation = NPC.velocity.X * 0.02f;
 
-                float basey = CalamityWorld.getFixedBoi ? -100 : -350;
+                float basey = Main.zenithWorld ? -100 : -350;
                 Vector2 targetVector = player.Center + new Vector2(0f, basey) * NPC.scale;
                 float velocity = death ? 13.5f : 12f;
                 velocity += 6f * enrageScale;

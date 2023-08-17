@@ -77,12 +77,11 @@ namespace CalamityMod.NPCs.Perforator
             int associatedNPCType = ModContent.NPCType<PerforatorHive>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCrimson,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Each equipped with a deadly mouthpiece, the different ones are suited for different tasks. One to pierce, one to tear, and another, simply to devour.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Perforator")
             });
         }
 
@@ -470,7 +469,7 @@ namespace CalamityMod.NPCs.Perforator
             if (Main.rand.NextBool(4) && Main.player[closestPlayer].statLife < Main.player[closestPlayer].statLifeMax2)
                 Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart);
 
-            if (Main.netMode != NetmodeID.MultiplayerClient && CalamityWorld.getFixedBoi)
+            if (Main.netMode != NetmodeID.MultiplayerClient && Main.zenithWorld)
             {
                 int type = ModContent.ProjectileType<IchorBlob>();
                 int damage = NPC.GetProjectileDamage(type);
@@ -494,7 +493,7 @@ namespace CalamityMod.NPCs.Perforator
 
         public override void BossLoot(ref string name, ref int potionType)
         {
-            name = "The Medium Perforator";
+            name = CalamityUtils.GetTextValue("NPCs.PerforatorMedium");
             potionType = ItemID.HealingPotion;
         }
 

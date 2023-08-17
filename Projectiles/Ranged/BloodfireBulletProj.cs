@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Ranged
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.SourceDamage += OnHitEffect(Main.player[Projectile.owner]);
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.SourceDamage.Flat += OnHitEffect(Main.player[Projectile.owner]);
 
         // Returns the amount of bonus damage that should be dealt. Boosts life regeneration appropriately as a side effect.
         private int OnHitEffect(Player owner)
@@ -85,8 +85,8 @@ namespace CalamityMod.Projectiles.Ranged
         {
             int dustID = 90;
             int dustCount = 3;
-            for(int i = 0; i < dustCount; ++i)
-                _ = Dust.NewDust(Projectile.Center, 0, 0, dustID, Scale: 1.2f);
+            for (int i = 0; i < dustCount; ++i)
+               Dust.NewDust(Projectile.Center, 0, 0, dustID, Scale: 1.2f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

@@ -14,22 +14,26 @@ namespace CalamityMod.NPCs.HiveMind
     {
         public override void SetStaticDefaults()
         {
+            this.HideFromBestiary();
             Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
         }
 
         public override void SetDefaults()
         {
-            NPC.damage = 0;
+            NPC.damage = 20;
             NPC.width = 32;
             NPC.height = 32;
             NPC.defense = 2;
 
-            NPC.lifeMax = 150;
+            NPC.lifeMax = 75;
             if (BossRushEvent.BossRushActive)
                 NPC.lifeMax = 1800;
             if (Main.getGoodWorld)
                 NPC.lifeMax *= 4;
+
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
 
             NPC.aiStyle = -1;
             AIType = -1;
@@ -44,20 +48,6 @@ namespace CalamityMod.NPCs.HiveMind
             NPC.Calamity().VulnerableToSickness = true;
         }
 
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            int associatedNPCType = ModContent.NPCType<HiveMind>();
-            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
-
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCorruption,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("It pulses with stagnant, stinking waters of corruption, and leaks as it flies overhead. Wherever those drops land, any organic matter nearby slowly corrodes.")
-            });
-        }
-
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter += 0.15f;
@@ -68,6 +58,9 @@ namespace CalamityMod.NPCs.HiveMind
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             bool revenge = CalamityWorld.revenge || BossRushEvent.BossRushActive;
             NPC.TargetClosest();
             float num1164 = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 8f : revenge ? 4.5f : 4f;

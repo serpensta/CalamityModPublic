@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CalamityMod.Balancing;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatBuffs;
@@ -7,6 +8,7 @@ using CalamityMod.Cooldowns;
 using CalamityMod.Dusts;
 using CalamityMod.EntitySources;
 using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Armor.Prismatic;
 using CalamityMod.Items.Armor.Reaver;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.Ranged;
@@ -177,7 +179,7 @@ namespace CalamityMod.CalPlayer
 
             ItemLifesteal(target, item, damageDone);
             ItemOnHit(item, damageDone, target.Center, hit.Crit, (target.damage > 5 || target.boss) && !target.SpawnedFromStatue);
-            NPCDebuffs(target, item.CountsAsClass<MeleeDamageClass>(), item.CountsAsClass<RangedDamageClass>(), item.CountsAsClass<MagicDamageClass>(), item.CountsAsClass<SummonDamageClass>(), item.CountsAsClass<ThrowingDamageClass>(), item.CountsAsClass<SummonMeleeSpeedDamageClass>(), false);
+            NPCDebuffs(target, item.CountsAsClass<MeleeDamageClass>(), item.CountsAsClass<RangedDamageClass>(), item.CountsAsClass<MagicDamageClass>(), item.CountsAsClass<SummonDamageClass>(), item.CountsAsClass<ThrowingDamageClass>(), item.CountsAsClass<SummonMeleeSpeedDamageClass>());
 
             // Shattered Community tracks all damage dealt with Rage Mode (ignoring dummies).
             if (target.type == NPCID.TargetDummy || target.type == NPCType<SuperDummyNPC>())
@@ -275,10 +277,6 @@ namespace CalamityMod.CalPlayer
                 case ProjectileID.Flamarang:
                 case ProjectileID.FireArrow:
                     target.AddBuff(BuffID.OnFire, 120);
-                    break;
-
-                case ProjectileID.Spark:
-                    target.AddBuff(BuffID.OnFire, 30);
                     break;
 
                 case ProjectileID.GolemFist:
@@ -379,7 +377,7 @@ namespace CalamityMod.CalPlayer
 
                 ProjLifesteal(target, proj, damageDone, hit.Crit);
                 ProjOnHit(proj, target.Center, hit.Crit, (target.damage > 5 || target.boss) && !target.SpawnedFromStatue);
-                NPCDebuffs(target, proj.CountsAsClass<MeleeDamageClass>(), proj.CountsAsClass<RangedDamageClass>(), proj.CountsAsClass<MagicDamageClass>(), proj.CountsAsClass<SummonDamageClass>(), proj.CountsAsClass<ThrowingDamageClass>(), proj.CountsAsClass<SummonMeleeSpeedDamageClass>(), true);
+                NPCDebuffs(target, proj.CountsAsClass<MeleeDamageClass>(), proj.CountsAsClass<RangedDamageClass>(), proj.CountsAsClass<MagicDamageClass>(), proj.CountsAsClass<SummonDamageClass>(), proj.CountsAsClass<ThrowingDamageClass>(), proj.CountsAsClass<SummonMeleeSpeedDamageClass>(), true, proj.noEnchantments);
 
                 // Shattered Community tracks all damage dealt with Rage Mode (ignoring dummies).
                 if (target.type == NPCID.TargetDummy || target.type == NPCType<SuperDummyNPC>())
@@ -748,7 +746,7 @@ namespace CalamityMod.CalPlayer
                         Projectile.NewProjectile(source, proj.Center, Vector2.Zero, ProjectileType<SummonAstralExplosion>(), starburstDamage, 3.5f, proj.owner);
                         summonProjCooldown = 60f;
                     }
-                    else if (nuclearRod)
+                    else if (nuclearFuelRod)
                     {
                         int nuclearDamage = (int)Player.GetTotalDamage<SummonDamageClass>().ApplyTo(20);
                         Projectile.NewProjectile(source, proj.Center, Vector2.Zero, ProjectileType<IrradiatedAura>(), nuclearDamage, 0f, proj.owner);
@@ -781,48 +779,19 @@ namespace CalamityMod.CalPlayer
         private void RogueOnHit(Projectile proj, CalamityGlobalProjectile modProj, Vector2 position, bool crit, bool npcCheck)
         {
             var spawnSource = proj.GetSource_FromThis();
-            if (modProj.stealthStrike && dragonScales && CalamityUtils.CountProjectiles(ProjectileType<InfernadoFriendly>()) < 1)
+            int Type = ProjectileType<DragonScalesInfernado>();
+            if (modProj.stealthStrike && dragonScales && Main.projectile.Count(proj => proj.type == Type && proj.active) < 1) 
             {
-                int projTileX = (int)(proj.Center.X / 16f);
-                int projTileY = (int)(proj.Center.Y / 16f);
-                int distance = 100;
-                if (projTileX < 10)
-                {
-                    projTileX = 10;
-                }
-                if (projTileX > Main.maxTilesX - 10)
-                {
-                    projTileX = Main.maxTilesX - 10;
-                }
-                if (projTileY < 10)
-                {
-                    projTileY = 10;
-                }
-                if (projTileY > Main.maxTilesY - distance - 10)
-                {
-                    projTileY = Main.maxTilesY - distance - 10;
-                }
-                for (int x = projTileX; x < projTileX + distance; x++)
-                {
-                    Tile tile = Main.tile[projTileX, projTileY];
-                    if (tile.HasTile && (Main.tileSolid[tile.TileType] || tile.LiquidAmount != 0))
-                    {
-                        projTileX = x;
-                        break;
-                    }
-                }
-                int damage = (int)Player.GetTotalDamage<RogueDamageClass>().ApplyTo(180);
-                int projectileIndex = Projectile.NewProjectile(spawnSource, projTileX * 16 + 8, projTileY * 16 - 24, 0f, 0f, ProjectileType<InfernadoFriendly>(), damage, 15f, Main.myPlayer, 16f, 16f);
+
+                int damage = (int)Player.GetTotalDamage<RogueDamageClass>().ApplyTo(DragonScales.TornadoBaseDamage);
+                int projectileIndex = Projectile.NewProjectile(spawnSource, proj.Center.X, proj.Center.Y, 0f, 0f, ProjectileType<DragonScalesInfernado>(), damage, 15f, Main.myPlayer, 10f, 9f); //First overload seems to deal with timing, second is segment amount
                 if (projectileIndex.WithinBounds(Main.maxProjectiles))
                 {
-                    Main.projectile[projectileIndex].DamageType = DamageClass.Generic;
                     Main.projectile[projectileIndex].netUpdate = true;
-                    Main.projectile[projectileIndex].usesIDStaticNPCImmunity = true;
-                    Main.projectile[projectileIndex].idStaticNPCHitCooldown = 30;
                 }
             }
 
-            if (crit && tarraThrowing && tarraThrowingCrits < 25 && !tarragonImmunity && !Player.HasCooldown(Cooldowns.TarragonImmunity.ID))
+            if (crit && tarraThrowing && tarraThrowingCrits < 50 && !tarragonImmunity && !Player.HasCooldown(Cooldowns.TarragonImmunity.ID))
                 tarraThrowingCrits++;
 
             if (xerocSet && xerocDmg <= 0 && Player.ownedProjectileCounts[ProjectileType<EmpyreanEmber>()] < 3 && Player.ownedProjectileCounts[ProjectileType<EmpyreanBlast>()] < 3)
@@ -1028,9 +997,9 @@ namespace CalamityMod.CalPlayer
         #endregion
 
         #region Debuffs
-        public void NPCDebuffs(NPC target, bool melee, bool ranged, bool magic, bool summon, bool rogue, bool whip, bool proj)
+        public void NPCDebuffs(NPC target, bool melee, bool ranged, bool magic, bool summon, bool rogue, bool whip, bool proj = false, bool noFlask = false)
         {
-            if (melee) // Prevents Deep Sea Dumbell from snagging true melee debuff memes
+            if (melee && !noFlask) // Prevents Deep Sea Dumbell from snagging true melee debuff memes
             {
                 if (eGauntlet)
                 {
@@ -1049,7 +1018,7 @@ namespace CalamityMod.CalPlayer
                     CalamityUtils.Inflict246DebuffsNPC(target, BuffID.OnFire, 4f);
                 }
             }
-			if (melee || rogue || whip)
+			if ((melee || rogue || whip) && !noFlask)
 			{
 				if (flaskCrumbling)
 				{
@@ -1064,7 +1033,7 @@ namespace CalamityMod.CalPlayer
 					target.AddBuff(BuffType<HolyFlames>(), 180, false);
 				}
 			}
-            if (rogue)
+            if (rogue && !noFlask)
             {
                 switch (Player.meleeEnchant)
                 {
@@ -1472,7 +1441,8 @@ namespace CalamityMod.CalPlayer
                             }
                         }
 
-                        var source = new ProjectileSource_ReaverHeal(Player);
+                        // https://github.com/tModLoader/tModLoader/wiki/IEntitySource#detailed-list
+                        var source = Player.GetSource_FromThis(ReaverHeadTank.HealOrbEntitySourceContext);
                         Projectile.NewProjectile(source, target.Center, Vector2.Zero, ProjectileType<ReaverHealOrb>(), 0, 0f, Player.whoAmI, healTarget, heal);
                     }
                 }

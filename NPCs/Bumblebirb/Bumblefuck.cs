@@ -82,11 +82,10 @@ namespace CalamityMod.NPCs.Bumblebirb
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Known across the land for the swarms that have gathered in the jungle, they are nearly feared above all else in it. Although they may not be quite as dangerous as other forces, they have no master.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Bumblefuck")
             });
         }
 
@@ -131,7 +130,7 @@ namespace CalamityMod.NPCs.Bumblebirb
             bool birbSpawn = NPC.ai[0] == 4f && NPC.ai[1] > 0f;
 
             // Animation goes nyoom
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 NPC.frameCounter += 4;
             }
@@ -410,11 +409,7 @@ namespace CalamityMod.NPCs.Bumblebirb
             return newColor;
         }
 
-        public override void BossLoot(ref string name, ref int potionType)
-        {
-            name = CalamityWorld.getFixedBoi ? "A Bumblebirb" : "A Dragonfolly";
-            potionType = ItemID.SuperHealingPotion;
-        }
+        public override void BossLoot(ref string name, ref int potionType) => potionType = ItemID.SuperHealingPotion;
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
@@ -465,18 +460,21 @@ namespace CalamityMod.NPCs.Bumblebirb
             DownedBossSystem.downedDragonfolly = true;
             CalamityNetcode.SyncWorld();
 
-            if (Main.netMode != NetmodeID.MultiplayerClient && CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 int spacing = 40;
                 int amt = 7;
                 SoundEngine.PlaySound(CommonCalamitySounds.LightningSound, NPC.Center - Vector2.UnitY * 300f);
-                for (int i = 0; i < amt; i++)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Vector2 fireFrom = new Vector2(NPC.Center.X + (spacing * i) - (spacing * amt / 2), NPC.Center.Y - 900f);
-                    Vector2 ai0 = NPC.Center - fireFrom;
-                    float ai = Main.rand.Next(100);
-                    Vector2 velocity = Vector2.Normalize(ai0.RotatedByRandom(MathHelper.PiOver4)) * 7f;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), NPC.damage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
+                    for (int i = 0; i < amt; i++)
+                    {
+                        Vector2 fireFrom = new Vector2(NPC.Center.X + (spacing * i) - (spacing * amt / 2), NPC.Center.Y - 900f);
+                        Vector2 ai0 = NPC.Center - fireFrom;
+                        float ai = Main.rand.Next(100);
+                        Vector2 velocity = Vector2.Normalize(ai0.RotatedByRandom(MathHelper.PiOver4)) * 7f;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), NPC.damage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
+                    }
                 }
             }
 
@@ -490,7 +488,7 @@ namespace CalamityMod.NPCs.Bumblebirb
 
         public override void ModifyTypeName(ref string typeName)
         {
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 typeName = CalamityUtils.GetTextValue("NPCs.Bumblebirb");
             }

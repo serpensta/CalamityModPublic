@@ -29,6 +29,8 @@ namespace CalamityMod.NPCs.SlimeGod
 
             NPC.defense = 4;
             NPC.lifeMax = BossRushEvent.BossRushActive ? 10000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 220 : 110;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.knockBackResist = 0f;
             AnimationType = NPCID.CorruptSlime;
             NPC.Opacity = 0.8f;
@@ -47,12 +49,11 @@ namespace CalamityMod.NPCs.SlimeGod
             int associatedNPCType = ModContent.NPCType<SplitCrimulanPaladin>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Irritant globs of gel, which can rob you of your vision if they get on your eyes. Avoid these at all costs, as they can spell death against the Slime God.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CrimsonSlimeSpawn")
             });
         }
 
@@ -79,7 +80,7 @@ namespace CalamityMod.NPCs.SlimeGod
             if (Main.rand.NextBool(8) && Main.player[closestPlayer].statLife < Main.player[closestPlayer].statLifeMax2)
                 Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart);
 
-            if (CalamityWorld.getFixedBoi && Main.rand.NextBool(5))
+            if (Main.zenithWorld && Main.rand.NextBool(5))
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {

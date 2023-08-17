@@ -15,6 +15,7 @@ namespace CalamityMod.Tiles.Ores
     {
         public byte[,] TileAdjacency;
         public byte[,] secondTileAdjacency;
+
         public override void SetStaticDefaults()
         {
             Main.tileLighted[Type] = true;
@@ -29,7 +30,7 @@ namespace CalamityMod.Tiles.Ores
 
             DustType = 105;
             AddMapEntry(new Color(210, 101, 28), CreateMapEntryName());
-            MineResist = 4f;
+            MineResist = 3f;
             MinPick = 210;
             HitSound = SoundID.Tink;
 
@@ -54,18 +55,6 @@ namespace CalamityMod.Tiles.Ores
 
             }
 
-            if (!closer)
-            {
-                if ((Main.tile[i, j].LiquidAmount == 0 || Main.tile[i, j].LiquidType == LiquidID.Water) && j < Main.maxTilesY - 205)
-                {
-                    Main.tile[i, j].Get<LiquidData>().LiquidType = LiquidID.Water;
-                    Main.tile[i, j].LiquidAmount = byte.MaxValue;
-                    WorldGen.SquareTileFrame(i, j);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetMessage.sendWater(i, j);
-                }
-            }
-
             if (Main.gamePaused)
                 return;
 
@@ -77,7 +66,7 @@ namespace CalamityMod.Tiles.Ores
                     if (!Main.tile[i, tileLocationY].HasTile)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(new EntitySource_WorldEvent(), (float)(i * 16 + 16), (float)(tileLocationY * 16 + 16), 0f, 0.1f, ModContent.ProjectileType<LavaChunk>(), 25, 2f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(new EntitySource_WorldEvent(), (float)(i * 16 + 16), (float)(tileLocationY * 16 + 16), 0f, 0.1f, ModContent.ProjectileType<LavaChunk>(), 25, 2f, Main.myPlayer);
                     }
                 }
             }

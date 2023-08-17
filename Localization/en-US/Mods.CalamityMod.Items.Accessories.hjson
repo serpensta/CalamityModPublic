@@ -32,7 +32,7 @@ AbyssalDivingSuit: {
 		'''
 		Transforms the holder into an armored diver
 		Increases max movement speed and acceleration while underwater but you move slowly outside of water
-		The suits' armored plates increase damage reduction by 15%
+		The suit's armored plates increase damage reduction by 15%
 		The plates will only take damage if the damage taken is over 50
 		After the suit has taken too much damage its armored plates will take 3 minutes to regenerate
 		Reduces the damage caused by the pressure of the abyss while out of breath
@@ -153,7 +153,7 @@ AngelicAlliance: {
 		Courage, Enlightenment, Bliss. United in Judgement
 		+2 max minions, 15% increased summon damage, and 8% increased damage to all other classes
 		Life regeneration is boosted while jumping
-		This line is modified in the code below. If you can read this, someone probably did something wrong (It was Ben)
+		Press [KEY] to grace yourself in divinity for 15 seconds
 		While under the effects of Divine Bless, for every minion you have, an archangel shall be summoned to aid you in combat
 		Each spawned angel will instantly heal you for two health
 		All minion attacks inflict Banishing Fire and you are granted a flat health boost of four health per second
@@ -219,10 +219,8 @@ AsgardianAegis: {
 		Grants immunity to knockback
 		Immune to most debuffs
 		+40 max life and increased life regeneration
-		Grants a supreme god slayer flame dash
+		Grants a cosmic inferno dash which can slam through enemies without taking damage
 		Can be used to ram enemies
-		TOOLTIP LINE HERE
-		Activating this buff will reduce your movement speed and increase enemy aggro
 		+20 defense while submerged in liquid
 		'''
 }
@@ -235,7 +233,7 @@ AsgardsValor: {
 		Immune to most debuffs
 		+16 defense while submerged in liquid
 		+20 max life
-		Grants a holy dash which can be used to ram enemies
+		Grants a holy flame dash which can slam through enemies without taking damage
 		'''
 }
 
@@ -246,7 +244,7 @@ AstralArcanum: {
 		Provides immunity to the astral infection debuff
 		Boosts life regen even while under the effects of a damaging debuff
 		While under the effects of a damaging debuff you will gain 15 defense
-		TOOLTIP LINE HERE
+		Press [KEY] to toggle teleportation UI while no bosses are alive
 		'''
 }
 
@@ -254,8 +252,7 @@ BadgeofBravery: {
 	DisplayName: Badge of Bravery
 	Tooltip:
 		'''
-		15% increased melee speed
-		Increases melee damage and melee crit by 5%
+		Increases melee damage and melee crit by 10%
 		+5 melee armor penetration
 		'''
 }
@@ -264,10 +261,13 @@ BlazingCore: {
 	DisplayName: Blazing Core
 	Tooltip:
 		'''
-		The searing core of the profaned goddess
-		Being hit creates a miniature sun that lingers, dealing damage to nearby enemies
-		The sun will slowly drag enemies into it
-		Only one sun can be active at once
+		The searing core of the Profaned Goddess
+		Pressing [KEY] will activate Elysian Guard, encasing you in luminous profaned crystal
+		Being hit shortly after encasement will shatter the crystal
+		Upon shattering, waves of holy stars spiral outwards and the damage you would have taken is reduced to 1
+		After shattering, this damage reduction effect goes on cooldown
+		If another encasement is shattered whilst on cooldown, healing stars will be interspersed throughout the waves of stars
+		The damage of a hit is not reduced whilst on cooldown
 		Provides a moderate amount of light in the Abyss
 		'''
 }
@@ -303,13 +303,13 @@ BloodyWormScarf: {
 	Tooltip:
 		'''
 		7% increased damage reduction
-		7% increased melee damage and speed
+		10% increased melee damage
 		'''
 }
 
 BloodyWormTooth: {
 	DisplayName: Bloody Worm Tooth
-	Tooltip: 7% increased melee damage and speed
+	Tooltip: 10% increased melee damage
 }
 
 BloomStone: {
@@ -331,7 +331,7 @@ BlunderBooster: {
 		12% increased rogue damage and 15% increased rogue projectile velocity
 		Stealth generates 10% faster
 		Summons a red lightning aura to surround the player and electrify nearby enemies
-		TOOLTIP LINE HERE
+		Press [KEY] to consume 25% of your maximum stealth to perform a swift upwards/diagonal dash which leaves a trail of lightning bolts
 		This effect has a 1 second cooldown before it can be used again
 		'''
 }
@@ -353,7 +353,7 @@ CelestialJewel: {
 		'''
 		Boosts life regen even while under the effects of a damaging debuff
 		While under the effects of a damaging debuff you will gain 11 defense
-		TOOLTIP LINE HERE
+		Press [KEY] to teleport to a random location while no bosses are alive
 		'''
 }
 
@@ -419,7 +419,20 @@ CounterScarf: {
 
 CrawCarapace: {
 	DisplayName: Craw Carapace
-	Tooltip: Enemies take damage when they touch you
+	Tooltip:
+		'''
+		5% increased damage
+		Enemies that hit you take damage and are inflicted with Armor Crunch
+		'''
+}
+
+Baroclaw: {
+	DisplayName: Baroclaw
+	Tooltip:
+		'''
+		8% increased damage
+		Enemies that hit you take high damage and are inflicted with Armor Crunch for a long time
+		'''
 }
 
 CrimsonFlask: {
@@ -482,7 +495,7 @@ DarkSunRing: {
 	DisplayName: Dark Sun Ring
 	Tooltip:
 		'''
-		12% increase to damage and melee speed
+		12% increase to damage
 		+1 life regen and +2 max minions
 		Increased minion knockback
 		During the day the player has +4 life regen
@@ -542,13 +555,23 @@ DraedonsHeart: {
 	DisplayName: Draedon's Heart
 	Tooltip:
 		'''
-		15% reduced contact damage from enemies
-		Reduces defense damage taken by 50%
-		Replaces Adrenaline with the Nanomachines meter
-		Unlike Adrenaline, you lose no Nanomachines when you take damage, but they stop accumulating for 1 second
-		With full Nanomachines, press & to heal 360 health over 2 seconds
-		While healing, you gain 50% damage reduction
+		{0}% reduced contact damage from enemies
+		Reduces defense damage taken by {1}%
+		[NANODESC]
+		With full Nanomachines, press [KEY] to heal {2} health over {3} {^3:second;seconds}
+		While healing, you take [DR]% less damage
 		'Nanomachines, son'
+		'''
+	NanomachinesAdd:
+		'''
+		Adds the Nanomachines meter
+		Nanomachines accumulate over time while fighting bosses
+		Taking damage stops the accumulation for {0} {^0:second;seconds}
+		'''
+	NanomachinesReplace:
+		'''
+		Replaces Adrenaline with the Nanomachines meter
+		Unlike Adrenaline, you lose no Nanomachines when you take damage, but they stop accumulating for {0} {^0:second;seconds}
 		'''
 }
 
@@ -582,7 +605,7 @@ EclipseMirror: {
 		6% increased rogue damage, and 6% increased rogue crit chance
 		Vastly reduces enemy aggression, even in the abyss
 		Stealth generates 25% faster when standing still
-		Mobile stealth generation exponentially accelerates while not attacking
+		Mobile stealth generation accelerates while not attacking
 		Stealth strikes only expend 50% of your max stealth
 		Grants the ability to evade attacks in a blast of darksun light, which inflicts extreme damage in a wide area
 		Evading an attack grants full stealth but has a 90 second cooldown
@@ -617,7 +640,6 @@ ElementalGauntlet: {
 		Melee attacks and projectiles inflict Hellfire
 		15% increased melee speed, damage, and 5% increased melee critical strike chance
 		20% increased true melee damage
-		Temporary immunity to lava
 		Increased melee knockback
 		Enables auto swing for melee weapons
 		Increases the size of melee weapons
@@ -640,10 +662,8 @@ ElysianAegis: {
 		'''
 		Grants immunity to knockback and the Burning, On Fire!, and Holy Flames debuffs
 		+30 max life
-		Grants a supreme holy flame dash
+		Grants an enhanced holy flame dash which can slam through enemies without taking damage
 		Can be used to ram enemies
-		TOOLTIP LINE HERE
-		Activating this buff will reduce your movement speed and increase enemy aggro
 		Blessed by the Profaned Flame
 		'''
 }
@@ -713,8 +733,7 @@ FlameLickedShell: {
 		35% decreased movement speed
 		Enemies take damage when they hit you
 		You move faster and lose 18 defense for 3 seconds if you take damage
-		Temporary immunity to lava
-		Grants immunity to Armor Crunch
+		Grants immunity to lava and Armor Crunch
 		'''
 }
 
@@ -746,11 +765,6 @@ FrostFlare: {
 		Being below 25% life grants 20 defense and 15% increased max movement speed and acceleration
 		Grants resistance against cold attacks
 		'''
-}
-
-FungalCarapace: {
-	DisplayName: Fungal Carapace
-	Tooltip: You emit a cloud of mushroom spores when you are hit
 }
 
 FungalClump: {
@@ -792,8 +806,8 @@ GiantShell: {
 	DisplayName: Giant Shell
 	Tooltip:
 		'''
-		15% reduced movement speed
-		Taking a hit will make you move very fast for a short time
+		10% reduced dash velocity
+		Taking a hit will remove the dash penalty and reduce defense for 5 seconds
 		'''
 }
 
@@ -801,9 +815,9 @@ GiantTortoiseShell: {
 	DisplayName: Giant Tortoise Shell
 	Tooltip:
 		'''
-		10% decreased movement speed
-		Enemies take damage when they hit you
-		Grants immunity to Armor Crunch
+		5% increased damage reduction
+		15% reduced dash velocity
+		Taking a hit will remove the dash penalty and reduce defense and damage reduction for 5 seconds
 		'''
 }
 
@@ -844,9 +858,10 @@ GrandGelatin: {
 	DisplayName: Grand Gelatin
 	Tooltip:
 		'''
-		10% increased movement and jump speed
-		+20 max life and mana
-		Standing still boosts life and mana regen
+		10% increased movement speed and jump speed
+		Using a healing potion will spawn a cleansing aura
+		Walking into the aura removes all debuffs and defense damage one time
+		The aura provides increased life regen for all players inside for 8 seconds
 		'''
 }
 
@@ -854,9 +869,14 @@ GravistarSabaton: {
 	DisplayName: Gravistar Sabaton
 	Tooltip:
 		'''
-		Tap the DOWN key to increase your fall speed for 5 seconds
-		This has an 8 second cooldown
-		Striking the ground with increased fall speed will cause an astral explosion
+		20% increased jump speed
+		Grants immunity to fall damage
+		Hold DOWN to increase your maximum fall speed
+		Hold [KEY] for 1 second while midair to charge up a superspeed slam
+		While slamming, you ram through enemies and don't take contact damage
+		Once you reach the ground, you create an explosion at your feet 
+		The explosion scales in both damage and size the longer you slam for
+		Temporary 40% increased jump speed after slamming into the ground
 		'''
 }
 
@@ -949,7 +969,7 @@ JellyChargedBattery: {
 	DisplayName: Jelly-Charged Battery
 	Tooltip:
 		'''
-		+1 max minions and 7% minion damage
+		+1 max minions and 7% summon damage
 		Minion attacks spawn orbs of energy and inflict Electrified
 		'''
 }
@@ -980,8 +1000,8 @@ LifeJelly: {
 	DisplayName: Life Jelly
 	Tooltip:
 		'''
-		+20 max life
-		Standing still boosts life regen
+		Using a healing potion will spawn a lingering aura 
+		The aura provides increased life regen for all players inside for 5 seconds
 		'''
 }
 
@@ -1014,12 +1034,12 @@ LuxorsGift: {
 		'''
 }
 
-ManaJelly: {
-	DisplayName: Mana Jelly
+CleansingJelly: {
+	DisplayName: Cleansing Jelly
 	Tooltip:
 		'''
-		+20 max mana
-		Standing still boosts mana regen
+		Using a healing potion will spawn a cleansing aura 
+		Walking into the aura removes all debuffs and defense damage one time
 		'''
 }
 
@@ -1107,8 +1127,8 @@ NecklaceofVexation: {
 		'''
 }
 
-NuclearRod: {
-	DisplayName: Nuclear Rod
+NuclearFuelRod: {
+	DisplayName: Nuclear Fuel Rod
 	Tooltip:
 		'''
 		Minions release an irradiated aura on enemy hits
@@ -1123,7 +1143,7 @@ Nucleogenesis: {
 		'''
 		Increases max minions by 4, does not stack with downgrades
 		Grants immunity to Shadowflame and Irradiated
-		15% increased minion damage
+		15% increased summon damage
 		Increased minion knockback
 		Minions inflict a variety of debuffs
 		Minions spawn damaging sparks on enemy hits
@@ -1163,10 +1183,17 @@ OldDukeScales: {
 	DisplayName: Old Duke's Scales
 	Tooltip:
 		'''
-		While under the effects of a damaging debuff, you gain 10% increased damage and 5% crit
-		For every 25% of lost life, you gain 6% increased damage and 3% crit
-		This will max out at 18% increased damage and 9% crit when under 25% life
-		Provides immunity to poisoned, venom, and sulphuric poisoning
+		10% increased damage reduction
+		10% increased max movement speed and acceleration
+		25% increased dash velocity and length
+		Gives you a stamina indicator on the cooldown rack
+		Using any dash will consume 20% of your stamina
+		Stamina will gradually recover to 100% after not dashing for 1 second
+		Stamina recovers faster when you are stationary
+		If your stamina reaches 0%, you become exhausted
+		[c/CE0E18:While exhausted, this item's damage reduction and movement bonuses are negated]
+		[c/CE0E18:Being exhausted reduces movement speed by 30% and dash velocity by 50%]
+		This debuff lasts until your stamina reaches 100% again
 		'''
 }
 
@@ -1175,7 +1202,7 @@ OrnateShield: {
 	Tooltip:
 		'''
 		8% increased damage reduction and +20 health while wearing the Daedalus armor
-		Grants a frost dash
+		Grants a frost dash which can slam through enemies without taking damage
 		'''
 }
 
@@ -1218,7 +1245,7 @@ PlaguedFuelPack: {
 		'''
 		8% increased rogue damage and 15% increased rogue projectile velocity
 		Stealth generates 10% faster
-		TOOLTIP LINE HERE
+		Press [KEY] to consume 25% of your maximum stealth to perform a swift upwards/diagonal dash which leaves a trail of plagued clouds
 		This effect has a 1 second cooldown before it can be used again
 		'''
 }
@@ -1250,7 +1277,24 @@ ProfanedSoulCrystal: {
 	Tooltip:
 		'''
 		Transforms you into an emissary of the profaned goddess
-		This tooltip gets modified
+		[STATUS]
+		'''
+	ExoMechsLock: "[c/F05A5A:The soul within this crystal has been defiled by overwhelming energy waves from dangerous mechanations]"
+	CalamitasLock: "[c/F05A5A:The soul within this crystal has been defiled by the powerful magic of a supreme witch]"
+	Reject: Merchants will reject a defiled soul such as this.
+	FullTooltip:
+		'''
+		Requires 10 minion slots to use in order to grant the following effects
+		All non-summon weapons are converted into powerful summon variations
+		Falling below 50% life will empower these attacks
+		[c/F05A5A:Transforms Melee attacks into a barrage of spears]
+		[c/3A83E4:Transforms Magic attacks into a powerful splitting fireball for {0} mana per cast]
+		[c/85E092:Transforms Ranged attacks into a flurry of fireballs and meteors]
+		[c/E94571:Transforms Rogue attacks into a deadly crystalline spiral]
+		Summons and empowers the profaned babs to fight alongside you
+		Provides buffs depending on the time of day
+		Thinking back, it was a boring life
+		[c/FFBF49:And so we burn it all in the name of purity]
 		'''
 }
 
@@ -1337,7 +1381,7 @@ RottenBrain: {
 
 RottenDogtooth: {
 	DisplayName: Rotten Dogtooth
-	Tooltip: Makes Stealth strikes inflict Armor Crunch and deal 10% more damage
+	Tooltip: Makes Stealth strikes inflict Armor Crunch and deal 8% more damage
 }
 
 RoverDrive: {
@@ -1374,7 +1418,7 @@ SandCloak: {
 	Tooltip:
 		'''
 		5% increased movement speed
-		TOOLTIP LINE HERE
+		Press [KEY] to consume 10% of your maximum stealth to create a protective dust veil which provides +6 defense and +2 life regen
 		This effect has a 30 second cooldown before it can be used again
 		'''
 }
@@ -1405,11 +1449,21 @@ ShatteredCommunity: {
 		Increases damage by 10% and critical strike chance by 5%
 		Increases max health by 10%, damage reduction by 5%, defense by 10 and life regen by 2
 		Increases movement speed by 10% and flight time by 20%
-		You generate rage over time and rage does not fade away out of combat
+		[RAGEDESC]
 		Taking damage gives rage, this effect is not hindered by your defensive stats
 		While Rage Mode is active, taking damage gives only half as much rage
 		Deal damage with Rage Mode to further empower your wrath
+		Current level: [LEVEL] (+[LEVEL]% Rage Mode damage)
+		Progress to next level: [PROGRESS]%
+		Total Rage Mode damage: [DAMAGE]
 		'''
+	RageAdd:
+		'''
+		Adds the Rage meter, which generates over time
+		Rage generates faster when in proximity of enemies
+		When Rage is maxed, press {0} for a temporary damage boost
+		'''
+	RageModified: You generate rage over time and rage does not fade out of combat
 }
 
 ShieldoftheHighRuler: {
@@ -1454,7 +1508,7 @@ SpectralVeil: {
 	DisplayName: Spectral Veil
 	Tooltip:
 		'''
-		TOOLTIP LINE HERE
+		Press [KEY] to consume 25% of your maximum stealth to perform a mid-range teleport and render you momentarily invulnerable
 		If you dodge something while invulnerable, you instantly gain full stealth
 		Teleportation is disabled while Chaos State is active
 		Stealth generates 15% faster
@@ -1490,7 +1544,7 @@ StarTaintedGenerator: {
 	Tooltip:
 		'''
 		+2 max minions, does not stack with downgrades
-		7% increased minion damage
+		7% increased summon damage
 		Minion attacks spawn astral explosions and inflict several debuffs
 		Grants immunity to Irradiated
 		'''
@@ -1500,7 +1554,7 @@ StatisBlessing: {
 	DisplayName: Statis' Blessing
 	Tooltip:
 		'''
-		Increased max minions by 2 and 10% increased minion damage
+		Increased max minions by 2 and 10% increased summon damage
 		Increased minion knockback
 		Minions inflict holy flames on hit
 		'''
@@ -1511,7 +1565,7 @@ StatisCurse: {
 	Tooltip:
 		'''
 		Increases max minions by 3, does not stack with downgrades
-		10% increased minion damage
+		10% increased summon damage
 		Increased minion knockback
 		Minions inflict holy flames and shadowflames on hit
 		Grants immunity to Shadowflame
@@ -1544,9 +1598,78 @@ StatisVoidSash: {
 		'''
 }
 
+// Be warned translators, this thing fucking sucks
 StatMeter: {
 	DisplayName: Stat Meter
-	Tooltip: Displays almost all player stats
+	FoolsName: Pasta Strainer
+	Tooltip:
+		'''
+		Displays almost all player stats
+		Offensive/utility stats displayed vary with held item
+		[REV]
+		[ITEMS]
+		[GENERIC]
+		[ABYSS]
+		'''
+	RevStats:
+		'''
+		Rage Damage Boost: {0}% | Rage Mode Duration: {1} seconds
+		Adrenaline Damage Boost: {2}% | Adrenaline DR Boost: {3}%
+		'''
+
+	ClassNameOverride: {
+		Default: true damage
+		Generic: classless damage
+		NoSpeed: " (no speed)"
+		SummonMeleeSpeed: " (whip)"
+	}
+
+	DamageStats:
+		'''
+		Class: {0}
+		Damage: {1}
+		Armor Penetration: {2}
+		'''
+	DamageBase: "[{0} base] +"
+	DamageNormal: "{0}%"
+	DamageMult: " x{0}"
+	DamageFlat: " {0} flat"
+	Crit: " | Crit Chance: {0}%"
+	AttackSpeed: Attack Speed: {0}%
+	WhipMeleeInheritance: " [{0}% from melee]"
+	// Class stats
+	RangedStats: Ammo Consumption Chance: {0}
+	MagicStats: Mana Usage: {0}% | Mana Regen: {1}
+	SummonStats: Minion Slots: {0} | Sentry Slots: {1}
+	WhipStats: Whip Range: {0}%
+	RogueStats:
+		'''
+		Max Stealth: {0} | Standing Regen: {1} / sec | Moving Regen: {2} / sec
+		Rogue Velocity Boost: {3}%
+		'''
+	RogueConsumption: " | Rogue Weapon Consumption Chance: {0}%"
+	// Utility stats
+	ToolRange: Tool Range Bonus: ({0}, {1})
+	MiningSpeed: " | Mining Speed: {0}%"
+	PlacementRange: Placement Range Bonus: ({0}, {1})
+	TileSpeed: " | Block Placement Speed: {0}%"
+	WallSpeed: " | Wall Placement Speed: {0}%"
+	// Other stats
+	GenericStats:
+		'''
+		Defense: {0} | DR: {1}% | Life Regen: {2}
+		Move Speed: {3}% | Jump Boost: {4}%
+		'''
+	FlightTime: " | Wing Flight Time: {0} seconds"
+	MiscStats: Aggro: {0} | Luck: {1}%
+	AbyssStats:
+		'''
+		Abyss Light Strength: {0}
+		Breath Lost Per Tick: {1} | Breath Loss Rate: {2}
+		Life Lost Per Tick at Zero Breath: {3}
+		Defense Lost From Pressure: {4}
+		'''
+	AbyssStatsHidden: Abyss stats are only displayed while in the Abyss
 }
 
 StressPills: {
@@ -1576,14 +1699,12 @@ TheAbsorber: {
 	DisplayName: The Absorber
 	Tooltip:
 		'''
-		5% increased movement and jump speed
-		+20 max life and mana
-		Standing still boosts life and mana regen
-		Enemies take damage when they touch you
-		You emit a cloud of mushroom spores when you are hit
-		7% increased damage reduction
+		10% increased movement and jump speed
+		Enemies take immense damage when they touch you and are afflicted with a debuff that reduces damage reduction significantly
+		Using a healing potion will spawn a cleansing aura
+		Walking into the aura removes all debuffs and defense damage one time
+		The aura provides greatly increased life regen, damage, and damage reduction for all players inside for 15 seconds
 		5% of the damage from enemy attacks is absorbed and converted into healing
-		Grants immunity to Armor Crunch
 		'''
 }
 
@@ -1628,11 +1749,17 @@ TheCommunity: {
 	DisplayName: The Community
 	Tooltip:
 		'''
-		Starts off with weak buffs to all of your stats
-		The stat buffs become more powerful as you defeat bosses
-		Reduces the DoT effects of harmful debuffs inflicted on you
+		[STATS]
 		'The heart of (most of) the Terraria community'
-		[c/b00ba5:Thank you to all of my supporters who made this mod a reality!]
+		[c/B00BA5:Thank you to all of my supporters who made this mod a reality!]
+		'''
+	StatsList:
+		'''
+		Increases damage by {0}% and critical strike chance by {1}%
+		Increases max health by {2}%, damage reduction by {3}%, and defense by {4}
+		Increases life regen by {5} while under damage over time effects
+		Increases movement speed by {6}% and flight time by {7}%
+		Become more powerful as you defeat bosses ({8}% Power)
 		'''
 }
 
@@ -1659,17 +1786,7 @@ TheFirstShadowflame: {
 
 TheSponge: {
 	DisplayName: The Sponge
-	Tooltip:
-		'''
-		10% increased damage reduction
-		+30 max life and mana
-		5% increased movement and jump speed
-		Standing still boosts life and mana regen
-		Enemies take damage when they touch you
-		You emit a cloud of mushroom spores when you are hit
-		6.25% of the damage from enemy attacks is absorbed and converted into healing
-		Grants immunity to Armor Crunch
-		'''
+	Tooltip: OUT OF ORDER
 }
 
 TheTransformer: {
@@ -1732,6 +1849,11 @@ AbandonedWulfrumHelmet: {
 		'''
 }
 
+HapuFruit: {
+	DisplayName: Ha-pu Fruit
+	Tooltip: ""
+}
+
 Popo: {
 	DisplayName: Magic Scarf and Hat
 	Tooltip:
@@ -1774,8 +1896,7 @@ VoidofExtinction: {
 		12% increase to all damage
 		All attacks inflict Brimstone Flames
 		Brimstone fire rains down after getting hit
-		Reduces damage from touching lava
-		Grants immunity to Burning, On Fire!, Brimstone Flames and Searing Lava
+		Grants immunity to lava, Burning, On Fire!, Brimstone Flames and Searing Lava
 		'''
 }
 
@@ -1850,10 +1971,8 @@ YharimsInsignia: {
 	Tooltip:
 		'''
 		10% increased damage when under 50% life
-		10% increased melee speed
-		10% increased melee and true melee damage
-		Melee attacks and melee projectiles inflict holy fire
-		Temporary immunity to lava
+		15% increased melee and true melee damage
+		All melee attacks inflict Holy Flames
 		Increased melee knockback
 		'''
 }

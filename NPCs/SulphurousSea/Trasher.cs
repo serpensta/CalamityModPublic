@@ -56,10 +56,9 @@ namespace CalamityMod.NPCs.SulphurousSea
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("A huge alligator adapted to a life of scavenging in the sulphurous sea. They scrape morsels of food from the bottom with their massive jaws. But do not be mistaken. They will also prey on weak and feeble creatures.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Trasher")
             });
         }
 
@@ -342,10 +341,13 @@ namespace CalamityMod.NPCs.SulphurousSea
 
         public override void OnKill()
         {
-            if (!NPC.savedAngler && !NPC.AnyNPCs(NPCID.Angler) && !NPC.AnyNPCs(NPCID.SleepingAngler) && Main.netMode != NetmodeID.MultiplayerClient)
+            if (!NPC.savedAngler && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.Angler);
-                NPC.savedAngler = true;
+                if (!NPC.AnyNPCs(NPCID.Angler) && !NPC.AnyNPCs(NPCID.SleepingAngler))
+                {
+                    NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, NPCID.Angler);
+                    NPC.savedAngler = true;
+                }
             }
         }
 

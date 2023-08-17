@@ -61,11 +61,10 @@ namespace CalamityMod.NPCs.CeaselessVoid
             int associatedNPCType = ModContent.NPCType<CeaselessVoid>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("One of the many rifts created in the fabric of space by the Ceaseless Void. Some say you could even see a glimpse of another world if you gaze into it.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DarkEnergy")
             });
         }
 
@@ -273,8 +272,8 @@ namespace CalamityMod.NPCs.CeaselessVoid
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            int debufftype = CalamityWorld.getFixedBoi ? BuffID.Obstructed : BuffID.VortexDebuff;
-            int duration = CalamityWorld.getFixedBoi ? 30 : 60;
+            int debufftype = Main.zenithWorld ? BuffID.Obstructed : BuffID.VortexDebuff;
+            int duration = Main.zenithWorld ? 30 : 60;
             if (hurtInfo.Damage > 0)
                 target.AddBuff(debufftype, duration, true);
         }

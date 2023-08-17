@@ -1,10 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Buffs.Alcohol;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Magic
 {
     public class FabRay : ModProjectile, ILocalizedModType
@@ -46,7 +48,16 @@ namespace CalamityMod.Projectiles.Magic
                 if (potentialTarget != null)
                 {
                     Vector2 shootVelocity = Projectile.SafeDirectionTo(potentialTarget.Center) * 13f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - shootVelocity * 2.5f, shootVelocity, ModContent.ProjectileType<FabBolt>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - shootVelocity * 2.5f, shootVelocity, ModContent.ProjectileType<FabBolt>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    if (p.WithinBounds(Main.maxProjectiles))
+                    {
+                        if (Projectile.hostile)
+                        {
+                            Main.projectile[p].hostile = true;
+                            Main.projectile[p].friendly = false;
+                            Main.projectile[p].DamageType = DamageClass.Default;
+                        }
+                    }
                 }
 
                 for (int i = 0; i < Projectile.oldPos.Length / 4; i += 3)
@@ -55,14 +66,24 @@ namespace CalamityMod.Projectiles.Magic
                     if (potentialTarget != null)
                     {
                         Vector2 shootVelocity = (potentialTarget.Center - Projectile.oldPos[i]).SafeNormalize(Vector2.UnitY) * 13f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.oldPos[i] - shootVelocity * 2.5f, shootVelocity, ModContent.ProjectileType<FabBolt>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                        int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.oldPos[i] - shootVelocity * 2.5f, shootVelocity, ModContent.ProjectileType<FabBolt>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                        if (p.WithinBounds(Main.maxProjectiles))
+                        {
+                            if (Projectile.hostile)
+                            {
+                                Main.projectile[p].hostile = true;
+                                Main.projectile[p].friendly = false;
+                                Main.projectile[p].DamageType = DamageClass.Default;
+                            }
+                        }
                         break;
                     }
                 }
             }
 
             // Emit light.
-            Lighting.AddLight(Projectile.Center, Vector3.One * Projectile.Opacity * 0.7f);
+            if (!Projectile.hostile)
+                Lighting.AddLight(Projectile.Center, Vector3.One * Projectile.Opacity * 0.7f);
         }
 
         internal Color ColorFunction(float completionRatio)
@@ -108,6 +129,12 @@ namespace CalamityMod.Projectiles.Magic
                 }
             }
             return false;
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (Projectile.hostile)
+                target.AddBuff(ModContent.BuffType<FabsolVodkaBuff>(), 54000);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public new string LocalizationCategory => "Items.Weapons.Melee";
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.Yoyo[Item.type] = true;
+            ItemID.Sets.Yoyo[Item.type] = true;
             ItemID.Sets.GamepadExtraRange[Item.type] = 15;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
         }
@@ -25,7 +25,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = 30;
             Item.height = 26;
             Item.DamageType = DamageClass.MeleeNoSpeed;
-            Item.damage = 107;
+            Item.damage = 130;
             Item.knockBack = 7f;
             Item.useTime = 20;
             Item.useAnimation = 20;
@@ -44,20 +44,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.rare = ModContent.RarityType<Turquoise>();
         }
 
-        public override void ModifyTooltips(List<TooltipLine> list)
-        {
-            Player player = Main.LocalPlayer;
-            TooltipLine line3 = list.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip2");
-
-            if (CalamityWorld.getFixedBoi)
-            {
-                line3.Text = "May be viable weapon against DoG...";
-            }
-            else
-            {
-                line3.Text = "Someone thought this was a viable weapon against DoG at one point lol";
-            }
-        }
+        public override void ModifyTooltips(List<TooltipLine> list) => list.FindAndReplace("[GFB]", this.GetLocalizedValue(Main.zenithWorld ? "TooltipGFB" : "TooltipNormal"));
 
         public override void AddRecipes()
         {

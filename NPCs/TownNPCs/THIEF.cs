@@ -61,12 +61,10 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,                   
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("A kleptomaniac who is a bit of a coward when it comes to face-to-face fights. She's rather good at getting herself both into and out of dicey situations.")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.THIEF")
             });
         }
 
@@ -260,10 +258,10 @@ namespace CalamityMod.NPCs.TownNPCs
         }
         public override void AddShops()
         {
-            Condition potionSells = new("While the Town NPC Potion Selling configuration option is enabled", () => CalamityConfig.Instance.PotionSelling);
-            Condition downedCalclone = new("If the Calamitas Clone has been defeated", () => DownedBossSystem.downedCalamitasClone);
-            Condition downedDoG = new("If The Devourer of Gods has been defeated", () => DownedBossSystem.downedDoG);
-            Condition downedYharon = new("If Yharon has been defeated", () => DownedBossSystem.downedYharon);
+            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
+            Condition downedCalclone = new(CalamityUtils.GetText("Condition.PostCal"), () => DownedBossSystem.downedCalamitasClone);
+            Condition downedDoG = new(CalamityUtils.GetText("Condition.PostDoG"), () => DownedBossSystem.downedDoG);
+            Condition downedYharon = new(CalamityUtils.GetText("Condition.PostYharon"), () => DownedBossSystem.downedYharon);
 
             NPCShop shop = new(Type);
             shop.AddWithCustomValue(ModContent.ItemType<Cinquedea>(), Item.buyPrice(gold: 9))
@@ -273,7 +271,6 @@ namespace CalamityMod.NPCs.TownNPCs
                 .Add(ItemID.TigerClimbingGear)
                 .AddWithCustomValue(ItemID.InvisibilityPotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
                 .AddWithCustomValue(ItemID.NightOwlPotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.TrapsightPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
                 .AddWithCustomValue(ModContent.ItemType<SlickCane>(), Item.buyPrice(gold: 25), Condition.Hardmode)
                 .Add(ModContent.ItemType<ThiefsDime>(), Condition.DownedPirates)
                 .AddWithCustomValue(ModContent.ItemType<MomentumCapacitor>(), Item.buyPrice(gold: 60), Condition.DownedMechBossAll)
@@ -303,8 +300,8 @@ namespace CalamityMod.NPCs.TownNPCs
             }
         }
 
-        // Make this Town NPC teleport to the Queen statue when triggered.
-        public override bool CanGoToStatue(bool toKingStatue) => !toKingStatue;
+        // Make this Town NPC teleport to the Queen or King statue when triggered.
+        public override bool CanGoToStatue(bool toKingStatue) => true;
 
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {

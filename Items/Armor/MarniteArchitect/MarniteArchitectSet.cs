@@ -40,15 +40,8 @@ namespace CalamityMod.Items.Armor.MarniteArchitect
             Terraria.On_Player.QuickMount += ActivateLift;
         }
 
-        public override void Unload()
-        {
-            Terraria.On_Player.QuickMount -= ActivateLift;
-        }
-
-
         public override void SetStaticDefaults()
         {
-
             if (Main.netMode == NetmodeID.Server)
                 return;
 
@@ -80,7 +73,6 @@ namespace CalamityMod.Items.Armor.MarniteArchitect
                     self.mount.SetMount(liftMountType, self);
                     SoundEngine.PlaySound(LiftSpawnSound, self.Center);
                 }
-
             }
 
             else
@@ -104,7 +96,7 @@ namespace CalamityMod.Items.Armor.MarniteArchitect
             if (Main.myPlayer == player.whoAmI)
             {
                 Player.tileRangeX += 5;
-                Player.tileRangeY += 4; //Extendo grip also increases vertical tile range by one less than horizontal
+                Player.tileRangeY += 5; //Extendo grip also increases vertical tile range by one less than horizontal <-- This is silly lmao
             }
         }
 
@@ -153,7 +145,6 @@ namespace CalamityMod.Items.Armor.MarniteArchitect
 
         public override void SetStaticDefaults()
         {
-
             if (Main.netMode == NetmodeID.Server)
                 return;
         }

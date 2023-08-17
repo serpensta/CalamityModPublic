@@ -19,7 +19,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 128;
+            Item.damage = 140;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 106;
             Item.height = 42;
@@ -91,7 +91,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 AddIngredient(ItemID.VortexBeater).
                 AddIngredient(ItemID.IllegalGunParts).
                 AddIngredient<ArmoredShell>(2).
-                AddTile(TileID.Anvils).
+                AddTile(TileID.LunarCraftingStation).
                 Register();
         }
     }

@@ -48,13 +48,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public override void SetDefaults()
         {
             NPC.BossBar = Main.BigBossProgressBar.NeverValid;
-            NPC.damage = 0;
+            NPC.damage = 50;
             NPC.npcSlots = 5f;
             NPC.width = 120;
             NPC.height = 120;
             NPC.defense = 80;
             NPC.DR_NERD(SupremeCataclysm.NormalBrothersDR);
-            NPC.LifeMaxNERB(230000, 276000, 200000);
+            NPC.lifeMax = 138000;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
@@ -73,12 +73,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             int associatedNPCType = ModContent.NPCType<SupremeCalamitas>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                //We'll probably want a custom background SCal her like ML has.
-                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.SCal,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("Calamitas' necromancy is outmatched by no one, but no one can truly bring the departed back from the dead.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SupremeCatastrophe")
             });
         }
 
@@ -121,6 +118,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             // Set the whoAmI variable.
             CalamityGlobalNPC.SCalCatastrophe = NPC.whoAmI;
 
@@ -231,13 +231,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     DartBurstCounter = 0f;
                     SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, NPC.Center);
 
-                    int type = CalamityWorld.getFixedBoi ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
+                    int type = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
                     int damage = NPC.GetProjectileDamage(type);
 					if (bossRush)
 						damage /= 2;
                     int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
                     float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = CalamityWorld.getFixedBoi ? 5f : 7f;
+                    float velocity = Main.zenithWorld ? 5f : 7f;
                     Vector2 spinningPoint = new Vector2(0f, -velocity);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {

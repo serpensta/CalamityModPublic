@@ -248,7 +248,7 @@ Condemnation: {
 	Tooltip:
 		'''
 		Fires powerful scarlet bolts suffused with hateful magics
-		Hold <left> to load up to eight bolts for powerful burst fire
+		Hold <left> to load up to nine bolts for powerful burst fire
 		Hold <right> to use the repeater full auto
 		'''
 }
@@ -540,7 +540,9 @@ GunkShot: {
 
 HalibutCannon: {
 	DisplayName: Halibut Cannon
-	Tooltip: "'Yes, it's still overpowered'"
+	Tooltip: "[GFB]"
+	TooltipNormal: "'Yes, it's still overpowered'"
+	TooltipGFB: "'No, it sucks now'"
 }
 
 HalleysInferno: {
@@ -682,9 +684,8 @@ Megalodon: {
 	DisplayName: Megalodon
 	Tooltip:
 		'''
-		Rapidly fires a storm of bullets
-		Fires streams of water every other shot
-		50% chance to save ammo
+		Rapidly fires alternating bullets and pressurized water jets
+		Water jets consume no ammo
 		'''
 }
 
@@ -705,6 +706,12 @@ MidasPrime: {
 		Striking a coin with a bullet causes it to ricochet into the nearest enemy
 		Up to 4 coins can be tossed simultaneously, and shots will ricochet off multiple coins if possible
 		Ricocheted bullets always critically strike and do bonus damage based on the coins used
+		'''
+	UltrakillEasterEgg:
+		'''
+		MANKIND IS DEAD.
+		BLOOD IS FUEL.
+		HELL IS FULL.
 		'''
 }
 
@@ -844,6 +851,17 @@ Photoviscerator: {
 		'''
 }
 
+PlagueTaintedSMG: {
+	DisplayName: Plague Tainted SMG
+	Tooltip:
+		'''
+		Shoots plague bullets that spawn drones on critical hits
+		Bullets deal more damage and knockback the closer the enemy is
+		Drones always crit upon hitting a plagued enemy
+		Press <right> to fire a drone swarm
+		'''
+}
+
 PlanetaryAnnihilation: {
 	DisplayName: Planetary Annihilation
 	Tooltip:
@@ -962,10 +980,9 @@ Seadragon: {
 	DisplayName: Seadragon
 	Tooltip:
 		'''
-		Unleashes a rapid deluge of bullets
-		Fires streams of water every other shot
-		Fires a homing rocket every 18 shots, which explodes into fire shards on death
-		50% chance to save ammo
+		Unleashes a deluge of alternating bullets and pressurized water jets
+		Additionally fires rockets and emits devastating muzzle blasts
+		Water jets consume no ammo
 		'''
 }
 
@@ -1070,6 +1087,11 @@ Starmada: {
 		Fires a barrage of stars and plasma blasts
 		66% chance to save ammo
 		'''
+}
+
+Starmageddon: {
+	DisplayName: Starmageddon
+	Tooltip: Projects the finality of cosmic annihilation with Darksun power
 }
 
 StarSputter: {

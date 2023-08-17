@@ -1,9 +1,12 @@
 ﻿using CalamityMod.Events;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Furniture.CraftingStations;
+using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.Items.SummonItems;
 using CalamityMod.NPCs.SupremeCalamitas;
+using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Projectiles.Boss;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -63,10 +66,19 @@ namespace CalamityMod.Tiles.Furniture.CraftingStations
 
         public static void HoverItemIcon()
         {
-            if (Main.LocalPlayer.HasItem(ModContent.ItemType<CeremonialUrn>()))
+            bool vodka = Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FabsolsVodka>() && Main.zenithWorld;
+            if (vodka)
+            {
+                Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<FabsolsVodka>();
+            }
+            else if (Main.LocalPlayer.HasItem(ModContent.ItemType<CeremonialUrn>()))
+            {
                 Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<CeremonialUrn>();
+            }
             else
+            {
                 Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<AshesofCalamity>();
+            }
 
             Main.LocalPlayer.noThrow = 2;
             Main.LocalPlayer.cursorItemIconEnabled = true;
@@ -80,10 +92,12 @@ namespace CalamityMod.Tiles.Furniture.CraftingStations
             int top = j - tile.TileFrameY / 18;
 
             if (!Main.LocalPlayer.HasItem(ModContent.ItemType<AshesofCalamity>()) &&
-                !Main.LocalPlayer.HasItem(ModContent.ItemType<CeremonialUrn>()))
+                !Main.LocalPlayer.HasItem(ModContent.ItemType<CeremonialUrn>()) && !(Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FabsolsVodka>() && Main.zenithWorld))
             {
                 return true;
             }
+
+            bool vodka = Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FabsolsVodka>() && Main.zenithWorld;
 
             if (NPC.AnyNPCs(ModContent.NPCType<SupremeCalamitas>()) || BossRushEvent.BossRushActive)
                 return true;
@@ -97,10 +111,23 @@ namespace CalamityMod.Tiles.Furniture.CraftingStations
             ritualSpawnPosition += new Vector2(-10f, -24f);
 
             SoundEngine.PlaySound(SummonSound, ritualSpawnPosition);
-            Projectile.NewProjectile(new EntitySource_WorldEvent(), ritualSpawnPosition, Vector2.Zero, ModContent.ProjectileType<SCalRitualDrama>(), 0, 0f, Main.myPlayer);
+            Projectile.NewProjectile(new EntitySource_WorldEvent(), ritualSpawnPosition, Vector2.Zero, ModContent.ProjectileType<SCalRitualDrama>(), 0, 0f, Main.myPlayer, 0, vodka.ToInt());
 
-            if (!usingSpecialItem)
+            if (vodka)
+            {
+                Main.LocalPlayer.ConsumeItem(ModContent.ItemType<FabsolsVodka>(), true);
+                for (int f = 0; f < Main.maxNPCs; f++)
+                {
+                    if (Main.npc[f].type == ModContent.NPCType<FAP>() && Main.npc[f].active)
+                    {
+                        Main.npc[f].active = false;
+                    }
+                }
+            }
+            else if (!usingSpecialItem)
+            {
                 Main.LocalPlayer.ConsumeItem(ModContent.ItemType<AshesofCalamity>(), true);
+            }
             return true;
         }
     }

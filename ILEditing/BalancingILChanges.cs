@@ -9,6 +9,20 @@ namespace CalamityMod.ILEditing
 {
     public partial class ILChanges
     {
+        #region Rod of Harmony Changes
+
+        private static bool ChangeRodOfHarmonyShimmerRequirement(On_Item.orig_CanShimmer orig, Item item)
+        {
+            //Rod of Harmony requires Draedong and SCal dead instead of Moon Lord.
+            if (item.type == ItemID.RodofDiscord)
+            {
+                return DownedBossSystem.downedCalamitas && DownedBossSystem.downedExoMechs;
+            }
+            return orig(item);
+        }
+        
+        #endregion
+        
         #region Soaring Insignia Changes
         private static void RemoveSoaringInsigniaInfiniteWingTime(ILContext il)
         {
@@ -398,6 +412,23 @@ namespace CalamityMod.ILEditing
             }
             cursor.Remove();
             cursor.Emit(OpCodes.Ldc_R4, 150f); // Reduce homing range by 50%.
+        }
+        #endregion
+
+        #region Terrarian Projectile Limitation for Extra Updates
+        private static void LimitTerrarianProjectiles(ILContext il)
+        {
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(ProjectileID.Terrarian)))
+            {
+                LogFailure("Limit Terrarian Yoyo Projectiles", "Could not locate the yoyo ID.");
+                return;
+            }
+
+            // Emit a delegate which corrupts the projectile ID checked for if the projectile is not on its final extra update.
+            // This delegate intentionally eats the original ID off the stack and gives it back if finished.
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate((int x, Projectile p) => p.FinalExtraUpdate() ? x : int.MinValue);
         }
         #endregion
 

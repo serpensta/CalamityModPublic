@@ -81,12 +81,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("Rotating their small frames, they swoop at potential intruders into a predefined territory that no longer exists. They wander without purpose.")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.WulfrumDrone")
             });
         }
 
@@ -197,11 +196,10 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            float pylonMult = NPC.AnyNPCs(ModContent.NPCType<WulfrumAmplifier>()) ? 5.5f : 1f;
-            if (spawnInfo.PlayerSafe || spawnInfo.Player.Calamity().ZoneSulphur)
+            if (spawnInfo.PlayerSafe || spawnInfo.Player.Calamity().ZoneSulphur || !spawnInfo.Player.ZoneOverworldHeight)
                 return 0f;
 
-            return SpawnCondition.OverworldDaySlime.Chance * (Main.hardMode ? 0.010f : 0.1f) * pylonMult;
+            return SpawnCondition.OverworldDaySlime.Chance * (Main.hardMode ? 0.010f : 0.1f) * (NPC.AnyNPCs(ModContent.NPCType<WulfrumAmplifier>()) ? 5.5f : 1f);
         }
 
         public override void HitEffect(NPC.HitInfo hit)

@@ -56,13 +56,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public override void SetDefaults()
         {
             NPC.BossBar = Main.BigBossProgressBar.NeverValid;
-            NPC.damage = 0;
+            NPC.damage = 50;
             NPC.npcSlots = 5f;
             NPC.width = 120;
             NPC.height = 120;
             NPC.defense = 80;
             NPC.DR_NERD(NormalBrothersDR);
-            NPC.LifeMaxNERB(230000, 276000, 200000);
+            NPC.lifeMax = 138000;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
@@ -81,12 +81,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             int associatedNPCType = ModContent.NPCType<SupremeCalamitas>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                //We'll probably want a custom background SCal her like ML has.
-                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.SCal,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("Despite retaining a humanoid form, it is not capable of any higher thoughts. It only knows violence.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SupremeCataclysm")
             });
         }
 
@@ -128,6 +125,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             // Set the whoAmI variable.
             CalamityGlobalNPC.SCalCataclysm = NPC.whoAmI;
 
@@ -236,13 +236,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     DartBurstCounter = 0f;
                     SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, NPC.Center);
 
-                    int type = CalamityWorld.getFixedBoi ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
+                    int type = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
                     int damage = NPC.GetProjectileDamage(type);
 					if (bossRush)
 						damage /= 2;
                     int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
                     float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = CalamityWorld.getFixedBoi ? 5f : 7f;
+                    float velocity = Main.zenithWorld ? 5f : 7f;
                     Vector2 spinningPoint = new Vector2(0f, -velocity);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -283,7 +283,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             spriteBatch.Draw(texture, mainDrawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
 
             texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeCataclysmGlow").Value;
-            Color primarycolor = CalamityWorld.getFixedBoi ? Color.Blue : Color.Red; // why? because blue fire is awesome!!
+            Color primarycolor = Main.zenithWorld ? Color.Blue : Color.Red; // why? because blue fire is awesome!!
             Color baseGlowmaskColor = NPC.IsABestiaryIconDummy ? Color.White : Color.Lerp(Color.White, primarycolor, 0.5f);
 
             if (CalamityConfig.Instance.Afterimages)

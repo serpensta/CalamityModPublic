@@ -86,10 +86,9 @@ namespace CalamityMod.NPCs.OldDuke
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("One of the first descendants of the Dragons, its reign as the apex sea monster has been long forgotten. However, its power is still immense due to its heritage.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.OldDuke")
             });
         }
 
@@ -126,7 +125,7 @@ namespace CalamityMod.NPCs.OldDuke
 
         public override void ModifyTypeName(ref string typeName)
         {
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 typeName = CalamityUtils.GetTextValue("NPCs.BoomerDuke");
             }
@@ -476,7 +475,7 @@ namespace CalamityMod.NPCs.OldDuke
             if (hurtInfo.Damage > 0)
             {
                 target.AddBuff(ModContent.BuffType<Irradiated>(), 480);
-                if (CalamityWorld.getFixedBoi)
+                if (Main.zenithWorld)
                 {
                     target.AddBuff(BuffID.Rabies, Main.rand.Next(180, 601));
                 }

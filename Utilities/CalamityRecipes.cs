@@ -25,10 +25,10 @@ namespace CalamityMod
         #region Recipe Group Definitions
         public static int HardmodeAnvil, HardmodeForge, AnyLargeGem, AnyFood;
         public static int AnyCopperBar, AnySilverBar, AnyGoldBar, AnyEvilBar, AnyCobaltBar, AnyMythrilBar, AnyAdamantiteBar;
-        public static int EvilPowder, Boss2Material, CursedFlameIchor, AnyEvilWater, AnyEvilFlask;
-        public static int AnyStoneBlock, AnySnowBlock, AnyIceBlock, SiltGroup, AnyEvilBlock, AnyGoodBlock;
+        public static int AnyEvilPowder, Boss2Material, CursedFlameIchor, AnyEvilWater, AnyEvilFlask;
+        public static int AnyStoneBlock, AnySnowBlock, AnyIceBlock, AnySiltBlock, AnyEvilBlock, AnyGoodBlock;
         public static int AnyWoodenSword, AnyHallowedHelmet, AnyHallowedPlatemail, AnyHallowedGreaves, AnyGoldCrown, LunarPickaxe, LunarHamaxe;
-        public static int ManaFlowersGroup, QuiversGroup, WingsGroup, TombstonesGroup;
+        public static int AnyManaFlower, AnyQuiver, AnyTombstone, AnyWings;
 
         private static void ModifyVanillaRecipeGroups()
         {
@@ -58,7 +58,7 @@ namespace CalamityMod
             AddEquipmentRecipeGroups();
 
             // Mythril Anvil and Orichalcum Anvil
-            RecipeGroup group = new RecipeGroup(() => "Any Hardmode Anvil", new int[]
+            RecipeGroup group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.HardmodeAnvil"), new int[]
             {
                 ItemID.MythrilAnvil,
                 ItemID.OrichalcumAnvil
@@ -66,7 +66,7 @@ namespace CalamityMod
             HardmodeAnvil = RecipeGroup.RegisterGroup("HardmodeAnvil", group);
 
             // Adamantite Forge and Titanium Forge
-            group = new RecipeGroup(() => "Any Hardmode Forge", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.HardmodeForge"), new int[]
             {
                 ItemID.AdamantiteForge,
                 ItemID.TitaniumForge
@@ -74,7 +74,7 @@ namespace CalamityMod
             HardmodeForge = RecipeGroup.RegisterGroup("HardmodeForge", group);
 
             // Large Gems (PvP tokens)
-            group = new RecipeGroup(() => "Any Large Gem", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyLargeGem"), new int[]
             {
                 ItemID.LargeAmber,
                 ItemID.LargeAmethyst,
@@ -87,7 +87,7 @@ namespace CalamityMod
             AnyLargeGem = RecipeGroup.RegisterGroup("AnyLargeGem", group);
 
             // Food
-            group = new RecipeGroup(() => "Any Food Item", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyFood"), new int[]
             {
                 ItemID.Apple,
                 ItemID.AppleJuice,
@@ -201,7 +201,7 @@ namespace CalamityMod
             AnyGoldBar = RecipeGroup.RegisterGroup("AnyGoldBar", group);
 
             // Demonite and Crimtane
-            group = new RecipeGroup(() => "Any Evil Bar", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyEvilBar"), new int[]
             {
                 ItemID.DemoniteBar,
                 ItemID.CrimtaneBar
@@ -236,15 +236,15 @@ namespace CalamityMod
         private static void AddEvilBiomeItemRecipeGroups()
         {
             // Vile and Vicious Powder
-            RecipeGroup group = new RecipeGroup(() => "Any Evil Powder", new int[]
+            RecipeGroup group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyEvilPowder"), new int[]
             {
                 ItemID.VilePowder,
                 ItemID.ViciousPowder
             });
-            EvilPowder = RecipeGroup.RegisterGroup("EvilPowder", group);
+            AnyEvilPowder = RecipeGroup.RegisterGroup("AnyEvilPowder", group);
 
             // Shadow Scale and Tissue Sample
-            group = new RecipeGroup(() => "Shadow Scale or Tissue Sample", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.Boss2Material"), new int[]
             {
                 ItemID.ShadowScale,
                 ItemID.TissueSample
@@ -252,7 +252,7 @@ namespace CalamityMod
             Boss2Material = RecipeGroup.RegisterGroup("Boss2Material", group);
 
             // Cursed Flame and Ichor
-            group = new RecipeGroup(() => "Cursed Flame or Ichor", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.CursedFlameIchor"), new int[]
             {
                 ItemID.CursedFlame,
                 ItemID.Ichor
@@ -260,7 +260,7 @@ namespace CalamityMod
             CursedFlameIchor = RecipeGroup.RegisterGroup("CursedFlameIchor", group);
 
             // Unholy Water and Blood Water
-            group = new RecipeGroup(() => "Any Evil Water", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyEvilWater"), new int[]
             {
                 ItemID.UnholyWater,
                 ItemID.BloodWater
@@ -268,7 +268,7 @@ namespace CalamityMod
             AnyEvilWater = RecipeGroup.RegisterGroup("AnyEvilWater", group);
 
             // Flask of Cursed Flames and Flask of Ichor
-            group = new RecipeGroup(() => "Any Evil Flask", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyEvilFlask"), new int[]
             {
                 ItemID.FlaskofCursedFlames,
                 ItemID.FlaskofIchor
@@ -315,10 +315,10 @@ namespace CalamityMod
                 ItemID.SlushBlock,
                 ModContent.ItemType<NovaeSlag>()
             });
-            SiltGroup = RecipeGroup.RegisterGroup("SiltGroup", group);
+            AnySiltBlock = RecipeGroup.RegisterGroup("AnySiltBlock", group);
 
             // Set of all generic Corruption/Crimson blocks, for Overloaded Sludge
-            group = new RecipeGroup(() => "Any Evil Block", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyEvilBlock"), new int[]
             {
                 ItemID.EbonstoneBlock,
                 ItemID.CrimstoneBlock,
@@ -334,7 +334,7 @@ namespace CalamityMod
             AnyEvilBlock = RecipeGroup.RegisterGroup("AnyEvilBlock", group);
 
             // Set of all generic Hallow blocks, this recipe group is unused
-            group = new RecipeGroup(() => "Any Good Block", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyGoodBlock"), new int[]
             {
                 ItemID.PearlstoneBlock,
                 ItemID.PinkIceBlock,
@@ -399,7 +399,7 @@ namespace CalamityMod
             AnyGoldCrown = RecipeGroup.RegisterGroup("AnyGoldCrown", group);
 
             // Vanilla Luminite Pickaxes and Genesis Pickaxe for Crystyl Crusher
-            group = new RecipeGroup(() => "Any Lunar Pickaxe", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.LunarPickaxe"), new int[]
             {
                 ItemID.SolarFlarePickaxe,
                 ItemID.VortexPickaxe,
@@ -410,7 +410,7 @@ namespace CalamityMod
             LunarPickaxe = RecipeGroup.RegisterGroup("LunarPickaxe", group);
 
             // Luminite Hamaxes for Grax
-            group = new RecipeGroup(() => "Any Lunar Hamaxe", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.LunarHamaxe"), new int[]
             {
                 ItemID.LunarHamaxeSolar,
                 ItemID.LunarHamaxeVortex,
@@ -427,16 +427,16 @@ namespace CalamityMod
                 ItemID.MagnetFlower,
                 ItemID.ManaCloak
             }); 
-            ManaFlowersGroup = RecipeGroup.RegisterGroup("ManaFlowersGroup", group);
+            AnyManaFlower = RecipeGroup.RegisterGroup("AnyManaFlower", group);
 
             // Magic Quiver+ for Elemental Quiver
-            group = new RecipeGroup(() => "Any Quiver", new int[]
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyQuiver"), new int[]
             {
                 ItemID.MagicQuiver,
                 ItemID.MoltenQuiver,
                 ItemID.StalkersQuiver
             });
-            QuiversGroup = RecipeGroup.RegisterGroup("QuiversGroup", group);
+            AnyQuiver = RecipeGroup.RegisterGroup("AnyQuiver", group);
 
             // Tombstones for Grave Grimreaver
             group = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Tombstone)}", new int[]
@@ -453,10 +453,10 @@ namespace CalamityMod
                 ItemID.RichGravestone4,
                 ItemID.RichGravestone5
             });
-            QuiversGroup = RecipeGroup.RegisterGroup("TombstonesGroup", group);
+            AnyTombstone = RecipeGroup.RegisterGroup("AnyTombstone", group);
 
-            // Wings for Seraph Tracers
-            group = new RecipeGroup(() => "Any Wings", new int[]
+            // Wings for Celestial Tracers
+            group = new RecipeGroup(() => CalamityUtils.GetTextValue("Misc.RecipeGroup.AnyWings"), new int[]
             {
                 ItemID.DemonWings,
                 ItemID.AngelWings,
@@ -512,7 +512,7 @@ namespace CalamityMod
                 ModContent.ItemType<HadarianWings>(),
                 ModContent.ItemType<SilvaWings>()
             });
-            WingsGroup = RecipeGroup.RegisterGroup("WingsGroup", group);
+            AnyWings = RecipeGroup.RegisterGroup("AnyWings", group);
         }
         #endregion
 
@@ -834,7 +834,7 @@ namespace CalamityMod
                 // Tier unlock various items to a lower tier (sorted by progression)
                 // Move a bunch of mythril anvil locked stuff in early HM to regular anvils to fit progression changes
                 { VanillaEach(
-                    ItemID.MechanicalEye, ItemID.MechanicalWorm, ItemID.MechanicalSkull,
+                    ItemID.MechanicalEye, ItemID.MechanicalWorm, ItemID.MechanicalSkull, ItemID.MechdusaSummon,
                     ItemID.DaoofPow, ItemID.Chik, ItemID.MeteorStaff, ItemID.CoolWhip,
                     ItemID.AngelWings, ItemID.DemonWings, ItemID.FairyWings,
                     ItemID.CursedArrow, ItemID.CursedBullet, ItemID.IchorArrow, ItemID.IchorBullet),
@@ -854,6 +854,9 @@ namespace CalamityMod
 
                 // Add 20 Souls of Flight to vanilla Luminite wings
                 { VanillaEach(ItemID.WingsSolar, ItemID.WingsVortex, ItemID.WingsNebula, ItemID.WingsStardust), AddIngredient(ItemID.SoulofFlight, 20) },
+
+                // Berserker's Glove recipe change now that it doesn't provide melee speed
+                { Vanilla(ItemID.BerserkerGlove), ReplaceIngredient(ItemID.PowerGlove, ItemID.TitanGlove) },
 
                 // Standardize the costs of all PHM ore armors to 10/16/14 head/chest/legs
                 { Vanilla(ItemID.CopperHelmet), ChangeIngredientStack(ItemID.CopperBar, 10) },
@@ -936,7 +939,7 @@ namespace CalamityMod
 
             // Apply all recipe changes.
             IEnumerator<Recipe> recipeEnumerator = Main.recipe.ToList().GetEnumerator();
-            while(recipeEnumerator.MoveNext())
+            while (recipeEnumerator.MoveNext())
             {
                 Recipe r = recipeEnumerator.Current;
                 foreach (var kv in edits)
@@ -1205,23 +1208,6 @@ namespace CalamityMod
             r.AddTile(TileID.Anvils);
             r.Register();
 
-            // Magic Mirror
-            r = Recipe.Create(ItemID.MagicMirror);
-            r.AddRecipeGroup("AnySilverBar", 10);
-            r.AddIngredient(ItemID.Glass, 10);
-            r.AddIngredient(ItemID.FallenStar, 10);
-            r.AddTile(TileID.Anvils);
-            r.Register();
-
-            // Ice Mirror
-            r = Recipe.Create(ItemID.IceMirror);
-            r.AddRecipeGroup("AnySilverBar", 5);
-            r.AddRecipeGroup("AnyIceBlock", 20);
-            r.AddIngredient(ItemID.Glass, 10);
-            r.AddIngredient(ItemID.FallenStar, 10);
-            r.AddTile(TileID.Anvils);
-            r.Register();
-
             // Bloody Tear
             r = Recipe.Create(ItemID.BloodMoonStarter);
             r.AddIngredient(ModContent.ItemType<BloodOrb>(), 10);
@@ -1292,7 +1278,7 @@ namespace CalamityMod
             // Guide Voodoo Doll
             Recipe r = Recipe.Create(ItemID.GuideVoodooDoll);
             r.AddIngredient(ItemID.Leather, 2);
-            r.AddRecipeGroup(EvilPowder, 10);
+            r.AddRecipeGroup(AnyEvilPowder, 10);
             r.AddTile(TileID.Hellforge);
             r.Register();
 
@@ -1357,6 +1343,7 @@ namespace CalamityMod
             r.AddIngredient(ItemID.Wood, 5);
             r.AddIngredient(ItemID.Torch, 3);
             r.AddIngredient(ItemID.FallenStar);
+            r.AddCondition(Condition.NotRemixWorld);
             r.AddTile(TileID.Anvils);
             r.Register();
 
@@ -1469,7 +1456,7 @@ namespace CalamityMod
             r = Recipe.Create(ItemID.SandstorminaBottle);
             r.AddIngredient(ItemID.Bottle);
             r.AddIngredient(ItemID.SandBlock, 70);
-            r.AddIngredient(ModContent.ItemType<DesertFeather>(), 10);
+            r.AddIngredient(ItemID.AntlionMandible, 5);
             r.AddIngredient(ItemID.Feather, 3);
             r.AddTile(TileID.Anvils);
             r.Register();
@@ -1483,7 +1470,7 @@ namespace CalamityMod
             // Flying Carpet
             r = Recipe.Create(ItemID.FlyingCarpet);
             r.AddIngredient(ItemID.Silk, 10);
-            r.AddIngredient(ModContent.ItemType<DesertFeather>(), 3);
+            r.AddIngredient(ItemID.AntlionMandible, 2);
             r.AddIngredient(ModContent.ItemType<PearlShard>(), 5);
             r.AddTile(TileID.Anvils);
             r.Register().DisableDecraft();
@@ -1809,11 +1796,6 @@ namespace CalamityMod
             r.AddIngredient(ItemID.Lens, 5);
             r.AddIngredient(ItemID.SoulofLight, 8);
             r.AddTile(TileID.CrystalBall);
-            r.Register();
-
-            // Turtle Shell with Giant Tortoise Shell
-            r = Recipe.Create(ItemID.TurtleShell);
-            r.AddIngredient(ModContent.ItemType<GiantTortoiseShell>());
             r.Register();
 
             // Pulse Bow

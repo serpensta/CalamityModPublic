@@ -14,25 +14,25 @@ namespace CalamityMod.NPCs.HiveMind
     {
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0);
-            value.Position.X += 1f;
-            NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            this.HideFromBestiary();
         }
 
         public override void SetDefaults()
         {
             NPC.npcSlots = 0.1f;
             NPC.aiStyle = -1;
-            NPC.damage = 0;
+            NPC.damage = 10;
             NPC.width = 25;
             NPC.height = 25;
 
-            NPC.lifeMax = 100;
+            NPC.lifeMax = 50;
             if (BossRushEvent.BossRushActive)
                 NPC.lifeMax = 1300;
             if (Main.getGoodWorld)
                 NPC.lifeMax *= 2;
+
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
 
             NPC.knockBackResist = 0f;
             AIType = -1;
@@ -47,27 +47,16 @@ namespace CalamityMod.NPCs.HiveMind
             NPC.Calamity().VulnerableToSickness = true;
         }
 
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            int associatedNPCType = ModContent.NPCType<HiveMind>();
-            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
-
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCorruption,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("A ball of flesh and rotting matter, it is flung out by the hive mind towards its enemies as fodder, to wear down any who stand in their way.")
-            });
-        }
-
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             bool expertMode = Main.expertMode || BossRushEvent.BossRushActive;
             bool revenge = CalamityWorld.revenge || BossRushEvent.BossRushActive;
             bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
 
-            bool getFuckedAI = CalamityWorld.getFixedBoi;
+            bool getFuckedAI = Main.zenithWorld;
 
             int num750 = CalamityGlobalNPC.hiveMind;
             if (num750 < 0 || !Main.npc[num750].active)

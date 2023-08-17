@@ -188,11 +188,6 @@ SearingLava: {
 	Description: The brimstone lava sears your flesh
 }
 
-Shadowflame: {
-	DisplayName: Shadowflame
-	Description: Losing life
-}
-
 ShellfishClaps: {
 	DisplayName: Shellfish Claps
 	Description: Clamfest
@@ -668,7 +663,13 @@ BloodyBoost: {
 
 BossEffects: {
 	DisplayName: Boss Effects
-	Description: This tooltip is edited in the function below
+	Description:
+		'''
+		The nearby boss is:
+		Increasing Nurse healing cost by 400%
+		Disabling Target and Super Dummy hitboxes
+		'''
+	ZenDescription: Greatly reducing enemy spawn rates
 }
 
 BrimflameFrenzyBuff: {
@@ -701,11 +702,6 @@ DivineBless: {
 	Description: Increased health regen and minions inflict Banishing Fire
 }
 
-ElysianGuard: {
-	DisplayName: Elysian Guard
-	Description: Movement speed reduced, other stats buffed
-}
-
 EmpyreanRage: {
 	DisplayName: Empyrean Rage
 	Description: Rage of the cosmos
@@ -733,7 +729,7 @@ HallowedRuneDefense: {
 
 HallowedRunePower: {
 	DisplayName: Hallowed Power
-	Description: 10% increased minion damage
+	Description: 10% increased summon damage
 }
 
 HallowedRuneRegeneration: {
@@ -758,7 +754,7 @@ Mushy: {
 
 PhantomicEmpowerment: {
 	DisplayName: Phantomic Empowerment
-	Description: 10% increased minion damage
+	Description: 10% increased summon damage
 }
 
 PhantomicRegen: {
@@ -783,6 +779,19 @@ PolarisBuff: {
 ProfanedCrystalBuff: {
 	DisplayName: Devotion
 	Description: You are an emissary of the profaned goddess now!
+	Offense: The {0} empowers your offensive capabilities
+	Lava: heat of the lava
+	Day: light of the sun
+	Defense: The {0} your flames, empowering your defensive capabilities
+	Water: water douses
+	Honey: honey cools
+	Night: darkness of night cools
+	Enrage: Your weakened life force fuels your desperate attacks
+	NerfedEndo: An ascended ice construct is suppressing your true potential...
+	NerfedHat: A magical hat overwhelms your senses, squandering your true potential...
+	LockedSlots: Your profaned soul is constrained by your insufficient summoning powers
+	LockedExos: The soul within this crystal has been defiled by overwhelming energy waves from dangerous mechanations
+	LockedSCal: The profaned soul within has been defiled by the powerful magic of a supreme witch
 }
 
 RageMode: {
@@ -812,7 +821,7 @@ SpiritDefense: {
 
 SpiritPower: {
 	DisplayName: Spirit Power
-	Description: 10% increased minion damage
+	Description: 10% increased summon damage
 }
 
 SpiritRegen: {
@@ -1217,6 +1226,11 @@ IgneousExaltationBuff: {
 	Description: A blade is orbiting you
 }
 
+KalandraMirrorBuff: {
+	DisplayName: Mirror of Kalandra
+	Description: Five ancient weapons will annihilate your enemies
+}
+
 KingofConstellationsBuff: {
 	DisplayName: Celestial Dragons
 	Description: The celestial dragons will protect you
@@ -1225,6 +1239,11 @@ KingofConstellationsBuff: {
 LilPlaguebringerBuff: {
 	DisplayName: Lil' Plaguebringer
 	Description: The Plaguebringer will protect you
+}
+
+LordeBuff: {
+	DisplayName: Lil'orde
+	Description: Spin spin spin
 }
 
 MagicHatBuff: {
@@ -1267,6 +1286,11 @@ MountedScannerBuff: {
 	Description: Powerful machinery surrounds you
 }
 
+NOU: {
+	DisplayName: NO U
+	Description: Equips disabled
+}
+
 PerditionBuff: {
 	DisplayName: Perdition
 	Description: How unfortunate
@@ -1290,6 +1314,7 @@ PoleWarperBuff: {
 ProfanedBabs: {
 	DisplayName: The Profaned Soul
 	Description: The Profaned Babs will fight for and defend you!
+	VanityDescription: The Profaned Babs will accompany you!
 }
 
 PuffWarriorBuff: {
@@ -1387,6 +1412,11 @@ StarSwallowerBuff: {
 	Description: Mmmm myes
 }
 
+StellarTorusBuff: {
+	DisplayName: Stellar Torus
+	Description: Summons a Torus Orbital that fries your foes
+}
+
 TacticalPlagueEngineBuff: {
 	DisplayName: Tactical Plague Engine
 	Description: A giant plague jet is following you
@@ -1435,4 +1465,28 @@ WitherBlossomsBuff: {
 WulfrumDroidBuff: {
 	DisplayName: Wulfrum Droid
 	Description: The wulfrum droid will protect you
+}
+
+PinkJellyRegen: {
+	DisplayName: Pink Jelly Regen
+	Description: The power of goo refreshes you, life regen increased by 4
+}
+
+GreenJellyRegen: {
+	DisplayName: Green Jelly Regen
+	Description: The regenerative goo empowers you, life regen increased by 6
+}
+
+AbsorberRegen: {
+	DisplayName: Regeneraga
+	Description:
+		'''
+		You are blessed by the culmimation of nature's powers
+		Life regen increased by 7, damage increased by 10%, damage reduction increased by 7%
+		'''
+}
+
+AbsorberAffliction: {
+	DisplayName: Absorber Affliction
+	Description: Damn nature, you scary!
 }

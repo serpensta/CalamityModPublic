@@ -84,9 +84,11 @@ namespace CalamityMod.Projectiles
         // How many times this projectile has pierced.
         public int timesPierced = 0;
 
-        // Point-blank shot timer.
+        // Point-blank shot timer and distance check.
         public int pointBlankShotDuration = 0;
+        public float pointBlankShotDistanceTravelled = 0f;
         public const int DefaultPointBlankDuration = 18; // 18 frames
+        public const float PointBlankShotDistanceLimit = 240f; // 15 tiles
 
         // Temporary flat damage reduction effects. This is typically used for parry effects such as Ark of the Ancients
         public int flatDRTimer = 0;
@@ -204,18 +206,37 @@ namespace CalamityMod.Projectiles
 
             if (pointBlankShotDuration > 0)
                 pointBlankShotDuration--;
+            if (pointBlankShotDistanceTravelled < PointBlankShotDistanceLimit)
+                pointBlankShotDistanceTravelled += projectile.velocity.Length() * projectile.MaxUpdates;
 
             // Reduce secondary yoyo damage if the player has Yoyo Glove
             // Brief behavior documentation of yoyo AI: ai[0, 1] are the x, y co-ords and localAI[0] is the airtime in frames
             // All secondary yoyos are spawned with ai[0] of 1 which tells then tell its AI to do secondary yoyo AI
-            if (Main.player[projectile.owner].yoyoGlove && projectile.aiStyle == 99)
+            if (Main.player[projectile.owner].yoyoGlove && projectile.aiStyle == ProjAIStyleID.Yoyo)
             {
-                if (projectile.ai[0] == 1f && projectile.localAI[0] == 0f)
-                    projectile.damage = (int)(projectile.originalDamage * 0.5f);
-                // Reset damage if the yoyo count returns to 1
-                // This is possible due to the horrendous yoyo spawning system for limited lifespan yoyos
-                else if (Main.player[projectile.owner].ownedProjectileCounts[projectile.type] == 1 && projectile.localAI[0] > 0f)
-                    projectile.damage = projectile.originalDamage;
+                // Store damage on first frame
+                if (projectile.ai[2] == 0f)
+                    projectile.ai[2] = projectile.damage;
+
+                // Find the first yoyo projectile owned by the corresponding player
+                // Limited lifespan yoyos are horrendous so it had to be this way
+                // EDIT: ownedProjectileCounts does not work what the fuck
+                int MainYoyo = -1;
+                for (int x = 0; x < Main.maxProjectiles; x++)
+                {
+                    Projectile proj = Main.projectile[x];
+                    if (proj.active && proj.type == projectile.type && proj.owner == projectile.owner)
+                    {
+                        MainYoyo = x;
+                        break;
+                    }
+                }
+
+                // Halve damage if not the main yoyo
+                if (projectile.whoAmI != MainYoyo)
+                    projectile.damage = (int)(projectile.ai[2] * 0.5f);
+                else
+                    projectile.damage = (int)projectile.ai[2];
             }
 
             // Chlorophyte Crystal AI rework.
@@ -298,11 +319,10 @@ namespace CalamityMod.Projectiles
 
                 for (int num172 = 0; num172 < 2; num172++)
                 {
-                    int num173 = Dust.NewDust(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
-                    Main.dust[num173].position -= projectile.velocity * 2f;
-                    Main.dust[num173].noGravity = true;
-                    Main.dust[num173].velocity.X *= 0.3f;
-                    Main.dust[num173].velocity.Y *= 0.3f;
+                    Dust flame = Dust.NewDustDirect(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
+                    flame.position -= projectile.velocity * 2f;
+                    flame.noGravity = true;
+                    flame.velocity *= 0.3f;
                 }
 
                 if (projectile.ai[0] == 0f)
@@ -403,11 +423,11 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[0] = 1f;
                     for (int num160 = 0; num160 < 8; num160++)
                     {
-                        Dust obj12 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
-                        obj12.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
-                        obj12.scale = 0.9f;
-                        obj12.fadeIn = 1.1f;
-                        obj12.position = projectile.Center;
+                        Dust blood1 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                        blood1.velocity = (Main.rand.NextFloatDirection() * MathHelper.Pi).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
+                        blood1.scale = 0.9f;
+                        blood1.fadeIn = 1.1f;
+                        blood1.position = projectile.Center;
                     }
                 }
 
@@ -417,20 +437,20 @@ namespace CalamityMod.Projectiles
 
                 for (int num161 = 0; num161 < 2; num161++)
                 {
-                    Dust obj13 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
-                    obj13.velocity = obj13.velocity / 4f + projectile.velocity / 2f;
-                    obj13.scale = 1.2f;
-                    obj13.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
+                    Dust blood2 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                    blood2.velocity = blood2.velocity / 4f + projectile.velocity / 2f;
+                    blood2.scale = 1.2f;
+                    blood2.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
                 }
 
                 for (int num162 = 1; num162 < projectile.oldPos.Length && !(projectile.oldPos[num162] == Vector2.Zero); num162++)
                 {
                     if (Main.rand.Next(3) == 0)
                     {
-                        Dust obj14 = Main.dust[Dust.NewDust(projectile.oldPos[num162], projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
-                        obj14.velocity = obj14.velocity / 4f + projectile.velocity / 2f;
-                        obj14.scale = 1.2f;
-                        obj14.position = projectile.oldPos[num162] + projectile.Size / 2f + Main.rand.NextFloat() * projectile.velocity * 2f;
+                        Dust blood3 = Dust.NewDustDirect(projectile.oldPos[num162], projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                        blood3.velocity = blood3.velocity / 4f + projectile.velocity / 2f;
+                        blood3.scale = 1.2f;
+                        blood3.position = projectile.oldPos[num162] + projectile.Size / 2f + Main.rand.NextFloat() * projectile.velocity * 2f;
                     }
                 }
 
@@ -528,7 +548,7 @@ namespace CalamityMod.Projectiles
                         Dust.NewDust(projectile.position, projectile.width, projectile.height, 58, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 150, default, 1.2f);
 
                     if (Main.rand.NextBool(20) && Main.netMode != NetmodeID.Server)
-                        Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, new Vector2(projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f), Main.rand.Next(16, 18), 1f);
+                        Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, projectile.velocity * 0.2f, Main.rand.Next(16, 18), 1f);
                 }
 
                 return false;
@@ -588,18 +608,17 @@ namespace CalamityMod.Projectiles
                     num1035 = 1.6f;
 
                 projectile.ai[1]++;
-                float num1036 = projectile.ai[1] / 180f * ((float)Math.PI * 2f);
+                float num1036 = projectile.ai[1] / 180f * MathHelper.TwoPi;
                 for (float num1037 = 0f; num1037 < 3f; num1037++)
                 {
                     if (Main.rand.Next(3) == 0)
                     {
-                        Dust dust54 = Main.dust[Dust.NewDust(projectile.Center, 0, 0, 27, 0f, -2f)];
-                        dust54.position = projectile.Center + Vector2.UnitY.RotatedBy(num1037 * ((float)Math.PI * 2f) / 3f + projectile.ai[1]) * 10f;
-                        dust54.noGravity = true;
-                        dust54.velocity = projectile.DirectionFrom(dust54.position);
-                        dust54.scale = num1035;
-                        dust54.fadeIn = 0.5f;
-                        dust54.alpha = 200;
+                        Dust shflame = Dust.NewDustDirect(projectile.Center, 0, 0, 27, 0f, -2f, 200);
+                        shflame.position = projectile.Center + Vector2.UnitY.RotatedBy(num1037 * MathHelper.TwoPi / 3f + projectile.ai[1]) * 10f;
+                        shflame.noGravity = true;
+                        shflame.velocity = projectile.DirectionFrom(shflame.position);
+                        shflame.scale = num1035;
+                        shflame.fadeIn = 0.5f;
                     }
                 }
 
@@ -803,32 +822,32 @@ namespace CalamityMod.Projectiles
 
                     if (Main.rand.Next(4) == 0)
                     {
-                        Vector2 value4 = -Vector2.UnitX.RotatedByRandom(0.19634954631328583).RotatedBy(projectile.velocity.ToRotation());
-                        int num23 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100);
-                        Main.dust[num23].velocity *= 0.1f;
-                        Main.dust[num23].position = projectile.Center + value4 * projectile.width / 2f;
-                        Main.dust[num23].fadeIn = 0.9f;
+                        Vector2 value4 = -Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(11.25f)).RotatedBy(projectile.velocity.ToRotation());
+                        Dust smoke = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100);
+                        smoke.velocity *= 0.1f;
+                        smoke.position = projectile.Center + value4 * projectile.width / 2f;
+                        smoke.fadeIn = 0.9f;
                     }
 
                     if (Main.rand.Next(32) == 0)
                     {
-                        Vector2 value5 = -Vector2.UnitX.RotatedByRandom(0.39269909262657166).RotatedBy(projectile.velocity.ToRotation());
-                        int num25 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 155, default, 0.8f);
-                        Main.dust[num25].velocity *= 0.3f;
-                        Main.dust[num25].position = projectile.Center + value5 * projectile.width / 2f;
+                        Vector2 value5 = -Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(22.5f)).RotatedBy(projectile.velocity.ToRotation());
+                        Dust smoke = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 155, default, 0.8f);
+                        smoke.velocity *= 0.3f;
+                        smoke.position = projectile.Center + value5 * projectile.width / 2f;
                         if (Main.rand.Next(2) == 0)
-                            Main.dust[num25].fadeIn = 1.4f;
+                            smoke.fadeIn = 1.4f;
                     }
 
                     if (Main.rand.Next(2) == 0)
                     {
-                        Vector2 value6 = -Vector2.UnitX.RotatedByRandom(0.78539818525314331).RotatedBy(projectile.velocity.ToRotation());
-                        int num27 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 27, 0f, 0f, 0, default, 1.2f);
-                        Main.dust[num27].velocity *= 0.3f;
-                        Main.dust[num27].noGravity = true;
-                        Main.dust[num27].position = projectile.Center + value6 * projectile.width / 2f;
+                        Vector2 value6 = -Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(45f)).RotatedBy(projectile.velocity.ToRotation());
+                        Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 27, 0f, 0f, 0, default, 1.2f);
+                        shflame.velocity *= 0.3f;
+                        shflame.noGravity = true;
+                        shflame.position = projectile.Center + value6 * projectile.width / 2f;
                         if (Main.rand.Next(2) == 0)
-                            Main.dust[num27].fadeIn = 1.4f;
+                            shflame.fadeIn = 1.4f;
                     }
 
                     return false;
@@ -878,7 +897,7 @@ namespace CalamityMod.Projectiles
                             Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector50, projectile.type, projectile.damage, projectile.knockBack, projectile.owner);
                         }
 
-                        projectile.rotation += (float)Math.PI / 30f;
+                        projectile.rotation += MathHelper.Pi / 30f;
 
                         return false;
                     }
@@ -908,9 +927,9 @@ namespace CalamityMod.Projectiles
 
                     for (int num724 = 0; num724 < 6; num724++)
                     {
-                        Vector2 vector51 = projectile.Center + spinningpoint13.RotatedBy(num724 * ((float)Math.PI * 2f) / 6f);
-                        int num726 = Dust.NewDust(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, 197, 0f, 0f, 100, Color.Transparent);
-                        Main.dust[num726].noGravity = true;
+                        Vector2 vector51 = projectile.Center + spinningpoint13.RotatedBy(num724 * MathHelper.TwoPi / 6f);
+                        Dust ice = Dust.NewDustDirect(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, 197, 0f, 0f, 100, Color.Transparent);
+                        ice.noGravity = true;
                     }
 
                     return false;
@@ -952,7 +971,7 @@ namespace CalamityMod.Projectiles
                             int num750 = unifiedRandom.Next();
                             projectile.ai[1] = num750;
                             num750 %= 100;
-                            float f = (float)num750 / 100f * ((float)Math.PI * 2f);
+                            float f = (float)num750 / 100f * MathHelper.TwoPi;
                             Vector2 vector55 = f.ToRotationVector2();
                             if (vector55.Y > 0f)
                             {
@@ -992,8 +1011,8 @@ namespace CalamityMod.Projectiles
                         if (projectile.velocity != Vector2.Zero)
                         {
                             projectile.localAI[0] += spinningpoint14.X * (float)(projectile.extraUpdates + 1) * 2f * num748;
-                            projectile.velocity = spinningpoint14.RotatedBy(projectile.ai[0] + (float)Math.PI / 2f) * num748;
-                            projectile.rotation = projectile.velocity.ToRotation() + (float)Math.PI / 2f;
+                            projectile.velocity = spinningpoint14.RotatedBy(projectile.ai[0] + MathHelper.Pi / 2f) * num748;
+                            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi / 2f;
                         }
                     }
 
@@ -1039,8 +1058,8 @@ namespace CalamityMod.Projectiles
 
                     for (int i = 0; i < 2; i++)
                     {
-                        int dust = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 27, 0f, 0f, 100);
-                        Main.dust[dust].noGravity = true;
+                        Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 27, 0f, 0f, 100);
+                        shflame.noGravity = true;
                     }
 
                     return false;
@@ -1080,10 +1099,10 @@ namespace CalamityMod.Projectiles
                             newColor.A = 150;
                             int num72 = 8;
                             bool noGravity = Main.rand.NextBool();
-                            int num73 = Dust.NewDust(projectile.position - new Vector2(num72, num72) + projectile.velocity, projectile.width + num72 * 2, projectile.height + num72 * 2, 4, 0f, 0f, 50, newColor, 1.2f);
-                            Main.dust[num73].velocity *= 0.3f;
-                            Main.dust[num73].velocity += projectile.velocity * 0.3f;
-                            Main.dust[num73].noGravity = noGravity;
+                            Dust slime = Dust.NewDustDirect(projectile.position - new Vector2(num72, num72) + projectile.velocity, projectile.width + num72 * 2, projectile.height + num72 * 2, 4, 0f, 0f, 50, newColor, 1.2f);
+                            slime.velocity *= 0.3f;
+                            slime.velocity += projectile.velocity * 0.3f;
+                            slime.noGravity = noGravity;
                         }
 
                         projectile.alpha -= 50;
@@ -1113,10 +1132,10 @@ namespace CalamityMod.Projectiles
                         if (projectile.alpha == 0 && Main.rand.Next(3) == 0)
                         {
                             Color newColor = new Color(78, 136, 255, 150);
-                            int num73 = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 4, 0f, 0f, 50, newColor, 1.2f);
-                            Main.dust[num73].velocity *= 0.3f;
-                            Main.dust[num73].velocity += projectile.velocity * 0.3f;
-                            Main.dust[num73].noGravity = true;
+                            Dust slime = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 4, 0f, 0f, 50, newColor, 1.2f);
+                            slime.velocity *= 0.3f;
+                            slime.velocity += projectile.velocity * 0.3f;
+                            slime.noGravity = true;
                         }
 
                         projectile.alpha -= 50;
@@ -1234,14 +1253,14 @@ namespace CalamityMod.Projectiles
                                 num23 = projectile.velocity.Y * 0.5f;
                             }
 
-                            int num24 = Dust.NewDust(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, 6, 0f, 0f, 100);
-                            Main.dust[num24].scale *= 2f + Main.rand.Next(10) * 0.1f;
-                            Main.dust[num24].velocity *= 0.2f;
-                            Main.dust[num24].noGravity = true;
+                            Dust fire = Dust.NewDustDirect(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, 6, 0f, 0f, 100);
+                            fire.scale *= 2f + Main.rand.Next(10) * 0.1f;
+                            fire.velocity *= 0.2f;
+                            fire.noGravity = true;
 
-                            num24 = Dust.NewDust(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, 31, 0f, 0f, 100, default(Color), 0.5f);
-                            Main.dust[num24].fadeIn = 1f + Main.rand.Next(5) * 0.1f;
-                            Main.dust[num24].velocity *= 0.05f;
+                            Dust smoke = Dust.NewDustDirect(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, 31, 0f, 0f, 100, default(Color), 0.5f);
+                            smoke.fadeIn = 1f + Main.rand.Next(5) * 0.1f;
+                            smoke.velocity *= 0.05f;
                         }
                     }
 
@@ -1251,7 +1270,7 @@ namespace CalamityMod.Projectiles
                     return false;
                 }
 
-                else if (projectile.type == ProjectileID.PoisonSeedPlantera)
+                else if (projectile.type == ProjectileID.SeedPlantera || projectile.type == ProjectileID.PoisonSeedPlantera)
                 {
                     projectile.frameCounter++;
                     if (projectile.frameCounter > 1)
@@ -1277,23 +1296,21 @@ namespace CalamityMod.Projectiles
                     projectile.ai[0] += 1f;
                     if (projectile.ai[0] >= 120f)
                     {
-                        projectile.ai[0] = 120f;
-
                         if (projectile.velocity.Length() < 18f)
                             projectile.velocity *= 1.01f;
                     }
 
-                    projectile.tileCollide = false;
-
+                    projectile.tileCollide = projectile.ai[0] >= 300f;
+                    
                     if (projectile.timeLeft > 600)
                         projectile.timeLeft = 600;
 
-                    projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + 1.57f;
+                    projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
                     return false;
                 }
 
-                else if (projectile.type == ProjectileID.ThornBall)
+                else if (projectile.type == ProjectileID.ThornBall && !projectile.tileCollide)
                 {
                     if (projectile.alpha > 0)
                     {
@@ -1302,36 +1319,79 @@ namespace CalamityMod.Projectiles
                             projectile.alpha = 0;
                     }
 
-                    int num147 = Player.FindClosest(projectile.Center, 1, 1);
-                    float num146 = 7.5f * projectile.ai[1] + Vector2.Distance(Main.player[num147].Center, projectile.Center) * 0.01f;
-                    Vector2 vector12 = Main.player[num147].Center - projectile.Center;
-                    vector12.Normalize();
-                    vector12 *= num146;
-                    int num148 = 200;
-                    projectile.velocity.X = (projectile.velocity.X * (num148 - 1) + vector12.X) / num148;
-
-                    if (projectile.velocity.Length() > 16f)
+                    Point point = projectile.Center.ToTileCoordinates();
+                    Tile tileSafely = Framing.GetTileSafely(point);
+                    bool stickOnCollision = tileSafely.HasUnactuatedTile && Main.tileSolid[tileSafely.TileType];
+                    if (stickOnCollision)
                     {
-                        projectile.velocity.Normalize();
-                        projectile.velocity *= 16f;
-                    }
-
-                    projectile.ai[0] += 1f;
-                    if (projectile.ai[0] > 15f)
-                    {
-                        if (projectile.velocity.Y == 0f && projectile.velocity.X != 0f)
+                        projectile.velocity = Vector2.Zero;
+                        projectile.ai[1] += 1f;
+                        float explodeGateValue = 600f;
+                        if (projectile.ai[1] >= explodeGateValue)
                         {
-                            projectile.velocity.X *= 0.97f;
-                            if (projectile.velocity.X > -0.01f && projectile.velocity.X < 0.01f)
-                                projectile.Kill();
+                            if (projectile.owner == Main.myPlayer)
+                            {
+                                int totalProjectiles = 8;
+                                float radians = MathHelper.TwoPi / totalProjectiles;
+                                int type = ModContent.ProjectileType<ThornBallSpike>();
+                                float velocity = 1f;
+                                Vector2 spinningPoint = new Vector2(0f, -velocity);
+                                for (int k = 0; k < totalProjectiles; k++)
+                                {
+                                    Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
+                                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center + Vector2.Normalize(velocity2) * 16f, velocity2, type, (int)Math.Round(projectile.damage * 0.8), 0f, Main.myPlayer);
+                                }
+                            }
+
+                            SoundEngine.PlaySound(SoundID.Item17, projectile.position);
+
+                            for (int i = 0; i < 8; i++)
+                            {
+                                int randomDustType = Main.rand.NextBool(2) ? 125 : 148;
+                                Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, randomDustType, 0f, 0f, 0, default, 2f);
+                                dust.velocity *= 3f;
+                                if (Main.rand.NextBool(2))
+                                {
+                                    dust.scale = 0.5f;
+                                    dust.fadeIn = 1f + Main.rand.Next(10) * 0.1f;
+                                }
+                            }
+                            for (int i = 0; i < 10; i++)
+                            {
+                                int randomDustType = Main.rand.NextBool(2) ? 125 : 148;
+                                Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, randomDustType, 0f, 0f, 0, default, 3f);
+                                dust.noGravity = true;
+                                dust.velocity *= 5f;
+                                dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, randomDustType, 0f, 0f, 0, default, 2f);
+                                dust.velocity *= 2f;
+                            }
+
+                            projectile.Kill();
                         }
-                        projectile.velocity.Y += 0.1f;
                     }
+                    else
+                    {
+                        int closestPlayer = Player.FindClosest(projectile.Center, 1, 1);
+                        float homingSpeed = 7.5f + Vector2.Distance(Main.player[closestPlayer].Center, projectile.Center) * 0.01f;
+                        Vector2 homingVelocity = Vector2.Normalize(Main.player[closestPlayer].Center - projectile.Center) * homingSpeed;
+                        int inertia = 200;
+                        projectile.velocity.X = (projectile.velocity.X * (inertia - 1) + homingVelocity.X) / inertia;
 
-                    projectile.rotation += projectile.velocity.X * 0.05f;
+                        if (projectile.velocity.Length() > 16f)
+                        {
+                            projectile.velocity.Normalize();
+                            projectile.velocity *= 16f;
+                        }
 
-                    if (projectile.velocity.Y > 16f)
-                        projectile.velocity.Y = 16f;
+                        projectile.ai[0] += 1f;
+                        if (projectile.ai[0] > 15f)
+                            projectile.velocity.Y += 0.1f;
+
+                        projectile.rotation += projectile.velocity.X * 0.05f;
+
+                        if (projectile.velocity.Y > 16f)
+                            projectile.velocity.Y = 16f;
+                    }
 
                     return false;
                 }
@@ -1356,7 +1416,7 @@ namespace CalamityMod.Projectiles
                     {
                         float spreadVelocity = (float)Math.Cos(projectile.whoAmI % 6f / 6f + projectile.position.X / 320f + projectile.position.Y / 160f);
                         projectile.velocity *= spreadDeceleration;
-                        projectile.velocity = projectile.velocity.RotatedBy(spreadVelocity * ((float)Math.PI * 2f) * 0.125f * 1f / 30f);
+                        projectile.velocity = projectile.velocity.RotatedBy(spreadVelocity * MathHelper.TwoPi * 0.125f * 1f / 30f);
                     }
 
                     if (homeIn)
@@ -1374,7 +1434,7 @@ namespace CalamityMod.Projectiles
                     }
 
                     projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
-                    projectile.rotation = projectile.velocity.ToRotation() + (float)Math.PI / 2f;
+                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi / 2f;
 
                     return false;
                 }
@@ -1612,11 +1672,11 @@ namespace CalamityMod.Projectiles
                             if (num737 > 0.5f)
                                 num737 = 0.5f;
 
-                            Vector2 value40 = new Vector2(-projectile.width * 0.2f * projectile.scale, 0f).RotatedBy(num737 * ((float)Math.PI * 2f)).RotatedBy(projectile.velocity.ToRotation());
-                            int num738 = Dust.NewDust(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
-                            Main.dust[num738].position = projectile.Center + value40;
-                            Main.dust[num738].velocity = Vector2.Normalize(Main.dust[num738].position - projectile.Center) * 2f;
-                            Main.dust[num738].noGravity = true;
+                            Vector2 value40 = new Vector2(-projectile.width * 0.2f * projectile.scale, 0f).RotatedBy(num737 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
+                            Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
+                            zap.position = projectile.Center + value40;
+                            zap.velocity = Vector2.Normalize(zap.position - projectile.Center) * 2f;
+                            zap.noGravity = true;
                         }
 
                         for (int num739 = 0; num739 < 1; num739++)
@@ -1627,11 +1687,11 @@ namespace CalamityMod.Projectiles
                             if (num740 > 0.5f)
                                 num740 = 0.5f;
 
-                            Vector2 value41 = new Vector2(-projectile.width * 0.6f * projectile.scale, 0f).RotatedBy(num740 * ((float)Math.PI * 2f)).RotatedBy(projectile.velocity.ToRotation());
-                            int num741 = Dust.NewDust(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
-                            Main.dust[num741].velocity = Vector2.Zero;
-                            Main.dust[num741].position = projectile.Center + value41;
-                            Main.dust[num741].noGravity = true;
+                            Vector2 value41 = new Vector2(-projectile.width * 0.6f * projectile.scale, 0f).RotatedBy(num740 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
+                            Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
+                            zap.velocity = Vector2.Zero;
+                            zap.position = projectile.Center + value41;
+                            zap.noGravity = true;
                         }
 
                         return false;
@@ -1683,7 +1743,7 @@ namespace CalamityMod.Projectiles
                             Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector50, projectile.type, projectile.damage, projectile.knockBack, projectile.owner);
                         }
 
-                        projectile.rotation += (float)Math.PI / 30f;
+                        projectile.rotation += MathHelper.Pi / 30f;
 
                         Lighting.AddLight(projectile.Center, 0.3f, 0.75f, 0.9f);
 
@@ -1715,14 +1775,14 @@ namespace CalamityMod.Projectiles
 
                     for (int num724 = 0; num724 < 6; num724++)
                     {
-                        Vector2 vector51 = projectile.Center + spinningpoint13.RotatedBy(num724 * ((float)Math.PI * 2f) / 6f);
+                        Vector2 vector51 = projectile.Center + spinningpoint13.RotatedBy(num724 * MathHelper.TwoPi / 6f);
 
                         Lighting.AddLight(vector51, 0.3f, 0.75f, 0.9f);
 
                         for (int num725 = 0; num725 < 2; num725++)
                         {
-                            int num726 = Dust.NewDust(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, 197, 0f, 0f, 100, Color.Transparent);
-                            Main.dust[num726].noGravity = true;
+                            Dust ice = Dust.NewDustDirect(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, 197, 0f, 0f, 100, Color.Transparent);
+                            ice.noGravity = true;
                         }
                     }
 
@@ -1833,8 +1893,8 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.alpha < 40)
                     {
-                        int num676 = Dust.NewDust(projectile.Center - Vector2.One * 5f, 10, 10, 229, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 1.2f);
-                        Main.dust[num676].noGravity = true;
+                        Dust dust = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 229, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 1.2f);
+                        dust.noGravity = true;
                     }
 
                     projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
@@ -1881,7 +1941,7 @@ namespace CalamityMod.Projectiles
                         projectile.netUpdate = true;
                     }
 
-                    projectile.rotation = (Main.npc[(int)Math.Abs(projectile.ai[0]) - 1].Center - Main.player[(int)projectile.ai[1]].Center + value35).ToRotation() + (float)Math.PI / 2f;
+                    projectile.rotation = (Main.npc[(int)Math.Abs(projectile.ai[0]) - 1].Center - Main.player[(int)projectile.ai[1]].Center + value35).ToRotation() + MathHelper.Pi / 2f;
                     if (projectile.ai[0] > 0f)
                     {
                         Vector2 value36 = Main.player[(int)projectile.ai[1]].Center - projectile.Center;
@@ -1930,7 +1990,7 @@ namespace CalamityMod.Projectiles
                         {
                             Vector2 value21 = new(27f, 59f);
                             Vector2 value22 = Utils.Vector2FromElipse(Main.npc[(int)projectile.ai[1]].localAI[0].ToRotationVector2(), value21 * Main.npc[(int)projectile.ai[1]].localAI[1]);
-                            projectile.position = Main.npc[(int)projectile.ai[1]].Center + value22 - new Vector2(projectile.width, projectile.height) / 2f;
+                            projectile.position = Main.npc[(int)projectile.ai[1]].Center + value22 - projectile.Size / 2f;
                         }
 
                         if (projectile.velocity.HasNaNs() || projectile.velocity == Vector2.Zero)
@@ -1992,19 +2052,18 @@ namespace CalamityMod.Projectiles
                             float num810 = projectile.velocity.ToRotation() + ((Main.rand.Next(2) == 1) ? -1f : 1f) * MathHelper.PiOver2;
                             float num811 = (float)Main.rand.NextDouble() * 2f + 2f;
                             Vector2 vector80 = new((float)Math.Cos(num810) * num811, (float)Math.Sin(num810) * num811);
-                            int num812 = Dust.NewDust(vector79, 0, 0, 229, vector80.X, vector80.Y, 0, default, 1f);
-                            Main.dust[num812].noGravity = true;
-                            Main.dust[num812].scale = 1.7f;
+                            Dust dust = Dust.NewDustDirect(vector79, 0, 0, 229, vector80.X, vector80.Y);
+                            dust.noGravity = true;
+                            dust.scale = 1.7f;
                             num3 = num809;
                         }
 
                         if (Main.rand.Next(5) == 0)
                         {
                             Vector2 value29 = projectile.velocity.RotatedBy(MathHelper.PiOver2) * ((float)Main.rand.NextDouble() - 0.5f) * projectile.width;
-                            int num813 = Dust.NewDust(vector79 + value29 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default, 1.5f);
-                            Dust dust = Main.dust[num813];
-                            dust.velocity *= 0.5f;
-                            Main.dust[num813].velocity.Y = -Math.Abs(Main.dust[num813].velocity.Y);
+                            Dust smoke = Dust.NewDustDirect(vector79 + value29 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default, 1.5f);
+                            smoke.velocity *= 0.5f;
+                            smoke.velocity.Y = -Math.Abs(smoke.velocity.Y);
                         }
 
                         DelegateMethods.v3_1 = new Vector3(0.3f, 0.65f, 0.7f);
@@ -2143,7 +2202,7 @@ namespace CalamityMod.Projectiles
                 case ProjectileID.BouncyBoulder:
                 case ProjectileID.LifeCrystalBoulder:
                 case ProjectileID.MoonBoulder:
-                    projectile.extraUpdates = CalamityWorld.getFixedBoi ? 1 : 0;
+                    projectile.extraUpdates = Main.zenithWorld ? 1 : 0;
                     break;
 
                 case ProjectileID.RockGolemRock:
@@ -2162,7 +2221,7 @@ namespace CalamityMod.Projectiles
             }
 
             // Random velocities for Bouncy Boulders in GFB
-            if (projectile.type == ProjectileID.BouncyBoulder && CalamityWorld.getFixedBoi)
+            if (projectile.type == ProjectileID.BouncyBoulder && Main.zenithWorld)
             {
                 // 5% chance every frame to get a random velocity multiplier (this is actually rolled twice per frame, due to the extra update in GFB)
                 if (Main.rand.Next(100) >= 95)
@@ -2241,147 +2300,139 @@ namespace CalamityMod.Projectiles
 
                 if (projectile.CountsAsClass<RogueDamageClass>())
                 {
-                    if (modPlayer.nanotech)
-                    {
-                        if (Main.player[projectile.owner].miscCounter % 30 == 0 && projectile.FinalExtraUpdate())
+                        if (modPlayer.nanotech)
                         {
-                            if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<NanotechProjectile>()] < 5)
+                            if (Main.player[projectile.owner].miscCounter % 30 == 0 && projectile.FinalExtraUpdate())
                             {
-                                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(60);
-                                Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<NanotechProjectile>(), damage, 0f, projectile.owner);
-                            }
-                        }
-                    }
-                    else if (modPlayer.moonCrown)
-                    {
-                        if (Main.player[projectile.owner].miscCounter % 120 == 0 && projectile.FinalExtraUpdate())
-                        {
-                            if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<MoonSigil>()] < 5)
-                            {
-                                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(45);
-                                int proj = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<MoonSigil>(), damage, 0f, projectile.owner);
-                                if (proj.WithinBounds(Main.maxProjectiles))
-                                    Main.projectile[proj].DamageType = DamageClass.Generic;
-                            }
-                        }
-                    }
-
-                    if (modPlayer.dragonScales)
-                    {
-                        if (Main.player[projectile.owner].miscCounter % 50 == 0 && projectile.FinalExtraUpdate())
-                        {
-                            if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<DragonShit>()] < 5)
-                            {
-                                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(DragonScales.ShitBaseDamage);
-                                int proj = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.One.RotatedByRandom(MathHelper.TwoPi), ProjectileType<DragonShit>(),
-                                    damage, 0f, projectile.owner);
-                                if (proj.WithinBounds(Main.maxProjectiles))
-                                    Main.projectile[proj].DamageType = DamageClass.Generic;
-                            }
-                        }
-                    }
-
-                    if (modPlayer.daedalusSplit)
-                    {
-                        if (Main.player[projectile.owner].miscCounter % 30 == 0 && projectile.FinalExtraUpdate())
-                        {
-                            if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileID.CrystalShard] < 30)
-                            {
-                                // Daedalus Rogue Crystals: 2 x 25%, soft cap starts at 120 base damage
-                                int crystalDamage = CalamityUtils.DamageSoftCap(projectile.damage * 0.25, 30);
-                                for (int i = 0; i < 2; i++)
+                                if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<NanotechProjectile>()] < 5)
                                 {
-                                    Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f);
-                                    int shard = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, velocity, ProjectileID.CrystalShard, crystalDamage, 0f, projectile.owner);
-                                    if (shard.WithinBounds(Main.maxProjectiles))
-                                        Main.projectile[shard].DamageType = DamageClass.Generic;
+                                    int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(60);
+                                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<NanotechProjectile>(), damage, 0f, projectile.owner);
                                 }
                             }
                         }
-                    }
+                        else if (modPlayer.moonCrown)
+                        {
+                            if (Main.player[projectile.owner].miscCounter % 120 == 0 && projectile.FinalExtraUpdate())
+                            {
+                                if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<MoonSigil>()] < 5)
+                                {
+                                    int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(45);
+                                    int proj = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<MoonSigil>(), damage, 0f, projectile.owner);
+                                    if (proj.WithinBounds(Main.maxProjectiles))
+                                        Main.projectile[proj].DamageType = DamageClass.Generic;
+                                }
+                            }
+                        }
 
-                    if (player.meleeEnchant > 0 && !projectile.noEnchantments)
-                    {
+                        if (modPlayer.dragonScales)
+                        {
+                            if (Main.player[projectile.owner].miscCounter % 50 == 0 && projectile.FinalExtraUpdate())
+                            {
+                                if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<DragonShit>()] < 5)
+                                {
+                                    int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(DragonScales.ShitBaseDamage);
+                                    int proj = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.One.RotatedByRandom(MathHelper.TwoPi), ProjectileType<DragonShit>(),
+                                        damage, 0f, projectile.owner);
+                                    if (proj.WithinBounds(Main.maxProjectiles))
+                                        Main.projectile[proj].DamageType = DamageClass.Generic;
+                                }
+                            }
+                        }
+
+                        if (modPlayer.daedalusSplit)
+                        {
+                            if (Main.player[projectile.owner].miscCounter % 30 == 0 && projectile.FinalExtraUpdate())
+                            {
+                                if (projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ProjectileID.CrystalShard] < 15)
+                                {
+                                    // Daedalus Rogue Crystals: 2 x 25%, soft cap starts at 120 base damage
+                                    int crystalDamage = CalamityUtils.DamageSoftCap(projectile.damage * 0.25, 30);
+                                    for (int i = 0; i < 2; i++)
+                                    {
+                                        Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f);
+                                        int shard = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, velocity, ProjectileID.CrystalShard, crystalDamage, 0f, projectile.owner);
+                                        if (shard.WithinBounds(Main.maxProjectiles))
+                                            Main.projectile[shard].DamageType = DamageClass.Generic;
+                                    }
+                                }
+                            }
+                        }
+                    
+                    if (player.meleeEnchant > 0 && !projectile.noEnchantments && !projectile.noEnchantmentVisuals)
+                        {
                         switch (player.meleeEnchant)
                         {
                             case 1:
-                                if (Main.rand.NextBool(3))
+                                if (!Main.rand.NextBool(3))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 171, 0.0f, 0.0f, 100, new Color(), 1f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].fadeIn = 1.5f;
-                                    Main.dust[index].velocity *= 0.25f;
-                                }
-                                if (Main.rand.NextBool(3))
-                                {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 171, 0.0f, 0.0f, 100, new Color(), 1f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].fadeIn = 1.5f;
-                                    Main.dust[index].velocity *= 0.25f;
+                                    Dust venom = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 171, 0f, 0f, 100);
+                                    venom.noGravity = true;
+                                    venom.fadeIn = 1.5f;
+                                    venom.velocity *= 0.25f;
                                 }
                                 break;
                             case 2:
                                 if (Main.rand.NextBool(2))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 75, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].velocity *= 0.7f;
-                                    Main.dust[index].velocity.Y -= 0.5f;
+                                    Dust cflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 75, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
+                                    cflame.noGravity = true;
+                                    cflame.velocity *= 0.7f;
+                                    cflame.velocity.Y -= 0.5f;
                                 }
                                 break;
                             case 3:
                                 if (Main.rand.NextBool(2))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 6, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].velocity *= 0.7f;
-                                    Main.dust[index].velocity.Y -= 0.5f;
+                                    Dust fire = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 6, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
+                                    fire.noGravity = true;
+                                    fire.velocity *= 0.7f;
+                                    fire.velocity.Y -= 0.5f;
                                 }
                                 break;
                             case 4:
                                 if (Main.rand.NextBool(2))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 57, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 1.1f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].velocity.X /= 2f;
-                                    Main.dust[index].velocity.Y /= 2f;
+                                    Dust gold = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 57, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 1.1f);
+                                    gold.noGravity = true;
+                                    gold.velocity *= 0.5f;
                                 }
                                 break;
                             case 5:
                                 if (Main.rand.NextBool(2))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, 0.0f, 0.0f, 100, new Color(), 1f);
-                                    Main.dust[index].velocity.X += projectile.direction;
-                                    Main.dust[index].velocity.Y += 0.2f;
-                                    Main.dust[index].noGravity = true;
+                                    Dust ichor = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 169, 0f, 0f, 100);
+                                    ichor.velocity.X += projectile.direction;
+                                    ichor.velocity.Y += 0.2f;
+                                    ichor.noGravity = true;
                                 }
                                 break;
                             case 6:
                                 if (Main.rand.NextBool(2))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 135, 0.0f, 0.0f, 100, new Color(), 1f);
-                                    Main.dust[index].velocity.X += projectile.direction;
-                                    Main.dust[index].velocity.Y += 0.2f;
-                                    Main.dust[index].noGravity = true;
+                                    Dust nanite = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 135, 0f, 0f, 100);
+                                    nanite.velocity.X += projectile.direction;
+                                    nanite.velocity.Y += 0.2f;
+                                    nanite.noGravity = true;
                                 }
                                 break;
                             case 8:
                                 if (Main.rand.NextBool(4))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, 46, 0.0f, 0.0f, 100, new Color(), 1f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].fadeIn = 1.5f;
-                                    Main.dust[index].velocity *= 0.25f;
+                                    Dust poison = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 46, 0f, 0f, 100);
+                                    poison.noGravity = true;
+                                    poison.fadeIn = 1.5f;
+                                    poison.velocity *= 0.25f;
                                 }
                                 break;
                             case CalamityGlobalBuff.ModdedFlaskEnchant:
                                 int dustType = player.Calamity().flaskHoly ? (int)CalamityDusts.ProfanedFire : player.Calamity().flaskBrimstone ? ModContent.DustType<BrimstoneFlame>() : DustID.Stone;
                                 if (Main.rand.NextBool(4))
                                 {
-                                    int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, dustType, 0f, 0f, 100, new Color(), 1f);
-                                    Main.dust[index].noGravity = true;
-                                    Main.dust[index].fadeIn = 1.5f;
-                                    Main.dust[index].velocity *= 0.25f;
+                                    Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, dustType, 0f, 0f, 100);
+                                    dust.noGravity = true;
+                                    dust.fadeIn = 1.5f;
+                                    dust.velocity *= 0.25f;
                                 }
                                 break;
                             default:
@@ -2392,15 +2443,15 @@ namespace CalamityMod.Projectiles
 
                 if (projectile.CountsAsClass<MeleeDamageClass>() || projectile.CountsAsClass<SummonMeleeSpeedDamageClass>())
                 {
-                    if (player.Calamity().flaskBrimstone || player.Calamity().flaskCrumbling || player.Calamity().flaskHoly)
+                    if ((player.Calamity().flaskBrimstone || player.Calamity().flaskCrumbling || player.Calamity().flaskHoly) && !projectile.noEnchantments && !projectile.noEnchantmentVisuals)
                     {
                         int dustType = player.Calamity().flaskHoly ? (int)CalamityDusts.ProfanedFire : player.Calamity().flaskBrimstone ? ModContent.DustType<BrimstoneFlame>() : DustID.Stone;
                         if (Main.rand.NextBool(4))
                         {
-                            int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, dustType, 0f, 0f, 100, new Color(), 1f);
-                            Main.dust[index].noGravity = true;
-                            Main.dust[index].fadeIn = 1.5f;
-                            Main.dust[index].velocity *= 0.25f;
+                            Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, dustType, 0f, 0f, 100);
+                            dust.noGravity = true;
+                            dust.fadeIn = 1.5f;
+                            dust.velocity *= 0.25f;
                         }
                     }
                 }
@@ -2409,37 +2460,34 @@ namespace CalamityMod.Projectiles
                 {
                     if (Main.rand.NextBool(5))
                     {
-                        int dust = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 91, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f, 0, default, 0.5f);
-                        Main.dust[dust].noGravity = true;
+                        Dust dust = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 91, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f, 0, default, 0.5f);
+                        dust.noGravity = true;
                     }
                 }
 
-                if (!projectile.CountsAsClass<MeleeDamageClass>() && player.meleeEnchant > 0 && !projectile.noEnchantments)
+                if (!projectile.CountsAsClass<MeleeDamageClass>() && player.meleeEnchant == 7 && !projectile.noEnchantmentVisuals) //flask of party affects all types of weapons
                 {
-                    if (player.meleeEnchant == 7) //flask of party affects all types of weapons
+                    Vector2 velocity = projectile.velocity;
+                    if (velocity.Length() > 4.0)
+                        velocity *= 4f / velocity.Length();
+                    if (Main.rand.NextBool(20))
                     {
-                        Vector2 velocity = projectile.velocity;
-                        if (velocity.Length() > 4.0)
-                            velocity *= 4f / velocity.Length();
-                        if (Main.rand.NextBool(20))
-                        {
-                            int index = Dust.NewDust(projectile.position, projectile.width, projectile.height, Main.rand.Next(139, 143), velocity.X, velocity.Y, 0, new Color(), 1.2f);
-                            Main.dust[index].velocity.X *= (float)(1.0 + Main.rand.Next(-50, 51) * 0.01);
-                            Main.dust[index].velocity.Y *= (float)(1.0 + Main.rand.Next(-50, 51) * 0.01);
-                            Main.dust[index].velocity.X += Main.rand.Next(-50, 51) * 0.05f;
-                            Main.dust[index].velocity.Y += Main.rand.Next(-50, 51) * 0.05f;
-                            Main.dust[index].scale *= (float)(1.0 + Main.rand.Next(-30, 31) * 0.01);
-                        }
-                        if (Main.rand.NextBool(40) && Main.netMode != NetmodeID.Server)
-                        {
-                            int Type = Main.rand.Next(276, 283);
-                            int index = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, velocity, Type, 1f);
-                            Main.gore[index].velocity.X *= (float)(1.0 + Main.rand.Next(-50, 51) * 0.01);
-                            Main.gore[index].velocity.Y *= (float)(1.0 + Main.rand.Next(-50, 51) * 0.01);
-                            Main.gore[index].scale *= (float)(1.0 + Main.rand.Next(-20, 21) * 0.01);
-                            Main.gore[index].velocity.X += Main.rand.Next(-50, 51) * 0.05f;
-                            Main.gore[index].velocity.Y += Main.rand.Next(-50, 51) * 0.05f;
-                        }
+                        Dust confetti = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, Main.rand.Next(139, 143), velocity.X, velocity.Y, 0, new Color(), 1.2f);
+                        confetti.scale *= 1f + Main.rand.Next(-20, 21) * 0.01f;
+                        confetti.velocity.X *= 1f + Main.rand.Next(-50, 51) * 0.01f;
+                        confetti.velocity.Y *= 1f + Main.rand.Next(-50, 51) * 0.01f;
+                        confetti.velocity.X += Main.rand.Next(-50, 51) * 0.05f;
+                        confetti.velocity.Y += Main.rand.Next(-50, 51) * 0.05f;
+                    }
+                    if (Main.rand.NextBool(40) && Main.netMode != NetmodeID.Server)
+                    {
+                        int Type = Main.rand.Next(276, 283);
+                        Gore confetti = Gore.NewGoreDirect(projectile.GetSource_FromAI(), projectile.position, velocity, Type, 1f);
+                        confetti.scale *= 1f + Main.rand.Next(-20, 21) * 0.01f;
+                        confetti.velocity.X *= 1f + Main.rand.Next(-50, 51) * 0.01f;
+                        confetti.velocity.Y *= 1f + Main.rand.Next(-50, 51) * 0.01f;
+                        confetti.velocity.X += Main.rand.Next(-50, 51) * 0.05f;
+                        confetti.velocity.Y += Main.rand.Next(-50, 51) * 0.05f;
                     }
                 }
                 if (brimstoneBullets) 
@@ -2458,7 +2506,7 @@ namespace CalamityMod.Projectiles
         }
         #endregion
 
-        #region PostAI
+        #region Post AI
         public override void PostAI(Projectile projectile)
         {
             if (projectile.FinalExtraUpdate() && flatDRTimer > 0)
@@ -2527,7 +2575,7 @@ namespace CalamityMod.Projectiles
         }
         #endregion
 
-        #region ModifyHitNPC
+        #region Modify Hit NPC
         public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[projectile.owner];
@@ -2544,7 +2592,7 @@ namespace CalamityMod.Projectiles
 
             // If applicable, use ricoshot bonus damage.
             if (totalRicoshotDamageBonus > 0f)
-                modifiers.SourceDamage *= totalRicoshotDamageBonus;
+                modifiers.ScalingBonusDamage += totalRicoshotDamageBonus;
 
             // If this projectile is forced to crit, simply set the crit bool.
             if (forcedCrit)
@@ -2597,14 +2645,14 @@ namespace CalamityMod.Projectiles
         }
         #endregion
 
-        #region ModifyHitPlayer
+        #region Modify Hit Player
         public override void ModifyHitPlayer(Projectile projectile, Player target, ref Player.HurtModifiers modifiers)
         {
             modifiers.FinalDamage.Flat -= flatDR;
         }
         #endregion
 
-        #region CanDamage + CanHit
+        #region Can Damage + Can Hit
         public override bool? CanDamage(Projectile projectile)
         {
             if (projectile.hostile && (projectile.damage - flatDR <= 0))
@@ -2655,9 +2703,7 @@ namespace CalamityMod.Projectiles
             if (Main.LocalPlayer.Calamity().omniscience && projectile.hostile && projectile.damage > 0 && projectile.alpha < 255)
             {
                 if (projectile.ModProjectile is null || (projectile.ModProjectile != null && projectile.ModProjectile.CanHitPlayer(Main.LocalPlayer) && (projectile.ModProjectile.CanDamage() ?? true)))
-                {
                     return Color.Coral;
-                }
             }
 
             if (projectile.type == ProjectileID.Stinger)
@@ -2690,9 +2736,27 @@ namespace CalamityMod.Projectiles
                 return new Color(200, 200, 200, projectile.alpha);
             }
 
+            if (projectile.type == ProjectileID.ThornBall)
+            {
+                float startTurningBrownGateValue = 420f;
+                float timeToReachFullBrown = 180f;
+                float timeToReachThornExplosion = startTurningBrownGateValue + timeToReachFullBrown;
+                Color initialColor = Color.White;
+                initialColor.A = (byte)projectile.alpha;
+                Color finalColor = Color.RosyBrown;
+                finalColor.A = (byte)projectile.alpha;
+                if (projectile.ai[1] > startTurningBrownGateValue)
+                {
+                    float colorTransitionRatio = (projectile.ai[1] - startTurningBrownGateValue) / timeToReachFullBrown;
+                    Color dehydratedColor = Color.Lerp(initialColor, finalColor, colorTransitionRatio);
+                    return dehydratedColor;
+                }
+                else
+                    return initialColor;
+            }
+
             if (projectile.type == ProjectileID.SeedPlantera || projectile.type == ProjectileID.PoisonSeedPlantera ||
-                projectile.type == ProjectileID.ThornBall || projectile.type == ProjectileID.CultistBossFireBallClone ||
-                projectile.type == ProjectileID.AncientDoomProjectile)
+                projectile.type == ProjectileID.CultistBossFireBallClone || projectile.type == ProjectileID.AncientDoomProjectile)
             {
                 if (projectile.timeLeft < 85)
                 {
@@ -2724,6 +2788,8 @@ namespace CalamityMod.Projectiles
                 Color color9 = new(Main.DiscoR, Main.DiscoG, Main.DiscoB, projectile.alpha);
                 Color alpha15 = projectile.GetAlpha(color9);
 
+                float offsetX = Main.screenPosition.X + (projectile.width / 2) - texture.Width * projectile.scale / 2f + vector11.X * projectile.scale;
+                float offsetY = Main.screenPosition.Y + projectile.height - texture.Height * projectile.scale / Main.projFrames[projectile.type] + 4f + vector11.Y * projectile.scale + projectile.gfxOffY;
                 for (int num213 = 0; num213 < 4; num213++)
                 {
                     Vector2 position9 = projectile.position;
@@ -2747,17 +2813,20 @@ namespace CalamityMod.Projectiles
                     position9.Y -= projectile.height / 2;
 
                     Main.spriteBatch.Draw(texture,
-                        new Vector2(position9.X - Main.screenPosition.X + (projectile.width / 2) - texture.Width * projectile.scale / 2f + vector11.X * projectile.scale, position9.Y - Main.screenPosition.Y + projectile.height - texture.Height * projectile.scale / Main.projFrames[projectile.type] + 4f + vector11.Y * projectile.scale + projectile.gfxOffY),
+                        new Vector2(position9.X - offsetX, position9.Y - offsetY),
                         new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, y, texture.Width, frames)), alpha15, projectile.rotation, vector11, projectile.scale, spriteEffects, 0);
                 }
             }
 
-            if (CalamityWorld.getFixedBoi && NPC.AnyNPCs(NPCType<NPCs.CeaselessVoid.CeaselessVoid>()))
+            if (Main.zenithWorld)
             {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-                var midnightShader = Terraria.Graphics.Shaders.GameShaders.Armor.GetShaderFromItemId(ItemID.MidnightRainbowDye);
-                midnightShader.Apply();
+                if (NPC.AnyNPCs(NPCType<NPCs.CeaselessVoid.CeaselessVoid>()))
+                {
+                    Main.spriteBatch.End();
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                    var midnightShader = Terraria.Graphics.Shaders.GameShaders.Armor.GetShaderFromItemId(ItemID.MidnightRainbowDye);
+                    midnightShader.Apply();
+                }
             }
 
             return true;

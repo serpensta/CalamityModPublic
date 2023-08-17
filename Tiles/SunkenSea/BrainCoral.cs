@@ -19,7 +19,6 @@ namespace CalamityMod.Tiles.SunkenSea
             TileObjectData.addTile(Type);
             DustType = 253;
             AddMapEntry(new Color(36, 61, 111));
-            MineResist = 3f;
 
             base.SetStaticDefaults();
         }
@@ -32,9 +31,8 @@ namespace CalamityMod.Tiles.SunkenSea
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (Main.gamePaused)
-            {
                 return;
-            }
+
             if (closer)
             {
                 if (Main.rand.NextBool(300))

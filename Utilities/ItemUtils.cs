@@ -109,6 +109,7 @@ namespace CalamityMod
             // ACCESSORIES
             if (item.accessory)
             {
+                int accRerolls = 0;
                 int[][] accessoryReforgeTiers = new int[][]
                 {
                     /* 0 */ new int[] { PrefixID.Hard, PrefixID.Jagged, PrefixID.Brisk, PrefixID.Wild, GetCalPrefix("Quiet") },
@@ -116,7 +117,18 @@ namespace CalamityMod
                     /* 2 */ new int[] { PrefixID.Armored, PrefixID.Angry, PrefixID.Hasty2, PrefixID.Intrepid, PrefixID.Arcane, GetCalPrefix("Camouflaged") },
                     /* 3 */ new int[] { PrefixID.Warding, PrefixID.Menacing, PrefixID.Lucky, PrefixID.Quick2, PrefixID.Violent, GetCalPrefix("Silent") },
                 };
-                prefix = IteratePrefix(rand, accessoryReforgeTiers, currentPrefix);
+
+                // Try to prevent the player from rolling the same modifier twice
+                do
+                {
+                    int newPrefix = IteratePrefix(rand, accessoryReforgeTiers, currentPrefix);
+                    if (newPrefix != currentPrefix)
+                    {
+                        prefix = newPrefix;
+                        break;
+                    }
+                    accRerolls++;
+                } while (accRerolls < 20);
             }
 
             // MELEE (includes tools and whips)
@@ -292,6 +304,34 @@ namespace CalamityMod
                     sb.Append(" / ").Append(keys[i]);
                 return sb.ToString();
             }
+        }
+
+        /// <summary>
+        /// Shortcut for finding a specific string in the tooltip and replacing it with a new string<br/>
+        /// Typically used for dynamic tooltip updating. Consider overriding Tooltip or using String.Format for applying constants.
+        /// </summary>
+        /// <param name="tooltips">The tooltip list provided to a <b>ModifyTooltips</b> TML hook.</param>
+        /// <param name="replacedKey">The key to be replaced.</param>
+        /// <param name="replacedKey">The new key.</param>
+        public static void FindAndReplace(this List<TooltipLine> tooltips, string replacedKey, string newKey)
+        {
+            TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Text.Contains(replacedKey));
+            if (line != null)
+                line.Text = line.Text.Replace(replacedKey, newKey);
+        }
+
+        /// <summary>
+        /// Shortcut for automatically placing one keybind within a tooltip. Requires the "[KEY]" string to be replaced.
+        /// </summary>
+        /// <param name="tooltips">The tooltip list provided to a <b>ModifyTooltips</b> TML hook.</param>
+        /// <param name="mhk">The ModKeybind to integrate into the tooltip.</param>
+        public static void IntegrateHotkey(this List<TooltipLine> tooltips, ModKeybind mhk)
+        {
+            if (Main.dedServ || mhk is null)
+                return;
+            
+            string finalKey = mhk.TooltipHotkeyString();
+            tooltips.FindAndReplace("[KEY]", finalKey);
         }
 
         // Original code lifted from Iban's extended armor tooltips.

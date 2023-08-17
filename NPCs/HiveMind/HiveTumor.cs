@@ -38,12 +38,11 @@ namespace CalamityMod.NPCs.HiveMind
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCorruption,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("The blemish of a colonial superorganism, the mass of organic matter pulses like a heart. The growth is the result of the corruption's beings forming together.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.HiveTumor")
             });
         }
 
@@ -59,9 +58,9 @@ namespace CalamityMod.NPCs.HiveMind
         {
             float timeToSpawn = 120f;
 
-            if (CalamityWorld.getFixedBoi && NPC.AnyNPCs(ModContent.NPCType<HiveMind>()))
+            if (Main.zenithWorld && NPC.AnyNPCs(ModContent.NPCType<HiveMind>()))
             {
-                //Passively spawns random enemies
+                // Passively spawns random enemies
                 NPC.ai[0]++;
                 
                 if (NPC.ai[0] >= timeToSpawn)
@@ -94,14 +93,22 @@ namespace CalamityMod.NPCs.HiveMind
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (CalamityGlobalNPC.AnyEvents(spawnInfo.Player))
+            if (CalamityGlobalNPC.AnyEvents(spawnInfo.Player) || !spawnInfo.Player.ZoneCorrupt)
                 return 0f;
+
             if (spawnInfo.Player.Calamity().disableHiveCystSpawns)
                 return 0f;
 
-            bool anyBossElements = NPC.AnyNPCs(ModContent.NPCType<HiveTumor>()) || NPC.AnyNPCs(ModContent.NPCType<HiveMind>());
-            bool corrupt = TileID.Sets.Corrupt[spawnInfo.SpawnTileType] || spawnInfo.SpawnTileType == TileID.Demonite && spawnInfo.Player.ZoneCorrupt;
-            if (anyBossElements || spawnInfo.PlayerSafe || !corrupt)
+            bool corrupt = TileID.Sets.Corrupt[spawnInfo.SpawnTileType] || spawnInfo.SpawnTileType == TileID.Demonite;
+            if (spawnInfo.PlayerSafe || !corrupt)
+                return 0f;
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
+                return 0f;
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(ModContent.NPCType<HiveMind>()))
                 return 0f;
 
             if (NPC.downedBoss2 && !DownedBossSystem.downedHiveMind)

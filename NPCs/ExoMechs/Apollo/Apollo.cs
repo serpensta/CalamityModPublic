@@ -172,12 +172,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                //We'll probably want a custom background for Exos like ML has.
-                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Exo,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("Within it, burns chemicals with the fury of Greek fire. Highly refined from the design of the eye-like twins before, it is now capable of outstanding mid-air movement.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Apollo")
             });
         }
 
@@ -551,9 +548,6 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
             if (rateOfRotation != 0f)
                 NPC.rotation = NPC.rotation.AngleTowards((float)Math.Atan2(rotateTowards.Y, rotateTowards.X) + MathHelper.PiOver2, rateOfRotation);
 
-            // Light
-            Lighting.AddLight(NPC.Center, 0.05f * NPC.Opacity, 0.25f * NPC.Opacity, 0.15f * NPC.Opacity);
-
             // Despawn if target is dead
             if (player.dead)
             {
@@ -631,21 +625,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                         if (spawnOtherExoMechs)
                         {
                             // Despawn projectile bullshit
-                            for (int x = 0; x < Main.maxProjectiles; x++)
-                            {
-                                Projectile projectile = Main.projectile[x];
-                                if (projectile.active)
-                                {
-                                    if (projectile.type == ModContent.ProjectileType<ArtemisLaser>() ||
-                                        projectile.type == ModContent.ProjectileType<ArtemisChargeTelegraph>() ||
-                                        projectile.type == ModContent.ProjectileType<ApolloFireball>() ||
-                                        projectile.type == ModContent.ProjectileType<ApolloRocket>())
-                                    {
-                                        projectile.Kill();
-                                        projectile.owner = Main.maxPlayers;
-                                    }
-                                }
-                            }
+                            KillProjectiles();
 
                             // Set Artemis variables
                             if (exoMechTwinRedAlive)
@@ -736,21 +716,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                         if (otherMechIsBerserk && !berserk && !exoMechdusa)
                         {
                             // Despawn projectile bullshit
-                            for (int x = 0; x < Main.maxProjectiles; x++)
-                            {
-                                Projectile projectile = Main.projectile[x];
-                                if (projectile.active)
-                                {
-                                    if (projectile.type == ModContent.ProjectileType<ArtemisLaser>() ||
-                                        projectile.type == ModContent.ProjectileType<ArtemisChargeTelegraph>() ||
-                                        projectile.type == ModContent.ProjectileType<ApolloFireball>() ||
-                                        projectile.type == ModContent.ProjectileType<ApolloRocket>())
-                                    {
-                                        projectile.Kill();
-                                        projectile.owner = Main.maxPlayers;
-                                    }
-                                }
-                            }
+                            KillProjectiles();
 
                             // Set Artemis variables
                             if (exoMechTwinRedAlive)
@@ -806,21 +772,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                     if (otherMechIsBerserk && !exoMechdusa)
                     {
                         // Despawn projectile bullshit
-                        for (int x = 0; x < Main.maxProjectiles; x++)
-                        {
-                            Projectile projectile = Main.projectile[x];
-                            if (projectile.active)
-                            {
-                                if (projectile.type == ModContent.ProjectileType<ArtemisLaser>() ||
-                                    projectile.type == ModContent.ProjectileType<ArtemisChargeTelegraph>() ||
-                                    projectile.type == ModContent.ProjectileType<ApolloFireball>() ||
-                                    projectile.type == ModContent.ProjectileType<ApolloRocket>())
-                                {
-                                    projectile.Kill();
-                                    projectile.owner = Main.maxPlayers;
-                                }
-                            }
-                        }
+                        KillProjectiles();
 
                         // Set Artemis variables
                         if (exoMechTwinRedAlive)
@@ -1026,11 +978,11 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                             {
                                 pickNewLocation = true;
                                 NPC.ai[2] += 1f;
+                                SoundEngine.PlaySound(CommonCalamitySounds.ExoPlasmaShootSound, NPC.Center);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     int type = ModContent.ProjectileType<ApolloFireball>();
                                     int damage = NPC.GetProjectileDamage(type);
-                                    SoundEngine.PlaySound(CommonCalamitySounds.ExoPlasmaShootSound, NPC.Center);
                                     Vector2 plasmaVelocity = Vector2.Normalize(aimedVector) * projectileVelocity;
                                     Vector2 offset = Vector2.Normalize(plasmaVelocity) * 70f;
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, plasmaVelocity, type, damage, 0f, Main.myPlayer, player.Center.X, player.Center.Y);
@@ -1064,7 +1016,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                                 calamityGlobalNPC.newAI[3] = 0f;
 
                                 if (phase2)
-                                    AIState = (NPC.localAI[2] == 1f && !artemisUsingDeathray) ? (float)Phase.LineUpChargeCombo : (float)Phase.RocketBarrage;
+                                    AIState = (NPC.localAI[2] == 1f && (!artemisUsingDeathray || Main.zenithWorld)) ? (float)Phase.LineUpChargeCombo : (float)Phase.RocketBarrage;
                                 else
                                     AIState = (float)Phase.RocketBarrage;
                             }
@@ -1206,7 +1158,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                         NPC.netSpam -= 5;
 
                         // Plasma bolts on charge
-                        if (Main.netMode != NetmodeID.MultiplayerClient && !(CalamityWorld.getFixedBoi && !exoMechdusa)) // I'm not that evil
+                        if (Main.netMode != NetmodeID.MultiplayerClient && (!(Main.zenithWorld && !exoMechdusa) || (CalamityWorld.LegendaryMode && revenge))) // I'm not that evil (you aren't, but I am - Fab)
                         {
                             int totalProjectiles = bossRush ? 16 : death ? 12 : 8;
                             float radians = MathHelper.TwoPi / totalProjectiles;
@@ -1294,7 +1246,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                     // Reset phase and variables
                     if (calamityGlobalNPC.newAI[2] >= maxCharges - 1)
                     {
-                        if (CalamityWorld.getFixedBoi && !exoMechdusa)
+                        if (Main.zenithWorld && !exoMechdusa)
                         {
                             pickNewLocation = NPC.localAI[2] == 0f;
                             calamityGlobalNPC.newAI[3] = 0f;
@@ -1818,7 +1770,30 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                     nPC.netUpdate = true;
                 }
             }
+
+            // Despawn projectile bullshit
+            KillProjectiles();
+
             return true;
+        }
+
+        private void KillProjectiles()
+        {
+            for (int x = 0; x < Main.maxProjectiles; x++)
+            {
+                Projectile projectile = Main.projectile[x];
+                if (projectile.active)
+                {
+                    if (projectile.type == ModContent.ProjectileType<ArtemisLaser>() ||
+                        projectile.type == ModContent.ProjectileType<ArtemisChargeTelegraph>() ||
+                        projectile.type == ModContent.ProjectileType<ApolloFireball>() ||
+                        projectile.type == ModContent.ProjectileType<ApolloRocket>())
+                    {
+                        projectile.ai[2] = -1f;
+                        projectile.Kill();
+                    }
+                }
+            }
         }
 
         public override bool CheckActive() => false;

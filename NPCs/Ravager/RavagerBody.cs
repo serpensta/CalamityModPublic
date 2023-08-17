@@ -97,11 +97,10 @@ namespace CalamityMod.NPCs.Ravager
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Flames roar from what almost appear to be the parapets of a rotting fortress. You will know when it is approaching downwind, from the smell alone.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Ravager")
             });
         }
 
@@ -237,7 +236,7 @@ namespace CalamityMod.NPCs.Ravager
                 }
             }
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 bool finalStand = lifeRatio < 0.2f; //At 20% body health, does the funny final attack
                 NPC.localAI[1]++;
@@ -990,11 +989,7 @@ namespace CalamityMod.NPCs.Ravager
                 target.AddBuff(ModContent.BuffType<ArmorCrunch>(), 480, true);
         }
 
-        public override void BossLoot(ref string name, ref int potionType)
-        {
-            name = "Ravager";
-            potionType = ItemID.GreaterHealingPotion;
-        }
+        public override void BossLoot(ref string name, ref int potionType) => potionType = ItemID.GreaterHealingPotion;
 
         public override void OnKill()
         {

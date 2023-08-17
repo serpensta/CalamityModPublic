@@ -86,6 +86,9 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.IsABestiaryIconDummy)
+                return true;
+
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
@@ -180,7 +183,7 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-            if (NPC.life <= 0 && CalamityWorld.getFixedBoi) // I value people's computers
+            if (NPC.life <= 0 && !Main.zenithWorld) // I value people's computers
             {
                 NPC.position.X = NPC.position.X + (NPC.width / 2);
                 NPC.position.Y = NPC.position.Y + (NPC.height / 2);

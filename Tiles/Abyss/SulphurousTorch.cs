@@ -2,15 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.Abyss
 {
     public class SulphurousTorch : ModTile
     {
-        public override void SetStaticDefaults() => this.SetUpTorch(true, true);
+        public override void SetStaticDefaults() => this.SetUpTorch(ModContent.ItemType<Items.Placeables.Furniture.SulphurousTorch>(), waterImmune: true);
 
         public override bool CreateDust(int i, int j, ref int type)
         {
@@ -49,9 +47,7 @@ namespace CalamityMod.Tiles.Abyss
             {
                 offsetY = 2;
                 if (WorldGen.SolidTile(i - 1, j + 1) || WorldGen.SolidTile(i + 1, j + 1))
-                {
                     offsetY = 4;
-                }
             }
         }
 

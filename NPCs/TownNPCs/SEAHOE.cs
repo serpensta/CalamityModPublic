@@ -62,14 +62,10 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,   
-                
-                //Change the info part in his entry when we do the critter barter
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("The Sea King of an ancient civilization long lost to the sands of time— and the desert. He is able to give useful advice on the world around you, having lived for so long.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SEAHOE")
             });
         }
 
@@ -174,7 +170,7 @@ namespace CalamityMod.NPCs.TownNPCs
                 if (chosen == 6 || chosen == 9)
                     return this.GetLocalization("Help.PreHardmode" + chosen).Format(worldEvil);
 
-                return this.GetLocalizedValue("Help.PreHardmdoe" + chosen);
+                return this.GetLocalizedValue("Help.PreHardmode" + chosen);
             }
         }
 
@@ -201,8 +197,7 @@ namespace CalamityMod.NPCs.TownNPCs
         }
         public override void AddShops()
         {
-            Condition potionSells = new("While the Town NPC Potion Selling configuration option is enabled", () => CalamityConfig.Instance.PotionSelling);
-            Condition downedOldDuke = new("If The Old Duke has been defeated", () => DownedBossSystem.downedBoomerDuke);
+            Condition downedOldDuke = new(CalamityUtils.GetText("Condition.PostOD"), () => DownedBossSystem.downedBoomerDuke);
 
             NPCShop shop = new(Type);
             shop.Add(ModContent.ItemType<Shellshooter>())
@@ -214,9 +209,6 @@ namespace CalamityMod.NPCs.TownNPCs
                 .Add(ModContent.ItemType<AmidiasTrident>())
                 .Add(ModContent.ItemType<EnchantedConch>())
                 .Add(ModContent.ItemType<PolypLauncher>())
-                .AddWithCustomValue(ItemID.GillsPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.WaterWalkingPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.FlipperPotion, Item.buyPrice(gold: 4), potionSells, Condition.HappyEnough)
                 .AddWithCustomValue(ItemID.TruffleWorm, Item.buyPrice(gold: 10), Condition.Hardmode)
                 .AddWithCustomValue(ModContent.ItemType<BloodwormItem>(), Item.buyPrice(2), downedOldDuke)
                 .AddWithCustomValue(ItemID.ShrimpPoBoy, Item.buyPrice(gold: 2, silver: 50), Condition.HappyEnough, Condition.InBeach)

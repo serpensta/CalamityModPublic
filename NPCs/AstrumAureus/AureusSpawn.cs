@@ -37,6 +37,8 @@ namespace CalamityMod.NPCs.AstrumAureus
             NPC.Opacity = 0f;
             NPC.defense = 10;
             NPC.lifeMax = 5000;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.knockBackResist = 0f;
             NPC.dontTakeDamage = true;
             NPC.noGravity = true;
@@ -377,7 +379,7 @@ namespace CalamityMod.NPCs.AstrumAureus
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            int debuffType = CalamityWorld.getFixedBoi ? ModContent.BuffType<GodSlayerInferno>() : ModContent.BuffType<AstralInfectionDebuff>();
+            int debuffType = Main.zenithWorld ? ModContent.BuffType<GodSlayerInferno>() : ModContent.BuffType<AstralInfectionDebuff>();
             target.AddBuff(debuffType, (int)(180 * NPC.scale), true);
         }
     }

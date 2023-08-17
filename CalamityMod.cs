@@ -20,7 +20,7 @@ using CalamityMod.ILEditing;
 using CalamityMod.Items;
 using CalamityMod.Items.Dyes.HairDye;
 using CalamityMod.Items.VanillaArmorChanges;
-using CalamityMod.NPCs.AdultEidolonWyrm;
+using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.AstrumAureus;
 using CalamityMod.NPCs.AstrumDeus;
@@ -74,6 +74,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.DataStructures;
+using CalamityMod.NPCs.NormalNPCs;
 
 [assembly: InternalsVisibleTo("CalTestHelpers")]
 [assembly: InternalsVisibleTo("InfernumMode")]
@@ -151,7 +152,6 @@ namespace CalamityMod
 
         internal Mod ancientsAwakened = null;
         internal Mod bossChecklist = null;
-        internal Mod census = null;
         internal Mod crouchMod = null;
         internal Mod dialogueTweak = null;
         internal Mod fargos = null;
@@ -160,7 +160,6 @@ namespace CalamityMod
         internal Mod soa = null;
         internal Mod subworldLibrary = null;
         internal Mod summonersAssociation = null;
-        internal Mod summonersShine = null;
         internal Mod thorium = null;
         internal Mod varia = null;
         internal Mod wikithis = null;
@@ -175,9 +174,6 @@ namespace CalamityMod
 
             carpetOriginal = TextureAssets.FlyingCarpet;
 
-            // Apply IL edits as soon as possible.
-            ILChanges.Load();
-
             // If any of these mods aren't loaded, it will simply keep them as null.
             musicMod = null;
             ModLoader.TryGetMod("CalamityModMusic", out musicMod);
@@ -185,8 +181,6 @@ namespace CalamityMod
             ModLoader.TryGetMod("AAMod", out ancientsAwakened);
             bossChecklist = null;
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
-            census = null;
-            ModLoader.TryGetMod("Census", out census);
             crouchMod = null;
             ModLoader.TryGetMod("CrouchMod", out crouchMod);
             dialogueTweak = null;
@@ -203,8 +197,6 @@ namespace CalamityMod
             ModLoader.TryGetMod("SubworldLibrary", out subworldLibrary);
             summonersAssociation = null;
             ModLoader.TryGetMod("SummonersAssociation", out summonersAssociation);
-            summonersShine = null;
-            ModLoader.TryGetMod("SummonersShine", out summonersShine);
             thorium = null;
             ModLoader.TryGetMod("ThoriumMod", out thorium);
             varia = null;
@@ -225,8 +217,6 @@ namespace CalamityMod
             // Mount balancing occurs during runtime and is undone when Calamity is unloaded.
             Mount.mounts[MountID.Unicorn].dashSpeed *= CalamityPlayer.UnicornSpeedNerfPower;
             Mount.mounts[MountID.Unicorn].runSpeed *= CalamityPlayer.UnicornSpeedNerfPower;
-            Mount.mounts[MountID.MinecartMech].dashSpeed *= CalamityPlayer.MechanicalCartSpeedNerfPower;
-            Mount.mounts[MountID.MinecartMech].runSpeed *= CalamityPlayer.MechanicalCartSpeedNerfPower;
 
             // Make Graveyard biomes require more Gravestones
             SceneMetrics.GraveyardTileMax = 88;
@@ -343,7 +333,7 @@ namespace CalamityMod
             Filters.Scene["CalamityMod:MonolithAccursed"] = new Filter(new MonolithScreenShaderData("FilterMiniTower").UseColor(1.1f, 0.3f, 0.3f).UseOpacity(0.65f), EffectPriority.VeryHigh);
             SkyManager.Instance["CalamityMod:MonolithAccursed"] = new MonolithSky();
 
-            //Normal intensity is 4f
+            // Normal intensity is 4f
             Texture2D DistortionTexture = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/GreyscaleGradients/BlobbyNoise", AssetRequestMode.ImmediateLoad).Value;
             Filters.Scene["CalamityMod:DrunkCrabulon"] = new Filter(new DrunkCrabScreenShaderData("FilterHeatDistortion").UseImage(DistortionTexture, 0, null).UseIntensity(20f), EffectPriority.VeryHigh);
 
@@ -372,6 +362,7 @@ namespace CalamityMod
             StealthUI.Load();
             ChargeMeterUI.Load();
             AstralArcanumUI.Load(this);
+            FlightBar.Load();
 
             // TODO -- Is this not possible to place in ModNPC.Load or ModNPC.SetStaticDefaults ?
             // Centralizing head texture registration like this seems absurdly stiff
@@ -425,7 +416,6 @@ namespace CalamityMod
 
             ancientsAwakened = null;
             bossChecklist = null;
-            census = null;
             crouchMod = null;
             dialogueTweak = null;
             fargos = null;
@@ -434,7 +424,6 @@ namespace CalamityMod
             soa = null;
             subworldLibrary = null;
             summonersAssociation = null;
-            summonersShine = null;
             thorium = null;
             varia = null;
             wikithis = null;
@@ -477,6 +466,7 @@ namespace CalamityMod
             StealthUI.Unload();
             ChargeMeterUI.Unload();
             AstralArcanumUI.Unload();
+            FlightBar.Unload();
 
             if (!Main.dedServ)
             {
@@ -486,8 +476,6 @@ namespace CalamityMod
 
             Mount.mounts[MountID.Unicorn].dashSpeed /= CalamityPlayer.UnicornSpeedNerfPower;
             Mount.mounts[MountID.Unicorn].runSpeed /= CalamityPlayer.UnicornSpeedNerfPower;
-            Mount.mounts[MountID.MinecartMech].dashSpeed /= CalamityPlayer.MechanicalCartSpeedNerfPower;
-            Mount.mounts[MountID.MinecartMech].runSpeed /= CalamityPlayer.MechanicalCartSpeedNerfPower;
 
             SceneMetrics.GraveyardTileMax = 36;
             SceneMetrics.GraveyardTileMin = 16;
@@ -510,7 +498,6 @@ namespace CalamityMod
             loadCache = null;
             */
 
-            ILChanges.Unload();
             Instance = null;
             base.Unload();
         }
@@ -526,16 +513,22 @@ namespace CalamityMod
         }
         #endregion Render Target Management
 
-        #region ConfigCrap
+        #region Force ModConfig save (Reflection)
         internal static void SaveConfig(CalamityConfig cfg)
         {
-            // in-game ModConfig saving from mod code is not supported yet in tmodloader, and subject to change, so we need to be extra careful.
-            // This code only supports client configs, and doesn't call onchanged. It also doesn't support ReloadRequired or anything else.
-            MethodInfo saveMethodInfo = typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic);
-            if (saveMethodInfo != null)
-                saveMethodInfo.Invoke(null, new object[] { cfg });
-            else
-                Instance.Logger.Warn("In-game SaveConfig failed, code update required");
+            // There is no current way to manually save a mod configuration file in tModLoader.
+            // The method which saves mod config files is private in ConfigManager, so reflection is used to invoke it.
+            try
+            {
+                MethodInfo saveMethodInfo = typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic);
+                if (saveMethodInfo is not null)
+                    saveMethodInfo.Invoke(null, new object[] { cfg });
+                else
+                    Instance.Logger.Error("TML ConfigManager.Save reflection failed. Method signature has changed. Notify Calamity Devs if you see this in your log.");
+            } catch
+            {
+                Instance.Logger.Error("An error occurred while manually saving Calamity mod configuration. This may be due to a complex mod conflict. It is safe to ignore this error.");
+            }
         }
         #endregion
 
@@ -752,7 +745,7 @@ namespace CalamityMod
                 { ModContent.NPCType<ThanatosBody2>(), 21600 },
                 { ModContent.NPCType<ThanatosTail>(), 21600 },
                 { ModContent.NPCType<SupremeCalamitas>(), 18000 }, // 5:00 (300 seconds)
-                { ModContent.NPCType<AdultEidolonWyrmHead>(), 18000 } // 5:00 (300 seconds)
+                { ModContent.NPCType<PrimordialWyrmHead>(), 18000 } // 5:00 (300 seconds)
             };
         }
         #endregion
@@ -789,6 +782,7 @@ namespace CalamityMod
                 { NPCID.PrimeVice, velocityScaleMin },
                 { NPCID.Plantera, velocityScaleMin }, // Increases in phase 2
                 { NPCID.PlanterasTentacle, bitingEnemeyVelocityScale },
+                { ModContent.NPCType<PlanterasFreeTentacle>(), bitingEnemeyVelocityScale },
                 { NPCID.HallowBoss, velocityScaleMin },
                 { NPCID.Golem, velocityScaleMin },
                 { NPCID.GolemFistLeft, velocityScaleMin },
@@ -871,7 +865,7 @@ namespace CalamityMod
                 { ModContent.NPCType<ThanatosBody1>(), velocityScaleMin },
                 { ModContent.NPCType<ThanatosBody2>(), velocityScaleMin },
                 { ModContent.NPCType<ThanatosTail>(), velocityScaleMin },
-                { ModContent.NPCType<AdultEidolonWyrmHead>(), bitingEnemeyVelocityScale }
+                { ModContent.NPCType<PrimordialWyrmHead>(), bitingEnemeyVelocityScale }
             };
         }
         #endregion

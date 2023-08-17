@@ -35,6 +35,8 @@ namespace CalamityMod.NPCs.AstrumDeus
     public class AstrumDeusHead : ModNPC
     {
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/AstrumDeusSpawn");
+        public static readonly SoundStyle LaserSound = new("CalamityMod/Sounds/Custom/AstrumDeusLaser");
+        public static readonly SoundStyle MineSound = new("CalamityMod/Sounds/Custom/AstrumDeusMine");
         public static readonly SoundStyle SplitSound = new("CalamityMod/Sounds/Custom/AstrumDeusSplit");
         public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/AstrumDeusDeath");
 
@@ -92,7 +94,7 @@ namespace CalamityMod.NPCs.AstrumDeus
             NPC.Calamity().VulnerableToSickness = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbovegroundAstralBiome>().Type };
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 if (CalamityWorld.death) // killing 10 worms with half of the og's health is ridiculous
                 NPC.lifeMax /= 3;
@@ -102,11 +104,10 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("Revered as a God of the stars, it has been infected by the starborne illness. However, it has now been broken free from the infection's control and roams the stars once more, consuming dying stars and birthing them anew.")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.AstrumDeus")
             });
         }
 
@@ -218,7 +219,7 @@ namespace CalamityMod.NPCs.AstrumDeus
         {
             if (NPC.life <= 0)
             {
-                if (CalamityWorld.getFixedBoi && Main.rand.NextBool(5)) // I value people's computers
+                if (!Main.zenithWorld && Main.rand.NextBool(5)) // I value people's computers
                 {
                     NPC.position.X = NPC.position.X + (NPC.width / 2);
                     NPC.position.Y = NPC.position.Y + (NPC.height / 2);
@@ -314,7 +315,7 @@ namespace CalamityMod.NPCs.AstrumDeus
                 {
                     ModContent.ItemType<TheMicrowave>(),
                     ModContent.ItemType<StarSputter>(),
-                    ModContent.ItemType<Starfall>(),
+                    ModContent.ItemType<StarShower>(),
                     ModContent.ItemType<GodspawnHelixStaff>(),
                     ModContent.ItemType<RegulusRiot>(),
                 };

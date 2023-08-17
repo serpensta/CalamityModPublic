@@ -88,12 +88,11 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             int associatedNPCType = ModContent.NPCType<ProfanedGuardianCommander>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheHallow,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Its crystal which is displayed prominently on its body is able to restore damage done to its kin, and it draws that damage into flares which steal your life.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ProfanedGuardianHealer")
             });
         }
 
@@ -162,7 +161,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             // Percent life remaining
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
                 NPC.ai[0]++;
             if (NPC.ai[0] >= 300f)
                 NPC.ai[1] = 1f;
@@ -188,7 +187,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
                 NPC.spriteDirection = NPC.direction;
             }
 
-            if (NPC.ai[1] == 1f && CalamityWorld.getFixedBoi)
+            if (NPC.ai[1] == 1f && Main.zenithWorld)
             {
                 NPC.ai[2]++;
                 NPC.velocity = Vector2.Zero;
@@ -464,7 +463,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
 
                 texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/ProfanedGuardians/ProfanedGuardianHealerGlow").Value;
                 Color color37 = Color.Lerp(Color.White, Color.Yellow, 0.5f);
-                if (CalamityWorld.getFixedBoi)
+                if (Main.remixWorld)
                 {
                     texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/ProfanedGuardians/ProfanedGuardianHealerGlowNight").Value;
                     color37 = Color.Cyan;
@@ -547,12 +546,6 @@ namespace CalamityMod.NPCs.ProfanedGuardians
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ModContent.ItemType<RelicOfConvergence>(), 4);
-
-        public override void BossLoot(ref string name, ref int potionType)
-        {
-            name = "A Profaned Guardian";
-            potionType = ItemID.GreaterHealingPotion;
-        }
 
         // Can only hit the target if within certain distance
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)

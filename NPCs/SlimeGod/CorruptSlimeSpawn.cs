@@ -31,6 +31,8 @@ namespace CalamityMod.NPCs.SlimeGod
 
             NPC.defense = 6;
             NPC.lifeMax = BossRushEvent.BossRushActive ? 10000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 360 : 180;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.knockBackResist = 0f;
             AnimationType = 121;
             NPC.Opacity = 0.8f;
@@ -49,12 +51,11 @@ namespace CalamityMod.NPCs.SlimeGod
             int associatedNPCType = ModContent.NPCType<SplitEbonianPaladin>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("They rapidly flap their wings, created from membranes of gel and spines of hardened slime. They will incessantly hunt you down.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CorruptSlimeSpawn")
             });
         }
 
@@ -75,7 +76,7 @@ namespace CalamityMod.NPCs.SlimeGod
         }
         public override void OnKill()
         {
-            if (CalamityWorld.getFixedBoi && Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.zenithWorld && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 int type = ModContent.ProjectileType<ShadeNimbusHostile>();
                 int damage = NPC.GetProjectileDamage(type);

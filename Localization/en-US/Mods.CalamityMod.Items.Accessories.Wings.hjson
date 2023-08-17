@@ -10,23 +10,6 @@ AureateBooster: {
 		'''
 }
 
-CelestialTracers: {
-	DisplayName: Celestial Tracers
-	Tooltip:
-		'''
-		Counts as wings
-		Horizontal speed: 12.00
-		Acceleration multiplier: 3.0
-		Excellent vertical speed
-		Flight time: 250
-		50% increased running acceleration and greater mobility on ice
-		Provides the ability to walk on water, honey, and lava
-		Grants immunity to fire, lava, and harmful block effects
-		Being hit for over 200 damage will make you immune for an extended period of time
-		'Taking speed EVEN FURTHER BEYOND!'
-		'''
-}
-
 DrewsWings: {
 	DisplayName: Drew's Wings
 	Tooltip:
@@ -36,22 +19,6 @@ DrewsWings: {
 		Excellent vertical speed
 		Flight time: 361
 		'Absolutely Fabulous'
-		'''
-}
-
-ElysianTracers: {
-	DisplayName: Elysian Tracers
-	Tooltip:
-		'''
-		Counts as wings
-		Horizontal speed: 10.50
-		Acceleration multiplier: 2.75
-		Great vertical speed
-		Flight time: 180
-		36% increased running acceleration and greater mobility on ice
-		Provides the ability to walk on water, honey, and lava
-		Grants immunity to fire and lava
-		'Ludicrous speed!'
 		'''
 }
 
@@ -98,11 +65,11 @@ HadarianWings: {
 	DisplayName: Hadarian Wings
 	Tooltip:
 		'''
-		This line gets modified below
 		Horizontal speed: 9.00
 		Acceleration multiplier: 1.75
 		Good vertical speed
 		Flight time: 90
+		{$CommonItemTooltip.PressDownToHover}
 		Powered by the Astral Infection
 		'''
 }
@@ -119,22 +86,6 @@ MOAB: {
 		10% increased jump speed and allows constant jumping
 		Grants the player cloud, blizzard, and sandstorm mid-air jumps
 		'The Mother Of All Balloons'
-		'''
-}
-
-SeraphTracers: {
-	DisplayName: Seraph Tracers
-	Tooltip:
-		'''
-		Counts as wings
-		Horizontal speed: 9.00
-		Acceleration multiplier: 2.5
-		Good vertical speed
-		Flight time: 140
-		24% increased running acceleration and greater mobility on ice
-		Provides the ability to walk on water, honey, and lava
-		Grants immunity to fire and lava
-		'Ludicrous speed!'
 		'''
 }
 
@@ -200,5 +151,54 @@ TarragonWings: {
 		Flight time: 250
 		+15 defense and +2 life regen while wearing the Tarragon Armor
 		'Born of the jungle'
+		'''
+}
+
+TracersCelestial: {
+	DisplayName: Celestial Tracers
+	Tooltip:
+		'''
+		Counts as wings
+		Horizontal speed: 9.00
+		Acceleration multiplier: 2.5
+		Good vertical speed
+		Flight time: 140
+		24% increased running acceleration and greater mobility on ice
+		Provides the ability to walk on water, honey, and lava
+		Grants immunity to fire and lava
+		'Ludicrous speed!'
+		'''
+}
+
+TracersElysian: {
+	DisplayName: Elysian Tracers
+	Tooltip:
+		'''
+		Counts as wings
+		Horizontal speed: 10.50
+		Acceleration multiplier: 2.75
+		Great vertical speed
+		Flight time: 180
+		36% increased running acceleration and greater mobility on ice
+		Provides the ability to walk on water, honey, and lava
+		Grants immunity to fire and lava
+		'Ludicrous speed!'
+		'''
+}
+
+TracersSeraph: {
+	DisplayName: Seraph Tracers
+	Tooltip:
+		'''
+		Counts as wings
+		Horizontal speed: 12.00
+		Acceleration multiplier: 3.0
+		Excellent vertical speed
+		Flight time: 250
+		50% increased running acceleration and greater mobility on ice
+		Provides the ability to walk on water, honey, and lava
+		Grants immunity to fire, lava, and harmful block effects
+		Being hit for over 200 damage will make you immune for an extended period of time
+		'Taking speed EVEN FURTHER BEYOND!'
 		'''
 }

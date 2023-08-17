@@ -45,11 +45,6 @@ namespace CalamityMod.Items.Armor.DesertProwler
             Terraria.On_Player.KeyDoubleTap += ActivateSetBonus;
         }
 
-        public override void Unload()
-        {
-            Terraria.On_Player.KeyDoubleTap -= ActivateSetBonus;
-        }
-
         private void ActivateSetBonus(Terraria.On_Player.orig_KeyDoubleTap orig, Player player, int keyDir)
         {
             if (keyDir == 0 && HasArmorSet(player) && !player.mount.Active)
@@ -83,6 +78,7 @@ namespace CalamityMod.Items.Armor.DesertProwler
         public override void UpdateArmorSet(Player player)
         {           
             player.setBonus = this.GetLocalization("SetBonus").Format(FlatDamageBonus); //More gets edited in elsewhere
+            player.GetDamage<RangedDamageClass>().Flat += FlatDamageBonus;
 
             DesertProwlerPlayer armorPlayer = player.GetModPlayer<DesertProwlerPlayer>();
             armorPlayer.desertProwlerSet = true;
@@ -192,7 +188,7 @@ namespace CalamityMod.Items.Armor.DesertProwler
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<DesertFeather>(2).
+                AddIngredient<StormlionMandible>(2).
                 AddIngredient(ItemID.Silk, 8).
                 AddTile(TileID.Loom).
                 Register();
@@ -235,7 +231,7 @@ namespace CalamityMod.Items.Armor.DesertProwler
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<DesertFeather>(3).
+                AddIngredient<StormlionMandible>(3).
                 AddIngredient(ItemID.Silk, 10).
                 AddTile(TileID.Loom).
                 Register();
@@ -264,7 +260,7 @@ namespace CalamityMod.Items.Armor.DesertProwler
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<DesertFeather>().
+                AddIngredient<StormlionMandible>().
                 AddIngredient(ItemID.Silk, 5).
                 AddTile(TileID.Loom).
                 Register();
@@ -289,12 +285,6 @@ namespace CalamityMod.Items.Armor.DesertProwler
         public override void UpdateDead()
         {
             desertProwlerSet = false;
-        }
-
-        public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
-        {
-            if (desertProwlerSet && item.CountsAsClass<RangedDamageClass>() && item.ammo == AmmoID.None)
-                damage.Flat += DesertProwlerHat.FlatDamageBonus;
         }
 
         public override void PostUpdate()

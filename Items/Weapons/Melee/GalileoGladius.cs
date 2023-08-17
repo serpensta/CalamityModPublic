@@ -11,15 +11,11 @@ namespace CalamityMod.Items.Weapons.Melee
     public class GalileoGladius : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        public override void SetStaticDefaults()
-        {
-                       ItemID.Sets.BonusAttackSpeedMultiplier[Item.type] = 0.33f;
-        }
 
         public override void SetDefaults()
         {
             Item.useStyle = ItemUseStyleID.Rapier;
-            Item.DamageType = TrueMeleeDamageClass.Instance;
+            Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 8;
             Item.useTime = 8;
             Item.width = 44;

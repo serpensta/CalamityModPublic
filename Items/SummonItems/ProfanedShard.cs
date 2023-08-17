@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CalamityMod.Events;
 using CalamityMod.Items.Materials;
 using CalamityMod.NPCs.ProfanedGuardians;
@@ -16,7 +15,7 @@ namespace CalamityMod.Items.SummonItems
         public new string LocalizationCategory => "Items.SummonItems";
         public override void SetStaticDefaults()
         {
-           			ItemID.Sets.SortingPriorityBossSpawns[Type] = 17; // Celestial Sigil
+           	ItemID.Sets.SortingPriorityBossSpawns[Type] = 19; // Celestial Sigil
         }
 
         public override void SetDefaults()
@@ -37,7 +36,7 @@ namespace CalamityMod.Items.SummonItems
 
         public override bool CanUseItem(Player player)
         {
-            return !NPC.AnyNPCs(ModContent.NPCType<ProfanedGuardianCommander>()) && (Main.dayTime || CalamityWorld.getFixedBoi) && (player.ZoneHallow || player.ZoneUnderworldHeight) && !BossRushEvent.BossRushActive;
+            return !NPC.AnyNPCs(ModContent.NPCType<ProfanedGuardianCommander>()) && (Main.dayTime || Main.remixWorld) && (player.ZoneHallow || player.ZoneUnderworldHeight) && !BossRushEvent.BossRushActive;
         }
 
         public override bool? UseItem(Player player)
@@ -50,20 +49,7 @@ namespace CalamityMod.Items.SummonItems
 
             return true;
         }
-        public override void ModifyTooltips(List<TooltipLine> list)
-        {
-            Player player = Main.LocalPlayer;
-            TooltipLine line1 = list.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip1");
-
-            if (CalamityWorld.getFixedBoi)
-            {
-                line1.Text = "Summons the Profaned Guardians when used in the Hallow or Underworld";
-            }
-            else
-            {
-                line1.Text = "Summons the Profaned Guardians when used in the Hallow or Underworld during daytime";
-            }
-        }
+        public override void ModifyTooltips(List<TooltipLine> list) => list.FindAndReplace("[SPAWN]", this.GetLocalizedValue(Main.remixWorld ? "SpawnRemix" : "SpawnNormal"));
 
         public override void AddRecipes()
         {

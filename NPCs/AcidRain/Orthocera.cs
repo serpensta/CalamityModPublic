@@ -76,10 +76,9 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Within the muck of the sulphurous sea, it is not uncommon to find creatures from ages past, their bodies entirely preserved. It seems that not all simply passed away.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Orthocera")
             });
         }
 
@@ -206,7 +205,7 @@ namespace CalamityMod.NPCs.AcidRain
             // Prevent yeeting into the sky at the speed of light.
             NPC.velocity = Vector2.Clamp(NPC.velocity, new Vector2(-maxSpeed), new Vector2(maxSpeed));
 
-            if (CalamityWorld.getFixedBoi && !(!NPC.wet && NPC.collideY))
+            if (Main.zenithWorld && !(!NPC.wet && NPC.collideY))
             {
                 // Spread the wrath of the damned
                 NPC.Calamity().newAI[0]++;

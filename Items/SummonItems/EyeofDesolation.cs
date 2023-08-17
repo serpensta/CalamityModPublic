@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CalamityMod.Events;
 using CalamityMod.Items.Materials;
 using CalamityMod.NPCs.CalClone;
@@ -27,7 +26,7 @@ namespace CalamityMod.Items.SummonItems
         public int spawnYAdd = 0;
         public override void SetStaticDefaults()
         {
-           			ItemID.Sets.SortingPriorityBossSpawns[Type] = 10; // Pirate Map
+            ItemID.Sets.SortingPriorityBossSpawns[Type] = 10; // Pirate Map
         }
 
         public override void SetDefaults()
@@ -41,10 +40,10 @@ namespace CalamityMod.Items.SummonItems
             Item.consumable = false;
         }
 
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = ContentSamples.CreativeHelper.ItemGroup.BossItem;
-		}
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = ContentSamples.CreativeHelper.ItemGroup.BossItem;
+        }
 
         public override bool CanUseItem(Player player)
         {
@@ -59,7 +58,7 @@ namespace CalamityMod.Items.SummonItems
             else
                 NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<CalamitasClone>());
 
-            if (Main.netMode != NetmodeID.MultiplayerClient && CalamityWorld.getFixedBoi)
+            if (Main.netMode != NetmodeID.MultiplayerClient && Main.zenithWorld)
             {
                 safeBox.X = spawnX = spawnXReset = (int)(player.Center.X - 1250f);
                 spawnX2 = spawnXReset2 = (int)(player.Center.X + 1250f);
@@ -100,22 +99,14 @@ namespace CalamityMod.Items.SummonItems
             return true;
         }
 
-        public override void ModifyTooltips(List<TooltipLine> list)
-        {
-            Player player = Main.LocalPlayer;
-            TooltipLine line3 = list.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip2");
-
-            if (CalamityWorld.getFixedBoi)
-            {
-                line3.Text = "Creates a square arena of blocks, with you at its center\nEnrages during the day";
-            }
-        }
+        public override void ModifyTooltips(List<TooltipLine> list) => list.FindAndReplace("[GFB]", Main.zenithWorld ? "\n" + this.GetLocalizedValue("GFBInfo") : string.Empty);
 
         public override void AddRecipes()
         {
             CreateRecipe().
                 AddIngredient(ItemID.HellstoneBar, 10).
-                AddIngredient<EssenceofHavoc>(7).
+                // waffles% stipulation: you can only get 5 essences of havoc from the music box, not 7, and cal clone must be accessible
+                AddIngredient<EssenceofHavoc>(5).
                 AddTile(TileID.MythrilAnvil).
                 Register();
         }

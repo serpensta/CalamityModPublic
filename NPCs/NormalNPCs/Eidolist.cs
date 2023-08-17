@@ -11,7 +11,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-using CalamityMod.NPCs.AdultEidolonWyrm;
+using CalamityMod.NPCs.PrimordialWyrm;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
@@ -37,10 +37,10 @@ namespace CalamityMod.NPCs.NormalNPCs
         {
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.damage = 0;
+            NPC.damage = 50;
             NPC.width = 60;
             NPC.height = 80;
-            NPC.lifeMax = 10000;
+            NPC.lifeMax = 5000;
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 1, 0, 0);
             NPC.Opacity = 0f;
@@ -60,10 +60,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Highly skilled in the art of spellcasting, these mysterious creatures seem to stand guard like sentinels in watch over something. Approach one close enough and you may be able to make out garbled whispers.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Eidolist")
             });
         }
 
@@ -81,6 +80,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             bool adultWyrmAlive = false;
             if (CalamityGlobalNPC.adultEidolonWyrmHead != -1)
             {
@@ -312,18 +314,21 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (!Main.hardMode || NPC.AnyNPCs(ModContent.NPCType<Eidolist>()))
-            {
+            // waffles% stipulation: eidolists are accessible by beating cal clone, even without beating WoF
+            bool hardmodeOrCalClone = Main.hardMode || DownedBossSystem.downedCalamitasClone;
+            if (!hardmodeOrCalClone || !spawnInfo.Player.InAbyss())
                 return 0f;
-            }
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
+                return 0f;
+
             if (spawnInfo.Player.Calamity().ZoneAbyssLayer3 && spawnInfo.Water)
-            {
                 return Main.remixWorld ? 2.25f : 0.25f;
-            }
+
             if (spawnInfo.Player.Calamity().ZoneAbyssLayer4 && spawnInfo.Water)
-            {
                 return Main.remixWorld ? 4.5f : 0.5f;
-            }
+
             return 0f;
         }
 
@@ -352,7 +357,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             // Never drop anything if this Eidolon Wyrm is a minion during an AEW fight.
-            var aewMinionCondition = npcLoot.DefineConditionalDropSet(AdultEidolonWyrmHead.CanMinionsDropThings);
+            var aewMinionCondition = npcLoot.DefineConditionalDropSet(PrimordialWyrmHead.CanMinionsDropThings);
 
             LeadingConditionRule notDuringCultistFight = new LeadingConditionRule(DropHelper.If(() => !NPC.LunarApocalypseIsUp));
             notDuringCultistFight.Add(ModContent.ItemType<EidolonTablet>(), 4);

@@ -66,10 +66,9 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Their shell is of notable hardness, and it carries the same weight as stone. It speaks of their strength, for them to be able to fling themselves about the way they do.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Trilobite")
             });
         }
 
@@ -169,7 +168,7 @@ namespace CalamityMod.NPCs.AcidRain
                     projDamage = (int)Math.Round(projDamage * 0.8);
 
                 Vector2 spikeVelocity = -NPC.velocity.RotatedByRandom(0.18f);
-                if (CalamityWorld.getFixedBoi) // more true to the original concept art.
+                if (Main.zenithWorld) // more true to the original concept art.
                 {
                     spikeVelocity = -projectile.velocity;
                     spikeVelocity.Normalize();

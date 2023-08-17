@@ -173,12 +173,11 @@ namespace CalamityMod.NPCs.HiveMind
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCorruption,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("In the deep trenches of the corruption, infected creatures gather to manifest their own deity. Unlike other cases where smaller beings gather for protection, this is an entirely offensive maneuver.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.HiveMind")
             });
         }
 
@@ -351,8 +350,8 @@ namespace CalamityMod.NPCs.HiveMind
                     NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + Main.rand.Next(NPC.width), (int)NPC.position.Y + Main.rand.Next(NPC.height), type);
             }
 
-            //Spawn a Hive Cyst
-            if (CalamityWorld.getFixedBoi && NPC.CountNPCS(ModContent.NPCType<HiveTumor>()) < 3)
+            // Spawn a Hive Cyst
+            if (Main.zenithWorld && NPC.CountNPCS(ModContent.NPCType<HiveTumor>()) < 3)
                 NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + Main.rand.Next(NPC.width), (int)NPC.position.Y + Main.rand.Next(NPC.height), ModContent.NPCType<HiveTumor>());
         }
 
@@ -512,7 +511,7 @@ namespace CalamityMod.NPCs.HiveMind
                         int maxBlobs = death ? 15 : revenge ? 7 : expertMode ? 6 : 5;
                         if (Main.getGoodWorld)
                             maxBlobs *= 2;
-                        if (CalamityWorld.getFixedBoi)
+                        if (Main.zenithWorld)
                             maxBlobs = 50;
 
                         for (int i = 0; i < maxBlobs; i++)
@@ -1053,7 +1052,7 @@ namespace CalamityMod.NPCs.HiveMind
 
             if (phase2)
             {
-                if (Main.netMode != NetmodeID.MultiplayerClient && CalamityWorld.getFixedBoi ? NPC.CountNPCS(ModContent.NPCType<HiveBlob2>()) < 10 : (Main.rand.NextBool(15) && NPC.CountNPCS(ModContent.NPCType<HiveBlob2>()) < 2))
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.zenithWorld ? NPC.CountNPCS(ModContent.NPCType<HiveBlob2>()) < 10 : (Main.rand.NextBool(15) && NPC.CountNPCS(ModContent.NPCType<HiveBlob2>()) < 2))
                 {
                     Vector2 spawnAt = NPC.Center + new Vector2(0f, NPC.height / 2f);
                     NPC.NewNPC(NPC.GetSource_FromThis(), (int)spawnAt.X, (int)spawnAt.Y, ModContent.NPCType<HiveBlob2>());

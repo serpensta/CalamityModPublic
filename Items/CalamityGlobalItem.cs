@@ -27,6 +27,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
+using CalamityMod.Buffs.StatDebuffs;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -35,6 +36,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
+using CalamityMod.Projectiles.Typless;
 
 namespace CalamityMod.Items
 {
@@ -132,8 +134,10 @@ namespace CalamityMod.Items
         }
 
         #region SetDefaults
-        public override void SetDefaults(Item item)
+        public override void SetStaticDefaults()
         {
+            SetStaticDefaults_ShimmerRecipes();
+
             #region Vanilla Wing Tweaks
             // 170 -> 240 flight time
             ArmorIDs.Wing.Sets.Stats[(int)VanillaWingID.BoneWings] = new WingStats(240, 7.5f, 1f);
@@ -152,15 +156,13 @@ namespace CalamityMod.Items
             // (Celestial Starboard) 4.5 -> 2.75 acceleration multiplier, 16 -> 11.6 hover stats
             ArmorIDs.Wing.Sets.Stats[(int)VanillaWingID.LongRainbowTrailWings] = new WingStats(180, 8f, 2.75f, true, 11.6f, 11.6f);
             #endregion
+        }
 
-            // Shield of Cthulhu cannot be enchanted (it is an accessory with a damage value).
-            // TODO -- there are better ways to do this. Just stop letting accessories be enchanted, even if they do have a damage value.
-            if (item.type == ItemID.EoCShield)
+        public override void SetDefaults(Item item)
+        {
+            // Accessories can never be enchanted, to prevent Shield of Cthulhu & High Ruler from being enchantable
+            if (item.accessory)
                 CannotBeEnchanted = true;
-
-            // Fix Bones being attracted to the player when you have open ammo slots.
-            if (item.type == ItemID.Bone)
-                item.notAmmo = true;
 
             // Modified Pearlwood items are now Light Red.
             if (item.type == ItemID.PearlwoodBow || item.type == ItemID.PearlwoodHammer || item.type == ItemID.PearlwoodSword)
@@ -235,10 +237,13 @@ namespace CalamityMod.Items
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockBack)
         {
             CalamityPlayer modPlayer = player.Calamity();
-            if (Main.myPlayer == player.whoAmI && player.Calamity().cursedSummonsEnchant && NPC.CountNPCS(ModContent.NPCType<CalamitasEnchantDemon>()) < 2)
+            if (Main.myPlayer == player.whoAmI && player.Calamity().cursedSummonsEnchant)
             {
-                CalamityNetcode.NewNPC_ClientSide(Main.MouseWorld, ModContent.NPCType<CalamitasEnchantDemon>(), player);
-                SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, Main.MouseWorld);
+                if (NPC.CountNPCS(ModContent.NPCType<CalamitasEnchantDemon>()) < 2)
+                {
+                    CalamityNetcode.NewNPC_ClientSide(Main.MouseWorld, ModContent.NPCType<CalamitasEnchantDemon>(), player);
+                    SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, Main.MouseWorld);
+                }
             }
 
             // Traitorous enchantment implementation
@@ -604,6 +609,14 @@ namespace CalamityMod.Items
         #region Use Item Changes
         public override bool? UseItem(Item item, Player player)
         {
+            if (Main.zenithWorld && item.type == ItemID.RodOfHarmony)
+            {
+                if (NPC.AnyNPCs(ModContent.NPCType<THELORDE>()))
+                {
+                    //one hour of NOU when using rod of harmony while LORDE is alive
+                    player.AddBuff(ModContent.BuffType<NOU>(), 3600 * 60);
+                }
+            }
             if (player.Calamity().evilSmasherBoost > 0)
             {
                 if (item.type != ModContent.ItemType<EvilSmasher>())
@@ -618,10 +631,6 @@ namespace CalamityMod.Items
                     player.ClearBuff(BuffID.ParryDamageBuff);
                 }
             }
-
-            // Give 2 minutes of Honey buff when drinking Bottled Honey.
-            if (item.type == ItemID.BottledHoney)
-                player.AddBuff(BuffID.Honey, 7200);
 
             // Give 1 minute of Mushy buff when consuming Mushrooms with Fungal Symbiote equipped.
             if (item.type == ItemID.Mushroom && player.Calamity().fungalSymbiote)
@@ -1021,6 +1030,15 @@ namespace CalamityMod.Items
                     player.GetCritChance<MagicDamageClass>() -= 1;
                     break;
 
+                case ItemID.Gi:
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.jumpSpeedBoost += 0.5f;
+                    break;
+
+                case ItemID.TitaniumMask:
+                    player.GetAttackSpeed<MeleeDamageClass>() += 0.05f;
+                    break;
+
                 case ItemID.SquireGreatHelm:
                     player.lifeRegen -= 3;
                     break;
@@ -1139,6 +1157,61 @@ namespace CalamityMod.Items
             {
                 player.GetDamage<MeleeDamageClass>() += 0.02f;
                 player.GetAttackSpeed<MeleeDamageClass>() += 0.02f;
+            }
+            
+            //Feral Claws line melee speed adjustments
+            if (item.type == ItemID.FeralClaws)
+            {
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.02f;
+            }
+
+             if (item.type == ItemID.PowerGlove)
+            {
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.02f;
+            }
+
+             if (item.type == ItemID.BerserkerGlove)
+            {
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.12f;
+            }
+
+            //Celestial Stone line melee speed removal
+            if (item.type == ItemID.SunStone)
+            {
+                if (Main.dayTime)
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+            }
+            
+            if (item.type == ItemID.MoonStone)
+            {
+                if (!Main.dayTime)
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+            }
+            
+            if (item.type == ItemID.CelestialStone)
+            {
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+            }
+            
+            if (item.type == ItemID.CelestialShell)
+            {
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                if (!Main.dayTime)
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+            }
+
+            //Moon Charm and Moon Shell melee speed removal
+            
+            if (item.type == ItemID.MoonCharm)
+            {    
+                if (!Main.dayTime)
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+            }
+
+            if (item.type == ItemID.MoonShell)
+            {    
+                if (!Main.dayTime)
+                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.TerrasparkBoots)

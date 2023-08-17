@@ -264,12 +264,6 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                 NPC.spriteDirection = -NPC.direction;
             }
 
-            // Light
-            if (enraged)
-                Lighting.AddLight(NPC.Center, 0.5f * NPC.Opacity, 0f, 0f);
-            else
-                Lighting.AddLight(NPC.Center, 0.1f * NPC.Opacity, 0.25f * NPC.Opacity, 0.05f * NPC.Opacity);
-
             // Gate values
             bool fireMoreBolts = calamityGlobalNPC_Body.newAI[0] == (float)AresBody.Phase.Deathrays;
             float plasmaBoltPhaseGateValue = fireMoreBolts ? 120f : 270f;
@@ -439,10 +433,10 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                         if ((calamityGlobalNPC.newAI[2] - plasmaBoltTelegraphDuration) % divisor == 0f && canFire)
                         {
                             NPC.ai[3] += 1f;
+                            SoundEngine.PlaySound(CommonCalamitySounds.ExoPlasmaShootSound, NPC.Center);
+                            Vector2 plasmaBoltVelocity = Vector2.Normalize(rotationVector) * projectileVelocity;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                SoundEngine.PlaySound(CommonCalamitySounds.ExoPlasmaShootSound, NPC.Center);
-                                Vector2 plasmaBoltVelocity = Vector2.Normalize(rotationVector) * projectileVelocity;
                                 int type = ModContent.ProjectileType<AresPlasmaFireball>();
                                 int damage = NPC.GetProjectileDamage(type);
                                 Vector2 offset = Vector2.Normalize(plasmaBoltVelocity) * 40f + Vector2.UnitY * 16f;
@@ -451,10 +445,10 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, plasmaBoltVelocity, type, damage, 0f, Main.myPlayer, -1f);
                                 else
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + offset, plasmaBoltVelocity, type, damage, 0f, Main.myPlayer, player.Center.X, player.Center.Y);
-
-                                // Recoil
-                                NPC.velocity -= plasmaBoltVelocity;
                             }
+
+                            // Recoil
+                            NPC.velocity -= plasmaBoltVelocity;
                         }
                     }
 

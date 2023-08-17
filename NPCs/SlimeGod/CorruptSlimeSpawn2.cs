@@ -30,6 +30,8 @@ namespace CalamityMod.NPCs.SlimeGod
 
             NPC.defense = 4;
             NPC.lifeMax = BossRushEvent.BossRushActive ? 5000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 180 : 90;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.knockBackResist = 0f;
             AnimationType = NPCID.CorruptSlime;
             NPC.Opacity = 0.8f;
@@ -66,7 +68,7 @@ namespace CalamityMod.NPCs.SlimeGod
             if (Main.rand.NextBool(8) && Main.player[closestPlayer].statLife < Main.player[closestPlayer].statLifeMax2)
                 Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart); 
             
-            if (CalamityWorld.getFixedBoi && Main.rand.NextBool(5))
+            if (Main.zenithWorld && Main.rand.NextBool(5))
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {

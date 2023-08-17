@@ -29,6 +29,8 @@ namespace CalamityMod.NPCs.DevourerofGods
             global.DR = 0.5f;
             global.unbreakableDR = true;
             NPC.lifeMax = 50000;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
             NPC.knockBackResist = 0f;
@@ -62,8 +64,6 @@ namespace CalamityMod.NPCs.DevourerofGods
 
         public override void AI()
         {
-            Lighting.AddLight((int)((NPC.position.X + (NPC.width / 2)) / 16f), (int)((NPC.position.Y + (NPC.height / 2)) / 16f), 0.2f, 0.05f, 0.2f);
-
             if (invinceTime > 0)
             {
                 invinceTime--;

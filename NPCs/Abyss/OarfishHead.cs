@@ -66,7 +66,7 @@ namespace CalamityMod.NPCs.Abyss
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
 
 				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("A peculiar bony fish many have only ever seen as corpses washed up on a beach, but in their natural habitat, their red fins stream behind them, as they drift in the water column.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Oarfish")
             });
         }
 
@@ -320,13 +320,11 @@ namespace CalamityMod.NPCs.Abyss
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.Calamity().ZoneAbyssLayer2 && spawnInfo.Water && !NPC.AnyNPCs(ModContent.NPCType<OarfishHead>()))
-            {
                 return SpawnCondition.CaveJellyfish.Chance * 0.3f;
-            }
+
             if (spawnInfo.Player.Calamity().ZoneAbyssLayer3 && spawnInfo.Water && !NPC.AnyNPCs(ModContent.NPCType<OarfishHead>()))
-            {
                 return Main.remixWorld ? 5.4f : SpawnCondition.CaveJellyfish.Chance * 0.6f;
-            }
+
             return 0f;
         }
 

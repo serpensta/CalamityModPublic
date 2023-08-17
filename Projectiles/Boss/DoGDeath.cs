@@ -13,6 +13,7 @@ namespace CalamityMod.Projectiles.Boss
     public class DoGDeath : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Boss";
+
         public float TelegraphDelay
         {
             get => Projectile.ai[0];
@@ -120,6 +121,10 @@ namespace CalamityMod.Projectiles.Boss
         {
             if (TelegraphDelay >= TelegraphTotalTime)
                 return true;
+
+            // for old times sake
+            if (Main.zenithWorld)
+                return false;
 
             Texture2D laserTelegraph = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/LaserWallTelegraphBeam").Value;
 

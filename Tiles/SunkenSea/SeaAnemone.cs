@@ -17,7 +17,6 @@ namespace CalamityMod.Tiles.SunkenSea
             TileObjectData.addTile(Type);
             DustType = 253;
             AddMapEntry(new Color(54, 69, 72));
-            MineResist = 2f;
 
             base.SetStaticDefaults();
         }
@@ -35,9 +34,7 @@ namespace CalamityMod.Tiles.SunkenSea
                 frameCounter = 0;
                 frame++;
                 if (frame > 5)
-                {
                     frame = 0;
-                }
             }
         }
     }

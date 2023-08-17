@@ -19,6 +19,7 @@ namespace CalamityMod.Tiles.Abyss
         public byte[,] tileAdjacency;
         public byte[,] secondTileAdjacency;
         public byte[,] thirdTileAdjacency;
+
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -30,9 +31,7 @@ namespace CalamityMod.Tiles.Abyss
 
             DustType = 2;
             AddMapEntry(new Color(84, 102, 39), CalamityUtils.GetItemName<Items.Placeables.PlantyMush>());
-            MineResist = 1f;
             HitSound = MineSound;
-
 
             TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, out tileAdjacency);
             TileFraming.SetUpUniversalMerge(Type, TileID.Stone, out secondTileAdjacency);
@@ -49,21 +48,6 @@ namespace CalamityMod.Tiles.Abyss
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = fail ? 1 : 3;
-        }
-
-        public override void NearbyEffects(int i, int j, bool closer)
-        {
-            if (!closer)
-            {
-                if ((Main.tile[i, j].LiquidAmount == 0 || Main.tile[i, j].LiquidType == LiquidID.Water) && j < Main.maxTilesY - 205)
-                {
-                    Main.tile[i, j].Get<LiquidData>().LiquidType = LiquidID.Water;
-                    Main.tile[i, j].LiquidAmount = byte.MaxValue;
-                    WorldGen.SquareTileFrame(i, j);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetMessage.sendWater(i, j);
-                }
-            }
         }
         
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
@@ -163,7 +147,7 @@ namespace CalamityMod.Tiles.Abyss
             Tile up = Main.tile[i, j - 1];
             Tile up2 = Main.tile[i, j - 2];
 
-            //place kelp
+            // Place kelp
             if (WorldGen.genRand.Next(5) == 0 && !up.HasTile && !up2.HasTile && up.LiquidAmount > 0 && up2.LiquidAmount > 0 && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
             {
                 up.TileType = (ushort)ModContent.TileType<AbyssKelp>();
@@ -175,9 +159,7 @@ namespace CalamityMod.Tiles.Abyss
                 WorldGen.SquareTileFrame(i, j - 1, true);
 
                 if (Main.netMode == NetmodeID.Server) 
-                {
                     NetMessage.SendTileSquare(-1, i, j - 1, 3, TileChangeType.None);
-                }
             }
 
             int num8 = WorldGen.genRand.Next((int)Main.rockLayer, (int)(Main.rockLayer + (double)Main.maxTilesY * 0.143));
@@ -211,9 +193,7 @@ namespace CalamityMod.Tiles.Abyss
                             Main.tile[num53, num54].Get<TileWallWireStateData>().HasTile = true;
                             WorldGen.SquareTileFrame(num53, num54, true);
                             if (Main.netMode == NetmodeID.Server)
-                            {
                                 NetMessage.SendTileSquare(-1, num53, num54, 3, TileChangeType.None);
-                            }
                         }
                     }
                 }

@@ -9,6 +9,8 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.Audio;
+using CalamityMod.NPCs.SupremeCalamitas;
+using CalamityMod.NPCs;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -77,6 +79,16 @@ namespace CalamityMod.Projectiles.Boss
             int frameHeight = texture.Height / Main.projFrames[Projectile.type];
             int drawStart = frameHeight * Projectile.frame;
             lightColor.R = (byte)(255 * Projectile.Opacity);
+
+            if (CalamityGlobalNPC.SCal != -1)
+            {
+                if (Main.npc[CalamityGlobalNPC.SCal].active)
+                {
+                    if (Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas>().cirrus)
+                        lightColor.B = (byte)(255 * Projectile.Opacity);
+                }
+            }
+
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, drawStart, texture.Width, frameHeight)), Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
@@ -118,16 +130,25 @@ namespace CalamityMod.Projectiles.Boss
                 }
             }
 
-            for (int j = 0; j < 2; j++)
+            int dustType = (int)CalamityDusts.Brimstone;
+            if (CalamityGlobalNPC.SCal != -1)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, (int)CalamityDusts.Brimstone, 0f, 0f, 50, default, 1f);
+                if (Main.npc[CalamityGlobalNPC.SCal].active)
+                {
+                    if (Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas>().cirrus)
+                        dustType = (int)CalamityDusts.PurpleCosmilite;
+                }
             }
+
+            for (int j = 0; j < 2; j++)
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 1f);
+
             for (int k = 0; k < 20; k++)
             {
-                int redFire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, (int)CalamityDusts.Brimstone, 0f, 0f, 0, default, 1.5f);
+                int redFire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 0, default, 1.5f);
                 Main.dust[redFire].noGravity = true;
                 Main.dust[redFire].velocity *= 3f;
-                redFire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, (int)CalamityDusts.Brimstone, 0f, 0f, 50, default, 1f);
+                redFire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 1f);
                 Main.dust[redFire].velocity *= 2f;
                 Main.dust[redFire].noGravity = true;
             }

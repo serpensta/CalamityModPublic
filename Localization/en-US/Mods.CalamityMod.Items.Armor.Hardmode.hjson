@@ -39,11 +39,7 @@ BrimflameBoots: {
 
 BrimflameRobes: {
 	DisplayName: Brimflame Robes
-	Tooltip:
-		'''
-		5% increased magic damage and critical strike chance
-		Reduces damage from touching lava
-		'''
+	Tooltip: 5% increased magic damage and critical strike chance
 }
 
 BrimflameScowl: {
@@ -70,7 +66,7 @@ CirrusDress: {
 		'''
 		5% increased magic damage and critical strike chance
 		20% decreased movement speed and increases maximum fall speed to 61 mph
-		[c/b00ba5:'Here, this should help you drink a lot more than usual!']
+		[c/B00BA5:'Here, this should help you drink a lot more than usual!']
 		'You feel thick...'
 		'''
 }
@@ -99,12 +95,12 @@ DaedalusHeadMelee: {
 	DisplayName: Daedalus Helm
 	Tooltip:
 		'''
-		10% increased melee damage and critical strike chance
-		15% increased melee speed
+		15% increased melee damage
+		10% increased melee critical strike chance
 		'''
 	SetBonus:
 		'''
-		5% increased melee damage
+		10% increased melee speed
 		Enemies are more likely to target you
 		You reflect projectiles back at enemies
 		Reflected projectiles deal 50% less damage to you
@@ -130,8 +126,8 @@ DaedalusHeadRogue: {
 	DisplayName: Daedalus Facemask
 	Tooltip:
 		'''
-		13% increased rogue damage and 7% increased rogue critical strike chance, increases rogue velocity by 15%
-		5% increased movement speed
+		13% increased rogue damage and 7% increased rogue critical strike chance
+		15% increased rogue velocity and 5% increased movement speed
 		'''
 	SetBonus:
 		'''
@@ -143,10 +139,10 @@ DaedalusHeadRogue: {
 
 DaedalusHeadSummon: {
 	DisplayName: Daedalus Mask
-	Tooltip: 5% increased minion damage
+	Tooltip: 5% increased summon damage
 	SetBonus:
 		'''
-		20% increased minion damage and +2 max minions
+		20% increased summon damage and +2 max minions
 		A daedalus crystal floats above you to protect you
 		'''
 }
@@ -164,7 +160,7 @@ FathomSwarmerBoots: {
 	DisplayName: Fathom Swarmer Greaves
 	Tooltip:
 		'''
-		4% increased minion damage
+		4% increased summon damage
 		Grants the ability to swim
 		Movement speed increased by 40% while submerged in liquid
 		'''
@@ -175,7 +171,7 @@ FathomSwarmerBreastplate: {
 	Tooltip:
 		'''
 		6% increased damage reduction
-		6% increased minion damage
+		6% increased summon damage
 		Boosted defense and regen increased while submerged in liquid
 		Reduces defense loss within the Abyss
 		'''
@@ -185,21 +181,21 @@ FathomSwarmerVisage: {
 	DisplayName: Fathom Swarmer Visage
 	Tooltip:
 		'''
-		5% increased minion damage
+		5% increased summon damage
 		Provides breathing and light underwater
 		'''
 	SetBonus:
 		'''
-		10% increased minion damage and +2 max minions
+		10% increased summon damage and +2 max minions
 		Grants the ability to climb walls
-		30% increased minion damage while submerged in liquid
+		30% increased summon damage while submerged in liquid
 		Provides a moderate amount of light and moderately reduces breath loss in the abyss
 		'''
 }
 
 ForbiddenCirclet: {
 	DisplayName: Forbidden Circlet
-	Tooltip: 10% increased minion damage and 15% increased rogue velocity
+	Tooltip: 10% increased summon damage and 15% increased rogue velocity
 	SetBonus:
 		'''
 		+40 maximum stealth
@@ -229,7 +225,7 @@ HydrothermicHeadMagic: {
 	Tooltip:
 		'''
 		12% increased magic damage, +100 max mana, and 10% increased magic critical strike chance
-		Temporary immunity to lava, and immunity to fire damage
+		Grants immunity to fire and lava
 		'''
 	SetBonus:
 		'''
@@ -242,14 +238,13 @@ HydrothermicHeadMelee: {
 	DisplayName: Hydrothermic Helm
 	Tooltip:
 		'''
-		12% increased melee damage and 10% increased melee critical strike chance
-		18% increased melee speed
+		17% increased melee damage and 10% increased melee critical strike chance
 		Melee attacks and melee projectiles inflict on fire
-		Temporary immunity to lava and immunity to fire damage
+		Grants immunity to fire and lava
 		'''
 	SetBonus:
 		'''
-		5% increased melee damage
+		15% increased melee speed
 		Enemies are more likely to target you
 		Melee attacks and projectiles cause chaos flames to erupt on enemy hits
 		'''
@@ -260,7 +255,8 @@ HydrothermicHeadRanged: {
 	Tooltip:
 		'''
 		12% increased ranged damage and 10% increased ranged critical strike chance
-		Reduces ammo usage by 25%, temporary immunity to lava, and immunity to fire damage
+		Reduces ammo usage by 25%
+		Grants immunity to fire and lava
 		'''
 	SetBonus:
 		'''
@@ -275,7 +271,7 @@ HydrothermicHeadRogue: {
 		'''
 		12% increased rogue damage and 10% increased rogue critical strike chance
 		50% chance to not consume rogue items and 5% increased movement speed
-		Temporary immunity to lava and immunity to fire damage
+		Grants immunity to fire and lava
 		'''
 	SetBonus:
 		'''
@@ -289,12 +285,12 @@ HydrothermicHeadSummon: {
 	DisplayName: Hydrothermic Helmet
 	Tooltip:
 		'''
-		5% increased minion damage and increased minion knockback
-		Temporary immunity to lava and immunity to fire damage
+		5% increased summon damage and increased minion knockback
+		Grants immunity to fire and lava
 		'''
 	SetBonus:
 		'''
-		40% increased minion damage and +2 max minions
+		40% increased summon damage and +2 max minions
 		Summons a hydrothermic vent to protect you
 		'''
 }
@@ -305,6 +301,45 @@ HydrothermicSubligar: {
 		'''
 		5% increased critical strike chance
 		10% increased movement speed
+		'''
+}
+
+LunicCorpsBoots: {
+	DisplayName: Lunic Corps Boots
+	Tooltip:
+		'''
+		15% increased movement speed
+		4% increased ranged critical strike chance
+		10% increased max movement speed and acceleration
+		'''
+}
+
+LunicCorpsHelmet: {
+	DisplayName: Lunic Corps Helmet
+	Tooltip:
+		'''
+		12% increased ranged damage
+		Night vision and creature detect
+		'''
+	SetBonus:
+		'''
+		'Finish the fight'
+		Provides an energy shield that absorbs up to 70 damage
+		The shield recharges over 10 seconds after being broken
+		Getting hit during the shield recharge period will restart the recharging process
+		10% increased bullet damage
+		10% increased specialist ranged damage
+		These are launchers, dartguns, or anything else that doesn't shoot arrows/bullets
+		20% increased jump speed
+		'''
+}
+
+LunicCorpsVest: {
+	DisplayName: Lunic Corps Vest
+	Tooltip:
+		'''
+		3% increased ranged damage
+		11% increased ranged critical strike chance
 		'''
 }
 
@@ -346,7 +381,7 @@ PlaguebringerCarapace: {
 	Tooltip:
 		'''
 		Grants immunity to the Plague
-		12% increased minion damage
+		12% increased summon damage
 		Friendly bees inflict the plague
 		'''
 }
@@ -355,7 +390,7 @@ PlaguebringerPistons: {
 	DisplayName: Plaguebringer Pistons
 	Tooltip:
 		'''
-		13% increased minion damage and 15% increased movement speed
+		13% increased summon damage and 15% increased movement speed
 		You grow flowers on the grass beneath you, chance to grow very random dye plants on grassless dirt
 		You spawn bees while sprinting or dashing
 		'''
@@ -365,12 +400,12 @@ PlaguebringerVisor: {
 	DisplayName: Plaguebringer Visor
 	Tooltip:
 		'''
-		15% increased minion damage
+		15% increased summon damage
 		+20 max life
 		'''
 	SetBonus:
 		'''
-		Grants a plague dash to ram enemies and afflict them with the plague
+		Grants a plague dash which can slam through enemies without taking damage
 		Summons a lil' plaguebringer to protect you and empower nearby minions
 		+3 max minions
 		'''
@@ -421,7 +456,7 @@ ReaverHeadExplore: {
 	Tooltip:
 		'''
 		20% increased mining speed and block/wall placement speed
-		Temporary immunity to lava and can move freely through liquids
+		Grants immunity to lava and can move freely through liquids
 		'''
 	SetBonus:
 		'''

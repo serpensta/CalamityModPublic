@@ -29,9 +29,6 @@ namespace CalamityMod.Projectiles.Melee
         public ref float AlreadyParried => ref Projectile.ai[1];
         public Player Owner => Main.player[Projectile.owner];
 
-        public override void SetStaticDefaults()
-        {
-        }
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.MeleeNoSpeed;
@@ -40,6 +37,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.tileCollide = false;
             Projectile.friendly = true;
             Projectile.penetrate = -1;
+            Projectile.noEnchantmentVisuals = true;
         }
 
         public override bool? CanDamage() => Timer <= ParryTime && AlreadyParried == 0f;
@@ -62,7 +60,7 @@ namespace CalamityMod.Projectiles.Melee
             }
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact);
             SoundEngine.PlaySound(CommonCalamitySounds.ScissorGuillotineSnapSound with { Volume = CommonCalamitySounds.ScissorGuillotineSnapSound.Volume * 1.3f }, Projectile.Center);
-            CombatText.NewText(Projectile.Hitbox, new Color(111, 247, 200), "Parry!", true);
+            CombatText.NewText(Projectile.Hitbox, new Color(111, 247, 200), CalamityUtils.GetTextValue("Misc.ArkParry"), true);
 
             for (int i = 0; i < 5; i ++) //Don't loose your way
             {

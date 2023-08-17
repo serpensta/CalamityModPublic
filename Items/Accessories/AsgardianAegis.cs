@@ -5,7 +5,6 @@ using CalamityMod.Items.Materials;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,21 +27,11 @@ namespace CalamityMod.Items.Accessories
             Item.rare = ModContent.RarityType<DarkBlue>();
         }
 
-        public override void ModifyTooltips(List<TooltipLine> list)
-        {
-            string hotkey = CalamityKeybinds.AegisHotKey.TooltipHotkeyString();
-            TooltipLine line = list.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip5");
-
-            if (line != null)
-                line.Text = "Press " + hotkey + " to activate buffs to all damage, crit chance, and defense";
-        }
-
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             CalamityPlayer modPlayer = player.Calamity();
             modPlayer.DashID = AsgardianAegisDash.ID;
             player.dashType = 0;
-            modPlayer.elysianAegis = true;
             player.noKnockback = true;
             player.fireWalk = true;
             player.statLifeMax2 += 40;

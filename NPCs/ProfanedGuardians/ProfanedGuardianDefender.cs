@@ -75,12 +75,11 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             int associatedNPCType = ModContent.NPCType<ProfanedGuardianCommander>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheHallow,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("The body it has formed boasts of a stone shell hallowed and tempered by the flames of the sun. Very little can fully shatter its defense.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ProfanedGuardianDefender")
             });
         }
 
@@ -213,7 +212,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
                     }
                 }
 
-                if (Main.npc[CalamityGlobalNPC.doughnutBossHealer].ai[0] == 599 && CalamityWorld.getFixedBoi && Main.netMode != NetmodeID.MultiplayerClient)
+                if (Main.npc[CalamityGlobalNPC.doughnutBossHealer].ai[0] == 599 && Main.zenithWorld && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     // gain more health once the healer's channel heal is done
                     NPC.lifeMax += 7500;
@@ -386,23 +385,6 @@ namespace CalamityMod.NPCs.ProfanedGuardians
                     }
                 }
             }
-
-            // This causes bugs due to the return
-            /*if (CalamityWorld.getFixedBoi)
-            {
-                if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
-                {
-                    float playerLocation = NPC.Center.X - player.Center.X;
-                    NPC.direction = playerLocation < 0f ? 1 : -1;
-                    NPC.spriteDirection = NPC.direction;
-                }
-                // Block the main guardian
-                Vector2 guardPos = Main.npc[CalamityGlobalNPC.doughnutBoss].Center;
-                Vector2 playerPos = player.Center;
-                Vector2 midPoint = ((guardPos - playerPos) / 1.25f) + playerPos;
-                NPC.position = midPoint;
-                return;
-            }*/
 
             float moveVelocity = (bossRush || biomeEnraged) ? 24f : death ? 22f : revenge ? 21f : expertMode ? 20f : 18f;
             if (Main.getGoodWorld)
@@ -703,6 +685,22 @@ namespace CalamityMod.NPCs.ProfanedGuardians
 
                 NPC.velocity *= 0.97f;
             }
+
+            if (Main.zenithWorld)
+            {
+                if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
+                {
+                    float playerLocation = NPC.Center.X - player.Center.X;
+                    NPC.direction = playerLocation < 0f ? 1 : -1;
+                    NPC.spriteDirection = NPC.direction;
+                }
+                // Block the main guardian
+                Vector2 guardPos = Main.npc[CalamityGlobalNPC.doughnutBoss].Center;
+                Vector2 playerPos = player.Center;
+                Vector2 midPoint = ((guardPos - playerPos) / 1.25f) + playerPos;
+                NPC.position = midPoint;
+                return;
+            }
         }
 
         public override bool CheckActive() => false;
@@ -749,7 +747,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
 
                 texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/ProfanedGuardians/ProfanedGuardianDefenderGlow").Value;
                 Color color37 = Color.Lerp(Color.White, Color.Yellow, 0.5f);
-                if (CalamityWorld.getFixedBoi)
+                if (Main.remixWorld)
                 {
                     texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/ProfanedGuardians/ProfanedGuardianDefenderGlowNight").Value;
                     color37 = Color.Cyan;
@@ -866,12 +864,6 @@ namespace CalamityMod.NPCs.ProfanedGuardians
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.Add(ModContent.ItemType<RelicOfResilience>(), 4);
 
-        public override void BossLoot(ref string name, ref int potionType)
-        {
-            name = "A Profaned Guardian";
-            potionType = ItemID.GreaterHealingPotion;
-        }
-
         // Can only hit the target if within certain distance
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
@@ -904,7 +896,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             // eat projectiles but take more damage based on piercing in the zenith seed
-            if (CalamityWorld.getFixedBoi && !projectile.minion)
+            if (Main.zenithWorld && !projectile.minion)
             {
                 if (projectile.penetrate <= -1 || projectile.penetrate > 5)
                 {

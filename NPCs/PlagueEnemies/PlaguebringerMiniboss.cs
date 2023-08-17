@@ -57,7 +57,7 @@ namespace CalamityMod.NPCs.PlagueEnemies
             BannerItem = ModContent.ItemType<PlaguebringerBanner>();
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToElectricity = true;
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 NPC.scale = 2f;
             }
@@ -65,12 +65,11 @@ namespace CalamityMod.NPCs.PlagueEnemies
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundJungle,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Queen Bees are reared upon royal honey, raising them into the matriarchs they are. If during the process, their growth is hijacked by the plague, they are left as only a pathetic reminder of what they could have been.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.PlaguebringerMiniboss")
             });
         }
 
@@ -605,10 +604,13 @@ namespace CalamityMod.NPCs.PlagueEnemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.PlayerSafe || !NPC.downedGolemBoss || NPC.AnyNPCs(ModContent.NPCType<PlaguebringerMiniboss>()))
-            {
+            if (spawnInfo.PlayerSafe || !NPC.downedGolemBoss || !spawnInfo.Player.ZoneJungle)
                 return 0f;
-            }
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
+                return 0f;
+
             return SpawnCondition.HardmodeJungle.Chance * 0.02f;
         }
 

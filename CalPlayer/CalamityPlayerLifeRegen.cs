@@ -170,7 +170,7 @@ namespace CalamityMod.CalPlayer
             }
             
             float ASPoisonLevel = 0f;
-            if (CalamityGlobalNPC.aquaticScourge >= 0 && CalamityWorld.getFixedBoi)
+            if (CalamityGlobalNPC.aquaticScourge >= 0 && Main.zenithWorld)
             {
                 NPC AS = Main.npc[CalamityGlobalNPC.aquaticScourge];
                 //if the player is 50 blocks or more away from the head
@@ -628,10 +628,6 @@ namespace CalamityMod.CalPlayer
         #region Update Life Regen
         public override void UpdateLifeRegen()
         {
-            // Fuck the 'sitting in a chair' meta.
-            if (Player.sitting.isSitting)
-                Player.lifeRegenTime -= 10;
-
             if (rum)
                 Player.lifeRegen += 2;
 
@@ -660,6 +656,15 @@ namespace CalamityMod.CalPlayer
             if (sRegen)
                 Player.lifeRegen += 2;
 
+            if (PinkJellyRegen)
+                Player.lifeRegen += 4;
+
+            if (GreenJellyRegen)
+                Player.lifeRegen += 6;
+
+            if (AbsorberRegen)
+                Player.lifeRegen += 7;
+
             if (hallowedRegen)
                 Player.lifeRegen += 3;
 
@@ -668,12 +673,6 @@ namespace CalamityMod.CalPlayer
 
             if (trinketOfChi || chiRegen)
                 Player.lifeRegen += 2;
-
-            if (absorber)
-            {
-                if (Player.StandingStill() && Player.itemAnimation == 0)
-                    Player.lifeRegen += 4;
-            }
 
             if (aAmpoule)
             {
@@ -740,18 +739,12 @@ namespace CalamityMod.CalPlayer
 
             if (community)
             {
-                float BoostAtZeroBosses = 0.05f;
-                float BoostPostYharon = 0.2f;
-                float floatTypeBoost = MathHelper.Lerp(BoostAtZeroBosses, BoostPostYharon, TheCommunity.CalculatePower());
-                int integerTypeBoost = (int)(floatTypeBoost * 50f);
-                int regenBoost = 1 + (integerTypeBoost / 5);
+                int regenBoost = 1 + (int)(TheCommunity.CalculatePower() * TheCommunity.RegenMultiplier);
                 bool lesserEffect = false;
                 for (int l = 0; l < Player.MaxBuffs; l++)
                 {
                     int hasBuff = Player.buffType[l];
-                    bool shouldAffect = CalamityLists.alcoholList.Contains(hasBuff);
-                    if (shouldAffect)
-                        lesserEffect = true;
+                    lesserEffect = CalamityLists.alcoholList.Contains(hasBuff);
                 }
                 if (Player.lifeRegen < 0)
                     Player.lifeRegen += lesserEffect ? 1 : regenBoost;
@@ -948,6 +941,7 @@ namespace CalamityMod.CalPlayer
             {
                 // The soft cap doesn't apply if the player is not moving and not using a weapon while having any of the following:
                 // Shiny Stone, Cosmic Freeze buff from the Cosmic Discharge, Demonshade Armor, Photosynthesis Potion buff or The Camper.
+                int baseLifeRegenBoost = 4;
                 bool noLifeRegenCap = (Player.shinyStone || cFreeze || shadeRegen || photosynthesis || camper) &&
                     Player.StandingStill() && Player.itemAnimation == 0;
 
@@ -967,7 +961,7 @@ namespace CalamityMod.CalPlayer
                     int lifeRegenSoftCap = (int)MathHelper.Clamp((int)Math.Round((1f - maxLifeRatio) * lifeRegenSoftCapMax), lifeRegenSoftCapMin, lifeRegenSoftCapMax);
 
                     // If life regen is greater than the calculated soft cap, reduce it.
-                    if (Player.lifeRegen > lifeRegenSoftCap)
+                    if (Player.lifeRegen - baseLifeRegenBoost > lifeRegenSoftCap)
                     {
                         // The scalar used to calculate how much the life regen stat should be reduced by.
                         // Ranges from 1 (at 0% HP) to 2 (at 100% HP).
@@ -975,10 +969,10 @@ namespace CalamityMod.CalPlayer
 
                         // Calculate the amount of life regen the player should get according to the soft cap and their current % HP remaining.
                         // The higher the player's % HP remaining the less life regen they get and vice versa.
-                        int defLifeRegen = (int)(Player.lifeRegen / lifeRegenScalar);
+                        int defLifeRegen = (int)((Player.lifeRegen - baseLifeRegenBoost) / lifeRegenScalar);
 
                         // Set the player's life regen to the scaled amount.
-                        Player.lifeRegen = defLifeRegen;
+                        Player.lifeRegen = baseLifeRegenBoost + defLifeRegen;
                     }
                 }
             }

@@ -48,6 +48,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             global.DR = 0.999999f;
             global.unbreakableDR = true;
             NPC.lifeMax = CalamityWorld.revenge ? 345000 : 300000;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
             NPC.knockBackResist = 0f;
@@ -67,12 +69,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             int associatedNPCType = ModContent.NPCType<SupremeCalamitas>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                //We'll probably want a custom background SCal her like ML has.
-                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.SCal,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("This might just be the vilest undead abomination in this realm. The Sepulcher itself is completely immune to physical damage, and can only be killed by destroying its many suspended organs.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Sepulcher")
             });
         }
 
@@ -171,7 +170,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 }
             }
 
-            if (CalamityWorld.getFixedBoi && !NPC.AnyNPCs(ModContent.NPCType<BrimstoneHeart>()))
+            if (Main.zenithWorld && !NPC.AnyNPCs(ModContent.NPCType<BrimstoneHeart>()))
             {
                 CalamityGlobalNPC global = NPC.Calamity();
                 global.DR = 0.4f;
@@ -180,7 +179,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.DeathSound = DeathSound;
             }
 
-            if (Main.player[NPC.target].dead || (!NPC.AnyNPCs(ModContent.NPCType<BrimstoneHeart>()) && !CalamityWorld.getFixedBoi) || CalamityGlobalNPC.SCal < 0 || !Main.npc[CalamityGlobalNPC.SCal].active)
+            if (Main.player[NPC.target].dead || (!NPC.AnyNPCs(ModContent.NPCType<BrimstoneHeart>()) && !Main.zenithWorld) || CalamityGlobalNPC.SCal < 0 || !Main.npc[CalamityGlobalNPC.SCal].active)
             {
                 NPC.TargetClosest(false);
                 SoundEngine.PlaySound(DeathSound, Main.player[NPC.target].Center);

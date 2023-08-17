@@ -18,6 +18,7 @@ namespace CalamityMod.Skies
         public static float IncrementalInterest = 0f;
         public static float CurrentInterestMin = 0f;
         public static bool ShouldDrawRegularly;
+
         public static Color GeneralColor => Color.Lerp(Color.LightGray, Color.Black, BossRushEvent.WhiteDimness) * 0.2f;
 
         public static bool DetermineDrawEligibility()
@@ -28,12 +29,10 @@ namespace CalamityMod.Skies
             {
                 if (useEffect)
                     SkyManager.Instance.Activate("CalamityMod:BossRush");
-
                 else
-                {
                     SkyManager.Instance.Deactivate("CalamityMod:BossRush", new object[0]);
-                }
             }
+
             if (useEffect != Filters.Scene["CalamityMod:BossRush"].IsActive())
             {
                 if (useEffect)
@@ -51,6 +50,7 @@ namespace CalamityMod.Skies
             {
                 if (Intensity < 1f)
                     Intensity += 0.03f;
+
                 CurrentInterest = MathHelper.Clamp(CurrentInterest - 0.005f, CurrentInterestMin, 1f);
                 IncrementalInterest = MathHelper.Lerp(IncrementalInterest, CurrentInterest, 0.085f);
                 IdleTimer += MathHelper.Lerp(0.04f, 0.1f, IncrementalInterest);
@@ -96,7 +96,6 @@ namespace CalamityMod.Skies
                 fadeToWhite *= Utils.GetLerpValue(BossRushEvent.EndVisualEffectTime - 5f, BossRushEvent.EndVisualEffectTime - 25f, BossRushEvent.EndTimer, true);
                 float backScale = MathHelper.Lerp(0.01f, 8f, fadeToWhite);
                 Color backFadeColor = Color.White * fadeToWhite * 0.64f;
-
                 spriteBatch.Draw(whiteTexture, screenCenter, null, backFadeColor, 0f, whiteTexture.Size() * 0.5f, backScale, SpriteEffects.None, 0f);
             }
 
@@ -114,17 +113,20 @@ namespace CalamityMod.Skies
 
                 Texture2D eyeTexture = ModContent.Request<Texture2D>("CalamityMod/Skies/XerocEye").Value;
                 Color baseColorDraw = Color.Lerp(Color.White, Color.Red, IncrementalInterest);
+                Vector2 origin = eyeTexture.Size() * 0.5f;
 
-                spriteBatch.Draw(eyeTexture, drawPosition, null, baseColorDraw, 0f, eyeTexture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(eyeTexture, drawPosition, null, baseColorDraw, 0f, origin, scale, SpriteEffects.None, 0f);
                 Color fadedColor = Color.Lerp(baseColorDraw, Color.Coral, 0.3f) * MathHelper.Lerp(0.18f, 0.3f, IncrementalInterest);
                 fadedColor.A = 0;
 
                 float backEyeOutwardness = MathHelper.Lerp(8f, 4f, IncrementalInterest);
                 int backInstances = (int)MathHelper.Lerp(6f, 24f, IncrementalInterest);
+                float fourPi = MathHelper.TwoPi * 2f;
+                float time = Main.GlobalTimeWrappedHourly * 2.1f;
                 for (int i = 0; i < backInstances; i++)
                 {
-                    Vector2 drawOffset = (MathHelper.TwoPi * 2f * i / backInstances + Main.GlobalTimeWrappedHourly * 2.1f).ToRotationVector2() * backEyeOutwardness;
-                    spriteBatch.Draw(eyeTexture, drawPosition + drawOffset, null, fadedColor, 0f, eyeTexture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                    Vector2 drawOffset = (fourPi * i / backInstances + time).ToRotationVector2() * backEyeOutwardness;
+                    spriteBatch.Draw(eyeTexture, drawPosition + drawOffset, null, fadedColor, 0f, origin, scale, SpriteEffects.None, 0f);
                 }
             }
 

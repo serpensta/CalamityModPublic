@@ -7,7 +7,7 @@ using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
-using CalamityMod.NPCs.AdultEidolonWyrm;
+using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Sounds;
 using CalamityMod.World;
@@ -77,10 +77,9 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Among any creature ever witnessed, it is these that stray furthest from our understanding. Such grand might, such mystery…")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.EidolonWyrm")
             });
         }
 
@@ -101,7 +100,7 @@ namespace CalamityMod.NPCs.Abyss
         public override void AI()
         {
             bool adultWyrmAlive = false;
-            SoundStyle roar = CalamityWorld.getFixedBoi ? Sunskater.DeathSound with { Pitch = Sunskater.DeathSound.Pitch - 0.5f } : CommonCalamitySounds.WyrmScreamSound;
+            SoundStyle roar = Main.zenithWorld ? Sunskater.DeathSound with { Pitch = Sunskater.DeathSound.Pitch - 0.5f } : CommonCalamitySounds.WyrmScreamSound;
             if (CalamityGlobalNPC.adultEidolonWyrmHead != -1)
             {
                 if (Main.npc[CalamityGlobalNPC.adultEidolonWyrmHead].active)
@@ -436,16 +435,15 @@ namespace CalamityMod.NPCs.Abyss
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.Calamity().ZoneAbyssLayer4 && spawnInfo.Water && !NPC.AnyNPCs(ModContent.NPCType<EidolonWyrmHead>()))
-            {
                 return Main.remixWorld ? 5.4f : SpawnCondition.CaveJellyfish.Chance * 0.6f;
-            }
+
             return 0f;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             // Never drop anything if this Eidolon Wyrm is a minion during an AEW fight.
-            var aewMinionCondition = npcLoot.DefineConditionalDropSet(AdultEidolonWyrmHead.CanMinionsDropThings);
+            var aewMinionCondition = npcLoot.DefineConditionalDropSet(PrimordialWyrmHead.CanMinionsDropThings);
 
             // 30-40 Voidstone
             aewMinionCondition.Add(ModContent.ItemType<Voidstone>(), 1, 30, 40);

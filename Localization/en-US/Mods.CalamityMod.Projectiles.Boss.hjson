@@ -35,6 +35,11 @@ BrimstoneTargetRay.DisplayName: Brimstone Target Ray
 BrimstoneWave.DisplayName: Brimstone Flame Skull
 BrokenApolloLens.DisplayName: Lens
 BrokenArtemisLens.DisplayName: Lens
+CirrusBlast.DisplayName: Cirrus Mushroom Blast
+CirrusBlaster.DisplayName: Cirrus Mushroom
+CirrusPhotonRipperPrismTooth.DisplayName: Cirrus Photon Ripper Tooth
+CirrusPhotonRipperProjectile.DisplayName: Cirrus Photon Ripper
+CirrusVolatileVodkaBottle.DisplayName: Volatile Vodka Bottle
 DarkEnergyBall.DisplayName: Dark Energy
 DarkEnergyBall2.DisplayName: Dark Energy
 DarkOrb.DisplayName: Dark Orb
@@ -58,6 +63,7 @@ FlareDust.DisplayName: Flare Dust
 FlareDust2.DisplayName: Flare Bomb
 Flarenado.DisplayName: Flarenado
 FrostMist.DisplayName: Frost Mist
+GooglyEye.DisplayName: Googly Eye
 GreatSandBlast.DisplayName: Great Sand Blast
 HealOrbProv.DisplayName: Heal
 HellfireExplosion.DisplayName: Brimstone Hellfire Explosion
@@ -72,6 +78,8 @@ HolyFire2.DisplayName: Holy Fire
 HolyFlare.DisplayName: Holy Flare
 HolyLight.DisplayName: Holy Light
 HolySpear.DisplayName: Holy Spear
+HomingGasBulb.DisplayName: Homing Gas Bulb
+HomingGasBulbSporeGas.DisplayName: Homing Gas Bulb Spore Gas
 IceBlast.DisplayName: Ice Blast
 IceBomb.DisplayName: Ice Bomb
 IceRain.DisplayName: Ice Rain
@@ -138,6 +146,7 @@ SwirlingFire.DisplayName: Fire
 ThanatosBeamStart.DisplayName: T Hanos Beam
 ThanatosBeamTelegraph.DisplayName: Gamma Disintegration Beam Telegraph
 ThanatosLaser.DisplayName: Exo Pulse Laser
+ThornBallSpike.DisplayName: Thorn Ball Spike
 ToxicCloud.DisplayName: Toxic Cloud
 UnstableCrimulanGlob.DisplayName: Unstable Crimulan Glob
 UnstableEbonianGlob.DisplayName: Unstable Ebonian Glob

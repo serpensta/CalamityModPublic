@@ -41,12 +41,11 @@ namespace CalamityMod.NPCs.Perforator
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCrimson,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("A pulsing patch of anarchistic eyes and teeth. It is the culmination of the crimson's flesh and should be avoided at all costs.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.PerforatorCyst")
             });
         }
 
@@ -82,14 +81,22 @@ namespace CalamityMod.NPCs.Perforator
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (CalamityGlobalNPC.AnyEvents(spawnInfo.Player))
+            if (CalamityGlobalNPC.AnyEvents(spawnInfo.Player) || !spawnInfo.Player.ZoneCrimson)
                 return 0f;
+
             if (spawnInfo.Player.Calamity().disablePerfCystSpawns)
                 return 0f;
 
-            bool anyBossElements = NPC.AnyNPCs(ModContent.NPCType<PerforatorCyst>()) || NPC.AnyNPCs(ModContent.NPCType<PerforatorHive>());
-            bool crimson = TileID.Sets.Crimson[spawnInfo.SpawnTileType] || spawnInfo.SpawnTileType == TileID.Crimtane && spawnInfo.Player.ZoneCrimson;
-            if (spawnInfo.PlayerSafe || anyBossElements || !crimson)
+            bool crimson = TileID.Sets.Crimson[spawnInfo.SpawnTileType] || spawnInfo.SpawnTileType == TileID.Crimtane;
+            if (spawnInfo.PlayerSafe || !crimson)
+                return 0f;
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
+                return 0f;
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(ModContent.NPCType<PerforatorHive>()))
                 return 0f;
 
             if (NPC.downedBoss2 && !DownedBossSystem.downedPerforator)

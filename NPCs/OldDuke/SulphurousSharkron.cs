@@ -21,13 +21,8 @@ namespace CalamityMod.NPCs.OldDuke
     {
         public override void SetStaticDefaults()
         {
+            this.HideFromBestiary();
             NPCID.Sets.TrailingMode[NPC.type] = 1;
-            NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-            {
-                Scale = 0.65f,
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
         }
 
         public override void SetDefaults()
@@ -44,6 +39,8 @@ namespace CalamityMod.NPCs.OldDuke
             {
                 NPC.lifeMax = 10000;
             }
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0f;
@@ -56,18 +53,6 @@ namespace CalamityMod.NPCs.OldDuke
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<SulphurousSeaBiome>().Type };
-        }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            int associatedNPCType = ModContent.NPCType<OldDuke>();
-            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
-
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Rotting, corpselike offspring of the Old Duke. In the Sulphurous Seas, even from birth, their appearances are wizened and decrepit.")
-            });
         }
 
         public override void SendExtraAI(BinaryWriter writer)

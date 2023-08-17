@@ -42,11 +42,11 @@ namespace CalamityMod.NPCs.NormalNPCs
         {
             AIType = -1;
             NPC.aiStyle = -1;
-            NPC.damage = 0;
+            NPC.damage = 10;
             NPC.width = 44;
             NPC.height = 44;
             NPC.defense = 4;
-            NPC.lifeMax = 92;
+            NPC.lifeMax = 46;
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 0, 1, 50);
             NPC.noGravity = false;
@@ -61,17 +61,19 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("A stationary foe, though its function is far from harmless. Within its influence, other wulfrum creations become notably empowered, the curious energy within them, overflowing.")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.WulfrumAmplifier")
             });
         }
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             List<int> SuperchargableEnemies = new List<int>()
             {
                 ModContent.NPCType<WulfrumDrone>(),
@@ -84,31 +86,35 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             Player player = Main.player[NPC.target];
 
-            if (Main.netMode != NetmodeID.MultiplayerClient && !Charging && NPC.Distance(player.Center) < ChargeRadiusMax * 0.667f)
+            if (!Charging && NPC.Distance(player.Center) < ChargeRadiusMax * 0.667f)
             {
                 // Spawn some off-screen enemies to act as threats if the player enters the field.
-                int enemiesToSpawn = CalamityWorld.death ? 3 : CalamityWorld.revenge ? 2 : 1;
-                for (int i = 0; i < enemiesToSpawn; i++)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int tries = 0;
-                    Vector2 spawnPosition;
-                    do
+                    int enemiesToSpawn = CalamityWorld.death ? 3 : CalamityWorld.revenge ? 2 : 1;
+                    for (int i = 0; i < enemiesToSpawn; i++)
                     {
-                        spawnPosition = player.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(600f, 1015f) * new Vector2(1.5f, 1f);
-                        if (spawnPosition.Y > player.Center.Y)
-                            spawnPosition.Y = player.Center.Y;
-                        if (tries > 500)
-                            break;
-                        tries++;
-                    }
-                    while (WorldGen.SolidTile(CalamityUtils.ParanoidTileRetrieval((int)spawnPosition.X / 16, (int)spawnPosition.Y / 16)));
+                        int tries = 0;
+                        Vector2 spawnPosition;
+                        do
+                        {
+                            spawnPosition = player.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(600f, 1015f) * new Vector2(1.5f, 1f);
+                            if (spawnPosition.Y > player.Center.Y)
+                                spawnPosition.Y = player.Center.Y;
+                            if (tries > 500)
+                                break;
+                            tries++;
+                        }
+                        while (WorldGen.SolidTile(CalamityUtils.ParanoidTileRetrieval((int)spawnPosition.X / 16, (int)spawnPosition.Y / 16)));
 
-                    if (tries < 500)
-                    {
-                        int npcToSpawn = Main.rand.NextBool(2) ? ModContent.NPCType<WulfrumDrone>() : ModContent.NPCType<WulfrumHovercraft>();
-                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPosition.X, (int)spawnPosition.Y, npcToSpawn);
+                        if (tries < 500)
+                        {
+                            int npcToSpawn = Main.rand.NextBool(2) ? ModContent.NPCType<WulfrumDrone>() : ModContent.NPCType<WulfrumHovercraft>();
+                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPosition.X, (int)spawnPosition.Y, npcToSpawn);
+                        }
                     }
                 }
+
                 Charging = true;
                 NPC.netUpdate = true;
             }
@@ -172,16 +178,14 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            float amplifierMult = !NPC.AnyNPCs(ModContent.NPCType<WulfrumAmplifier>()) ? 1.3f : 1f;
-
-            if (spawnInfo.PlayerSafe || spawnInfo.Player.Calamity().ZoneSulphur)
+            if (spawnInfo.PlayerSafe || spawnInfo.Player.Calamity().ZoneSulphur || !spawnInfo.Player.ZoneOverworldHeight)
                 return 0f;
 
             // Spawn less frequently in the inner third of the world.
             if (spawnInfo.PlayerFloorX > Main.maxTilesX * 0.333f && spawnInfo.PlayerFloorX < Main.maxTilesX - Main.maxTilesX * 0.333f)
-                return SpawnCondition.OverworldDaySlime.Chance * (Main.hardMode ? 0.01f : 0.06f) * amplifierMult;
+                return SpawnCondition.OverworldDaySlime.Chance * (Main.hardMode ? 0.01f : 0.06f) * (!NPC.AnyNPCs(NPC.type) ? 1.3f : 1f);
 
-            return SpawnCondition.OverworldDaySlime.Chance * (Main.hardMode ? 0.033f : 0.15f) * amplifierMult;
+            return SpawnCondition.OverworldDaySlime.Chance * (Main.hardMode ? 0.033f : 0.15f) * (!NPC.AnyNPCs(NPC.type) ? 1.3f : 1f);
         }
 
         public override void HitEffect(NPC.HitInfo hit)

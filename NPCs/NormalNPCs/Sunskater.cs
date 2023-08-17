@@ -40,7 +40,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             AIType = -1;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit50;
-            NPC.DeathSound = CalamityWorld.getFixedBoi ? AresGaussNuke.NukeExplosionSound : DeathSound;
+            NPC.DeathSound = Main.zenithWorld ? AresGaussNuke.NukeExplosionSound : DeathSound;
             NPC.knockBackResist = 0.7f;
             Banner = NPC.type;
             BannerItem = ModContent.ItemType<SunskaterBanner>();
@@ -52,11 +52,10 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Some creatures which skirt the edges of our atmosphere tend to absorb and channel the sun's rays better than others. At any rate, this is a passive creature that means you no harm. You should return the favor.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Sunskater")
             });
         }
 
@@ -243,7 +242,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, 64, hit.HitDirection, -1f, 0, default, 1f);
                 }
-                if (CalamityWorld.getFixedBoi)
+                if (Main.zenithWorld)
                 {
                     float screenShakePower = 16 * Utils.GetLerpValue(1300f, 0f, NPC.Distance(Main.LocalPlayer.Center), true);
                     if (Main.LocalPlayer.Calamity().GeneralScreenShakePower < screenShakePower)

@@ -129,8 +129,8 @@ CindersOfLament: {
 		Summons either Cataclysm or Catastrophe at the mouse position
 		They will look at you for a moment before charging at you
 		They can do damage to both you and enemies
-		[c/c61b40:'The Witch, a sinner of her own making,]
-		[c/c61b40:Within her mind her demon lies, ever patient, until the end of time.']
+		[c/C61B40:'The Witch, a sinner of her own making,]
+		[c/C61B40:Within her mind her demon lies, ever patient, until the end of time.']
 		'''
 }
 
@@ -142,18 +142,6 @@ Cnidarian: {
 		Periodically sends out sparks to electrocute nearby enemies.
 		[c/5C95A1:'From looking at their less sapient brethren, the Old Kingdom's inhabitants adapted tools and weapons designed for underwater efficiency.]
 		[c/5C95A1:The electric properties of ghost bells remain useful even after death, having been commonly used as conduits.']
-		'''
-}
-
-GlacialEmbrace: {
-	DisplayName: Glacial Embrace
-	Tooltip:
-		'''
-		Summons the power of the ancient ice castle
-		For each minion slot used, you will gain an additional orbiting shield spike
-		These spikes accelerate rapidly towards a nearby enemy to inflict heavy damage
-		They take some time to regenerate after launching themselves at the target, however
-		On right click, summons a duplicate ring around the targeted enemy, which slowly converges before exploding
 		'''
 }
 
@@ -267,6 +255,7 @@ DragonbloodDisgorger: {
 	Tooltip:
 		'''
 		Summons a skeletal dragon and her two children
+		Baby spits passively heal the player
 		Requires 6 minion slots to be summoned
 		There can only be one family at a time
 		'''
@@ -333,6 +322,8 @@ EyeOfNight: {
 
 FlamsteedRing: {
 	DisplayName: Flamsteed Ring
+	NoSpaceTextTop: Cannot Deploy
+	NoSpaceTextBottom: Insufficient space!
 	Tooltip:
 		'''
 		Summons a colossal controllable mech
@@ -344,7 +335,7 @@ FlamsteedRing: {
 		The top icon is the mech's weaponry. It must be powered in order to attack
 		Click the top icon to switch between Regicide, an enormous energy blade, and a powerful Gauss rifle
 		Exiting the mount while a boss is alive will temporarily hinder your movement
-		[c/87ceeb:'Now, make them pay']
+		[c/87CEEB:'Now, make them pay']
 		'''
 }
 
@@ -399,6 +390,18 @@ GastricBelcherStaff: {
 		'''
 }
 
+GlacialEmbrace: {
+	DisplayName: Glacial Embrace
+	Tooltip:
+		'''
+		Summons the power of the ancient ice castle
+		For each minion slot used, you will gain an additional orbiting shield spike
+		These spikes accelerate rapidly towards a nearby enemy to inflict heavy damage
+		They take some time to regenerate after launching themselves at the target, however
+		On right click, summons a duplicate ring around the targeted enemy, which slowly converges before exploding
+		'''
+}
+
 GodspawnHelixStaff: {
 	DisplayName: Godspawn Helix Staff
 	Tooltip: Summons astral probes to protect you
@@ -420,11 +423,7 @@ HauntedScroll: {
 
 HerringStaff: {
 	DisplayName: Herring Staff
-	Tooltip:
-		'''
-		Summons a herring to fight for you
-		Each herring takes only half of a minion slot
-		'''
+	Tooltip: Summons a school of herrings to fight for you
 }
 
 HivePod: {
@@ -459,6 +458,7 @@ KingofConstellationsTenryu: {
 	Tooltip:
 		'''
 		Uses 4 minion slots to summon a pair of celestial dragons to fight for you
+		There can only be one pair of dragons at a time
 		'The ones who will devour the Unmoving Star'
 		'''
 }
@@ -471,8 +471,8 @@ Metastasis: {
 		While the Sepulcher is active brimstone hearts will begin to appear and orbit you
 		It will attempt to attack you more and more frequently depending on how many hearts are present
 		It takes up 4 minion slots and it can only be summoned once
-		[c/c61b40:A contemplated possible future of the cosmic serpent,]
-		[c/c61b40:A gruesome warning for those blinded by the hunger for power.]
+		[c/C61B40:A contemplated possible future of the cosmic serpent,]
+		[c/C61B40:A gruesome warning for those blinded by the hunger for power.]
 
 		'''
 }
@@ -599,7 +599,13 @@ SlimePuppetStaff: {
 
 SpikecragStaff: {
 	DisplayName: Spikecrag Staff
-	Tooltip: Summons a spikecrag to protect you
+	Tooltip: "[GFB]"
+	TooltipNormal: Summons a spikecrag to protect you
+	TooltipGFB:
+		'''
+		Summons a spikecrag to protect you"
+		Defeating the Profaned Goddess unlocks its true power
+		'''
 }
 
 SquirrelSquireStaff: {
@@ -768,4 +774,24 @@ YharonsKindleStaff: {
 		Summons a fiery draconid to fight for you
 		Requires 5 minion slots to use
 		'''
+}
+
+MirrorofKalandra: {
+	DisplayName: Mirror of Kalandra
+	Tooltip:
+		'''
+		Summons five ancient weapons to annihilate your enemies
+		There can only be one of each individual weapon
+		[c/BD7F59:Atziri's Disfavor brutally cleaves through enemies]
+		[c/E7A7FF:Starforge rips through foes and occasionally induces cosmic explosions]
+		[c/868B8F:Paradoxica teleports to enemies and blitzes through them at high speed]
+		[c/EBC3A5:Wind Ripper unleashes a single high-speed, powerful arrow at enemies]
+		[c/9B6856:Hope Shredder shoots arrows that split into three and pierce enemies twice]
+		'Ultimate, Immeasurable, Indescribable'
+		'''
+}
+
+StellarTorusStaff: {
+	DisplayName: Stellar Torus Staff
+	Tooltip: Summons a Torus Orbital that fries foes with a telescoping light beam
 }

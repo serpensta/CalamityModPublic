@@ -59,11 +59,10 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("It is civilization's goal to wrest nature under its control. This is the result of one such conquest, an artificial elemental, run by clockwork gears.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Horse")
             });
         }
 
@@ -79,11 +78,13 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.PlayerSafe || !Main.hardMode || spawnInfo.Player.Calamity().ZoneAbyss ||
-                spawnInfo.Player.Calamity().ZoneSunkenSea || NPC.AnyNPCs(NPC.type))
-            {
+            if (spawnInfo.PlayerSafe || !Main.hardMode || spawnInfo.Player.Calamity().ZoneAbyss || spawnInfo.Player.Calamity().ZoneSunkenSea || !spawnInfo.Player.ZoneRockLayerHeight)
                 return 0f;
-            }
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
+                return 0f;
+
             return SpawnCondition.Cavern.Chance * 0.005f;
         }
 
@@ -201,7 +202,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 if (NPC.ai[0] == 0f)
                 {
-                    if (CalamityWorld.getFixedBoi)
+                    if (Main.zenithWorld)
                     {
                         SoundEngine.PlaySound(SoundID.ScaryScream, Main.player[NPC.target].Center);
                     }

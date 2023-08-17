@@ -14,10 +14,7 @@ namespace CalamityMod.NPCs.HiveMind
     {
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0);
-            value.Position.X += 1f;
-            NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            this.HideFromBestiary();
         }
 
         public override void SetDefaults()
@@ -34,6 +31,9 @@ namespace CalamityMod.NPCs.HiveMind
             if (Main.getGoodWorld)
                 NPC.lifeMax *= 4;
 
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
+
             if ((CalamityWorld.LegendaryMode && CalamityWorld.revenge))
                 NPC.reflectsProjectiles = true;
 
@@ -48,20 +48,6 @@ namespace CalamityMod.NPCs.HiveMind
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = true;
-        }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            int associatedNPCType = ModContent.NPCType<HiveMind>();
-            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
-
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCorruption,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Though their core is the same as a hive blob, their armored shell of shadow scale prevents them from dying quite as easily. They also carry a noxious gas within them.")
-            });
         }
 
         public override void AI()

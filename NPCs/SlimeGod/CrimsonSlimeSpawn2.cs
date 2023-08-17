@@ -34,6 +34,8 @@ namespace CalamityMod.NPCs.SlimeGod
 
             NPC.defense = 6;
             NPC.lifeMax = BossRushEvent.BossRushActive ? 12000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 260 : 130;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.knockBackResist = 0f;
             NPC.Opacity = 0.8f;
             NPC.lavaImmune = false;
@@ -51,12 +53,11 @@ namespace CalamityMod.NPCs.SlimeGod
             int associatedNPCType = ModContent.NPCType<SplitCrimulanPaladin>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Embedded in these slime's bodies are shards of crimulan stone, which drip with a toxin meant to impair your vision.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CrimsonSlimeSpawn2")
             });
         }
 
@@ -96,7 +97,7 @@ namespace CalamityMod.NPCs.SlimeGod
 
             int type = ModContent.ProjectileType<CrimsonSpike>();
             int damage = NPC.GetProjectileDamage(type);
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 type = Main.rand.NextBool(2) ? ModContent.ProjectileType<IchorShot>() : ModContent.ProjectileType<BloodGeyser>();
             }
@@ -115,7 +116,7 @@ namespace CalamityMod.NPCs.SlimeGod
                     }
                     if (Main.netMode != NetmodeID.MultiplayerClient && spikeTimer == 0f)
                     {
-                        int projcount = CalamityWorld.getFixedBoi ? 12 : 5;
+                        int projcount = Main.zenithWorld ? 12 : 5;
                         for (int n = 0; n < projcount; n++)
                         {
                             Vector2 vector4 = new Vector2((float)(n - 2), -4f);

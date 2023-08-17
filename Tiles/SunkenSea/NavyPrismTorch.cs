@@ -10,7 +10,7 @@ namespace CalamityMod.Tiles.SunkenSea
 {
     public class NavyPrismTorch : ModTile
     {
-        public override void SetStaticDefaults() => this.SetUpTorch(true, true);
+        public override void SetStaticDefaults() => this.SetUpTorch(ModContent.ItemType<Items.Placeables.Furniture.NavyPrismTorch>(), true, true);
 
         public override bool CreateDust(int i, int j, ref int type)
         {
@@ -49,9 +49,7 @@ namespace CalamityMod.Tiles.SunkenSea
             {
                 offsetY = 2;
                 if (WorldGen.SolidTile(i - 1, j + 1) || WorldGen.SolidTile(i + 1, j + 1))
-                {
                     offsetY = 4;
-                }
             }
         }
 

@@ -6,11 +6,17 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using CalamityMod.CalPlayer;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
     public class KingSlimeJewel : ModNPC
     {
+        private const int BoltShootGateValue = 75;
+        private const int BoltShootGateValue_Death = 60;
+        private const int BoltShootGateValue_BossRush = 45;
+        private const float LightTelegraphDuration = 45f;
+
         public override void SetStaticDefaults()
         {
             NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true }; 
@@ -21,12 +27,12 @@ namespace CalamityMod.NPCs.NormalNPCs
         {
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.damage = 0;
+            NPC.damage = 10;
             NPC.width = 22;
             NPC.height = 22;
             NPC.defense = 10;
             NPC.DR_NERD(0.1f);
-            NPC.lifeMax = 280;
+            NPC.lifeMax = 140;
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
@@ -38,11 +44,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void AI()
         {
-            // Red light
-            Lighting.AddLight((int)((NPC.position.X + (float)(NPC.width / 2)) / 16f), (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f), 1f, 0f, 0f);
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
 
             // Despawn
-            if (!NPC.AnyNPCs(NPCID.KingSlime))
+            if (!CalamityPlayer.areThereAnyDamnBosses)
             {
                 NPC.life = 0;
                 NPC.HitEffect();
@@ -102,44 +108,44 @@ namespace CalamityMod.NPCs.NormalNPCs
             }
 
             // Fire projectiles
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            NPC.ai[0] += 1f;
+            if (NPC.ai[0] >= (BossRushEvent.BossRushActive ? BoltShootGateValue_BossRush : CalamityWorld.death ? BoltShootGateValue_Death : BoltShootGateValue))
             {
-                // Fire bolt every 1.5 seconds
-                NPC.localAI[0] += 1f;
-                if (NPC.localAI[0] >= (BossRushEvent.BossRushActive ? 45f : CalamityWorld.death ? 60f : 75f))
+                NPC.ai[0] = 0f;
+
+                Vector2 npcPos = new Vector2(NPC.Center.X, NPC.Center.Y);
+                float xDist = Main.player[NPC.target].Center.X - npcPos.X;
+                float yDist = Main.player[NPC.target].Center.Y - npcPos.Y;
+                Vector2 projVector = new Vector2(xDist, yDist);
+                float projLength = projVector.Length();
+
+                float speed = 10f;
+                int type = ModContent.ProjectileType<JewelProjectile>();
+
+                projLength = speed / projLength;
+                projVector.X *= projLength;
+                projVector.Y *= projLength;
+                npcPos.X += projVector.X * 2f;
+                npcPos.Y += projVector.Y * 2f;
+
+                for (int dusty = 0; dusty < 10; dusty++)
                 {
-                    NPC.localAI[0] = 0f;
-
-                    Vector2 npcPos = new Vector2(NPC.Center.X, NPC.Center.Y);
-                    float xDist = Main.player[NPC.target].Center.X - npcPos.X;
-                    float yDist = Main.player[NPC.target].Center.Y - npcPos.Y;
-                    Vector2 projVector = new Vector2(xDist, yDist);
-                    float projLength = projVector.Length();
-
-                    float speed = 10f;
-                    int type = ModContent.ProjectileType<JewelProjectile>();
-
-                    projLength = speed / projLength;
-                    projVector.X *= projLength;
-                    projVector.Y *= projLength;
-                    npcPos.X += projVector.X * 2f;
-                    npcPos.Y += projVector.Y * 2f;
-
-                    for (int dusty = 0; dusty < 10; dusty++)
+                    Vector2 dustVel = projVector;
+                    dustVel.Normalize();
+                    int ruby = Dust.NewDust(NPC.Center, NPC.width, NPC.height, 90, dustVel.X, dustVel.Y, 100, default, 2f);
+                    Main.dust[ruby].velocity *= 1.5f;
+                    Main.dust[ruby].noGravity = true;
+                    if (Main.rand.NextBool(2))
                     {
-                        Vector2 dustVel = projVector;
-                        dustVel.Normalize();
-                        int ruby = Dust.NewDust(NPC.Center, NPC.width, NPC.height, 90, dustVel.X, dustVel.Y, 100, default, 2f);
-                        Main.dust[ruby].velocity *= 1.5f;
-                        Main.dust[ruby].noGravity = true;
-                        if (Main.rand.NextBool(2))
-                        {
-                            Main.dust[ruby].scale = 0.5f;
-                            Main.dust[ruby].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
-                        }
+                        Main.dust[ruby].scale = 0.5f;
+                        Main.dust[ruby].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
                     }
+                }
 
-                    SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+                SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
                     int damage = NPC.GetProjectileDamage(type);
                     if (CalamityWorld.death || BossRushEvent.BossRushActive)
                     {
@@ -148,19 +154,29 @@ namespace CalamityMod.NPCs.NormalNPCs
                         for (int i = 0; i < numProj; i++)
                         {
                             Vector2 perturbedSpeed = projVector.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), npcPos, perturbedSpeed, type, damage, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), npcPos, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                         }
                     }
                     else
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), npcPos, projVector, type, damage, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), npcPos, projVector, type, damage, 0f, Main.myPlayer);
                 }
             }
         }
 
-        public override bool CheckActive()
+        public override Color? GetAlpha(Color drawColor)
         {
-            return false;
+            Color initialColor = Color.DarkRed;
+            Color newColor = initialColor;
+            Color finalColor = Color.White;
+            float colorTelegraphGateValue = (BossRushEvent.BossRushActive ? BoltShootGateValue_BossRush : CalamityWorld.death ? BoltShootGateValue_Death : BoltShootGateValue) - LightTelegraphDuration;
+            if (NPC.ai[0] > colorTelegraphGateValue)
+                newColor = Color.Lerp(initialColor, finalColor, (NPC.ai[0] - colorTelegraphGateValue) / LightTelegraphDuration);
+            newColor.A = (byte)(255 * NPC.Opacity);
+
+            return newColor;
         }
+
+        public override bool CheckActive() => false;
 
         public override void HitEffect(NPC.HitInfo hit)
         {

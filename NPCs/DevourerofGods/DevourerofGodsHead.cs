@@ -172,11 +172,9 @@ namespace CalamityMod.NPCs.DevourerofGods
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                //Custom background probably?,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Its otherworldly ego is known as well as its overwhelming power across the land, as in battle it boasts constantly. Admittedly it is one of the few able to back up its claims.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DevourerofGods")
             });
         }
 
@@ -391,7 +389,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             }
 
             // Sound pitch
-            extrapitch = CalamityWorld.getFixedBoi ? 0.3f : 0f;
+            extrapitch = Main.zenithWorld ? 0.3f : 0f;
 
             // Velocity variables
             float fallSpeed = bossRush ? 19f : death ? 17.5f : 16f;
@@ -439,9 +437,6 @@ namespace CalamityMod.NPCs.DevourerofGods
 
             // Continuously reset certain things.
             AttemptingToEnterPortal = false;
-
-            // Light
-            Lighting.AddLight((int)((NPC.position.X + (NPC.width / 2)) / 16f), (int)((NPC.position.Y + (NPC.height / 2)) / 16f), 0.2f, 0.05f, 0.2f);
 
             // Worm variable
             if (NPC.ai[2] > 0f)
@@ -745,14 +740,14 @@ namespace CalamityMod.NPCs.DevourerofGods
                     if (NPC.Opacity >= 1f && (distanceFromTarget > 480f || (CalamityWorld.LegendaryMode && CalamityWorld.revenge)) && NPC.SafeDirectionTo(player.Center).AngleBetween((NPC.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f))
                     {
                         calamityGlobalNPC.newAI[0] += 1f;
-                        if (calamityGlobalNPC.newAI[0] >= ((CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 50f : 150f) && calamityGlobalNPC.newAI[0] % (phase7 ? 30f : 60f) == 0f)
+                        if (calamityGlobalNPC.newAI[0] >= ((CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 30f : 150f) && calamityGlobalNPC.newAI[0] % ((CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 30f : phase7 ? 30f : 60f) == 0f)
                         {
                             float fireballSpeed = 8f;
                             Vector2 fireballVelocity = Vector2.Normalize(player.Center - NPC.Center) * fireballSpeed + NPC.velocity * 0.5f;
 
                             Vector2 dustVelocity = fireballVelocity * 2f;
                             for (int k = 0; k < 50; k++)
-                                Dust.NewDust(NPC.Center, 52, 52, (int)CalamityDusts.PurpleCosmilite, dustVelocity.X, dustVelocity.Y, 0, default, 1f);
+                                Dust.NewDust(NPC.Center, 52, 52, (int)CalamityDusts.PurpleCosmilite, dustVelocity.X, dustVelocity.Y);
 
                             int type = ModContent.ProjectileType<DoGFire>();
                             int damage = NPC.GetProjectileDamage(type);
@@ -997,8 +992,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                         {
                             if (!Main.player[Main.myPlayer].dead && Main.player[Main.myPlayer].active && Vector2.Distance(Main.player[Main.myPlayer].Center, NPC.Center) < CalamityGlobalNPC.CatchUpDistance350Tiles)
                             {
-                                if (Main.player[Main.myPlayer].wingTime < Main.player[Main.myPlayer].wingTimeMax)
-                                    Main.player[Main.myPlayer].wingTime = Main.player[Main.myPlayer].wingTimeMax;
+                                Main.player[Main.myPlayer].Calamity().infiniteFlight = true;
                             }
                         }
                     }
@@ -1571,7 +1565,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                     if (!tail && NPC.ai[0] == 0f)
                     {
                         int Previous = NPC.whoAmI;
-                        if (CalamityWorld.getFixedBoi)
+                        if (Main.zenithWorld)
                         {
                             maxLength = 2;
                             minLength = 1;
@@ -2251,10 +2245,21 @@ namespace CalamityMod.NPCs.DevourerofGods
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                int randomRange = 48;
+                int randomRange = Main.zenithWorld ? 960 : 48;
                 float distance = 500f;
                 Vector2 targetVector = player.Center + player.velocity.SafeNormalize(Vector2.UnitX) * distance + new Vector2(Main.rand.Next(-randomRange, randomRange + 1), Main.rand.Next(-randomRange, randomRange + 1));
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), targetVector, Vector2.Zero, ModContent.ProjectileType<DoGTeleportRift>(), 0, 0f, Main.myPlayer, NPC.whoAmI);
+
+                if (Main.zenithWorld)
+                {
+                    // Fake portals galore
+                    randomRange = 2000;
+                    for (int k = 0; k < 35; k++)
+                    {
+                        targetVector = player.Center + player.velocity.SafeNormalize(Vector2.UnitX) * distance + new Vector2(Main.rand.Next(-randomRange, randomRange + 1), Main.rand.Next(-randomRange, randomRange + 1));
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), targetVector, Vector2.Zero, ModContent.ProjectileType<DoGTeleportRift>(), 0, 0f, Main.myPlayer, NPC.whoAmI, ai2: 1f);
+                    }
+                }
             }
         }
 
@@ -2424,18 +2429,24 @@ namespace CalamityMod.NPCs.DevourerofGods
 
         private Vector2 GetRiftLocation(bool spawnDust)
         {
+            Vector2 realSpot = default;
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
-                if (Main.projectile[i].type == ModContent.ProjectileType<DoGTeleportRift>())
+                Projectile proj = Main.projectile[i];
+                if (proj.type == ModContent.ProjectileType<DoGTeleportRift>())
                 {
                     if (!spawnDust)
-                        Main.projectile[i].ai[0] = -1f;
+                        proj.ai[0] = -1f;
 
-                    Main.projectile[i].Kill();
-                    return Main.projectile[i].Center;
+                    proj.Kill();
+
+                    if (proj.ai[2] == 1f)
+                        continue;
+
+                    realSpot = proj.Center;
                 }
             }
-            return default;
+            return realSpot;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -2614,9 +2625,6 @@ namespace CalamityMod.NPCs.DevourerofGods
             // Trophy (always directly from boss, never in bag)
             npcLoot.Add(ModContent.ItemType<DevourerofGodsTrophy>(), 10);
 
-            // GFB Auric Bar drop
-            npcLoot.DefineConditionalDropSet(DropHelper.GFB).Add(ModContent.ItemType<AuricBar>(), 1, 1, 5);
-
             // Lore
             npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedDoG, ModContent.ItemType<LoreDevourerofGods>(), desc: DropHelper.FirstKillText);
         }
@@ -2650,7 +2658,7 @@ namespace CalamityMod.NPCs.DevourerofGods
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             // viable???, done here since it's conditional
-            if (CalamityWorld.getFixedBoi && projectile.type == ModContent.ProjectileType<LaceratorYoyo>())
+            if (Main.zenithWorld && projectile.type == ModContent.ProjectileType<LaceratorYoyo>())
             {
                 modifiers.SourceDamage *= 40f;
             }
@@ -2667,16 +2675,14 @@ namespace CalamityMod.NPCs.DevourerofGods
             return false;
         }
 
+        // This can be ran multiple times per death, goofy mode
         public override bool CheckDead()
         {
-            if (!Dying)
-            {
-                Dying = true;
-                NPC.life = 1;
-                NPC.dontTakeDamage = true;
-                NPC.active = true;
-                NPC.netUpdate = true;
-            }
+            NPC.life = 1;
+            Dying = true;
+            NPC.dontTakeDamage = true;
+            NPC.active = true;
+            NPC.netUpdate = true;
             return false;
         }
 

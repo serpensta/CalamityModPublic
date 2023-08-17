@@ -36,10 +36,10 @@ AerospecHelm: {
 
 AerospecHelmet: {
 	DisplayName: Aerospec Helmet
-	Tooltip: 5% increased movement speed and minion damage
+	Tooltip: 5% increased movement speed and summon damage
 	SetBonus:
 		'''
-		11% increased minion damage and +1 max minion
+		11% increased summon damage and +1 max minion
 		Summons a valkyrie to protect you
 		'''
 }
@@ -81,7 +81,7 @@ DesertProwlerShirt: {
 
 MarniteArchitectHeadgear: {
 	DisplayName: Marnite Architect Headgear
-	Tooltip: Increases block placement range by 5
+	Tooltip: Increases block placement & tool range by 5
 	AbilityBrief: Marnite Lift - You can summon a lift under your feet to reach higher up
 	AbilityDescription:
 		'''
@@ -175,7 +175,7 @@ StatigelHeadSummon: {
 	Tooltip: Increased minion knockback
 	SetBonus:
 		'''
-		18% increased minion damage and +1 max minion
+		18% increased summon damage and +1 max minion
 		Summons a mini slime god to fight for you, the type depends on what world evil you have
 		'''
 }
@@ -220,7 +220,6 @@ VictideBreastplate: {
 		'''
 	CommonSetBonus:
 		'''
-		+3 life regen and 10% increased magic damage while submerged in liquid
 		When using any weapon you have a 10% chance to throw a returning seashell projectile
 		This seashell does true damage and does not benefit from any damage class
 		Provides increased underwater mobility and slightly reduces breath loss in the abyss
@@ -239,32 +238,43 @@ VictideGreaves: {
 VictideHeadMagic: {
 	DisplayName: Victide Hermit Helmet
 	Tooltip: 5% increased magic damage
+	SetBonus: +3 life regen and 10% increased magic damage while submerged in liquid
 }
 
 VictideHeadMelee: {
 	DisplayName: Victide Shellmet
 	Tooltip: 5% increased melee damage
-	SetBonus: Enemies are more likely to target you
+	SetBonus:
+		'''
+		Enemies are more likely to target you
+		+3 life regen and 10% increased melee damage while submerged in liquid
+		'''
 }
 
 VictideHeadRanged: {
 	DisplayName: Victide Coral Turban
 	Tooltip: 5% increased ranged damage
+	SetBonus: +3 life regen and 10% increased ranged damage while submerged in liquid
 }
 
 VictideHeadRogue: {
 	DisplayName: Victide Headcrab
 	Tooltip: 5% increased rogue damage
-	SetBonus: +60 maximum stealth
+	SetBonus:
+		'''
+		+60 maximum stealth
+		+3 life regen and 10% increased rogue damage while submerged in liquid
+		'''
 }
 
 VictideHeadSummon: {
 	DisplayName: Victide Mask
-	Tooltip: 10% increased minion damage
+	Tooltip: 10% increased summon damage
 	SetBonus:
 		'''
 		+1 max minion
 		Summons a sea snail to protect you
+		+3 life regen and 10% increased summon damage while submerged in liquid
 		'''
 }
 
@@ -282,7 +292,7 @@ WulfrumHat: {
 	DisplayName: Wulfrum Hat & Goggles
 	Tooltip:
 		'''
-		10% increased minion damage
+		10% increased summon damage
 		Comes equipped with hair extensions
 		'''
 	SetBonus: +1 max minion

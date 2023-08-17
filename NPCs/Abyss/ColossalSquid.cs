@@ -60,10 +60,9 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("With crushing tentacles that stretch out to over twice the length of a grown man, and toxic black ink, these are formidable predators indeed.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ColossalSquid")
             });
         }
 
@@ -347,7 +346,7 @@ namespace CalamityMod.NPCs.Abyss
                     (Main.player[NPC.target].Center - NPC.Center).Length() < Main.player[NPC.target].Calamity().GetAbyssAggro(240f)) ||
                     NPC.justHit)
                 {
-                    if (CalamityWorld.getFixedBoi && Main.netMode != NetmodeID.MultiplayerClient && !clone && !hasBeenHit)
+                    if (Main.zenithWorld && Main.netMode != NetmodeID.MultiplayerClient && !clone && !hasBeenHit)
                     {
                         // spawn some baby colossal squids in gfb
                         for (int i = 0; i < 3; i++)
@@ -588,9 +587,8 @@ namespace CalamityMod.NPCs.Abyss
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if ((spawnInfo.Player.Calamity().ZoneAbyssLayer3 || spawnInfo.Player.Calamity().ZoneAbyssLayer4) && spawnInfo.Water && !NPC.AnyNPCs(ModContent.NPCType<ColossalSquid>()))
-            {
                 return Main.remixWorld ? 5.4f : SpawnCondition.CaveJellyfish.Chance * 0.6f;
-            }
+
             return 0f;
         }
 
@@ -635,7 +633,7 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void ModifyTypeName(ref string typeName)
         {
-            if (CalamityWorld.getFixedBoi && clone)
+            if (Main.zenithWorld && clone)
             {
                 typeName = CalamityUtils.GetTextValue("NPCs.TinySquid");
             }

@@ -63,12 +63,10 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,  
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("His face shows great age, but also great wisdom. The Archmage once served the Godslayer, but abandoned him later into the war. He sells various frosty wares, but keeps his most powerful spells to himself.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DILF")
             });
         }
 
@@ -140,7 +138,7 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void AddShops()
         {
-            Condition potionSells = new("While the Town NPC Potion Selling configuration option is enabled", () => CalamityConfig.Instance.PotionSelling);
+            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
             NPCShop shop = new(Type);
                 shop.Add(ModContent.ItemType<FrostbiteBlaster>())
                 .Add(ModContent.ItemType<IcicleTrident>())
@@ -155,7 +153,6 @@ namespace CalamityMod.NPCs.TownNPCs
                 .Add(ModContent.ItemType<IcyBullet>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
                 .Add(ModContent.ItemType<IcicleArrow>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
                 .Add(ModContent.ItemType<PermafrostsConcoction>())
-                .AddWithCustomValue(ItemID.WarmthPotion, Item.buyPrice(0, 4), potionSells, Condition.HappyEnough)
                 .Add(ItemID.SuperManaPotion)
                 .Add(ModContent.ItemType<DeliciousMeat>())
                 .AddWithCustomValue(ModContent.ItemType<Popo>(), Item.buyPrice(5))

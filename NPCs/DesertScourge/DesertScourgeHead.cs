@@ -96,7 +96,7 @@ namespace CalamityMod.NPCs.DesertScourge
             if (Main.getGoodWorld)
                 NPC.scale *= 0.4f;
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
                 NPC.scale *= 4f;
 
 
@@ -107,11 +107,10 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
 				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("If ever before you have peered out into the desert and seen entire dunes rise and fall like the waves of the sea, it is not unlikely that this is the culprit, as it bore through the sands below.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DesertScourge")
             });
         }
 
@@ -217,7 +216,7 @@ namespace CalamityMod.NPCs.DesertScourge
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 // become moist if in an aquatic biome
-                if (CalamityWorld.getFixedBoi && (player.ZoneBeach || player.Calamity().ZoneAbyss || player.Calamity().ZoneSunkenSea || player.Calamity().ZoneSulphur) && NPC.CountNPCS(ModContent.NPCType<AquaticScourgeHead>()) < 1)
+                if (Main.zenithWorld && (player.ZoneBeach || player.Calamity().ZoneAbyss || player.Calamity().ZoneSunkenSea || player.Calamity().ZoneSulphur) && NPC.CountNPCS(ModContent.NPCType<AquaticScourgeHead>()) < 1)
                 {
                     NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + (NPC.width / 2), (int)NPC.position.Y + (NPC.height / 2), ModContent.NPCType<AquaticScourgeHead>());
                     NPC.active = false;
@@ -253,44 +252,51 @@ namespace CalamityMod.NPCs.DesertScourge
                     }
                     TailSpawned = true;
                 }
+            }
 
-                if (expertMode)
+            if (expertMode)
+            {
+                if (NPC.Calamity().newAI[2] < 300f)
+                    NPC.Calamity().newAI[2] += 1f;
+
+                if (NPC.SafeDirectionTo(player.Center).AngleBetween((NPC.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
+                    NPC.Calamity().newAI[2] >= 300f && Vector2.Distance(NPC.Center, player.Center) > 320f &&
+                    Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height))
                 {
-                    if (NPC.Calamity().newAI[2] < 300f)
-                        NPC.Calamity().newAI[2] += 1f;
-
-                    if (NPC.SafeDirectionTo(player.Center).AngleBetween((NPC.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
-                        NPC.Calamity().newAI[2] >= 300f && Vector2.Distance(NPC.Center, player.Center) > 320f &&
-                        Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height))
+                    if (NPC.Calamity().newAI[2] % 30f == 0f)
                     {
-                        if (NPC.Calamity().newAI[2] % 30f == 0f)
-                        {
-                            SoundEngine.PlaySound(SoundID.Item21, NPC.Center);
-                            float velocity = bossRush ? 6f : death ? 5.5f : 5f;
-                            int type = ModContent.ProjectileType<SandBlast>();
-                            int type2 = ModContent.ProjectileType<HorsWaterBlast>();
-                            int damage = NPC.GetProjectileDamage(type);
-                            Vector2 projectileVelocity = Vector2.Normalize(player.Center - NPC.Center) * velocity;
-                            int baseProjectileAmt = bossRush ? 6 : death ? 4 : revenge ? 3 : 2;
-                            int numProj = NPC.Calamity().newAI[2] % 60f == 0f ? (int)(baseProjectileAmt * 1.5) : baseProjectileAmt;
-                            int spread = bossRush ? 18 : death ? 14 : revenge ? 12 : 10;
-                            float rotation = MathHelper.ToRadians(spread);
-                            for (int i = 0; i < numProj; i++)
-                            {
-                                Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
-                                    perturbedSpeed *= Main.rand.NextFloat() + 0.5f;
+                        SoundEngine.PlaySound(SoundID.Item21, NPC.Center);
 
+                        float velocity = bossRush ? 6f : death ? 5.5f : 5f;
+                        int type = ModContent.ProjectileType<SandBlast>();
+                        int type2 = ModContent.ProjectileType<HorsWaterBlast>();
+                        int damage = NPC.GetProjectileDamage(type);
+                        Vector2 projectileVelocity = Vector2.Normalize(player.Center - NPC.Center) * velocity;
+                        int baseProjectileAmt = bossRush ? 6 : death ? 4 : revenge ? 3 : 2;
+                        int numProj = NPC.Calamity().newAI[2] % 60f == 0f ? (int)(baseProjectileAmt * 1.5) : baseProjectileAmt;
+                        int spread = bossRush ? 18 : death ? 14 : revenge ? 12 : 10;
+                        float rotation = MathHelper.ToRadians(spread);
+                        for (int i = 0; i < numProj; i++)
+                        {
+                            Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                            if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
+                                perturbedSpeed *= Main.rand.NextFloat() + 0.5f;
+
+                            for (int k = 0; k < 10; k++)
+                                Dust.NewDust(NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, 10, 10, 85, perturbedSpeed.X, perturbedSpeed.Y);
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
-                                if (CalamityWorld.getFixedBoi)
+                                if (Main.zenithWorld)
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(perturbedSpeed) * 3f, perturbedSpeed, type2, damage, 0f, Main.myPlayer);
                             }
                         }
-
-                        NPC.Calamity().newAI[2] += 1f;
-                        if (NPC.Calamity().newAI[2] > 360f)
-                            NPC.Calamity().newAI[2] = 0f;
                     }
+
+                    NPC.Calamity().newAI[2] += 1f;
+                    if (NPC.Calamity().newAI[2] > 360f)
+                        NPC.Calamity().newAI[2] = 0f;
                 }
             }
 
@@ -429,23 +435,25 @@ namespace CalamityMod.NPCs.DesertScourge
             {
                 // Spit a huge spread of sand upwards that falls down
                 SoundEngine.PlaySound(SoundID.NPCDeath13, NPC.Center);
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    float velocity = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 16f : bossRush ? 9f : death ? 7f : 6f;
-                    int type = ModContent.ProjectileType<GreatSandBlast>();
-                    int damage = NPC.GetProjectileDamage(type);
-                    Vector2 projectileVelocity = Vector2.Normalize(NPC.Center + NPC.velocity * 10f - NPC.Center) * velocity;
-                    int numProj = bossRush ? 24 : death ? 20 : revenge ? 18 : expertMode ? 16 : 12;
-                    if (Main.getGoodWorld)
-                        numProj *= 2;
+                float velocity = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 16f : bossRush ? 9f : death ? 7f : 6f;
+                int type = ModContent.ProjectileType<GreatSandBlast>();
+                int damage = NPC.GetProjectileDamage(type);
+                Vector2 projectileVelocity = Vector2.Normalize(NPC.Center + NPC.velocity * 10f - NPC.Center) * velocity;
+                int numProj = bossRush ? 24 : death ? 20 : revenge ? 18 : expertMode ? 16 : 12;
+                if (Main.getGoodWorld)
+                    numProj *= 2;
 
-                    int spread = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 120 : 90;
-                    float rotation = MathHelper.ToRadians(spread);
-                    for (int i = 0; i < numProj; i++)
-                    {
-                        Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                int spread = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 120 : 90;
+                float rotation = MathHelper.ToRadians(spread);
+                for (int i = 0; i < numProj; i++)
+                {
+                    Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+
+                    for (int k = 0; k < 10; k++)
+                        Dust.NewDust(NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, 10, 10, 85, perturbedSpeed.X, perturbedSpeed.Y);
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
-                    }
                 }
 
                 NPC.TargetClosest();
@@ -799,7 +807,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override Color? GetAlpha(Color drawColor)
         {
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 Color lightColor = Color.MediumBlue * drawColor.A;
                 return lightColor * NPC.Opacity;

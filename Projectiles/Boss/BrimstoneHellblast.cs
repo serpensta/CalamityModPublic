@@ -1,6 +1,8 @@
 ﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
+using CalamityMod.NPCs.SupremeCalamitas;
+using CalamityMod.NPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -73,6 +75,16 @@ namespace CalamityMod.Projectiles.Boss
         public override bool PreDraw(ref Color lightColor)
         {
             lightColor.R = (byte)(255 * Projectile.Opacity);
+
+            if (CalamityGlobalNPC.SCal != -1)
+            {
+                if (Main.npc[CalamityGlobalNPC.SCal].active)
+                {
+                    if (Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas>().cirrus)
+                        lightColor.B = (byte)(255 * Projectile.Opacity);
+                }
+            }
+
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
             return false;
         }
@@ -84,7 +96,7 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0 || Projectile.timeLeft < 51)
                 return;
 
-            if (Projectile.ai[0] == 0f || CalamityWorld.getFixedBoi)
+            if (Projectile.ai[0] == 0f || Main.zenithWorld)
                 target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 120);
             else
                 target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 180);

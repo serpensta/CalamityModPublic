@@ -96,10 +96,9 @@ namespace CalamityMod.NPCs.AquaticScourge
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("A species of scourge which has had its exoskeleton hardened and tempered by years of diving through sulphuric waters for prey. Its own jaws are now imbued with the venom of those seas.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.AquaticScourge")
             });
         }
 
@@ -144,7 +143,7 @@ namespace CalamityMod.NPCs.AquaticScourge
             vector43 += vector11 * NPC.scale + new Vector2(0f, NPC.gfxOffY);
             Color color = NPC.GetAlpha(drawColor);
 
-            if (CalamityWorld.revenge || BossRushEvent.BossRushActive || CalamityWorld.getFixedBoi)
+            if (CalamityWorld.revenge || BossRushEvent.BossRushActive || Main.zenithWorld)
             {
                 if (NPC.Calamity().newAI[3] > 300f)
                     color = Color.Lerp(color, Color.SandyBrown, MathHelper.Clamp((NPC.Calamity().newAI[3] - 300f) / 180f, 0f, 1f));

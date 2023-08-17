@@ -21,12 +21,12 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
-            Item.damage = 198;
+            Item.damage = 130;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 124;
             Item.height = 78;
@@ -34,6 +34,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useTime = 9;
             Item.useAnimation = 18;
             Item.reuseDelay = BetweenShotsPause;
+            Item.useLimitPerAnimation = 2;
             Item.autoReuse = true;
             Item.useStyle = ItemUseStyleID.Shoot;
 

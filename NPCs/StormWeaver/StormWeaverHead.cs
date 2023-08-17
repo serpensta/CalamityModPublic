@@ -122,11 +122,10 @@ namespace CalamityMod.NPCs.StormWeaver
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("It resides high up in the stratosphere, feasting on wyverns and storm swimmers alike, which give it powerful electrokinesis.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.StormWeaver")
             });
         }
 
@@ -243,7 +242,7 @@ namespace CalamityMod.NPCs.StormWeaver
                     int Previous = NPC.whoAmI;
                     int totalLength = death ? 60 : revenge ? 50 : expertMode ? 40 : 30;
                     int npcCounts = 0;
-                    if (CalamityWorld.getFixedBoi) // use up every remaining npc but 20 for safety in the zenith seed
+                    if (Main.zenithWorld) // use up every remaining npc but 20 for safety in the zenith seed
                     {
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {

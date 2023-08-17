@@ -91,6 +91,15 @@ namespace CalamityMod.ILEditing
             return initialTexture;
         }
 
+        private static VertexColors SelectLavaQuadColor(Texture2D initialTexture, ref VertexColors initialColor, bool forceTrue = false)
+        {
+            initialColor.TopLeftColor = SelectLavaColor(initialTexture, initialColor.TopLeftColor, forceTrue);
+            initialColor.TopRightColor = SelectLavaColor(initialTexture, initialColor.TopRightColor, forceTrue);
+            initialColor.BottomLeftColor = SelectLavaColor(initialTexture, initialColor.BottomLeftColor, forceTrue);
+            initialColor.BottomRightColor = SelectLavaColor(initialTexture, initialColor.BottomRightColor, forceTrue);
+            return initialColor;
+        }
+
         private static Color SelectLavaColor(Texture2D initialTexture, Color initialLightColor, bool forceTrue = false)
         {
             // Use the initial color if it isn't lava.
@@ -128,18 +137,32 @@ namespace CalamityMod.ILEditing
                     new Vector2(x + 0.5f, y + 0.5f),
                 };
 
+                float lerpAmt = (1f - SulphuricWaterSafeZoneSystem.NearbySafeTiles[closestSafeZone]) * 21f;
                 for (int i = 0; i < 4; i++)
                 {
                     float distanceToClosest = points[i].Distance(closestSafeZone.ToVector2());
-                    float acidicWaterInterpolant = Utils.GetLerpValue(12f, 20.5f, distanceToClosest + (1f - SulphuricWaterSafeZoneSystem.NearbySafeTiles[closestSafeZone]) * 21f, true);
-                    if (i == 0)
-                        initialColor.TopLeftColor = Color.Lerp(initialColor.TopLeftColor, cleanWaterColor, 1f - acidicWaterInterpolant);
-                    if (i == 1)
-                        initialColor.TopRightColor = Color.Lerp(initialColor.TopRightColor, cleanWaterColor, 1f - acidicWaterInterpolant);
-                    if (i == 2)
-                        initialColor.BottomLeftColor = Color.Lerp(initialColor.BottomLeftColor, cleanWaterColor, 1f - acidicWaterInterpolant);
-                    if (i == 3)
-                        initialColor.BottomRightColor = Color.Lerp(initialColor.BottomRightColor, cleanWaterColor, 1f - acidicWaterInterpolant);
+                    float acidicWaterInterpolant = Utils.GetLerpValue(12f, 20.5f, distanceToClosest + lerpAmt, true);
+                    switch (i)
+                    {
+                        case 0:
+                            initialColor.TopLeftColor = Color.Lerp(initialColor.TopLeftColor, cleanWaterColor, 1f - acidicWaterInterpolant);
+                            break;
+
+                        case 1:
+                            initialColor.TopRightColor = Color.Lerp(initialColor.TopRightColor, cleanWaterColor, 1f - acidicWaterInterpolant);
+                            break;
+
+                        case 2:
+                            initialColor.BottomLeftColor = Color.Lerp(initialColor.BottomLeftColor, cleanWaterColor, 1f - acidicWaterInterpolant);
+                            break;
+
+                        case 3:
+                            initialColor.BottomRightColor = Color.Lerp(initialColor.BottomRightColor, cleanWaterColor, 1f - acidicWaterInterpolant);
+                            break;
+
+                        default:
+                            break;
+                    }   
                 }
             }
 

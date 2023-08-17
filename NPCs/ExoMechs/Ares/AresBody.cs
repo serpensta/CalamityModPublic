@@ -199,12 +199,9 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                //We'll probably want a custom background for Exos like ML has.
-                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Exo,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("While it is the most flamboyant of Draedon's machines, it appears to be lacking some finish, though this trait does not compromise its killing potential whatsoever.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Ares")
             });
         }
 
@@ -335,8 +332,8 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                             Vector2 betweenL = NeuronLeft + velocity * 650;
                         
                             Terraria.Audio.SoundEngine.PlaySound(CommonCalamitySounds.LaserCannonSound with { Volume = CommonCalamitySounds.LaserCannonSound.Volume - 0.2f, Pitch = CommonCalamitySounds.LaserCannonSound.Pitch + 0.2f }, NeuronRight);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), betweenL, betweenL + velocity, ModContent.ProjectileType<ArtemisLaser>(), 222, 0f, Main.myPlayer, 7, NPC.whoAmI);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), betweenR, betweenR + velocity, ModContent.ProjectileType<ArtemisLaser>(), 222, 0f, Main.myPlayer, 7, NPC.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), betweenL, betweenL + velocity, ModContent.ProjectileType<ArtemisLaser>(), 111, 0f, Main.myPlayer, 7, NPC.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), betweenR, betweenR + velocity, ModContent.ProjectileType<ArtemisLaser>(), 111, 0f, Main.myPlayer, 7, NPC.whoAmI);
 
                         }
                         neurontimer = 0;
@@ -508,17 +505,9 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             // Rotation
             NPC.rotation = NPC.velocity.X * 0.003f;
 
-            // Light and enrage check
+            // Enrage check
             if (EnragedState == (float)Enraged.Yes)
-            {
-                Lighting.AddLight(NPC.Center, 0.5f * NPC.Opacity, 0f, 0f);
                 NPC.Calamity().CurrentlyEnraged = true;
-            }
-            else
-            {
-                float lightScale = 510f;
-                Lighting.AddLight(NPC.Center, Main.DiscoR / lightScale * NPC.Opacity, Main.DiscoG / lightScale * NPC.Opacity, Main.DiscoB / lightScale * NPC.Opacity);
-            }
 
             // Despawn if target is dead
             if (player.dead)
@@ -822,8 +811,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                     {
                         if (!Main.player[Main.myPlayer].dead && Main.player[Main.myPlayer].active && Vector2.Distance(Main.player[Main.myPlayer].Center, NPC.Center) < DeathrayEnrageDistance)
                         {
-                            if (Main.player[Main.myPlayer].wingTime < Main.player[Main.myPlayer].wingTimeMax)
-                                Main.player[Main.myPlayer].wingTime = Main.player[Main.myPlayer].wingTimeMax;
+                            Main.player[Main.myPlayer].Calamity().infiniteFlight = true;
                         }
                     }
 
@@ -835,7 +823,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                     else
                     {
                         // Enrage if the target is more than the deathray length away
-                        if (distanceFromTarget > DeathrayEnrageDistance && EnragedState == (float)Enraged.No)
+                        if ((distanceFromTarget > DeathrayEnrageDistance || (CalamityWorld.LegendaryMode && revenge)) && EnragedState == (float)Enraged.No)
                         {
                             // Play enrage sound
                             if (Main.player[Main.myPlayer].active && !Main.player[Main.myPlayer].dead && Vector2.Distance(Main.player[Main.myPlayer].Center, NPC.Center) < soundDistance)
@@ -915,9 +903,9 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                                 // Create a bunch of lightning bolts in the sky
                                 ExoMechsSky.CreateLightningBolt(12);
 
+                                SoundEngine.PlaySound(CommonCalamitySounds.LaserCannonSound, NPC.Center);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    SoundEngine.PlaySound(CommonCalamitySounds.LaserCannonSound, NPC.Center);
                                     int type = ModContent.ProjectileType<AresDeathBeamTelegraph>();
                                     Vector2 spawnPoint = NPC.Center + new Vector2(-1f, 23f);
                                     for (int k = 0; k < totalProjectiles; k++)
@@ -969,7 +957,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
                         if (calamityGlobalNPC.newAI[2] >= deathrayTelegraphDuration + deathrayDuration)
                         {
-                            if (!CalamityWorld.getFixedBoi || exoMechdusa)
+                            if (!Main.zenithWorld || exoMechdusa)
                             {
                                 AIState = (float)Phase.Normal;
                                 calamityGlobalNPC.newAI[2] = 0f;

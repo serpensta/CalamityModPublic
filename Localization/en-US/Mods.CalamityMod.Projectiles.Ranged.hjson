@@ -152,6 +152,8 @@ PhangasmBow.DisplayName: Phangasm
 PiercingBullet.DisplayName: Piercing Blow
 PlagueArrow.DisplayName: Arrow
 PlagueExplosionFriendly.DisplayName: Explosion
+PlagueTaintedProjectile.DisplayName: Plague Tainted Projectile
+PlagueTaintedDrone.DisplayName: Plague Tainted Drone
 PlanarRipperBolt.DisplayName: Bolt
 PlanarRipperExplosion.DisplayName: Explosion
 PlanetaryAnnihilationProj.DisplayName: Ball
@@ -212,6 +214,10 @@ SputterComet.DisplayName: Comet
 SputterCometBig.DisplayName: Comet
 SpykerProj.DisplayName: Spyker
 StarfleetMK2Gun.DisplayName: Starmada
+StarmageddonBinaryStarCenter.DisplayName: Starmageddon Binary Star Center
+StarmageddonHeld.DisplayName: Starmageddon
+StarmageddonStar.DisplayName: Starmageddon Star
+StarmageddonStar2.DisplayName: Starmageddon Star
 StormSurgeTornado.DisplayName: Surge
 SulphuricBlast.DisplayName: Sulphuric Blast
 SuperballBulletProj.DisplayName: Superball Bullet
@@ -247,3 +253,5 @@ Voidragon.DisplayName: Blast
 VoidragonTentacle.DisplayName: Voidragon Tentacle
 WaterSpout.DisplayName: Spout
 WulfrumScrapBullet.DisplayName: High Speed Scrap
+ArcherfishRing.DisplayName: Archerfish Ring
+SeaDragonMuzzleBlast.DisplayName: Seadragon Muzzle Blast

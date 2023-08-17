@@ -27,6 +27,8 @@ namespace CalamityMod.NPCs.DesertScourge
                 NPC.defense += 26;
 
             NPC.lifeMax = BossRushEvent.BossRushActive ? 35000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 2400 : 800;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
             NPC.knockBackResist = 0f;
@@ -169,7 +171,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override Color? GetAlpha(Color drawColor)
         {
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 Color lightColor = Color.Orange * drawColor.A;
                 return lightColor * NPC.Opacity;

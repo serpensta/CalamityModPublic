@@ -49,6 +49,8 @@ namespace CalamityMod.NPCs.DesertScourge
             NPC.width = 60;
             NPC.height = 60;
             NPC.lifeMax = BossRushEvent.BossRushActive ? 35000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 2400 : 800;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
             NPC.knockBackResist = 0f;
@@ -63,7 +65,7 @@ namespace CalamityMod.NPCs.DesertScourge
             NPC.Calamity().VulnerableToSickness = true;
             NPC.Calamity().VulnerableToWater = true;
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
                 NPC.scale *= 2;
         }
 
@@ -72,11 +74,10 @@ namespace CalamityMod.NPCs.DesertScourge
             int associatedNPCType = ModContent.NPCType<DesertScourgeHead>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("The starved spawn of the Desert Scourge. Like piranhas of the desert, they can swarm and tear apart smaller animals within seconds.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DesertNuisance")
             });
         }
 
@@ -459,7 +460,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override Color? GetAlpha(Color drawColor)
         {
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 Color lightColor = Color.Orange * drawColor.A;
                 return lightColor * NPC.Opacity;

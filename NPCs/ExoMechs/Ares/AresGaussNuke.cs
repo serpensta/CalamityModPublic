@@ -265,12 +265,6 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                 NPC.spriteDirection = -NPC.direction;
             }
 
-            // Light
-            if (enraged)
-                Lighting.AddLight(NPC.Center, 0.5f * NPC.Opacity, 0f, 0f);
-            else
-                Lighting.AddLight(NPC.Center, 0.2f * NPC.Opacity, 0.25f * NPC.Opacity, 0.05f * NPC.Opacity);
-
             // Despawn if target is dead
             if (player.dead)
             {
@@ -417,18 +411,18 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                         {
                             calamityGlobalNPC.newAI[1] = 1f;
 
+                            SoundEngine.PlaySound(CommonCalamitySounds.LargeWeaponFireSound, NPC.Center);
+                            Vector2 gaussNukeVelocity = Vector2.Normalize(rotationVector) * projectileVelocity;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                SoundEngine.PlaySound(CommonCalamitySounds.LargeWeaponFireSound, NPC.Center);
-                                Vector2 gaussNukeVelocity = Vector2.Normalize(rotationVector) * projectileVelocity;
                                 int type = ModContent.ProjectileType<AresGaussNukeProjectile>();
                                 int damage = NPC.GetProjectileDamage(type);
                                 float offset = 40f;
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(gaussNukeVelocity) * offset, gaussNukeVelocity, type, damage, 0f, Main.myPlayer, 0f, player.Center.Y);
-
-                                // Recoil
-                                NPC.velocity -= gaussNukeVelocity * 2f;
                             }
+
+                            // Recoil
+                            NPC.velocity -= gaussNukeVelocity * 2f;
                         }
 
                         EnergyDrawer.ParticleSpawnRate = AresBody.telegraphParticlesSpawnRate;

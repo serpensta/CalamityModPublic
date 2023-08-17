@@ -76,10 +76,9 @@ namespace CalamityMod.NPCs.SunkenSea
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("This oversized clam is large enough to entrap a person or two whole. Thankfully, it has only taken turf in the lowest regions of the sunken sea.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.GiantClam")
             });
         }
 
@@ -281,7 +280,7 @@ namespace CalamityMod.NPCs.SunkenSea
                 }
 
                 // Gains Calamitas' bullet hells in the zenith seed
-                if (CalamityWorld.getFixedBoi)
+                if (Main.zenithWorld)
                 {
                     calamityGlobalNPC.newAI[0] += 1f;
 
@@ -452,15 +451,14 @@ namespace CalamityMod.NPCs.SunkenSea
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.Calamity().ZoneSunkenSea && spawnInfo.Water && DownedBossSystem.downedDesertScourge && !NPC.AnyNPCs(ModContent.NPCType<GiantClam>()))
-            {
                 return SpawnCondition.CaveJellyfish.Chance * 0.24f;
-            }
+
             return 0f;
         }
 
         public override void ModifyTypeName(ref string typeName)
         {
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 if (Main.hardMode)
                 {

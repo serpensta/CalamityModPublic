@@ -21,7 +21,7 @@ namespace CalamityMod.Items.PermanentBoosters
         public override void SetStaticDefaults()
         {
 			// For some reason Life/Mana boosting items are in this set (along with Magic Mirror+)
-			ItemID.Sets.SortingPriorityBossSpawns[Type] = 19; // Mana Crystal
+			ItemID.Sets.SortingPriorityBossSpawns[Type] = 21; // Mana Crystal
         }
 
         public override void SetDefaults()
@@ -70,7 +70,7 @@ namespace CalamityMod.Items.PermanentBoosters
         {
             CreateRecipe().
                 AddIngredient<RuinousSoul>(5).
-                AddIngredient<Phantoplasm>(25).
+                AddIngredient<Polterplasm>(25).
                 AddTile(TileID.LunarCraftingStation).
                 Register();
         }

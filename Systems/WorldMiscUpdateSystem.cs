@@ -2,7 +2,7 @@
 using CalamityMod.CalPlayer;
 using CalamityMod.Events;
 using CalamityMod.NPCs;
-using CalamityMod.NPCs.AdultEidolonWyrm;
+using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.ExoMechs;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Boss;
@@ -25,9 +25,12 @@ namespace CalamityMod.Systems
     {
         public override void PostUpdateWorld()
         {
-            // Reset this int because it causes bugs with other mods if you delete Dr. Draedon through abnormal means
-            if (!NPC.AnyNPCs(ModContent.NPCType<Draedon>()))
-                CalamityGlobalNPC.draedon = -1;
+            // Reset this int because it causes bugs with other mods if you delete Dr. Draedon through abnormal means.
+            if (CalamityGlobalNPC.draedon != -1)
+            {
+                if (!NPC.AnyNPCs(ModContent.NPCType<Draedon>()))
+                    CalamityGlobalNPC.draedon = -1;
+            }
 
             // Reset the exo mech to summon if Draedon is absent.
             if (DraedonMechToSummon != ExoMech.None && CalamityGlobalNPC.draedon == -1)
@@ -39,12 +42,12 @@ namespace CalamityMod.Systems
                 HandleDraedonSummoning();
             }
 
-            // Sunken Sea Location
-            // This moved in 1.4, it's now officially the "lower half of the Underground Desert" until its worldgen gets fixed
+            // Sunken Sea Location.
+            // This moved in 1.4, it's now officially the "lower half of the Underground Desert" until its worldgen gets fixed.
             Rectangle ugDesert = GenVars.UndergroundDesertLocation;
             SunkenSeaLocation = new Rectangle(ugDesert.Left, ugDesert.Center.Y, ugDesert.Width, ugDesert.Height / 2);
 
-            // Player variable, always finds the closest player relative to the center of the map
+            // Player variable, always finds the closest player relative to the center of the map.
             int closestPlayer = Player.FindClosest(new Vector2(Main.maxTilesX / 2, (float)Main.worldSurface / 2f) * 16f, 0, 0);
             Player player = Main.player[closestPlayer];
 
@@ -69,7 +72,7 @@ namespace CalamityMod.Systems
                 AcidRainEvent.HasStartedAcidicDownpour = false;
             }
 
-            // Lumenyl crystal and sea prism crystal spawn rates
+            // Lumenyl crystal and sea prism crystal spawn rates.
             HandleTileGrowth();
 
             // Update Boss Rush.
@@ -87,7 +90,7 @@ namespace CalamityMod.Systems
             // Very, very, very rarely display a Lorde joke text if the system clock is set to April Fools Day.
             if (Main.rand.NextBool(100000000) && DateTime.Now.Month == 4 && DateTime.Now.Day == 1)
             {
-                string key = CalamityWorld.getFixedBoi ? "Mods.CalamityMod.Status.Boss.AprilFoolsGFB" : "Mods.CalamityMod.Status.Boss.AprilFools";
+                string key = Main.zenithWorld ? "Mods.CalamityMod.Status.Boss.AprilFoolsGFB" : "Mods.CalamityMod.Status.Boss.AprilFools";
                 Color messageColor = Color.Crimson;
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
             }
@@ -342,7 +345,7 @@ namespace CalamityMod.Systems
         #region Handle Armored Digger Random Spawns
         public static void TrySpawnArmoredDigger(Player player, CalamityPlayer modPlayer)
         {
-            bool gfbCondition = CalamityWorld.getFixedBoi && (player.ZoneHallow || player.ZoneUnderworldHeight) && NPC.downedMoonlord;
+            bool gfbCondition = Main.zenithWorld && (player.ZoneHallow || player.ZoneUnderworldHeight) && NPC.downedMoonlord;
             if ((gfbCondition || (player.ZoneRockLayerHeight && !player.ZoneUnderworldHeight && !player.ZoneJungle)) && !player.ZoneDungeon && !modPlayer.ZoneSunkenSea && !modPlayer.ZoneAbyss && !CalamityPlayer.areThereAnyDamnBosses)
             {
                 if (NPC.downedPlantBoss && player.townNPCs < 3f)
@@ -413,20 +416,23 @@ namespace CalamityMod.Systems
             if (Main.drunkWorld && player.position.Y / 16f < (float)(Main.dungeonY + 40))
                 spawn = false;
 
-            if (!NPC.AnyNPCs(NPCID.DungeonGuardian) && spawn)
-                NPC.SpawnOnPlayer(player.whoAmI, NPCID.DungeonGuardian); //your hell is as vast as my bonergrin, pray your life ends quickly
+            if (spawn)
+            {
+                if (!NPC.AnyNPCs(NPCID.DungeonGuardian))
+                    NPC.SpawnOnPlayer(player.whoAmI, NPCID.DungeonGuardian); //your hell is as vast as my bonergrin, pray your life ends quickly
+            }
         }
         #endregion
 
-        #region Handle Adult Eidolon Wyrm Spawns
+        #region Handle Primordial Wyrm Spawns
         public static void TrySpawnAEoW(Player player, CalamityPlayer modPlayer)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient || !(modPlayer.ZoneAbyss || CalamityWorld.getFixedBoi) || !player.chaosState || player.dead)
+            if (Main.netMode == NetmodeID.MultiplayerClient || !(modPlayer.ZoneAbyss || Main.zenithWorld) || !player.chaosState || player.dead)
                 return;
 
             bool adultWyrmAlive = CalamityGlobalNPC.adultEidolonWyrmHead != -1 && Main.npc[CalamityGlobalNPC.adultEidolonWyrmHead].active;
             if (!adultWyrmAlive)
-                NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<AdultEidolonWyrmHead>());
+                NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<PrimordialWyrmHead>());
         }
         #endregion
     }

@@ -28,6 +28,8 @@ namespace CalamityMod.NPCs.Signus
             NPC.height = 25;
             NPC.defense = 50;
             NPC.lifeMax = 25;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.alpha = 255;
             NPC.knockBackResist = 0.85f;
             NPC.noGravity = true;
@@ -45,11 +47,10 @@ namespace CalamityMod.NPCs.Signus
             int associatedNPCType = ModContent.NPCType<Signus>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("These lanterns allow their user to see through any darkness. They are not typically used for combat.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicLantern")
             });
         }
 

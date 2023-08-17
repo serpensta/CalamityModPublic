@@ -21,7 +21,7 @@ namespace CalamityMod.Tiles.Abyss.AbyssAmbient
             Main.tileNoAttach[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(106, 80, 102), CreateMapEntryName());
+            AddMapEntry(new Color(106, 80, 102), CalamityUtils.GetText($"{LocalizationCategory}.AbyssVent.MapEntry"));
             DustType = 33;
 
             base.SetStaticDefaults();
@@ -42,11 +42,8 @@ namespace CalamityMod.Tiles.Abyss.AbyssAmbient
             if (!Main.gamePaused && t.TileFrameX % 36 == 0 && t.TileFrameY % 36 == 0 && Collision.CanHitLine(spawnPosition, 1, 1, spawnPosition - Vector2.UnitY * 100f, 1, 1))
             {
                 steamTimer += Main.rand.Next(0, 2);
-
                 if (steamTimer >= 360)
-                {
                     steamTimer = 0;
-                }
             }
         }
 
@@ -63,9 +60,7 @@ namespace CalamityMod.Tiles.Abyss.AbyssAmbient
                 smokeVelocity.Y -= Main.rand.Next(3, 6);
 
                 if (steamTimer >= 300 && Main.rand.NextBool(3))
-                {
                     Projectile.NewProjectile(new EntitySource_WorldEvent(), spawnPosition, smokeVelocity, ModContent.ProjectileType<MurkySteam>(), Main.expertMode ? 17 : 25, 0f);
-                }
             }
         }
     }

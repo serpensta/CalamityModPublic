@@ -85,12 +85,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Rain,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("Once, outposts were created in the sky, for ease of worship towards the forces that occupied the clouds in order to please them. Now they lay abandoned and their deity angered.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ThiccWaifu")
             });
         }
 
@@ -395,7 +394,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 texture = ModContent.Request<Texture2D>(Texture).Value;
                 Main.EntitySpriteDraw(texture, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, direction, 0);
             }
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 // I ran out of ideas, so Cloud just gets a hat like how I wanted GSS to
                 Texture2D hattexture = ModContent.Request<Texture2D>("CalamityMod/Particles/WulfrumHat").Value;
@@ -422,7 +421,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.PlayerSafe || !Main.hardMode || !Main.raining || NPC.AnyNPCs(ModContent.NPCType<ThiccWaifu>()))
+            if (spawnInfo.PlayerSafe || !Main.hardMode || !Main.raining || !spawnInfo.Player.ZoneSkyHeight)
+                return 0f;
+
+            // Keep this as a separate if check, because it's a loop and we don't want to be checking it constantly.
+            if (NPC.AnyNPCs(NPC.type))
                 return 0f;
 
             return SpawnCondition.Sky.Chance * 0.1f;

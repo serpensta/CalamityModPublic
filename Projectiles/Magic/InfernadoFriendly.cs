@@ -9,6 +9,7 @@ namespace CalamityMod.Projectiles.Magic
 {
     public class InfernadoFriendly : ModProjectile, ILocalizedModType
     {
+
         public new string LocalizationCategory => "Projectiles.Magic";
         bool intersectingSomething = false;
         public override void SetStaticDefaults()
@@ -26,8 +27,8 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.penetrate = -1;
             Projectile.alpha = 255;
             Projectile.timeLeft = 500;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
             Projectile.DamageType = DamageClass.Magic;
         }
 

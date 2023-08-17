@@ -79,12 +79,11 @@ namespace CalamityMod.NPCs.CalClone
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("A mysterious burning form which only appears at night, wreathed in brimstone fire. It has a twisted mind and misplaced pride in its abilities.")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Calamitas")
             });
         }
 
@@ -157,7 +156,7 @@ namespace CalamityMod.NPCs.CalClone
 
             texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/CalClone/CalamitasCloneGlow").Value;
             Color color = Color.Lerp(Color.White, Color.Red, 0.5f);
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 color = Color.CornflowerBlue;
             }
@@ -251,11 +250,7 @@ namespace CalamityMod.NPCs.CalClone
             CalamityNetcode.SyncWorld();
         }
 
-        public override void BossLoot(ref string name, ref int potionType)
-        {
-            name = "The Calamitas Clone";
-            potionType = ItemID.GreaterHealingPotion;
-        }
+        public override void BossLoot(ref string name, ref int potionType) => potionType = ItemID.GreaterHealingPotion;
 
         public override void HitEffect(NPC.HitInfo hit)
         {

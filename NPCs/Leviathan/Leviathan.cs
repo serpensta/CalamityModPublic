@@ -37,6 +37,7 @@ namespace CalamityMod.NPCs.Leviathan
         private int biomeEnrageTimer = CalamityGlobalNPC.biomeEnrageTimerMax;
         private int counter = 0;
         private bool initialised = false;
+        private bool gfbAnaSummoned = false;
         private int soundDelay = 0;
         private float extrapitch = 0;
         public static Texture2D AttackTexture = null;
@@ -86,17 +87,16 @@ namespace CalamityMod.NPCs.Leviathan
             if (Main.getGoodWorld)
                 NPC.scale *= 1.3f;
 
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
                 NPC.scale *= 0.3f; 
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("A gargantuan marine reptile that lurks the ocean depths along with the Water Elemental, Anahita. It is unknown if she is the last of her kind, or was simply manifested into existence like her master.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Leviathan")
             });
         }
 
@@ -106,6 +106,7 @@ namespace CalamityMod.NPCs.Leviathan
             writer.Write(NPC.dontTakeDamage);
             writer.Write(soundDelay);
             writer.Write(NPC.Calamity().newAI[3]);
+            writer.Write(gfbAnaSummoned);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -114,6 +115,7 @@ namespace CalamityMod.NPCs.Leviathan
             NPC.dontTakeDamage = reader.ReadBoolean();
             soundDelay = reader.ReadInt32();
             NPC.Calamity().newAI[3] = reader.ReadSingle();
+            gfbAnaSummoned = reader.ReadBoolean();
         }
 
         public override void AI()
@@ -121,6 +123,10 @@ namespace CalamityMod.NPCs.Leviathan
             CalamityGlobalNPC calamityGlobalNPC = NPC.Calamity();
 
             CalamityGlobalNPC.leviathan = NPC.whoAmI;
+
+            // This dictates the Leviathan music scene
+            if (CalamityGlobalNPC.LeviAndAna == -1)
+                CalamityGlobalNPC.LeviAndAna = NPC.whoAmI;
 
             bool bossRush = BossRushEvent.BossRushActive;
             bool death = CalamityWorld.death || bossRush;
@@ -158,6 +164,16 @@ namespace CalamityMod.NPCs.Leviathan
                 }
             }
 
+            if (phase2 && !sirenAlive && Main.zenithWorld && !gfbAnaSummoned)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    int siren = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.position.Y + NPC.height - 1000, ModContent.NPCType<Anahita>(), NPC.whoAmI);
+                    CalamityUtils.BossAwakenMessage(siren);
+                }
+                gfbAnaSummoned = true;
+            }
+
             SoundStyle soundChoiceRage = SoundID.Zombie92;
             SoundStyle soundChoice = Utils.SelectRandom(Main.rand, new SoundStyle[]
             {
@@ -169,7 +185,7 @@ namespace CalamityMod.NPCs.Leviathan
             if (soundDelay > 0)
                 soundDelay--;
 
-            extrapitch = CalamityWorld.getFixedBoi ? 0.3f : 0f;
+            extrapitch = Main.zenithWorld ? 0.3f : 0f;
 
             if (Main.rand.NextBool(600) && !spawnAnimation)
                 SoundEngine.PlaySound(((sirenAlive && !death) ? soundChoice : soundChoiceRage) with { Pitch = soundChoice.Pitch + extrapitch }, vector);
@@ -391,7 +407,7 @@ namespace CalamityMod.NPCs.Leviathan
                                 vector40.X += num415 * 4f;
                                 vector40.Y += num416 * 4f;
 
-                                if (CalamityWorld.getFixedBoi)
+                                if (Main.zenithWorld)
                                 {
                                     type = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? ProjectileID.BouncyBoulder : ProjectileID.Boulder;
                                     vector40.Y -= 5; //Shoot a bit more up since boulders are affected by gravity
@@ -399,7 +415,7 @@ namespace CalamityMod.NPCs.Leviathan
                                 }
 
                                 int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), vector40.X, vector40.Y, num415, num416, type, damage, 0f, Main.myPlayer);
-                                if (CalamityWorld.getFixedBoi)
+                                if (Main.zenithWorld)
                                     Main.projectile[proj].scale *= 5f;
 
                                 if (soundDelay <= 0)
@@ -512,7 +528,7 @@ namespace CalamityMod.NPCs.Leviathan
                         return;
                     }
 
-                    float gfbchargeboost = CalamityWorld.getFixedBoi ? 1100 : 0;
+                    float gfbchargeboost = Main.zenithWorld ? 1100 : 0;
                     float chargeDistance = ((sirenAlive && !phase4) ? 1100f : 900f) * NPC.scale + gfbchargeboost;
                     chargeDistance -= 50f * enrageScale;
                     if (!sirenAlive || phase4)

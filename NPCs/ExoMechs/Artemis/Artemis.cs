@@ -204,12 +204,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                // We'll probably want a custom background for Exos like ML has.
-                // BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Exo,
-
-                // Will move to localization whenever that is cleaned up.
-                new FlavorTextBestiaryInfoElement("The Exo Twins are the ultimate recon units. Capable of detecting various wavelengths of light unknown to us, nothing can hide.")
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Artemis")
             });
         }
 
@@ -628,9 +625,6 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                     NPC.rotation = NPC.rotation.AngleTowards((float)Math.Atan2(rotateTowards.Y, rotateTowards.X) + MathHelper.PiOver2, rateOfRotation);
             }
 
-            // Light
-            Lighting.AddLight(NPC.Center, 0.25f * NPC.Opacity, 0.15f * NPC.Opacity, 0.05f * NPC.Opacity);
-
             // Despawn if target is dead
             if (player.dead)
             {
@@ -867,7 +861,7 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                                     calamityGlobalNPC.newAI[3] = 0f;
                                     if (phase2)
                                     {
-                                        AIState = (NPC.localAI[2] == 1f && !apolloUsingChargeCombo) ? (float)Phase.Deathray : (float)Phase.LaserShotgun;
+                                        AIState = (NPC.localAI[2] == 1f && (!apolloUsingChargeCombo || Main.zenithWorld)) ? (float)Phase.Deathray : (float)Phase.LaserShotgun;
                                     }
                                     else
                                     {
@@ -1077,10 +1071,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                                 ExoMechsSky.CreateLightningBolt(12);
 
                                 // Fire deathray
+                                DeathraySoundSlot = SoundEngine.PlaySound(SpinLaserbeamSound, NPC.Center);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    DeathraySoundSlot = SoundEngine.PlaySound(SpinLaserbeamSound, NPC.Center);
-                                    
                                     int type = ModContent.ProjectileType<ArtemisSpinLaserbeam>();
                                     int damage = NPC.GetProjectileDamage(type);
                                     int laser = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, damage, 0f, Main.myPlayer, NPC.whoAmI);
@@ -1131,7 +1124,7 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                     // Reset phase and variables
                     if (calamityGlobalNPC.newAI[2] >= deathrayTelegraphDuration + deathrayDuration)
                     {
-                        if (CalamityWorld.getFixedBoi && !exoMechdusa)
+                        if (Main.zenithWorld && !exoMechdusa)
                         {
                             calamityGlobalNPC.newAI[3] = 0f;
                             AIState = (float)Phase.Deathray;

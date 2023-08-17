@@ -22,15 +22,18 @@ namespace CalamityMod.NPCs.HiveMind
         {
             NPC.npcSlots = 0.1f;
             NPC.aiStyle = -1;
-            NPC.damage = 0;
+            NPC.damage = 10;
             NPC.width = 25;
             NPC.height = 25;
 
-            NPC.lifeMax = 150;
+            NPC.lifeMax = 75;
             if (BossRushEvent.BossRushActive)
                 NPC.lifeMax = 1300;
             if (Main.getGoodWorld)
                 NPC.lifeMax *= 2;
+
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
 
             NPC.knockBackResist = 0f;
             AIType = -1;
@@ -47,11 +50,14 @@ namespace CalamityMod.NPCs.HiveMind
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             bool expertMode = Main.expertMode || BossRushEvent.BossRushActive;
             bool revenge = CalamityWorld.revenge || BossRushEvent.BossRushActive;
             bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
 
-            bool getFuckedAI = CalamityWorld.getFixedBoi;
+            bool getFuckedAI = Main.zenithWorld;
 
             int num750 = CalamityGlobalNPC.hiveMind;
             if (num750 < 0 || !Main.npc[num750].active)
@@ -195,7 +201,7 @@ namespace CalamityMod.NPCs.HiveMind
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, 14, hit.HitDirection, -1f, 0, default, 1f);
                 }
-                if (Main.netMode != NetmodeID.MultiplayerClient && CalamityWorld.getFixedBoi)
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.zenithWorld)
                 {
                     //Spawn even more blobs on death
                     for (int i = 1; i < 3; i++)

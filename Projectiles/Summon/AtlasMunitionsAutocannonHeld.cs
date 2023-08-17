@@ -122,7 +122,7 @@ namespace CalamityMod.Projectiles.Summon
                     Projectile.velocity = new Vector2(Projectile.spriteDirection * 3f, -4f);
                     Projectile.netUpdate = true;
                     if (HeatInterpolant >= 1f)
-                        CombatText.NewText(Owner.Hitbox, Color.OrangeRed, "OUCH! HOT!", true);
+                        CombatText.NewText(Owner.Hitbox, Color.OrangeRed, CalamityUtils.GetTextValue("Misc.AutocannonHot"), true);
 
                     return;
                 }
@@ -235,7 +235,7 @@ namespace CalamityMod.Projectiles.Summon
 
             // Determine whether the cannon is being fired based on the left mouse state.
             bool wasFiring = IsFiring;
-            IsFiring = Main.mouseLeft && !Main.blockMouse;
+            IsFiring = Main.mouseLeft && !Owner.mouseInterface;
 
             // Notify other clients and the server if the cannon's firing state has changed. This sync cannot be blocked by the net spam threshold.
             if (wasFiring != IsFiring)

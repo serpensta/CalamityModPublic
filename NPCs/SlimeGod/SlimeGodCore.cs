@@ -83,12 +83,11 @@ namespace CalamityMod.NPCs.SlimeGod
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
-
-				// Will move to localization whenever that is cleaned up.
-				new FlavorTextBestiaryInfoElement("This God is rather evasive and relies on tricky and strategic retreats due to its relatively minor strength among the Gods. It prefers to be protected rather than be in combat fighting.")
+				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SlimeGodCore")
             });
         }
 
@@ -192,7 +191,7 @@ namespace CalamityMod.NPCs.SlimeGod
                 }
 
                 // Emit dust
-                if (!CalamityWorld.getFixedBoi) // you must see his glory.
+                if (!Main.zenithWorld) // you must see his glory.
                 {
                     for (int k = 0; k < 5; k++)
                     {
@@ -554,11 +553,11 @@ namespace CalamityMod.NPCs.SlimeGod
             float num160 = 0f;
             int num161 = num159;
             spriteBatch.Draw(texture2D3, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY), NPC.frame, color24, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, spriteEffects, 0);
-            if (CalamityWorld.getFixedBoi)
+            if (Main.zenithWorld)
             {
                 spriteBatch.Draw(pog, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY), NPC.frame, color24, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, spriteEffects, 0);
             }
-            if (!CalamityWorld.getFixedBoi)
+            if (!Main.zenithWorld)
                 while (((num158 > 0 && num161 < num157) || (num158 < 0 && num161 > num157)) && CalamityConfig.Instance.Afterimages)
                 {
                     Color color26 = NPC.GetAlpha(color25);
@@ -659,7 +658,7 @@ namespace CalamityMod.NPCs.SlimeGod
         {
             if (hurtInfo.Damage > 0)
             {
-                int debufftype = CalamityWorld.getFixedBoi ? BuffID.VortexDebuff : BuffID.Slow;
+                int debufftype = Main.zenithWorld ? BuffID.VortexDebuff : BuffID.Slow;
                 target.AddBuff(debufftype, 180, true);
                 target.AddBuff(BuffID.Weak, 180, true);
                 target.AddBuff(BuffID.Darkness, 180, true);
