@@ -69,11 +69,20 @@ namespace CalamityMod.Items.Weapons.Ranged
         #region Stat changing
         public override void ModifyWeaponCrit(Player player, ref float crit)
         {
-            float mult = 1f;
             if (player.altFunctionUse == 2)
-                mult = SniperCritMult;
-            
-            crit *= mult;
+            {
+                crit *= SniperCritMult;
+            }
+
+        }
+
+        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                damage *= SniperDmgMult;
+            }
+
         }
 
         public override float UseSpeedMultiplier(Player player)
@@ -84,14 +93,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             return 1f;
         }
 
-        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-        {
-            float mult = 1f;
-            if (player.altFunctionUse == 2)
-                mult = SniperDmgMult;
-            
-            damage *= mult;
-        }
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
