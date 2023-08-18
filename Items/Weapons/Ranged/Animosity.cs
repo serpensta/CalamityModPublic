@@ -95,15 +95,15 @@ namespace CalamityMod.Items.Weapons.Ranged
                 // TO DO: Replace with actual bullet shells or used casings
                 Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f,-0.35f), Mod.Find<ModGore>("Polt5").Type);
             }
+            //It should feel powerful
+            if (player.Calamity().GeneralScreenShakePower < 3f)
+                player.Calamity().GeneralScreenShakePower = 2f;
 
             if (player.altFunctionUse == 2)
             {
-                // It should feel powerful but less than the shotgun
-                if (player.Calamity().GeneralScreenShakePower < 3f)
-                    player.Calamity().GeneralScreenShakePower = 1.5f;
                 //Shoot from muzzle
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.5f;
+                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.8f;
 
                 int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<AnimosityBullet>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
@@ -116,13 +116,9 @@ namespace CalamityMod.Items.Weapons.Ranged
             }
             else
             {
-                // It should feel powerful
-                if (player.Calamity().GeneralScreenShakePower < 3f)
-                    player.Calamity().GeneralScreenShakePower = 3f;
-
                 //Shoot from muzzle
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * ShotgunBulletSpeed;
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.5f;
+                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
 
                 // Fire a shotgun spread of bullets.
                 for (int i = 0; i < 6; ++i)
