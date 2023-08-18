@@ -103,7 +103,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                     player.Calamity().GeneralScreenShakePower = 1.5f;
                 //Shoot from muzzle
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
+                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.5f;
 
                 int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<AnimosityBullet>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
@@ -122,7 +122,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
                 //Shoot from muzzle
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * ShotgunBulletSpeed;
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
+                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.5f;
 
                 // Fire a shotgun spread of bullets.
                 for (int i = 0; i < 6; ++i)
