@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         // If stuff is here then DragonLens can easily detect it so it can change it for balancing
         public static float ShotgunBulletSpeed = 11.5f;
         public static float SniperBulletSpeed = 16f;
-        public static float SniperDmgMult = 3.4f;
+        public static float SniperDmgMult = 3.5f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
@@ -83,10 +83,11 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Item.reuseDelay = 8;
                 Item.useAnimation = 18;
                 Item.shootSpeed = ShotgunBulletSpeed;
-                Item.crit = -18;
+                Item.crit = 18;
             }
             return base.CanUseItem(player);
         }
+
         #region Shooting
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
