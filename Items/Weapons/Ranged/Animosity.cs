@@ -11,18 +11,20 @@ using CalamityMod.Projectiles.Ranged;
 using System;
 using System.Collections.Generic;
 using Terraria.Localization;
+using CalamityMod.Sounds;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
     public class Animosity : ModItem, ILocalizedModType
     {
-        public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.2f }; 
+        public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
         // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
         // If stuff is here then DragonLens can easily detect it so it can change it for balancing
         public static float ShotgunBulletSpeed = 11.5f;
         public static float SniperBulletSpeed = 16f;
         public static float SniperDmgMult = 3.5f;
+        public static float SniperCritMult = 4f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
@@ -37,9 +39,9 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.width = 70;
             Item.height = 18;
             Item.scale = 0.85f;
-            Item.useTime = 15;
+            Item.useTime = 16;
             Item.reuseDelay = 10;
-            Item.useAnimation = 15;
+            Item.useAnimation = 16;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2f;
@@ -50,12 +52,9 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = ShotgunBulletSpeed;
             Item.useAmmo = AmmoID.Bullet;
-            Item.crit = -18; // Explained later
+            Item.crit = 8;
             Item.Calamity().canFirePointBlankShots = true;
         }
-        
-        // Terraria dislikes high crit on SetDefaults
-        public override void ModifyWeaponCrit(Player player, ref float crit) => crit += 20; // 6% Shotgun mode, 32% Sniper Mode. This is after dealing with vanilla adding 4% more
 
         public override Vector2? HoldoutOffset()
         {
@@ -67,26 +66,42 @@ namespace CalamityMod.Items.Weapons.Ranged
             return true;
         }
 
+        #region Stat changing
+        public override void ModifyWeaponCrit(Player player, ref float crit)
+        {
+            float mult = 1f;
+            if (player.altFunctionUse == 2)
+                mult = SniperCritMult;
+            
+            crit *= mult;
+        }
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+                return 2.5f;
+
+            return 1f;
+        }
+
+        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+        {
+            float mult = 1f;
+            if (player.altFunctionUse == 2)
+                mult = SniperDmgMult;
+            
+            damage *= mult;
+        }
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-            {
-                Item.useTime = 40;
-                Item.reuseDelay = 0;
-                Item.useAnimation = 40;
-                Item.shootSpeed = SniperBulletSpeed;
-                Item.crit = 8;
-            }
+               Item.reuseDelay = 5;
             else
-            {
-                Item.useTime = 18;
-                Item.reuseDelay = 8;
-                Item.useAnimation = 18;
-                Item.shootSpeed = ShotgunBulletSpeed;
-                Item.crit = 18;
-            }
+               Item.reuseDelay = 10;
+
             return base.CanUseItem(player);
         }
+        #endregion
 
         #region Shooting
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -106,7 +121,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
                 Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.8f;
 
-                int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<AnimosityBullet>(), (int)(damage * SniperDmgMult), knockback, player.whoAmI);
+                int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
                 {
                     Main.projectile[p].Calamity().supercritHits = 1;

@@ -54,7 +54,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void Kill(int timeLeft)
         { 
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
-            //DesertProwelerSkullParticle is a placeholder
+            //DesertProwelerSkullParticle is a placeholder, maybe replace with evil skull or broken heart (maybe both?, maybe one of Gfb?)
             Particle skull = new DesertProwlerSkullParticle(Projectile.Center, new Vector2(0f,Main.rand.NextFloat(0.5f,1f)), Color.Red, Color.DarkRed, Main.rand.NextFloat(0.7f, 1.2f), 255);
             GeneralParticleHandler.SpawnParticle(skull);
 
