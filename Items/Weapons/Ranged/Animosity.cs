@@ -23,8 +23,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static float ShotgunBulletSpeed = 11.5f;
         public static float SniperBulletSpeed = 15f;
         public static float SniperDmgMult = 3.4f;
-        public static float SniperRecoil = -8f;
-        public new string LocalizationCategory => "Items.Weapons.Ranged";
+         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
         public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.AnimosityGfb") : GetText("Items.Weapons.Ranged.Animosity.DisplayName");
@@ -158,20 +157,35 @@ namespace CalamityMod.Items.Weapons.Ranged
                 CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
                 base.UseStyle(player, heldItemFrame);
             }
-            // TO DO: Make Sniper have horizontal recoil
+            // Sniper's recoid
             else
             {
-                    player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
-                    float itemRotation = MathHelper.PiOver2 * player.gravDir; //this one is gonna be a pain in the ass aint it?
+                player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+                float itemRotation = (player.Center - player.Calamity().mouseWorld).ToRotation()+MathHelper.Pi; //this one was a pain in the ass
 
-                    Vector2 itemPosition = player.MountedCenter;
-                    itemPosition.X += SniperRecoil;
+                Vector2 itemPosition = player.MountedCenter;
+                Vector2 itemSize = new Vector2(Item.width, Item.height);
+                Vector2 itemOrigin = new Vector2(-40, 6);
 
-                    Vector2 itemSize = new Vector2(Item.width, Item.height);
-                    Vector2 itemOrigin = new Vector2(-5, 6);
-
-                    CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
-                    base.UseStyle(player, heldItemFrame);
+                //Recoil:
+                int anim = 0;
+                for (int r = 0; r < Item.useAnimation; ++r)
+                {
+                    if (anim == 10 && r<Item.useAnimation/2) //animates every 10 frames so that the player notices a recoil because this happens way too fast
+                    {
+                        itemPosition.X -= player.direction * 0.025f;
+                        itemPosition.Y -= player.direction * 0.025f;
+                        anim = 0;
+                    } else if (anim == 10 && r>Item.useAnimation/2)
+                    {
+                        itemPosition.X += player.direction * 0.025f;
+                        itemPosition.Y += player.direction * 0.025f;
+                        anim = 0;
+                    }
+                    ++anim;
+                }
+                CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
+                base.UseStyle(player, heldItemFrame);
             }
         }
 

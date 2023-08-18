@@ -2492,15 +2492,12 @@ namespace CalamityMod.Projectiles
                 }
                 if (brimstoneBullets) 
                 {
-                    for (int flames = 0; flames < 3; flames++)
-                    {
-                        Dust fireTrail = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, (int)CalamityDusts.Brimstone, projectile.velocity.X, projectile.velocity.Y, 100, default, 1f)];
-                        fireTrail.velocity = Vector2.Zero;
-                        fireTrail.position -= projectile.velocity / 5f * (float)flames;
-                        fireTrail.noGravity = true;
-                        fireTrail.scale = 1f;
-                        fireTrail.noLight = true;
-                    }
+                    Dust fireTrail = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, (int)CalamityDusts.Brimstone, projectile.velocity.X, projectile.velocity.Y, 100, default, 1f)];
+                    fireTrail.velocity = Vector2.Zero;
+                    fireTrail.position -= projectile.velocity / 5f; 
+                    fireTrail.noGravity = true;
+                    fireTrail.scale = 1f;
+                    fireTrail.noLight = true;
                 }
             }
         }
