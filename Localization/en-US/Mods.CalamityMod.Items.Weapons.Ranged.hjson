@@ -39,8 +39,8 @@ Animosity: {
 	Tooltip:
 		'''
 		Fires a powerful shotgun blast which is imbued with Brimstone Flames
-		Right click to fire a powerful brimstone round that can super crit
-        '''
+		Press <right> to fire a powerful brimstone round that can super crit
+		'''
 }
 
 AnimosityGfb: Shotgun Full of Hate

@@ -121,7 +121,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
                 Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.8f;
 
-                int p = Projectile.NewProjectile(source, nuzzlePos, velocity, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
+                int p = Projectile.NewProjectile(source, nuzzlePos, baseVelocity, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
                 {
                     Main.projectile[p].Calamity().supercritHits = 1;
