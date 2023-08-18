@@ -144,39 +144,27 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            // Only the shotgun gets upwards recoil
-            if (player.altFunctionUse != 2)
-            {
-                player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
-                float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
+            player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+            float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
 
-                Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 35f;
-                Vector2 itemSize = new Vector2(Item.width, Item.height);
-                Vector2 itemOrigin = new Vector2(-5, 6);
+            Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 35f;
+            Vector2 itemSize = new Vector2(Item.width, Item.height);
+            Vector2 itemOrigin = new Vector2(-5, 6);
 
-                CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
-                base.UseStyle(player, heldItemFrame);
-            }
-            // Sniper's recoid
-            else
-            {
-                player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
-                float itemRotation = (player.Center - player.Calamity().mouseWorld).ToRotation()+MathHelper.Pi; //this one was a pain in the ass
-
-                Vector2 itemPosition = player.MountedCenter;
-                Vector2 itemSize = new Vector2(Item.width, Item.height);
-                Vector2 itemOrigin = new Vector2(-40, 6);
-
+            //Sniper's horizontal recoil; can be a bit subtle but it is noticeable
+            if (player.altFunctionUse == 2)
+            { 
                 //Recoil:
                 int anim = 0;
                 for (int r = 0; r < Item.useAnimation; ++r)
                 {
-                    if (anim == 10 && r<Item.useAnimation/2) //animates every 10 frames so that the player notices a recoil because this happens way too fast
+                    if (anim == 10 && r < Item.useAnimation / 2) //animates every 10 frames so that the player notices a recoil because this happens way too fast
                     {
                         itemPosition.X -= player.direction * 0.025f;
                         itemPosition.Y -= player.direction * 0.025f;
                         anim = 0;
-                    } else if (anim == 10 && r>Item.useAnimation/2)
+                    }
+                    else if (anim == 10 && r > Item.useAnimation / 2)
                     {
                         itemPosition.X += player.direction * 0.025f;
                         itemPosition.Y += player.direction * 0.025f;
@@ -184,9 +172,10 @@ namespace CalamityMod.Items.Weapons.Ranged
                     }
                     ++anim;
                 }
-                CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
-                base.UseStyle(player, heldItemFrame);
             }
+
+            CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
+            base.UseStyle(player, heldItemFrame);
         }
 
         // Recoil + Not having the gun aim downwards
@@ -196,7 +185,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
             float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
             float rotation = (player.Center - player.Calamity().mouseWorld).ToRotation() * player.gravDir + MathHelper.PiOver2;
-            rotation += -0.45f * (float)Math.Pow((1f - animProgress), 2) * player.direction;
+            rotation += (player.altFunctionUse == 2 ? -1f : -0.45f) * (float)Math.Pow((1f - animProgress), 2) * player.direction;
 
             player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation);
 
