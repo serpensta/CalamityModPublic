@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         
         // If stuff is here then DragonLens can easily detect it so it can change it for balancing
         public static float ShotgunBulletSpeed = 11.5f;
-        public static float SniperBulletSpeed = 15f;
+        public static float SniperBulletSpeed = 16f;
         public static float SniperDmgMult = 3.4f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 

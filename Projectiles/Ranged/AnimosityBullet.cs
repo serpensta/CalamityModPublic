@@ -4,7 +4,9 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using CalamityMod.Dusts;
-using CalamityMod.Projectiles;
+using CalamityMod.Particles;
+using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Buffs.StatDebuffs;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -51,11 +53,22 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void Kill(int timeLeft)
         { 
-            if (Projectile.owner == Main.myPlayer)
-            {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Brimsplosion>(), Projectile.damage/3, Projectile.knockBack, Projectile.owner);
-            }
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+            //DesertProwelerSkullParticle is a placeholder
+            Particle skull = new DesertProwlerSkullParticle(Projectile.Center, new Vector2(0f,Main.rand.NextFloat(0.5f,1f)), Color.Red, Color.DarkRed, Main.rand.NextFloat(0.7f, 1.2f), Main.rand.Next(30, 50));
+            GeneralParticleHandler.SpawnParticle(skull);
+
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 300);
+            target.AddBuff(ModContent.BuffType<WhisperingDeath>(), 120);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 120);
         }
     }
 }
