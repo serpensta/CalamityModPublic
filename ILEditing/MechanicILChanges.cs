@@ -16,7 +16,6 @@ using CalamityMod.NPCs.AstrumAureus;
 using CalamityMod.NPCs.Crabulon;
 using CalamityMod.NPCs.Ravager;
 using CalamityMod.Particles;
-using CalamityMod.Particles.Metaballs;
 using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Systems;
@@ -261,7 +260,7 @@ namespace CalamityMod.ILEditing
                     self.dashTime = 15;
                     return;
                 }
-                
+
                 dashing = true;
                 self.dashTime = 0;
                 self.timeSinceLastDashStarted = 0;
@@ -456,8 +455,14 @@ namespace CalamityMod.ILEditing
         private static string IncorporateEnchantmentInAffix(Terraria.On_Item.orig_AffixName orig, Item self)
         {
             string result = orig(self);
-            if (!self.IsAir && self.Calamity().AppliedEnchantment.HasValue)
-                result = $"{self.Calamity().AppliedEnchantment.Value.Name} {result}";
+
+            // This hook could occur before CalamityGlobalItem is loaded and throw an error.
+            try
+            {
+                if (!self.IsAir && self.Calamity().AppliedEnchantment.HasValue)
+                    result = $"{self.Calamity().AppliedEnchantment.Value.Name} {result}";
+            }
+            catch { }
             return result;
         }
         #endregion
@@ -473,6 +478,11 @@ namespace CalamityMod.ILEditing
             {
                 Player player = Main.player[projectile.owner];
                 if (Main.gameMenu || !player.active)
+                    return proj;
+
+                // Do not apply Hellbound effects to minions not spawned by the item itself, if it came out of an item
+                // This prevent minions like Luxor's Gift getting it, but minions spawned out of minions such as Temporal Umbrella will work fine
+                if (spawnSource is EntitySource_ItemUse && player.ActiveItem().shoot != projectile.type)
                     return proj;
 
                 CalamityPlayer.EnchantHeldItemEffects(player, player.Calamity(), player.ActiveItem());
@@ -696,7 +706,6 @@ namespace CalamityMod.ILEditing
         private static void DrawFusableParticles(Terraria.On_Main.orig_SortDrawCacheWorms orig, Main self)
         {
             DeathAshParticle.DrawAll();
-            FusableParticleManager.RenderAllFusableParticles();
 
             if (Main.LocalPlayer.dye.Any(dyeItem => dyeItem.type == ModContent.ItemType<ProfanedMoonlightDye>()))
                 Main.LocalPlayer.Calamity().ProfanedMoonlightAuroraDrawer?.Draw(Main.LocalPlayer.Center - Main.screenPosition, false, Main.GameViewMatrix.TransformationMatrix, Matrix.Identity);
@@ -708,13 +717,6 @@ namespace CalamityMod.ILEditing
         {
             GeneralParticleHandler.DrawAllParticles(Main.spriteBatch);
             orig(self);
-        }
-
-        private static void ResetRenderTargetSizes(Terraria.On_Main.orig_SetDisplayMode orig, int width, int height, bool fullscreen)
-        {
-            if (FusableParticleManager.HasBeenFormallyDefined)
-                FusableParticleManager.LoadParticleRenderSets(true, width, height);
-            orig(width, height, fullscreen);
         }
         #endregion
 
@@ -735,23 +737,23 @@ namespace CalamityMod.ILEditing
                 Main.tileBatch.Draw(liquidTexture, position, liquidSize, colors, default(Vector2), 1f, SpriteEffects.None);
                 return;
             }
-            
+
             Texture2D slopeTexture = SelectLavaTexture(liquidType == 1 ? CustomLavaManagement.LavaSlopeTexture : TextureAssets.LiquidSlope[liquidType].Value, LiquidTileType.Slope);
             liquidSize.X += 18 * (slope - 1);
             switch (slope)
             {
-            case 1:
-                Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
-                break;
-            case 2:
-                Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
-                break;
-            case 3:
-                Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
-                break;
-            case 4:
-                Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
-                break;
+                case 1:
+                    Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
+                    break;
+                case 2:
+                    Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
+                    break;
+                case 3:
+                    Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
+                    break;
+                case 4:
+                    Main.tileBatch.Draw(slopeTexture, position, liquidSize, colors, Vector2.Zero, 1f, SpriteEffects.None);
+                    break;
             }
         }
 
@@ -793,7 +795,7 @@ namespace CalamityMod.ILEditing
             {
                 initialColor = SelectLavaQuadColor(initialTexture, ref initialColor, liquidType == 1);
 
-                if (liquidType == ModContent.Find<ModWaterStyle>("CalamityMod/SunkenSeaWater").Slot || 
+                if (liquidType == ModContent.Find<ModWaterStyle>("CalamityMod/SunkenSeaWater").Slot ||
                 liquidType == ModContent.Find<ModWaterStyle>("CalamityMod/SulphuricWater").Slot ||
                 liquidType == ModContent.Find<ModWaterStyle>("CalamityMod/SulphuricDepthsWater").Slot ||
                 liquidType == ModContent.Find<ModWaterStyle>("CalamityMod/UpperAbyssWater").Slot ||
@@ -919,7 +921,7 @@ namespace CalamityMod.ILEditing
                 return;
 
             Tile above = CalamityUtils.ParanoidTileRetrieval(x, y - 1);
-            if (!Main.gamePaused && !above.HasTile && above.LiquidAmount <= 0 && Main.rand.NextBool(9) && 
+            if (!Main.gamePaused && !above.HasTile && above.LiquidAmount <= 0 && Main.rand.NextBool(9) &&
             Main.waterStyle == SulphuricWater.Type)
             {
                 MediumMistParticle acidFoam = new(new(x * 16f + Main.rand.NextFloat(16f), y * 16f + 8f), -Vector2.UnitY.RotatedByRandom(0.67f) * Main.rand.NextFloat(1f, 2.4f), Color.LightSeaGreen, Color.White, 0.16f, 128f, 0.02f);

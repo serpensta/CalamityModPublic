@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Buffs.Summon;
+using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -11,6 +12,7 @@ namespace CalamityMod.Projectiles.Summon
     {
         public new string LocalizationCategory => "Projectiles.Summon";
         public Player Owner => Main.player[Projectile.owner];
+        public NPC Target => Owner.Center.MinionHoming(750f, Owner, CalamityPlayer.areThereAnyDamnBosses);
         public ref float HoverTime => ref Projectile.ai[0];
 
         public const int ShootRate = 60;
@@ -39,11 +41,10 @@ namespace CalamityMod.Projectiles.Summon
         {
             ProvidePlayerMinionBuffs();
             GenerateVisuals();
-            NPC potentialTarget = Projectile.Center.MinionHoming(750f, Owner);
-            if (potentialTarget is null)
+            if (Target is null)
                 FlyNearOwner();
             else
-                AttackTarget(potentialTarget);
+                AttackTarget(Target);
         }
 
         internal void ProvidePlayerMinionBuffs()
@@ -75,7 +76,7 @@ namespace CalamityMod.Projectiles.Summon
             Vector2 destination = Owner.Top - Vector2.UnitY * 45f + (Projectile.identity * 0.9f).ToRotationVector2() * 16f;
             Vector2 idealVelocity = Projectile.SafeDirectionTo(destination) * MathHelper.Lerp(2.3f, 8f, Utils.GetLerpValue(16f, 160f, Projectile.Distance(destination)));
             if (Projectile.velocity.Length() < 0.4f)
-                Projectile.velocity = Vector2.UnitY.RotatedBy(Main.rand.NextFloat(0.5f, 1.1f) * Main.rand.NextBool(2).ToDirectionInt()) * -3.6f;
+                Projectile.velocity = Vector2.UnitY.RotatedBy(Main.rand.NextFloat(0.5f, 1.1f) * Main.rand.NextBool().ToDirectionInt()) * -3.6f;
             else if (!Projectile.WithinRange(destination, 20f))
                 Projectile.velocity = Projectile.velocity * 0.9f + idealVelocity * 0.1f;
 
@@ -94,9 +95,7 @@ namespace CalamityMod.Projectiles.Summon
         {
             if (Main.myPlayer == Projectile.owner && HoverTime % 70f == 69f)
             {
-                int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.SafeDirectionTo(target.Center) * 8f, ModContent.ProjectileType<EyeOfNightCell>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                if (Main.projectile.IndexInRange(p))
-                    Main.projectile[p].originalDamage = Projectile.originalDamage;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.SafeDirectionTo(target.Center) * 8f, ModContent.ProjectileType<EyeOfNightCell>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                 HoverTime++;
             }
 

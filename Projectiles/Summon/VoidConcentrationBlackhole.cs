@@ -28,6 +28,7 @@ namespace CalamityMod.Projectiles.Summon
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
+            ProjectileID.Sets.MinionShot[Projectile.type] = true;
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
         }
 
@@ -38,12 +39,10 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.netImportant = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.minionSlots = 0f;
             Projectile.timeLeft = 1800;
             Projectile.penetrate = -1;
 
             Projectile.tileCollide = false;
-            Projectile.minion = true;
             Projectile.scale = 0.01f;
             Projectile.DamageType = DamageClass.Summon;
         }
@@ -55,20 +54,20 @@ namespace CalamityMod.Projectiles.Summon
             Vector2 velocity = Projectile.Center - npc.Center;
             velocity *= 2f;
             velocity.SafeNormalize(Vector2.Zero);
-            float num550 = 5f * Projectile.scale;
-            Vector2 vector43 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-            float num551 = Projectile.Center.X - vector43.X;
-            float num552 = Projectile.Center.Y - vector43.Y;
-            float num553 = (float)Math.Sqrt((double)(num551 * num551 + num552 * num552));
-            if (num553 < 100f)
+            float projSpeed = 5f * Projectile.scale;
+            Vector2 fireDirection = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
+            float fireXVel = Projectile.Center.X - fireDirection.X;
+            float fireYVel = Projectile.Center.Y - fireDirection.Y;
+            float fireVelocity = (float)Math.Sqrt((double)(fireXVel * fireXVel + fireYVel * fireYVel));
+            if (fireVelocity < 100f)
             {
-                num550 = 28f; //14
+                projSpeed = 28f; //14
             }
-            num553 = num550 / num553;
-            num551 *= num553;
-            num552 *= num553;
-            npc.velocity.X = (velocity.X * 15f + num551) / 16f;
-            npc.velocity.Y = (velocity.Y * 15f + num552) / 16f;
+            fireVelocity = projSpeed / fireVelocity;
+            fireXVel *= fireVelocity;
+            fireYVel *= fireVelocity;
+            npc.velocity.X = (velocity.X * 15f + fireXVel) / 16f;
+            npc.velocity.Y = (velocity.Y * 15f + fireYVel) / 16f;
             npc.velocity = (velocity / succStrength);
         }
 
@@ -91,13 +90,13 @@ namespace CalamityMod.Projectiles.Summon
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int d = 0; d < 6; d++)
             {
                 int shadow = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 27, 0f, 0f, 100, new Color(0, 0, 0), 4f);
                 Main.dust[shadow].velocity *= 3f;
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool())
                 {
                     Main.dust[shadow].scale = 0.5f;
                     Main.dust[shadow].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;

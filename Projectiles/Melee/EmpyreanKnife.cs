@@ -65,20 +65,20 @@ namespace CalamityMod.Projectiles.Melee
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-            for (int num303 = 0; num303 < 3; num303++)
+            for (int i = 0; i < 3; i++)
             {
-                int num304 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 58, 0f, 0f, 100, default, 0.8f);
-                Main.dust[num304].noGravity = true;
-                Main.dust[num304].velocity *= 1.2f;
-                Main.dust[num304].velocity -= Projectile.oldVelocity * 0.3f;
+                int empyreanDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 58, 0f, 0f, 100, default, 0.8f);
+                Main.dust[empyreanDust].noGravity = true;
+                Main.dust[empyreanDust].velocity *= 1.2f;
+                Main.dust[empyreanDust].velocity -= Projectile.oldVelocity * 0.3f;
             }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            float healAmt = hit.Damage * 0.005f;
+            float healAmt = hit.Damage * 0.0075f;
             if ((int)healAmt == 0)
                 return;
 

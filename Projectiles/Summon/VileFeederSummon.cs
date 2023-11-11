@@ -1,8 +1,8 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System.IO;
 using CalamityMod.Buffs.Summon;
+using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -35,6 +35,8 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.timeLeft *= 5;
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 60;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -61,9 +63,9 @@ namespace CalamityMod.Projectiles.Summon
                     Vector2 source = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                     source = source.RotatedBy((double)((float)(d - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
                     Vector2 dustVel = source - Projectile.Center;
-                    int num228 = Dust.NewDust(source + dustVel, 0, 0, 7, dustVel.X * 1.75f, dustVel.Y * 1.75f, 100, default, 1.1f);
-                    Main.dust[num228].noGravity = true;
-                    Main.dust[num228].velocity = dustVel;
+                    int dusty = Dust.NewDust(source + dustVel, 0, 0, 7, dustVel.X * 1.75f, dustVel.Y * 1.75f, 100, default, 1.1f);
+                    Main.dust[dusty].noGravity = true;
+                    Main.dust[dusty].velocity = dustVel;
                 }
                 spawnDust = false;
             }
@@ -155,8 +157,7 @@ namespace CalamityMod.Projectiles.Summon
                             float yVector = (float)Main.rand.Next(-35, 36) * 0.02f;
                             xVector *= 10f;
                             yVector *= 10f;
-                            int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, xVector, yVector, ModContent.ProjectileType<VileFeederProjectile>(), (int)(Projectile.damage * 1.25f), Projectile.knockBack, Projectile.owner, 0f, 0f);
-                            Main.projectile[p].originalDamage = (int)(Projectile.originalDamage * 1.25f);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, xVector, yVector, ModContent.ProjectileType<VileFeederProjectile>(), (int)(Projectile.damage * 1.25f), Projectile.knockBack, Projectile.owner);
                         }
                         eaterCooldown = 80;
                     }
@@ -232,15 +233,15 @@ namespace CalamityMod.Projectiles.Summon
                                 }
                                 if (projCount >= array2.Length)
                                 {
-                                    int num30 = 0;
+                                    projCount = 0;
                                     for (int m = 1; m < array2.Length; m++)
                                     {
-                                        if (array2[m].Y < array2[num30].Y)
+                                        if (array2[m].Y < array2[projCount].Y)
                                         {
-                                            num30 = m;
+                                            projCount = m;
                                         }
                                     }
-                                    Main.projectile[array2[num30].X].Kill();
+                                    Main.projectile[array2[projCount].X].Kill();
                                 }
                             }
                         }
@@ -261,18 +262,11 @@ namespace CalamityMod.Projectiles.Summon
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            int num214 = texture.Height / Main.projFrames[Projectile.type];
-            int y6 = num214 * Projectile.frame;
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, y6, texture.Width, num214)), Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2((float)texture.Width / 2f, (float)num214 / 2f), Projectile.scale, SpriteEffects.None, 0);
+            int framing = texture.Height / Main.projFrames[Projectile.type];
+            int y6 = framing * Projectile.frame;
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, y6, texture.Width, framing)), Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2((float)texture.Width / 2f, (float)framing / 2f), Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            target.immune[Projectile.owner] = 0;
-        }
-
-        public override bool? CanDamage() => Projectile.ai[0] != 3f;
 
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
     }

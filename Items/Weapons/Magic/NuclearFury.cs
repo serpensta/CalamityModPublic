@@ -13,9 +13,9 @@ namespace CalamityMod.Items.Weapons.Magic
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()
         {
-            Item.damage = 114;
+            Item.damage = 140;
             Item.DamageType = DamageClass.Magic;
-            Item.mana = 13;
+            Item.mana = 22;
             Item.width = 38;
             Item.height = 40;
             Item.useTime = 25;
@@ -36,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Magic
             for (int i = 0; i < 8; i++)
             {
                 Vector2 ringVelocity = ((MathHelper.TwoPi * i / 8f) + velocity.ToRotation()).ToRotationVector2() * velocity.Length() * 0.5f;
-                Projectile.NewProjectile(source, position, ringVelocity, type, damage, knockback, Main.myPlayer);
+                Projectile.NewProjectile(source, position, ringVelocity, type, damage, knockback, Main.myPlayer, 0f, 0f);
             }
             return false;
         }

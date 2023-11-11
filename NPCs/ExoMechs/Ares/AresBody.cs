@@ -10,31 +10,31 @@ using CalamityMod.Items.Placeables.Furniture.DevPaintings;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.Potions;
 using CalamityMod.Items.TreasureBags;
+using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Rogue;
-using CalamityMod.Items.Weapons.DraedonsArsenal;
+using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Skies;
+using CalamityMod.Sounds;
 using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using CalamityMod.Sounds;
-using CalamityMod.Items.Weapons.Summon;
-using ReLogic.Utilities;
 
 namespace CalamityMod.NPCs.ExoMechs.Ares
 {
@@ -163,7 +163,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             NPCID.Sets.TrailingMode[NPC.type] = 3;
             NPCID.Sets.TrailCacheLength[NPC.type] = NPC.oldPos.Length;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 PortraitScale = 0.54f,
                 Scale = 0.4f
@@ -189,7 +189,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             NPC.value = Item.buyPrice(15, 0, 0, 0);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.DeathSound = SoundID.NPCDeath14;
+            NPC.DeathSound = CommonCalamitySounds.ExoDeathSound;
             NPC.netAlways = true;
             NPC.boss = true;
             NPC.BossBar = ModContent.GetInstance<ExoMechsBossBar>();
@@ -1536,7 +1536,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             // GFB Broken Water Filter
             var GFBOnly = npcLoot.DefineConditionalDropSet(DropHelper.GFB);
             {
-                GFBOnly.Add(ModContent.ItemType<BrokenWaterFilter>());
+                GFBOnly.Add(ModContent.ItemType<BrokenWaterFilter>(), hideLootReport: true);
             }
 
             // Lore item
@@ -1607,18 +1607,18 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
             if (NPC.life <= 0)
             {
-                for (int num193 = 0; num193 < 2; num193++)
+                for (int i = 0; i < 2; i++)
                 {
                     Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
                 }
-                for (int num194 = 0; num194 < 20; num194++)
+                for (int j = 0; j < 20; j++)
                 {
-                    int num195 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
-                    Main.dust[num195].noGravity = true;
-                    Main.dust[num195].velocity *= 3f;
-                    num195 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
-                    Main.dust[num195].velocity *= 2f;
-                    Main.dust[num195].noGravity = true;
+                    int plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
+                    Main.dust[plasmaDust].noGravity = true;
+                    Main.dust[plasmaDust].velocity *= 3f;
+                    plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
+                    Main.dust[plasmaDust].velocity *= 2f;
+                    Main.dust[plasmaDust].noGravity = true;
                 }
 
                 if (Main.netMode != NetmodeID.Server)

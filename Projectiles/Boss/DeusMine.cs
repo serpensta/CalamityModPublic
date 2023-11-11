@@ -91,7 +91,7 @@ namespace CalamityMod.Projectiles.Boss
             return new Color(255, 255, 255, Projectile.alpha);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             // Explode and split into accelerating lasers
             if (Projectile.ai[0] == 1f)
@@ -101,21 +101,21 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.width = Projectile.height = 96;
                 Projectile.position.X = Projectile.position.X - (Projectile.width / 2);
                 Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
-                for (int num621 = 0; num621 < 5; num621++)
+                for (int i = 0; i < 5; i++)
                 {
-                    int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 173, 0f, 0f, 100, default, 1.2f);
-                    Main.dust[num622].velocity *= 3f;
-                    if (Main.rand.NextBool(2))
+                    int purpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 173, 0f, 0f, 100, default, 1.2f);
+                    Main.dust[purpleDust].velocity *= 3f;
+                    if (Main.rand.NextBool())
                     {
-                        Main.dust[num622].scale = 0.5f;
-                        Main.dust[num622].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
+                        Main.dust[purpleDust].scale = 0.5f;
+                        Main.dust[purpleDust].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
                     }
                 }
-                for (int num623 = 0; num623 < 10; num623++)
+                for (int j = 0; j < 10; j++)
                 {
-                    int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1.7f);
-                    Main.dust[num624].noGravity = true;
-                    Main.dust[num624].velocity *= 1.5f;
+                    int astralDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1.7f);
+                    Main.dust[astralDust].noGravity = true;
+                    Main.dust[astralDust].velocity *= 1.5f;
                     Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
                 }
 
@@ -144,7 +144,7 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0 || Projectile.timeLeft > MaxTimeLeft - FadeTime || (Projectile.timeLeft < FadeTime && Projectile.ai[0] == 0f))
                 return;
 
-            target.AddBuff(ModContent.BuffType<AstralInfectionDebuff>(), 180);
+            target.AddBuff(ModContent.BuffType<AstralInfectionDebuff>(), 75);
         }
     }
 }

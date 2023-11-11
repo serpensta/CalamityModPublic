@@ -37,12 +37,12 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > 4f)
             {
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool())
                 {
-                    int num137 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, 107, 0f, 0f, 0, default, 0.5f);
-                    Main.dust[num137].alpha = Projectile.alpha;
-                    Main.dust[num137].velocity *= 0f;
-                    Main.dust[num137].noGravity = true;
+                    int greenDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, 107, 0f, 0f, 0, default, 0.5f);
+                    Main.dust[greenDust].alpha = Projectile.alpha;
+                    Main.dust[greenDust].velocity *= 0f;
+                    Main.dust[greenDust].noGravity = true;
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace CalamityMod.Projectiles.Ranged
         // Inflicts Plague for 3 seconds
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Plague>(), 180);
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int k = 0; k < 5; k++)
             {

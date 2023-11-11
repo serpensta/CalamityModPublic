@@ -17,10 +17,10 @@ namespace CalamityMod.Items.Accessories
         {
             Item.width = 64;
             Item.height = 62;
-            Item.value = CalamityGlobalItem.Rarity14BuyPrice;
+            Item.value = CalamityGlobalItem.Rarity15BuyPrice;
             Item.defense = 18;
             Item.accessory = true;
-            Item.rare = ModContent.RarityType<DarkBlue>();
+            Item.rare = ModContent.RarityType<Violet>();
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -43,9 +43,9 @@ namespace CalamityMod.Items.Accessories
                     int myPlayer = Main.myPlayer;
                     if (Main.player[myPlayer].team == player.team && player.team != 0)
                     {
-                        float num = player.position.X - Main.player[myPlayer].position.X;
-                        float num2 = player.position.Y - Main.player[myPlayer].position.Y;
-                        if ((float)Math.Sqrt(num * num + num2 * num2) < 800f)
+                        float teamPlayerXDist = player.position.X - Main.player[myPlayer].position.X;
+                        float teamPlayerYDist = player.position.Y - Main.player[myPlayer].position.Y;
+                        if ((float)Math.Sqrt(teamPlayerXDist * teamPlayerXDist + teamPlayerYDist * teamPlayerYDist) < 800f)
                             Main.player[myPlayer].AddBuff(BuffID.PaladinsShield, 20);
                     }
                 }
@@ -57,8 +57,7 @@ namespace CalamityMod.Items.Accessories
             CreateRecipe().
                 AddIngredient(ItemID.FrozenShield).
                 AddIngredient<DeificAmulet>().
-                AddIngredient<DivineGeode>(10).
-                AddIngredient<CosmiliteBar>(10).
+                AddIngredient<AuricBar>(5).
                 AddIngredient<AscendantSpiritEssence>(4).
                 AddTile<CosmicAnvil>().
                 Register();

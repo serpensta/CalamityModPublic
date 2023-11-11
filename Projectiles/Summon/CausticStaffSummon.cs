@@ -45,13 +45,13 @@ namespace CalamityMod.Projectiles.Summon
                 int dustAmt = 36;
                 for (int dustIndex = 0; dustIndex < dustAmt; dustIndex++)
                 {
-                    Vector2 vector6 = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
-                    vector6 = vector6.RotatedBy((double)((float)(dustIndex - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
-                    Vector2 vector7 = vector6 - Projectile.Center;
-                    int dusty = Dust.NewDust(vector6 + vector7, 0, 0, 6, vector7.X * 1f, vector7.Y * 1f, 100, default, 1.1f);
+                    Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
+                    rotate = rotate.RotatedBy((double)((float)(dustIndex - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
+                    Vector2 faceDirection = rotate - Projectile.Center;
+                    int dusty = Dust.NewDust(rotate + faceDirection, 0, 0, 6, faceDirection.X * 1f, faceDirection.Y * 1f, 100, default, 1.1f);
                     Main.dust[dusty].noGravity = true;
                     Main.dust[dusty].noLight = true;
-                    Main.dust[dusty].velocity = vector7;
+                    Main.dust[dusty].velocity = faceDirection;
                 }
                 initialized = true;
             }
@@ -277,8 +277,6 @@ namespace CalamityMod.Projectiles.Summon
             targetVec.Normalize();
             targetVec *= speedMult;
             int spike = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, targetVec, ModContent.ProjectileType<CausticStaffProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, debuffToInflict, 0f);
-            if (Main.projectile.IndexInRange(spike))
-                Main.projectile[spike].originalDamage = Projectile.originalDamage;
             debuffToInflict++;
             if (debuffToInflict >= 5f)
                 debuffToInflict = 0f;

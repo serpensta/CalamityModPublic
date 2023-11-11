@@ -60,14 +60,14 @@ namespace CalamityMod.Projectiles.Melee
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - direction * bladeHalfLength, Projectile.Center + direction * bladeHalfLength, bladeWidth, ref collisionPoint);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-            for (int num303 = 0; num303 < 3; num303++)
+            for (int i = 0; i < 3; i++)
             {
-                int num304 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 20, 0f, 0f, 100, default, 0.8f);
-                Main.dust[num304].noGravity = true;
-                Main.dust[num304].velocity *= 1.2f;
-                Main.dust[num304].velocity -= Projectile.oldVelocity * 0.3f;
+                int illustrious = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 20, 0f, 0f, 100, default, 0.8f);
+                Main.dust[illustrious].noGravity = true;
+                Main.dust[illustrious].velocity *= 1.2f;
+                Main.dust[illustrious].velocity -= Projectile.oldVelocity * 0.3f;
             }
         }
 

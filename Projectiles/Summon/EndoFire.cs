@@ -21,12 +21,9 @@ namespace CalamityMod.Projectiles.Summon
 
         public override void SetDefaults()
         {
-            Projectile.width = 22;
-            Projectile.height = 22;
+            Projectile.width = Projectile.height = 22;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.minion = true;
-            Projectile.minionSlots = 0f;
             Projectile.penetrate = -1;
             Projectile.extraUpdates = 10;
             Projectile.usesIDStaticNPCImmunity = true;
@@ -43,42 +40,42 @@ namespace CalamityMod.Projectiles.Summon
             float speedY = 1f;
             if (!speedXChoice)
             {
-                speedX = Main.rand.NextBool(2) ? 1.03f : 0.97f;
+                speedX = Main.rand.NextBool() ? 1.03f : 0.97f;
                 speedXChoice = true;
             }
             if (!speedYChoice)
             {
-                speedY = Main.rand.NextBool(2) ? 1.03f : 0.97f;
+                speedY = Main.rand.NextBool() ? 1.03f : 0.97f;
                 speedYChoice = true;
             }
             Projectile.velocity.X *= speedX;
             Projectile.velocity.X *= speedY;
             if (Projectile.ai[0] > 20f)
             {
-                float num296 = 1f;
+                float dustScale = 1f;
                 if (Projectile.ai[0] == 21f)
                 {
-                    num296 = 0.25f;
+                    dustScale = 0.25f;
                 }
                 else if (Projectile.ai[0] == 22f)
                 {
-                    num296 = 0.5f;
+                    dustScale = 0.5f;
                 }
                 else if (Projectile.ai[0] == 23f)
                 {
-                    num296 = 0.75f;
+                    dustScale = 0.75f;
                 }
                 Projectile.ai[0] += 1f;
-                int num297 = Main.rand.NextBool(2) ? 68 : 67;
+                int dustType = Main.rand.NextBool() ? 68 : 67;
                 if (Main.rand.NextBool(4))
                 {
-                    num297 = 80;
+                    dustType = 80;
                 }
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool())
                 {
 
-                    int num299 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, num297, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default, 0.8f);
-                    Dust dust = Main.dust[num299];
+                    int endoDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default, 0.8f);
+                    Dust dust = Main.dust[endoDust];
                     if (Main.rand.NextBool(3))
                     {
                         dust.scale *= 1.5f;
@@ -92,7 +89,7 @@ namespace CalamityMod.Projectiles.Summon
                     dust.noGravity = true;
                     dust.velocity.X *= 0.8f;
                     dust.velocity.Y *= 0.8f;
-                    dust.scale *= num296;
+                    dust.scale *= dustScale;
                     dust.velocity += Projectile.velocity;
                     dust.noLight = true;
 

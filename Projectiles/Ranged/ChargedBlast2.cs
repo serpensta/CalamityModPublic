@@ -33,19 +33,19 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.alpha = 0;
             }
             Lighting.AddLight((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16, 0f, 0.3f, 0.7f);
-            float num55 = 30f;
-            float num56 = 1f;
+            float thirty = 30f;
+            float inc = 1f;
             if (Projectile.ai[1] == 0f)
             {
-                Projectile.localAI[0] += num56;
-                if (Projectile.localAI[0] > num55)
+                Projectile.localAI[0] += inc;
+                if (Projectile.localAI[0] > thirty)
                 {
-                    Projectile.localAI[0] = num55;
+                    Projectile.localAI[0] = thirty;
                 }
             }
             else
             {
-                Projectile.localAI[0] -= num56;
+                Projectile.localAI[0] -= inc;
                 if (Projectile.localAI[0] <= 0f)
                 {
                     Projectile.Kill();
@@ -80,7 +80,7 @@ namespace CalamityMod.Projectiles.Ranged
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 160, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
         }

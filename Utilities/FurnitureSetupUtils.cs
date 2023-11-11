@@ -68,7 +68,7 @@ namespace CalamityMod
 
         #region Sitting in Chairs
         // fat is for 2 tile chairs like Exo Chair and Exo Toilet
-        public static void ChairSitInfo(int i, int j, ref TileRestingInfo info, int nextStyleHeight = 40, bool fat = false, bool hasOffset = false)
+        public static void ChairSitInfo(int i, int j, ref TileRestingInfo info, int nextStyleHeight = 40, bool fat = false, bool hasOffset = false, bool shitter = false)
         {
             if (hasOffset)
             {
@@ -78,6 +78,9 @@ namespace CalamityMod
 
             Tile tile = Framing.GetTileSafely(i, j);
             bool frameCheck = fat ? tile.TileFrameX >= 35 : tile.TileFrameX != 0;
+
+            if (shitter)
+                info.ExtraInfo.IsAToilet = true;
 
             info.TargetDirection = -1;
             if (frameCheck)
@@ -403,19 +406,19 @@ namespace CalamityMod
                 {
                     player.piggyBankProjTracker.Clear();
                     player.voidLensChest.Clear();
-                    int num213 = Chest.FindChest(left, top);
-                    if (num213 != -1)
+                    int dresserChestID = Chest.FindChest(left, top);
+                    if (dresserChestID != -1)
                     {
                         Main.stackSplit = 600;
-                        if (num213 == player.chest)
+                        if (dresserChestID == player.chest)
                         {
                             player.chest = -1;
                             Recipe.FindRecipes();
                             SoundEngine.PlaySound(SoundID.MenuClose);
                         }
-                        else if (num213 != player.chest && player.chest == -1)
+                        else if (dresserChestID != player.chest && player.chest == -1)
                         {
-                            player.chest = num213;
+                            player.chest = dresserChestID;
                             Main.playerInventory = true;
                             Main.recBigList = false;
                             SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -424,7 +427,7 @@ namespace CalamityMod
                         }
                         else
                         {
-                            player.chest = num213;
+                            player.chest = dresserChestID;
                             Main.playerInventory = true;
                             Main.recBigList = false;
                             SoundEngine.PlaySound(SoundID.MenuTick);
@@ -1251,6 +1254,11 @@ namespace CalamityMod
             TileObjectData.newTile.LavaDeath = !lavaImmune;
             TileObjectData.newTile.LavaPlacement = lavaImmune ? LiquidPlacement.Allowed : LiquidPlacement.NotAllowed;
             TileObjectData.newTile.StyleLineSkip = 2;
+            TileObjectData.newTile.DrawYOffset = -2;
+            TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+    		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
+	    	TileObjectData.newAlternate.DrawYOffset = -10;
+		    TileObjectData.addAlternate(0);
             TileObjectData.addTile(mt.Type);
 
             // All hanging lanterns count as light sources.
@@ -1259,6 +1267,19 @@ namespace CalamityMod
                 mt.AddMapEntry(new Color(251, 235, 127), Language.GetText("MapObject.Lantern"));
 
             mt.AdjTiles = new int[] { TileID.HangingLanterns };
+        }
+
+        // Allow hanging lanterns to move up when hung on platforms
+        internal static void PlatformHangOffset(int i, int j, ref int offsetY)
+        {
+            Tile tile = Main.tile[i, j];
+            TileObjectData data = TileObjectData.GetTileData(tile);
+            int topLeftX = i - tile.TileFrameX / 18 % data.Width;
+            int topLeftY = j - tile.TileFrameY / 18 % data.Height;
+            if (WorldGen.IsBelowANonHammeredPlatform(topLeftX, topLeftY))
+            {
+                offsetY -= 8;
+            }
         }
 
         /// <summary>

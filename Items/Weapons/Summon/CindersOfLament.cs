@@ -29,12 +29,17 @@ namespace CalamityMod.Items.Weapons.Summon
             Item.shootSpeed = 10f;
             Item.DamageType = DamageClass.Summon;
         }
+        
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<EntropysVigil>();
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.altFunctionUse != 2)
             {
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool())
                     type = ModContent.ProjectileType<CatastropheSummon>();
                 int p = Projectile.NewProjectile(source, Main.MouseWorld, Vector2.Zero, type, damage, knockback, player.whoAmI);
                 if (Main.projectile.IndexInRange(p))

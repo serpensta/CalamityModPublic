@@ -92,7 +92,7 @@ namespace CalamityMod.Projectiles.Ranged
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Projectile.position = Projectile.Center;
             Projectile.width = Projectile.height = 10;
@@ -105,7 +105,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.localNPCHitCooldown = 10;
             Projectile.Damage();
 
-            SoundStyle sound = Main.rand.NextBool(2) ? SoundID.Item93 : SoundID.Item92;
+            SoundStyle sound = Main.rand.NextBool() ? SoundID.Item93 : SoundID.Item92;
             SoundEngine.PlaySound(sound with { Volume = sound.Volume * 0.5f}, Projectile.position);
 
             for (int i = 0; i < 5; i++)
@@ -113,12 +113,12 @@ namespace CalamityMod.Projectiles.Ranged
                 int dust = Dust.NewDust(Projectile.Center, 1, 1, 132, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 0.5f);
                 Main.dust[dust].noGravity = true;
             }
-            int num212 = Main.rand.Next(10, 20);
-            for (int num213 = 0; num213 < num212; num213++)
+            int rando = Main.rand.Next(10, 20);
+            for (int i = 0; i < rando; i++)
             {
-                int num214 = Dust.NewDust(Projectile.Center - Projectile.velocity / 2f, 0, 0, 135, 0f, 0f, 100, default, 2f);
-                Main.dust[num214].velocity *= 2f;
-                Main.dust[num214].noGravity = true;
+                int dusty = Dust.NewDust(Projectile.Center - Projectile.velocity / 2f, 0, 0, 135, 0f, 0f, 100, default, 2f);
+                Main.dust[dusty].velocity *= 2f;
+                Main.dust[dusty].noGravity = true;
             }
         }
     }

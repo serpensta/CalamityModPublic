@@ -14,12 +14,12 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()
         {
-            Item.damage = 14;
+            Item.damage = 9;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 62;
             Item.height = 26;
-            Item.useTime = 26;
-            Item.useAnimation = 26;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 5.5f;
@@ -40,8 +40,8 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int num6 = Main.rand.Next(2, 4);
-            for (int index = 0; index < num6; ++index)
+            int projAmt = Main.rand.Next(2, 4);
+            for (int index = 0; index < projAmt; ++index)
             {
                 float SpeedX = velocity.X + Main.rand.Next(-40, 41) * 0.05f;
                 float SpeedY = velocity.Y + Main.rand.Next(-40, 41) * 0.05f;

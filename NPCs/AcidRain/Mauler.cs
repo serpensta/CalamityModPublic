@@ -492,7 +492,7 @@ namespace CalamityMod.NPCs.AcidRain
                 int damageBoom = 200;
                 for (iBoom = 0; iBoom < 25; iBoom++)
                 {
-                    int projectileType = Main.rand.NextBool(2) ? ModContent.ProjectileType<SulphuricAcidMist>() : ModContent.ProjectileType<SulphuricAcidBubble>();
+                    int projectileType = Main.rand.NextBool() ? ModContent.ProjectileType<SulphuricAcidMist>() : ModContent.ProjectileType<SulphuricAcidBubble>();
                     offsetAngleBoom = startAngleBoom + deltaAngleBoom * (iBoom + iBoom * iBoom) / 2f + 32f * iBoom;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -500,25 +500,25 @@ namespace CalamityMod.NPCs.AcidRain
                     int boom2 = Projectile.NewProjectile(NPC.GetSource_Death(), valueBoom.X, valueBoom.Y, (float)(-Math.Sin(offsetAngleBoom) * 6f), (float)(-Math.Cos(offsetAngleBoom) * 6f), projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
                     }
                 }
-                for (int num621 = 0; num621 < 25; num621++)
+                for (int i = 0; i < 25; i++)
                 {
-                    int num622 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 100, default, 2f);
-                    Main.dust[num622].velocity *= 3f;
-                    if (Main.rand.NextBool(2))
+                    int deathDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 100, default, 2f);
+                    Main.dust[deathDust].velocity *= 3f;
+                    if (Main.rand.NextBool())
                     {
-                        Main.dust[num622].scale = 0.5f;
-                        Main.dust[num622].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
+                        Main.dust[deathDust].scale = 0.5f;
+                        Main.dust[deathDust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
                     }
-                    Main.dust[num622].noGravity = true;
+                    Main.dust[deathDust].noGravity = true;
                 }
-                for (int num623 = 0; num623 < 50; num623++)
+                for (int j = 0; j < 50; j++)
                 {
-                    int num624 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 0f, 0f, 100, default, 3f);
-                    Main.dust[num624].noGravity = true;
-                    Main.dust[num624].velocity *= 5f;
-                    num624 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 0f, 0f, 100, default, 2f);
-                    Main.dust[num624].velocity *= 2f;
-                    Main.dust[num624].noGravity = true;
+                    int deathDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 0f, 0f, 100, default, 3f);
+                    Main.dust[deathDust2].noGravity = true;
+                    Main.dust[deathDust2].velocity *= 5f;
+                    deathDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 0f, 0f, 100, default, 2f);
+                    Main.dust[deathDust2].velocity *= 2f;
+                    Main.dust[deathDust2].noGravity = true;
                 }
                 NPC.netUpdate = true;
             }

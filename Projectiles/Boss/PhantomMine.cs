@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Boss
                             for (int i = 0; i < totalProjectiles; i++)
                             {
                                 Vector2 vector = new Vector2(0f, -8f).RotatedBy(radians * i);
-                                int type = Main.rand.NextBool(2) ? ModContent.ProjectileType<PhantomShot2>() : ModContent.ProjectileType<PhantomShot>();
+                                int type = Main.rand.NextBool() ? ModContent.ProjectileType<PhantomShot2>() : ModContent.ProjectileType<PhantomShot>();
                                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, type, Projectile.damage, 0f, Main.myPlayer);
                             }
                         }
@@ -70,7 +70,7 @@ namespace CalamityMod.Projectiles.Boss
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, 12f, targetHitbox);
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
             Projectile.position.X = Projectile.position.X + (Projectile.width / 2);
@@ -79,23 +79,23 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.height = 150;
             Projectile.position.X = Projectile.position.X - (Projectile.width / 2);
             Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
-            for (int num621 = 0; num621 < 15; num621++)
+            for (int i = 0; i < 15; i++)
             {
-                int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 180, 0f, 0f, 100, default, 1.2f);
-                Main.dust[num622].velocity *= 3f;
-                if (Main.rand.NextBool(2))
+                int phantomDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 180, 0f, 0f, 100, default, 1.2f);
+                Main.dust[phantomDust].velocity *= 3f;
+                if (Main.rand.NextBool())
                 {
-                    Main.dust[num622].scale = 0.5f;
-                    Main.dust[num622].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
+                    Main.dust[phantomDust].scale = 0.5f;
+                    Main.dust[phantomDust].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
                 }
             }
-            for (int num623 = 0; num623 < 30; num623++)
+            for (int j = 0; j < 30; j++)
             {
-                int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 180, 0f, 0f, 100, default, 1.7f);
-                Main.dust[num624].noGravity = true;
-                Main.dust[num624].velocity *= 5f;
-                num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 60, 0f, 0f, 100, default, 1f);
-                Main.dust[num624].velocity *= 2f;
+                int phantomDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 180, 0f, 0f, 100, default, 1.7f);
+                Main.dust[phantomDust2].noGravity = true;
+                Main.dust[phantomDust2].velocity *= 5f;
+                phantomDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 60, 0f, 0f, 100, default, 1f);
+                Main.dust[phantomDust2].velocity *= 2f;
             }
         }
 
@@ -106,7 +106,7 @@ namespace CalamityMod.Projectiles.Boss
 
             if (Projectile.velocity.Length() >= Projectile.ai[0])
             {
-                target.AddBuff(ModContent.BuffType<Nightwither>(), 180);
+                target.AddBuff(ModContent.BuffType<Nightwither>(), 120);
                 target.AddBuff(ModContent.BuffType<WhisperingDeath>(), 180);
             }
         }

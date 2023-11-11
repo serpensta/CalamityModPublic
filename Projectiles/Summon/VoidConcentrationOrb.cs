@@ -12,6 +12,7 @@ namespace CalamityMod.Projectiles.Summon
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
+            ProjectileID.Sets.MinionShot[Projectile.type] = true;
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
         }
 
@@ -22,12 +23,10 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.netImportant = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.minionSlots = 0f;
             Projectile.timeLeft = 300;
             Projectile.penetrate = 1;
 
             Projectile.tileCollide = false;
-            Projectile.minion = true;
             Projectile.scale = 0.01f;
             Projectile.DamageType = DamageClass.Summon;
         }
@@ -45,7 +44,7 @@ namespace CalamityMod.Projectiles.Summon
             {
                 int shadow = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 27, 0f, 0f, 100, new Color(0, 0, 0), 2f);
                 Main.dust[shadow].velocity *= 3f;
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool())
                 {
                     Main.dust[shadow].scale = 0.5f;
                     Main.dust[shadow].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
@@ -70,20 +69,20 @@ namespace CalamityMod.Projectiles.Summon
             {
                 if (target != null)
                 {
-                    float num550 = 40f;
-                    Vector2 vector43 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
-                    float num551 = target.Center.X - vector43.X;
-                    float num552 = target.Center.Y - vector43.Y;
-                    float num553 = (float)Math.Sqrt((double)(num551 * num551 + num552 * num552));
-                    if (num553 < 100f)
+                    float projSpeed = 40f;
+                    Vector2 fireDirection = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    float fireXVel = target.Center.X - fireDirection.X;
+                    float fireYVel = target.Center.Y - fireDirection.Y;
+                    float fireVelocity = (float)Math.Sqrt((double)(fireXVel * fireXVel + fireYVel * fireYVel));
+                    if (fireVelocity < 100f)
                     {
-                        num550 = 28f; //14
+                        projSpeed = 28f; //14
                     }
-                    num553 = num550 / num553;
-                    num551 *= num553;
-                    num552 *= num553;
-                    Projectile.velocity.X = (Projectile.velocity.X * 25f + num551) / 26f;
-                    Projectile.velocity.Y = (Projectile.velocity.Y * 25f + num552) / 26f;
+                    fireVelocity = projSpeed / fireVelocity;
+                    fireXVel *= fireVelocity;
+                    fireYVel *= fireVelocity;
+                    Projectile.velocity.X = (Projectile.velocity.X * 25f + fireXVel) / 26f;
+                    Projectile.velocity.Y = (Projectile.velocity.Y * 25f + fireYVel) / 26f;
                     if (Main.rand.NextBool(5))
                         Projectile.velocity *= 1.1f;
                 }

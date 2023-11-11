@@ -13,11 +13,11 @@ namespace CalamityMod.Items.Weapons.Magic
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()
         {
-            Item.damage = 250;
+            Item.damage = 220;
             Item.DamageType = DamageClass.Magic;
             Item.noUseGraphic = true;
             Item.channel = true;
-            Item.mana = 10;
+            Item.mana = 20;
             Item.width = 66;
             Item.height = 82;
             Item.useTime = 25;
@@ -30,6 +30,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
             Item.value = CalamityGlobalItem.Rarity15BuyPrice;
             Item.rare = ModContent.RarityType<Violet>();
+        }
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<BurningSea>();
         }
 
         // This weapon uses a holdout projectile.

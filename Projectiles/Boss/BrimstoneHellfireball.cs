@@ -67,10 +67,10 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.localAI[0] += 1f;
             }
 
-            int num458 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, (int)CalamityDusts.Brimstone, 0f, 0f, 170, default, 1.1f);
-            Main.dust[num458].noGravity = true;
-            Main.dust[num458].velocity *= 0.5f;
-            Main.dust[num458].velocity += Projectile.velocity * 0.1f;
+            int brimDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, (int)CalamityDusts.Brimstone, 0f, 0f, 170, default, 1.1f);
+            Main.dust[brimDust].noGravity = true;
+            Main.dust[brimDust].velocity *= 0.5f;
+            Main.dust[brimDust].velocity += Projectile.velocity * 0.1f;
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -78,7 +78,7 @@ namespace CalamityMod.Projectiles.Boss
             return new Color(250, 50, 50, Projectile.alpha);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.owner == Main.myPlayer)
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HellfireExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
@@ -89,7 +89,7 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0)
                 return;
 
-            target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 300);
+            target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 150);
         }
 
         public override bool PreDraw(ref Color lightColor)

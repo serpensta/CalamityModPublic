@@ -47,7 +47,8 @@
         internal static readonly float LeatherWhipTagDamageMultiplier = 1.08f;
         internal static readonly float SnapthornTagDamageMultiplier = 1.04f;
         internal static readonly float SpinalTapTagDamageMultiplier = 1.08f;
-        internal static readonly float FirecrackerExplosionDamageMultiplier = 2.25f; // Relative to the whip, not the summon.
+        internal static readonly float FirecrackerExplosionDamageMultiplier = 2f; // Note: Lasts for 1 hit
+        internal static readonly float CoolWhipTagDamageMultiplier = 1.08f;
         internal static readonly float DurendalTagDamageMultiplier = 1.09f;
         internal static readonly float MorningStarTagDamageMultiplier = 1.11f;
         internal static readonly float KaleidoscopeTagDamageMultiplier = 1.12f;
@@ -58,7 +59,12 @@
         // Rogue stealth
         // If stealth is too weak, increase this number. If stealth is too strong, decrease this number.
         // This value is intentionally not readonly.
-        public static double UniversalStealthStrikeDamageFactor = 0.5;
+        public static double UniversalStealthStrikeDamageFactor = 0.42;
+        // Shade 23/10/2023: So stealth apparently was indeed way too strong after the bugfix with nearly every weapon being way stronger than before
+        // due to Flawless now working properly and thus the stealth factor was changed back to 0.42 from 0.5.
+        // This nerf takes feedback from various players as well as my own personal experience with testing rogue stuff today; it feels too strong and
+        // something needed to be done about it.
+
         internal static readonly float BaseStealthGenTime = 4f; // 4 seconds
         internal static readonly float MovingStealthGenRatio = 0.5f;
 

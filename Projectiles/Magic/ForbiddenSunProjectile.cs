@@ -48,13 +48,13 @@ namespace CalamityMod.Projectiles.Magic
             }
             if (Main.rand.NextBool(4))
             {
-                int num469 = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? 16 : 174, 0f, 0f);
-                Main.dust[num469].noGravity = true;
-                Main.dust[num469].velocity *= 0f;
+                int forbid = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, Main.rand.NextBool(3) ? 16 : 174, 0f, 0f);
+                Main.dust[forbid].noGravity = true;
+                Main.dust[forbid].velocity *= 0f;
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.owner == Main.myPlayer)
             {

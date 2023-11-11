@@ -50,7 +50,7 @@ AntiMaterielRifle: {
 	Tooltip:
 		'''
 		Converts musket balls into .50 caliber sniper rounds that rip apart enemy defense and DR
-		Critical hits unleash a second swarm of bullets
+		Critical hits unleash a second swarm of 5 bullets
 		'''
 }
 
@@ -63,7 +63,7 @@ Arbalest: {
 	DisplayName: Arbalest
 	Tooltip:
 		'''
-		Fires a volley of 10 high-speed arrows
+		Fires a volley of 6 high-speed arrows
 		Arrows start off small and grow in size with continuous fire
 		Arrow damage, spread and knockback scale with arrow size
 		'''
@@ -79,7 +79,7 @@ ArterialAssault: {
 	Tooltip:
 		'''
 		Fires a chain of 5 arrows from the sky
-		Wooden arrows are converted into homing bloodfire arrows
+		All arrows will rapidly home in on nearby enemies
 		'''
 }
 
@@ -102,7 +102,7 @@ Auralis: {
 	DisplayName: Auralis
 	Tooltip:
 		'''
-		Fires a high speed glowing bullet that inflicts debilitating debuffs
+		Fires a high speed glowing bullet that reduces enemy protection
 		Press <right> to zoom out
 		Standing still provides increasing damage bonuses up to 25%
 		Standing still for 5 or more seconds while using the scope ability will summon an aurora
@@ -116,14 +116,14 @@ AuroraBlazer: {
 	DisplayName: Aurora Blazer
 	Tooltip:
 		'''
-		Spews astral flames that travel in a star-shaped patterns
-		60% chance to save ammo
+		Spews a nebula stream which forms a star shaped pattern
+		Uses gel for ammo
 		'''
 }
 
 Barinade: {
 	DisplayName: Barinade
-	Tooltip: Converts wooden arrows into electric bolt arrows that explode
+	Tooltip: Fires two converging high-velocity fin arrows that easily soar through the air
 }
 
 Barinautical: {
@@ -143,7 +143,12 @@ BladedgeGreatbow: {
 
 BlightSpewer: {
 	DisplayName: Blight Spewer
-	Tooltip: ""
+	Tooltip:
+		'''
+		Fires clouds of plague nanomachines that stick to tiles
+		Nanomachines aggressively lock onto nearby enemies
+		40% chance to save ammo
+		'''
 }
 
 BlissfulBombardier: {
@@ -159,9 +164,8 @@ BloodBoiler: {
 	DisplayName: Blood Boiler
 	Tooltip:
 		'''
-		Fires a stream of lifestealing bloodfire
+		Fires twin streams of life stealing bloodfire that returns to you
 		Uses your health as ammo
-		25% chance to save ammo
 		'''
 }
 
@@ -223,7 +227,11 @@ ClaretCannon: {
 
 CleansingBlaze: {
 	DisplayName: Cleansing Blaze
-	Tooltip: 90% chance to save ammo
+	Tooltip:
+		'''
+		Unleashes a torrent of flames which can pass through tiles
+		Uses gel for ammo
+		'''
 }
 
 ClockGatlignum: {
@@ -275,7 +283,7 @@ ContinentalGreatbow: {
 		'''
 		Wooden arrows are set alight with fire
 		Fires 3 arrows at once
-		Fires 2 additional cursed, hellfire, or ichor arrows
+		Fires 2 additional hellfire or ichor arrows
 		'''
 }
 
@@ -348,12 +356,14 @@ DarkechoGreatbow: {
 		'''
 }
 
-DeepcoreGK2: {
-	DisplayName: Deepcore GK2
+DeadSunsWind: {
+	DisplayName: Dead Sun's Wind
 	Tooltip:
 		'''
-		Bullets are twice as large and ignores 15 points of enemy defense
-		'For rock and stone!'
+		Fires a concentrated blast of superheated cosmic plasma that explodes and can ricochet off blocks
+		Shots aggressively home in on enemies after being ricocheted
+		Consecutive hits cause larger explosions
+		Uses gel for ammo
 		'''
 }
 
@@ -363,6 +373,15 @@ Deathwind: {
 		'''
 		Fires a spread of 4 arrows
 		Wooden arrows are converted into nebula arrows
+		'''
+}
+
+DeepcoreGK2: {
+	DisplayName: Deepcore GK2
+	Tooltip:
+		'''
+		Bullets are twice as large and ignores 15 points of enemy defense
+		'For rock and stone!'
 		'''
 }
 
@@ -389,12 +408,11 @@ DragonsBreath: {
 	DisplayName: Dragon's Breath
 	Tooltip:
 		'''
-		Press <left> to fire in two-shot bursts
-		The first shot is a spread of 6 normal bullets
-		The second shot is a tight spread of 6 Dragon's Breath rounds
-		Press <right> to fire full auto and mix the bullets randomly, but deal 20% less damage
-		This weapon has no randomness to its spread pattern
-		66% chance to save ammo
+		Fires dragon fireballs at an accelerating pace
+		Upon firing for long enough, you will begin using a cartridge of energy
+		While using a cartridge you will shoot a draconic beam of fire that doesn't consume ammo
+		Once a cartridge has been ejected you will return to the original fire rate
+		80% chance to save ammo
 		'''
 }
 
@@ -423,8 +441,9 @@ ElementalEruption: {
 	DisplayName: Elemental Eruption
 	Tooltip:
 		'''
-		Fires a spread of rainbow flames
-		90% chance to save ammo
+		Charge and then spew rainbow flames and pairs of high-energy homing flares
+		Uses gel for ammo
+		70% chance to save ammo
 		'''
 }
 
@@ -467,7 +486,7 @@ FlakToxicannon: {
 	Tooltip:
 		'''
 		Fires angled shots in the direction of the cursor
-		Can only be shot in a cone direction above the player
+		Can only be shot in a wide cone above the player
 		'High IQ required'
 		'''
 }
@@ -476,8 +495,8 @@ FlarewingBow: {
 	DisplayName: Flarewing Bow
 	Tooltip:
 		'''
-		Shoots a spread of 4 arrows
-		Wooden arrows are converted into bouncing obsidian bats
+		Shoots a spread of 3 arrows
+		Wooden arrows are converted into obsidian bats which home in after piercing once
 		'''
 }
 
@@ -519,11 +538,6 @@ Galeforce: {
 	Tooltip: Fires a spread of low-damage feathers
 }
 
-GodsBellows: {
-	DisplayName: God's Bellows
-	Tooltip: 70% chance to save ammo
-}
-
 GoldenEagle: {
 	DisplayName: Golden Eagle
 	Tooltip: Fires 5 bullets at once
@@ -550,8 +564,9 @@ HalleysInferno: {
 	DisplayName: Halley's Inferno
 	Tooltip:
 		'''
-		Fires a flaming blue comet
+		Fires a highly concentrated shot of lunar fire
 		Press <right> to zoom out
+		Uses gel for ammo
 		50% chance to save ammo
 		'Halley came sooner than expected'
 		'''
@@ -564,7 +579,11 @@ HandheldTank: {
 
 HavocsBreath: {
 	DisplayName: Havoc's Breath
-	Tooltip: 50% chance to save ammo
+	Tooltip:
+		'''
+		Fires a cone of scorching brimstone fire
+		Uses gel for ammo
+		'''
 }
 
 HeavenlyGale: {
@@ -648,9 +667,14 @@ LunarianBow: {
 		'''
 }
 
-MagnaStriker: {
-	DisplayName: Magna Striker
-	Tooltip: Fires a string of opal and magna strikes
+ArcNovaDiffuser: {
+	DisplayName: Arc Nova Diffuser
+	Tooltip:
+		'''
+		Charges and fires a rapid burst of nova bolts
+		The first charging stage increases the fire rate of the burst
+		The second charging stage replaces the rapid burst with a devastating nova blast
+		'''
 }
 
 MagnomalyCannon: {
@@ -694,8 +718,9 @@ Meowthrower: {
 	DisplayName: Meowthrower
 	Tooltip:
 		'''
-		Fires blue and pink flames that emit meows on enemy hits
-		85% chance to save ammo
+		Cooks your foes to purrfection with catty smoke
+		Occasionally launches homing feline entities
+		Uses gel for ammo
 		'''
 }
 
@@ -721,9 +746,16 @@ MineralMortar: {
 	Tooltip: Shoots an onyx bomb that explodes into sand sharks on death
 }
 
-Minigun: {
-	DisplayName: Minigun
-	Tooltip: 80% chance to save ammo
+Kingsbane: {
+	DisplayName: Kingsbane
+	Tooltip:
+		'''
+		After revving up, rapidly fire bullets
+		When you stop firing you will release a barrage of auric bullets
+		Auric bullets aggressively home in on enemies and ignore 50 points of defense
+		Constantly consumes ammo while in use
+		90% chance to save ammo
+		'''
 }
 
 MolecularManipulator: {
@@ -794,8 +826,8 @@ OpalStriker: {
 	DisplayName: Opal Striker
 	Tooltip:
 		'''
-		Fires a string of opal strikes
-		50% chance to save ammo
+		Fires a chargeable heated energy bolt that pierces
+		Fully charged shots deal extra damage and move faster
 		'''
 }
 
@@ -803,8 +835,11 @@ OverloadedBlaster: {
 	DisplayName: Overloaded Blaster
 	Tooltip:
 		'''
-		Fires a large spread of bouncing slime
-		33% chance to save ammo
+		Converts gel into a spread of energized slime pearls that overload when they come to a stop
+		Overloaded slime pearls deal double damage but no longer pierce
+		Slime pearls bounce off of walls at very high speed
+		Uses gel for ammo
+		25% chance to save ammo
 		'''
 }
 
@@ -812,8 +847,9 @@ P90: {
 	DisplayName: P90
 	Tooltip:
 		'''
-		Unleashes a stream of bullets at an incredible rate
-		50% chance to save ammo
+		Unleashes a stream of armor-piercing rounds at an incredible rate
+		Armor-piercing rounds ignore 15 defense
+		75% chance to save ammo
 		'It's a bullet hose'
 		'''
 }
@@ -848,7 +884,8 @@ Photoviscerator: {
 		'''
 		Fires a stream of exo flames and light that explodes into homing sparks
 		Press <right> to fire homing flares which stick to enemies and incinerate them
-		90% chance to save ammo
+		Uses gel for ammo
+		95% chance to save ammo
 		'''
 }
 
@@ -858,7 +895,7 @@ PlagueTaintedSMG: {
 		'''
 		Shoots plague bullets that spawn drones on critical hits
 		Bullets deal more damage and knockback the closer the enemy is
-		Drones always crit upon hitting a plagued enemy
+		Drones have a much higher crit chance upon hitting a plagued enemy
 		Press <right> to fire a drone swarm
 		'''
 }
@@ -900,8 +937,9 @@ PristineFury: {
 	DisplayName: Pristine Fury
 	Tooltip:
 		'''
-		Fires an intense helix of flames that explode into a column of fire
-		Press <right> to fire a short ranged cloud of lingering flames
+		Fires an intense helix of flames that explode into a column of smoke
+		Press <right> to disperse intense clouds of profaned heat
+		Uses gel for ammo
 		'''
 }
 
@@ -1007,7 +1045,11 @@ SepticSkewer: {
 
 Shadethrower: {
 	DisplayName: Shadethrower
-	Tooltip: 66% chance to save ammo
+	Tooltip:
+		'''
+		Spits clouds of shade which afflict enemies with brain rot
+		Uses gel for ammo
+		'''
 }
 
 Shellshooter: {
@@ -1054,7 +1096,11 @@ SomaPrime: {
 
 SparkSpreader: {
 	DisplayName: Spark Spreader
-	Tooltip: 70% chance to save ammo
+	Tooltip:
+		'''
+		Ignites your foe with flaming sparks
+		Uses gel for ammo
+		'''
 }
 
 SpectralstormCannon: {
@@ -1068,7 +1114,13 @@ SpectralstormCannon: {
 
 SpeedBlaster: {
 	DisplayName: Speed Blaster
-	Tooltip: Shoots a string of paint blasts
+	Tooltip:
+		'''
+		Rapidly fires phosphorescent paintball shots
+		Press <right> to eject a powerful glob which propels you while moving
+		This ability has a cooldown of {0} seconds
+		While under cooldown, you fire more rapidly with greater accuracy
+		'''
 }
 
 Spyker: {
@@ -1159,7 +1211,12 @@ TelluricGlare: {
 
 TerraFlameburster: {
 	DisplayName: Terra Flameburster
-	Tooltip: 80% chance to save ammo
+	Tooltip:
+		'''
+		Charge and then spew high-energy flames and pairs of homing flares
+		Uses gel for ammo
+		50% chance to save ammo
+		'''
 }
 
 TheBallista: {
@@ -1232,9 +1289,9 @@ TyrannysEnd: {
 	DisplayName: Tyranny's End
 	Tooltip:
 		'''
-		Converts musket balls into .70 caliber sniper rounds that bypass enemy Defense and DR
-		Inflicts Marked for Death on enemy hits
-		Critical hits summon a swarm of 10 additional bullets
+		Converts musket balls into .70 caliber sniper rounds that deal devastating damage
+		Inflicts Marked for Death on enemy hits and bypasses defense
+		Critical hits summon a swarm of 6 additional bullets
 		'Pierce the heart of even the most heavily-armored foe'
 		'''
 }
@@ -1285,5 +1342,15 @@ WulfrumBlunderbuss: {
 		Ignores 3 points of enemy Defense
 		[c/83B87E:'The good thing about Wulfrum is that while it breaks fast, it can be reused even faster.]
 		[c/83B87E:In fact, it is quite common for a robot to be turned into ammo right after it stops functioning.']
+		'''
+}
+
+MagnaCannon: {
+	DisplayName: Magna Cannon
+	Tooltip:
+		'''
+		Charges up a rapid fire burst of crystal bolts
+		Charging for longer increases the number of bolts fired
+		Fully charged shots fire an even longer and more rapid burst
 		'''
 }

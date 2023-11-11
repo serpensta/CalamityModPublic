@@ -31,6 +31,7 @@ namespace CalamityMod.NPCs.TownNPCs
             NPCID.Sets.AttackType[NPC.type] = 0;
             NPCID.Sets.AttackTime[NPC.type] = 60;
             NPCID.Sets.AttackAverageChance[NPC.type] = 10;
+            NPCID.Sets.ShimmerTownTransform[Type] = false;
             NPC.Happiness
                 .SetBiomeAffection<DesertBiome>(AffectionLevel.Like)
                 .SetBiomeAffection<JungleBiome>(AffectionLevel.Dislike)
@@ -248,7 +249,6 @@ namespace CalamityMod.NPCs.TownNPCs
         {
             if (firstButton)
             {
-                Main.LocalPlayer.Calamity().newBanditInventory = false;
                 shopName = "Shop";
             }
             else

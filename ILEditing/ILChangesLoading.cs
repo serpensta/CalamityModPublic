@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Armor.LunicCorps;
 using CalamityMod.Tiles.DraedonStructures;
 using CalamityMod.Tiles.FurnitureExo;
 using Terraria;
@@ -36,7 +38,6 @@ namespace CalamityMod.ILEditing
             IL_Main.DoDraw += AdditiveDrawing;
             On_Main.DrawGore += DrawForegroundStuff;
             On_Main.DrawCursor += UseCoolFireCursorEffect;
-            On_Main.SetDisplayMode += ResetRenderTargetSizes;
             On_Main.SortDrawCacheWorms += DrawFusableParticles;
             On_Main.DrawInfernoRings += DrawForegroundParticles;
             On_TileDrawing.DrawPartialLiquid += DrawCustomLava;
@@ -47,6 +48,14 @@ namespace CalamityMod.ILEditing
             On_TileDrawing.PreDrawTiles += ClearForegroundStuff;
             On_TileDrawing.Draw += ClearTilePings;
             On_CommonCode.ModifyItemDropFromNPC += ColorBlightedGel;
+
+            // Graphics (Energy shields)
+            // ORDER MATTERS. Whichever hook is registered last will draw a shield first, blocking all other hooks
+            // Please order these hooks in the ordering priority you want energy shields to have
+            On_Main.DrawInfernoRings += RoverDrive.DrawRoverDriveShields;
+            On_Main.DrawInfernoRings += LunicCorpsHelmet.DrawHaloShields;
+            On_Main.DrawInfernoRings += ProfanedSoulArtifact.DrawProfanedSoulShields; //both psa and psc
+            On_Main.DrawInfernoRings += TheSponge.DrawSpongeShields;
 
             // NPC behavior
             IL_Main.UpdateTime += PermitNighttimeTownNPCSpawning;
@@ -83,7 +92,6 @@ namespace CalamityMod.ILEditing
 
             // Damage and health balance
             On_Main.DamageVar_float_int_float += AdjustDamageVariance;
-            IL_Projectile.Damage += MakeTagDamageMultiplicative;
             IL_NPC.ScaleStats_ApplyExpertTweaks += RemoveExpertHardmodeScaling;
             IL_Projectile.AI_001 += AdjustChlorophyteBullets;
             IL_Projectile.AI_099_2 += LimitTerrarianProjectiles;
@@ -93,7 +101,6 @@ namespace CalamityMod.ILEditing
             IL_Player.UpdateJumpHeight += FixJumpHeightBoosts;
             IL_Player.Update += BaseJumpHeightAdjustment;
             IL_Player.Update += RunSpeedAdjustments;
-            IL_Player.Update += NerfMagiluminescence;
             IL_Player.Update += NerfSoaringInsigniaRunAcceleration;
             IL_Player.WingMovement += RemoveSoaringInsigniaInfiniteWingTime;
 
@@ -103,6 +110,9 @@ namespace CalamityMod.ILEditing
             // Mana regen balance
             IL_Player.Update += ManaRegenDelayAdjustment;
             IL_Player.UpdateManaRegen += ManaRegenAdjustment;
+
+            // Debuff balancing
+            IL_Projectile.StatusPlayer += RemoveFrozenInflictionFromDeerclopsIceSpikes;
 
             // World generation
             IL_WorldGen.Pyramid += ReplacePharaohSetInPyramids;
@@ -119,7 +129,7 @@ namespace CalamityMod.ILEditing
             IL_Sandstorm.HasSufficientWind += DecreaseSandstormWindSpeedRequirement;
             IL_Item.TryGetPrefixStatMultipliersForItem += RelaxPrefixRequirements;
             On_NPC.SlimeRainSpawns += PreventBossSlimeRainSpawns;
-            On_Item.CanShimmer += ChangeRodOfHarmonyShimmerRequirement;
+            On_Item.CanShimmer += AdjustShimmerRequirements;
 
             // TODO -- Beat Lava Slimes once and for all
             // IL.Terraria.NPC.VanillaHitEffect += RemoveLavaDropsFromExpertLavaSlimes;

@@ -45,16 +45,16 @@ namespace CalamityMod.Projectiles.Ranged
                     for (int d = 0; d < 2; d++)
                     {
                         int dustType = d == 0 ? dust1 : dust2;
-                        Vector2 value8 = Vector2.UnitX * -12f;
-                        value8 = -Vector2.UnitY.RotatedBy((double)(Projectile.localAI[0] * 0.1308997f + (float)d * MathHelper.Pi), default) * value7;
-                        int num42 = Dust.NewDust(Projectile.Center, 0, 0, dustType, 0f, 0f, 160, default, 1f);
-                        Main.dust[num42].scale = dustType == dust1 ? 1.5f : 1f;
-                        Main.dust[num42].noGravity = true;
-                        Main.dust[num42].position = Projectile.Center + value8;
-                        Main.dust[num42].velocity = Projectile.velocity;
-                        int num458 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 0.8f);
-                        Main.dust[num458].noGravity = true;
-                        Main.dust[num458].velocity *= 0f;
+                        Vector2 dustVel = Vector2.UnitX * -12f;
+                        dustVel = -Vector2.UnitY.RotatedBy((double)(Projectile.localAI[0] * 0.1308997f + (float)d * MathHelper.Pi), default) * value7;
+                        int typeDust = Dust.NewDust(Projectile.Center, 0, 0, dustType, 0f, 0f, 160, default, 1f);
+                        Main.dust[typeDust].scale = dustType == dust1 ? 1.5f : 1f;
+                        Main.dust[typeDust].noGravity = true;
+                        Main.dust[typeDust].position = Projectile.Center + dustVel;
+                        Main.dust[typeDust].velocity = Projectile.velocity;
+                        int extraDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 0.8f);
+                        Main.dust[extraDust].noGravity = true;
+                        Main.dust[extraDust].velocity *= 0f;
                     }
                 }
             }
@@ -72,19 +72,19 @@ namespace CalamityMod.Projectiles.Ranged
                 {
                     Projectile.alpha = 0;
                 }
-                float num55 = 30f;
-                float num56 = 1f;
+                float boostLevel = 30f;
+                float inc = 1f;
                 if (Projectile.ai[1] == 1f)
                 {
-                    Projectile.localAI[0] += num56;
-                    if (Projectile.localAI[0] > num55)
+                    Projectile.localAI[0] += inc;
+                    if (Projectile.localAI[0] > boostLevel)
                     {
-                        Projectile.localAI[0] = num55;
+                        Projectile.localAI[0] = boostLevel;
                     }
                 }
                 else
                 {
-                    Projectile.localAI[0] -= num56;
+                    Projectile.localAI[0] -= inc;
                     if (Projectile.localAI[0] <= 0f)
                     {
                         Projectile.Kill();
@@ -101,19 +101,19 @@ namespace CalamityMod.Projectiles.Ranged
                 {
                     Projectile.alpha = 0;
                 }
-                float num55 = 40f;
-                float num56 = 1.5f;
+                float boostLevel = 40f;
+                float inc = 1.5f;
                 if (Projectile.ai[1] == 0f)
                 {
-                    Projectile.localAI[0] += num56;
-                    if (Projectile.localAI[0] > num55)
+                    Projectile.localAI[0] += inc;
+                    if (Projectile.localAI[0] > boostLevel)
                     {
-                        Projectile.localAI[0] = num55;
+                        Projectile.localAI[0] = boostLevel;
                     }
                 }
                 else
                 {
-                    Projectile.localAI[0] -= num56;
+                    Projectile.localAI[0] -= inc;
                     if (Projectile.localAI[0] <= 0f)
                     {
                         Projectile.Kill();
@@ -129,7 +129,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
-            if ((target.damage > 5 || target.boss) && Projectile.owner == Main.myPlayer && !target.SpawnedFromStatue)
+            if (Projectile.owner == Main.myPlayer && target.IsAnEnemy(false))
             {
                 player.AddBuff(ModContent.BuffType<PolarisBuff>(), 480);
             }
@@ -142,7 +142,7 @@ namespace CalamityMod.Projectiles.Ranged
             return true;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item62 with { Volume = SoundID.Item62.Volume * 0.5f}, Projectile.position);
             if (Projectile.ai[1] == 1f) //Boost two
@@ -174,13 +174,13 @@ namespace CalamityMod.Projectiles.Ranged
                     source = source.RotatedBy((double)((float)(d - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
                     Vector2 dustVel = source - Projectile.Center;
 
-                    int i = Dust.NewDust(source + dustVel, 0, 0, Main.rand.NextBool(2) ? dust1 : dust2, dustVel.X * 0.3f, dustVel.Y * 0.3f, 100, default, 2f);
+                    int i = Dust.NewDust(source + dustVel, 0, 0, Main.rand.NextBool() ? dust1 : dust2, dustVel.X * 0.3f, dustVel.Y * 0.3f, 100, default, 2f);
                     Main.dust[i].noGravity = true;
 
-                    int j = Dust.NewDust(source + dustVel, 0, 0, Main.rand.NextBool(2) ? dust1 : dust2, dustVel.X * 0.2f, dustVel.Y * 0.2f, 100, default, 2f);
+                    int j = Dust.NewDust(source + dustVel, 0, 0, Main.rand.NextBool() ? dust1 : dust2, dustVel.X * 0.2f, dustVel.Y * 0.2f, 100, default, 2f);
                     Main.dust[j].noGravity = true;
 
-                    int k = Dust.NewDust(source + dustVel, 0, 0, Main.rand.NextBool(2) ? dust1 : dust2, dustVel.X * 0.1f, dustVel.Y * 0.1f, 100, default, 2f);
+                    int k = Dust.NewDust(source + dustVel, 0, 0, Main.rand.NextBool() ? dust1 : dust2, dustVel.X * 0.1f, dustVel.Y * 0.1f, 100, default, 2f);
                     Main.dust[k].noGravity = true;
                 }
 

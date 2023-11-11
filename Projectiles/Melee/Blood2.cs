@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 namespace CalamityMod.Projectiles.Melee
@@ -25,16 +26,21 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > 4f)
             {
-                for (int num468 = 0; num468 < 2; num468++)
+                for (int i = 0; i < 2; i++)
                 {
-                    int num469 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 5, 0f, 0f, 100, default, 1f);
-                    Main.dust[num469].noGravity = true;
-                    Main.dust[num469].velocity *= 0f;
+                    int blood = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 5, 0f, 0f, 100, default, 1f);
+                    Main.dust[blood].noGravity = true;
+                    Main.dust[blood].velocity *= 0f;
                 }
             }
 
             if (Projectile.timeLeft < 120)
                 CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 450f, 6f, 20f);
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(ModContent.BuffType<BurningBlood>(), 60);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Particles;
-using CalamityMod.Particles.Metaballs;
+using CalamityMod.Graphics.Metaballs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using System;
@@ -132,7 +131,7 @@ namespace CalamityMod.Projectiles.Magic
             Vector2 endOfLaser = Projectile.Center + Projectile.velocity * (LaserLength - Main.rand.NextFloat(12f, 72f));
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), endOfLaser, Main.rand.NextVector2Circular(4f, 8f), ModContent.ProjectileType<RancorFog>(), 0, 0f, Projectile.owner);
 
-            if (Main.rand.NextBool(2))
+            if (Main.rand.NextBool())
             {
                 int type = ModContent.ProjectileType<RancorSmallCinder>();
                 int damage = 0;
@@ -147,7 +146,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), endOfLaser, cinderVelocity, type, damage, 0f, Projectile.owner);
             }
 
-            FusableParticleManager.GetParticleSetByType<RancorGroundLavaParticleSet>().SpawnParticle(endOfLaser + Main.rand.NextVector2Circular(10f, 10f) + Projectile.velocity * 40f, 135f);
+            RancorLavaMetaball.SpawnParticle(endOfLaser + Main.rand.NextVector2Circular(10f, 10f) + Projectile.velocity * 40f, 135f);
         }
 
         private float PrimitiveWidthFunction(float completionRatio) => Projectile.scale * 20f;
@@ -163,8 +162,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (RayDrawer is null)
-                RayDrawer = new PrimitiveTrail(PrimitiveWidthFunction, PrimitiveColorFunction, specialShader: GameShaders.Misc["CalamityMod:Flame"]);
+            RayDrawer ??= new PrimitiveTrail(PrimitiveWidthFunction, PrimitiveColorFunction, specialShader: GameShaders.Misc["CalamityMod:Flame"]);
 
             GameShaders.Misc["CalamityMod:Flame"].UseImage1("Images/Misc/Perlin");
 

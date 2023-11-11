@@ -49,7 +49,7 @@ namespace CalamityMod.Projectiles.Summon
             //dust
             if (Main.rand.NextBool(15))
             {
-                int dusttype = Main.rand.NextBool(2) ? 68 : 67;
+                int dusttype = Main.rand.NextBool() ? 68 : 67;
                 if (Main.rand.NextBool(4))
                 {
                     dusttype = 80;
@@ -59,11 +59,11 @@ namespace CalamityMod.Projectiles.Summon
 
             }
             //Apply the buff
-            bool flag64 = Projectile.type == ModContent.ProjectileType<EndoCooperBody>();
+            bool isMinion = Projectile.type == ModContent.ProjectileType<EndoCooperBody>();
             Player player = Main.player[Projectile.owner];
             CalamityPlayer modPlayer = player.Calamity();
             player.AddBuff(ModContent.BuffType<EndoCooperBuff>(), 3600);
-            if (flag64)
+            if (isMinion)
             {
                 if (player.dead)
                 {
@@ -85,7 +85,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.localAI[0] += 1f;
                 for (int i = 0; i < 60; i++)
                 {
-                    int dusttype = Main.rand.NextBool(2) ? 68 : 67;
+                    int dusttype = Main.rand.NextBool() ? 68 : 67;
                     if (Main.rand.NextBool(4))
                     {
                         dusttype = 80;
@@ -133,7 +133,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.Kill();
 
             Projectile.MinionAntiClump();
-            bool flag24 = false;
+            bool accelerate = false;
             if (Projectile.ai[0] == 2f)
             {
                 Projectile.ai[1] += 1f;
@@ -148,10 +148,10 @@ namespace CalamityMod.Projectiles.Summon
                 }
                 else
                 {
-                    flag24 = true;
+                    accelerate = true;
                 }
             }
-            if (flag24)
+            if (accelerate)
             {
                 return;
             }
@@ -173,9 +173,9 @@ namespace CalamityMod.Projectiles.Summon
             }
             if (!gotoenemy)
             {
-                for (int num645 = 0; num645 < Main.maxNPCs; num645++)
+                for (int i = 0; i < Main.maxNPCs; i++)
                 {
-                    NPC nPC2 = Main.npc[num645];
+                    NPC nPC2 = Main.npc[i];
                     if (nPC2.CanBeChasedBy(Projectile, false))
                     {
                         float disttoobjective = Vector2.Distance(nPC2.Center, Projectile.Center);
@@ -287,9 +287,7 @@ namespace CalamityMod.Projectiles.Summon
                                     aimlaser = aimlaser.RotatedBy(MathHelper.ToRadians(30 * -laserdirection));
                                     float angularChange = (MathHelper.Pi / 180f) * 1.1f * laserdirection;
                                     //aimlaser *= 12f;
-                                    int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, aimlaser, ModContent.ProjectileType<EndoBeam>(), Projectile.damage, 0f, Projectile.owner, angularChange, (float)Projectile.whoAmI);
-                                    if (Main.projectile.IndexInRange(p))
-                                        Main.projectile[p].originalDamage = Projectile.originalDamage;
+                                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, aimlaser, ModContent.ProjectileType<EndoBeam>(), Projectile.damage, 0f, Projectile.owner, angularChange, (float)Projectile.whoAmI);
                                     laserdirection *= -1;
                                     break;
 

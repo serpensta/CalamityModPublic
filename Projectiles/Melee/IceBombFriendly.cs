@@ -57,23 +57,23 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.ai[0] += 1f;
                 if (Projectile.ai[0] == 120f)
                 {
-                    for (int num621 = 0; num621 < 8; num621++)
+                    for (int i = 0; i < 8; i++)
                     {
-                        int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67, 0f, 0f, 100, default, 2f);
-                        Main.dust[num622].velocity *= 3f;
-                        if (Main.rand.NextBool(2))
+                        int icyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67, 0f, 0f, 100, default, 2f);
+                        Main.dust[icyDust].velocity *= 3f;
+                        if (Main.rand.NextBool())
                         {
-                            Main.dust[num622].scale = 0.5f;
-                            Main.dust[num622].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
+                            Main.dust[icyDust].scale = 0.5f;
+                            Main.dust[icyDust].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
                         }
                     }
-                    for (int num623 = 0; num623 < 14; num623++)
+                    for (int j = 0; j < 14; j++)
                     {
-                        int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67, 0f, 0f, 100, default, 3f);
-                        Main.dust[num624].noGravity = true;
-                        Main.dust[num624].velocity *= 5f;
-                        num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67, 0f, 0f, 100, default, 2f);
-                        Main.dust[num624].velocity *= 2f;
+                        int icyDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67, 0f, 0f, 100, default, 3f);
+                        Main.dust[icyDust2].noGravity = true;
+                        Main.dust[icyDust2].velocity *= 5f;
+                        icyDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67, 0f, 0f, 100, default, 2f);
+                        Main.dust[icyDust2].velocity *= 2f;
                     }
 
                     Projectile.scale = 1f;
@@ -88,7 +88,7 @@ namespace CalamityMod.Projectiles.Melee
             return Main.dayTime ? new Color(50, 50, 255, Projectile.alpha) : new Color(255, 255, 255, Projectile.alpha);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
             float spread = 90f * 0.0174f;

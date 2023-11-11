@@ -24,10 +24,10 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.alpha = 50;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-            int num310 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + (float)Projectile.height - 2f), 2, 2, 14, 0f, 0f, 0, default, 1f);
-            Dust dust = Main.dust[num310];
+            int shadeDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + (float)Projectile.height - 2f), 2, 2, 14, 0f, 0f, 0, default, 1f);
+            Dust dust = Main.dust[shadeDust];
             dust.position.X -= 2f;
             dust.alpha = 38;
             dust.velocity *= 0.1f;
@@ -45,7 +45,7 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0)
                 return;
 
-            target.AddBuff(ModContent.BuffType<Shadowflame>(), 120);
+            target.AddBuff(ModContent.BuffType<BrainRot>(), 360);
         }
     }
 }

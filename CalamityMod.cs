@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Linq;
-using CalamityMod.Systems;
 using CalamityMod.Balancing;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
@@ -16,11 +14,9 @@ using CalamityMod.DataStructures;
 using CalamityMod.Effects;
 using CalamityMod.Events;
 using CalamityMod.FluidSimulation;
-using CalamityMod.ILEditing;
 using CalamityMod.Items;
 using CalamityMod.Items.Dyes.HairDye;
 using CalamityMod.Items.VanillaArmorChanges;
-using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.AstrumAureus;
 using CalamityMod.NPCs.AstrumDeus;
@@ -38,10 +34,12 @@ using CalamityMod.NPCs.ExoMechs.Artemis;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.NPCs.Leviathan;
+using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.OldDuke;
 using CalamityMod.NPCs.Perforator;
 using CalamityMod.NPCs.PlaguebringerGoliath;
 using CalamityMod.NPCs.Polterghast;
+using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.ProfanedGuardians;
 using CalamityMod.NPCs.Providence;
 using CalamityMod.NPCs.Ravager;
@@ -51,7 +49,6 @@ using CalamityMod.NPCs.StormWeaver;
 using CalamityMod.NPCs.SupremeCalamitas;
 using CalamityMod.NPCs.Yharon;
 using CalamityMod.Particles;
-using CalamityMod.Particles.Metaballs;
 using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.BaseProjectiles;
 using CalamityMod.Schematics;
@@ -61,7 +58,6 @@ using CalamityMod.UI.CalamitasEnchants;
 using CalamityMod.UI.DraedonsArsenal;
 using CalamityMod.UI.Rippers;
 using CalamityMod.Waters;
-using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -73,8 +69,6 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using Terraria.DataStructures;
-using CalamityMod.NPCs.NormalNPCs;
 
 [assembly: InternalsVisibleTo("CalTestHelpers")]
 [assembly: InternalsVisibleTo("InfernumMode")]
@@ -133,28 +127,19 @@ namespace CalamityMod
         // Speedrun timer
         internal static Stopwatch SpeedrunTimer = new Stopwatch();
 
-        // Debuff immunities, these are used in the NPCDebuffs file
-        public static int[] slimeEnemyImmunities = new int[1] { BuffID.Poisoned };
-        public static int[] iceEnemyImmunities = new int[3] { BuffID.Frostburn, BuffID.Frostburn2, ModContent.BuffType<GlacialState>() };
-        public static int[] sulphurEnemyImmunities = new int[4] { BuffID.Poisoned, BuffID.Venom, ModContent.BuffType<SulphuricPoisoning>(), ModContent.BuffType<Irradiated>() };
-        public static int[] sunkenSeaEnemyImmunities = new int[2] { ModContent.BuffType<Eutrophication>(), ModContent.BuffType<PearlAura>() };
-        public static int[] abyssEnemyImmunities = new int[1] { ModContent.BuffType<CrushDepth>() };
-        public static int[] cragEnemyImmunities = new int[3] { BuffID.OnFire, BuffID.OnFire3, ModContent.BuffType<BrimstoneFlames>() };
-        public static int[] astralEnemyImmunities = new int[2] { BuffID.Poisoned, ModContent.BuffType<AstralInfectionDebuff>() };
-        public static int[] plagueEnemyImmunities = new int[3] { BuffID.Poisoned, BuffID.Venom, ModContent.BuffType<Plague>() };
-        public static int[] holyEnemyImmunities = new int[4] { BuffID.OnFire, BuffID.OnFire3, ModContent.BuffType<HolyFlames>(), ModContent.BuffType<Nightwither>() };
-
         internal static CalamityMod Instance;
 
         // TODO -- Mod references should be contained in a ModSystem (example name "ModLoadedChecker")
         internal Mod musicMod = null; // This is Calamity's official music mod, CalamityModMusic
         internal bool MusicAvailable => !(musicMod is null);
 
+        // Please keep this in alphabetical order so it's easy to read
         internal Mod ancientsAwakened = null;
         internal Mod bossChecklist = null;
         internal Mod crouchMod = null;
         internal Mod dialogueTweak = null;
         internal Mod fargos = null;
+        internal Mod magicStorage = null;
         internal Mod overhaul = null;
         internal Mod redemption = null;
         internal Mod soa = null;
@@ -187,6 +172,8 @@ namespace CalamityMod
             ModLoader.TryGetMod("DialogueTweak", out dialogueTweak);
             fargos = null;
             ModLoader.TryGetMod("Fargowiltas", out fargos);
+            magicStorage = null;
+            ModLoader.TryGetMod("MagicStorage", out magicStorage);
             overhaul = null;
             ModLoader.TryGetMod("TerrariaOverhaul", out overhaul);
             redemption = null;
@@ -217,6 +204,9 @@ namespace CalamityMod
             // Mount balancing occurs during runtime and is undone when Calamity is unloaded.
             Mount.mounts[MountID.Unicorn].dashSpeed *= CalamityPlayer.UnicornSpeedNerfPower;
             Mount.mounts[MountID.Unicorn].runSpeed *= CalamityPlayer.UnicornSpeedNerfPower;
+
+            // Buff DCU's pickaxe power to equal PML pickaxe capabilities
+            Mount.drillPickPower = 225;
 
             // Make Graveyard biomes require more Gravestones
             SceneMetrics.GraveyardTileMax = 88;
@@ -354,14 +344,12 @@ namespace CalamityMod
             // However, render targets and certain other graphical objects can only be created on the main thread.
             Main.QueueMainThreadAction(() =>
             {
-                FusableParticleManager.LoadParticleRenderSets();
                 Main.OnPreDraw += PrepareRenderTargets;
             });
 
             RipperUI.Load();
             StealthUI.Load();
             ChargeMeterUI.Load();
-            AstralArcanumUI.Load(this);
             FlightBar.Load();
 
             // TODO -- Is this not possible to place in ModNPC.Load or ModNPC.SetStaticDefaults ?
@@ -386,7 +374,7 @@ namespace CalamityMod
             GameShaders.Hair.BindShader(ModContent.ItemType<AdrenalineHairDye>(), new LegacyHairShaderData().UseLegacyMethod((Player player, Color newColor, ref bool lighting) => Color.Lerp(player.hairColor, new Color(0, 255, 171), ((float)player.Calamity().adrenaline / (float)player.Calamity().adrenalineMax))));
             GameShaders.Hair.BindShader(ModContent.ItemType<RageHairDye>(), new LegacyHairShaderData().UseLegacyMethod((Player player, Color newColor, ref bool lighting) => Color.Lerp(player.hairColor, new Color(255, 83, 48), ((float)player.Calamity().rage / (float)player.Calamity().rageMax))));
             GameShaders.Hair.BindShader(ModContent.ItemType<WingTimeHairDye>(), new LegacyHairShaderData().UseLegacyMethod((Player player, Color newColor, ref bool lighting) =>
-            { 
+            {
                 float flightTimeInterpolant = player.wingTime / player.wingTimeMax;
                 if (player.mount.Active)
                     flightTimeInterpolant = 1f;
@@ -419,6 +407,7 @@ namespace CalamityMod
             crouchMod = null;
             dialogueTweak = null;
             fargos = null;
+            magicStorage = null;
             overhaul = null;
             redemption = null;
             soa = null;
@@ -458,14 +447,12 @@ namespace CalamityMod
 
             Main.QueueMainThreadAction(() =>
             {
-                FusableParticleManager.UnloadParticleRenderSets();
                 Main.OnPreDraw -= PrepareRenderTargets;
             });
 
             RipperUI.Unload();
             StealthUI.Unload();
             ChargeMeterUI.Unload();
-            AstralArcanumUI.Unload();
             FlightBar.Unload();
 
             if (!Main.dedServ)
@@ -476,6 +463,8 @@ namespace CalamityMod
 
             Mount.mounts[MountID.Unicorn].dashSpeed /= CalamityPlayer.UnicornSpeedNerfPower;
             Mount.mounts[MountID.Unicorn].runSpeed /= CalamityPlayer.UnicornSpeedNerfPower;
+
+            Mount.drillPickPower = 210;
 
             SceneMetrics.GraveyardTileMax = 36;
             SceneMetrics.GraveyardTileMin = 16;
@@ -507,7 +496,6 @@ namespace CalamityMod
 
         public static void PrepareRenderTargets(GameTime gameTime)
         {
-            FusableParticleManager.PrepareFusableParticleTargets();
             DeathAshParticle.PrepareRenderTargets();
             FluidFieldManager.Update();
         }
@@ -525,7 +513,8 @@ namespace CalamityMod
                     saveMethodInfo.Invoke(null, new object[] { cfg });
                 else
                     Instance.Logger.Error("TML ConfigManager.Save reflection failed. Method signature has changed. Notify Calamity Devs if you see this in your log.");
-            } catch
+            }
+            catch
             {
                 Instance.Logger.Error("An error occurred while manually saving Calamity mod configuration. This may be due to a complex mod conflict. It is safe to ignore this error.");
             }

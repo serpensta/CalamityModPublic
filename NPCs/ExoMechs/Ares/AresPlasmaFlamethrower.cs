@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Events;
+using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
@@ -6,16 +7,15 @@ using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
 using System;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Items.Weapons.DraedonsArsenal;
-using ReLogic.Utilities;
 
 namespace CalamityMod.NPCs.ExoMechs.Ares
 {
@@ -80,7 +80,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             NPC.damage = 100;
             NPC.width = 152;
             NPC.height = 90;
-            NPC.defense = 80;
+            NPC.defense = 100;
             NPC.DR_NERD(0.35f);
             NPC.LifeMaxNERB(1250000, 1495000, 650000);
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
@@ -92,7 +92,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             NPC.canGhostHeal = false;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.DeathSound = SoundID.NPCDeath14;
+            NPC.DeathSound = CommonCalamitySounds.ExoDeathSound;
             NPC.netAlways = true;
             NPC.boss = true;
             NPC.hide = true;
@@ -664,18 +664,18 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
             if (NPC.life <= 0)
             {
-                for (int num193 = 0; num193 < 2; num193++)
+                for (int i = 0; i < 2; i++)
                 {
                     Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
                 }
-                for (int num194 = 0; num194 < 20; num194++)
+                for (int j = 0; j < 20; j++)
                 {
-                    int num195 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
-                    Main.dust[num195].noGravity = true;
-                    Main.dust[num195].velocity *= 3f;
-                    num195 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
-                    Main.dust[num195].velocity *= 2f;
-                    Main.dust[num195].noGravity = true;
+                    int plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
+                    Main.dust[plasmaDust].noGravity = true;
+                    Main.dust[plasmaDust].velocity *= 3f;
+                    plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
+                    Main.dust[plasmaDust].velocity *= 2f;
+                    Main.dust[plasmaDust].noGravity = true;
                 }
 
                 if (Main.netMode != NetmodeID.Server)

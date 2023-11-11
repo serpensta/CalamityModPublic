@@ -18,9 +18,10 @@ namespace CalamityMod.Items.Accessories.Wings
     public class TracersSeraph : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Accessories.Wings";
+
         public override void SetStaticDefaults()
         {
-            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(250, 12f, 3f);
+            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(250, 11f, 2.8f);
         }
 
         public override void SetDefaults()
@@ -34,25 +35,25 @@ namespace CalamityMod.Items.Accessories.Wings
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            if (player.controlJump && player.wingTime > 0f && !player.canJumpAgain_Cloud && player.jump == 0 && player.velocity.Y != 0f && !hideVisual)
+            if (player.controlJump && player.wingTime > 0f && player.jump == 0 && player.velocity.Y != 0f && !hideVisual)
             {
-                int num59 = 4;
+                int dustXOffset = 4;
                 if (player.direction == 1)
                 {
-                    num59 = -40;
+                    dustXOffset = -40;
                 }
-                int num60 = Dust.NewDust(new Vector2(player.position.X + (float)(player.width / 2) + (float)num59, player.position.Y + (float)(player.height / 2) - 15f), 30, 30, 91, 0f, 0f, 100, default, 2.4f);
-                Main.dust[num60].noGravity = true;
-                Main.dust[num60].velocity *= 0.3f;
+                int flightDust = Dust.NewDust(new Vector2(player.position.X + (float)(player.width / 2) + (float)dustXOffset, player.position.Y + (float)(player.height / 2) - 15f), 30, 30, 91, 0f, 0f, 100, default, 2.4f);
+                Main.dust[flightDust].noGravity = true;
+                Main.dust[flightDust].velocity *= 0.3f;
                 if (Main.rand.NextBool(10))
                 {
-                    Main.dust[num60].fadeIn = 2f;
+                    Main.dust[flightDust].fadeIn = 2f;
                 }
-                Main.dust[num60].shader = GameShaders.Armor.GetSecondaryShader(player.cWings, player);
+                Main.dust[flightDust].shader = GameShaders.Armor.GetSecondaryShader(player.cWings, player);
             }
             CalamityPlayer modPlayer = player.Calamity();
-            player.accRunSpeed = 10f;
-            player.moveSpeed += 0.24f;
+            player.accRunSpeed = 9f;
+            player.moveSpeed += 0.18f;
             player.iceSkate = true;
             player.waterWalk = true;
             player.fireWalk = true;
@@ -66,11 +67,11 @@ namespace CalamityMod.Items.Accessories.Wings
 
         public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
         {
-            ascentWhenFalling = 1f; //0.85
-            ascentWhenRising = 0.175f; //0.15
-            maxCanAscendMultiplier = 1.2f; //1
-            maxAscentMultiplier = 3.25f; //3
-            constantAscend = 0.15f; //0.135
+            ascentWhenFalling = 0.95f;
+            ascentWhenRising = 0.16f;
+            maxCanAscendMultiplier = 1.2f;
+            maxAscentMultiplier = 2.9f;
+            constantAscend = 0.145f;
         }
 
         public override void AddRecipes()

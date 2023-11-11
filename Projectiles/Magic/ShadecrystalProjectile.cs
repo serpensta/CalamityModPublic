@@ -28,10 +28,10 @@ namespace CalamityMod.Projectiles.Magic
 
             if (Main.rand.NextBool(4))
             {
-                int num300 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 70, 0f, 0f, 0, default, 1f);
-                Main.dust[num300].noGravity = true;
-                Main.dust[num300].velocity *= 0.2f;
-                Main.dust[num300].scale *= 0.8f;
+                int crystalDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 70, 0f, 0f, 0, default, 1f);
+                Main.dust[crystalDust].noGravity = true;
+                Main.dust[crystalDust].velocity *= 0.2f;
+                Main.dust[crystalDust].scale *= 0.8f;
             }
 
             Projectile.velocity *= 0.99f;
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Magic
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int k = 0; k < 5; k++)
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 70, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);

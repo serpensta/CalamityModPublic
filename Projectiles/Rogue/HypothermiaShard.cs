@@ -31,9 +31,9 @@ namespace CalamityMod.Projectiles.Rogue
             counter += 0.25f;
             if (Main.rand.NextBool(10))
             {
-                int num300 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 191, 0f, 0f, 0, default, 0.8f);
-                Main.dust[num300].noGravity = true;
-                Main.dust[num300].velocity *= 0.2f;
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 318, 0f, 0f, 0, default, 0.8f);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].velocity *= 0.2f;
             }
             Projectile.velocity *= 0.996f;
             if (counter > 100f)
@@ -62,17 +62,17 @@ namespace CalamityMod.Projectiles.Rogue
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int k = 0; k < 3; k++)
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 191, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f, 0, default, 0.8f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 318, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f, 0, default, 0.8f);
             }
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(BuffID.Frostburn, 120);
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(BuffID.Frostburn2, 120);
 
-        public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(BuffID.Frostburn, 120);        
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(BuffID.Frostburn2, 120);        
 
         public override bool PreDraw(ref Color lightColor)
         {

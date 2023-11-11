@@ -2,9 +2,7 @@
 using CalamityMod.Items.Placeables.Furniture;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -17,11 +15,11 @@ namespace CalamityMod.Tiles.Furniture
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.addTile(Type);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
             AddMapEntry(new Color(238, 145, 105), CalamityUtils.GetItemName<SpitefulCandle>());
-            AnimationFrameHeight = 34;
+            AnimationFrameHeight = 18;
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
@@ -29,7 +27,7 @@ namespace CalamityMod.Tiles.Furniture
             frameCounter++;
             if (frameCounter >= 6)
             {
-                frame = (frame + 1) % 6;
+                frame = (frame + 1) % 5;
                 frameCounter = 0;
             }
         }
@@ -40,20 +38,20 @@ namespace CalamityMod.Tiles.Furniture
             if (player == null || !player.active || player.dead)
                 return;
             player.AddBuff(ModContent.BuffType<CirrusYellowCandleBuff>(), 20);
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+
+            // All NPCs within a certain distance of the player get "Tagged" with Spite.
+            for (int m = 0; m < Main.maxNPCs; m++)
             {
-                for (int m = 0; m < Main.maxNPCs; m++)
-                {
-                    if (Main.npc[m].active && !Main.npc[m].friendly)
-                    {
-                        Main.npc[m].buffImmune[ModContent.BuffType<CirrusYellowCandleBuff>()] = false;
-                        if (Main.npc[m].Calamity().DR >= 0.99f)
-                        {
-                            Main.npc[m].buffImmune[ModContent.BuffType<CirrusYellowCandleBuff>()] = true;
-                        }
-                        Main.npc[m].AddBuff(ModContent.BuffType<CirrusYellowCandleBuff>(), 20, false);
-                    }
-                }
+                NPC npc = Main.npc[m];
+                if (npc is null || !npc.active || npc.friendly)
+                    continue;
+
+                float dist2 = npc.DistanceSQ(player.Center);
+                if (dist2 < 23040000f) // 4800px range
+                    Main.npc[m].AddBuff(ModContent.BuffType<CirrusYellowCandleBuff>(), 20, false);
             }
         }
 

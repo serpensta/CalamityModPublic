@@ -18,7 +18,7 @@ namespace CalamityMod.World
             var schematic = TileMaps[mapKey];
 
             int placementPositionX = WorldGen.genRand.Next(GenVars.snowOriginLeft + 100, GenVars.snowOriginRight - 100);
-            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 8);
+            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6);
 
             bool foundValidGround = false;
             int attempts = 0;
@@ -44,7 +44,7 @@ namespace CalamityMod.World
             PlaceSchematic(mapKey, placementPoint, anchorType, ref place, new Action<Chest, int, bool>(FillMechanicChest));
 
             Rectangle protectionArea = CalamityUtils.GetSchematicProtectionArea(schematic, placementPoint, anchorType);
-            structures.AddProtectedStructure(protectionArea, 30);
+            CalamityUtils.AddProtectedStructure(protectionArea, 30);
         }
 
         public static void FillMechanicChest(Chest chest, int Type, bool place)

@@ -47,14 +47,14 @@ namespace CalamityMod.Projectiles.Healing
             return new Color(Main.DiscoR, 203, 103, Projectile.alpha);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-            for (int num407 = 0; num407 < 5; num407++)
+            for (int i = 0; i < 5; i++)
             {
-                int num408 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 157, 0f, 0f, 0, new Color(Main.DiscoR, 203, 103), 1f);
-                Main.dust[num408].noGravity = true;
-                Main.dust[num408].velocity *= 1.5f;
-                Main.dust[num408].scale = 1.5f;
+                int silvaHeal = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 157, 0f, 0f, 0, new Color(Main.DiscoR, 203, 103), 1f);
+                Main.dust[silvaHeal].noGravity = true;
+                Main.dust[silvaHeal].velocity *= 1.5f;
+                Main.dust[silvaHeal].scale = 1.5f;
             }
         }
     }

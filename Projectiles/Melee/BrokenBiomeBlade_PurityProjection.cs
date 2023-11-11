@@ -1,4 +1,4 @@
-using CalamityMod.Buffs.StatDebuffs;
+﻿using CalamityMod.Buffs.StatDebuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -54,7 +54,7 @@ namespace CalamityMod.Projectiles.Melee
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item43, Projectile.Center);
             for (int i = 0; i <= 15; i++)
@@ -69,7 +69,7 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             int debuffTime = 90;
-            target.AddBuff(BuffType<ArmorCrunch>(), debuffTime);
+            target.AddBuff(BuffType<Crumbling>(), debuffTime);
         }
     }
 }

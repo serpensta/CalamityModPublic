@@ -28,7 +28,7 @@ namespace CalamityMod.Items.Accessories.Wings
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            if (player.controlJump && player.wingTime > 0f && !player.canJumpAgain_Cloud && player.jump == 0 && player.velocity.Y != 0f && !hideVisual)
+            if (player.controlJump && player.wingTime > 0f && player.jump == 0 && player.velocity.Y != 0f && !hideVisual)
             {
                 player.rocketDelay2--;
                 if (player.rocketDelay2 <= 0)
@@ -69,10 +69,10 @@ namespace CalamityMod.Items.Accessories.Wings
                     {
                         yStart += player.velocity.Y;
                     }
-                    int num69 = Dust.NewDust(new Vector2(xStart, yStart), 8, 8, type, 0f, 0f, alpha, default, scale);
-                    Dust dust = Main.dust[num69];
+                    int boosterDust = Dust.NewDust(new Vector2(xStart, yStart), 8, 8, type, 0f, 0f, alpha, default, scale);
+                    Dust dust = Main.dust[boosterDust];
                     dust.velocity.X *= 0.1f;
-                    dust.velocity.Y = Main.dust[num69].velocity.Y * 1f + 2f * player.gravDir - player.velocity.Y * 0.3f;
+                    dust.velocity.Y = Main.dust[boosterDust].velocity.Y * 1f + 2f * player.gravDir - player.velocity.Y * 0.3f;
                     dust.noGravity = true;
                     dust.shader = GameShaders.Armor.GetSecondaryShader(player.cWings, player);
                     if (dustAmt == 4)
@@ -81,13 +81,16 @@ namespace CalamityMod.Items.Accessories.Wings
                     }
                 }
             }
-            player.hasJumpOption_Cloud = true;
-            player.hasJumpOption_Sandstorm = true;
-            player.hasJumpOption_Blizzard = true;
+
+            // Grants Cloud in a Bottle, Sandstorm in a Bottle, and Blizzard in a Bottle (like Bundle of Balloons)
+            player.GetJumpState(ExtraJump.CloudInABottle).Enable();
+            player.GetJumpState(ExtraJump.SandstormInABottle).Enable();
+            player.GetJumpState(ExtraJump.BlizzardInABottle).Enable();
             player.jumpBoost = true;
             player.autoJump = true;
             player.noFallDmg = true;
             player.jumpSpeedBoost += 0.5f;
+            player.luck += 0.05f;
         }
 
         public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)

@@ -1,6 +1,5 @@
 ﻿using Terraria.DataStructures;
 using CalamityMod.Items.Materials;
-using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -13,8 +12,8 @@ namespace CalamityMod.Items.Weapons.Rogue
     {
         public override void SetDefaults()
         {
-            Item.width = 52;
-            Item.height = 48;
+            Item.width = 54;
+            Item.height = 54;
             Item.damage = 55; //33
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -52,7 +51,8 @@ namespace CalamityMod.Items.Weapons.Rogue
                 AddIngredient<AstralBar>(10).
                 AddIngredient<Stardust>(15).
                 AddIngredient(ItemID.FallenStar, 10).
-                AddTile(TileID.LunarCraftingStation).Register();
+                AddTile(TileID.LunarCraftingStation).
+                Register();
         }
     }
 }

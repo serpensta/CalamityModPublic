@@ -1,10 +1,10 @@
 ﻿using CalamityMod.CalPlayer;
-using CalamityMod.Particles.Metaballs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using CalamityMod.Graphics.Metaballs;
 
 namespace CalamityMod.Projectiles.Typeless
 {
@@ -12,7 +12,7 @@ namespace CalamityMod.Projectiles.Typeless
     {
         public new string LocalizationCategory => "Projectiles.Typeless";
         public bool start = true;
-        public BaseFusableParticleSet.FusableParticle voidaura;
+        public StreamGougeMetaball.CosmicParticle VoidAura;
 
         public override void SetDefaults()
         {
@@ -58,7 +58,7 @@ namespace CalamityMod.Projectiles.Typeless
                 var proj = Main.projectile[k];
                 if (proj.active && proj.owner == Projectile.owner && proj.arrow && !proj.Calamity().nihilicArrow && proj.friendly && Vector2.Distance(proj.Center, Projectile.Center) < 65)
                 {
-                    Main.projectile[k].damage = (int)(proj.damage * 2f);
+                    Main.projectile[k].damage = (int)(proj.damage * 1.75f);
                     proj.extraUpdates += 1;
                     Main.projectile[k].Calamity().nihilicArrow = true;
                     SoundEngine.PlaySound(SoundID.Item104 with { Volume = SoundID.Item104.Volume * 0.75f }, Projectile.Center);
@@ -78,14 +78,14 @@ namespace CalamityMod.Projectiles.Typeless
                 }
             }
 
-            if (voidaura == null)
+            if (VoidAura == null)
             {
-                voidaura = FusableParticleManager.GetParticleSetByType<VoidGeneratorParticleSet>()?.SpawnParticle(Projectile.Center, 500);
+                VoidAura = VoidGeneratorMetaball.SpawnParticle(Projectile.Center, Vector2.Zero, 120f);
             }
             else
             {
-                voidaura.Center = Projectile.Center;
-                voidaura.Size = 500;
+                VoidAura.Center = Projectile.Center;
+                VoidAura.Size = 120f;
             }
         }
         public override bool? CanCutTiles() => false;
