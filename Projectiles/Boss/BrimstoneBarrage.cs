@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.CalClone;
@@ -76,6 +77,19 @@ namespace CalamityMod.Projectiles.Boss
                     Projectile.velocity = (Projectile.velocity * 15f + vector) / 16f;
                     Projectile.velocity.Normalize();
                     Projectile.velocity *= scaleFactor;
+                }
+            }
+            if (Projectile.ai[2] == 2f)
+            {
+                if (Projectile.timeLeft > 660)
+                    Projectile.velocity *= 1.02f;
+                Projectile.scale = 0.8f;
+                if (Projectile.timeLeft % 3 == 0)
+                {
+                    Dust trailDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5), 182);
+                    trailDust.noGravity = true;
+                    trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
+                    trailDust.scale = Main.rand.NextFloat(0.5f, 0.8f);
                 }
             }
 

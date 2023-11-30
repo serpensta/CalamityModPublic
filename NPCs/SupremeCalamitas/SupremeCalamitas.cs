@@ -39,6 +39,10 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
+using ReLogic.Utilities;
+using CalamityMod.Projectiles.Ranged;
+using Steamworks;
+using CalamityMod.Particles;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -192,6 +196,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
         public static readonly SoundStyle HellblastSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/ShieldHit", 3);
+        public static readonly SoundStyle BulletHellSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalRumble");
+        public static readonly SoundStyle BulletHellEndSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalEndBH");
+        public SlotId BulletHellRumbleSlot;
 
         // TODO -- This is cumbersome. Change it to be better in 1.4.
         internal static void LoadHeadIcons()
@@ -853,13 +860,42 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             }
             #endregion
             #region SecondAttack
-            if (bulletHellCounter2 < SecondBulletHellEndValue && startSecondAttack)
+            if (bulletHellCounter2 < SecondBulletHellEndValue && startSecondAttack) // Bullet hell lasts 1800
             {
                 despawnProj = true;
                 bulletHellCounter2++;
                 NPC.damage = 0;
                 NPC.chaseable = false;
                 NPC.dontTakeDamage = true;
+
+                #region BulletHellEndTelegraphBH2
+                if (bulletHellCounter2 == (SecondBulletHellEndValue - 360))
+                    BulletHellRumbleSlot = SoundEngine.PlaySound(BulletHellSound, player.Center);
+                if (bulletHellCounter2 > (SecondBulletHellEndValue - 360))
+                {
+                    if (SoundEngine.TryGetActiveSound(BulletHellRumbleSlot, out var BHSound) && BHSound.IsPlaying)
+                    {
+                        BHSound.Position = player.MountedCenter;
+                    }
+                }
+                if (bulletHellCounter2 == SecondBulletHellEndValue)
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        Vector2 dustVel = new Vector2(15, 15).RotatedByRandom(100);
+                        Dust failShotDust = Dust.NewDustPerfect(NPC.Center + dustVel * 3, Main.rand.NextBool(3) ? 60 : 114);
+                        failShotDust.noGravity = true;
+                        failShotDust.velocity = dustVel * Main.rand.NextFloat(0.3f, 1.3f);
+                        failShotDust.scale = Main.rand.NextFloat(2f, 3.2f);
+                    }
+                    Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    GeneralParticleHandler.SpawnParticle(pulse2);
+
+                    SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
+                }
+                #endregion
 
                 if (!canDespawn)
                     NPC.velocity *= 0.95f;
@@ -963,6 +999,35 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.chaseable = false;
                 NPC.dontTakeDamage = true;
 
+                #region BulletHellEndTelegraphBH3
+                if (bulletHellCounter2 == (ThirdBulletHellEndValue - 360))
+                    BulletHellRumbleSlot = SoundEngine.PlaySound(BulletHellSound, player.Center);
+                if (bulletHellCounter2 > (ThirdBulletHellEndValue - 360))
+                {
+                    if (SoundEngine.TryGetActiveSound(BulletHellRumbleSlot, out var BHSound) && BHSound.IsPlaying)
+                    {
+                        BHSound.Position = player.MountedCenter;
+                    }
+                }
+                if (bulletHellCounter2 == ThirdBulletHellEndValue)
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        Vector2 dustVel = new Vector2(15, 15).RotatedByRandom(100);
+                        Dust failShotDust = Dust.NewDustPerfect(NPC.Center + dustVel * 3, Main.rand.NextBool(3) ? 60 : 114);
+                        failShotDust.noGravity = true;
+                        failShotDust.velocity = dustVel * Main.rand.NextFloat(0.3f, 1.3f);
+                        failShotDust.scale = Main.rand.NextFloat(2f, 3.2f);
+                    }
+                    Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    GeneralParticleHandler.SpawnParticle(pulse2);
+
+                    SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
+                }
+                #endregion
+
                 if (cirrus)
                 {
                     Vector2 destination = player.Center;
@@ -1058,6 +1123,35 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.damage = 0;
                 NPC.chaseable = false;
                 NPC.dontTakeDamage = true;
+
+                #region BulletHellEndTelegraphBH4
+                if (bulletHellCounter2 == (FourthBulletHellEndValue - 360))
+                    BulletHellRumbleSlot = SoundEngine.PlaySound(BulletHellSound, player.Center);
+                if (bulletHellCounter2 > (FourthBulletHellEndValue - 360))
+                {
+                    if (SoundEngine.TryGetActiveSound(BulletHellRumbleSlot, out var BHSound) && BHSound.IsPlaying)
+                    {
+                        BHSound.Position = player.MountedCenter;
+                    }
+                }
+                if (bulletHellCounter2 == FourthBulletHellEndValue)
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        Vector2 dustVel = new Vector2(15, 15).RotatedByRandom(100);
+                        Dust failShotDust = Dust.NewDustPerfect(NPC.Center + dustVel * 3, Main.rand.NextBool(3) ? 60 : 114);
+                        failShotDust.noGravity = true;
+                        failShotDust.velocity = dustVel * Main.rand.NextFloat(0.3f, 1.3f);
+                        failShotDust.scale = Main.rand.NextFloat(2f, 3.2f);
+                    }
+                    Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    GeneralParticleHandler.SpawnParticle(pulse2);
+
+                    SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
+                }
+                #endregion
 
                 if (!canDespawn)
                     NPC.velocity *= 0.95f;
@@ -1159,6 +1253,35 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.damage = 0;
                 NPC.chaseable = false;
                 NPC.dontTakeDamage = true;
+
+                #region BulletHellEndTelegraphBH5
+                if (bulletHellCounter2 == (FifthBulletHellEndValue - 360))
+                    BulletHellRumbleSlot = SoundEngine.PlaySound(BulletHellSound, player.Center);
+                if (bulletHellCounter2 > (FifthBulletHellEndValue - 360))
+                {
+                    if (SoundEngine.TryGetActiveSound(BulletHellRumbleSlot, out var BHSound) && BHSound.IsPlaying)
+                    {
+                        BHSound.Position = player.MountedCenter;
+                    }
+                }
+                if (bulletHellCounter2 == FifthBulletHellEndValue)
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        Vector2 dustVel = new Vector2(15, 15).RotatedByRandom(100);
+                        Dust failShotDust = Dust.NewDustPerfect(NPC.Center + dustVel * 3, Main.rand.NextBool(3) ? 60 : 114);
+                        failShotDust.noGravity = true;
+                        failShotDust.velocity = dustVel * Main.rand.NextFloat(0.3f, 1.3f);
+                        failShotDust.scale = Main.rand.NextFloat(2f, 3.2f);
+                    }
+                    Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    GeneralParticleHandler.SpawnParticle(pulse2);
+
+                    SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
+                }
+                #endregion
 
                 if (cirrus)
                 {

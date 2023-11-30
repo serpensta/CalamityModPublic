@@ -11,6 +11,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
 using Terraria.Audio;
+using CalamityMod.Particles;
+using Steamworks;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -22,6 +24,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public Player Target => Main.player[NPC.target];
 
         public Vector2 EyePosition => NPC.Center + new Vector2(NPC.spriteDirection == -1 ? 40f : -36f, 16f);
+        public Vector2 ProjPosition;
 
         public ref float RotationalDegreeOffset => ref NPC.ai[1];
 
@@ -149,18 +152,60 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 }
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
+                    float targetDist = Vector2.Distance(Target.Center, ProjPosition);
                     int type = ModContent.ProjectileType<BrimstoneBarrage>();
                     int damage = NPC.GetProjectileDamage(type);
 					if (BossRushEvent.BossRushActive)
 						damage /= 2;
-                    Vector2 shootVelocity = (Target.Center - EyePosition).SafeNormalize(Vector2.UnitY) * 9f;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), EyePosition, shootVelocity, type, damage, 1f, Main.myPlayer);
+                    Vector2 shootVelocity = (Target.Center - ProjPosition).SafeNormalize(Vector2.UnitY) * 5f;
+                    if (targetDist <= 160 || targetDist >= 1952)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            Dust failShotDust = Dust.NewDustPerfect(ProjPosition, 114);
+                            failShotDust.noGravity = true;
+                            failShotDust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.3f);
+                            failShotDust.scale = Main.rand.NextFloat(1.3f, 2.4f);
+                        }
+                    }
+                    else
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), ProjPosition, shootVelocity, type, damage, 1f, Main.myPlayer, 0, 0, 2);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            Dust ShotDust = Dust.NewDustPerfect(ProjPosition, 114);
+                            ShotDust.noGravity = true;
+                            ShotDust.velocity = shootVelocity.RotatedByRandom(1f) * Main.rand.NextFloat(2.2f, 3.8f);
+                            ShotDust.scale = Main.rand.NextFloat(1.8f, 2.1f);
+                        }
+                    }
                 }
                 timer = 0;
                 NPC.netUpdate = true;
             }
+            if (timer == shootRate - 35)
+            {
+                ProjPosition = NPC.Center;
 
-            NPC.position = SCal.Center - MathHelper.ToRadians(RotationalDegreeOffset).ToRotationVector2() * 300f - NPC.Size * 0.5f;
+                Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Red * 2.5f, new Vector2(2f, 2f), 0, 0.03f, 0.005f, 45);
+                GeneralParticleHandler.SpawnParticle(pulse);
+                for (int i = 0; i < 4; i++)
+                {
+                    Dust prepShotDust = Dust.NewDustPerfect(NPC.Center, 182);
+                    prepShotDust.noGravity = true;
+                    prepShotDust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.3f);
+                    prepShotDust.scale = Main.rand.NextFloat(1.3f, 2.4f);
+                }
+            }
+            if (timer >= shootRate - 35)
+            {
+                Dust prepShotDust = Dust.NewDustPerfect(ProjPosition, 182);
+                prepShotDust.noGravity = true;
+                prepShotDust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 0.8f);
+                prepShotDust.scale = Main.rand.NextFloat(1.2f, 1.9f);
+            }
+
+                NPC.position = SCal.Center - MathHelper.ToRadians(RotationalDegreeOffset).ToRotationVector2() * 300f - NPC.Size * 0.5f;
             RotationalDegreeOffset += 0.5f;
         }
 
@@ -218,6 +263,17 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            Texture2D lineTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/LineFade").Value;
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+            int shootRate = BossRushEvent.BossRushActive ? 144 : 216;
+            float opacity = timer >= shootRate - 35 ? (timer - (BossRushEvent.BossRushActive ? 101 : 181)) *  0.03f : 0;
+            Vector2 lineDir = (ProjPosition - Target.Center).SafeNormalize(Vector2.UnitY);
+            Vector2 linePos = (lineDir * (lineTex.Height * 0.25f)) + ProjPosition - Main.screenPosition;
+            spriteBatch.Draw(lineTex, linePos, null, Color.Red * opacity, lineDir.ToRotation(), lineTex.Size(), NPC.scale * 1.1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin();
+
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
