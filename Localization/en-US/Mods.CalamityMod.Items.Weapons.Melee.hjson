@@ -14,7 +14,6 @@ AbyssBlade: {
 		'''
 		Fires short-range tridents
 		Hitting enemies will inflict the crush depth debuff
-		The lower the enemies' defense, the more damage they take from this debuff
 		'''
 }
 
