@@ -170,12 +170,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                             SoundEngine.PlaySound(SoundID.NPCHit1, servantSpawnCenter);
 
-                            int servantDust;
-                            for (int m = 0; m < 10; m = servantDust + 1)
-                            {
+                            for (int m = 0; m < 10; m++)
                                 Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
-                                servantDust = m;
-                            }
                         }
                     }
                 }
@@ -271,7 +267,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 npc.rotation += npc.ai[2];
                 npc.ai[1] += 1f;
-                if (npc.ai[1] % (Main.getGoodWorld ? 10f : 20f) == 0f)
+                if (npc.ai[1] % (Main.getGoodWorld ? 5f : 20f) == 0f)
                 {
                     Vector2 servantSpawnVelocity = Main.rand.NextVector2CircularEdge(5.65f, 5.65f);
                     if (Main.getGoodWorld)
@@ -290,7 +286,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (CalamityWorld.LegendaryMode)
                         {
                             int type = ProjectileID.BloodNautilusShot;
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(10f, 10f);
+                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(15f, 15f);
                             int numProj = 3;
                             int spread = 20;
                             float rotation = MathHelper.ToRadians(spread);
@@ -302,12 +298,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
                     }
 
-                    int num;
-                    for (int n = 0; n < 10; n = num + 1)
-                    {
+                    for (int n = 0; n < 10; n++)
                         Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
-                        num = n;
-                    }
                 }
 
                 if (npc.ai[1] == 100f)
@@ -316,7 +308,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[1] = 0f;
 
                     if (npc.ai[0] == 3f)
+                    {
                         npc.ai[2] = 0f;
+                    }
                     else
                     {
                         SoundEngine.PlaySound(SoundID.NPCHit1, npc.position);
@@ -332,9 +326,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
 
                         for (int i = 0; i < 20; i++)
-                        {
                             Dust.NewDust(npc.position, npc.width, npc.height, 5, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
-                        }
 
                         SoundEngine.PlaySound(SoundID.Roar, npc.position);
                     }
@@ -603,7 +595,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.ai[3] += 1f;
                         npc.ai[2] = 0f;
 
-                        float maxCharges = death ? (lifeRatio < 0.05f ? 1f : lifeRatio < 0.1f ? 2f : lifeRatio < 0.15f ? 3f : lifeRatio < 0.25f ? 4f : 5f) : lifeRatio < 0.2f ? 4f : 5f;
+                        float maxCharges = death ? (lifeRatio < 0.15f ? 1f : lifeRatio < 0.275f ? 2f : 3f) : lifeRatio < 0.2f ? 4f : 5f;
                         if (npc.ai[3] >= maxCharges)
                         {
                             npc.ai[1] = 0f;
@@ -657,7 +649,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (CalamityWorld.LegendaryMode)
                             {
                                 int type = ProjectileID.BloodNautilusShot;
-                                Vector2 projectileVelocity = servantSpawnVelocity * 2f;
+                                Vector2 projectileVelocity = servantSpawnVelocity * 3f;
                                 int numProj = 3;
                                 int spread = 20;
                                 float rotation = MathHelper.ToRadians(spread);

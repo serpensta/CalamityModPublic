@@ -12,14 +12,14 @@ namespace CalamityMod.NPCs.NormalNPCs
 {
     public class KingSlimeJewel : ModNPC
     {
-        private const int BoltShootGateValue = 75;
-        private const int BoltShootGateValue_Death = 60;
+        private const int BoltShootGateValue = 60;
+        private const int BoltShootGateValue_Death = 75;
         private const int BoltShootGateValue_BossRush = 45;
         private const float LightTelegraphDuration = 45f;
 
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true }; 
+            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true }; 
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
         }
 
@@ -62,7 +62,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             NPC.TargetClosest(true);
 
-            float velocity = 2f;
+            float velocity = 5f;
             float acceleration = 0.1f;
 
             if (NPC.position.Y > Main.player[NPC.target].position.Y - 350f)
@@ -75,7 +75,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 if (NPC.velocity.Y > velocity)
                     NPC.velocity.Y = velocity;
             }
-            else if (NPC.position.Y < Main.player[NPC.target].position.Y - 400f)
+            else if (NPC.position.Y < Main.player[NPC.target].position.Y - 500f)
             {
                 if (NPC.velocity.Y < 0f)
                     NPC.velocity.Y *= 0.98f;
@@ -149,7 +149,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     int damage = NPC.GetProjectileDamage(type);
                     if (CalamityWorld.death || BossRushEvent.BossRushActive)
                     {
-                        int numProj = 3;
+                        int numProj = 5;
                         float rotation = MathHelper.ToRadians(9);
                         for (int i = 0; i < numProj; i++)
                         {
