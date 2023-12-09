@@ -65,7 +65,7 @@ namespace CalamityMod.Projectiles.Melee
         public float ThrowTimer => MaxThrowTime - Projectile.timeLeft;
         public float ThrowCompletion => ThrowTimer / MaxThrowTime;
 
-        public const float SnapWindowStart = 0.2f;
+        public const float SnapWindowStart = 0.35f;
         public const float SnapWindowEnd = 0.75f;
         public float SnapEndTime => (MaxThrowTime - (MaxThrowTime * SnapWindowEnd));
         public float SnapEndCompletion => (SnapEndTime - Projectile.timeLeft) / SnapEndTime;
