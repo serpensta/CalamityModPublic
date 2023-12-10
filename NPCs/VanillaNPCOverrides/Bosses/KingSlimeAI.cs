@@ -44,8 +44,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.TargetClosest();
 
             // Phases based on life percentage
+
+            // Higher velocity jumps phase
             bool phase2 = lifeRatio < 0.75f;
+
+            // Spawn Crystal phase
             bool phase3 = lifeRatio < 0.5f;
+
+            // Check if the crystal is alive
+            bool crystalAlive = true;
+            if (phase3)
+                crystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel>());
 
             // Spawn crystal in phase 2
             if (phase3 && npc.Calamity().newAI[0] == 0f && Main.netMode != NetmodeID.MultiplayerClient)
@@ -99,7 +108,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             // Faster fall
             if (npc.velocity.Y > 0f)
+            {
                 npc.velocity.Y += bossRush ? 0.1f : death ? 0.05f : 0f;
+                if (!crystalAlive)
+                    npc.velocity.Y += 0.05f;
+            }
 
             // Activate teleport
             float teleportGateValue = 480f;
@@ -154,7 +167,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 teleporting = true;
                 npc.aiAction = 1;
-                npc.ai[0] += 1f;
+                float teleportRate = crystalAlive ? 1f : 2f;
+                npc.ai[0] += teleportRate;
                 teleportScale = MathHelper.Clamp((60f - npc.ai[0]) / 60f, 0f, 1f);
                 teleportScale = 0.5f + teleportScale * 0.5f;
                 if (Main.getGoodWorld)
@@ -199,7 +213,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 teleporting = true;
                 npc.aiAction = 0;
-                npc.ai[0] += 1f;
+                float teleportRate = crystalAlive ? 1f : 2f;
+                npc.ai[0] += teleportRate;
                 teleportScale = MathHelper.Clamp(npc.ai[0] / 30f, 0f, 1f);
                 teleportScale = 0.5f + teleportScale * 0.5f;
                 if (Main.getGoodWorld)
@@ -307,11 +322,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Change jump velocity
             else if (npc.target < Main.maxPlayers)
             {
-                float jumpVelocityMult = 3f;
+                float jumpVelocityLimit = crystalAlive ? 3f : 4f;
                 if (Main.getGoodWorld)
-                    jumpVelocityMult = 6f;
+                    jumpVelocityLimit = 6f;
 
-                if ((npc.direction == 1 && npc.velocity.X < jumpVelocityMult) || (npc.direction == -1 && npc.velocity.X > -jumpVelocityMult))
+                if ((npc.direction == 1 && npc.velocity.X < jumpVelocityLimit) || (npc.direction == -1 && npc.velocity.X > -jumpVelocityLimit))
                 {
                     if ((npc.direction == -1 && npc.velocity.X < 0.1) || (npc.direction == 1 && npc.velocity.X > -0.1))
                         npc.velocity.X += (bossRush ? 0.4f : death ? 0.25f : 0.2f) * npc.direction;
@@ -364,38 +379,43 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     int slimeAmt = Main.rand.Next(2, 4);
                     for (int i = 0; i < slimeAmt; i++)
                     {
-                        int x = (int)(npc.position.X + Main.rand.Next(npc.width - 32));
-                        int y = (int)(npc.position.Y + Main.rand.Next(npc.height - 32));
+                        float minLowerLimit = death ? 5f : 0f;
+                        float maxLowerLimit = death ? 7f : 2f;
+                        int minTypeChoice = (int)MathHelper.Lerp(minLowerLimit, 8f, 1f - lifeRatio);
+                        int maxTypeChoice = (int)MathHelper.Lerp(maxLowerLimit, 10f, 1f - lifeRatio);
 
-                        int random = phase2 ? 10 : 8;
-                        int npcType = death ? Main.rand.Next(4) + 6 : Main.rand.Next(random);
-                        switch (npcType)
+                        int npcType;
+                        switch (Main.rand.Next(minTypeChoice, maxTypeChoice))
                         {
-                            case 0:
-                                npcType = NPCID.BlueSlime;
-                                break;
-                            case 1:
-                                npcType = NPCID.YellowSlime;
-                                break;
-                            case 2:
-                                npcType = NPCID.RedSlime;
-                                break;
-                            case 3:
-                                npcType = NPCID.PurpleSlime;
-                                break;
-                            case 4:
-                                npcType = NPCID.GreenSlime;
-                                break;
-                            case 5:
-                                npcType = NPCID.IceSlime;
-                                break;
-                            case 6:
-                            case 7:
-                            case 8:
-                            case 9:
+                            default:
                                 npcType = NPCID.SlimeSpiked;
                                 break;
-                            default:
+                            case 0:
+                                npcType = NPCID.GreenSlime;
+                                break;
+                            case 1:
+                                npcType = NPCID.BlueSlime;
+                                break;
+                            case 2:
+                                npcType = NPCID.IceSlime;
+                                break;
+                            case 3:
+                                npcType = NPCID.RedSlime;
+                                break;
+                            case 4:
+                                npcType = NPCID.PurpleSlime;
+                                break;
+                            case 5:
+                                npcType = NPCID.YellowSlime;
+                                break;
+                            case 6:
+                                npcType = NPCID.SlimeSpiked;
+                                break;
+                            case 7:
+                                npcType = NPCID.SpikedIceSlime;
+                                break;
+                            case 8:
+                                npcType = NPCID.SpikedJungleSlime;
                                 break;
                         }
 
@@ -413,6 +433,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (CalamityWorld.LegendaryMode)
                             npcType = NPCID.RainbowSlime;
 
+                        int x = (int)(npc.position.X + Main.rand.Next(npc.width - 32));
+                        int y = (int)(npc.position.Y + Main.rand.Next(npc.height - 32));
                         int slimeSpawns = NPC.NewNPC(npc.GetSource_FromAI(), x, y, npcType);
                         Main.npc[slimeSpawns].SetDefaults(npcType);
                         Main.npc[slimeSpawns].velocity.X = Main.rand.Next(-15, 16) * 0.1f;
