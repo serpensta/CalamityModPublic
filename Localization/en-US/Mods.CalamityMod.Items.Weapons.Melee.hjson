@@ -1191,6 +1191,18 @@ TheBurningSky: {
 		'''
 }
 
+TheDarkMaster: {
+	DisplayName: The Dark Master
+	Tooltip:
+		'''
+		Fires whirling red beams while at full health
+		The damage of the beams increases based on your maximum health
+		<right> to summon three dark clones which fire beams regardless of your current health
+		The clones disappear while the weapon isn't being held
+		'The blade by which the shadows levy their foes with a terrible fate'
+		'''
+}
+
 TheEnforcer: {
 	DisplayName: The Enforcer
 	Tooltip: Spawns essence flames on hit
