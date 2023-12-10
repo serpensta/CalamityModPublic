@@ -54,12 +54,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Total body segments
             float totalSegments = GetEaterOfWorldsSegmentsCountRevDeath();
 
-            // Count segments remaining
-            // TODO - This runs for every EoW segment, this is bad because there are three separate loops here running every frame.
-            float segmentCount = NPC.CountNPCS(NPCID.EaterofWorldsHead) + NPC.CountNPCS(NPCID.EaterofWorldsBody) + NPC.CountNPCS(NPCID.EaterofWorldsTail);
+            // Count body segments remaining
+            float segmentCount = NPC.CountNPCS(NPCID.EaterofWorldsBody);
 
-            // Percent segments remaining, add two to total for head and tail
-            float lifeRatio = segmentCount / (totalSegments + 2);
+            // Percent body segments remaining
+            float lifeRatio = segmentCount / totalSegments;
 
             // 10 seconds of resistance to prevent spawn killing
             if (calamityGlobalNPC.newAI[1] < 600f && bossRush)
