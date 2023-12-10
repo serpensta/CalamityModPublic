@@ -58,15 +58,12 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.timeLeft = 30;
             // move the clone to the desired position
             Projectile.Center = Vector2.Lerp(Projectile.Center, owner.Center + moveTo, 0.4f);
-            // assure that the clones only shoot at the owner's cursor
-            if (Main.myPlayer != Projectile.owner)
-                return;
             // shoot beams while the player is left clicking
             if (owner.itemTime == owner.itemTimeMax && owner.altFunctionUse != 2)
             {
                 Vector2 direction = Projectile.Center.DirectionTo(Main.MouseWorld);
                 Projectile.direction = Math.Sign(direction.X);
-                if (Main.netMode != NetmodeID.MultiplayerClient)
+                if (Projectile.owner == Main.myPlayer)
                 {
                     // ai[1] not being 0 determines if the projectile should always ignore tiles
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * owner.HeldItem.shootSpeed, ModContent.ProjectileType<DarkMasterBeam>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack, Projectile.owner, ai1: 1);
