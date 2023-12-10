@@ -43,7 +43,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if ((npc.position.Y / 16f) < Main.worldSurface || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
-                enrageScale += 1f;
+                enrageScale += 0.5f;
             }
             if (!Main.player[npc.target].ZoneCorrupt || bossRush)
             {
@@ -65,9 +65,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 calamityGlobalNPC.newAI[1] += 1f;
 
             // Phases
+
+            // Vile Spit phase
             bool phase2 = lifeRatio < 0.9f;
+
+            // Cursed Flame phase
             bool phase3 = lifeRatio < 0.75f;
+
+            // Boost velocity by 20% phase
             bool phase4 = lifeRatio < 0.4f;
+
+            // Boost velocity by 50% phase
             bool phase5 = lifeRatio < 0.1f;
 
             // Fire projectiles
@@ -270,6 +278,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                 }
             }
+
             if (!inTiles && npc.type == NPCID.EaterofWorldsHead)
             {
                 Rectangle rectangle = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
@@ -306,13 +315,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (phase5)
             {
-                segmentVelocity += 2.4f * enrageScale;
-                segmentAcceleration += 0.03f * enrageScale;
+                segmentVelocity += 6f * (enrageScale + 1f);
+                segmentAcceleration += 0.075f * (enrageScale + 1f);
             }
             else if (phase4)
             {
-                segmentVelocity += 1.2f * enrageScale;
-                segmentAcceleration += 0.015f * enrageScale;
+                segmentVelocity += 2.4f * (enrageScale + 1f);
+                segmentAcceleration += 0.03f * (enrageScale + 1f);
             }
 
             if (Main.getGoodWorld)
