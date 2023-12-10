@@ -1195,10 +1195,12 @@ TheDarkMaster: {
 	DisplayName: The Dark Master
 	Tooltip:
 		'''
-		Fires whirling red beams while at full health
-		The damage of the beams increases based on your maximum health
-		<right> to summon three dark clones which fire beams regardless of your current health
-		The clones disappear while the weapon isn't being held
+		Fires red echo slash projectiles at full health
+		Projectile damage increases for every point of HP above 400
+		Press <right> to spawn three shadow clones in a Delta formation
+		The clones will mirror your sword swings and release projectiles
+		The clones will always fire projectiles regardless of your own HP
+		The clones may only exist while holding this weapon
 		'The blade by which the shadows levy their foes with a terrible fate'
 		'''
 }
