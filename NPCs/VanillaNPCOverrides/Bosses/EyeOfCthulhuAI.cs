@@ -119,14 +119,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (death)
                     {
-                        hoverSpeed += 8f * (1f - lifeRatio);
-                        hoverAcceleration += 0.17f * (1f - lifeRatio);
+                        hoverSpeed += 10.5f * (1f - lifeRatio);
+                        hoverAcceleration += 0.225f * (1f - lifeRatio);
                     }
 
                     if (Main.getGoodWorld)
                     {
-                        hoverSpeed += 1f;
-                        hoverAcceleration += 0.05f;
+                        hoverSpeed += 3f;
+                        hoverAcceleration += 0.08f;
                     }
 
                     Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * 320f;
@@ -134,7 +134,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.SimpleFlyMovement(idealVelocity, hoverAcceleration);
 
                     npc.ai[2] += 1f;
-                    float attackSwitchTimer = 180f - (death ? 200f * (1f - lifeRatio) : 0f);
+                    float attackSwitchTimer = 180f - (death ? 360f * (1f - lifeRatio) : 0f);
                     if (npc.ai[2] >= attackSwitchTimer)
                     {
                         npc.ai[1] = 1f;
@@ -148,7 +148,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (!Main.player[npc.target].dead)
                             npc.ai[3] += 1f;
 
-                        float servantSpawnGateValue = 40f;
+                        float servantSpawnGateValue = death ? 20f : 40f;
                         if (Main.getGoodWorld)
                             servantSpawnGateValue *= 0.8f;
 
@@ -159,7 +159,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                             Vector2 servantSpawnVelocity = npc.SafeDirectionTo(Main.player[npc.target].Center) * 6f;
                             Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity * 10f;
-                            if (Main.netMode != NetmodeID.MultiplayerClient && NPC.CountNPCS(NPCID.ServantofCthulhu) < 12)
+                            int maxServants = death ? 4 : 3;
+                            if (Main.netMode != NetmodeID.MultiplayerClient && NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants)
                             {
                                 int eye = NPC.NewNPC(npc.GetSource_FromAI(), (int)servantSpawnCenter.X, (int)servantSpawnCenter.Y, NPCID.ServantofCthulhu);
                                 Main.npc[eye].velocity = servantSpawnVelocity;
@@ -181,9 +182,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float chargeSpeed = 8f;
                     chargeSpeed += 5f * enrageScale;
                     if (death)
-                        chargeSpeed += 8.5f * (1f - lifeRatio);
+                        chargeSpeed += 16f * (1f - lifeRatio);
                     if (Main.getGoodWorld)
-                        chargeSpeed += 1f;
+                        chargeSpeed += 4f;
 
                     npc.velocity = npc.SafeDirectionTo(Main.player[npc.target].Center) * chargeSpeed;
 
@@ -212,9 +213,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     int chargeDelay = 90;
                     if (death)
-                        chargeDelay -= (int)Math.Round(120f * (1f - lifeRatio));
+                        chargeDelay -= (int)Math.Round(180f * (1f - lifeRatio));
                     if (Main.getGoodWorld)
-                        chargeDelay -= 15;
+                        chargeDelay -= 30;
 
                     if (npc.ai[2] >= chargeDelay)
                     {
@@ -223,7 +224,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.TargetClosest();
                         npc.rotation = eyeRotation;
 
-                        if (npc.ai[3] >= 3f)
+                        float numCharges = death ? 2f : 3f;
+                        if (npc.ai[3] >= numCharges)
                         {
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
@@ -252,6 +254,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (Main.getGoodWorld)
                     npc.reflectsProjectiles = true;
 
+                float rotationRate = death ? 0.025f : 0.005f;
                 if (npc.ai[0] == 1f)
                 {
                     npc.ai[2] += 0.005f;
@@ -266,8 +269,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 npc.rotation += npc.ai[2];
-                npc.ai[1] += 1f;
-                if (npc.ai[1] % (Main.getGoodWorld ? 5f : 20f) == 0f)
+
+                float phaseChangeRate = death ? 5f : 1f;
+                float servantSpawnGateValue = Main.getGoodWorld ? 5f : 20f;
+                npc.ai[1] += phaseChangeRate;
+                if (npc.ai[1] % servantSpawnGateValue == 0f)
                 {
                     Vector2 servantSpawnVelocity = Main.rand.NextVector2CircularEdge(5.65f, 5.65f);
                     if (Main.getGoodWorld)
@@ -358,8 +364,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (death)
                     {
-                        hoverSpeed += 5f * (0.75f - lifeRatio);
-                        hoverAcceleration += 0.04f * (0.75f - lifeRatio);
+                        hoverSpeed += 7f * (0.75f - lifeRatio);
+                        hoverAcceleration += 0.08f * (0.75f - lifeRatio);
                     }
 
                     Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * 160f;
@@ -391,7 +397,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.SimpleFlyMovement(idealHoverVelocity, hoverAcceleration);
 
                     npc.ai[2] += 1f;
-                    float phaseLimit = 200f - (death ? 200f * (0.75f - lifeRatio) : 0f);
+                    float phaseLimit = 200f - (death ? 280f * (0.75f - lifeRatio) : 0f);
                     if (npc.ai[2] >= phaseLimit)
                     {
                         npc.ai[1] = 1f;
@@ -414,7 +420,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float chargeSpeed = 6.2f + 4f * (0.75f - lifeRatio);
                     chargeSpeed += 4f * enrageScale;
                     if (death)
-                        chargeSpeed += 5.5f * (0.75f - lifeRatio);
+                        chargeSpeed += 8f * (0.75f - lifeRatio);
                     if (npc.ai[3] == 1f)
                         chargeSpeed *= 1.15f;
                     if (npc.ai[3] == 2f)
@@ -446,7 +452,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     int phase2ChargeDelay = 80;
                     if (death)
-                        phase2ChargeDelay -= (int)Math.Round(40f * (0.75f - lifeRatio));
+                        phase2ChargeDelay -= (int)Math.Round(110f * (0.75f - lifeRatio));
 
                     if (npc.ai[2] >= phase2ChargeDelay)
                     {
@@ -609,8 +615,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 else if (npc.ai[1] == 5f)
                 {
                     float offset = 600f;
-                    float speedBoost = death ? 6f * (0.4f - lifeRatio) : 4f * (0.4f - lifeRatio);
-                    float accelerationBoost = death ? 0.15f * (0.4f - lifeRatio) : 0.1f * (0.4f - lifeRatio);
+                    float speedBoost = death ? 12f * (0.4f - lifeRatio) : 4f * (0.4f - lifeRatio);
+                    float accelerationBoost = death ? 0.35f * (0.4f - lifeRatio) : 0.1f * (0.4f - lifeRatio);
                     float hoverSpeed = 8f + speedBoost;
                     float hoverAcceleration = 0.25f + accelerationBoost;
 
@@ -667,7 +673,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
                     }
 
-                    float timeGateValue = horizontalCharge ? (100f - (death ? 20f * (0.4f - lifeRatio) : 0f)) : (70f - (death ? 15f * (0.4f - lifeRatio) : 0f));
+                    float timeGateValue = horizontalCharge ? (100f - (death ? 100f * (0.4f - lifeRatio) : 0f)) : (70f - (death ? 70f * (0.4f - lifeRatio) : 0f));
                     if (npc.ai[2] >= timeGateValue)
                     {
                         switch ((int)calamityGlobalNPC.newAI[0])
@@ -711,7 +717,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        float speedBoost = death ? 6f * (0.4f - lifeRatio) : 4f * (0.4f - lifeRatio);
+                        float speedBoost = death ? 12f * (0.4f - lifeRatio) : 4f * (0.4f - lifeRatio);
                         float chargeSpeed = 18f + speedBoost;
                         chargeSpeed += 10f * enrageScale;
                         npc.velocity = npc.SafeDirectionTo(Main.player[npc.target].Center) * chargeSpeed;

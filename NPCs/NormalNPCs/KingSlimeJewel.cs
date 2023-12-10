@@ -150,7 +150,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     if (CalamityWorld.death || BossRushEvent.BossRushActive)
                     {
                         int numProj = 5;
-                        float rotation = MathHelper.ToRadians(9);
+                        float rotation = MathHelper.ToRadians(12);
                         for (int i = 0; i < numProj; i++)
                         {
                             Vector2 perturbedSpeed = projVector.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
