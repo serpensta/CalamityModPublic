@@ -17,7 +17,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public const float FullChargeTime = 420f;
         public override void SetDefaults()
         {
-            Item.damage = 116;
+            Item.damage = 150;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 44;
             Item.height = 58;
