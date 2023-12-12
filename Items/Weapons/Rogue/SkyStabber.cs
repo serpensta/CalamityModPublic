@@ -30,12 +30,11 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.rare = ItemRarityID.Orange;
             Item.UseSound = SoundID.Item1;
 
-            Item.shootSpeed = 2f;
+            Item.shootSpeed = 2.2f;
             Item.shoot = ModContent.ProjectileType<SkyStabberProj>();
         }
 
-        // Terraria seems to really dislike high crit values in SetDefaults
-        public override void ModifyWeaponCrit(Player player, ref float crit) => crit += 4;
+        public override float StealthDamageMultiplier => 0.5f;
 
         public override bool CanUseItem(Player player)
         {
