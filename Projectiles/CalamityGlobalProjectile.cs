@@ -1111,7 +1111,7 @@ namespace CalamityMod.Projectiles
                         if (projectile.ai[0] == projectile.ai[2])
                         {
                             projectile.velocity *= 100f;
-                            projectile.velocity *= 12f + Main.rand.NextFloat() * 2f;
+                            projectile.velocity *= (CalamityWorld.death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
                         }
                     }
 
