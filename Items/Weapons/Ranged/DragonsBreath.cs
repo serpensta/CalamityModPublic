@@ -16,6 +16,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         
         public static readonly SoundStyle FireballSound = new("CalamityMod/Sounds/Custom/Yharon/YharonFireball", 3) { PitchVariance = 0.3f, Volume = 0.75f };
+	    public static readonly SoundStyle WeldingStart = new("CalamityMod/Sounds/Item/DragonsBreathStrongStart") { Volume = 1.75f };
         public static readonly SoundStyle WeldingBurn = new("CalamityMod/Sounds/Item/WeldingBurn") { Volume = 0.65f };
         public static readonly SoundStyle WeldingShoot = new("CalamityMod/Sounds/Item/WeldingShoot") { Volume = 0.45f };
 
@@ -83,14 +84,14 @@ namespace CalamityMod.Items.Weapons.Ranged
                     StrongShotMode = true;
                     DragonsBreathSetUseTime = 2;
                     DragonsBreathSetUseAnimation = 2;
-                    SoundEngine.PlaySound(ScorchedEarth.ShootSound, player.Center);
+                    SoundEngine.PlaySound(WeldingStart, player.Center);
                 }
             }
             else if (StrongShotMode)
             {
                 if (SoundEngine.TryGetActiveSound(WeldSoundSlot, out var WeldSound) && WeldSound.IsPlaying)
                     WeldSound.Position = player.Center;
-                if (player.Calamity().DragonsBreathAudioCooldown2 == 0)
+                if ((player.Calamity().DragonsBreathAudioCooldown2 == 0) && (WeldingShots < 45))
                 {
                     player.Calamity().DragonsBreathAudioCooldown2 = 30;
                     WeldSoundSlot = SoundEngine.PlaySound(WeldingShoot, player.Center);
