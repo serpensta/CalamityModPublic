@@ -1,10 +1,7 @@
 ﻿using CalamityMod.Items.Materials;
-using CalamityMod.Items.Tools;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Melee;
-using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using Mono.Cecil;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
