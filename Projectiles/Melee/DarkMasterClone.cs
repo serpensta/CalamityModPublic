@@ -1,16 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Dusts;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-using static Humanizer.In;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.Graphics.Shaders;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -51,7 +47,7 @@ namespace CalamityMod.Projectiles.Melee
                     break;
             }
             // if the player isn't holding the sword, DIE.
-            if (owner.HeldItem.type != ModContent.ItemType<TheDarkMaster>() || !owner.active || owner.CCed || owner == null || Projectile.type != ModContent.ProjectileType<DarkMasterClone>())
+            if (owner.HeldItem.type != ModContent.ItemType<TheDarkMaster>() || !owner.active || owner.CCed || owner == null)
             {
                 Projectile.Kill();
             }
@@ -59,8 +55,20 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.timeLeft = 30;
             // move the clone to the desired position
             Projectile.Center = Vector2.Lerp(Projectile.Center, owner.Center + moveTo, 0.4f);
+            // produce smoke during initial move
+            if (Projectile.Distance(owner.Center + moveTo) < 16)
+            {
+                Projectile.ai[2] = 1;
+            }
+            if (Projectile.ai[2] == 0)
+            {
+                float angle = MathHelper.TwoPi * Main.rand.NextFloat(0f, 1f);
+                Vector2 angleVec = angle.ToRotationVector2();
+                Particle smoke = new HeavySmokeParticle(Projectile.Center, angleVec * Main.rand.NextFloat(1f, 2f), Color.Black, 30, Main.rand.NextFloat(0.25f, 1f), 0.5f, 0.1f);
+                GeneralParticleHandler.SpawnParticle(smoke);
+            }
             // shoot beams while the player is left clicking
-            if (owner.itemTime == owner.itemTimeMax && owner.altFunctionUse != 2)
+            if (owner.itemTime == owner.itemTimeMax && owner.altFunctionUse != 2 && owner.HeldItem.type == ModContent.ItemType<TheDarkMaster>())
             {
                 Vector2 direction = Projectile.Center.DirectionTo(Main.MouseWorld);
                 Projectile.direction = Math.Sign(direction.X);
