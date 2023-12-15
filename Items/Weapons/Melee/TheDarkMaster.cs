@@ -93,9 +93,7 @@ namespace CalamityMod.Items.Weapons.Melee
                     Item.UseSound = SoundID.Item104;
                     Item.useStyle = ItemUseStyleID.Shoot;
                     Item.useTurn = false;
-                    Item.autoReuse = true;
                     Item.noMelee = true;
-                    Item.channel = true;
                 }
                 else
                 {
@@ -107,48 +105,10 @@ namespace CalamityMod.Items.Weapons.Melee
                 Item.UseSound = SoundID.Item1;
                 Item.useStyle = ItemUseStyleID.Swing;
                 Item.useTurn = true;
-                Item.autoReuse = true;
                 Item.noMelee = false;
-                Item.channel = false;
             }
             return base.CanUseItem(player);
         }
-
-       /* public override void UseItemFrame(Player player)
-        {
-            // spawn clones once the item's animation has ended 
-            if (player.altFunctionUse == 2)
-            {
-                /*if (player.itemAnimation > 1)
-                {
-                    Vector2 itemRot = player.itemRotation.ToRotationVector2();
-                    if (player.direction == -1)
-                        itemRot *= -1;
-                    float animationCompletion = 1 - ((float)player.itemAnimation / (float)player.itemAnimationMax);
-                    Vector2 dustSpawnBase = (Vector2)player.HandPosition + itemRot * (1 + animationCompletion) * 40;
-                    for (int i = 0; i < 6; i++)
-                    {
-                        Vector2 spawnPos = dustSpawnBase + Main.rand.NextVector2Circular(64, 64);
-                        Vector2 speed = dustSpawnBase - spawnPos;
-                        speed.SafeNormalize(spawnPos);
-                        Dust d = Dust.NewDustPerfect(spawnPos, 109, speed * 0.2f, Scale: 1f);
-                        d.noGravity = true;
-                    }
-                }
-                else*/
-                /*{
-                    if (player.ownedProjectileCounts[ModContent.ProjectileType<DarkMasterClone>()] <= 0)
-                    {
-                        ring = new BloomRing(player.Center, Vector2.Zero, Color.Red, 0.4f, 10);
-                        GeneralParticleHandler.SpawnParticle(ring);
-                        for (int i = 0; i < 3; i++)
-                        {
-                            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center.X, player.Center.Y, 0, 0, ModContent.ProjectileType<DarkMasterClone>(), Item.damage, Item.knockBack, player.whoAmI, i);
-                        }
-                    }
-                }
-            }
-        }*/
 
         // make the ring grow if it exists
         public override void UpdateInventory(Player player)
