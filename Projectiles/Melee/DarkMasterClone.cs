@@ -10,6 +10,7 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -91,7 +92,7 @@ namespace CalamityMod.Projectiles.Melee
             Player owner = Main.player[Projectile.owner];
 
             Player player = Main.playerVisualClone[Projectile.owner];
-            //player.CopyVisuals(Main.player[Projectile.owner]);
+            player.CopyVisuals(Main.player[Projectile.owner]);
             player.hair = owner.hair;
             player.skinVariant = owner.skinVariant;
             player.skinColor = Color.Black;
@@ -101,6 +102,20 @@ namespace CalamityMod.Projectiles.Melee
             player.shoeColor = Color.Black;
             player.hairColor = Color.Black;
             player.eyeColor = Color.Red;
+            // become one with the shadows
+            for (int i = 0; i < player.dye.Length; i++)
+            {
+                if (player.dye[i].type != ItemID.ShadowDye)
+                {
+                    player.dye[i].SetDefaults(ItemID.ShadowDye);
+                }
+            }
+            // update everything for our little dummy player
+            player.ResetEffects();
+            player.ResetVisibleAccessories();
+            player.DisplayDollUpdate();
+            player.UpdateSocialShadow();
+            player.UpdateDyes();
             player.PlayerFrame();
             // copy the player's arm movements while swinging, otherwise idle
             if (owner.ItemAnimationActive && owner.altFunctionUse != 2)
