@@ -237,7 +237,7 @@ DivineRetribution: {
 
 Downpour: {
 	DisplayName: Downpour
-        Tooltip:
+	Tooltip:
 		'''
 		Fires an explosive stream of sand that falls after hitting an enemy
 		The explosion only occurs when the projectile expires

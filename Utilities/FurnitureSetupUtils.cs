@@ -1531,6 +1531,7 @@ namespace CalamityMod
             
             Main.tileFrameImportant[mt.Type] = true;
             Main.tileLavaDeath[mt.Type] = true;
+            Main.tileSpelunker[mt.Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
             TileObjectData.addTile(mt.Type);
             TileID.Sets.DisableSmartCursor[mt.Type] = true;
@@ -1578,6 +1579,7 @@ namespace CalamityMod
         {
             Main.tileFrameImportant[mt.Type] = true;
             Main.tileLavaDeath[mt.Type] = !lavaImmune;
+            Main.tileSpelunker[mt.Type] = true;
             Main.tileWaterDeath[mt.Type] = false;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
             TileObjectData.newTile.Width = 6;
