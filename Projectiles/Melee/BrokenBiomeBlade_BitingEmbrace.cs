@@ -119,7 +119,6 @@ namespace CalamityMod.Projectiles.Melee
                     case 1:
                         Projectile.width = Projectile.height = 140;
                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, Projectile.Center);
-                        Projectile.damage = (int)(Projectile.damage * BrokenBiomeBlade.ColdAttunement_SecondSwingBoost);
                         break;
                     case 2:
                         Projectile.width = Projectile.height = 130;
