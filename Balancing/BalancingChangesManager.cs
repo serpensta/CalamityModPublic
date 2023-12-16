@@ -162,6 +162,9 @@ namespace CalamityMod.Balancing
             // 40% resist to Flying Dragon.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileID.DD2SquireSonicBoom))));
 
+            // 30% resist to Aurora Blazer.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<AuroraFire>()))));
+
             #endregion
 
             #region Duke Fishron
@@ -192,8 +195,8 @@ namespace CalamityMod.Balancing
             // 70% resist to the Stardust Dragon.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.3f, ProjectileID.StardustDragon1, ProjectileID.StardustDragon2, ProjectileID.StardustDragon3, ProjectileID.StardustDragon4))));
 
-            // 70% resist to Aurora Blazer.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.3f, ProjectileType<AuroraFire>()))));
+            // 60% resist to Aurora Blazer.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.4f, ProjectileType<AuroraFire>()))));
 
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(ResistTrueMelee(0.5f))));

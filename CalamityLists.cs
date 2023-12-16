@@ -2052,6 +2052,7 @@ namespace CalamityMod
                 ProjectileID.PiercingStarlight,
                 ProjectileID.Terragrim,
                 ProjectileType<AcidicSaxBubble>(),
+                ProjectileType<AuroraFire>(),
                 ProjectileType<BallisticPoisonCloud>(),
                 ProjectileType<BlushieStaffProj>(),
                 ProjectileType<BonebreakerProjectile>(),
