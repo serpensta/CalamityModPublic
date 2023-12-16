@@ -19,12 +19,11 @@ namespace CalamityMod.Projectiles.Melee
 
         // Bull Rush stats
         public const float MinChargeTime = 15f;
-        public const float MaxChargeTime = 50f;
-        public const float MaxChargeDistance = 800f; // 50 blocks
-        public const float MaxChargeDamageMult = 4.5f;
+        public const float MaxChargeTime = 45f;
+        public const float MaxChargeDistance = 720f; // 45 blocks
+        public const float MaxChargeDamageMult = 6f;
         public const float PiercingDamageMult = 0.6f;
         public const float DashDuration = 21f;
-        public const int IFrameAmount = 12;
 
         public Player Owner => Main.player[Projectile.owner];
         public ref float Charge => ref Projectile.ai[0];
@@ -122,6 +121,13 @@ namespace CalamityMod.Projectiles.Melee
                 {
                     SoundEngine.PlaySound(DashSound, Owner.Center);
 
+                    // Give immunity frames
+                    Owner.immune = true;
+                    Owner.immuneNoBlink = true;
+                    Owner.immuneTime = (int)DashDuration;
+                    for (int k = 0; k < Owner.hurtCooldowns.Length; k++)
+                        Owner.hurtCooldowns[k] = Owner.immuneTime;
+
                     // Reset the trail
                     for (int i = 0; i < Projectile.oldPos.Length; i++)
                     {
@@ -172,13 +178,6 @@ namespace CalamityMod.Projectiles.Melee
             float rotation = Projectile.velocity.ToRotation() - MathHelper.Pi;
             Particle redSlash = new SlashThrough(Color.Red * 0.9f, Owner.Center, rotation, 15, target);
             GeneralParticleHandler.SpawnParticle(redSlash);
-
-            // Give immunity frames
-            Owner.immune = true;
-            Owner.immuneNoBlink = true;
-            Owner.immuneTime = IFrameAmount;
-            for (int k = 0; k < Owner.hurtCooldowns.Length; k++)
-                Owner.hurtCooldowns[k] = Owner.immuneTime;
         }
 
         internal Color ColorFunction(float completionRatio)
