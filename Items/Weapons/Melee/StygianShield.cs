@@ -30,7 +30,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
-            Item.damage = 250;
+            Item.damage = 222;
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.useAnimation = Item.useTime = 40; // This is only for the "Very slow" tooltip. The real use time should be faster
             Item.shoot = ModContent.ProjectileType<StygianShieldAttack>();
@@ -43,7 +43,7 @@ namespace CalamityMod.Items.Weapons.Melee
         }
 
         // Can only throw a shield if none is active
-        public override bool AltFunctionUse(Player player) => player.ownedProjectileCounts[ThrownShieldID] <= 0;
+        public override bool AltFunctionUse(Player player) => player.ownedProjectileCounts[ThrownShieldID] <= 1;
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
