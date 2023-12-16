@@ -30,7 +30,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public int CanLunge = 1;
 
         #region stats
-        public static int BaseDamage = 47;
+        public static int BaseDamage = 38;
 
         public static int DefaultAttunement_BaseDamage = 38;
 
