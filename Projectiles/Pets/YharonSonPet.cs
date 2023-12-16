@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Pets
 {
     public class YharonSonPet : ModProjectile, ILocalizedModType
@@ -28,6 +30,10 @@ namespace CalamityMod.Projectiles.Pets
         public override void SetStaticDefaults()
         {
             Main.projPet[Projectile.type] = true;
+
+            //im crying how do i even make this use the correct animation
+            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 0, 1)
+            .WithOffset(-25f, 0f).WithSpriteDirection(-1).WhenNotSelected(0, 0);
         }
 
         public override void SetDefaults()
