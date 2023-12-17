@@ -31,9 +31,10 @@ namespace CalamityMod.Projectiles.Pets
         {
             Main.projPet[Projectile.type] = true;
 
-            //im crying how do i even make this use the correct animation
-            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 0, 1)
-            .WithOffset(-25f, 0f).WithSpriteDirection(-1).WhenNotSelected(0, 0);
+            //i cannot be bothered to figure out why it keeps flickering everytime it repeats the animation
+            //as a "solution" i have set the frame counter to an obnoxiously high number so it probably wont be noticed by players
+            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(1, 1, int.MaxValue)
+            .WithOffset(-55f, 2f).WithSpriteDirection(-1).WhenNotSelected(0, 0);
         }
 
         public override void SetDefaults()
