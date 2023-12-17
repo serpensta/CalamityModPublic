@@ -557,6 +557,8 @@ namespace CalamityMod
                 { new Tuple<int, int>(ModContent.NPCType<DesertScourgeHead>(), ModContent.ProjectileType<SandBlast>()), new int[] { 26, 44, 60, 68, 90 } },
                 { new Tuple<int, int>(ModContent.NPCType<DesertScourgeHead>(), ModContent.ProjectileType<GreatSandBlast>()), new int[] { 26, 44, 60, 68, 90 } },
 
+                { new Tuple<int, int>(NPCID.EyeofCthulhu, ProjectileID.BloodNautilusShot), new int[] { 0, 0, 60, 68, 90 } },
+
                 { new Tuple<int, int>(ModContent.NPCType<Crabulon>(), ModContent.ProjectileType<MushBomb>()), new int[] { 32, 48, 60, 68, 90 } },
                 { new Tuple<int, int>(ModContent.NPCType<Crabulon>(), ModContent.ProjectileType<MushBombFall>()), new int[] { 32, 48, 60, 68, 90 } },
 
