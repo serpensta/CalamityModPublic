@@ -44,8 +44,8 @@ BubonicRound: {
 	DisplayName: Bubonic Round
 	Tooltip:
 		'''
-		Bursts into virulent plague on contact
-		Ignores 25% of enemy defense
+		Spreads the plague on hit
+		Ignores 20% of enemy defense
 		'''
 }
 
