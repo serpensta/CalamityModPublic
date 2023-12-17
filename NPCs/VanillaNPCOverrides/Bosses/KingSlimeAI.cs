@@ -16,6 +16,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
         {
             // Percent life remaining
             float lifeRatio = npc.life / (float)npc.lifeMax;
+            float lifeRatio2 = lifeRatio;
 
             // Variables
             float teleportScale = 1f;
@@ -291,7 +292,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         else if (npc.ai[1] == 2f)
                         {
                             npc.velocity.Y = -6f * speedMult;
-                            npc.velocity.X += (phase2 ? (death ? 6.5f : 5.5f) : 4.5f) * npc.direction;
+                            npc.velocity.X += (phase2 ? (deathModeRapidHops ? 8f : death ? 6.5f : 5.5f) : 4.5f) * npc.direction;
                             if (bossRush)
                                 npc.velocity.X *= bossRushJumpSpeedMult;
 
@@ -372,20 +373,20 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Slime spawning
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                int slimeSpawnThreshold = (int)(npc.lifeMax * 0.05);
+                int slimeSpawnThreshold = (int)(npc.lifeMax * 0.03);
                 if (npc.life + slimeSpawnThreshold < npc.ai[3])
                 {
                     npc.ai[3] = npc.life;
-                    int slimeAmt = Main.rand.Next(2, 4);
+                    int slimeAmt = Main.rand.Next(1, 3);
                     for (int i = 0; i < slimeAmt; i++)
                     {
                         float minLowerLimit = death ? 5f : 0f;
                         float maxLowerLimit = death ? 7f : 2f;
-                        int minTypeChoice = (int)MathHelper.Lerp(minLowerLimit, 8f, 1f - lifeRatio);
-                        int maxTypeChoice = (int)MathHelper.Lerp(maxLowerLimit, 10f, 1f - lifeRatio);
+                        int minTypeChoice = (int)MathHelper.Lerp(minLowerLimit, 7f, 1f - lifeRatio2);
+                        int maxTypeChoice = (int)MathHelper.Lerp(maxLowerLimit, 9f, 1f - lifeRatio2);
 
                         int npcType;
-                        switch (Main.rand.Next(minTypeChoice, maxTypeChoice))
+                        switch (Main.rand.Next(minTypeChoice, maxTypeChoice + 1))
                         {
                             default:
                                 npcType = NPCID.SlimeSpiked;
@@ -433,8 +434,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (CalamityWorld.LegendaryMode)
                             npcType = NPCID.RainbowSlime;
 
-                        int x = (int)(npc.position.X + Main.rand.Next(npc.width - 32));
-                        int y = (int)(npc.position.Y + Main.rand.Next(npc.height - 32));
+                        int spawnZoneWidth = npc.width - 32;
+                        int spawnZoneHeight = npc.height - 32;
+                        if (spawnZoneWidth < 2)
+                            spawnZoneWidth = 2;
+                        if (spawnZoneHeight < 2)
+                            spawnZoneHeight = 2;
+
+                        int x = (int)(npc.position.X + Main.rand.Next(spawnZoneWidth));
+                        int y = (int)(npc.position.Y + Main.rand.Next(spawnZoneHeight));
                         int slimeSpawns = NPC.NewNPC(npc.GetSource_FromAI(), x, y, npcType);
                         Main.npc[slimeSpawns].SetDefaults(npcType);
                         Main.npc[slimeSpawns].velocity.X = Main.rand.Next(-15, 16) * 0.1f;
