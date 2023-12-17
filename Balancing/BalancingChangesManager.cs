@@ -137,9 +137,6 @@ namespace CalamityMod.Balancing
             // 50% resist to Dormant Brimseekers.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<DormantBrimseekerBab>()))));
 
-            // 40% resist to Cryophobia.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<CryoBlast>()))));
-
             // 40% resist to Meowthrower.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<MeowFire>()))));
 
