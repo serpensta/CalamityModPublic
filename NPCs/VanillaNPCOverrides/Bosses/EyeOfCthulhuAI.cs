@@ -134,7 +134,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.SimpleFlyMovement(idealVelocity, hoverAcceleration);
 
                     npc.ai[2] += 1f;
-                    float attackSwitchTimer = 180f - (death ? 360f * (1f - lifeRatio) : 0f);
+                    float attackSwitchTimer = 180f - (death ? 300f * (1f - lifeRatio) : 0f);
                     if (npc.ai[2] >= attackSwitchTimer)
                     {
                         npc.ai[1] = 1f;
@@ -213,7 +213,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     int chargeDelay = 90;
                     if (death)
-                        chargeDelay -= (int)Math.Round(180f * (1f - lifeRatio));
+                        chargeDelay -= (int)Math.Round(150f * (1f - lifeRatio));
                     if (Main.getGoodWorld)
                         chargeDelay -= 30;
 
@@ -254,7 +254,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (Main.getGoodWorld)
                     npc.reflectsProjectiles = true;
 
-                float rotationRate = death ? 0.025f : 0.005f;
                 if (npc.ai[0] == 1f)
                 {
                     npc.ai[2] += 0.005f;
@@ -270,8 +269,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 npc.rotation += npc.ai[2];
 
-                float phaseChangeRate = death ? 5f : 1f;
-                float servantSpawnGateValue = Main.getGoodWorld ? 5f : 20f;
+                float phaseChangeRate = death ? 2f : 1f;
+                float servantSpawnGateValue = Main.getGoodWorld ? 4f : 20f;
                 npc.ai[1] += phaseChangeRate;
                 if (npc.ai[1] % servantSpawnGateValue == 0f)
                 {
