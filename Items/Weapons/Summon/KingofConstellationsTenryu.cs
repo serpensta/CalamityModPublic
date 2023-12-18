@@ -17,7 +17,7 @@ namespace CalamityMod.Items.Weapons.Summon
         public override void SetDefaults()
         {
             Item.mana = 10;
-            Item.damage = 213;
+            Item.damage = 187;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.shootSpeed = 10f;
             Item.shoot = ModContent.ProjectileType<BlackDragonHead>();
