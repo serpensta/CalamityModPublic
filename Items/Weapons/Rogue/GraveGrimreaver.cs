@@ -12,6 +12,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         public override void SetDefaults()
         {
             Item.width = 80;
+            Item.height = 68;
             Item.damage = 84;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -21,7 +22,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.knockBack = 4f;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.height = 68;
             Item.shoot = ModContent.ProjectileType<GraveGrimreaverProjectile>();
             Item.shootSpeed = 16.5f;
             Item.DamageType = RogueDamageClass.Instance;

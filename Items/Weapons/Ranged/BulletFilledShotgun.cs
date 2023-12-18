@@ -16,6 +16,8 @@ namespace CalamityMod.Items.Weapons.Ranged
                    }
         public override void SetDefaults()
         {
+            Item.width = 64;
+            Item.height = 24;
             Item.damage = 1;
             Item.knockBack = 0f;
             Item.useTime = Item.useAnimation = 45;
@@ -26,8 +28,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.shootSpeed = 9f;
             Item.shoot = ModContent.ProjectileType<BouncingShotgunPellet>();
 
-            Item.width = 64;
-            Item.height = 24;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = SoundID.Item38;
             Item.value = CalamityGlobalItem.Rarity3BuyPrice;

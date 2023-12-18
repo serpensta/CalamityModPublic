@@ -45,14 +45,14 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = 58;
+            Item.height = 50;
             Item.damage = 380;
             Item.useTime = Item.useAnimation = 30;
             Item.knockBack = 4f;
             Item.mana = 10;
             Item.shoot = ModContent.ProjectileType<AtzirisDisfavor>();
 
-            Item.width = 58;
-            Item.height = 50;
             Item.autoReuse = true;
             Item.noMelee = true;
             Item.Calamity().donorItem = true;

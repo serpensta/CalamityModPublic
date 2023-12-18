@@ -20,5 +20,6 @@ namespace CalamityMod.Items.Materials
             Item.maxStack = 9999;
             Item.value = Item.buyPrice(0, 2, 50, 0);
             Item.rare = ItemRarityID.LightRed;
-        }    }
+        }
+    }
 }
