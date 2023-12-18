@@ -203,8 +203,8 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Moon Lord
-            // 90% resist to Mercurial Tides (True Biome Blade).
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.1f, ProjectileType<MercurialTides>(), ProjectileType<MercurialTidesMonolith>(), ProjectileType<MercurialTidesBlast>()))));
+            // 20% resist to Mercurial Tides (True Biome Blade).
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<MercurialTides>(), ProjectileType<MercurialTidesMonolith>(), ProjectileType<MercurialTidesBlast>()))));
 
             // 15% resist to Pestilent Defiler.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<SicknessRound>(), ProjectileType<Sickness>()))));
