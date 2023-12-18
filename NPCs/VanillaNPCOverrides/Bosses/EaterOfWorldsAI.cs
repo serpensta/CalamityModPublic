@@ -315,13 +315,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (phase5)
             {
-                segmentVelocity += 6f * (enrageScale + 1f);
-                segmentAcceleration += 0.075f * (enrageScale + 1f);
+                segmentVelocity += 4f * (enrageScale + 1f);
+                segmentAcceleration += 0.05f * (enrageScale + 1f);
             }
             else if (phase4)
             {
-                segmentVelocity += 2.4f * (enrageScale + 1f);
-                segmentAcceleration += 0.03f * (enrageScale + 1f);
+                segmentVelocity += 1.6f * (enrageScale + 1f);
+                segmentAcceleration += 0.02f * (enrageScale + 1f);
             }
 
             if (Main.getGoodWorld)
