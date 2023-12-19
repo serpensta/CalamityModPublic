@@ -17,6 +17,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         public override void SetDefaults()
         {
             Item.width = 28;
+            Item.height = 58;
             Item.damage = 55;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -25,7 +26,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.knockBack = 1.25f;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.height = 58;
             Item.shoot = ModContent.ProjectileType<MalachiteProj>();
             Item.shootSpeed = 10f;
             Item.DamageType = RogueDamageClass.Instance;

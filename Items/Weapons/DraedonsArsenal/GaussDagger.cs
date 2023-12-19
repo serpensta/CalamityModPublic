@@ -17,10 +17,10 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         {
             CalamityGlobalItem modItem = Item.Calamity();
 
-            Item.damage = 25;
-            Item.DamageType = DamageClass.Melee;
             Item.width = 26;
             Item.height = 26;
+            Item.damage = 25;
+            Item.DamageType = DamageClass.Melee;
             Item.scale = 1.5f;
             Item.useTime = 24;
             Item.useAnimation = 24;

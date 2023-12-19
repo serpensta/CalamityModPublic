@@ -13,12 +13,12 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
+            Item.width = 72;
+            Item.height = 62;
             Item.damage = 130;
             Item.DamageType = DamageClass.Melee;
             Item.useTurn = true;
             Item.rare = ItemRarityID.Yellow;
-            Item.width = 72;
-            Item.height = 62;
             Item.scale = 1.5f;
             Item.useTime = 20;
             Item.useAnimation = 20;

@@ -18,11 +18,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 52;
+            Item.height = 52;
             Item.damage = 50;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 19;
-            Item.width = 52;
-            Item.height = 52;
             Item.useTime = 21;
             Item.useAnimation = 21;
             Item.useStyle = ItemUseStyleID.Shoot;

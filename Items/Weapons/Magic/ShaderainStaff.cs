@@ -34,6 +34,7 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = Item.height = 42;
             Item.damage = 21;
             Item.shootSpeed = 10f;
             Item.useTime = Item.useAnimation = 25;
@@ -42,7 +43,6 @@ namespace CalamityMod.Items.Weapons.Magic
 
             Item.shoot = ModContent.ProjectileType<Shaderain>();
 
-            Item.width = Item.height = 42;
             Item.DamageType = DamageClass.Magic;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = SoundID.Item66;

@@ -43,7 +43,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public static int HotAttunement_BaseDamage = 35;
         public static int HotAttunement_FullChargeDamage = 60;
-        public static int HotAttunement_ShredIFrames = 16;
+        public static int HotAttunement_ShredIFrames = 6;
         public static int HotAttunement_LocalIFrames = 40; //Be warned its got one extra update so all the iframes should be divided in 2
         public static int HotAttunement_LocalIFramesCharged = 25;
         public static float HotAttunement_ShredDecayRate = 1f; //How much charge is lost per frame.

@@ -16,11 +16,11 @@ namespace CalamityMod.Items.Weapons.Magic
         public static readonly SoundStyle ShootSound = new("CalamityMod/Sounds/Item/HadalUrnOpen");
         public override void SetDefaults()
         {
+            Item.width = 58;
+            Item.height = 38;
             Item.damage = 32;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
-            Item.width = 58;
-            Item.height = 38;
             Item.useTime = 14;
             Item.useAnimation = 14;
             Item.useStyle = ItemUseStyleID.Shoot;

@@ -14,8 +14,8 @@ namespace CalamityMod.Projectiles.Ranged
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override string Texture => "CalamityMod/Projectiles/Magic/RancorFog";
 
-        public static int Lifetime => 450;
-        public static int Fadetime => 420;
+        public static int Lifetime => 480;
+        public static int Fadetime => 450;
         public ref float Time => ref Projectile.ai[0];
         public ref float LightPower => ref Projectile.ai[1];
 
@@ -35,10 +35,10 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = -1;
-            Projectile.MaxUpdates = 3;
+            Projectile.MaxUpdates = 4;
             Projectile.timeLeft = Lifetime;
             Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = 7;
+            Projectile.idStaticNPCHitCooldown = 8;
         }
 
         public override void AI()

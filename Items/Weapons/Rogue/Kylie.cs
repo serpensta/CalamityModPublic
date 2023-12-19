@@ -14,6 +14,8 @@ namespace CalamityMod.Items.Weapons.Rogue
         public static float Speed = 14f;
         public override void SetDefaults()
         {
+            Item.width = 34;
+            Item.height = 50;
             Item.damage = 63;
             Item.knockBack = 12;
             Item.DamageType = DamageClass.Throwing;
@@ -21,8 +23,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.rare = ItemRarityID.Orange;
             Item.useTime = 25;
             Item.useAnimation = 25;
-            Item.width = 34;
-            Item.height = 50;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item1;
             Item.shootSpeed = Speed;

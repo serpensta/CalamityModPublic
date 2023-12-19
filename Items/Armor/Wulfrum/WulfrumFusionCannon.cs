@@ -26,11 +26,11 @@ namespace CalamityMod.Items.Armor.Wulfrum
 
         public override void SetDefaults()
         {
+            Item.width = 34;
+            Item.height = 42;
             Item.damage = 6;
             Item.ArmorPenetration = 10;
             Item.DamageType = DamageClass.Summon;
-            Item.width = 34;
-            Item.height = 42;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2;

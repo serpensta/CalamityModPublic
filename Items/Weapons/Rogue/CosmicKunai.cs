@@ -14,6 +14,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         public override void SetDefaults()
         {
             Item.width = 26;
+            Item.height = 48;
             Item.damage = 92;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -25,7 +26,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.knockBack = 5f;
             Item.UseSound = SoundID.Item109;
             Item.autoReuse = true;
-            Item.height = 48;
             Item.value = CalamityGlobalItem.Rarity12BuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.shoot = ModContent.ProjectileType<CosmicKunaiProj>();
