@@ -14,6 +14,7 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Projectiles.DraedonsArsenal;
+using CalamityMod.Projectiles.Summon.MirrorofKalandraMinions;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
