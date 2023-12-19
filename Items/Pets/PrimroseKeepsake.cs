@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Pets
             Item.noMelee = true;
             Item.width = 30;
             Item.height = 30;
-            Item.shoot = ProjectileID.None; // neither kendra nor bear is the direct "shoot"
+            Item.shoot = ModContent.ProjectileType<PrimroseKeepsakeDisplay>(); 
             Item.buffType = ModContent.BuffType<FurtasticDuoBuff>();
             Item.UseSound = SoundID.Item44;
 

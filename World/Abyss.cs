@@ -318,6 +318,8 @@ namespace CalamityMod.World
             else if (y > 1500)
                 maxAbyssIslands = 16; //Medium World
 
+            PlaceSnailFossil(abyssChasmX, Main.remixWorld ? 145 : AbyssChasmBottom + 45);
+
             //place a single abyss island under the terminus shrine
             AbyssIsland(abyssChasmX, Main.remixWorld ? 105 : AbyssChasmBottom + 5, 65, 75, 40, 45, ModContent.TileType<Voidstone>(), false, false, false);
 
@@ -1113,6 +1115,49 @@ namespace CalamityMod.World
                 Main.chest[ChestIndex].item[6].SetDefaults(ItemID.GoldCoin);
                 Main.chest[ChestIndex].item[6].stack = WorldGen.genRand.Next(2, 5);
             }
+        }
+
+        public static void PlaceSnailFossil(int i, int j)
+        {
+            //place an island
+            AbyssIsland(i, j + 2, 55, 75, 35, 45, ModContent.TileType<Voidstone>(), false, false, false);
+
+            //clear decently big circular area where the chest will be
+            for (int clearX = i - 2; clearX <= i + 2; clearX++)
+            {
+                for (int clearY = j - 8; clearY <= j - 1; clearY++)
+                {
+                    //clear area for the chest to place
+                    ShapeData circle = new ShapeData();
+                    GenAction blotchMod = new Modifiers.Blotches(2, 0.4);
+
+                    int radius = (int)(WorldGen.genRand.Next(3, 5) * WorldGen.genRand.NextFloat(0.74f, 0.82f));
+                    
+                    WorldUtils.Gen(new Point(clearX, clearY), new Shapes.Circle(radius), Actions.Chain(new GenAction[]
+                    {
+                        blotchMod.Output(circle)
+                    }));
+
+                    WorldUtils.Gen(new Point(clearX, clearY), new ModShapes.All(circle), Actions.Chain(new GenAction[]
+                    {
+                        new Actions.ClearTile()
+                    }));
+                }
+            }
+
+            //place cluster where chest will spawn
+            WorldGen.TileRunner(i, j + 4, 8, 5, ModContent.TileType<Voidstone>(), true, 0, 0, false, true);
+
+            //clear another small square exactly around where the chest will be so it has a flat area to place on
+            for (int clearX = i - 7; clearX <= i + 7; clearX++)
+            {
+                for (int clearY = j - 1; clearY <= j + 5; clearY++)
+                {
+                    WorldGen.PlaceTile(clearX, clearY, ModContent.TileType<Voidstone>());
+                }
+            }
+
+            WorldGen.PlaceObject(i, j - 2, (ushort)ModContent.TileType<AbyssFossilTile>());
         }
 
         /// <summary>
