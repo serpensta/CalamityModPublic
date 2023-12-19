@@ -24,6 +24,9 @@ namespace CalamityMod.Projectiles.Pets
             Main.projPet[Projectile.type] = true;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
+            .WithOffset(-7f, 0f).WithSpriteDirection(-1).WhenNotSelected(0, 0);
         }
 
         public override void SetDefaults()

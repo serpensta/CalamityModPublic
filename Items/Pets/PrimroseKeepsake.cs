@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Pets
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.noMelee = true;
-            Item.shoot = ProjectileID.None; // neither kendra nor bear is the direct "shoot"
+            Item.shoot = ModContent.ProjectileType<PrimroseKeepsakeDisplay>(); 
             Item.buffType = ModContent.BuffType<FurtasticDuoBuff>();
             Item.UseSound = SoundID.Item44;
 
