@@ -224,7 +224,8 @@ TrackingDisk: {
 	Tooltip:
 		'''
 		Releases a flying disk that fires lasers at nearby enemies
-		Stealth strikes allow the disk to fire multiple larger lasers at different targets
+		This disk gains acceleration as it returns to the player
+		Stealth strikes fire lasers at a faster rate and distance, and can fire at multiple different targets
 		'''
 }
 

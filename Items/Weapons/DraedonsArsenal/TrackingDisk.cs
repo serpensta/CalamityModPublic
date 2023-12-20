@@ -24,8 +24,8 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
             Item.height = 34;
             Item.damage = 16;
             Item.DamageType = RogueDamageClass.Instance;
-            Item.useTime = 45;
-            Item.useAnimation = 45;
+            Item.useTime = 40;
+            Item.useAnimation = 40;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = false;
             Item.knockBack = 3f;
@@ -39,7 +39,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
             Item.autoReuse = true;
 
             Item.shoot = ModContent.ProjectileType<TrackingDiskProjectile>();
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 8f;
 
             modItem.UsesCharge = true;
             modItem.MaxCharge = 50f;
