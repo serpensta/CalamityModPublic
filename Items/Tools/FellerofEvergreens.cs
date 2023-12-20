@@ -9,8 +9,8 @@ namespace CalamityMod.Items.Tools
         public new string LocalizationCategory => "Items.Tools";
         public override void SetDefaults()
         {
-            Item.width = 50;
-            Item.height = 46;
+            Item.width = 66;
+            Item.height = 66;
             Item.damage = 18;
             Item.knockBack = 5f;
             Item.useTime = 17;
