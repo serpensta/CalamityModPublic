@@ -31,6 +31,8 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = 38;
+            Item.height = 50;
             Item.damage = 25;
             Item.DamageType = DamageClass.Summon;
             Item.shoot = ModContent.ProjectileType<IceClasperMinion>();
@@ -38,8 +40,6 @@ namespace CalamityMod.Items.Weapons.Summon
 
             Item.useTime = Item.useAnimation = 25;
             Item.mana = 10;
-            Item.width = 38;
-            Item.height = 50;
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;

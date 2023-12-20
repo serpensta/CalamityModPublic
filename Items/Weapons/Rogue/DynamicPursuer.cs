@@ -21,11 +21,10 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             CalamityGlobalItem modItem = Item.Calamity();
 
-            Item.damage = 2850;
-            Item.DamageType = RogueDamageClass.Instance;
-
             Item.width = 30;
             Item.height = 34;
+            Item.damage = 2850;
+            Item.DamageType = RogueDamageClass.Instance;
             Item.useTime = 42;
             Item.useAnimation = 42;
             Item.useStyle = ItemUseStyleID.Swing;

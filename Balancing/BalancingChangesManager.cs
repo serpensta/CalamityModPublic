@@ -14,6 +14,7 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Projectiles.DraedonsArsenal;
+using CalamityMod.Projectiles.Summon.MirrorofKalandraMinions;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -203,8 +204,8 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Moon Lord
-            // 90% resist to Mercurial Tides (True Biome Blade).
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.1f, ProjectileType<MercurialTides>(), ProjectileType<MercurialTidesMonolith>(), ProjectileType<MercurialTidesBlast>()))));
+            // 20% resist to Mercurial Tides (True Biome Blade).
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<MercurialTides>(), ProjectileType<MercurialTidesMonolith>(), ProjectileType<MercurialTidesBlast>()))));
 
             // 15% resist to Pestilent Defiler.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<SicknessRound>(), ProjectileType<Sickness>()))));
@@ -374,6 +375,9 @@ namespace CalamityMod.Balancing
 
             // 25% resist to Gael's Greatsword's big skulls.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileSpecificRequirementBalancingRule(0.75f, BigGaelsSkullFilter))));
+
+            // 25% resist to Mirror of Kalandra's Paradoxica minion.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<Paradoxica>()))));
 
             // 25% resist to Zenith.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileID.FinalFractal))));

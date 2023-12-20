@@ -17,10 +17,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         public const float FullChargeTime = 420f;
         public override void SetDefaults()
         {
-            Item.damage = 150;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 44;
             Item.height = 58;
+            Item.damage = 150;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = 8;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;

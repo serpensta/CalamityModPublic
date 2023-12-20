@@ -8,6 +8,7 @@ using CalamityMod.Items.Potions;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Items.Pets;
 using CalamityMod.NPCs.Abyss;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Sounds;
@@ -1449,6 +1450,7 @@ namespace CalamityMod.NPCs.PrimordialWyrm
             npcLoot.Add(ModContent.ItemType<EidolicWail>());
             npcLoot.Add(ModContent.ItemType<SoulEdge>());
             npcLoot.Add(ModContent.ItemType<HalibutCannon>());
+            npcLoot.Add(ModContent.ItemType<AbyssShellFossil>());
             npcLoot.Add(ModContent.ItemType<Voidstone>(), 1, 80, 100);
             npcLoot.Add(ModContent.ItemType<ThankYouPainting>(), ThankYouPainting.DropInt);
 

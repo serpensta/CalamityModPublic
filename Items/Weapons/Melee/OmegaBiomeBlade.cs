@@ -68,7 +68,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public static int ShockwaveAttunement_PassiveBaseDamage = 200;
 
 
-        public static int FlailBladeAttunement_BaseDamage = 320;
+        public static int FlailBladeAttunement_BaseDamage = 400;
         public static int FlailBladeAttunement_LocalIFrames = 30;
         public static int FlailBladeAttunement_FlailTime = 10;
         public static int FlailBladeAttunement_Reach = 400;
