@@ -16,7 +16,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.height = 34;
             Item.damage = 19;
             Item.DamageType = DamageClass.Ranged;
-            Item.useAnimation = Item.useTime = 22;
+            Item.useAnimation = Item.useTime = 28;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 1.5f;
@@ -38,7 +38,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Vector2 newPos = position + velocity * 6f;
             for (int i = 0; i < 3; i++)
             {
-                Vector2 newVel = velocity.RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.8f, 1.2f);
+                Vector2 newVel = velocity.RotatedByRandom(MathHelper.ToRadians(13f)) * Main.rand.NextFloat(0.8f, 1.2f);
                 Projectile.NewProjectile(source, newPos, newVel, type, damage, knockback, player.whoAmI);
             }
             return false;
