@@ -39,7 +39,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Fade in.
             npc.Opacity = MathHelper.Clamp(npc.Opacity + 0.08f, 0f, 1f);
 
-            float enrageScale = bossRush ? 1f : 0f;
+            float enrageScale = bossRush ? 1.5f : 0f;
             if ((npc.position.Y / 16f) < Main.worldSurface || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
@@ -66,20 +66,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             // Phases
 
-            // Vile Spit phase
-            bool phase2 = lifeRatio < 0.9f;
-
             // Cursed Flame phase
-            bool phase3 = lifeRatio < 0.75f;
+            bool phase2 = lifeRatio < 0.8f;
 
             // Boost velocity by 20% phase
-            bool phase4 = lifeRatio < 0.4f;
+            bool phase3 = lifeRatio < 0.4f;
 
             // Boost velocity by 50% phase
-            bool phase5 = lifeRatio < 0.1f;
+            bool phase4 = lifeRatio < 0.1f;
 
             // Fire projectiles
-            if (Main.netMode != NetmodeID.MultiplayerClient && (!phase5 || death || Main.getGoodWorld))
+            if (Main.netMode != NetmodeID.MultiplayerClient && (!phase4 || death || Main.getGoodWorld))
             {
                 // Vile spit
                 if (npc.type == NPCID.EaterofWorldsBody)
@@ -88,7 +85,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (Main.getGoodWorld)
                         randomChanceLimit = (int)(randomChanceLimit * 0.5f);
 
-                    if (Main.rand.NextBool(randomChanceLimit) && phase2)
+                    if (Main.rand.NextBool(randomChanceLimit))
                     {
                         npc.TargetClosest();
                         if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1) && Vector2.Distance(npc.Center, Main.player[npc.target].Center) > 320f)
@@ -107,7 +104,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (enrageScale >= 2f)
                         timer = 60f;
 
-                    if (calamityGlobalNPC.newAI[0] >= timer && phase3)
+                    if (calamityGlobalNPC.newAI[0] >= timer && phase2)
                     {
                         if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1) &&
                             npc.SafeDirectionTo(Main.player[npc.target].Center).AngleBetween((npc.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
@@ -317,15 +314,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float segmentVelocity = 12f + velocityBoost;
             float segmentAcceleration = 0.15f + accelerationBoost;
 
-            if (phase5)
+            if (phase4)
             {
-                segmentVelocity += 4f * (enrageScale + 1f);
-                segmentAcceleration += 0.1f * (enrageScale + 1f);
+                segmentVelocity += 3f * (enrageScale + 1f);
+                segmentAcceleration += 0.15f * (enrageScale + 1f);
             }
-            else if (phase4)
+            else if (phase3)
             {
-                segmentVelocity += 1.6f * (enrageScale + 1f);
-                segmentAcceleration += 0.04f * (enrageScale + 1f);
+                segmentVelocity += 1.2f * (enrageScale + 1f);
+                segmentAcceleration += 0.06f * (enrageScale + 1f);
             }
 
             if (Main.getGoodWorld)
@@ -384,12 +381,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     calamityGlobalNPC.newAI[1] += 1f;
 
                     // Set velocity for when a new head spawns
-                    npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * (segmentVelocity * (death ? 0.5f : 0.4f));
+                    npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * (segmentVelocity * (death ? 0.7f : 0.5f));
                 }
 
                 if (!inTiles)
                 {
-                    npc.velocity.Y += death ? 0.15f : 0.11f;
+                    npc.velocity.Y += death ? 0.1375f : 0.11f;
                     if (npc.velocity.Y > segmentVelocity)
                         npc.velocity.Y = segmentVelocity;
 
@@ -407,7 +404,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         else if (npc.velocity.X > targetPosX)
                             npc.velocity.X -= segmentAcceleration;
                     }
-                    else if (npc.velocity.Y > (death ? 6f : 4f))
+                    else if (npc.velocity.Y > (death ? 5f : 4f))
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X += segmentAcceleration * 0.9f;

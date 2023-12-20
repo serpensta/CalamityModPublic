@@ -26,6 +26,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             bool phase5 = lifeRatio < 0.4f;
             float lineUpDist = death ? 15f : 20f;
 
+            // Servant and projectile velocity, the projectile velocity is multiplied by 2
+            float servantAndProjectileVelocity = death ? 8f : 6f;
+
             float enrageScale = bossRush ? 1f : 0f;
             if (Main.dayTime || bossRush)
             {
@@ -143,7 +146,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.TargetClosest();
                         npc.netUpdate = true;
                     }
-                    else if (npc.WithinRange(hoverDestination, 800f))
+                    else if (npc.WithinRange(hoverDestination, 900f))
                     {
                         if (!Main.player[npc.target].dead)
                             npc.ai[3] += 1f;
@@ -157,9 +160,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.ai[3] = 0f;
                             npc.rotation = eyeRotation;
 
-                            Vector2 servantSpawnVelocity = npc.SafeDirectionTo(Main.player[npc.target].Center) * 6f;
+                            Vector2 servantSpawnVelocity = npc.SafeDirectionTo(Main.player[npc.target].Center) * servantAndProjectileVelocity;
                             Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity * 10f;
-                            int maxServants = death ? 4 : 3;
+                            int maxServants = death ? 5 : 4;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 if (NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants)
@@ -205,8 +208,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
                 else if (npc.ai[1] == 2f)
                 {
+                    float slowDownGateValue = 40f;
+                    if (death)
+                        slowDownGateValue -= (int)Math.Round(48f * (1f - lifeRatio));
+
                     npc.ai[2] += 1f;
-                    if (npc.ai[2] >= 40f)
+                    if (npc.ai[2] >= slowDownGateValue)
                     {
                         npc.velocity *= 0.975f;
                         if (Main.getGoodWorld)
@@ -222,7 +229,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     int chargeDelay = 90;
                     if (death)
-                        chargeDelay -= (int)Math.Round(150f * (1f - lifeRatio));
+                        chargeDelay -= (int)Math.Round(120f * (1f - lifeRatio));
                     if (Main.getGoodWorld)
                         chargeDelay -= 30;
 
@@ -233,7 +240,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.TargetClosest();
                         npc.rotation = eyeRotation;
 
-                        float numCharges = death ? 2f : 3f;
+                        float numCharges = death ? 4f : 3f;
                         if (npc.ai[3] >= numCharges)
                         {
                             npc.ai[1] = 0f;
@@ -649,11 +656,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[2] % 45f == 0f)
                     {
-                        Vector2 servantSpawnVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * 6f;
+                        Vector2 servantSpawnVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * servantAndProjectileVelocity;
                         Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity * 10f;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int maxServants = death ? 6 : 5;
+                            int maxServants = 4;
                             if (NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants)
                             {
                                 int eye = NPC.NewNPC(npc.GetSource_FromAI(), (int)servantSpawnCenter.X, (int)servantSpawnCenter.Y, NPCID.ServantofCthulhu);
