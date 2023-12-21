@@ -534,6 +534,43 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                 }
 
+                if (death)
+                {
+                    int numHeads = NPC.CountNPCS(npc.type);
+                    if (numHeads > 0)
+                    {
+                        // Limit this variable so that the following calculation never goes too low
+                        if (numHeads > 15)
+                            numHeads = 15;
+
+                        float pushDistanceLowerLimit = 16f - numHeads;
+                        float pushDistanceUpperLimit = 80f - numHeads * 5f;
+                        float pushDistance = MathHelper.Lerp(pushDistanceLowerLimit, pushDistanceUpperLimit, 1f - lifeRatio) * npc.scale;
+                        float pushVelocity = 0.5f;
+                        for (int i = 0; i < Main.maxNPCs; i++)
+                        {
+                            if (Main.npc[i].active)
+                            {
+                                if (i != npc.whoAmI && Main.npc[i].type == npc.type)
+                                {
+                                    if (Vector2.Distance(npc.Center, Main.npc[i].Center) < pushDistance)
+                                    {
+                                        if (npc.position.X < Main.npc[i].position.X)
+                                            npc.velocity.X -= pushVelocity;
+                                        else
+                                            npc.velocity.X += pushVelocity;
+
+                                        if (npc.position.Y < Main.npc[i].position.Y)
+                                            npc.velocity.Y -= pushVelocity;
+                                        else
+                                            npc.velocity.Y += pushVelocity;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) + MathHelper.PiOver2;
 
                 if (npc.type == NPCID.EaterofWorldsHead)

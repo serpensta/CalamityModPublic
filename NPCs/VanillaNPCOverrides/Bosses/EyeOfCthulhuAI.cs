@@ -24,6 +24,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             bool phase3 = lifeRatio < 0.65f;
             bool phase4 = lifeRatio < 0.55f;
             bool phase5 = lifeRatio < 0.4f;
+            bool finalPhaseRev = lifeRatio < 0.2f;
+            bool penultimatePhaseDeath = lifeRatio < 0.275f;
+            bool finalPhaseDeath = lifeRatio < 0.15f;
+
             float lineUpDist = death ? 15f : 20f;
 
             // Servant and projectile velocity, the projectile velocity is multiplied by 2
@@ -162,7 +166,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                             Vector2 servantSpawnVelocity = npc.SafeDirectionTo(Main.player[npc.target].Center) * servantAndProjectileVelocity;
                             Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity * 10f;
-                            int maxServants = death ? 5 : 4;
+                            int maxServants = 4;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 if (NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants)
@@ -616,7 +620,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.ai[3] += 1f;
                         npc.ai[2] = 0f;
 
-                        float maxCharges = death ? (lifeRatio < 0.15f ? 1f : lifeRatio < 0.275f ? 2f : 3f) : lifeRatio < 0.2f ? 4f : 5f;
+                        float maxCharges = death ? (finalPhaseDeath ? 1f : penultimatePhaseDeath ? 2f : 3f) : finalPhaseRev ? 3f : 5f;
                         if (npc.ai[3] >= maxCharges)
                         {
                             npc.ai[1] = 0f;
@@ -660,7 +664,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity * 10f;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int maxServants = 4;
+                            int maxServants = death ? (finalPhaseDeath ? 1 : penultimatePhaseDeath ? 2 : 3) : (finalPhaseRev ? 3 : 4);
                             if (NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants)
                             {
                                 int eye = NPC.NewNPC(npc.GetSource_FromAI(), (int)servantSpawnCenter.X, (int)servantSpawnCenter.Y, NPCID.ServantofCthulhu);

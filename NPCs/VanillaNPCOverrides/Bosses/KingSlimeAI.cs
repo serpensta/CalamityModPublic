@@ -112,7 +112,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.velocity.Y += bossRush ? 0.1f : death ? 0.05f : 0f;
                 if (!crystalAlive)
-                    npc.velocity.Y += 0.05f;
+                    npc.velocity.Y += 0.1f;
             }
 
             // Activate teleport
@@ -277,15 +277,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.ai[1] = 2f;
 
                         float bossRushJumpSpeedMult = 1.5f;
+                        float yVelocityMult = 1.2f;
 
                         // Jump type
                         if (npc.ai[1] == 3f)
                         {
                             npc.velocity.Y = -13f * speedMult;
                             npc.velocity.X += (phase2 ? (death ? 5.5f : 4.5f) : 3.5f) * npc.direction;
-                            if (bossRush)
-                                npc.velocity.X *= bossRushJumpSpeedMult;
-
                             npc.ai[0] = -100f;
                             npc.ai[1] = 0f;
                         }
@@ -293,9 +291,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         {
                             npc.velocity.Y = -6f * speedMult;
                             npc.velocity.X += (phase2 ? (deathModeRapidHops ? 8f : death ? 6.5f : 5.5f) : 4.5f) * npc.direction;
-                            if (bossRush)
-                                npc.velocity.X *= bossRushJumpSpeedMult;
-
                             npc.ai[0] = -60f;
 
                             // Use the quick forward jump over and over while at low HP in death mode
@@ -306,12 +301,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         {
                             npc.velocity.Y = -8f * speedMult;
                             npc.velocity.X += (phase2 ? (death ? 6f : 5f) : 4f) * npc.direction;
-                            if (bossRush)
-                                npc.velocity.X *= bossRushJumpSpeedMult;
-
                             npc.ai[0] = -60f;
                             npc.ai[1] += 1f;
                         }
+
+                        if (!crystalAlive)
+                            npc.velocity.Y *= yVelocityMult;
+
+                        if (bossRush)
+                            npc.velocity.X *= bossRushJumpSpeedMult;
 
                         npc.noTileCollide = true;
                     }
@@ -323,7 +321,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Change jump velocity
             else if (npc.target < Main.maxPlayers)
             {
-                float jumpVelocityLimit = crystalAlive ? 3f : 4f;
+                float jumpVelocityLimit = crystalAlive ? 3f : 4.5f;
                 if (Main.getGoodWorld)
                     jumpVelocityLimit = 6f;
 
@@ -356,7 +354,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             // Adjust size based on HP
             float maxScale = death ? (Main.getGoodWorld ? 6f : 3f) : (Main.getGoodWorld ? 3f : 1.25f);
-            float minScale = death ? 0.25f : 0.75f;
+            float minScale = death ? 0.5f : 0.75f;
             lifeRatio = lifeRatio * (maxScale - minScale) + minScale;
             lifeRatio *= teleportScale;
             if (lifeRatio != npc.scale)
@@ -436,22 +434,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                         int spawnZoneWidth = npc.width - 32;
                         int spawnZoneHeight = npc.height - 32;
-                        if (spawnZoneWidth < 2)
-                            spawnZoneWidth = 2;
-                        if (spawnZoneHeight < 2)
-                            spawnZoneHeight = 2;
-
                         int x = (int)(npc.position.X + Main.rand.Next(spawnZoneWidth));
                         int y = (int)(npc.position.Y + Main.rand.Next(spawnZoneHeight));
                         int slimeSpawns = NPC.NewNPC(npc.GetSource_FromAI(), x, y, npcType);
                         Main.npc[slimeSpawns].SetDefaults(npcType);
                         Main.npc[slimeSpawns].velocity.X = Main.rand.Next(-15, 16) * 0.1f;
-                        Main.npc[slimeSpawns].velocity.Y = Main.rand.Next(-30, 1) * 0.1f;
+                        Main.npc[slimeSpawns].velocity.Y = Main.rand.Next(-30, 31) * 0.1f;
                         Main.npc[slimeSpawns].ai[0] = -1000 * Main.rand.Next(3);
                         Main.npc[slimeSpawns].ai[1] = 0f;
 
                         if (Main.netMode == NetmodeID.Server && slimeSpawns < Main.maxNPCs)
-                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, slimeSpawns, 0f, 0f, 0f, 0, 0, 0);
+                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, slimeSpawns);
                     }
                 }
             }
