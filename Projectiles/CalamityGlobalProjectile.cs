@@ -2843,7 +2843,7 @@ namespace CalamityMod.Projectiles
                     modifiers.SourceDamage /= 1.5f;
             }
 
-            // create sparks on hit to hammer in the defense shredding 
+            // Create sparks on hit to hammer in the defense shredding.
             if (deepcoreBullet)
             {
                 if (Main.netMode != NetmodeID.Server)
@@ -3079,47 +3079,67 @@ namespace CalamityMod.Projectiles
         {
             Player player = Main.player[projectile.owner];
             CalamityPlayer modPlayer = player.Calamity();
-            if (projectile.owner == Main.myPlayer && !projectile.npcProj && !projectile.trap)
+            if (projectile.owner == Main.myPlayer)
             {
-                if (projectile.CountsAsClass<RogueDamageClass>())
+                if (projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet)
                 {
-                    if (modPlayer.etherealExtorter && extorterBoost && Main.player[projectile.owner].ownedProjectileCounts[ProjectileType<LostSoulFriendly>()] < 5)
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        for (int i = 0; i < 2; i++)
+                        int beeAmt = Main.rand.Next(2, 5);
+                        int availableAmountOfNPCsToSpawnUpToSlot = NPC.GetAvailableAmountOfNPCsToSpawnUpToSlot(beeAmt);
+                        for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
-                            Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f);
-
-                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(20);
-                            damage = player.ApplyArmorAccDamageBonusesTo(damage);
-
-                            int soul = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, velocity, ProjectileType<LostSoulFriendly>(), damage, 0f, projectile.owner);
-                            Main.projectile[soul].tileCollide = false;
-                            if (soul.WithinBounds(Main.maxProjectiles))
-                                Main.projectile[soul].DamageType = DamageClass.Generic;
+                            int beeType = Main.rand.Next(210, 212);
+                            int beeSpawn = NPC.NewNPC(projectile.GetSource_FromThis(), (int)projectile.Center.X, (int)projectile.Center.Y, beeType, 1);
+                            Main.npc[beeSpawn].velocity.X = (float)Main.rand.Next(-200, 201) * 0.002f;
+                            Main.npc[beeSpawn].velocity.Y = (float)Main.rand.Next(-200, 201) * 0.002f;
+                            Main.npc[beeSpawn].netUpdate = true;
                         }
-                    }
-
-                    if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0)
-                    {
-                        int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(18);
-                        damage = player.ApplyArmorAccDamageBonusesTo(damage);
-
-                        int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);
-                        Main.projectile[spike].frame = 4;
-                        if (spike.WithinBounds(Main.maxProjectiles))
-                            Main.projectile[spike].DamageType = DamageClass.Generic;
-                        modPlayer.scuttlerCooldown = 30;
                     }
                 }
 
-                if (projectile.type == ProjectileID.UnholyWater)
-                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<WaterConvertor>(), 0, 0f, projectile.owner, 1f);
+                if (!projectile.npcProj && !projectile.trap)
+                {
+                    if (projectile.CountsAsClass<RogueDamageClass>())
+                    {
+                        if (modPlayer.etherealExtorter && extorterBoost && Main.player[projectile.owner].ownedProjectileCounts[ProjectileType<LostSoulFriendly>()] < 5)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f);
 
-                if (projectile.type == ProjectileID.BloodWater)
-                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<WaterConvertor>(), 0, 0f, projectile.owner, 2f);
+                                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(20);
+                                damage = player.ApplyArmorAccDamageBonusesTo(damage);
 
-                if (projectile.type == ProjectileID.HolyWater)
-                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<WaterConvertor>(), 0, 0f, projectile.owner, 3f);
+                                int soul = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, velocity, ProjectileType<LostSoulFriendly>(), damage, 0f, projectile.owner);
+                                Main.projectile[soul].tileCollide = false;
+                                if (soul.WithinBounds(Main.maxProjectiles))
+                                    Main.projectile[soul].DamageType = DamageClass.Generic;
+                            }
+                        }
+
+                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0)
+                        {
+                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(18);
+                            damage = player.ApplyArmorAccDamageBonusesTo(damage);
+
+                            int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);
+                            Main.projectile[spike].frame = 4;
+                            if (spike.WithinBounds(Main.maxProjectiles))
+                                Main.projectile[spike].DamageType = DamageClass.Generic;
+                            modPlayer.scuttlerCooldown = 30;
+                        }
+                    }
+
+                    if (projectile.type == ProjectileID.UnholyWater)
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<WaterConvertor>(), 0, 0f, projectile.owner, 1f);
+
+                    if (projectile.type == ProjectileID.BloodWater)
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<WaterConvertor>(), 0, 0f, projectile.owner, 2f);
+
+                    if (projectile.type == ProjectileID.HolyWater)
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<WaterConvertor>(), 0, 0f, projectile.owner, 3f);
+                }
             }
         }
         #endregion

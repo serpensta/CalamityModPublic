@@ -64,16 +64,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             // Phases
 
-            // Become more aggressive phase
+            // Become more aggressive and start firing double stingers (triple in death mode) phase
             bool phase2 = lifeRatio < 0.8f;
 
-            // Begin launching beehives instead of bees phase
+            // Begin launching beehives instead of bees phase, spawn hornets in death mode
             bool phase3 = lifeRatio < 0.6f;
 
-            // Stop spawning bees and become more aggressive phase
+            // Stop spawning bees from ass, spawn bees while charging and become more aggressive phase
             bool phase4 = lifeRatio < 0.3f;
 
-            // Stinger bombardment phase
+            // Triple stinger (quintuple in death mode) bombardment phase
             bool phase5 = lifeRatio < 0.1f;
 
             // Despawn
@@ -109,6 +109,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.SyncExtraAI();
             }
 
+            // Despawn phase
             if (npc.ai[0] == 5f)
             {
                 npc.velocity.Y *= 0.98f;
@@ -219,6 +220,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.spriteDirection = npc.direction;
                         
                         SoundEngine.PlaySound(SoundID.Zombie125, npc.Center);
+
                         return false;
                     }
 
@@ -325,6 +327,36 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.velocity.X *= 1.01f;
                         }
 
+                        // Spawn bees
+                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % (death ? 10f : 15f) == 0f;
+                        if (Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee)
+                        {
+                            SoundEngine.PlaySound(SoundID.NPCHit1, npc.Center);
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                int spawnType = Main.rand.Next(NPCID.Bee, NPCID.BeeSmall + 1);
+                                if (Main.zenithWorld)
+                                {
+                                    if (phase3)
+                                        spawnType = Main.rand.NextBool(3) ? ModContent.NPCType<PlagueChargerLarge>() : ModContent.NPCType<PlagueCharger>();
+                                    else
+                                        spawnType = NPCID.Hellbat;
+                                }
+
+                                int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, spawnType);
+                                Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
+                                Main.npc[spawn].velocity.Normalize();
+                                Main.npc[spawn].velocity *= 5f;
+                                if (!Main.zenithWorld)
+                                {
+                                    Main.npc[spawn].ai[3] = 1f;
+                                    Main.npc[spawn].localAI[0] = 60f;
+                                }
+                                Main.npc[spawn].netUpdate = true;
+                            }
+                        }
+
                         npc.localAI[0] = 1f;
                         return false;
                     }
@@ -382,7 +414,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 // Go to bee spawn phase
                 calamityGlobalNPC.newAI[0] += 1f;
-                if (beeAttackTargetDist < (death ? 450f : 300f) || calamityGlobalNPC.newAI[0] >= 180f)
+                if (beeAttackTargetDist < 360f || calamityGlobalNPC.newAI[0] >= 180f)
                 {
                     npc.ai[0] = 1f;
                     npc.ai[1] = 0f;
@@ -452,7 +484,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     spawnBee = true;
                 }
 
-                // Spawn bees or hornets
+                // Spawn bees
                 if (Collision.CanHit(beeSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee)
                 {
                     if (!phase3 || Main.zenithWorld)
@@ -464,7 +496,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         if (phase3 && !Main.zenithWorld)
                         {
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), beeSpawnLocation, (Main.player[npc.target].Center - beeSpawnLocation).SafeNormalize(Vector2.UnitY), ProjectileID.BeeHive, 0, 0f, Main.myPlayer);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), beeSpawnLocation, (Main.player[npc.target].Center - beeSpawnLocation).SafeNormalize(Vector2.UnitY), ProjectileID.BeeHive, 0, 0f, Main.myPlayer, 0f, 0f, 1f);
 
                             if (death)
                             {
@@ -473,6 +505,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
                                 Main.npc[spawn].velocity.Normalize();
                                 Main.npc[spawn].velocity *= 5f;
+                                Main.npc[spawn].ai[3] = 1f;
                                 Main.npc[spawn].localAI[0] = 60f;
                                 Main.npc[spawn].netUpdate = true;
                             }
@@ -493,7 +526,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Main.npc[spawn].velocity.Normalize();
                             Main.npc[spawn].velocity *= 5f;
                             if (!Main.zenithWorld)
+                            {
+                                Main.npc[spawn].ai[3] = 1f;
                                 Main.npc[spawn].localAI[0] = 60f;
+                            }
                             Main.npc[spawn].netUpdate = true;
                         }
                     }
@@ -544,8 +580,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.spriteDirection = npc.direction;
 
                 // Go to a random phase
-                float numSpawns = phase3 ? 2f : 3f;
-                if (npc.ai[2] > 3f)
+                float numSpawns = phase3 ? 2f : 5f;
+                if (npc.ai[2] > numSpawns)
                 {
                     npc.ai[0] = -1f;
                     npc.ai[1] = 2f;
@@ -561,11 +597,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 Vector2 stingerSpawnLocation = new Vector2(npc.position.X + (npc.width / 2) + (Main.rand.Next(20) * npc.direction), npc.position.Y + npc.height * 0.8f);
                 Vector2 stingerQueenBeeLocation = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
                 float stingerAttackTargetX = Main.player[npc.target].position.X + (Main.player[npc.target].width / 2) - stingerQueenBeeLocation.X;
-                float stingerAttackTargetY = Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2) - 300f - stingerQueenBeeLocation.Y;
+                float stingerAttackTargetY = Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2) - (phase4 ? 400f : phase2 ? 350f : 300f) - stingerQueenBeeLocation.Y;
                 float stingerAttackTargetDist = (float)Math.Sqrt(stingerAttackTargetX * stingerAttackTargetX + stingerAttackTargetY * stingerAttackTargetY);
 
                 npc.ai[1] += 1f;
-                int stingerAttackTimer = phase5 ? (death ? 10 : 15) : phase4 ? 20 : phase2 ? 25 : 30;
+                int stingerAttackTimer = phase5 ? 30 : phase2 ? 25 : 20;
                 stingerAttackTimer -= (int)Math.Ceiling(5f * enrageScale);
                 if (stingerAttackTimer < 3)
                     stingerAttackTimer = 3;
@@ -594,9 +630,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         Main.projectile[projectile].timeLeft = 600;
                         Main.projectile[projectile].extraUpdates = 1;
 
-                        if (phase5)
+                        if (phase2)
                         {
-                            int numExtraStingers = death ? 4 : 2;
+                            int numExtraStingers = death ? (phase5 ? 4 : 2) : (phase5 ? 2 : 1);
                             for (int i = 0; i < numExtraStingers; i++)
                             {
                                 projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation + Main.rand.NextVector2CircularEdge(16f, 16f) * (i + 1), stingerVelocity * (0.75f * (i * 0.2f + 1)), type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, (Main.zenithWorld && phase3) ? Main.player[npc.target].position.Y : 0f);
