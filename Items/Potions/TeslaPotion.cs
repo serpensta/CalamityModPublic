@@ -15,14 +15,14 @@ namespace CalamityMod.Items.Potions
         public override void SetStaticDefaults()
 	{
 	    Item.ResearchUnlockCount = 20;
-	    Main.RegisterItemAnimation(Type, new DrawAnimationVertical(6, 8));
+	    Main.RegisterItemAnimation(Type, new DrawAnimationVertical(5, 14));
             ItemID.Sets.AnimatesAsSoul[Type] = true;
 	}
 
         public override void SetDefaults()
         {
-            Item.width = 34;
-            Item.height = 34;
+            Item.width = 32;
+            Item.height = 32;
             Item.useTurn = true;
             Item.maxStack = 9999;
             Item.rare = ItemRarityID.Orange;
