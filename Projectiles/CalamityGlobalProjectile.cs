@@ -2843,7 +2843,7 @@ namespace CalamityMod.Projectiles
                     modifiers.SourceDamage /= 1.5f;
             }
 
-            // create sparks on hit to hammer in the defense shredding 
+            // Create sparks on hit to hammer in the defense shredding.
             if (deepcoreBullet)
             {
                 if (Main.netMode != NetmodeID.Server)
@@ -3081,7 +3081,7 @@ namespace CalamityMod.Projectiles
             CalamityPlayer modPlayer = player.Calamity();
             if (projectile.owner == Main.myPlayer)
             {
-                if (projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
+                if (projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
