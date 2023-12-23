@@ -257,7 +257,7 @@ namespace CalamityMod.Items
                 { ItemID.VampireKnives, Do(DamageRatio(1.33f)) },
                 { ItemID.ValkyrieYoyo, Do(AutoReuse, DamageExact(48)) }, // Red's Throw and Valkyrie Yoyo are the same weapon basically
                 { ItemID.VenomStaff, Do(DamageRatio(1.25f)) },
-                { ItemID.WaspGun, Do(UseExact(11)) },
+                { ItemID.WaspGun, Do(UseExact(11), DamageExact(58)) },
                 { ItemID.WaterBolt, Do(DamageExact(23)) },
                 { ItemID.WhitePhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.WhitePhasesaber, Do(ScaleRatio(1.5f), DamageExact(60)) },

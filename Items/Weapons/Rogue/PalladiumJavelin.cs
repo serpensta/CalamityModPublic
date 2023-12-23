@@ -17,11 +17,11 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             Item.width = 54;
             Item.height = 54;
-            Item.damage = 88;
+            Item.damage = 118;
             Item.noMelee = true;
             Item.consumable = true;
             Item.noUseGraphic = true;
-            Item.useAnimation = Item.useTime = 26;
+            Item.useAnimation = Item.useTime = 24;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 5.5f;
             Item.UseSound = SoundID.Item1;
@@ -30,9 +30,11 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.value = 1200;
             Item.rare = ItemRarityID.LightRed;
             Item.shoot = ModContent.ProjectileType<PalladiumJavelinProjectile>();
-            Item.shootSpeed = 16f;
+            Item.shootSpeed = 12f;
             Item.DamageType = RogueDamageClass.Instance;
         }
+
+        public override float StealthDamageMultiplier => 0.8f;
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

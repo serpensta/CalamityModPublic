@@ -18,7 +18,6 @@ namespace CalamityMod.Items.Tools
             Item.axe = 100 / 5;
 
             Item.DamageType = DamageClass.Melee;
-            Item.scale = 1.5f;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;
