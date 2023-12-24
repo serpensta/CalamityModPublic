@@ -14,6 +14,8 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = 40;
+            Item.height = 26;
             Item.damage = 20;
             Item.DamageType = DamageClass.Summon;
             Item.shoot = ModContent.ProjectileType<HermitCrabMinion>();
@@ -21,8 +23,6 @@ namespace CalamityMod.Items.Weapons.Summon
 
             Item.useTime = Item.useAnimation = 35;
             Item.mana = 10;
-            Item.width = 40;
-            Item.height = 26;
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;

@@ -15,6 +15,8 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = 66;
+            Item.height = 70;
             Item.damage = 200;
             Item.DamageType = DamageClass.Summon;
             Item.shoot = ModContent.ProjectileType<PhantomGuy>();
@@ -22,8 +24,6 @@ namespace CalamityMod.Items.Weapons.Summon
 
             Item.useTime = Item.useAnimation = 10;
             Item.mana = 10;
-            Item.width = 66;
-            Item.height = 70;
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = CalamityGlobalItem.Rarity13BuyPrice;

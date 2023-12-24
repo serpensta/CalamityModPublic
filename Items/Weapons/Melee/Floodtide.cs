@@ -1,7 +1,7 @@
 ﻿using Terraria.DataStructures;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
-using CalamityMod.Projectiles.Ranged;
+using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.rare = ItemRarityID.Lime;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiniSharkron>();
+            Item.shoot = ModContent.ProjectileType<FloodtideShark>();
             Item.shootSpeed = 18f;
         }
 
@@ -42,9 +42,7 @@ namespace CalamityMod.Items.Weapons.Melee
             {
                 float SpeedX = velocity.X + (float)Main.rand.Next(-20, 21) * 0.05f;
                 float SpeedY = velocity.Y + (float)Main.rand.Next(-20, 21) * 0.05f;
-                int proj = Projectile.NewProjectile(source, position.X, position.Y, SpeedX, SpeedY, type, damage, knockback, player.whoAmI, 0f, 0f);
-                if (proj.WithinBounds(Main.maxProjectiles))
-                    Main.projectile[proj].DamageType = DamageClass.Melee;
+                Projectile.NewProjectile(source, position.X, position.Y, SpeedX, SpeedY, type, damage, knockback, player.whoAmI, 0f, 0f);
             }
             return false;
         }

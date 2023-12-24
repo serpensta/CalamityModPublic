@@ -16,6 +16,8 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = 52;
+            Item.height = 52;
             Item.damage = 40;
             Item.DamageType = DamageClass.Summon;
             Item.shoot = ModContent.ProjectileType<Calamitamini>();
@@ -23,8 +25,6 @@ namespace CalamityMod.Items.Weapons.Summon
 
             Item.useTime = Item.useAnimation = 25;
             Item.mana = 10;
-            Item.width = 52;
-            Item.height = 52;
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = CalamityGlobalItem.Rarity7BuyPrice;
