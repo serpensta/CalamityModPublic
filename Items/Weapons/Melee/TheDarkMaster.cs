@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 60;
             Item.height = 60;
-            Item.damage = 60;
+            Item.damage = 50;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = Item.useTime = 26;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -46,14 +46,14 @@ namespace CalamityMod.Items.Weapons.Melee
             if (player.altFunctionUse != 2)
             {
                 // only fire beams at max health
-                if (player.statLife >= player.statLifeMax2)
+                if (player.statLife >= (player.statLifeMax2 * 0.75f))
                 {
                     SoundEngine.PlaySound(SoundID.Item71, player.position);
                     // increase the beam's damage by the player's additional health starting from the vanilla maximum amount with just life crystals
                     int baseMaxHealth = 400;
                     int bonusHealth = player.statLifeMax2 - baseMaxHealth;
                     float bonusDamage = DamagePerHealth * bonusHealth;
-                    Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, (int)(damage * (1 + bonusDamage)), knockback, player.whoAmI);
+                    Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, (int)(damage * (1 + bonusDamage)), knockback, player.whoAmI, 0, 0);
                 }
                 // still play the sound if the clones are out since they always fire beams
                 else if (player.ownedProjectileCounts[ModContent.ProjectileType<DarkMasterClone>()] > 0)

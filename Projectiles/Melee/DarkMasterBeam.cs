@@ -28,6 +28,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.DamageType = DamageClass.Melee;
             Projectile.timeLeft = 300;
             Projectile.penetrate = 2;
+            Projectile.alpha = 255;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
@@ -71,6 +72,8 @@ namespace CalamityMod.Projectiles.Melee
                 d.customData = true;
             }
         }
+
+        public override Color? GetAlpha(Color drawColor) => Projectile.ai[0] == 1 ? new Color(100, 100, 100, Projectile.alpha) : new Color(255, 255, 255, Projectile.alpha);
 
         public override bool PreDraw(ref Color lightColor)
         {
