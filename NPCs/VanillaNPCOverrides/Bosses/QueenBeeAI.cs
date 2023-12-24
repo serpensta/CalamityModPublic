@@ -329,7 +329,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
 
                         // Spawn bees
-                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % (death ? 15f : 20f) == 0f;
+                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % 20f == 0f;
                         if (Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee)
                         {
                             SoundEngine.PlaySound(SoundID.NPCHit1, npc.Center);
@@ -603,9 +603,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 npc.ai[1] += 1f;
                 int stingerAttackTimer = phase5 ? 45 : phase2 ? 30 : 20;
-                stingerAttackTimer -= (int)Math.Ceiling((phase5 ? 10f : phase2 ? 7.5f : 5f) * enrageScale);
-                if (stingerAttackTimer < 3)
-                    stingerAttackTimer = 3;
+                stingerAttackTimer -= (int)Math.Ceiling((phase5 ? 18f : phase2 ? 12f : 8f) * enrageScale);
+                if (stingerAttackTimer < 5)
+                    stingerAttackTimer = 5;
 
                 // Fire stingers
                 if (npc.ai[1] % stingerAttackTimer == (stingerAttackTimer - 1) && npc.position.Y + npc.height < Main.player[npc.target].position.Y && Collision.CanHit(stingerSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
@@ -645,13 +645,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Movement calculations
-                float stingerAttackAccel = phase5 ? 0.15f : 0.075f;
+                float stingerAttackAccel = phase5 ? 0.09375f : 0.075f;
                 stingerAttackAccel += 0.1f * enrageScale;
                 if (!Collision.CanHit(new Vector2(stingerSpawnLocation.X, stingerSpawnLocation.Y - 30f), 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                 {
-                    stingerAttackAccel = phase5 ? 0.2f : 0.1f;
+                    stingerAttackAccel = phase5 ? 0.125f : 0.1f;
                     if (enrageScale > 0f)
-                        stingerAttackAccel = MathHelper.Lerp(phase5 ? 0.25f : 0.125f, phase5 ? 0.5f : 0.25f, enrageScale / maxEnrageScale);
+                        stingerAttackAccel = MathHelper.Lerp(phase5 ? 0.15625f : 0.125f, phase5 ? 0.3125f : 0.25f, enrageScale / maxEnrageScale);
 
                     stingerQueenBeeLocation = stingerSpawnLocation;
                     stingerAttackTargetX = Main.player[npc.target].position.X + (Main.player[npc.target].width / 2) - stingerQueenBeeLocation.X;
