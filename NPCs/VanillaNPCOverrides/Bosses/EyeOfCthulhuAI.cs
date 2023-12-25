@@ -664,7 +664,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity * 10f;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int maxServants = death ? (finalPhaseDeath ? 1 : penultimatePhaseDeath ? 2 : 3) : (finalPhaseRev ? 3 : 4);
+                            int maxServants = death ? (finalPhaseDeath ? 1 : penultimatePhaseDeath ? 2 : 3) : (finalPhaseRev ? 2 : 4);
                             if (NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants)
                             {
                                 int eye = NPC.NewNPC(npc.GetSource_FromAI(), (int)servantSpawnCenter.X, (int)servantSpawnCenter.Y, NPCID.ServantofCthulhu);
