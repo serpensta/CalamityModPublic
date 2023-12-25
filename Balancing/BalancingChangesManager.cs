@@ -117,6 +117,12 @@ namespace CalamityMod.Balancing
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.PerforatorIDs, Do(ResistTrueMelee(0.5f))));
             #endregion
 
+            #region Wall of Flesh
+            //45% resist to Corro/Crimslime Staff.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.WallofFleshEye, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<CrimslimeMinion>()))));
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.WallofFleshEye, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<CorroslimeMinion>()))));
+            #endregion
+
             #region Aquatic Scourge
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(ResistTrueMelee(0.5f))));

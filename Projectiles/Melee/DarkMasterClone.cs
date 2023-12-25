@@ -75,7 +75,7 @@ namespace CalamityMod.Projectiles.Melee
                 if (Projectile.owner == Main.myPlayer)
                 {
                     // ai[1] not being 0 determines if the projectile should always ignore tiles
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * owner.HeldItem.shootSpeed, ModContent.ProjectileType<DarkMasterBeam>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack, Projectile.owner, ai1: 1);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * owner.HeldItem.shootSpeed, ModContent.ProjectileType<DarkMasterBeam>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack, Projectile.owner, 1, 1);
                 }
             }
         }
