@@ -244,9 +244,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
             }
 
-            // Don't take damage while teleporting
-            npc.dontTakeDamage = npc.hide = teleported;
-
             npc.noTileCollide = false;
 
             // Jump
@@ -355,7 +352,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Adjust size based on HP
             float maxScale = death ? (Main.getGoodWorld ? 6f : 3f) : (Main.getGoodWorld ? 3f : 1.25f);
             float minScale = death ? 0.5f : 0.75f;
-            lifeRatio = lifeRatio * (maxScale - minScale) + minScale;
+            float maxScaledValue = maxScale - minScale;
+
+            // Inversed scale in FTW
+            if (Main.getGoodWorld)
+                lifeRatio = (maxScaledValue - lifeRatio * maxScaledValue) + minScale;
+            else
+                lifeRatio = lifeRatio * maxScaledValue + minScale;
+
             lifeRatio *= teleportScale;
             if (lifeRatio != npc.scale)
             {
