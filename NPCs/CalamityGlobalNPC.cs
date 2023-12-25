@@ -1411,7 +1411,7 @@ namespace CalamityMod.NPCs
             {
                 npc.defense = 14;
                 npc.defDefense = npc.defense;
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.npcSlots = 14f;
             }
             else if ((npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall) && CalamityPlayer.areThereAnyDamnBosses)
