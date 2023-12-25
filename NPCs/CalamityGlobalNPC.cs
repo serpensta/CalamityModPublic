@@ -1381,22 +1381,21 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.WallofFlesh || npc.type == NPCID.WallofFleshEye)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.3);
 
                 if (npc.type == NPCID.WallofFlesh)
                     npc.npcSlots = 20f;
             }
             else if (npc.type == NPCID.Deerclops)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
                 npc.npcSlots = 16f;
             }
             else if (npc.type == NPCID.SkeletronHead)
             {
                 if (CalamityWorld.death)
-                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
+                    npc.lifeMax = (int)(npc.lifeMax * 0.65);
                 else
-                    npc.lifeMax = (int)(npc.lifeMax * 0.75);
+                    npc.lifeMax = (int)(npc.lifeMax * 0.9);
 
                 npc.npcSlots = 12f;
             }
@@ -1411,7 +1410,7 @@ namespace CalamityMod.NPCs
             {
                 npc.defense = 14;
                 npc.defDefense = npc.defense;
-                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+                npc.lifeMax = (int)(npc.lifeMax * 1.8);
                 npc.npcSlots = 14f;
             }
             else if ((npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall) && CalamityPlayer.areThereAnyDamnBosses)
@@ -1419,14 +1418,9 @@ namespace CalamityMod.NPCs
                 npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.scale *= 1.25f;
             }
-            else if (npc.type == NPCID.Deerclops)
-            {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
-                npc.npcSlots = 12f;
-            }
             else if (npc.type == NPCID.BrainofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.1);
                 npc.npcSlots = 12f;
             }
             else if (npc.type == NPCID.Creeper)
@@ -1445,7 +1439,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.EyeofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.npcSlots = 10f;
             }
             else if (npc.type == NPCID.KingSlime)
@@ -1455,8 +1449,7 @@ namespace CalamityMod.NPCs
                 else
                     npc.scale = Main.getGoodWorld ? 3f : 1.25f;
 
-                if (Main.getGoodWorld)
-                    npc.lifeMax = (int)(npc.lifeMax * 1.5);
+                npc.lifeMax = (int)(npc.lifeMax * (Main.getGoodWorld ? 1.8 : 1.5));
             }
             else if ((npc.type == NPCID.Wraith || npc.type == NPCID.Mimic || npc.type == NPCID.Reaper || npc.type == NPCID.PresentMimic || npc.type == NPCID.SandElemental || npc.type == NPCID.Ghost) && CalamityWorld.LegendaryMode)
             {

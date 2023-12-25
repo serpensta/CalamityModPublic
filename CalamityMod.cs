@@ -646,7 +646,7 @@ namespace CalamityMod
                 //
                 // VANILLA BOSSES
                 //
-                { NPCID.KingSlime, 3600 }, // 1:00 (60 seconds)
+                { NPCID.KingSlime, 5400 }, // 1:30 (90 seconds)
                 { NPCID.EyeofCthulhu, 5400 }, // 1:30 (90 seconds)
                 { NPCID.EaterofWorldsHead, 7200 }, // 2:00 (120 seconds)
                 { NPCID.EaterofWorldsBody, 7200 },
@@ -678,9 +678,9 @@ namespace CalamityMod
                 //
                 // CALAMITY BOSSES
                 //
-                { ModContent.NPCType<DesertScourgeHead>(), 3600 }, // 1:00 (60 seconds)
-                { ModContent.NPCType<DesertScourgeBody>(), 3600 },
-                { ModContent.NPCType<DesertScourgeTail>(), 3600 },
+                { ModContent.NPCType<DesertScourgeHead>(), 5400 }, // 1:30 (90 seconds)
+                { ModContent.NPCType<DesertScourgeBody>(), 5400 },
+                { ModContent.NPCType<DesertScourgeTail>(), 5400 },
                 { ModContent.NPCType<Crabulon>(), 5400 }, // 1:30 (90 seconds)
                 { ModContent.NPCType<HiveMind>(), 7200 }, // 2:00 (120 seconds)
                 { ModContent.NPCType<PerforatorHive>(), 7200 }, // 2:00 (120 seconds)

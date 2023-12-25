@@ -24,7 +24,7 @@ namespace CalamityMod.NPCs.Perforator
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.75f,
                 PortraitScale = 0.75f,
@@ -46,7 +46,7 @@ namespace CalamityMod.NPCs.Perforator
             NPC.width = 70;
             NPC.height = 84;
             NPC.defense = 4;
-            NPC.LifeMaxNERB(2250, 2700, 80000);
+            NPC.LifeMaxNERB(2700, 3240, 80000);
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;

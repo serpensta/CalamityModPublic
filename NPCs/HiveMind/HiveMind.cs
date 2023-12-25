@@ -92,8 +92,8 @@ namespace CalamityMod.NPCs.HiveMind
             Main.npcFrameCount[NPC.type] = 16;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.TrailCacheLength[NPC.type] = NPC.oldPos.Length;
-            NPCID.Sets.BossBestiaryPriority.Add(Type); 
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.4f,
                 PortraitPositionYOverride = 3f
@@ -111,7 +111,7 @@ namespace CalamityMod.NPCs.HiveMind
             NPC.width = 178;
             NPC.height = 122;
             NPC.defense = 8;
-            NPC.LifeMaxNERB(8500, 10200, 350000);
+            NPC.LifeMaxNERB(7700, 9200, 350000);
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
