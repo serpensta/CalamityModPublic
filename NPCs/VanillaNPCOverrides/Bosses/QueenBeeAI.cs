@@ -38,6 +38,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (tile.WallType == WallID.HiveUnsafe)
                 enrage = false;
 
+            float maxEnrageScale = 2f;
             float enrageScale = death ? 0.25f : 0f;
             if (((npc.position.Y / 16f) < Main.worldSurface && enrage) || bossRush)
             {
@@ -50,14 +51,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 enrageScale += 0.5f;
             }
 
-            if (enrageScale > 1f)
-                enrageScale = 1f;
-
             if (Main.getGoodWorld)
                 enrageScale += ((CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 1f : 0.5f);
 
             if (bossRush)
                 enrageScale = 2f;
+
+            if (enrageScale > maxEnrageScale)
+                enrageScale = maxEnrageScale;
 
             // Percent life remaining
             float lifeRatio = npc.life / (float)npc.lifeMax;
@@ -311,7 +312,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         shouldCharge = true;
                     }
                     if (enrageScale > 0f && shouldCharge)
-                        npc.velocity *= 0.5f;
+                        npc.velocity *= MathHelper.Lerp(0.3f, 1f, 1f - enrageScale / maxEnrageScale);
 
                     // Keep moving
                     if (npc.ai[2] != 1f)
@@ -328,7 +329,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
 
                         // Spawn bees
-                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % (death ? 10f : 15f) == 0f;
+                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % 20f == 0f;
                         if (Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee)
                         {
                             SoundEngine.PlaySound(SoundID.NPCHit1, npc.Center);
@@ -381,7 +382,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         chargeDeceleration += 0.1f;
                     }
                     if (enrageScale > 0f)
-                        npc.velocity *= 0.7f;
+                        npc.velocity *= MathHelper.Lerp(0.5f, 1f, 1f - enrageScale / maxEnrageScale);
 
                     if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < chargeDeceleration)
                     {
@@ -406,7 +407,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.spriteDirection = npc.direction;
 
                 // Get target location
-                float beeAttackAccel = death ? 0.2f : 0.1f;
+                float beeAttackAccel = death ? 0.125f : 0.1f;
                 Vector2 beeAttackPosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
                 float beeAttackTargetX = Main.player[npc.target].position.X + (Main.player[npc.target].width / 2) - beeAttackPosition.X;
                 float beeAttackTargetY = Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2) - 200f - beeAttackPosition.Y;
@@ -476,7 +477,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[1] += 1f;
 
                 bool spawnBee = false;
-                float beeSpawnCheck = (phase3 ? 60f : 15f) - 12f * enrageScale;
+                float beeSpawnCheck = (phase3 ? 60f : 15f) - (phase3 ? 24f : 6f) * enrageScale;
                 if (npc.ai[1] > beeSpawnCheck)
                 {
                     npc.ai[1] = 0f;
@@ -538,8 +539,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Velocity calculations if target is too far away
                 if (beeSpawnTargetDist > 400f || !Collision.CanHit(new Vector2(beeSpawnLocation.X, beeSpawnLocation.Y - 30f), 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                 {
-                    float beeAttackHoverSpeed = death ? 21f : 14f;
-                    float beeAttackHoverAccel = death ? 0.15f : 0.1f;
+                    float beeAttackHoverSpeed = death ? 17.5f : 14f;
+                    float beeAttackHoverAccel = death ? 0.125f : 0.1f;
                     queenBeeLocation = beeSpawnLocation;
                     beeSpawnTargetX = Main.player[npc.target].position.X + (Main.player[npc.target].width / 2) - queenBeeLocation.X;
                     beeSpawnTargetY = Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2) - queenBeeLocation.Y;
@@ -601,10 +602,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float stingerAttackTargetDist = (float)Math.Sqrt(stingerAttackTargetX * stingerAttackTargetX + stingerAttackTargetY * stingerAttackTargetY);
 
                 npc.ai[1] += 1f;
-                int stingerAttackTimer = phase5 ? 30 : phase2 ? 25 : 20;
-                stingerAttackTimer -= (int)Math.Ceiling(5f * enrageScale);
-                if (stingerAttackTimer < 3)
-                    stingerAttackTimer = 3;
+                int stingerAttackTimer = phase5 ? 45 : phase2 ? 30 : 20;
+                stingerAttackTimer -= (int)Math.Ceiling((phase5 ? 18f : phase2 ? 12f : 8f) * enrageScale);
+                if (stingerAttackTimer < 5)
+                    stingerAttackTimer = 5;
 
                 // Fire stingers
                 if (npc.ai[1] % stingerAttackTimer == (stingerAttackTimer - 1) && npc.position.Y + npc.height < Main.player[npc.target].position.Y && Collision.CanHit(stingerSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
@@ -644,13 +645,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Movement calculations
-                float stingerAttackAccel = phase5 ? 0.15f : 0.075f;
-                stingerAttackAccel += 0.2f * enrageScale;
+                float stingerAttackAccel = phase5 ? 0.09375f : 0.075f;
+                stingerAttackAccel += 0.1f * enrageScale;
                 if (!Collision.CanHit(new Vector2(stingerSpawnLocation.X, stingerSpawnLocation.Y - 30f), 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                 {
-                    stingerAttackAccel = phase5 ? 0.2f : 0.1f;
+                    stingerAttackAccel = phase5 ? 0.125f : 0.1f;
                     if (enrageScale > 0f)
-                        stingerAttackAccel = 0.5f;
+                        stingerAttackAccel = MathHelper.Lerp(phase5 ? 0.15625f : 0.125f, phase5 ? 0.3125f : 0.25f, enrageScale / maxEnrageScale);
 
                     stingerQueenBeeLocation = stingerSpawnLocation;
                     stingerAttackTargetX = Main.player[npc.target].position.X + (Main.player[npc.target].width / 2) - stingerQueenBeeLocation.X;
