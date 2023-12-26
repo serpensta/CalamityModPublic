@@ -5,12 +5,12 @@ using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
 using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Perforator
@@ -18,6 +18,9 @@ namespace CalamityMod.NPCs.Perforator
     [AutoloadBossHead]
     public class PerforatorHeadLarge : ModNPC
     {
+        public static readonly SoundStyle HitSound = new("CalamityMod/Sounds/NPCHit/PerfLargeHit", 3);
+        public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/PerfLargeDeath");
+
         private int biomeEnrageTimer = CalamityGlobalNPC.biomeEnrageTimerMax;
         private bool TailSpawned = false;
 
@@ -56,8 +59,8 @@ namespace CalamityMod.NPCs.Perforator
             NPC.behindTiles = true;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.HitSound = HitSound;
+            NPC.DeathSound = DeathSound;
             NPC.netAlways = true;
 
             if (BossRushEvent.BossRushActive)

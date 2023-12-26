@@ -8,11 +8,15 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Perforator
 {
     public class PerforatorTailSmall : ModNPC
     {
+        public static readonly SoundStyle HitSound = new("CalamityMod/Sounds/NPCHit/PerfSmallHit", 3);
+        public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/PerfSmallDeath");
+
         public override LocalizedText DisplayName => CalamityUtils.GetText("NPCs.PerforatorHeadSmall.DisplayName");
         public override void SetStaticDefaults()
         {
@@ -36,8 +40,8 @@ namespace CalamityMod.NPCs.Perforator
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.canGhostHeal = false;
-            NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.HitSound = HitSound;
+            NPC.DeathSound = DeathSound;
             NPC.netAlways = true;
             NPC.dontCountMe = true;
 
