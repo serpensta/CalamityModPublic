@@ -350,11 +350,6 @@ namespace CalamityMod.Items
             // I think this fits the miscellaneous category? Not seeing anything like this elsewhere. - Tomat
             EditTooltipByName("Speed", (line) => RedistributeSpeedTooltips(item, line));
 
-            if (item.type == ItemID.SpaceGun)
-            {
-                int cost = (int)(item.mana * Main.LocalPlayer.manaCost * 0.5f);
-                EditTooltipByName("UseMana", (line) => line.Text = $"Uses {cost} mana");
-            }
             if (item.healLife > 0 && Main.LocalPlayer.Calamity().healingPotionMultiplier != 1f)
             {
                 int healAmt = (int)(item.healLife * Main.LocalPlayer.Calamity().healingPotionMultiplier);
@@ -777,6 +772,17 @@ namespace CalamityMod.Items
                 AddTooltip("5% increased critical strike chance");
             if (item.type == ItemID.PlatinumGreaves)
                 AddTooltip("10% increased movement speed");
+
+            // Jungle
+            if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+            }
+            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "4%"));
+            if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
 
             // Shadow
             if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)

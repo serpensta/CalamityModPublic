@@ -105,7 +105,7 @@ namespace CalamityMod.Items
                 // Unsure what to do with Celebration. Should it be treated as a serious weapon or not? Currently not changing it from vanilla.
                 // { ItemID.FireworksLauncher, Do(DamageRatio(2f)) }, // Celebration
                 { ItemID.Flairon, Do(DamageExact(73)) },
-                { ItemID.Flamarang, Do(DamageExact(43)) },
+                { ItemID.Flamarang, Do(DamageExact(40)) },
                 { ItemID.Flamelash, Do(DamageRatio(1.25f)) },
                 { ItemID.Flamethrower, Do(DamageExact(21), ShootSpeedDelta(+3f)) },
                 { ItemID.FlowerofFire, Do(AutoReuse, ManaExact(7), UseRatio(0.88f), DamageRatio(0.65f)) }, // Uses ratios due to remix seed
@@ -126,6 +126,7 @@ namespace CalamityMod.Items
                 { ItemID.Handgun, Do(PointBlank, UseExact(22), DamageExact(36)) },
                 { ItemID.HellwingBow, Do(PointBlank, DamageExact(16)) },
                 { ItemID.HighVelocityBullet, Do(DamageExact(15)) },
+                { ItemID.HiveFive, Do(AutoReuse, DamageExact(26)) },
                 { ItemID.IceBlade, Do(UseMeleeSpeed) },
                 { ItemID.IceBoomerang, Do(UseExact(25), ShootSpeedExact(9)) },
                 { ItemID.IceRod, Do(UseExact(6), DamageExact(30), ShootSpeedExact(20)) },
@@ -520,7 +521,6 @@ namespace CalamityMod.Items
                 { ItemID.FormatC, autoReuse },
                 { ItemID.GoldBroadsword, Do(AutoReuse, UseTurn) },
                 { ItemID.HelFire, autoReuse },
-                { ItemID.HiveFive, autoReuse },
                 { ItemID.IronBroadsword, Do(AutoReuse, UseTurn) },
                 { ItemID.JungleYoyo, autoReuse }, // Amazon
                 { ItemID.LifeCrystal, autoReuse },

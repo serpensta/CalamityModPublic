@@ -42,7 +42,7 @@ namespace CalamityMod.Items.Armor.Aerospec
         public override void UpdateEquip(Player player)
         {
             player.GetDamage<MagicDamageClass>() += 0.08f;
-            player.statManaMax2 += 20;
+            player.statManaMax2 += 30;
         }
 
         public override void AddRecipes()
