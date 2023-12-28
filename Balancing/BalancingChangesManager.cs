@@ -119,8 +119,7 @@ namespace CalamityMod.Balancing
 
             #region Wall of Flesh
             //45% resist to Corro/Crimslime Staff.
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.WallofFleshEye, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<CrimslimeMinion>()))));
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.WallofFleshEye, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<CorroslimeMinion>()))));
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.WallofFleshEye, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<CrimslimeMinion>(), ProjectileType<CorroslimeMinion>()))));
             #endregion
 
             #region Aquatic Scourge
