@@ -129,6 +129,12 @@ namespace CalamityMod.Balancing
             // 50% resist to Dormant Brimseekers.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<DormantBrimseekerBab>()))));
 
+            // 50% resist to Mounted Scanner.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<MountedScannerLaser>()))));
+
+            // 40% resist to SHPC.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<SHPExplosion>()))));
+
             // 40% resist to Cryophobia.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<CryoBlast>()))));
 
@@ -140,11 +146,17 @@ namespace CalamityMod.Balancing
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(ResistTrueMelee(0.5f))));
 
+            // 60% resist to Mounted Scanner.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.4f, ProjectileType<MountedScannerLaser>()))));
+
             // 50% resist to Dormant Brimseekers.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<DormantBrimseekerBab>()))));
 
             // 40% resist to Meowthrower.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<MeowFire>()))));
+
+            // 25% resist to SHPC.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<SHPExplosion>()))));
 
             // 15% resist to Mineral Mortar's Projectile.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<MineralMortarProjectile>()))));

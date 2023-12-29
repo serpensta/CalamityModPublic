@@ -189,6 +189,8 @@ namespace CalamityMod.Items
                 { ItemID.PurpleClubberfish, Do(UseTurn, ScaleRatio(1.2f), KnockbackExact(10f)) },
                 { ItemID.PurplePhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.PurplePhasesaber, Do(ScaleRatio(1.5f), DamageExact(60)) },
+                { ItemID.PygmyStaff, Do(AutoReuse, UseExact(20), DamageExact(70)) },
+                { ItemID.QuadBarrelShotgun, Do(PointBlank, DamageExact(11)) },
                 { ItemID.RainbowRod, Do(DamageExact(35), ManaExact(15)) },
                 { ItemID.Rally, Do(AutoReuse, DamageExact(18)) },
                 { ItemID.RainbowGun, Do(DamageExact(60), ManaExact(40)) },
@@ -444,7 +446,6 @@ namespace CalamityMod.Items
                 { ItemID.OnyxBlaster, pointBlank },
                 { ItemID.PalmWoodBow, pointBlank },
                 { ItemID.PulseBow, pointBlank },
-                { ItemID.QuadBarrelShotgun, pointBlank },
                 { ItemID.Revolver, Do(PointBlank, AutoReuse) },
                 { ItemID.RichMahoganyBow, pointBlank },
                 { ItemID.ShadewoodBow, pointBlank },
@@ -486,7 +487,6 @@ namespace CalamityMod.Items
                 { ItemID.MoonlordTurretStaff, Do(UseExact(15)) }, // Lunar Portal Staff
                 { ItemID.OpticStaff, Do(AutoReuse, UseExact(25)) },
                 { ItemID.PirateStaff, Do(AutoReuse, UseExact(25)) },
-                { ItemID.PygmyStaff, Do(AutoReuse, UseExact(20)) },
                 { ItemID.QueenSpiderStaff, Do(UseExact(25)) },
                 { ItemID.RainbowCrystalStaff, Do(UseExact(15)) },
                 { ItemID.RainbowWhip, autoReuse }, // Kaleidoscope
