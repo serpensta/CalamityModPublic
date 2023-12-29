@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             Item.width = 52;
             Item.height = 50;
-            Item.damage = 31;
+            Item.damage = 25;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
             Item.useTime = 15;
@@ -61,10 +61,6 @@ namespace CalamityMod.Items.Weapons.Magic
             }
 
             int bloodAmt = 2;
-            if (Main.rand.NextBool(3))
-            {
-                bloodAmt++;
-            }
             if (Main.rand.NextBool(3))
             {
                 bloodAmt++;
