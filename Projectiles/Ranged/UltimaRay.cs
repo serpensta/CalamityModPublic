@@ -54,14 +54,6 @@ namespace CalamityMod.Projectiles.Ranged
         {
             target.AddBuff(ModContent.BuffType<ElementalMix>(), 240);
         }
-
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            if (Projectile.numHits > 0)
-                Projectile.damage = (int)(Projectile.damage * 0.95f); // 5% damage nerf for every enemy hit
-            if (Projectile.damage < 1)
-                Projectile.damage = 1;
-        }
         public override bool ShouldUpdatePosition() => false;
     }
 }

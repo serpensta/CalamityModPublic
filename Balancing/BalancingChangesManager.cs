@@ -146,11 +146,11 @@ namespace CalamityMod.Balancing
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(ResistTrueMelee(0.5f))));
 
-            // 60% resist to Mounted Scanner.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.4f, ProjectileType<MountedScannerLaser>()))));
-
             // 50% resist to Dormant Brimseekers.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<DormantBrimseekerBab>()))));
+
+            // 45% resist to Mounted Scanner.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<MountedScannerLaser>()))));
 
             // 40% resist to Meowthrower.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<MeowFire>()))));
@@ -273,11 +273,11 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region The Devourer of Gods
+            // 80% resist to Wave Pounder.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DevourerOfGodsIDs, Do(new ProjectileResistBalancingRule(0.2f, ProjectileType<WavePounderBoom>()))));
+
             // 50% resist to Eidolic Wail.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DevourerOfGodsIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<EidolicWailSoundwave>()))));
-
-            // 40% resist to Wave Pounder.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DevourerOfGodsIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<WavePounderBoom>()))));
 
             // 35% resist to Venusian Trident's explosions.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DevourerOfGodsIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<VenusianBolt>(), ProjectileType<VenusianExplosion>()))));
@@ -365,6 +365,9 @@ namespace CalamityMod.Balancing
 
             // 40% resist to Rancor.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<RancorLaserbeam>()))));
+         
+            // 35% resist to Ultima.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<UltimaRay>()))));
 
             // 35% resist to Anomaly's Nanogun bomb explosions.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<AnomalysNanogunMPFBBoom>()))));

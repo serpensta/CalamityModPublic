@@ -93,15 +93,5 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 }
             }
         }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            Projectile.damage = (int)(Projectile.damage * 1);
-        }
-
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            Projectile.damage = (int)(Projectile.damage * 1);
-        }
     }
 }
