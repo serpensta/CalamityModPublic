@@ -249,6 +249,11 @@ CelestialClaymore: {
 	Tooltip: Spawns cosmic energy stars near the cursor that inflict several debuffs
 }
 
+ChronomancersScythe: {
+	DisplayName: Chronomancer's Scythe
+	Tooltip: ""
+}
+
 ClamCrusher: {
 	DisplayName: Clam Crusher
 	Tooltip:
