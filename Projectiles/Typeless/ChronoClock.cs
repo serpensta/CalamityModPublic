@@ -1,8 +1,10 @@
 ﻿using CalamityMod.Buffs.StatBuffs;
 using CalamityMod.CalPlayer;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -43,6 +45,23 @@ namespace CalamityMod.Projectiles.Typeless
                     {
                         player.Calamity().hasteLevel++;
                         player.Calamity().hasteCounter = 0; // reset the haste countdown
+                        SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact with { Volume = 2 }, Projectile.Center);
+                        for (int i = 0; i < 20; i++)
+                        {
+                            Particle sparkle = new SnowflakeSparkle(Projectile.Center, (Main.rand.NextVector2CircularEdge(100, 100)).SafeNormalize(Vector2.Zero) * 4, Color.LightBlue, Color.LightSkyBlue, Main.rand.NextFloat(0.1f, 0.6f), 60);
+                            GeneralParticleHandler.SpawnParticle(sparkle);
+                        }
+                    }
+                    else
+                    {
+                        // reset the haste countdown if haste level is maxed out
+                        player.Calamity().hasteCounter = 0;
+                        SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact with { Volume = 0.2f, Pitch = 1.4f }, Projectile.Center);
+                        for (int i = 0; i < 20; i++)
+                        {
+                            Particle sparkle = new SnowflakeSparkle(Projectile.Center, (Main.rand.NextVector2CircularEdge(100, 100)).SafeNormalize(Vector2.Zero) * 2, Color.LightBlue, Color.LightSkyBlue, Main.rand.NextFloat(0.04f, 0.3f), 30);
+                            GeneralParticleHandler.SpawnParticle(sparkle);
+                        }
                     }
                     Projectile.Kill();
                 }
