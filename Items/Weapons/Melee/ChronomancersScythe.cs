@@ -46,7 +46,9 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (player.altFunctionUse == 2)
             {
-                Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<ChronomancersScytheHoldout>(), damage, knockback, Main.myPlayer);
+                int p = Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<ChronomancersScytheHoldout>(), damage, knockback, Main.myPlayer, ai2: player.direction);
+                float rot = -MathHelper.PiOver2 + MathHelper.PiOver4;
+                Main.projectile[p].rotation = player.direction * rot;
                 return false;
             }
             else
@@ -59,13 +61,15 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (player.altFunctionUse == 2f)
             {
-                Item.reuseDelay = 20;
+                Item.reuseDelay = 10;
                 Item.channel = false;
+                Item.useTurn = false;
             }
             else
             {
                 Item.reuseDelay = 0;
                 Item.channel = true;
+                Item.useTurn = true;
             }
             return base.CanUseItem(player);
         }

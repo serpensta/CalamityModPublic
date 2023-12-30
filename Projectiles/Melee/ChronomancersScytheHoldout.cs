@@ -30,7 +30,6 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
             Projectile.ownerHitCheck = true;
-            Projectile.rotation = -MathHelper.PiOver2 + MathHelper.PiOver4; // this makes sure the projectile starts facing up without too much hassle
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -43,18 +42,18 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
-            Owner.ChangeDir(Math.Sign(Owner.Calamity().mouseWorld.X - Owner.position.X));
+            Owner.ChangeDir((int)Projectile.ai[2]);
 
             Projectile.velocity = Vector2.Zero;
 
-            Projectile.rotation += 2 * MathHelper.Pi / 60; // this is intentionally only clockwise, but can be changed if it's too awkward
+            Projectile.rotation += (2 * MathHelper.Pi / 60) * Projectile.ai[2]; // this is intentionally only clockwise, but can be changed if it's too awkward
 
             UpdateOwnerVars();
 
             Projectile.Center = Owner.MountedCenter + Projectile.rotation.ToRotationVector2() * 10f - Vector2.UnitX * 4 * Owner.direction;
 
             // once the scythe has completed a rotation, die
-            if (Projectile.rotation > 2 * MathHelper.Pi - MathHelper.PiOver2 + MathHelper.PiOver4)
+            if ((Projectile.rotation > 2 * MathHelper.Pi - MathHelper.PiOver2 + MathHelper.PiOver4 && Projectile.ai[2] == 1) || (Projectile.rotation < -(2 * MathHelper.Pi - MathHelper.PiOver2 + MathHelper.PiOver4) && Projectile.ai[2] == -1))
             {
                 Projectile.Kill();
             }
@@ -66,10 +65,12 @@ namespace CalamityMod.Projectiles.Melee
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    Vector2 rotationVector = (Projectile.rotation - MathHelper.PiOver4 * 1.6666f).ToRotationVector2();
-                    Vector2 spawnPos = Main.player[Projectile.owner].Center + (2 * MathHelper.Pi / 12 * (Projectile.ai[1]) - MathHelper.PiOver2).ToRotationVector2() * 160;
-                    int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, rotationVector * 5, ModContent.ProjectileType<ChronoIcicleLarge>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.ai[1] + 1);
-                    Main.projectile[p].rotation = Main.projectile[p].velocity.ToRotation() + MathHelper.PiOver2;
+                    // Math is beautiful
+                    float aivar = Projectile.ai[2] == -1 ? 1 - Projectile.ai[1] - 1 : Projectile.ai[1];
+                    Vector2 spawnPos = Main.player[Projectile.owner].Center + (2 * MathHelper.Pi / 12 * aivar - MathHelper.PiOver2).ToRotationVector2() * 160;
+                    Vector2 rotationVector = spawnPos - Main.player[Projectile.owner].Center;
+                    int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, rotationVector * 5, ModContent.ProjectileType<ChronoIcicleLarge>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai2: Projectile.ai[2] * (Projectile.ai[1] + 1));
+                    Main.projectile[p].rotation = (spawnPos - Main.player[Projectile.owner].Center).ToRotation() + MathHelper.PiOver2;
                 }
                 Projectile.ai[1]++;
                 Projectile.ai[0] = 0;
@@ -78,22 +79,8 @@ namespace CalamityMod.Projectiles.Melee
 
         public void UpdateOwnerVars()
         {
-            float armPointingDirection = ((Owner.Calamity().mouseWorld - Owner.MountedCenter).ToRotation());
-
-            //"crop" the rotation so the player only points their arm in a smaller range. (The back arm points in the throw direction)
-            if (armPointingDirection < MathHelper.PiOver2 && armPointingDirection >= -MathHelper.PiOver2)
-                armPointingDirection = -MathHelper.PiOver2 + MathHelper.PiOver4 / 2f + MathHelper.PiOver2 * 1.5f * Utils.GetLerpValue(0f, MathHelper.Pi, armPointingDirection + MathHelper.PiOver2, true);
-            else
-            {
-                if (armPointingDirection > 0)
-                    armPointingDirection = MathHelper.PiOver2 + MathHelper.PiOver4 / 2f + MathHelper.PiOver4 * 1.5f * Utils.GetLerpValue(0f, MathHelper.PiOver2, armPointingDirection - MathHelper.PiOver2, true);
-                else
-                    armPointingDirection = -MathHelper.Pi + MathHelper.PiOver4 * 1.5f * Utils.GetLerpValue(-MathHelper.Pi, -MathHelper.PiOver4, armPointingDirection, true);
-            }
-
-
-            Owner.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armPointingDirection - MathHelper.PiOver2);
-            Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
+            float rotOffset = Projectile.ai[2] == -1 ? 3 * MathHelper.Pi : MathHelper.PiOver2;
+            Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - rotOffset);
             Owner.heldProj = Projectile.whoAmI;
             Owner.itemTime = 2;
             Owner.itemAnimation = 2;
@@ -120,13 +107,13 @@ namespace CalamityMod.Projectiles.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Owner.ChangeDir(Math.Sign(Owner.Calamity().mouseWorld.X - Owner.position.X));
+            Owner.ChangeDir((int)Projectile.ai[2]);
 
             Texture2D scytheTexture = ModContent.Request<Texture2D>(Texture).Value;
 
-            Vector2 handleOrigin = new Vector2(0, scytheTexture.Height);
+            Vector2 handleOrigin = Projectile.ai[2] == -1 ? new Vector2(scytheTexture.Width, scytheTexture.Height) : new Vector2(0, scytheTexture.Height);
             float scytheRotation = Projectile.rotation;
-            Main.EntitySpriteDraw(scytheTexture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), scytheRotation, handleOrigin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(scytheTexture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), scytheRotation, handleOrigin, Projectile.scale, Projectile.ai[2] == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
 
             return false;
         }

@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using CalamityMod.Buffs.StatDebuffs;
 using System.Security.Policy;
+using System;
+using System.Diagnostics.Metrics;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -36,21 +38,36 @@ namespace CalamityMod.Projectiles.Melee
                 case 0:
                     if (Projectile.velocity.Length() > 0.01f)
                     {
-                        Projectile.velocity *= 0.01f;
+                        Projectile.velocity *= 0.001f;
                     }
+                    bool isCounter = Projectile.ai[2] < 0;
                     if (Main.player[Projectile.owner].active && !Main.player[Projectile.owner].dead)
                     {
-                        Projectile.position = Main.player[Projectile.owner].Center + (2 * MathHelper.Pi / 12 * (Projectile.ai[2] - 1) - MathHelper.PiOver2).ToRotationVector2() * 160 - Projectile.Size / 2;
+                        float shardNum = Math.Abs(Projectile.ai[2]) - 1;
+                        float aivar = isCounter ? 1 - shardNum - 1 : shardNum;
+                        Projectile.position = Main.player[Projectile.owner].Center + (2 * MathHelper.Pi / 12 * aivar - MathHelper.PiOver2).ToRotationVector2() * 160 - Projectile.Size / 2;
                     }
-                    if (Projectile.ai[1] >= (12 - Projectile.ai[2]) * 5 + 10)
+                    if (Projectile.ai[1] >= (12 - Math.Abs(Projectile.ai[2])) * 5 + 2)
                     {
+                        SoundEngine.PlaySound(SoundID.NPCHit5, Projectile.Center);
+                        for (int i = 0; i < 10; i++)
+                        {
+                            int dusttype = Main.rand.NextBool() ? 68 : 67;
+                            if (Main.rand.NextBool(4))
+                            {
+                                dusttype = 80;
+                            }
+                            Vector2 dspeed = new Vector2(Main.rand.NextFloat(-7f, 7f), Main.rand.NextFloat(-7f, 7f));
+                            int dust = Dust.NewDust(Projectile.Center, 1, 1, dusttype, dspeed.X, dspeed.Y, 50, default, 1.1f);
+                            Main.dust[dust].noGravity = true;
+                        }
                         Projectile.ai[0] = 1;
                         Projectile.ai[1] = 0;
                     }
                     break;
                 // jet out 
                 case 1:
-                    if (Projectile.velocity.Length() < 5)
+                    if (Projectile.velocity.Length() < IdleSpeedMax)
                     {
                         Projectile.velocity *= 3f;
                     }
