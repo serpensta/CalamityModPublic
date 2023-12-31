@@ -246,7 +246,7 @@ TaintedBlade: {
 
 CelestialClaymore: {
 	DisplayName: Celestial Claymore
-	Tooltip: Spawns cosmic energy flames near the player that generate large explosions
+	Tooltip: Spawns cosmic energy stars near the cursor that inflict several debuffs
 }
 
 ClamCrusher: {
