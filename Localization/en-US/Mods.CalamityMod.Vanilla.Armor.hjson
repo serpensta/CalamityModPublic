@@ -97,7 +97,6 @@ SetBonus: {
 		Every 10 defense gives you +0.5 HP/s life regen, 1% increased damage and 1% increased critical strike chance
 		These effects cap at 40 defense
 		'''
-	Shadow: 15% increased max movement speed and acceleration
 	Silver:
 		'''
 		+0.5 HP/s life regen
