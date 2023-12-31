@@ -101,7 +101,7 @@ namespace CalamityMod.Projectiles.Rogue
             int killDust = Main.rand.Next(30, 41);
             for (int i = 0; i < killDust; ++i)
             {
-                int dustID = DustID.Shadowflame;
+                int dustID = 54;
                 int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 0, new Color(38, 30, 43));
 
                 Main.dust[idx].noGravity = true;
