@@ -21,6 +21,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.width = 120;
+            Item.height = 108;
             Item.damage = 250;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -32,7 +33,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.knockBack = 8.5f;
             Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
             Item.autoReuse = true;
-            Item.height = 108;
             Item.shoot = ModContent.ProjectileType<BansheeHookProj>();
             Item.shootSpeed = 42f;
 

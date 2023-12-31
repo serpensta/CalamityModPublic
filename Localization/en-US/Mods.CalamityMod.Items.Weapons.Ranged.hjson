@@ -166,6 +166,7 @@ BloodBoiler: {
 		'''
 		Fires twin streams of life stealing bloodfire that returns to you
 		Uses your health as ammo
+		40% chance to save health
 		'''
 }
 
@@ -441,7 +442,7 @@ ElementalEruption: {
 	DisplayName: Elemental Eruption
 	Tooltip:
 		'''
-		Charge and then spew rainbow flames and pairs of high-energy homing flares
+		Charges up to spew rainbow flames and pairs of homing elemental flares
 		Uses gel for ammo
 		70% chance to save ammo
 		'''
@@ -470,7 +471,7 @@ FirestormCannon: {
 	DisplayName: Firestorm Cannon
 	Tooltip:
 		'''
-		Releases an constant stream of weaponized flares
+		Releases a constant stream of weaponized flares
 		Press <right> to fire a condensed spread of flares
 		70% chance to save ammo
 		'''
@@ -564,7 +565,7 @@ HalleysInferno: {
 	DisplayName: Halley's Inferno
 	Tooltip:
 		'''
-		Fires a highly concentrated shot of lunar fire
+		Fires a burst of intensely concentrated lunar fire jets
 		Press <right> to zoom out
 		Uses gel for ammo
 		50% chance to save ammo
@@ -581,7 +582,7 @@ HavocsBreath: {
 	DisplayName: Havoc's Breath
 	Tooltip:
 		'''
-		Fires a cone of scorching brimstone fire
+		Projects cone-shaped blasts of scorching brimstone fire
 		Uses gel for ammo
 		'''
 }
@@ -743,7 +744,7 @@ MidasPrime: {
 
 MineralMortar: {
 	DisplayName: Mineral Mortar
-	Tooltip: Shoots an onyx bomb that explodes into sand sharks on death
+	Tooltip: Shoots an onyx bomb that explodes into huge area damage
 }
 
 Kingsbane: {
@@ -836,7 +837,7 @@ OverloadedBlaster: {
 	Tooltip:
 		'''
 		Converts gel into a spread of energized slime pearls that overload when they come to a stop
-		Overloaded slime pearls deal double damage but no longer pierce
+		Overloaded slime pearls deal 60% more damage but no longer pierce
 		Slime pearls bounce off of walls at very high speed
 		Uses gel for ammo
 		25% chance to save ammo
@@ -848,7 +849,7 @@ P90: {
 	Tooltip:
 		'''
 		Unleashes a stream of armor-piercing rounds at an incredible rate
-		Armor-piercing rounds ignore 15 defense
+		Armor-piercing rounds ignore 30 defense
 		75% chance to save ammo
 		'It's a bullet hose'
 		'''
@@ -882,8 +883,8 @@ Photoviscerator: {
 	DisplayName: Photoviscerator
 	Tooltip:
 		'''
-		Fires a stream of exo flames and light that explodes into homing sparks
-		Press <right> to fire homing flares which stick to enemies and incinerate them
+		Emits a continuous beam of exo radiation that disintegrates everything
+		Press <right> to fire homing exo flares which stick to and incinerate enemies
 		Uses gel for ammo
 		95% chance to save ammo
 		'''
@@ -1213,7 +1214,7 @@ TerraFlameburster: {
 	DisplayName: Terra Flameburster
 	Tooltip:
 		'''
-		Charge and then spew high-energy flames and pairs of homing flares
+		Charges up to emit a stream of energized flames and pairs of homing terra flares
 		Uses gel for ammo
 		50% chance to save ammo
 		'''

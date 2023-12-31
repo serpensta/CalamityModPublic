@@ -18,11 +18,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 52;
+            Item.height = 52;
             Item.damage = 50;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 19;
-            Item.width = 52;
-            Item.height = 52;
             Item.useTime = 21;
             Item.useAnimation = 21;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -39,7 +39,7 @@ namespace CalamityMod.Items.Weapons.Magic
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Vector2 realPlayerPos = player.RotatedRelativePoint(player.MountedCenter, true);
-            int j = Main.myPlayer;
+            int i = Main.myPlayer;
             float fangSpeed = Item.shootSpeed;
             float mouseXDist = (float)Main.mouseX + Main.screenPosition.X - realPlayerPos.X;
             float mouseYDist = (float)Main.mouseY + Main.screenPosition.Y - realPlayerPos.Y;
@@ -57,11 +57,11 @@ namespace CalamityMod.Items.Weapons.Magic
             {
                 spikeAmount += 2;
             }
-            for (int i = 0; i < spikeAmount; i++)
+            for (int j = 0; j < spikeAmount; j++)
             {
                 float fangSpawnX = mouseXDist;
                 float fangSpawnY = mouseYDist;
-                float offsetDampener = 0.05f * (float)i;
+                float offsetDampener = 0.05f * (float)j;
                 fangSpawnX += (float)Main.rand.Next(-400, 400) * offsetDampener;
                 fangSpawnY += (float)Main.rand.Next(-400, 400) * offsetDampener;
                 float fangDistance = (float)Math.Sqrt((double)(fangSpawnX * fangSpawnX + fangSpawnY * fangSpawnY));

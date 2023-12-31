@@ -7,6 +7,7 @@ using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Items.Pets;
 using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Sounds;
@@ -447,6 +448,9 @@ namespace CalamityMod.NPCs.Abyss
 
             // 30-40 Voidstone
             aewMinionCondition.Add(ModContent.ItemType<Voidstone>(), 1, 30, 40);
+
+            //rarely drop the snail fossil
+            aewMinionCondition.Add(ModContent.ItemType<AbyssShellFossil>(), 50);
 
             // Post-Polterghast: Soul Edge, Eidolic Wail, Stardust Staff
             LeadingConditionRule postPolter = npcLoot.DefineConditionalDropSet(DropHelper.PostPolter());

@@ -14,21 +14,27 @@ namespace CalamityMod.Items.Weapons.Ranged
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
-        public static readonly SoundStyle Shoot = new("CalamityMod/Sounds/Item/HalleysInfernoShoot") { Volume = 0.6f };
-        public static readonly SoundStyle Hit = new("CalamityMod/Sounds/Item/HalleysInfernoHit") { Volume = 0.5f };
+        public static readonly SoundStyle Shoot = new("CalamityMod/Sounds/Item/HalleysInfernoShoot") { Volume = 0.68f };
+        public static readonly SoundStyle Hit = new("CalamityMod/Sounds/Item/HalleysInfernoHit") { Volume = 0.75f };
         public override void SetDefaults()
         {
-            Item.damage = 1205;
+            Item.width = 84;
+            Item.height = 34;
+            Item.damage = 444;
             Item.knockBack = 5.5f;
             Item.DamageType = DamageClass.Ranged;
-            Item.useTime = Item.useAnimation = 39;
+
+            // Burst of 5, one every 5 frames for 25 total. Cooldown of 39 frames.
+            Item.useTime = 5;
+            Item.useAnimation = 25;
+            Item.reuseDelay = 39;
+            Item.useLimitPerAnimation = 5;
             Item.autoReuse = true;
+
             Item.useAmmo = AmmoID.Gel;
             Item.shootSpeed = 12f;
             Item.shoot = ModContent.ProjectileType<HalleysComet>();
 
-            Item.width = 84;
-            Item.height = 34;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.UseSound = Shoot;

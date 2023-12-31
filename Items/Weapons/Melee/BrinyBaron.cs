@@ -17,6 +17,8 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
+            Item.width = 100;
+            Item.height = 102;
             Item.damage = 182;
             Item.knockBack = 4f;
             Item.useAnimation = Item.useTime = 20;
@@ -26,9 +28,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shootSpeed = 4f;
 
             Item.shoot = ModContent.ProjectileType<Razorwind>();
-
-            Item.width = 100;
-            Item.height = 102;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item1;
 

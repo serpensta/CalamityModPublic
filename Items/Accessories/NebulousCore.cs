@@ -1,4 +1,5 @@
 ﻿using CalamityMod.CalPlayer;
+using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
@@ -33,6 +34,7 @@ namespace CalamityMod.Items.Accessories
             modPlayer.nCore = true;
             player.GetDamage<GenericDamageClass>() += 0.1f;
             int damage = (int)player.GetBestClassDamage().ApplyTo(250);
+            damage = player.ApplyArmorAccDamageBonusesTo(damage);
             float knockBack = 3f;
             if (Main.rand.NextBool(15))
             {

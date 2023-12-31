@@ -14,6 +14,7 @@ using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.TreasureBags;
+using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
@@ -110,6 +111,7 @@ namespace CalamityMod
         public static List<int> livingFireBlockList;
         public static List<int> amalgamBuffList;
         public static List<int> persistentBuffList;
+        public static List<int> MagicGunIDs;
         public static List<int> MushroomWeaponIDs;
         public static List<int> MushroomProjectileIDs;
 
@@ -715,6 +717,87 @@ namespace CalamityMod
                 "_Skeggy_",
                 "just akkolite",
                 "J.U.N.E.S",
+                "Bruggs",
+                "Vimek Xol",
+                "Oceanman232",
+                "Sadouken",
+                "srxe",
+                "ProfessorWinston",
+                "OctolingGrimm",
+                "Cole",
+                "Markie",
+                "Met Vox",
+                "Tweee",
+                "Kaimonick",
+                "Chow Chow",
+                "drenmus!",
+                "Nitronium Productions",
+                "Goomfrontlut",
+                "Akkolite",
+                "Shaun",
+                "Bruh.PNG",
+                "James",
+                "Lord_Lucerne",
+                "Ulmod",
+                "Adamko",
+                "Gamma Freya",
+                "Finnrua",
+                "Maskedmilo",
+                "RockRecker39",
+                "Konorango",
+                "Indeciiissive",
+                "Curtis",
+                "Ponynator",
+                "Crippling-Ambition",
+                "TitaniumLlama",
+                "OriginForme487",
+                "FishBread",
+                "Real mystlc",
+                "Levi",
+                "jc.",
+                "Medi",
+                "Jakob",
+                "Borb9834",
+                "Georgios",
+                "KeL",
+                "Cody",
+                "Cristian(Mihaii)",
+                "Marco",
+                "RuskieThe3rd",
+                "BreachNClear747",
+                "happy thoughts",
+                "Azure",
+                "theHoopty",
+                "porglesupreme",
+                "XDkilljoy65XX",
+                "Mr. Bones",
+                "dawnboi",
+                "Joe",
+                "Sailor Jolt",
+                "SomeRando",
+                "Nuclear Chaos",
+                "Jankle",
+                "The Roborex",
+                "everquartz",
+                "discokittie",
+                "IsaacInsomnia",
+                "xElectrix_",
+                "Forge",
+                "MiyoshiEira",
+                "thebettercat",
+                "Darthlego",
+                "Azzilan",
+                "Griffin",
+                "LucasHM",
+                "ChrigTopher",
+                "Colin V",
+                "Scrumlet",
+                "Darkus",
+                "Homunculus Derelictus",
+                "Professor Pissington",
+                "Buppercups - Roblox",
+                "Pusheen_",
+                "Patrera"
             };
 
             projectileDestroyExceptionList = new List<int>()
@@ -1190,6 +1273,7 @@ namespace CalamityMod
                 BuffType<MargaritaBuff>(),
                 BuffType<MoonshineBuff>(),
                 BuffType<MoscowMuleBuff>(),
+                BuffType<OldFashionedBuff>(),
                 BuffType<RedWineBuff>(),
                 BuffType<RumBuff>(),
                 BuffType<ScrewdriverBuff>(),
@@ -1718,6 +1802,47 @@ namespace CalamityMod
                 BuffID.WeaponImbuePoison
             };
 
+            MagicGunIDs = new List<int>()
+            {
+                ItemType<AbyssShocker>(),
+                ItemType<AcidGun>(),
+                ItemType<AethersWhisper>(),
+                ItemType<AetherfluxCannon>(),
+                ItemType<AlphaRay>(),
+                ItemType<ApoctosisArray>(),
+                ItemType<Cryophobia>(),
+                ItemType<Effervescence>(),
+                ItemType<EidolicWail>(),
+                ItemType<GatlingLaser>(),
+                ItemType<GaussPistol>(),
+                ItemType<Genisis>(),
+                ItemType<IonBlaster>(),
+                ItemType<Lazhar>(),
+                ItemType<NanoPurge>(),
+                ItemType<PlasmaCaster>(),
+                ItemType<PlasmaRifle>(),
+                ItemType<PulsePistol>(),
+                ItemType<PurgeGuzzler>(),
+                ItemType<RainbowPartyCannon>(),
+                ItemType<SHPC>(),
+                ItemType<TeslaCannon>(),
+                ItemType<TheSwarmer>(),
+                ItemType<Thunderstorm>(),
+                ItemType<Wingman>(),
+                ItemID.BeeGun,
+                ItemID.BubbleGun,
+                ItemID.ChargedBlasterCannon,
+                ItemID.HeatRay,
+                ItemID.LaserMachinegun,
+                ItemID.LaserRifle,
+                ItemID.LeafBlower,
+                ItemID.RainbowGun,
+                ItemID.SpaceGun,
+                ItemID.WaspGun,
+                ItemID.ZapinatorGray,
+                ItemID.ZapinatorOrange
+            };
+
             MushroomWeaponIDs = new List<int>()
             {
                 ItemType<Mycoroot>(),
@@ -1961,14 +2086,19 @@ namespace CalamityMod
             {
                 ProjectileID.Arkhalis,
                 ProjectileID.ChargedBlasterLaser,
+		        ProjectileID.ClingerStaff,
                 ProjectileID.FinalFractal,
                 ProjectileID.FlyingKnife,
                 ProjectileID.LastPrismLaser,
                 ProjectileID.MechanicalPiranha,
                 ProjectileID.MonkStaffT3,
+                ProjectileID.NettleBurstEnd,
+                ProjectileID.NettleBurstLeft,
+                ProjectileID.NettleBurstRight,
                 ProjectileID.PiercingStarlight,
                 ProjectileID.Terragrim,
                 ProjectileType<AcidicSaxBubble>(),
+                ProjectileType<AuroraFire>(),
                 ProjectileType<BallisticPoisonCloud>(),
                 ProjectileType<BlushieStaffProj>(),
                 ProjectileType<BonebreakerProjectile>(),
@@ -2752,6 +2882,7 @@ namespace CalamityMod
             livingFireBlockList = null;
             amalgamBuffList = null;
             persistentBuffList = null;
+            MagicGunIDs = null;
             MushroomWeaponIDs = null;
             MushroomProjectileIDs = null;
 

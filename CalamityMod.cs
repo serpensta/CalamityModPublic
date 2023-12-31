@@ -305,9 +305,6 @@ namespace CalamityMod
             Filters.Scene["CalamityMod:Leviathan"] = new Filter(new LevScreenShaderData("FilterMiniTower").UseColor(0f, 0f, 0.5f).UseOpacity(0.5f), EffectPriority.VeryHigh);
             SkyManager.Instance["CalamityMod:Leviathan"] = new LevSky();
 
-            Filters.Scene["CalamityMod:Providence"] = new Filter(new ProvScreenShaderData("FilterMiniTower").UseColor(0.45f, 0.4f, 0.2f).UseOpacity(0.5f), EffectPriority.VeryHigh);
-            SkyManager.Instance["CalamityMod:Providence"] = new ProvSky();
-
             Filters.Scene["CalamityMod:SupremeCalamitas"] = new Filter(new SCalScreenShaderData("FilterMiniTower").UseColor(1.1f, 0.3f, 0.3f).UseOpacity(0.65f), EffectPriority.VeryHigh);
             SkyManager.Instance["CalamityMod:SupremeCalamitas"] = new SCalSky();
 
@@ -649,7 +646,7 @@ namespace CalamityMod
                 //
                 // VANILLA BOSSES
                 //
-                { NPCID.KingSlime, 3600 }, // 1:00 (60 seconds)
+                { NPCID.KingSlime, 5400 }, // 1:30 (90 seconds)
                 { NPCID.EyeofCthulhu, 5400 }, // 1:30 (90 seconds)
                 { NPCID.EaterofWorldsHead, 7200 }, // 2:00 (120 seconds)
                 { NPCID.EaterofWorldsBody, 7200 },
@@ -681,9 +678,9 @@ namespace CalamityMod
                 //
                 // CALAMITY BOSSES
                 //
-                { ModContent.NPCType<DesertScourgeHead>(), 3600 }, // 1:00 (60 seconds)
-                { ModContent.NPCType<DesertScourgeBody>(), 3600 },
-                { ModContent.NPCType<DesertScourgeTail>(), 3600 },
+                { ModContent.NPCType<DesertScourgeHead>(), 5400 }, // 1:30 (90 seconds)
+                { ModContent.NPCType<DesertScourgeBody>(), 5400 },
+                { ModContent.NPCType<DesertScourgeTail>(), 5400 },
                 { ModContent.NPCType<Crabulon>(), 5400 }, // 1:30 (90 seconds)
                 { ModContent.NPCType<HiveMind>(), 7200 }, // 2:00 (120 seconds)
                 { ModContent.NPCType<PerforatorHive>(), 7200 }, // 2:00 (120 seconds)

@@ -19,11 +19,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
-            Item.damage = 31;
-            Item.DamageType = DamageClass.Magic;
-            Item.mana = 10;
             Item.width = 52;
             Item.height = 50;
+            Item.damage = 25;
+            Item.DamageType = DamageClass.Magic;
+            Item.mana = 10;
             Item.useTime = 15;
             Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -61,10 +61,6 @@ namespace CalamityMod.Items.Weapons.Magic
             }
 
             int bloodAmt = 2;
-            if (Main.rand.NextBool(3))
-            {
-                bloodAmt++;
-            }
             if (Main.rand.NextBool(3))
             {
                 bloodAmt++;

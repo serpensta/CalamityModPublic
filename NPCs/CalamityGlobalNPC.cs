@@ -11,7 +11,7 @@ using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Buffs.Summon.Whips;
 using CalamityMod.CalPlayer;
 using CalamityMod.Events;
-using CalamityMod.Graphics.Drawers;
+using CalamityMod.Graphics.Renderers.CalamityRenderers;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Tools;
 using CalamityMod.Items.Weapons.Melee;
@@ -763,7 +763,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToHeat.Value)
                     heatDamageMult *= slimed ? ((wormBoss || slimeGod) ? 1.25 : 1.5) : ((wormBoss || slimeGod) ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    heatDamageMult *= slimed ? 0.2 : 0.5;
+                    heatDamageMult *= slimed ? ((wormBoss || slimeGod) ? 0.66 : 0.5) : 0.5;
             }
 
             double coldDamageMult = BaseDoTDamageMult;
@@ -781,7 +781,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToSickness.Value)
                     sicknessDamageMult *= irradiated > 0 ? (wormBoss ? 1.25 : 1.5) : (wormBoss ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    sicknessDamageMult *= irradiated > 0 ? 0.2 : 0.5;
+                    sicknessDamageMult *= irradiated > 0 ? (wormBoss ? 0.66 : 0.5) : 0.5;
             }
 
             bool increasedElectricityDamage = npc.wet || npc.honeyWet || npc.lavaWet || npc.dripping;
@@ -791,7 +791,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToElectricity.Value)
                     electricityDamageMult *= increasedElectricityDamage ? (wormBoss ? 1.25 : 1.5) : (wormBoss ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    electricityDamageMult *= increasedElectricityDamage ? 0.2 : 0.5;
+                    electricityDamageMult *= increasedElectricityDamage ? (wormBoss ? 0.66 : 0.5) : 0.5;
             }
 
             double waterDamageMult = BaseDoTDamageMult;
@@ -1027,7 +1027,7 @@ namespace CalamityMod.NPCs
             // Poisoned
             if (npc.poisoned)
             {
-                int basePoisonedDoTValue = (int)(4 * vanillaSicknessDamageMult);
+                int basePoisonedDoTValue = (int)(12 * vanillaSicknessDamageMult);
                 npc.lifeRegen -= basePoisonedDoTValue;
                 if (damage < basePoisonedDoTValue / 4)
                     damage = basePoisonedDoTValue / 4;
@@ -1381,22 +1381,21 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.WallofFlesh || npc.type == NPCID.WallofFleshEye)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.3);
 
                 if (npc.type == NPCID.WallofFlesh)
                     npc.npcSlots = 20f;
             }
             else if (npc.type == NPCID.Deerclops)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
                 npc.npcSlots = 16f;
             }
             else if (npc.type == NPCID.SkeletronHead)
             {
                 if (CalamityWorld.death)
-                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
+                    npc.lifeMax = (int)(npc.lifeMax * 0.65);
                 else
-                    npc.lifeMax = (int)(npc.lifeMax * 0.75);
+                    npc.lifeMax = (int)(npc.lifeMax * 0.9);
 
                 npc.npcSlots = 12f;
             }
@@ -1411,7 +1410,7 @@ namespace CalamityMod.NPCs
             {
                 npc.defense = 14;
                 npc.defDefense = npc.defense;
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.8);
                 npc.npcSlots = 14f;
             }
             else if ((npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall) && CalamityPlayer.areThereAnyDamnBosses)
@@ -1419,14 +1418,9 @@ namespace CalamityMod.NPCs
                 npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.scale *= 1.25f;
             }
-            else if (npc.type == NPCID.Deerclops)
-            {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
-                npc.npcSlots = 12f;
-            }
             else if (npc.type == NPCID.BrainofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.1);
                 npc.npcSlots = 12f;
             }
             else if (npc.type == NPCID.Creeper)
@@ -1445,7 +1439,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.EyeofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.npcSlots = 10f;
             }
             else if (npc.type == NPCID.KingSlime)
@@ -1455,8 +1449,7 @@ namespace CalamityMod.NPCs
                 else
                     npc.scale = Main.getGoodWorld ? 3f : 1.25f;
 
-                if (Main.getGoodWorld)
-                    npc.lifeMax = (int)(npc.lifeMax * 1.5);
+                npc.lifeMax = (int)(npc.lifeMax * (Main.getGoodWorld ? 1.8 : 1.5));
             }
             else if ((npc.type == NPCID.Wraith || npc.type == NPCID.Mimic || npc.type == NPCID.Reaper || npc.type == NPCID.PresentMimic || npc.type == NPCID.SandElemental || npc.type == NPCID.Ghost) && CalamityWorld.LegendaryMode)
             {
@@ -5235,6 +5228,15 @@ namespace CalamityMod.NPCs
         #region On Spawn
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
+            if (npc.type == NPCID.Deerclops)
+            {
+                DeerclopsAI.hasTargetBeenInRange = false;
+                DeerclopsAI.borderDelay = 7f * 60f;
+                DeerclopsAI.borderScalar = 0f;
+                DeerclopsAI.innerBorder = DeerclopsAI.maxDRIncreaseDistance * 5f;
+                DeerclopsAI.outerBorder = DeerclopsAI.maxDRIncreaseDistance * 5f;
+            }
+
             if (npc.type != NPCID.VoodooDemon)
                 return;
 
@@ -5692,8 +5694,8 @@ namespace CalamityMod.NPCs
                     VulnerabilityHexFireDrawer = null;
 
                 // Only draw the NPC if told to by the miracle blight drawer.
-                if (MiracleBlightDrawer.ValidToDraw(npc))
-                    return MiracleBlightDrawer.ActuallyDoPreDraw;
+                if (MiracleBlightRenderer.ValidToDraw(npc))
+                    return MiracleBlightRenderer.ActuallyDoPreDraw;
             }
 
             // Draw a pillar of light and fade the background as an animation when skipping things in the DD2 event.

@@ -19,6 +19,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.width = 60;
+            Item.height = 58;
             Item.damage = 84;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 17;
@@ -28,7 +29,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.knockBack = 6f;
             Item.UseSound = SoundID.Item105;
             Item.autoReuse = true;
-            Item.height = 58;
             Item.value = CalamityGlobalItem.Rarity12BuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.shoot = ModContent.ProjectileType<GalacticaComet>();

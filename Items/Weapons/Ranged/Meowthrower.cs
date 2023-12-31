@@ -15,15 +15,15 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 37;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 74;
             Item.height = 24;
+            Item.damage = 29;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 8;
             Item.useAnimation = 32;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
-            Item.knockBack = 1.25f;
+            Item.knockBack = 0.4f;
             Item.UseSound = SoundID.Item34;
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;
             Item.rare = ItemRarityID.LightRed;

@@ -14,7 +14,6 @@ AbyssBlade: {
 		'''
 		Fires short-range tridents
 		Hitting enemies will inflict the crush depth debuff
-		The lower the enemies' defense, the more damage they take from this debuff
 		'''
 }
 
@@ -247,7 +246,7 @@ TaintedBlade: {
 
 CelestialClaymore: {
 	DisplayName: Celestial Claymore
-	Tooltip: Spawns cosmic energy flames near the player that generate large explosions
+	Tooltip: Spawns cosmic energy stars near the cursor that inflict several debuffs
 }
 
 ClamCrusher: {
@@ -752,7 +751,8 @@ Murasama: {
 	Tooltip:
 		'''
 		A high-frequency blade that can cleanly slice through even the mightiest foe
-		Prove your worth by slaying Yharon, Dragon of Rebirth to unsheath this sword
+		Every third swing deals immense damage
+		Prove your worth by slaying The Devourer of Gods to unsheath this sword
 		[c/F41A31:'There will be blood!']
 		'''
 }
@@ -1191,6 +1191,20 @@ TheBurningSky: {
 		'''
 }
 
+TheDarkMaster: {
+	DisplayName: The Dark Master
+	Tooltip:
+		'''
+		Fires red echo slash projectiles at full health
+		Projectile damage increases for every point of HP above 400
+		Press <right> to spawn three shadow clones in a Delta formation
+		The clones will mirror your sword swings and release projectiles
+		The clones will always fire projectiles regardless of your own HP
+		The clones may only exist while holding this weapon
+		'The blade by which the shadows levy their foes with a terrible fate'
+		'''
+}
+
 TheEnforcer: {
 	DisplayName: The Enforcer
 	Tooltip: Spawns essence flames on hit
@@ -1313,7 +1327,11 @@ Tumbleweed: {
 
 TyphonsGreed: {
 	DisplayName: Typhon's Greed
-	Tooltip: Summons water spirits while in use
+	Tooltip:
+		'''
+		Summons water spirits while in use
+		These water spirits will home in on enemies after traveling towards the player
+		'''
 }
 
 BlightedCleaver: {

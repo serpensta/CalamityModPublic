@@ -44,8 +44,8 @@ BubonicRound: {
 	DisplayName: Bubonic Round
 	Tooltip:
 		'''
-		Bursts into virulent plague on contact
-		Ignores 25% of enemy defense
+		Spreads the plague on hit
+		Ignores 20% of enemy defense
 		'''
 }
 
@@ -115,7 +115,8 @@ MortarRound: {
 	DisplayName: Mortar Round
 	Tooltip:
 		'''
-		Large blast radius. Will destroy tiles
+		Specialized high explosive rounds with a large blast radius
+		Will destroy tiles
 		Used by normal guns
 		'''
 }
@@ -129,7 +130,7 @@ RubberMortarRound: {
 	DisplayName: Rubber Mortar Round
 	Tooltip:
 		'''
-		Large blast radius
+		Specialized high explosive rounds with a large blast radius
 		Will destroy tiles on each bounce
 		Used by normal guns
 		'''

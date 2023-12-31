@@ -204,7 +204,7 @@ CosmicKunai: {
 	Tooltip:
 		'''
 		Fires a rapid stream of short-range kunai
-		Stealth strikes spawn 5 Cosmic Scythes which home and explode
+		Stealth strikes make kunai travel farther and spawn 5 homing Cosmic Scythes
 		'''
 }
 
@@ -542,8 +542,7 @@ HardenedHoneycomb: {
 	Tooltip:
 		'''
 		Fires a honeycomb that shatters into fragments
-		Grants the honey buff to players it touches
-		Stealth strikes can bounce off walls and enemies
+		Stealth strikes grant the honey buff on hit and spawn bees
 		'''
 }
 
@@ -679,8 +678,8 @@ LeviathanTeeth: {
 	DisplayName: Leviathan Teeth
 	Tooltip:
 		'''
-		Rapidly throws a variety of poisonous fangs that stick to enemies
-		Stealth strikes cause 6 very fast teeth to be thrown, ignoring gravity and inflicting extreme knockback
+		Rapidly throws a spread of venomous teeth that stick to enemies
+		Stealth strikes cause 6 very fast teeth to be thrown, ignoring gravity and spawning water blasts on hit
 		'''
 }
 
@@ -708,7 +707,7 @@ LunarKunai: {
 		'''
 		Throws out a set of three kunai that ignore gravity and slightly home in on enemies
 		After traveling enough distance, the kunai supercharge with lunar energy, homing in far more aggressively and exploding on impact
-		Stealth strikes instantly throw eight supercharged Kunai
+		Stealth strikes instantly throw nine supercharged Kunai
 		'''
 }
 
@@ -847,18 +846,7 @@ PhantasmalRuin: {
 	Tooltip:
 		'''
 		Fires a large ghost lance that explodes into spirits on enemy hits
-		Stealth strikes pierce and summon many spirits from the depths on enemy hits
-		'''
-}
-
-PhantomLance: {
-	DisplayName: Phantom Lance
-	Tooltip:
-		'''
-		Fires a spectral javelin that rapidly releases lost souls
-		Fades away and slows down over time
-		Lost souls released later deal less damage
-		Stealth strikes don't slow down and souls always deal full damage
+		Stealth strikes pierce twice and summon many spirits from the depths on the first hit
 		'''
 }
 

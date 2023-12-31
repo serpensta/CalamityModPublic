@@ -74,6 +74,8 @@ Cyclone.DisplayName: Cyclone
 DarkBall.DisplayName: Dark Ball
 DarkBeam.DisplayName: Dark Beam
 DarkIceZero.DisplayName: Dark Ice
+DarkMasterBeam.DisplayName: Dark Master Beam
+DarkMasterClone.DisplayName: Dark Terrarian
 DeathsAscensionProjectile.DisplayName: Ascended Scythe
 DecaysRetort.DisplayName: Decay's Retort
 DecaysRetortDash.DisplayName: Evisceration Lunge
@@ -119,6 +121,7 @@ FallenPaladinsHammerEcho.DisplayName: Fallen Paladin's Hammer Echo
 FallenPaladinsHammerProj.DisplayName: Fallen Paladin's Hammer
 Feather.DisplayName: Feather
 Flarefrost.DisplayName: Flarefrost
+FloodtideShark.DisplayName: SHORK
 ForbiddenOathbladeProjectile.DisplayName: Oathblade
 GaelExplosion.DisplayName: Gael Explosion
 GaelSkull.DisplayName: No Longer Ark of the Cosmos' Superior Cousin

@@ -350,14 +350,9 @@ namespace CalamityMod.Items
             // I think this fits the miscellaneous category? Not seeing anything like this elsewhere. - Tomat
             EditTooltipByName("Speed", (line) => RedistributeSpeedTooltips(item, line));
 
-            if (item.type == ItemID.SpaceGun)
+            if (item.healLife > 0 && Main.LocalPlayer.Calamity().healingPotionMultiplier != 1f)
             {
-                int cost = (int)(item.mana * Main.LocalPlayer.manaCost * 0.5f);
-                EditTooltipByName("UseMana", (line) => line.Text = $"Uses {cost} mana");
-            }
-            if (item.healLife > 0 && Main.LocalPlayer.Calamity().healingPotBonus != 1f)
-            {
-                int healAmt = (int)(item.healLife * Main.LocalPlayer.Calamity().healingPotBonus);
+                int healAmt = (int)(item.healLife * Main.LocalPlayer.Calamity().healingPotionMultiplier);
                 EditTooltipByName("HealLife", (line) => line.Text = $"Restores {healAmt} life");
             }
             #endregion
@@ -630,9 +625,24 @@ namespace CalamityMod.Items
                 EditTooltipByNum(1, (line) => line.Text = "Increases movement and jump speed by 10% and acceleration by 1.1x");
             }
 
-            // Sniper Scope
+            // Rifle Scope visibility change
+            if (item.type == ItemID.RifleScope)
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Increase view range for guns (Right click to zoom out)");
+                EditTooltipByNum(1, (line) => line.Text = "The scope effect can be toggled with visibility");
+            }
+
+            // Sniper Scope rebalance and visibility change
             if (item.type == ItemID.SniperScope)
+            {
                 EditTooltipByNum(1, (line) => line.Text = "7% increased ranged damage and critical strike chance");
+                EditTooltipByNum(0, (line) => line.Text += "\nThe scope effect can be toggled with visibility");
+            }
+
+            // Recon Scope visibility change
+            if (item.type == ItemID.ReconScope)
+                EditTooltipByNum(0, (line) => line.Text += "\nThe scope effect can be toggled with visibility");
+
 
             // Magic Quiver
             if (item.type == ItemID.MagicQuiver)
@@ -670,7 +680,7 @@ namespace CalamityMod.Items
 
             if (item.type == ItemID.PowerGlove)
             {
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("12%", "10%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("12% increased melee speed", "10% increased melee speed, does not stack with downgrades"));
                 EditTooltipByNum(0, (line) => line.Text += "\n10% increased true melee damage");
             }
 
@@ -680,13 +690,19 @@ namespace CalamityMod.Items
             }
 
             if (item.type == ItemID.MechanicalGlove)
+            {
+                string extraLine = "\n12% increased melee speed, does not stack with downgrades";
+                EditTooltipByNum(1, (line) => line.Text = "12% increased melee damage" + extraLine);
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("12% increased melee speed", "12% increased melee speed, does not stack with downgrades"));
                 EditTooltipByNum(0, (line) => line.Text += "\n10% increased true melee damage");
+            }
 
             if (item.type == ItemID.FireGauntlet)
             {
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("fire damage", "Hellfire"));
                 string extraLine = "\n10% increased true melee damage";
-                EditTooltipByNum(1, (line) => line.Text = "14% increased melee damage and speed" + extraLine);
+                string extraLine2 = "\n14% increased melee speed, does not stack with downgrades" + extraLine;
+                EditTooltipByNum(1, (line) => line.Text = "14% increased melee damage" + extraLine2);
             }
 
             // On Fire! debuff immunities
@@ -699,10 +715,8 @@ namespace CalamityMod.Items
             if (item.type == ItemID.TerrasparkBoots)
                 EditTooltipByNum(3, (line) => line.Text += "\nImmunity to the On Fire! debuff");
 
-            // IT'S HELLFIRE!!!
-            if (item.type == ItemID.MagmaStone || item.type == ItemID.LavaSkull || item.type == ItemID.MoltenSkullRose)
-                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("fire damage", "Hellfire"));
-
+            // Ozzatron 23NOV2023: Removed tooltip edits for Magma Skull and Molten Skull Rose, as they were invalid after vanilla tooltip changes.
+            
             // Yoyo Glove/Bag apply a 0.5x damage multiplier on the second yoyo
             if (item.type == ItemID.YoyoBag || item.type == ItemID.YoYoGlove)
                 EditTooltipByNum(0, (line) => line.Text += "\nSecondary yoyos will do 50% less damage");
@@ -774,6 +788,17 @@ namespace CalamityMod.Items
             if (item.type == ItemID.PlatinumGreaves)
                 AddTooltip("10% increased movement speed");
 
+            // Jungle
+            if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+            }
+            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "4%"));
+            if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+
             // Shadow
             if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
                 EditTooltipByNum(0, (line) => line.Text = "5% increased damage and 7% increased jump speed");
@@ -787,6 +812,10 @@ namespace CalamityMod.Items
                     line.Text = newTooltip;
                 });
             }
+
+            // Meteor
+            if (item.type == ItemID.MeteorHelmet || item.type == ItemID.MeteorSuit || item.type == ItemID.MeteorLeggings)
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("9%", "8%"));
             #endregion
 
             // Hardmode ore armor tooltip edits
@@ -797,9 +826,9 @@ namespace CalamityMod.Items
 
             // Palladium
             if (item.type == ItemID.PalladiumBreastplate)
-                EditTooltipByNum(0, (line) => line.Text = $"{PalladiumArmorSetChange.ChestplateDamagePercentageBoost + 3}% increased damage.");
+                EditTooltipByNum(0, (line) => line.Text = $"{PalladiumArmorSetChange.ChestplateDamagePercentageBoost + 3}% increased damage");
             if (item.type == ItemID.PalladiumLeggings)
-                EditTooltipByNum(0, (line) => line.Text = $"{PalladiumArmorSetChange.LeggingsDamagePercentageBoost + 2}% increased damage.");
+                EditTooltipByNum(0, (line) => line.Text = $"{PalladiumArmorSetChange.LeggingsDamagePercentageBoost + 2}% increased damage");
 
             // Mythril
             if (item.type == ItemID.MythrilHood)

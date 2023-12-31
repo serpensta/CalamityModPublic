@@ -236,12 +236,10 @@ AsgardianAegis: {
 	DisplayName: Asgardian Aegis
 	Tooltip:
 		'''
-		Grants immunity to knockback
-		Immune to most debuffs
-		+40 max life and +0.5 HP/s life regen
-		Grants a cosmic inferno dash which can slam through enemies without taking damage
-		Can be used to ram enemies
-		+20 defense while submerged in liquid
+		Allows the ability to ram dash, empowered by the cosmic inferno
+		This dash can slam through enemies without taking damage
+		Grants immunity to knockback and fire blocks
+		Grants immunity to the vast majority of debuffs, including God Slayer Inferno
 		'''
 }
 
@@ -249,11 +247,10 @@ AsgardsValor: {
 	DisplayName: Asgard's Valor
 	Tooltip:
 		'''
-		Grants immunity to knockback
-		Immune to most debuffs
-		+16 defense while submerged in liquid
-		+20 max life
-		Grants a holy flame dash which can slam through enemies without taking damage
+		Allows the ability to ram dash
+		This dash can slam through enemies without taking damage
+		Grants immunity to knockback and fire blocks
+		Grants immunity to most debuffs, including most forms of frost and flame
 		'''
 }
 
@@ -285,9 +282,9 @@ BloodflareCore: {
 	DisplayName: Bloodflare Core
 	Tooltip:
 		'''
-		You lose up to half your defense after taking damage
-		Lost defense regenerates over time
-		You gain 1 health for every 1 defense gained as it regenerates
+		Taking defense damage heals you over time
+		You gain 1 health for every 1 defense damage recovered
+		Taking damage always deals at least half of your total defense in defense damage
 		'''
 }
 
@@ -295,10 +292,8 @@ BloodPact: {
 	DisplayName: Blood Pact
 	Tooltip:
 		'''
-		Doubles your max HP
-		Causes you to take critical damage 25% of the time
-		After a critical hit, you gain various buffs for ten seconds
-		Any healing potions consumed during this time period heal 50% more health
+		Increases max HP by 25%
+		Healing Potions are 25% more effective
 		'''
 }
 
@@ -357,6 +352,19 @@ Calamity: {
 		'''
 }
 
+ChaliceOfTheBloodGod: {
+	DisplayName: Chalice of the Blood God
+	Tooltip:
+		'''
+		Increases max HP by 25%
+		Taking more than 5 damage converts the hit into a damage over time bleed debuff
+		This bleeding does not interfere with life regeneration
+		Drinking a healing potion removes half of the remaining bleed damage
+		Unequipping this accessory while bleeding inflicts the remaining damage instantly
+		'All that for a drop of blood...'
+		'''
+}
+
 ChaosStone: {
 	DisplayName: Chaos Stone
 	Tooltip:
@@ -377,23 +385,12 @@ CoinofDeceit: {
 		'''
 }
 
-CoreOfTheBloodGod: {
-	DisplayName: Core of the Blood God
-	Tooltip:
-		'''
-		Boosts your max HP by 15%
-		Healing Potions are 25% more effective
-		Halves enemy contact damage
-		When you take contact damage this effect has a 20 second cooldown
-		'''
-}
-
 CorrosiveSpine: {
 	DisplayName: Corrosive Spine
 	Tooltip:
 		'''
 		5% increased movement speed
-		All rogue weapons inflict poison and spawn irradiated clouds on enemy hits
+		All rogue weapons inflict poison and spawn poisoned clouds on enemy hits
 		You release a ton of clouds everywhere on hit
 		'''
 }
@@ -639,7 +636,8 @@ ElementalGauntlet: {
 	Tooltip:
 		'''
 		Melee attacks and projectiles inflict Elemental Mix
-		15% increased melee speed, damage, and 5% increased melee critical strike chance
+		15% increased melee damage and 5% increased melee critical strike chance
+		15% increased melee speed, does not stack with downgrades
 		20% increased true melee damage
 		Increased melee knockback
 		Enables auto swing for melee weapons
@@ -661,10 +659,10 @@ ElysianAegis: {
 	DisplayName: Elysian Aegis
 	Tooltip:
 		'''
-		Grants immunity to knockback and the Burning, On Fire!, and Holy Flames debuffs
-		+30 max life
-		Grants an enhanced holy flame dash which can slam through enemies without taking damage
-		Can be used to ram enemies
+		Allows the ability to ram dash, empowered by holy fire
+		This dash can slam through enemies without taking damage
+		Grants immunity to knockback and fire blocks
+		Grants immunity to most fire debuffs, including Daybreak and Holy Flames
 		Blessed by the Profaned Flame
 		'''
 }
@@ -683,7 +681,7 @@ EtherealExtorter: {
 	Tooltip:
 		'''
 		Rogue projectiles explode into homing souls on death
-		8% increased rogue damage and +10 maximum stealth
+		8% increased rogue damage and +5 maximum stealth
 		'''
 }
 
@@ -1209,8 +1207,9 @@ OrnateShield: {
 	DisplayName: Ornate Shield
 	Tooltip:
 		'''
-		8% increased damage reduction and +20 health while wearing the Daedalus armor
-		Grants a frost dash which can slam through enemies without taking damage
+		Allows the ability to ram dash
+		This dash can slam through enemies without taking damage
+		Grants immunity to Chilled, Frostburn, Frostbite, and Frozen
 		'''
 }
 
@@ -1428,7 +1427,6 @@ RoverDrive: {
 		The shield grants 10 defense while active
 		After the shield is broken, it takes 10 seconds to charge back up
 		Being hit again while recharging restarts the charge timer
-		The shield's color will change to match your team selection as needed
 		Can also be scrapped at an extractinator
 		'''
 }
@@ -1540,7 +1538,11 @@ SigilofCalamitas: {
 
 SilencingSheath: {
 	DisplayName: Silencing Sheath
-	Tooltip: +10 maximum stealth
+	Tooltip:
+		'''
+		+10 maximum stealth
+		Stealth generates 4% faster
+		'''
 }
 
 SlagsplitterPauldron: {
@@ -1843,7 +1845,6 @@ TheSponge: {
 		The barrier starts recharging 9 seconds after being hit
 		Recharging from zero to full charge takes 6 seconds
 		Being hit again while recharging restarts the charge timer
-		The barrier's color will change to match your team selection as needed
 		'''
 }
 
@@ -1978,7 +1979,7 @@ WulfrumBattery: {
 	DisplayName: Wulfrum Battery
 	Tooltip:
 		'''
-		Empowers your summons with wulfrum energy, letting them emit light around them
+		Empowers your summons with wulfrum energy, letting them emit light around them if visibility is enabled
 		7% increased summon damage
 		50% chance to get an extra scrap when killing wulfrum robots
 		Can also be scrapped at an extractinator

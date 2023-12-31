@@ -97,7 +97,7 @@ namespace CalamityMod.CalPlayer
         public bool reducedHolyFlamesDamage = false;
         public bool reducedNightwitherDamage = false;
         public float rangedAmmoCost = 1f;
-        public float healingPotBonus = 1f;
+        public float healingPotionMultiplier = 1f;
         public bool heldGaelsLastFrame = false;
         internal bool hadNanomachinesLastFrame = false;
         public bool disableVoodooSpawns = false;
@@ -224,12 +224,14 @@ namespace CalamityMod.CalPlayer
         public int auralisAurora = 0;
         public int necroReviveCounter = -1;
         public int hideOfDeusTimer = 0;
+        public int murasamaHitCooldown = 0;
         public int giantShellPostHit = 0;
         public int tortShellPostHit = 0;
         public int spiritOriginBullseyeShootCountdown = 0;
         public int spiritOriginConvertedCrit = 0;
         public int RustyMedallionCooldown = 0;
         public float SulphWaterPoisoningLevel;
+        public float holyInfernoFadeIntensity;
         public NPC unstableSelectedTarget;
         public int zapActivity = 0;
         public bool ragePulse = false;
@@ -363,27 +365,55 @@ namespace CalamityMod.CalPlayer
         #endregion
 
         #region Defense Damage
-        // Ratio at which incoming damage (after mitigation) is converted into defense damage.
-        // Used to be 5% normal, 10% expert, 12% rev, 15% death, 20% boss rush
-        // It is now 10% on all difficulties because you already take less damage on lower difficulties.
-        public const double DefenseDamageRatio = 0.1;
+        // Ratio at which mitigated damage is converted into defense damage.
+        // This is a significant rework, so the ratio is much higher than the previous 0.1 / 10%.
+        // The net difference between incoming damage and final taken damage is what is multiplied by this ratio.
+        //
+        // Example: You have 200 defense and 25% DR and get hit for 576, on Expert.
+        //
+        // Incoming damage = 576
+        // Defense reduction = 0.75 * 200 = 150
+        // Damage after defense = 426
+        // DR reduction = 0.25 * 426 = 106.5
+        // Damage after DR = 319.5 (rounds down to 319)
+        //
+        // Net Difference = 576 - 319 = 257
+        // Defense Damage = 257 * 0.3333 = 85.6581 (rounds up to 86)
+        //
+        // The player then loses 86 defense.
+        // DR is lost according to the ratio of defense lost versus total defense.
+        // In this case, that ratio is 86 / 200 = 0.43.
+        // The player loses 0.43 * 0.25 = 10.75% DR.
+        public double defenseDamageRatio = BalancingConstants.DefaultDefenseDamageRatio;
+
+        // Current effect of defense damage, calculated as total defense damage lerped to zero over the recovery time.
         public int CurrentDefenseDamage => (int)(totalDefenseDamage * ((float)defenseDamageRecoveryFrames / totalDefenseDamageRecoveryFrames));
+
+        // Total defense damage inflicted. This number keeps increasing if the player is repeatedly hit during the recovery period.
         internal int totalDefenseDamage = 0;
-        // Defense damage from a single hit recovers in 50 frames, no matter how big the hit was.
-        // If you get hit AGAIN before you have fully recovered, 50 more frames are added to your recovery timer!
+
+        // Defense damage from a single hit recovers in 60 frames, no matter how big the hit was.
+        // If you get hit AGAIN before you have fully recovered, 60 more frames are added to your recovery timer!
         internal const int DefenseDamageBaseRecoveryTime = 60;
+
         // The maximum possible recovery time is 15 seconds. This is to prevent annoyance where godmode defense damage never goes away.
         internal const int DefenseDamageMaxRecoveryTime = 900;
+
         // How many frames the player will continue to be recovering from defense damage.
         internal int defenseDamageRecoveryFrames = 0;
+
         // The total timer of defense damage recovery that the player is currently suffering from.
         internal int totalDefenseDamageRecoveryFrames = DefenseDamageBaseRecoveryTime;
+
         // Defense damage does not start recovering for a certain number of frames after iframes end.
         internal const int DefenseDamageRecoveryDelay = 10;
+
         // The current timer for how long the player must wait before defense damage begins recovering.
         internal int defenseDamageDelayFrames = 0;
-        public bool justHitByDefenseDamage = false;
-        public int defenseDamageToTake = 0;
+
+        // Temporary bool for whether the current instance of incoming damage to the player is one that inflicts defense damage.
+        // Bloodflare Core ignores this and makes every single instance of incoming damage apply defense damage.
+        public bool nextHitDealsDefenseDamage = false;
         #endregion
 
         #region Energy Shields
@@ -479,6 +509,7 @@ namespace CalamityMod.CalPlayer
         public int ascendantInsigniaCooldown = 0;
         public bool ascendantTrail = false;
         public bool eGauntlet = false;
+        public int gloveLevel = 0; // Used to prevent glove stacking
         public bool eTalisman = false;
         public int statisTimer = 0;
         public bool nucleogenesis = false;
@@ -545,8 +576,10 @@ namespace CalamityMod.CalPlayer
         public bool bloodPact = false;
         public bool bloodPactBoost = false;
         public bool bloodflareCore = false;
-        public int bloodflareCoreLostDefense = 0;
-        public bool coreOfTheBloodGod = false;
+        public int bloodflareCoreRemainingHealOverTime = 0;
+        public bool chaliceOfTheBloodGod = false;
+        public double chaliceBleedoutBuffer = 0D;
+        public double chaliceDamagePointPartialProgress = 0D;
         public bool elementalHeart = false;
         public bool crownJewel = false;
         public bool infectedJewel = false;
@@ -757,8 +790,6 @@ namespace CalamityMod.CalPlayer
         public bool plagueReaper = false;
         public bool plaguebringerPatronSet = false;
         public bool plaguebringerCarapace = false;
-        public bool plaguebringerPistons = false;
-        public int pistonsCounter = 0;
         public float ataxiaDmg;
         public bool ataxiaMage = false;
         public bool ataxiaGeyser = false;
@@ -922,6 +953,7 @@ namespace CalamityMod.CalPlayer
         public bool cinnamonRoll = false;
         public bool tequilaSunrise = false;
         public bool margarita = false;
+        public bool oldFashioned = false;
         public bool starBeamRye = false;
         public bool screwdriver = false;
         public bool moscowMule = false;
@@ -952,7 +984,7 @@ namespace CalamityMod.CalPlayer
         public bool wDroid = false;
         public bool resButterfly = false;
         public bool mWorm = false;
-        public bool iClasper = false;
+        public bool IceClasperBool = false;
         public bool magicHat = false;
         public bool herring = false;
         public bool blackhawk = false;
@@ -1445,12 +1477,15 @@ namespace CalamityMod.CalPlayer
                 Player.statLifeMax2 += 45;
 
             int percentMaxLifeIncrease = 0;
-            if (ZoneAbyss && abyssalAmulet)
+            if (ZoneAbyss && (abyssalAmulet || lumenousAmulet))
                 percentMaxLifeIncrease += lumenousAmulet ? 25 : 10;
-            if (coreOfTheBloodGod)
-                percentMaxLifeIncrease += 15;
+
+            // Blood Pact and Chalice of the Blood God stack their HP bonuses if you want to equip both
             if (bloodPact)
-                percentMaxLifeIncrease += 100;
+                percentMaxLifeIncrease += 25;
+            if (chaliceOfTheBloodGod)
+                percentMaxLifeIncrease += 25;
+
             if (affliction || afflicted)
                 percentMaxLifeIncrease += 10;
 
@@ -1472,6 +1507,7 @@ namespace CalamityMod.CalPlayer
             // Reset adrenaline duration to default. If Draedon's Heart is equipped, it'll change itself every frame.
             AdrenalineDuration = CalamityUtils.SecondsToFrames(5);
 
+            defenseDamageRatio = BalancingConstants.DefaultDefenseDamageRatio;
             contactDamageReduction = 0D;
             projectileDamageReduction = 0D;
             rogueVelocity = 1f;
@@ -1640,6 +1676,7 @@ namespace CalamityMod.CalPlayer
             ascendantInsignia = false;
             ascendantTrail = false;
             eGauntlet = false;
+            gloveLevel = 0;
             eTalisman = false;
             nucleogenesis = false;
             nuclearFuelRod = false;
@@ -1660,7 +1697,7 @@ namespace CalamityMod.CalPlayer
             fleshTotem = false;
             bloodPact = false;
             bloodflareCore = false;
-            coreOfTheBloodGod = false;
+            chaliceOfTheBloodGod = false;
             elementalHeart = false;
             crownJewel = false;
             infectedJewel = false;
@@ -1740,7 +1777,7 @@ namespace CalamityMod.CalPlayer
             lunicCorpsLegs = false;
 
             rangedAmmoCost = 1f;
-            healingPotBonus = 1f;
+            healingPotionMultiplier = 1f;
 
             avertorBonus = false;
 
@@ -1799,7 +1836,6 @@ namespace CalamityMod.CalPlayer
             plagueReaper = false;
             plaguebringerPatronSet = false;
             plaguebringerCarapace = false;
-            plaguebringerPistons = false;
             fathomSwarmer = false;
             fathomSwarmerVisage = false;
             fathomSwarmerBreastplate = false;
@@ -1937,7 +1973,6 @@ namespace CalamityMod.CalPlayer
             polarisBoostTwo = false;
             polarisBoostThree = false;
             bloodfinBoost = false;
-            bloodPactBoost = false;
             divineBless = false;
 
             killSpikyBalls = false;
@@ -1956,6 +1991,7 @@ namespace CalamityMod.CalPlayer
             cinnamonRoll = false;
             tequilaSunrise = false;
             margarita = false;
+            oldFashioned = false;
             starBeamRye = false;
             screwdriver = false;
             moscowMule = false;
@@ -1971,7 +2007,7 @@ namespace CalamityMod.CalPlayer
             wDroid = false;
             resButterfly = false;
             mWorm = false;
-            iClasper = false;
+            IceClasperBool = false;
             magicHat = false;
             herring = false;
             blackhawk = false;
@@ -2207,13 +2243,16 @@ namespace CalamityMod.CalPlayer
                 }
             }
 
-            #region Debuffs
+            #region Defense Damage
             totalDefenseDamage = 0;
             defenseDamageRecoveryFrames = 0;
             totalDefenseDamageRecoveryFrames = DefenseDamageBaseRecoveryTime;
             defenseDamageDelayFrames = 0;
-            justHitByDefenseDamage = false;
-            defenseDamageToTake = 0;
+            nextHitDealsDefenseDamage = false;
+            bloodflareCoreRemainingHealOverTime = 0;
+            #endregion
+
+            #region Debuffs
             heldGaelsLastFrame = false;
             gaelSwipes = 0;
             andromedaState = AndromedaPlayerState.Inactive;
@@ -2228,8 +2267,10 @@ namespace CalamityMod.CalPlayer
             auralisAurora = 0;
             necroReviveCounter = -1;
             hideOfDeusTimer = 0;
+            murasamaHitCooldown = 0;
             RustyMedallionCooldown = 0;
             SulphWaterPoisoningLevel = 0f;
+            holyInfernoFadeIntensity = 0f;
             spiritOriginConvertedCrit = 0;
             rage = 0f;
             adrenaline = 0f;
@@ -2403,6 +2444,7 @@ namespace CalamityMod.CalPlayer
             cinnamonRoll = false;
             tequilaSunrise = false;
             margarita = false;
+            oldFashioned = false;
             starBeamRye = false;
             screwdriver = false;
             moscowMule = false;
@@ -2423,9 +2465,8 @@ namespace CalamityMod.CalPlayer
             bloodfinTimer = 0;
             healCounter = 300;
             danceOfLightCharge = 0;
-            bloodPactBoost = false;
             rangedAmmoCost = 1f;
-            healingPotBonus = 1f;
+            healingPotionMultiplier = 1f;
             avertorBonus = false;
             divineBless = false;
             #endregion
@@ -2495,8 +2536,6 @@ namespace CalamityMod.CalPlayer
             plagueReaper = false;
             plaguebringerPatronSet = false;
             plaguebringerCarapace = false;
-            plaguebringerPistons = false;
-            pistonsCounter = 0;
             ataxiaMage = false;
             ataxiaBolt = false;
             ataxiaGeyser = false;
@@ -2573,11 +2612,13 @@ namespace CalamityMod.CalPlayer
             searedPanCounter = 0;
             searedPanTimer = 0;
             potionTimer = 0;
-            bloodflareCoreLostDefense = 0;
             persecutedEnchantSummonTimer = 0;
             momentumCapacitorTime = 0;
             momentumCapacitorBoost = 0f;
             LungingDown = false;
+
+            chaliceBleedoutBuffer = 0D;
+            chaliceDamagePointPartialProgress = 0D;
 
             if (BossRushEvent.BossRushActive)
             {
@@ -2589,8 +2630,8 @@ namespace CalamityMod.CalPlayer
             }
 
             // Respawn the player faster
-            // 3 seconds normally, 5 seconds while an event is happening and 15 seconds while a boss is alive
-            int respawnTimerSet = areThereAnyDamnBosses ? 900 : areThereAnyDamnEvents ? 300 : 180;
+            // 3 seconds normally and configurable while a boss is alive between 15 and 60 seconds
+            int respawnTimerSet = areThereAnyDamnBosses ? (CalamityConfig.Instance.PlayerRespawnTime_BossAlive * 60) : 180;
             if (Player.respawnTimer > respawnTimerSet)
                 Player.respawnTimer = respawnTimerSet;
         }
@@ -2695,7 +2736,9 @@ namespace CalamityMod.CalPlayer
                 {
                     Projectile proj = Main.projectile[projIndex];
                     float start = 360f / angelAmt;
-                    Projectile.NewProjectile(source, new Vector2((int)(Player.Center.X + (Math.Sin(projIndex * start) * 300)), (int)(Player.Center.Y + (Math.Cos(projIndex * start) * 300))), Vector2.Zero, ModContent.ProjectileType<AngelicAllianceArchangel>(), proj.damage / 10, proj.knockBack / 10f, Player.whoAmI, Main.rand.Next(180), projIndex * start);
+                    int damage = Player.ApplyArmorAccDamageBonusesTo(proj.damage / 10);
+
+                    Projectile.NewProjectile(source, new Vector2((int)(Player.Center.X + (Math.Sin(projIndex * start) * 300)), (int)(Player.Center.Y + (Math.Cos(projIndex * start) * 300))), Vector2.Zero, ModContent.ProjectileType<AngelicAllianceArchangel>(), damage, proj.knockBack / 10f, Player.whoAmI, Main.rand.Next(180), projIndex * start);
                     Player.statLife += 2;
                     Player.HealEffect(2);
                 }
@@ -2707,7 +2750,9 @@ namespace CalamityMod.CalPlayer
 
                 var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<Items.Accessories.SandCloak>()));
                 rogueStealth -= rogueStealthMax * 0.1f;
-                int veil = Projectile.NewProjectile(source, Player.Center, Vector2.Zero, ModContent.ProjectileType<SandCloakVeil>(), 7, 8, Player.whoAmI);
+                int damage = Player.ApplyArmorAccDamageBonusesTo(7);
+
+                int veil = Projectile.NewProjectile(source, Player.Center, Vector2.Zero, ModContent.ProjectileType<SandCloakVeil>(), damage, 8, Player.whoAmI);
                 Main.projectile[veil].Center = Player.Center;
                 SoundEngine.PlaySound(SoundID.Item45, Player.Center);
             }
@@ -2841,6 +2886,8 @@ namespace CalamityMod.CalPlayer
                     double offsetAngle;
 
                     int damage = (int)(Player.GetTotalDamage<RangedDamageClass>().ApplyTo(300f));
+                    damage = Player.ApplyArmorAccDamageBonusesTo(damage);
+
                     if (Player.whoAmI == Main.myPlayer)
                     {
                         var source = Player.GetSource_Misc("1");
@@ -2935,6 +2982,8 @@ namespace CalamityMod.CalPlayer
                         // To compute Forbidden Circlet tornado damage, create a fake stat modifier on the spot which combines both classes.
                         StatModifier forbidden = Player.GetTotalDamage<SummonDamageClass>().CombineWith(Player.GetDamage<RogueDamageClass>());
                         int damage = (int)forbidden.ApplyTo(ForbiddenCirclet.tornadoBaseDmg);
+                        damage = Player.ApplyArmorAccDamageBonusesTo(damage);
+
                         float kBack = Player.GetTotalKnockback<SummonDamageClass>().ApplyTo(ForbiddenCirclet.tornadoBaseKB);
 
                         if (Player.whoAmI == Main.myPlayer)
@@ -2976,7 +3025,6 @@ namespace CalamityMod.CalPlayer
                         SoundEngine.PlaySound(ProfanedGuardianDefender.RockShieldSpawnSound, Player.Center);
                         flameLickedShellParry = FlameLickedShell.flameLickedParry;
                     }
-                    
                 }
             }
 
@@ -3364,7 +3412,10 @@ namespace CalamityMod.CalPlayer
                     {
                         var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<GravistarSabaton>()));
                         //Spawn explosion. ai[0] is used for transferring the recorded falling time
-                        Projectile.NewProjectile(source, Player.Center, Vector2.Zero, ModContent.ProjectileType<SabatonSlam>(), 300, 4f, Player.whoAmI, gSabatonFall);
+
+                        int damage = Player.ApplyArmorAccDamageBonusesTo(Player.CalcIntDamage<MeleeDamageClass>(GravistarSabaton.SlamDamage));
+
+                        Projectile.NewProjectile(source, Player.Center, Vector2.Zero, ModContent.ProjectileType<SabatonSlam>(), damage, 4f, Player.whoAmI, gSabatonFall);
                         gSabatonFall = 0;
                         gSabatonFalling = false;
                         //Temporary jump speed is granted for 40 frames
@@ -3464,12 +3515,12 @@ namespace CalamityMod.CalPlayer
                 if (Player.controlLeft)
                 {
                     Player.velocity.X = -speed;
-                    Player.direction = -1;
+                    Player.ChangeDir(-1);
                 }
                 else if (Player.controlRight)
                 {
                     Player.velocity.X = speed;
-                    Player.direction = 1;
+                    Player.ChangeDir(1);
                 }
                 else
                     Player.velocity.X = 0f;
@@ -3678,7 +3729,7 @@ namespace CalamityMod.CalPlayer
         #region Get Heal Life
         public override void GetHealLife(Item item, bool quickHeal, ref int healValue)
         {
-            healValue = (int)(healValue * healingPotBonus);
+            healValue = (int)(healValue * healingPotionMultiplier);
         }
         #endregion
 
@@ -3736,9 +3787,9 @@ namespace CalamityMod.CalPlayer
         #region Modify Mana Cost
         public override void ModifyManaCost(Item item, ref float reduce, ref float mult)
         {
-            if (item.type == ItemID.SpaceGun && meteorSet)
+            if (CalamityLists.MagicGunIDs.Contains(item.type) && meteorSet)
             {
-                mult *= 0.5f;
+                mult *= 0.33f;
             }
         }
         #endregion
@@ -3946,7 +3997,11 @@ namespace CalamityMod.CalPlayer
                         veneratedCloneYPos *= veneratedCloneDistance;
                         float speedX4 = veneratedCloneXPos + (float)Main.rand.Next(-30, 31) * 0.02f;
                         float speedY5 = veneratedCloneYPos + (float)Main.rand.Next(-30, 31) * 0.02f;
-                        int p = Projectile.NewProjectile(source, realPlayerPos.X, realPlayerPos.Y, speedX4, speedY5, type, (int)(damage * 0.07), knockBack * 0.5f, Player.whoAmI);
+
+                        // 08DEC2023: Ozzatron: Locket + Old Fashioned may need to be a corner case. We should probably just rework Locket instead.
+                        int locketDamage = Player.ApplyArmorAccDamageBonusesTo((int)(damage * 0.07f));
+
+                        int p = Projectile.NewProjectile(source, realPlayerPos.X, realPlayerPos.Y, speedX4, speedY5, type, locketDamage, knockBack * 0.5f, Player.whoAmI);
 
                         if (p.WithinBounds(Main.maxProjectiles))
                         {
@@ -3965,6 +4020,8 @@ namespace CalamityMod.CalPlayer
                     {
                         int knifeCount = 12;
                         int knifeDamage = (int)Player.GetTotalDamage<RogueDamageClass>().ApplyTo(55);
+                        knifeDamage = Player.ApplyArmorAccDamageBonusesTo(knifeDamage);
+
                         float angleStep = MathHelper.TwoPi / knifeCount;
                         float speed = 14f;
 
@@ -3986,7 +4043,9 @@ namespace CalamityMod.CalPlayer
             {
                 if (item.CountsAsClass<RangedDamageClass>())
                 {
-                    int d = (int)Player.GetTotalDamage<RangedDamageClass>().ApplyTo(Items.Accessories.RustyMedallion.AcidDropBaseDamage);
+                    int d = (int)Player.GetTotalDamage<RangedDamageClass>().ApplyTo(RustyMedallion.AcidDropBaseDamage);
+                    d = Player.ApplyArmorAccDamageBonusesTo(d);
+
                     Vector2 startingPosition = Main.MouseWorld - Vector2.UnitY.RotatedByRandom(0.4f) * 1250f;
                     Vector2 directionToMouse = (Main.MouseWorld - startingPosition).SafeNormalize(Vector2.UnitY).RotatedByRandom(0.1f);
                     int drop = Projectile.NewProjectile(source, startingPosition, directionToMouse * 15f, ModContent.ProjectileType<ToxicannonDrop>(), d, 0f, Player.whoAmI);

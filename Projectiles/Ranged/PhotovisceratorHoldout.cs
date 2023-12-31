@@ -1,12 +1,10 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
-using Mono.Cecil;
 using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static CalamityMod.Items.Weapons.Ranged.Photoviscerator;
@@ -41,6 +39,11 @@ namespace CalamityMod.Projectiles.Ranged
             Time++;
             if (PhotoTimer > 0)
                 PhotoTimer--;
+
+            if (Time == 1)
+                Projectile.alpha = 255;
+            else
+                Projectile.alpha = 0;
 
             sparkColor = Main.rand.Next(4) switch
             {
@@ -186,13 +189,12 @@ namespace CalamityMod.Projectiles.Ranged
 
                     Projectile.NewProjectile(source, bombPos, bombVel, ProjectileType<ExoLight>(), damage, knockback, Projectile.owner, yDirection);
                 }
-                SoundEngine.PlaySound(HalleysInferno.Hit, Owner.MountedCenter);
+                SoundEngine.PlaySound(HalleysInferno.Hit with { Volume = 0.5f }, Owner.MountedCenter);
             }
         }
 
         public void RightClickAttack(Vector2 armPosition, Vector2 verticalOffset)
         {
-
             // Multiplied by the ratio of attack speed gained from modifiers
             ShootTimer = (RightClickCooldown * Owner.ActiveItem().useTime / (float)LightBombCooldown) - 1f;
             ForcedLifespan = ShootTimer;
@@ -221,15 +223,17 @@ namespace CalamityMod.Projectiles.Ranged
                 dust.scale = Main.rand.NextFloat(1.3f, 1.8f);
                 dust.color = sparkColor;
             }
-            SoundEngine.PlaySound(HalleysInferno.Shoot, Owner.MountedCenter);
-            Projectile.NewProjectile(source, position, velocity, ProjectileType<ExoFlareCluster>(), (int)(damage * 1.2f), knockback, Projectile.owner);
+            SoundEngine.PlaySound(HalleysInferno.Shoot with { Volume = 0.4f } , Owner.MountedCenter);
+
+            int rightClickDamage = (int)(0.5f * damage);
+            Projectile.NewProjectile(source, position, velocity, ProjectileType<ExoFlareCluster>(), rightClickDamage, knockback, Projectile.owner);
         }
 
         public void UpdateProjectileHeldVariables(Vector2 armPosition)
         {
             if (Main.myPlayer == Projectile.owner)
             {
-                float interpolant = Utils.GetLerpValue(5f, 25f, Projectile.Distance(Main.MouseWorld), true);
+                float interpolant = Utils.GetLerpValue(5f, 90f, Projectile.Distance(Main.MouseWorld), true);
                 Vector2 oldVelocity = Projectile.velocity;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.SafeDirectionTo(Main.MouseWorld), interpolant);
                 if (Projectile.velocity != oldVelocity)
