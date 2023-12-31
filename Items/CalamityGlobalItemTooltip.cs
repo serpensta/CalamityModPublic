@@ -625,9 +625,24 @@ namespace CalamityMod.Items
                 EditTooltipByNum(1, (line) => line.Text = "Increases movement and jump speed by 10% and acceleration by 1.1x");
             }
 
-            // Sniper Scope
+            // Rifle Scope visibility change
+            if (item.type == ItemID.RifleScope)
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Increase view range for guns (Right click to zoom out)");
+                EditTooltipByNum(1, (line) => line.Text = "The scope effect can be toggled with visibility");
+            }
+
+            // Sniper Scope rebalance and visibility change
             if (item.type == ItemID.SniperScope)
+            {
                 EditTooltipByNum(1, (line) => line.Text = "7% increased ranged damage and critical strike chance");
+                EditTooltipByNum(0, (line) => line.Text += "\nThe scope effect can be toggled with visibility");
+            }
+
+            // Recon Scope visibility change
+            if (item.type == ItemID.ReconScope)
+                EditTooltipByNum(0, (line) => line.Text += "\nThe scope effect can be toggled with visibility");
+
 
             // Magic Quiver
             if (item.type == ItemID.MagicQuiver)
