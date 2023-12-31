@@ -1027,7 +1027,7 @@ namespace CalamityMod.NPCs
             // Poisoned
             if (npc.poisoned)
             {
-                int basePoisonedDoTValue = (int)(4 * vanillaSicknessDamageMult);
+                int basePoisonedDoTValue = (int)(12 * vanillaSicknessDamageMult);
                 npc.lifeRegen -= basePoisonedDoTValue;
                 if (damage < basePoisonedDoTValue / 4)
                     damage = basePoisonedDoTValue / 4;
