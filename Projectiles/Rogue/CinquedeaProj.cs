@@ -70,7 +70,7 @@ namespace CalamityMod.Projectiles.Rogue
             //Stealth strike
             if (stealthstrike)
             {
-                CalamityUtils.HomeInOnNPC(Projectile, true, 250f, 7f, 20f);
+                Projectile.StickyProjAI(10);
             }
             //Gravity code
             else
@@ -89,6 +89,7 @@ namespace CalamityMod.Projectiles.Rogue
                 }
             }
         }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => Projectile.ModifyHitNPCSticky(1);
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
