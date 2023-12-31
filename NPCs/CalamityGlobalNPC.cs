@@ -763,7 +763,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToHeat.Value)
                     heatDamageMult *= slimed ? ((wormBoss || slimeGod) ? 1.25 : 1.5) : ((wormBoss || slimeGod) ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    heatDamageMult *= slimed ? 0.2 : 0.5;
+                    heatDamageMult *= slimed ? ((wormBoss || slimeGod) ? 0.66 : 0.5) : 0.5;
             }
 
             double coldDamageMult = BaseDoTDamageMult;
@@ -781,7 +781,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToSickness.Value)
                     sicknessDamageMult *= irradiated > 0 ? (wormBoss ? 1.25 : 1.5) : (wormBoss ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    sicknessDamageMult *= irradiated > 0 ? 0.2 : 0.5;
+                    sicknessDamageMult *= irradiated > 0 ? (wormBoss ? 0.66 : 0.5) : 0.5;
             }
 
             bool increasedElectricityDamage = npc.wet || npc.honeyWet || npc.lavaWet || npc.dripping;
@@ -791,7 +791,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToElectricity.Value)
                     electricityDamageMult *= increasedElectricityDamage ? (wormBoss ? 1.25 : 1.5) : (wormBoss ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    electricityDamageMult *= increasedElectricityDamage ? 0.2 : 0.5;
+                    electricityDamageMult *= increasedElectricityDamage ? (wormBoss ? 0.66 : 0.5) : 0.5;
             }
 
             double waterDamageMult = BaseDoTDamageMult;
@@ -1027,7 +1027,7 @@ namespace CalamityMod.NPCs
             // Poisoned
             if (npc.poisoned)
             {
-                int basePoisonedDoTValue = (int)(4 * vanillaSicknessDamageMult);
+                int basePoisonedDoTValue = (int)(12 * vanillaSicknessDamageMult);
                 npc.lifeRegen -= basePoisonedDoTValue;
                 if (damage < basePoisonedDoTValue / 4)
                     damage = basePoisonedDoTValue / 4;

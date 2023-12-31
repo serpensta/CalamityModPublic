@@ -41,7 +41,7 @@ namespace CalamityMod.Items.Armor.Aerospec
 
         public override void UpdateEquip(Player player)
         {
-            player.GetDamage<MagicDamageClass>() += 0.08f;
+            player.GetDamage<MagicDamageClass>() += 0.1f;
             player.statManaMax2 += 30;
         }
 

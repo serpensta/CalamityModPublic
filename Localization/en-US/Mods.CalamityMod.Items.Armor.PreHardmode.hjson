@@ -10,7 +10,7 @@ AerospecBreastplate: {
 
 AerospecHat: {
 	DisplayName: Aerospec Hat
-	Tooltip: 8% increased magic damage and +30 max mana
+	Tooltip: 10% increased magic damage and +30 max mana
 	SetBonus: 5% increased movement speed and magic critical strike chance
 }
 

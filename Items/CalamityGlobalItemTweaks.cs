@@ -45,7 +45,7 @@ namespace CalamityMod.Items
                 { ItemID.Bananarang, Do(DamageExact(76), UseExact(14)) },
                 { ItemID.BatScepter, Do(DamageExact(56)) },
                 { ItemID.BeamSword, Do(UseMeleeSpeed, UseTurn, DamageExact(180), UseAnimationExact(60), ShootSpeedExact(23f)) },
-                { ItemID.BeeGun, Do(DamageExact(11)) },
+                { ItemID.BeeGun, Do(DamageExact(10), ManaExact(4)) },
                 { ItemID.BeesKnees, Do(PointBlank, DamageExact(18), UseExact(38)) },
                 { ItemID.Bladetongue, Do(UseTurn, UseRatio(0.8f), DamageExact(120), ScaleRatio(1.75f)) },
                 { ItemID.BlizzardStaff, Do(DamageExact(41), ManaExact(7)) },
@@ -127,6 +127,7 @@ namespace CalamityMod.Items
                 { ItemID.HellwingBow, Do(PointBlank, DamageExact(16)) },
                 { ItemID.HighVelocityBullet, Do(DamageExact(15)) },
                 { ItemID.HiveFive, Do(AutoReuse, DamageExact(26)) },
+                { ItemID.HornetStaff, Do(AutoReuse, DamageExact(13), UseExact(30)) },
                 { ItemID.IceBlade, Do(UseMeleeSpeed) },
                 { ItemID.IceBoomerang, Do(UseExact(25), ShootSpeedExact(9)) },
                 { ItemID.IceRod, Do(UseExact(6), DamageExact(30), ShootSpeedExact(20)) },
@@ -482,7 +483,6 @@ namespace CalamityMod.Items
                 { ItemID.DeadlySphereStaff, Do(AutoReuse, UseExact(20)) },
                 { ItemID.FireWhip, autoReuse }, // Firecracker
                 { ItemID.FlinxStaff, Do(AutoReuse, UseExact(35)) },
-                { ItemID.HornetStaff, Do(AutoReuse, UseExact(30)) },
                 { ItemID.MaceWhip, autoReuse }, // Morning Star
                 { ItemID.MoonlordTurretStaff, Do(UseExact(15)) }, // Lunar Portal Staff
                 { ItemID.OpticStaff, Do(AutoReuse, UseExact(25)) },
