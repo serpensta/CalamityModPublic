@@ -390,7 +390,7 @@ CorrosiveSpine: {
 	Tooltip:
 		'''
 		5% increased movement speed
-		All rogue weapons inflict poison and spawn irradiated clouds on enemy hits
+		All rogue weapons inflict poison and spawn poisoned clouds on enemy hits
 		You release a ton of clouds everywhere on hit
 		'''
 }

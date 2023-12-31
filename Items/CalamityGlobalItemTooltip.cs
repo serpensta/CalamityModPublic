@@ -812,6 +812,10 @@ namespace CalamityMod.Items
                     line.Text = newTooltip;
                 });
             }
+
+            // Meteor
+            if (item.type == ItemID.MeteorHelmet || item.type == ItemID.MeteorSuit || item.type == ItemID.MeteorLeggings)
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("9%", "8%"));
             #endregion
 
             // Hardmode ore armor tooltip edits

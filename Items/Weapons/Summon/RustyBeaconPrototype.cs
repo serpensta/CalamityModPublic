@@ -17,8 +17,6 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public const int IrradiatedDebuffTime = 120;
 
-        public const int PoisonedDebuffTime = 240;
-
         public override void SetDefaults()
         {
             Item.width = 28;
