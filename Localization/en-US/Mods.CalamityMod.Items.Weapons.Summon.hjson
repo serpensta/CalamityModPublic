@@ -561,7 +561,7 @@ RustyBeaconPrototype: {
 	Tooltip:
 		'''
 		Summons a long-abandoned drone to support you
-		The drone hovers in place and releases toxic waves that inflict irradiated and poisoned
+		The drone hovers in place and releases toxic waves that irradiate hit enemies
 		'''
 }
 
