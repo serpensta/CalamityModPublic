@@ -20,11 +20,9 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
         // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
-        // If stuff is here then DragonLens can easily detect it so it can change it for balancing
-        public static float ShotgunBulletSpeed = 8.5f; //Bullets seem to have an extra update for some reason so this is less
-        public static float SniperBulletSpeed = 56f; //Must be huge otherwise its slow as fuck
         public static float SniperDmgMult = 3.5f;
         public static float SniperCritMult = 4f;
+        public static float SniperVelocityMult = 1.5f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
@@ -52,7 +50,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.UseSound = ShootAndReloadSound;
             Item.autoReuse = true;
             Item.shoot = ProjectileID.PurificationPowder;
-            Item.shootSpeed = ShotgunBulletSpeed;
+            Item.shootSpeed = 20f;
             Item.useAmmo = AmmoID.Bullet;
             Item.crit = 8;
             Item.Calamity().canFirePointBlankShots = true;
@@ -116,16 +114,15 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f,-0.35f), Mod.Find<ModGore>("Polt5").Type);
             }
             //It should feel powerful but also not too much given feedback
-            if (player.Calamity().GeneralScreenShakePower < 2f)
-                player.Calamity().GeneralScreenShakePower = 1f;
+            player.Calamity().GeneralScreenShakePower = 1f;
 
             if (player.altFunctionUse == 2)
             {
                 //Shoot from muzzle
-                Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
+                Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero);
                 Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
 
-                int p = Projectile.NewProjectile(source, nuzzlePos, baseVelocity, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
+                int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
                 {
                     Main.projectile[p].Calamity().supercritHits = 1;
@@ -137,7 +134,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             else
             {
                 //Shoot from muzzle
-                Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * ShotgunBulletSpeed;
+                Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero);
                 Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
 
                 // Fire a shotgun spread of bullets.
