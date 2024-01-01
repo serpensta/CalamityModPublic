@@ -43,7 +43,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.scale = 0.85f;
             Item.useTime = 16;
             Item.reuseDelay = 10;
-            Item.useAnimation = 40;
+            Item.useAnimation = 16;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2f;
@@ -163,11 +163,11 @@ namespace CalamityMod.Items.Weapons.Ranged
             player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
             float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
 
-            Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 34f;
+            Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 35f;
             Vector2 itemSize = new Vector2(Item.width, Item.height);
             Vector2 itemOrigin = new Vector2(-5, 6);
 
-            /*
+            
             //Sniper's horizontal recoil; can be a bit subtle but it is noticeable
             if (player.altFunctionUse == 2)
             { 
@@ -190,7 +190,6 @@ namespace CalamityMod.Items.Weapons.Ranged
                     ++anim;
                 }
             }
-            */
 
             CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
             base.UseStyle(player, heldItemFrame);
@@ -203,13 +202,11 @@ namespace CalamityMod.Items.Weapons.Ranged
 
             float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
             float rotation = (player.Center - player.Calamity().mouseWorld).ToRotation() * player.gravDir + MathHelper.PiOver2;
-            if (animProgress < 0.5f)
-            {
+            if (animProgress < 0.4)
                 rotation += (player.altFunctionUse == 2 ? -1f : -0.45f) * (float)Math.Pow((1f - animProgress), 2) * player.direction;
-                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation); //must be here otherwise it will vibrate
-            }
-            
+            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation); //must be here otherwise it will vibrate
 
+            /*
             //Reloads the gun 
             if (animProgress > 0.4f)
             {
@@ -218,6 +215,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Player.CompositeArmStretchAmount stretch = ((float)Math.Sin(MathHelper.Pi * (animProgress - 0.5f) / 0.36f)).ToStretchAmount();
                 player.SetCompositeArmBack(true, stretch, backArmRotation);
             }
+            */
         }
         #endregion
     }
