@@ -43,7 +43,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.scale = 0.85f;
             Item.useTime = 16;
             Item.reuseDelay = 10;
-            Item.useAnimation = 16;
+            Item.useAnimation = 40;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2f;
@@ -95,6 +95,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             return 1f;
         }
 
+
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
@@ -114,9 +115,9 @@ namespace CalamityMod.Items.Weapons.Ranged
                 // TO DO: Replace with actual bullet shells or used casings
                 Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f,-0.35f), Mod.Find<ModGore>("Polt5").Type);
             }
-            //It should feel powerful
-            if (player.Calamity().GeneralScreenShakePower < 3f)
-                player.Calamity().GeneralScreenShakePower = 2f;
+            //It should feel powerful but also not too much given feedback
+            if (player.Calamity().GeneralScreenShakePower < 2f)
+                player.Calamity().GeneralScreenShakePower = 1f;
 
             if (player.altFunctionUse == 2)
             {
@@ -159,13 +160,14 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+            player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
             float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
 
-            Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 35f;
+            Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 34f;
             Vector2 itemSize = new Vector2(Item.width, Item.height);
             Vector2 itemOrigin = new Vector2(-5, 6);
 
+            /*
             //Sniper's horizontal recoil; can be a bit subtle but it is noticeable
             if (player.altFunctionUse == 2)
             { 
@@ -188,6 +190,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                     ++anim;
                 }
             }
+            */
 
             CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
             base.UseStyle(player, heldItemFrame);
@@ -196,16 +199,19 @@ namespace CalamityMod.Items.Weapons.Ranged
         // Recoil + Not having the gun aim downwards
         public override void UseItemFrame(Player player)
         {
-            player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+            player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
 
             float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
             float rotation = (player.Center - player.Calamity().mouseWorld).ToRotation() * player.gravDir + MathHelper.PiOver2;
-            rotation += (player.altFunctionUse == 2 ? -1f : -0.45f) * (float)Math.Pow((1f - animProgress), 2) * player.direction;
-
-            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation);
+            if (animProgress < 0.5f)
+            {
+                rotation += (player.altFunctionUse == 2 ? -1f : -0.45f) * (float)Math.Pow((1f - animProgress), 2) * player.direction;
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation); //must be here otherwise it will vibrate
+            }
+            
 
             //Reloads the gun 
-            if (animProgress < 0.4f)
+            if (animProgress > 0.4f)
             {
                 float backArmRotation = rotation + 0.52f * player.direction;
 
