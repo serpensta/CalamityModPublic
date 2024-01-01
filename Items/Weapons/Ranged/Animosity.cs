@@ -21,8 +21,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
         // If stuff is here then DragonLens can easily detect it so it can change it for balancing
-        public static float ShotgunBulletSpeed = 11.5f;
-        public static float SniperBulletSpeed = 16f;
+        public static float ShotgunBulletSpeed = 8.5f; //Bullets seem to have an extra update for some reason so this is less
+        public static float SniperBulletSpeed = 56f; //Must be huge otherwise its slow as fuck
         public static float SniperDmgMult = 3.5f;
         public static float SniperCritMult = 4f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
@@ -123,7 +123,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             {
                 //Shoot from muzzle
                 Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * SniperBulletSpeed;
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 3.8f;
+                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
 
                 int p = Projectile.NewProjectile(source, nuzzlePos, baseVelocity, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
