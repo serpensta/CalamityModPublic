@@ -3787,9 +3787,9 @@ namespace CalamityMod.CalPlayer
         #region Modify Mana Cost
         public override void ModifyManaCost(Item item, ref float reduce, ref float mult)
         {
-            if (item.type == ItemID.SpaceGun && meteorSet)
+            if (CalamityLists.MagicGunIDs.Contains(item.type) && meteorSet)
             {
-                mult *= 0.5f;
+                mult *= 0.33f;
             }
         }
         #endregion

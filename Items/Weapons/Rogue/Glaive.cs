@@ -9,8 +9,7 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class Glaive : RogueWeapon
     {
-        public static int BaseDamage = 45;
-        public static float Knockback = 3f;
+        //These 2 are used on the Projectile AI and thus remain here
         public static float Speed = 10f;
         public static float StealthSpeedMult = 1.8f;
 
@@ -18,19 +17,19 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             Item.width = 34;
             Item.height = 32;
-            Item.damage = BaseDamage;
+            Item.damage = 45;
             Item.DamageType = RogueDamageClass.Instance;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useTime = 15;
             Item.useAnimation = 15;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.knockBack = Knockback;
+            Item.knockBack = 3;
             Item.value = CalamityGlobalItem.Rarity3BuyPrice;
             Item.rare = ItemRarityID.Orange;
             Item.UseSound = SoundID.Item1;
 
-            Item.shootSpeed = Speed;
+            Item.shootSpeed = 10;
             Item.shoot = ModContent.ProjectileType<GlaiveProj>();
         }
 

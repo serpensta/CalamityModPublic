@@ -15,7 +15,22 @@ namespace CalamityMod.Graphics.Renderers.CalamityRenderers
 
         public override DrawLayer Layer => DrawLayer.BeforeTiles;
 
-        public static Providence Provi => Main.npc[CalamityGlobalNPC.holyBoss].ModNPC as Providence;
+        public static Providence Provi
+        {
+            get
+            {
+                if (!Main.npc.IndexInRange(CalamityGlobalNPC.holyBoss))
+                  return null;
+                if (Main.npc[CalamityGlobalNPC.holyBoss].type != ModContent.NPCType<Providence>())
+                    return null;
+
+                if (Main.npc[CalamityGlobalNPC.holyBoss].ModNPC is not null && 
+                    Main.npc[CalamityGlobalNPC.holyBoss].ModNPC is Providence provi)
+                    return provi;
+
+                return null;
+            }
+        }
 
         //Should only draw if not in the main menu, provi is active and the boolean for drawing the border is true.
         public override bool ShouldDraw => !Main.gameMenu && CalamityGlobalNPC.holyBoss != -1 &&
@@ -33,6 +48,8 @@ namespace CalamityMod.Graphics.Renderers.CalamityRenderers
             var target = Main.player[Main.myPlayer];
             var holyInfernoIntensity = target.Calamity().holyInfernoFadeIntensity;
             var prov = Provi;
+            if (prov == null)
+                return;
 
             //Begin drawing the inferno
             var blackTile = TextureAssets.MagicPixel;

@@ -14,6 +14,7 @@ using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.TreasureBags;
+using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
@@ -110,6 +111,7 @@ namespace CalamityMod
         public static List<int> livingFireBlockList;
         public static List<int> amalgamBuffList;
         public static List<int> persistentBuffList;
+        public static List<int> MagicGunIDs;
         public static List<int> MushroomWeaponIDs;
         public static List<int> MushroomProjectileIDs;
 
@@ -1800,6 +1802,47 @@ namespace CalamityMod
                 BuffID.WeaponImbuePoison
             };
 
+            MagicGunIDs = new List<int>()
+            {
+                ItemType<AbyssShocker>(),
+                ItemType<AcidGun>(),
+                ItemType<AethersWhisper>(),
+                ItemType<AetherfluxCannon>(),
+                ItemType<AlphaRay>(),
+                ItemType<ApoctosisArray>(),
+                ItemType<Cryophobia>(),
+                ItemType<Effervescence>(),
+                ItemType<EidolicWail>(),
+                ItemType<GatlingLaser>(),
+                ItemType<GaussPistol>(),
+                ItemType<Genisis>(),
+                ItemType<IonBlaster>(),
+                ItemType<Lazhar>(),
+                ItemType<NanoPurge>(),
+                ItemType<PlasmaCaster>(),
+                ItemType<PlasmaRifle>(),
+                ItemType<PulsePistol>(),
+                ItemType<PurgeGuzzler>(),
+                ItemType<RainbowPartyCannon>(),
+                ItemType<SHPC>(),
+                ItemType<TeslaCannon>(),
+                ItemType<TheSwarmer>(),
+                ItemType<Thunderstorm>(),
+                ItemType<Wingman>(),
+                ItemID.BeeGun,
+                ItemID.BubbleGun,
+                ItemID.ChargedBlasterCannon,
+                ItemID.HeatRay,
+                ItemID.LaserMachinegun,
+                ItemID.LaserRifle,
+                ItemID.LeafBlower,
+                ItemID.RainbowGun,
+                ItemID.SpaceGun,
+                ItemID.WaspGun,
+                ItemID.ZapinatorGray,
+                ItemID.ZapinatorOrange
+            };
+
             MushroomWeaponIDs = new List<int>()
             {
                 ItemType<Mycoroot>(),
@@ -2839,6 +2882,7 @@ namespace CalamityMod
             livingFireBlockList = null;
             amalgamBuffList = null;
             persistentBuffList = null;
+            MagicGunIDs = null;
             MushroomWeaponIDs = null;
             MushroomProjectileIDs = null;
 

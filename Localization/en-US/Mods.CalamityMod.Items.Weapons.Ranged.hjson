@@ -470,7 +470,7 @@ FirestormCannon: {
 	DisplayName: Firestorm Cannon
 	Tooltip:
 		'''
-		Releases an constant stream of weaponized flares
+		Releases a constant stream of weaponized flares
 		Press <right> to fire a condensed spread of flares
 		70% chance to save ammo
 		'''

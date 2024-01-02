@@ -2727,7 +2727,7 @@ namespace CalamityMod.NPCs
                 astrumAureus.slimeProjCounter++;
                 if (astrumAureus.slimeProjCounter % 180 == 0)
                 {
-                    SoundEngine.PlaySound(SoundID.Item33, npc.Center);
+                    SoundEngine.PlaySound(SoundID.Item33, npc.Center); // Intentionally keeping the old laser sound in GFB
 
                     if (astrumAureus.slimePhase == 1)
                     {
@@ -2797,7 +2797,7 @@ namespace CalamityMod.NPCs
                     if (npc.ai[0] >= 5f && npc.ai[0] != 7)
                     {
                         npc.localAI[0] = 0f;
-                        SoundEngine.PlaySound(SoundID.Item109, npc.Center);
+                        SoundEngine.PlaySound(AstrumAureus.AstrumAureus.FlameCrystalSound, npc.Center);
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -2821,7 +2821,7 @@ namespace CalamityMod.NPCs
                     {
                         npc.localAI[0] = 0f;
 
-                        SoundEngine.PlaySound(SoundID.Item33, npc.Center);
+                        SoundEngine.PlaySound(AstrumAureus.AstrumAureus.LaserSound, npc.Center);
 
                         if (calamityGlobalNPC.newAI[2] == 0f)
                         {
@@ -3161,7 +3161,7 @@ namespace CalamityMod.NPCs
                     }
 
                     // Fire lasers or flames on stomp
-                    SoundEngine.PlaySound(SoundID.Item33, npc.Center);
+                    SoundEngine.PlaySound(AstrumAureus.AstrumAureus.LaserSound, npc.Center);
 
                     if (Main.zenithWorld)
                     {
@@ -3405,7 +3405,7 @@ namespace CalamityMod.NPCs
                 if (npc.soundDelay == 0)
                 {
                     npc.soundDelay = 15;
-                    SoundEngine.PlaySound(SoundID.Item109, npc.Center);
+                    SoundEngine.PlaySound(AstrumAureus.AstrumAureus.TeleportSound, npc.Center);
                 }
 
                 // Emit dust to make the teleport pretty
@@ -4253,8 +4253,6 @@ namespace CalamityMod.NPCs
 
                             if (Vector2.Distance(player.Center, npc.Center) > 80f)
                             {
-                                SoundEngine.PlaySound(AstrumDeusHead.LaserSound, npc.Center);
-
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     float deusLaserSpeed = (death ? 16f : revenge ? 14f : 13f) + enrageScale * 4f;
@@ -4273,6 +4271,7 @@ namespace CalamityMod.NPCs
                                     int damage = npc.GetProjectileDamage(type);
                                     if (shootGodRays)
                                     {
+                                        SoundEngine.PlaySound(AstrumDeusHead.GodRaySound, npc.Center);
                                         // Waving beams need to start offset so they cross each other neatly.
                                         float waveSideOffset = Main.rand.NextFloat(9f, 14f);
                                         Vector2 perp = shootDirection.RotatedBy(-MathHelper.PiOver2) * waveSideOffset;
@@ -4287,7 +4286,10 @@ namespace CalamityMod.NPCs
                                         }
                                     }
                                     else
+                                    {
+                                        SoundEngine.PlaySound(AstrumDeusHead.LaserSound, npc.Center);
                                         Projectile.NewProjectile(npc.GetSource_FromAI(), deusLaserCenter, laserVelocity, type, damage, 0f, Main.myPlayer, player.Center.X, player.Center.Y);
+                                    }
                                 }
                             }
                         }

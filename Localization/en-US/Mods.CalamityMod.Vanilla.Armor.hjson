@@ -57,13 +57,14 @@ SetBonus: {
 		Increases damage reduction by 6%
 		+1 HP/s life regen
 		'''
+	Jungle: 10% reduced mana costs
 	Lead:
 		'''
 		Increases damage reduction by 3%
 		+0.5 HP/s life regen
 		Grants immunity to knockback
 		'''
-	Meteor: Space Gun costs 50% mana
+	Meteor: All magic guns cost 33% mana
 	Mining: Mining ore will sometimes have additional yield
 	Molten:
 		'''
@@ -96,7 +97,6 @@ SetBonus: {
 		Every 10 defense gives you +0.5 HP/s life regen, 1% increased damage and 1% increased critical strike chance
 		These effects cap at 40 defense
 		'''
-	Shadow: 15% increased max movement speed and acceleration
 	Silver:
 		'''
 		+0.5 HP/s life regen

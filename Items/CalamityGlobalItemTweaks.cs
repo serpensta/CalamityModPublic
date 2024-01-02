@@ -45,7 +45,7 @@ namespace CalamityMod.Items
                 { ItemID.Bananarang, Do(DamageExact(76), UseExact(14)) },
                 { ItemID.BatScepter, Do(DamageExact(56)) },
                 { ItemID.BeamSword, Do(UseMeleeSpeed, UseTurn, DamageExact(180), UseAnimationExact(60), ShootSpeedExact(23f)) },
-                { ItemID.BeeGun, Do(DamageExact(11)) },
+                { ItemID.BeeGun, Do(DamageExact(10), ManaExact(4)) },
                 { ItemID.BeesKnees, Do(PointBlank, DamageExact(18), UseExact(38)) },
                 { ItemID.Bladetongue, Do(UseTurn, UseRatio(0.8f), DamageExact(120), ScaleRatio(1.75f)) },
                 { ItemID.BlizzardStaff, Do(DamageExact(41), ManaExact(7)) },
@@ -105,7 +105,7 @@ namespace CalamityMod.Items
                 // Unsure what to do with Celebration. Should it be treated as a serious weapon or not? Currently not changing it from vanilla.
                 // { ItemID.FireworksLauncher, Do(DamageRatio(2f)) }, // Celebration
                 { ItemID.Flairon, Do(DamageExact(73)) },
-                { ItemID.Flamarang, Do(DamageExact(43)) },
+                { ItemID.Flamarang, Do(DamageExact(40)) },
                 { ItemID.Flamelash, Do(DamageRatio(1.25f)) },
                 { ItemID.Flamethrower, Do(DamageExact(21), ShootSpeedDelta(+3f)) },
                 { ItemID.FlowerofFire, Do(AutoReuse, ManaExact(7), UseRatio(0.88f), DamageRatio(0.65f)) }, // Uses ratios due to remix seed
@@ -126,6 +126,8 @@ namespace CalamityMod.Items
                 { ItemID.Handgun, Do(PointBlank, UseExact(22), DamageExact(36)) },
                 { ItemID.HellwingBow, Do(PointBlank, DamageExact(16)) },
                 { ItemID.HighVelocityBullet, Do(DamageExact(15)) },
+                { ItemID.HiveFive, Do(AutoReuse, DamageExact(26)) },
+                { ItemID.HornetStaff, Do(AutoReuse, DamageExact(13), UseExact(30)) },
                 { ItemID.IceBlade, Do(UseMeleeSpeed) },
                 { ItemID.IceBoomerang, Do(UseExact(25), ShootSpeedExact(9)) },
                 { ItemID.IceRod, Do(UseExact(6), DamageExact(30), ShootSpeedExact(20)) },
@@ -188,6 +190,8 @@ namespace CalamityMod.Items
                 { ItemID.PurpleClubberfish, Do(UseTurn, ScaleRatio(1.2f), KnockbackExact(10f)) },
                 { ItemID.PurplePhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.PurplePhasesaber, Do(ScaleRatio(1.5f), DamageExact(60)) },
+                { ItemID.PygmyStaff, Do(AutoReuse, UseExact(20), DamageExact(70)) },
+                { ItemID.QuadBarrelShotgun, Do(PointBlank, DamageExact(11)) },
                 { ItemID.RainbowRod, Do(DamageExact(35), ManaExact(15)) },
                 { ItemID.Rally, Do(AutoReuse, DamageExact(18)) },
                 { ItemID.RainbowGun, Do(DamageExact(60), ManaExact(40)) },
@@ -443,7 +447,6 @@ namespace CalamityMod.Items
                 { ItemID.OnyxBlaster, pointBlank },
                 { ItemID.PalmWoodBow, pointBlank },
                 { ItemID.PulseBow, pointBlank },
-                { ItemID.QuadBarrelShotgun, pointBlank },
                 { ItemID.Revolver, Do(PointBlank, AutoReuse) },
                 { ItemID.RichMahoganyBow, pointBlank },
                 { ItemID.ShadewoodBow, pointBlank },
@@ -480,12 +483,10 @@ namespace CalamityMod.Items
                 { ItemID.DeadlySphereStaff, Do(AutoReuse, UseExact(20)) },
                 { ItemID.FireWhip, autoReuse }, // Firecracker
                 { ItemID.FlinxStaff, Do(AutoReuse, UseExact(35)) },
-                { ItemID.HornetStaff, Do(AutoReuse, UseExact(30)) },
                 { ItemID.MaceWhip, autoReuse }, // Morning Star
                 { ItemID.MoonlordTurretStaff, Do(UseExact(15)) }, // Lunar Portal Staff
                 { ItemID.OpticStaff, Do(AutoReuse, UseExact(25)) },
                 { ItemID.PirateStaff, Do(AutoReuse, UseExact(25)) },
-                { ItemID.PygmyStaff, Do(AutoReuse, UseExact(20)) },
                 { ItemID.QueenSpiderStaff, Do(UseExact(25)) },
                 { ItemID.RainbowCrystalStaff, Do(UseExact(15)) },
                 { ItemID.RainbowWhip, autoReuse }, // Kaleidoscope
@@ -520,7 +521,6 @@ namespace CalamityMod.Items
                 { ItemID.FormatC, autoReuse },
                 { ItemID.GoldBroadsword, Do(AutoReuse, UseTurn) },
                 { ItemID.HelFire, autoReuse },
-                { ItemID.HiveFive, autoReuse },
                 { ItemID.IronBroadsword, Do(AutoReuse, UseTurn) },
                 { ItemID.JungleYoyo, autoReuse }, // Amazon
                 { ItemID.LifeCrystal, autoReuse },

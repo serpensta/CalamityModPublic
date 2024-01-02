@@ -763,7 +763,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToHeat.Value)
                     heatDamageMult *= slimed ? ((wormBoss || slimeGod) ? 1.25 : 1.5) : ((wormBoss || slimeGod) ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    heatDamageMult *= slimed ? 0.2 : 0.5;
+                    heatDamageMult *= slimed ? ((wormBoss || slimeGod) ? 0.66 : 0.5) : 0.5;
             }
 
             double coldDamageMult = BaseDoTDamageMult;
@@ -781,7 +781,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToSickness.Value)
                     sicknessDamageMult *= irradiated > 0 ? (wormBoss ? 1.25 : 1.5) : (wormBoss ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    sicknessDamageMult *= irradiated > 0 ? 0.2 : 0.5;
+                    sicknessDamageMult *= irradiated > 0 ? (wormBoss ? 0.66 : 0.5) : 0.5;
             }
 
             bool increasedElectricityDamage = npc.wet || npc.honeyWet || npc.lavaWet || npc.dripping;
@@ -791,7 +791,7 @@ namespace CalamityMod.NPCs
                 if (VulnerableToElectricity.Value)
                     electricityDamageMult *= increasedElectricityDamage ? (wormBoss ? 1.25 : 1.5) : (wormBoss ? VulnerableToDoTDamageMult_Worms_SlimeGod : VulnerableToDoTDamageMult);
                 else
-                    electricityDamageMult *= increasedElectricityDamage ? 0.2 : 0.5;
+                    electricityDamageMult *= increasedElectricityDamage ? (wormBoss ? 0.66 : 0.5) : 0.5;
             }
 
             double waterDamageMult = BaseDoTDamageMult;
@@ -917,7 +917,7 @@ namespace CalamityMod.NPCs
             // Dragonfire
             if (dragonFire > 0)
             {
-                int baseDragonFireDoTValue = (int)(360 * heatDamageMult);
+                int baseDragonFireDoTValue = (int)(760 * heatDamageMult);
                 ApplyDPSDebuff(baseDragonFireDoTValue, baseDragonFireDoTValue / 5, ref npc.lifeRegen, ref damage);
             }
 
@@ -1027,7 +1027,7 @@ namespace CalamityMod.NPCs
             // Poisoned
             if (npc.poisoned)
             {
-                int basePoisonedDoTValue = (int)(4 * vanillaSicknessDamageMult);
+                int basePoisonedDoTValue = (int)(12 * vanillaSicknessDamageMult);
                 npc.lifeRegen -= basePoisonedDoTValue;
                 if (damage < basePoisonedDoTValue / 4)
                     damage = basePoisonedDoTValue / 4;
@@ -1059,7 +1059,7 @@ namespace CalamityMod.NPCs
             //Riptide
             if (rTide > 0)
             {
-                int baseRiptideDoTValue = (int)(40 * waterDamageMult);
+                int baseRiptideDoTValue = (int)(30 * waterDamageMult);
                 ApplyDPSDebuff(baseRiptideDoTValue, baseRiptideDoTValue / 3, ref npc.lifeRegen, ref damage);
             }
 
@@ -1069,9 +1069,9 @@ namespace CalamityMod.NPCs
             if (somaShredStacks > 0)
                 Shred.TickDebuff(npc, this);
             if (bBlood > 0)
-                ApplyDPSDebuff(50, 10, ref npc.lifeRegen, ref damage);
+                ApplyDPSDebuff(40, 10, ref npc.lifeRegen, ref damage);
             if (brainRot > 0)
-                ApplyDPSDebuff(50, 10, ref npc.lifeRegen, ref damage);
+                ApplyDPSDebuff(40, 10, ref npc.lifeRegen, ref damage);
             if (elementalMix > 0)
                 ApplyDPSDebuff(400, 80, ref npc.lifeRegen, ref damage);
             if (miracleBlight > 0)

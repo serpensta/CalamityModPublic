@@ -350,11 +350,6 @@ namespace CalamityMod.Items
             // I think this fits the miscellaneous category? Not seeing anything like this elsewhere. - Tomat
             EditTooltipByName("Speed", (line) => RedistributeSpeedTooltips(item, line));
 
-            if (item.type == ItemID.SpaceGun)
-            {
-                int cost = (int)(item.mana * Main.LocalPlayer.manaCost * 0.5f);
-                EditTooltipByName("UseMana", (line) => line.Text = $"Uses {cost} mana");
-            }
             if (item.healLife > 0 && Main.LocalPlayer.Calamity().healingPotionMultiplier != 1f)
             {
                 int healAmt = (int)(item.healLife * Main.LocalPlayer.Calamity().healingPotionMultiplier);
@@ -630,9 +625,24 @@ namespace CalamityMod.Items
                 EditTooltipByNum(1, (line) => line.Text = "Increases movement and jump speed by 10% and acceleration by 1.1x");
             }
 
-            // Sniper Scope
+            // Rifle Scope visibility change
+            if (item.type == ItemID.RifleScope)
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Increase view range for guns (Right click to zoom out)");
+                EditTooltipByNum(1, (line) => line.Text = "The scope effect can be toggled with visibility");
+            }
+
+            // Sniper Scope rebalance and visibility change
             if (item.type == ItemID.SniperScope)
+            {
                 EditTooltipByNum(1, (line) => line.Text = "7% increased ranged damage and critical strike chance");
+                EditTooltipByNum(0, (line) => line.Text += "\nThe scope effect can be toggled with visibility");
+            }
+
+            // Recon Scope visibility change
+            if (item.type == ItemID.ReconScope)
+                EditTooltipByNum(0, (line) => line.Text += "\nThe scope effect can be toggled with visibility");
+
 
             // Magic Quiver
             if (item.type == ItemID.MagicQuiver)
@@ -778,6 +788,17 @@ namespace CalamityMod.Items
             if (item.type == ItemID.PlatinumGreaves)
                 AddTooltip("10% increased movement speed");
 
+            // Jungle
+            if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+            }
+            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "4%"));
+            if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+
             // Shadow
             if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
                 EditTooltipByNum(0, (line) => line.Text = "5% increased damage and 7% increased jump speed");
@@ -791,6 +812,10 @@ namespace CalamityMod.Items
                     line.Text = newTooltip;
                 });
             }
+
+            // Meteor
+            if (item.type == ItemID.MeteorHelmet || item.type == ItemID.MeteorSuit || item.type == ItemID.MeteorLeggings)
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("9%", "8%"));
             #endregion
 
             // Hardmode ore armor tooltip edits
