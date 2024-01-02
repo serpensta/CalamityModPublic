@@ -126,6 +126,7 @@ namespace CalamityMod
         public static List<int> minibossList;
 
         public static List<int> pierceResistList;
+        public static List<int> pierceResistExceptionLeviAureusList;
         public static List<int> pierceResistExceptionList;
 
         public static List<int> AstrumDeusIDs;
@@ -2082,6 +2083,16 @@ namespace CalamityMod
                 NPCType<AresGaussNuke>()
             };
 
+            pierceResistExceptionLeviAureusList = new List<int>()
+            {
+                ProjectileID.NettleBurstEnd,
+                ProjectileID.NettleBurstLeft,
+                ProjectileID.NettleBurstRight,
+                ProjectileType<AuroraFire>(),
+                ProjectileType<BallisticPoisonCloud>(),
+                ProjectileType<DuststormCloudHitbox>()
+            };
+
             pierceResistExceptionList = new List<int>()
             {
                 ProjectileID.Arkhalis,
@@ -2092,21 +2103,15 @@ namespace CalamityMod
                 ProjectileID.LastPrismLaser,
                 ProjectileID.MechanicalPiranha,
                 ProjectileID.MonkStaffT3,
-                ProjectileID.NettleBurstEnd,
-                ProjectileID.NettleBurstLeft,
-                ProjectileID.NettleBurstRight,
                 ProjectileID.PiercingStarlight,
                 ProjectileID.Terragrim,
                 ProjectileType<AcidicSaxBubble>(),
-                ProjectileType<AuroraFire>(),
-                ProjectileType<BallisticPoisonCloud>(),
                 ProjectileType<BlushieStaffProj>(),
                 ProjectileType<BonebreakerProjectile>(),
                 ProjectileType<DarkSparkBeam>(),
                 ProjectileType<DevilsSunriseCyclone>(),
                 ProjectileType<DevilsSunriseProj>(),
                 ProjectileType<DragonRageStaff>(),
-                ProjectileType<DuststormCloudHitbox>(),
                 ProjectileType<EclipsesStealth>(),
                 ProjectileType<EidolicWailSoundwave>(),
                 ProjectileType<EmesisGore>(),
@@ -2895,6 +2900,7 @@ namespace CalamityMod
             bossMinionList = null;
             minibossList = null;
             pierceResistList = null;
+            pierceResistExceptionLeviAureusList = null;
             pierceResistExceptionList = null;
 
             AstrumDeusIDs = null;

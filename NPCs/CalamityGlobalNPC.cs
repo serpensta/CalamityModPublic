@@ -917,7 +917,7 @@ namespace CalamityMod.NPCs
             // Dragonfire
             if (dragonFire > 0)
             {
-                int baseDragonFireDoTValue = (int)(360 * heatDamageMult);
+                int baseDragonFireDoTValue = (int)(760 * heatDamageMult);
                 ApplyDPSDebuff(baseDragonFireDoTValue, baseDragonFireDoTValue / 5, ref npc.lifeRegen, ref damage);
             }
 
@@ -1059,7 +1059,7 @@ namespace CalamityMod.NPCs
             //Riptide
             if (rTide > 0)
             {
-                int baseRiptideDoTValue = (int)(40 * waterDamageMult);
+                int baseRiptideDoTValue = (int)(30 * waterDamageMult);
                 ApplyDPSDebuff(baseRiptideDoTValue, baseRiptideDoTValue / 3, ref npc.lifeRegen, ref damage);
             }
 
@@ -1069,9 +1069,9 @@ namespace CalamityMod.NPCs
             if (somaShredStacks > 0)
                 Shred.TickDebuff(npc, this);
             if (bBlood > 0)
-                ApplyDPSDebuff(50, 10, ref npc.lifeRegen, ref damage);
+                ApplyDPSDebuff(40, 10, ref npc.lifeRegen, ref damage);
             if (brainRot > 0)
-                ApplyDPSDebuff(50, 10, ref npc.lifeRegen, ref damage);
+                ApplyDPSDebuff(40, 10, ref npc.lifeRegen, ref damage);
             if (elementalMix > 0)
                 ApplyDPSDebuff(400, 80, ref npc.lifeRegen, ref damage);
             if (miracleBlight > 0)
@@ -1441,6 +1441,10 @@ namespace CalamityMod.NPCs
             {
                 npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.npcSlots = 10f;
+            }
+            else if (npc.type == NPCID.ServantofCthulhu)
+            {
+                npc.lifeMax = (int)(npc.lifeMax * 1.4);
             }
             else if (npc.type == NPCID.KingSlime)
             {
@@ -4624,6 +4628,10 @@ namespace CalamityMod.NPCs
         {
             // Thanatos segments do not trigger pierce resistance if they are closed
             if (CalamityLists.ThanatosIDs.Contains(npc.type) && unbreakableDR)
+                return;
+
+            // Isolates projectiles which ignore pierce resist only on Leviathan and Astrum Aureus
+            if ((npc.type == NPCType<Leviathan.Leviathan>() || npc.type == NPCType<AstrumAureus.AstrumAureus>()) && CalamityLists.pierceResistExceptionLeviAureusList.Contains(projectile.type))
                 return;
 
             float damageReduction = projectile.Calamity().timesPierced * CalamityGlobalProjectile.PierceResistHarshness;
