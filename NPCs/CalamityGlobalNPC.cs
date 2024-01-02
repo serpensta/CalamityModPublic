@@ -917,7 +917,7 @@ namespace CalamityMod.NPCs
             // Dragonfire
             if (dragonFire > 0)
             {
-                int baseDragonFireDoTValue = (int)(360 * heatDamageMult);
+                int baseDragonFireDoTValue = (int)(760 * heatDamageMult);
                 ApplyDPSDebuff(baseDragonFireDoTValue, baseDragonFireDoTValue / 5, ref npc.lifeRegen, ref damage);
             }
 
@@ -1059,7 +1059,7 @@ namespace CalamityMod.NPCs
             //Riptide
             if (rTide > 0)
             {
-                int baseRiptideDoTValue = (int)(40 * waterDamageMult);
+                int baseRiptideDoTValue = (int)(30 * waterDamageMult);
                 ApplyDPSDebuff(baseRiptideDoTValue, baseRiptideDoTValue / 3, ref npc.lifeRegen, ref damage);
             }
 
@@ -1069,9 +1069,9 @@ namespace CalamityMod.NPCs
             if (somaShredStacks > 0)
                 Shred.TickDebuff(npc, this);
             if (bBlood > 0)
-                ApplyDPSDebuff(50, 10, ref npc.lifeRegen, ref damage);
+                ApplyDPSDebuff(40, 10, ref npc.lifeRegen, ref damage);
             if (brainRot > 0)
-                ApplyDPSDebuff(50, 10, ref npc.lifeRegen, ref damage);
+                ApplyDPSDebuff(40, 10, ref npc.lifeRegen, ref damage);
             if (elementalMix > 0)
                 ApplyDPSDebuff(400, 80, ref npc.lifeRegen, ref damage);
             if (miracleBlight > 0)
