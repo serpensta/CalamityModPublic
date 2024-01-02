@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         
         public static float SniperDmgMult = 3.5f;
         public static float SniperCritMult = 4f;
-        public static float SniperVelocityMult = 1.5f;
+        public static float SniperVelocityMult = 3.5f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
@@ -50,7 +50,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.UseSound = ShootAndReloadSound;
             Item.autoReuse = true;
             Item.shoot = ProjectileID.PurificationPowder;
-            Item.shootSpeed = 20f;
+            Item.shootSpeed = 6.5f;
             Item.useAmmo = AmmoID.Bullet;
             Item.crit = 8;
             Item.Calamity().canFirePointBlankShots = true;
@@ -108,19 +108,13 @@ namespace CalamityMod.Items.Weapons.Ranged
         #region Shooting
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (Main.netMode != NetmodeID.Server)
-            {
-                // TO DO: Replace with actual bullet shells or used casings
-                Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f,-0.35f), Mod.Find<ModGore>("Polt5").Type);
-            }
             //It should feel powerful but also not too much given feedback
             player.Calamity().GeneralScreenShakePower = 1f;
 
             if (player.altFunctionUse == 2)
             {
                 //Shoot from muzzle
-                Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero);
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
+                Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
 
                 int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
@@ -134,19 +128,23 @@ namespace CalamityMod.Items.Weapons.Ranged
             else
             {
                 //Shoot from muzzle
-                Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero);
-                Vector2 nuzzlePos = player.MountedCenter + baseVelocity * 4f;
+                Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
 
                 // Fire a shotgun spread of bullets.
                 for (int i = 0; i < 6; ++i)
                 {
                     float dx = Main.rand.NextFloat(-1.3f, 1.3f);
                     float dy = Main.rand.NextFloat(-1.3f, 1.3f);
-                    Vector2 randomVelocity = baseVelocity + new Vector2(dx, dy);
+                    Vector2 randomVelocity = velocity + new Vector2(dx, dy);
                     Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, randomVelocity, type, damage, knockback, player.whoAmI);
                     CalamityGlobalProjectile cgp = shot.Calamity();
                     cgp.brimstoneBullets = true; //add a brimstone trail to all bullets
                 }
+            }
+            if (Main.netMode != NetmodeID.Server)
+            {
+                // TO DO: Replace with actual bullet shells or used casings
+                Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f, -0.35f), Mod.Find<ModGore>("Polt5").Type);
             }
             return false;
         }
