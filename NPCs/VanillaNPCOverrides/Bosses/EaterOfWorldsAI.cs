@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using CalamityMod.Projectiles.Boss;
 
 namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 {
@@ -73,15 +74,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             bool phase3 = lifeRatio < 0.4f;
 
             // Boost velocity by 50% phase
-            bool phase4 = lifeRatio < 0.1f;
+            bool phase4 = lifeRatio < 0.2f;
 
             // Fire projectiles
-            if (Main.netMode != NetmodeID.MultiplayerClient && (!phase4 || death || Main.getGoodWorld))
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 // Vile spit
                 if (npc.type == NPCID.EaterofWorldsBody)
                 {
-                    int randomChanceLimit = (int)MathHelper.Lerp(150f, 900f, lifeRatio);
+                    int randomChanceLimit = (int)MathHelper.Lerp(30f, 900f, lifeRatio);
                     if (Main.getGoodWorld)
                         randomChanceLimit = (int)(randomChanceLimit * 0.5f);
 
@@ -93,12 +94,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                 }
 
-                // Cursed flames
+                // Cursed flames (shadowflames in death mode)
                 else if (npc.type == NPCID.EaterofWorldsHead)
                 {
-                    calamityGlobalNPC.newAI[0] += 1f;
-                    float timer = enrageScale > 0f ? 90f : 120f;
-                    float shootBoost = death ? lifeRatio * 90f : lifeRatio * 180f;
+                    if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
+                        calamityGlobalNPC.newAI[0] += 1f;
+
+                    float timer = enrageScale > 0f ? 120f : 180f;
+                    float shootBoost = (0.8f - lifeRatio) * 120f;
                     timer += shootBoost;
 
                     if (enrageScale >= 2f)
@@ -124,8 +127,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             cursedFlameDirection.X -= targetXDirection;
                             cursedFlameDirection.Y -= targetYDirection;
 
-                            int type = ProjectileID.CursedFlameHostile;
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), cursedFlameDirection.X, cursedFlameDirection.Y, targetXDirection, targetYDirection, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
+                            int type = (death && phase3) ? ModContent.ProjectileType<ShadowflameFireball>() : ProjectileID.CursedFlameHostile;
+                            float homeIn = death ? (phase4 ? 2f : 0f) : 0f;
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), cursedFlameDirection.X, cursedFlameDirection.Y, targetXDirection, targetYDirection, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, homeIn);
                         }
                     }
                 }
@@ -195,7 +199,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (npc.type == NPCID.EaterofWorldsBody && (!Main.npc[(int)npc.ai[1]].active || Main.npc[(int)npc.ai[1]].aiStyle != npc.aiStyle))
                 {
                     npc.type = NPCID.EaterofWorldsHead;
-                    float segmentLifeRatio = npc.life / (float)npc.lifeMax;
+                    float segmentLifeRatio = MathHelper.Lerp(0.5f, 1f, npc.life / (float)npc.lifeMax);
                     int whoAmI = npc.whoAmI;
                     float ai0Holdover = npc.ai[0];
                     float newAI1Holdover = calamityGlobalNPC.newAI[1];
@@ -219,7 +223,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (npc.type == NPCID.EaterofWorldsBody && (!Main.npc[(int)npc.ai[0]].active || Main.npc[(int)npc.ai[0]].aiStyle != npc.aiStyle))
                 {
                     npc.type = NPCID.EaterofWorldsTail;
-                    float segmentLifeRatio = npc.life / (float)npc.lifeMax;
+                    float segmentLifeRatio = MathHelper.Lerp(0.5f, 1f, npc.life / (float)npc.lifeMax);
                     int whoAmI = npc.whoAmI;
                     float ai1Holdover = npc.ai[1];
                     int slowingDebuffResistTimer = calamityGlobalNPC.debuffResistanceTimer;
@@ -283,7 +287,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (!inTiles && npc.type == NPCID.EaterofWorldsHead)
             {
                 Rectangle rectangle = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
-                int noFlyZone = death ? 700 : 850;
+                int noFlyZone = death ? 800 : 900;
                 noFlyZone -= (int)(enrageScale * 300f);
 
                 if (noFlyZone < 100)
@@ -316,13 +320,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (phase4)
             {
-                segmentVelocity += 3f * (enrageScale + 1f);
-                segmentAcceleration += 0.15f * (enrageScale + 1f);
+                segmentVelocity += 2f * (enrageScale + 1f);
+                segmentAcceleration += 0.1f * (enrageScale + 1f);
             }
             else if (phase3)
             {
-                segmentVelocity += 1.2f * (enrageScale + 1f);
-                segmentAcceleration += 0.06f * (enrageScale + 1f);
+                segmentVelocity += 0.8f * (enrageScale + 1f);
+                segmentAcceleration += 0.04f * (enrageScale + 1f);
             }
 
             if (Main.getGoodWorld)
@@ -381,7 +385,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     calamityGlobalNPC.newAI[1] += 1f;
 
                     // Set velocity for when a new head spawns
-                    npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * (segmentVelocity * (death ? 0.7f : 0.5f));
+                    npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * (segmentVelocity * (death ? 0.75f : 0.5f));
                 }
 
                 if (!inTiles)
@@ -540,11 +544,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (numHeads > 0)
                     {
                         // Limit this variable so that the following calculation never goes too low
-                        if (numHeads > 15)
-                            numHeads = 15;
+                        numHeads--;
+                        if (numHeads > 8)
+                            numHeads = 8;
 
                         float pushDistanceLowerLimit = 16f - numHeads;
-                        float pushDistanceUpperLimit = 80f - numHeads * 5f;
+                        float pushDistanceUpperLimit = 160f - numHeads * 10f;
                         float pushDistance = MathHelper.Lerp(pushDistanceLowerLimit, pushDistanceUpperLimit, 1f - lifeRatio) * npc.scale;
                         float pushVelocity = 0.5f;
                         for (int i = 0; i < Main.maxNPCs; i++)
@@ -611,7 +616,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
         public static int GetEaterOfWorldsSegmentsCountRevDeath()
         {
-            return CalamityWorld.LegendaryMode ? 100 : (CalamityWorld.death || BossRushEvent.BossRushActive) ? 67 : 77;
+            return CalamityWorld.LegendaryMode ? 100 : (CalamityWorld.death || BossRushEvent.BossRushActive) ? 57 : 62;
         }
     }
 }

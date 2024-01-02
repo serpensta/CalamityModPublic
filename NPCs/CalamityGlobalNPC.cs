@@ -1442,6 +1442,10 @@ namespace CalamityMod.NPCs
                 npc.lifeMax = (int)(npc.lifeMax * 1.4);
                 npc.npcSlots = 10f;
             }
+            else if (npc.type == NPCID.ServantofCthulhu)
+            {
+                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+            }
             else if (npc.type == NPCID.KingSlime)
             {
                 if (CalamityWorld.death)
