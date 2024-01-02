@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Magic;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,6 +8,9 @@ namespace CalamityMod.Items.Weapons.Magic
 {
     public class FrigidflashBolt : ModItem, ILocalizedModType
     {
+        public static readonly SoundStyle UseSound = new("CalamityMod/Sounds/Item/FrigidflashUse");
+        public static readonly SoundStyle ProjDeathSound = new("CalamityMod/Sounds/Item/FrigidflashDeath");
+
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()
         {
@@ -22,7 +26,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.knockBack = 5.5f;
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;
             Item.rare = ItemRarityID.LightRed;
-            Item.UseSound = SoundID.Item21;
+            Item.UseSound = UseSound;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<FrigidflashBoltProjectile>();
             Item.shootSpeed = 9f;

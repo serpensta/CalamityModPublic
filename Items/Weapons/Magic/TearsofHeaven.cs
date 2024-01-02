@@ -3,6 +3,7 @@ using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.Magic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,6 +12,8 @@ namespace CalamityMod.Items.Weapons.Magic
 {
     public class TearsofHeaven : ModItem, ILocalizedModType
     {
+        public static readonly SoundStyle UseSound = new("CalamityMod/Sounds/Item/TearsOfHeavenUse");
+
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()
         {
@@ -26,7 +29,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.knockBack = 5.5f;
             Item.value = CalamityGlobalItem.Rarity8BuyPrice;
             Item.rare = ItemRarityID.Yellow;
-            Item.UseSound = SoundID.Item8;
+            Item.UseSound = UseSound;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<TearsofHeavenProjectile>();
             Item.shootSpeed = 5.5f;
