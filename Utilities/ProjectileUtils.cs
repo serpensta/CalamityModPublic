@@ -106,19 +106,27 @@ namespace CalamityMod
             float maxDistance = distanceRequired;
             bool locatedTarget = false;
 
-            // Find a target.
+            // Find the closest target.
+            float npcDistCompare = 25000f; // Initializing the value to a large number so the first entry is basically guaranteed to replace it.
+            int index = -1;
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 float extraDistance = (Main.npc[i].width / 2) + (Main.npc[i].height / 2);
                 if (!Main.npc[i].CanBeChasedBy(projectile, false) || !projectile.WithinRange(Main.npc[i].Center, maxDistance + extraDistance))
                     continue;
 
-                if (ignoreTiles || Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1))
+                float currentNPCDist = Vector2.Distance(Main.npc[i].Center, projectile.Center);
+                if ((currentNPCDist < npcDistCompare) && (ignoreTiles || Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1)))
                 {
-                    destination = Main.npc[i].Center;
-                    locatedTarget = true;
-                    break;
+                    npcDistCompare = currentNPCDist;
+                    index = i;
                 }
+            }
+            // If the index was never changed, don't do anything. Otherwise, tell the projectile where to home.
+            if (index != -1)
+            {
+                destination = Main.npc[index].Center;
+                locatedTarget = true;
             }
 
             if (locatedTarget)
