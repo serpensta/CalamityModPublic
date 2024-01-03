@@ -997,7 +997,7 @@ namespace CalamityMod.NPCs
             // Sulphuric Poisoning
             if (sulphurPoison > 0)
             {
-                int baseSulphurPoisonDoTValue = (int)(180 * sicknessDamageMult);
+                int baseSulphurPoisonDoTValue = (int)(240 * sicknessDamageMult);
                 ApplyDPSDebuff(baseSulphurPoisonDoTValue, baseSulphurPoisonDoTValue / 5, ref npc.lifeRegen, ref damage);
             }
 
