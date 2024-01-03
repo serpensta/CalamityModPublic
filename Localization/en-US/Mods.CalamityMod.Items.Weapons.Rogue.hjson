@@ -974,8 +974,8 @@ ScourgeoftheSeas: {
 	DisplayName: Scourge of the Seas
 	Tooltip:
 		'''
-		Snaps apart into a venomous cloud upon striking an enemy
-		Stealth strikes are coated with vile toxins, afflicting enemies with a powerful debuff
+		Snaps apart into poisonous clouds upon striking an enemy
+		Stealth strikes are additionally coated with venomous toxins
 		'''
 }
 

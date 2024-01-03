@@ -66,7 +66,7 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(ModContent.BuffType<Irradiated>(), 120);
+            target.AddBuff(BuffID.Poisoned, 120);
             if (Projectile.ai[1] == 1f && Projectile.owner == Main.myPlayer) //stealth strike attack
             {
                 target.AddBuff(BuffID.Venom, 60);
@@ -75,7 +75,7 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(ModContent.BuffType<Irradiated>(), 120);
+            target.AddBuff(BuffID.Poisoned, 120);
             if (Projectile.ai[1] == 1f && Projectile.owner == Main.myPlayer) //stealth strike attack
             {
                 target.AddBuff(BuffID.Venom, 60);
