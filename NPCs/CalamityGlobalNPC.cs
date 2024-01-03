@@ -4630,6 +4630,10 @@ namespace CalamityMod.NPCs
             if (CalamityLists.ThanatosIDs.Contains(npc.type) && unbreakableDR)
                 return;
 
+            // Isolates projectiles which ignore pierce resist only on Leviathan and Astrum Aureus
+            if ((npc.type == NPCType<Leviathan.Leviathan>() || npc.type == NPCType<AstrumAureus.AstrumAureus>()) && CalamityLists.pierceResistExceptionLeviAureusList.Contains(projectile.type))
+                return;
+
             float damageReduction = projectile.Calamity().timesPierced * CalamityGlobalProjectile.PierceResistHarshness;
             if (damageReduction > CalamityGlobalProjectile.PierceResistCap)
                 damageReduction = CalamityGlobalProjectile.PierceResistCap;
