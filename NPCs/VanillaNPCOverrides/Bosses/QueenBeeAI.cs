@@ -63,6 +63,27 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Percent life remaining
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
+            // Bee spawn limit
+            int beeLimit = 20;
+
+            // Queen Bee Bee count
+            int totalBees = 0;
+            bool beeLimitReached = false;
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC bee = Main.npc[i];
+                bool isQueenBeeBee = bee.ai[3] == 1f;
+                if (bee.active && (bee.type == NPCID.Bee || bee.type == NPCID.BeeSmall) && isQueenBeeBee)
+                {
+                    totalBees++;
+                    if (totalBees >= beeLimit)
+                    {
+                        beeLimitReached = true;
+                        break;
+                    }
+                }
+            }
+
             // Phases
 
             // Become more aggressive and start firing double stingers (triple in death mode) phase
@@ -345,16 +366,19 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                         spawnType = NPCID.Hellbat;
                                 }
 
-                                int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, spawnType);
-                                Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
-                                Main.npc[spawn].velocity.Normalize();
-                                Main.npc[spawn].velocity *= 5f;
-                                if (!Main.zenithWorld)
+                                if (!beeLimitReached)
                                 {
-                                    Main.npc[spawn].ai[3] = 1f;
-                                    Main.npc[spawn].localAI[0] = 60f;
+                                    int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, spawnType);
+                                    Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
+                                    Main.npc[spawn].velocity.Normalize();
+                                    Main.npc[spawn].velocity *= 5f;
+                                    if (!Main.zenithWorld)
+                                    {
+                                        Main.npc[spawn].ai[3] = 1f;
+                                        Main.npc[spawn].localAI[0] = 60f;
+                                    }
+                                    Main.npc[spawn].netUpdate = true;
                                 }
-                                Main.npc[spawn].netUpdate = true;
                             }
                         }
 
@@ -486,7 +510,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Spawn bees
-                if (Collision.CanHit(beeSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee)
+                if (Collision.CanHit(beeSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee && !beeLimitReached)
                 {
                     if (!phase3 || Main.zenithWorld)
                         SoundEngine.PlaySound(SoundID.NPCHit1, beeSpawnLocation);
@@ -582,7 +606,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 // Go to a random phase
                 float numSpawns = phase3 ? 2f : 5f;
-                if (npc.ai[2] > numSpawns)
+                if (npc.ai[2] > numSpawns || beeLimitReached)
                 {
                     npc.ai[0] = -1f;
                     npc.ai[1] = 2f;

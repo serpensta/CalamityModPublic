@@ -1415,7 +1415,7 @@ namespace CalamityMod.NPCs
             }
             else if ((npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall) && CalamityPlayer.areThereAnyDamnBosses)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+                npc.lifeMax = (int)(npc.lifeMax * 2.5);
                 npc.scale *= 1.25f;
             }
             else if (npc.type == NPCID.BrainofCthulhu)
@@ -1444,7 +1444,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.ServantofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+                npc.lifeMax = (int)(npc.lifeMax * 4.0);
             }
             else if (npc.type == NPCID.KingSlime)
             {
