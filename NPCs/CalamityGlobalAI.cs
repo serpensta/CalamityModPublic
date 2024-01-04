@@ -3619,8 +3619,8 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.ServantofCthulhu)
             {
-                maxVelocity = 5f;
-                acceleration = 0.03f;
+                maxVelocity = 5f + npc.ai[2] * 3f;
+                acceleration = 0.03f + npc.ai[2] * 0.15f;
             }
             else if (npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall)
             {
@@ -3650,8 +3650,8 @@ namespace CalamityMod.NPCs
                         npc.velocity.Y = -flyAwayVelocity;
                 }
 
-                maxVelocity = 5f;
-                acceleration = 0.1f;
+                maxVelocity = 5f + npc.ai[2] * 3f;
+                acceleration = 0.1f + npc.ai[2] * 0.15f;
                 acceleration *= flyAwayAccel;
             }
             maxVelocity *= 1.25f;
@@ -3723,7 +3723,7 @@ namespace CalamityMod.NPCs
                 {
                     if (npc.ai[3] == 1f)
                     {
-                        float pushVelocity = 0.5f;
+                        float pushVelocity = 0.5f + npc.ai[2] * 0.25f;
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             if (Main.npc[i].active)
@@ -3788,7 +3788,7 @@ namespace CalamityMod.NPCs
 
             if (npc.type == NPCID.ServantofCthulhu)
             {
-                float pushVelocity = 0.5f;
+                float pushVelocity = 0.5f + npc.ai[2] * 0.25f;
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     if (Main.npc[i].active)

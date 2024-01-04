@@ -374,6 +374,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     Main.npc[spawn].velocity *= 5f;
                                     if (!Main.zenithWorld)
                                     {
+                                        Main.npc[spawn].ai[2] = enrageScale;
                                         Main.npc[spawn].ai[3] = 1f;
                                         Main.npc[spawn].localAI[0] = 60f;
                                     }
@@ -530,6 +531,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
                                 Main.npc[spawn].velocity.Normalize();
                                 Main.npc[spawn].velocity *= 5f;
+                                Main.npc[spawn].ai[2] = enrageScale;
                                 Main.npc[spawn].ai[3] = 1f;
                                 Main.npc[spawn].localAI[0] = 60f;
                                 Main.npc[spawn].netUpdate = true;
@@ -552,6 +554,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Main.npc[spawn].velocity *= 5f;
                             if (!Main.zenithWorld)
                             {
+                                Main.npc[spawn].ai[2] = enrageScale;
                                 Main.npc[spawn].ai[3] = 1f;
                                 Main.npc[spawn].localAI[0] = 60f;
                             }

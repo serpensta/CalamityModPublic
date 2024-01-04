@@ -1325,14 +1325,14 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.Golem || npc.type == NPCID.GolemHead)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)(npc.lifeMax * 1.5);
 
                 if (npc.type == NPCID.Golem)
                     npc.npcSlots = 64f;
             }
             else if (npc.type == NPCID.GolemHeadFree)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.7);
+                npc.lifeMax = (int)(npc.lifeMax * 2.0);
                 npc.width = 88;
                 npc.height = 90;
                 npc.dontTakeDamage = false;
@@ -2634,7 +2634,7 @@ namespace CalamityMod.NPCs
                     modifiers.FinalDamage *= 0.01f;
             }
 
-            // Large Deus worm takes reduced damage to last a long enough time.
+            // Large Deus worm takes reduced damage in order to last a long enough time.
             // TODO -- WHY DOES DEUS HAVE THIS UNDOCUMENTED MULTIPLIER HERE??
             // this should be in ModifyHitNPC for deus himself
             if (CalamityLists.AstrumDeusIDs.Contains(npc.type) && newAI[0] == 0f)

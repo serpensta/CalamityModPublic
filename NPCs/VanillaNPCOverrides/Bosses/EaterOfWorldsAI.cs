@@ -551,7 +551,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float pushDistanceLowerLimit = 16f - numHeads;
                         float pushDistanceUpperLimit = 160f - numHeads * 10f;
                         float pushDistance = MathHelper.Lerp(pushDistanceLowerLimit, pushDistanceUpperLimit, 1f - lifeRatio) * npc.scale;
-                        float pushVelocity = 0.5f;
+                        float pushVelocity = 0.5f + enrageScale * 0.25f;
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             if (Main.npc[i].active)
