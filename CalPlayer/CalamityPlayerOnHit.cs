@@ -881,7 +881,7 @@ namespace CalamityMod.CalPlayer
                 titanCooldown = 15;
             }
 
-            if (corrosiveSpine && modProj.stealthStrikeHitCount < 3)
+            if (corrosiveSpine && modProj.stealthStrikeHitCount < 3 && (Player.ownedProjectileCounts[ProjectileType<Corrocloud1>()] + Player.ownedProjectileCounts[ProjectileType<Corrocloud2>()] + Player.ownedProjectileCounts[ProjectileType<Corrocloud3>()]) < 3)
             {
                 for (int i = 0; i < 3; i++)
                 {
@@ -903,7 +903,7 @@ namespace CalamityMod.CalPlayer
 
                         if (type != -1)
                         {
-                            int damage = (int)Player.GetTotalDamage<RogueDamageClass>().ApplyTo(24);
+                            int damage = (int)Player.GetTotalDamage<RogueDamageClass>().ApplyTo(22);
                             damage = Player.ApplyArmorAccDamageBonusesTo(damage);
 
                             float speed = Main.rand.NextFloat(5f, 11f);
