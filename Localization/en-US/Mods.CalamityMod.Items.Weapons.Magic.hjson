@@ -718,7 +718,11 @@ SlitheringEels: {
 
 SnowstormStaff: {
 	DisplayName: Snowstorm Staff
-	Tooltip: Fires a snowflake that follows the mouse cursor
+	Tooltip:
+		'''
+		Fires snowflakes that follows the mouse cursor
+		Snowflakes split into ice stars on enemy hits
+		'''
 }
 
 SoulPiercer: {
