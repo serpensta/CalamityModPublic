@@ -4813,8 +4813,15 @@ namespace CalamityMod.CalPlayer
             if (CalamityConfig.Instance.SpeedrunTimer)
                 CalamityMod.SpeedrunTimer.Restart();
 
-            // Set a random delay between 12 and 20 seconds. When this delay hits zero, the music mod and wiki reminder messages display
-            if ((CalamityMod.Instance.musicMod is null && CalamityConfig.Instance.MusicModReminderMessage) || CalamityConfig.Instance.WikiStatusMessage)
+            //
+            // 04JAN2024: Ozzatron: Added a temporary message for the Gimme Swag plushie campaign.
+            // This message should not exist indefinitely. It is being pushed as a silent public update just for itself.
+            // As this message always displays and is not configurable, the previous rules about startup messages have been replaced with always-true.
+            //
+
+            // Set a random delay between 12 and 20 seconds. When this delay hits zero, startup messages display
+            bool plushieMessage = true;
+            if (plushieMessage || (CalamityMod.Instance.musicMod is null && CalamityConfig.Instance.MusicModReminderMessage) || CalamityConfig.Instance.WikiStatusMessage)
             {
                 startMessageDisplayDelay = Main.rand.Next(CalamityUtils.SecondsToFrames(12), CalamityUtils.SecondsToFrames(20) + 1);
             }
