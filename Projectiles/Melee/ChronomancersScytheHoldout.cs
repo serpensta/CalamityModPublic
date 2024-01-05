@@ -46,7 +46,7 @@ namespace CalamityMod.Projectiles.Melee
 
             Projectile.velocity = Vector2.Zero;
 
-            Projectile.rotation += (2 * MathHelper.Pi / 60) * Projectile.ai[2]; // this is intentionally only clockwise, but can be changed if it's too awkward
+            Projectile.rotation += (2 * MathHelper.Pi / 60) * Projectile.ai[2];
 
             UpdateOwnerVars();
 

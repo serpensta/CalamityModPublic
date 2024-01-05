@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 45;
             Item.height = 45;
-            Item.DamageType = TrueMeleeNoSpeedDamageClass.Instance; // ironic how a weapon that increases use speed cant benefit from it
+            Item.DamageType = TrueMeleeNoSpeedDamageClass.Instance;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
