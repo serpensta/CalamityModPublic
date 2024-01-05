@@ -321,8 +321,8 @@ DepthCrusher: {
 	DisplayName: Depth Crusher
 	Tooltip:
 		'''
-		Hitting enemies will inflict the Riptide debuff
-		Press <right> to use without hammering down walls
+		Tosses a heavy abyssal crusher that releases water energy upon hitting a tile
+The crusher will ricochet off of tiles and enemies
 		'''
 }
 
