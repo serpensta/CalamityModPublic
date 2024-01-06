@@ -25,11 +25,11 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.tileCollide = false;
             Projectile.alpha = 70;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 280;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.coldDamage = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.localNPCHitCooldown = 40;
         }
 
         public override void AI()
@@ -190,7 +190,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             target.AddBuff(BuffID.Frostburn2, 180);
             float randOffset = Main.rand.NextFloat(0, 2 * MathHelper.Pi);
-            // spawn mini stars on hit with a 5 second cooldown
+            // spawn mini stars on hit with a 4 second cooldown
             if (Projectile.owner == Main.myPlayer && Projectile.ai[2] <= 0)
             {
                 for (int i = 0; i < 3; i++)
@@ -200,8 +200,8 @@ namespace CalamityMod.Projectiles.Magic
                     Main.projectile[p].DamageType = DamageClass.Magic;
                 }
                 SoundEngine.PlaySound(SoundID.Item30, Projectile.Center);
-                // set the 5 second cooldown
-                Projectile.ai[2] = 300;
+                // set the 4 second cooldown
+                Projectile.ai[2] = 240;
             }
         }
     }

@@ -140,6 +140,9 @@ namespace CalamityMod.Balancing
 
             // 30% resist to Meowthrower.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<MeowFire>()))));
+
+            // 25% resist to Snowstorm Staff.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AquaticScourgeIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<Snowflake>(), ProjectileType<SnowflakeIceStar>()))));
             #endregion
 
             #region The Destroyer
@@ -158,11 +161,11 @@ namespace CalamityMod.Balancing
             // 25% resist to SHPC.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<SHPExplosion>()))));
 
+            // 25% resist to Snowstorm Staff.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<Snowflake>(), ProjectileType<SnowflakeIceStar>()))));
+
             // 15% resist to Mineral Mortar's Projectile.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<MineralMortarProjectile>()))));
-
-            // 15% resist to Snowstorm Staff.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<Snowflake>()))));
             #endregion
 
             #region Astrum Aureus
