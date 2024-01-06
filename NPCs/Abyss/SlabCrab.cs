@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -72,7 +73,7 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void AI()
         {
-            NPC.direction = Math.Sign(NPC.velocity.X);
+            NPC.direction = NPC.velocity.X != 0 ? Math.Sign(NPC.velocity.X) : NPC.direction;
             NPC.spriteDirection = -NPC.direction;
             NPC.localAI[0]++;
             if (NPC.localAI[0] < 90)
@@ -97,6 +98,7 @@ namespace CalamityMod.NPCs.Abyss
                     {
                         ChangePhase((int)AIState.IdleAnim);
                     }
+                    HandlePickaxeInteraction();
                     break;
                 case (int)AIState.IdleAnim:
                     NPC.ShowNameOnHover = true;
@@ -120,6 +122,7 @@ namespace CalamityMod.NPCs.Abyss
                     {
                         ChangePhase((int)AIState.Hiding);
                     }
+                    HandlePickaxeInteraction();
                     break;
                 case (int)AIState.Enraged:
                     NPC.ShowNameOnHover = true;
@@ -162,6 +165,10 @@ namespace CalamityMod.NPCs.Abyss
                         if (Collision.CanHit(NPC.Center, 1, 1, Target.Center, 1, 1))
                             lungeForwardSpeed *= 1.2f;
 
+                        if (HopTimer == 3)
+                        {
+                            ChangePhase(4);
+                        }
                         if (Main.netMode != NetmodeID.MultiplayerClient && AITimer > hopRate)
                         {
                             HopTimer++;
@@ -185,6 +192,21 @@ namespace CalamityMod.NPCs.Abyss
                     if (CalmDownTimer > 300 && outofRange && NPC.velocity.Y == 0 && Main.rand.NextBool(180))
                     {
                         ChangePhase(0);
+                    }
+                    break;
+                case 4:
+                    AITimer++;
+                    NPC.knockBackResist = 0.6f;
+                    //NPC.TargetClosest(true);
+                    if (NPC.oldPosition == NPC.position)
+                    {
+                        NPC.direction *= -1;
+                        NPC.netUpdate = true;
+                    }
+                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 5 * NPC.direction, 0.0125f);
+                    if (AITimer > 240 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
+                    {
+                        ChangePhase((int)AIState.Active);
                     }
                     break;
             }
@@ -235,10 +257,17 @@ namespace CalamityMod.NPCs.Abyss
                         NPC.frame.Y += frameHeight;
                     }
                 }
-                if (NPC.frame.Y > frameHeight * 22 || NPC.frame.Y < frameHeight * 19)
+                if (NPC.velocity.X != 0 || NPC.IsABestiaryIconDummy)
+                {
+                    if (NPC.frame.Y > frameHeight * 22 || NPC.frame.Y < frameHeight * 19)
+                    {
+                        NPC.frame.Y = frameHeight * 19;
+                    }
+                }
+                else
                 {
                     NPC.frame.Y = frameHeight * 19;
-                }
+                }    
                 return;
             }
             switch (CurrentPhase)
@@ -292,9 +321,34 @@ namespace CalamityMod.NPCs.Abyss
             }
         }
 
-        public override bool? CanBeHitByItem(Player player, Item item) => CurrentPhase > (int)AIState.IdleAnim || (item.pick > 0 && new Rectangle((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 20, 20).Intersects(NPC.getRect())); // can only be hit by pickaxes while hidden
+        public override bool? CanBeHitByItem(Player player, Item item) => CurrentPhase > (int)AIState.IdleAnim;
 
         public override bool? CanBeHitByProjectile(Projectile projectile) => CurrentPhase > (int)AIState.IdleAnim;
+
+        public void HandlePickaxeInteraction()
+        {
+            Player player = Main.LocalPlayer;
+            Rectangle tileMaus = new Rectangle(Player.tileTargetX * 16, Player.tileTargetY * 16, 16, 16);
+            if (player.HeldItem.pick > 0)
+            {
+                if (tileMaus.Intersects(NPC.getRect()))
+                {
+                    if (player.Distance(NPC.Center) < new Vector2(Player.tileRangeX, Player.tileRangeY).Length() * 16)
+                    {
+                        if (player.ItemAnimationActive)
+                        {
+                            player.ApplyDamageToNPC(NPC, (int)player.GetDamage(DamageClass.MeleeNoSpeed).ApplyTo(player.HeldItem.damage), 0, player.direction);
+                            SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
+                            if (CurrentPhase < (int)AIState.Enraged)
+                            {
+                                ChangePhase((int)AIState.Enraged);
+                                NPC.netUpdate = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public override void HitEffect(NPC.HitInfo hit)
         {
