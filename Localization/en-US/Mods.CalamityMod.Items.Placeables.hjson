@@ -1368,7 +1368,7 @@ AuricRepulserPanel: {
 }
 
 ExoAuricPanel: {
-	DisplayName: Exo Auric Panel
+	DisplayName: Exo-Auric Panel
 	Tooltip: ""
 }
 
