@@ -156,7 +156,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.damage = 0;
 
                 // Start other phases; if arms are dead, start with spin phase
-                if (phase2 || CalamityWorld.LegendaryMode)
+                if (phase2 || CalamityWorld.LegendaryMode || allArmsDead)
                 {
                     // Start spin phase after 1.5 seconds
                     npc.ai[2] += phase3 ? 1.5f : 1f;
