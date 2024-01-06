@@ -169,8 +169,8 @@ namespace CalamityMod.Projectiles.BaseProjectiles
         public override void AI()
         {
             Projectile.localNPCHitCooldown = IFrames * Projectile.MaxUpdates;
-            CheckMinionExistence();
             SetOwnerTarget();
+            CheckMinionExistence();
             DoAnimation();
             MinionAI();
         }
