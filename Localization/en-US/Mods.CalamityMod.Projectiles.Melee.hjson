@@ -312,3 +312,5 @@ YinYoDark.DisplayName: Dark Shard
 YinYoLight.DisplayName: Light Shard
 DepthCrusherProjectile.DisplayName: Depth Crusher Projectile
 DepthCrusherSplitProjectile.DisplayName: Depth Crusher Split Projectile
+AbyssBladeProjectile.DisplayName: Abyss Blade Projectile
+AbyssBladeSplitProjectile.DisplayName: Abyss Blade Split Projectile

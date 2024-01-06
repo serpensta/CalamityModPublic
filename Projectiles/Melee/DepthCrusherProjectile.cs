@@ -22,6 +22,8 @@ namespace CalamityMod.Projectiles.Melee
         public int Lifetime = 255;
         public int startDamage;
         public bool setDamage = false;
+        public int dustType1 = 104;
+        public int dustType2 = 96;
         public float OverallProgress => 1 - Projectile.timeLeft / (float)Lifetime;
         public float ThrowProgress => 1 - Projectile.timeLeft / (float)(Lifetime);
         public float ChargeProgress => 1 - (Projectile.timeLeft - Lifetime) / (float)(ChargeupTime);
@@ -69,6 +71,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
+            Projectile.spriteDirection = Projectile.direction;
             Vector3 Light = new Vector3(0.050f, 0.050f, 0.250f);
             Lighting.AddLight(Projectile.Center, Light * 2);
 
@@ -81,8 +84,8 @@ namespace CalamityMod.Projectiles.Melee
 
                 Owner.heldProj = Projectile.whoAmI;
 
-                Projectile.Center = Owner.MountedCenter + Vector2.UnitY.RotatedBy(armRotation * Owner.gravDir) * -40f * Owner.gravDir;
-                Projectile.rotation = (-1 + armRotation) * Owner.gravDir;
+                Projectile.Center = Owner.MountedCenter + Vector2.UnitY.RotatedBy(armRotation * Owner.gravDir) * -45f * Owner.gravDir;
+                Projectile.rotation = (-MathHelper.PiOver4 * Projectile.direction + armRotation) * Owner.gravDir;
 
                 Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, MathHelper.Pi + armRotation);
 
@@ -98,6 +101,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.Center = Owner.MountedCenter + Projectile.velocity * 12f;
                 Projectile.velocity = (Main.MouseWorld - Owner.Center).SafeNormalize(Vector2.UnitX * Owner.direction) * 15;
                 startDamage = Projectile.damage;
+                Projectile.spriteDirection = Projectile.direction;
             }
 
             Projectile.rotation += (0.4f * (MathF.Abs(Projectile.velocity.Y) * 0.2f + 0.6f)) * Projectile.direction;
@@ -137,7 +141,7 @@ namespace CalamityMod.Projectiles.Melee
             for (int i = 0; i < 15; i++)
             {
                 Vector2 dustPos = Projectile.Center;
-                Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? 104 : 96);
+                Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? dustType1 : dustType2);
                 dust.noGravity = true;
                 dust.scale = Main.rand.NextFloat(0.5f, 1.1f);
                 dust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f);
@@ -150,7 +154,7 @@ namespace CalamityMod.Projectiles.Melee
             {
                 float dustMulti = Main.rand.NextFloat(0.3f, 1.5f);
                 Vector2 dustPos = Projectile.Center;
-                Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? 104 : 96);
+                Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? dustType1 : dustType2);
                 dust.noGravity = true;
                 dust.scale = Main.rand.NextFloat(1.6f, 2.5f) - dustMulti;
                 dust.velocity = new Vector2(5, 5).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 1f) * dustMulti;
@@ -180,7 +184,7 @@ namespace CalamityMod.Projectiles.Melee
                 {
                     float dustMulti = Main.rand.NextFloat(0.3f, 1.5f);
                     Vector2 dustPos = Projectile.Center;
-                    Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? 104 : 96);
+                    Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? dustType1 : dustType2);
                     dust.noGravity = true;
                     dust.scale = Main.rand.NextFloat(1.6f, 2.5f) - dustMulti;
                     dust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 1f) * dustMulti;

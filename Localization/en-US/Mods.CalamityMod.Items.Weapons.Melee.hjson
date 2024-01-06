@@ -12,8 +12,8 @@ AbyssBlade: {
 	DisplayName: Abyss Blade
 	Tooltip:
 		'''
-		Fires short-range tridents
-		Hitting enemies will inflict the crush depth debuff
+		Tosses a spinning abyssal sword that ricochets and releases water energy upon hitting a tile
+		The sword will fly towards enemies after a ricochet
 		'''
 }
 
@@ -322,7 +322,7 @@ DepthCrusher: {
 	Tooltip:
 		'''
 		Tosses a heavy abyssal crusher that releases water energy upon hitting a tile
-The crusher will ricochet off of tiles and enemies
+		The crusher will ricochet off of tiles and enemies
 		'''
 }
 
