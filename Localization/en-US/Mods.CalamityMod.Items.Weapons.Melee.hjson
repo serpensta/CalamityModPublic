@@ -251,7 +251,7 @@ CelestialClaymore: {
 
 ChronomancersScythe: {
 	DisplayName: Chronomancer's Scythe
-	Tooltip: 
+	Tooltip:
 		'''
 		Rapidly fires icicles
 		Press <right> to swing the scythe around you creating a clock pattern of homing icicles
