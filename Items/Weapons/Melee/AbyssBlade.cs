@@ -19,8 +19,8 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 74;
             Item.height = 74;
-            Item.damage = 90;
-            Item.knockBack = 5.5f;
+            Item.damage = 60;
+            Item.knockBack = 7.5f;
             Item.useTime = 65;
             Item.useAnimation = 65;
             Item.shoot = ModContent.ProjectileType<AbyssBladeProjectile>();

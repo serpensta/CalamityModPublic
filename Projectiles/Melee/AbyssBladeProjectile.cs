@@ -94,6 +94,8 @@ namespace CalamityMod.Projectiles.Melee
                 float armRotation = ArmAnticipationMovement() * Owner.direction;
 
                 Owner.heldProj = Projectile.whoAmI;
+                Projectile.spriteDirection = Owner.direction;
+                Projectile.direction = Owner.direction;
 
                 Projectile.Center = Owner.MountedCenter + Vector2.UnitY.RotatedBy(armRotation * Owner.gravDir) * -55f * Owner.gravDir;
                 Projectile.rotation = (-MathHelper.PiOver4 * Projectile.direction + armRotation) * Owner.gravDir;
@@ -113,6 +115,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.velocity = (Main.MouseWorld - Owner.Center).SafeNormalize(Vector2.UnitX * Owner.direction) * 20;
                 startDamage = Projectile.damage;
                 Projectile.spriteDirection = Projectile.direction;
+                Time = 0;
             }
 
             if (Projectile.velocity.X > 0)
@@ -151,7 +154,7 @@ namespace CalamityMod.Projectiles.Melee
                     dust.scale = 1.8f;
                 }
 
-                if (Collision.SolidCollision(Projectile.Center, 10, 10))
+                if (Collision.SolidCollision(Projectile.Center, 10, 10) && Time >= 2)
                 {
                     Projectile.extraUpdates = 1;
                     Projectile.rotation = 0;
