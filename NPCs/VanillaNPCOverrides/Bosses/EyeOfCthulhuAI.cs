@@ -120,6 +120,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 if (npc.ai[1] == 0f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     float hoverSpeed = 7f;
                     float hoverAcceleration = 0.15f;
                     hoverSpeed += 5f * enrageScale;
@@ -199,6 +202,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
                 else if (npc.ai[1] == 1f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     npc.rotation = eyeRotation;
                     float additionalVelocityPerCharge = 2f;
                     float chargeSpeed = 6f + npc.ai[3] * additionalVelocityPerCharge;
@@ -218,6 +224,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
                 else if (npc.ai[1] == 2f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     int chargeDelay = 90;
                     if (death)
                         chargeDelay -= (int)Math.Round(40f * (1f - lifeRatio));
@@ -229,6 +238,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[2] += 1f;
                     if (npc.ai[2] >= slowDownGateValue)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         float decelerationScalar = death ? ((lifeRatio - 0.6f) / 0.4f) : 1f;
                         if (decelerationScalar < 0f)
                             decelerationScalar = 0f;
@@ -255,6 +267,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float numCharges = death ? 4f : 3f;
                         if (npc.ai[3] >= numCharges)
                         {
+                            // Avoid cheap bullshit
+                            npc.damage = 0;
+
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
                         }
@@ -265,6 +280,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 if (phase2)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     npc.ai[0] = 1f;
                     npc.ai[1] = 0f;
                     npc.ai[2] = 0f;
@@ -279,6 +297,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             else if (npc.ai[0] == 1f || npc.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (Main.getGoodWorld)
                     npc.reflectsProjectiles = true;
 
@@ -377,13 +398,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             else
             {
                 npc.defense = 0;
-                npc.damage = (int)(npc.defDamage * (phase3 ? 1.4f : 1.2f));
+                int setDamage = (int)(npc.defDamage * (phase3 ? 1.4f : 1.2f));
 
                 if (npc.ai[1] == 0f & phase3)
                     npc.ai[1] = 5f;
 
                 if (npc.ai[1] == 0f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     float hoverSpeed = 5.5f + 3f * (0.6f - lifeRatio);
                     float hoverAcceleration = 0.06f + 0.02f * (0.6f - lifeRatio);
                     hoverSpeed += 4f * enrageScale;
@@ -461,6 +485,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 1f)
                 {
+                    // Set damage
+                    npc.damage = setDamage;
+
                     SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
                     npc.rotation = eyeRotation;
 
@@ -486,6 +513,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 2f)
                 {
+                    // Set damage
+                    npc.damage = setDamage;
+
                     int phase2ChargeDelay = 80;
                     if (death)
                         phase2ChargeDelay -= (int)Math.Round(35f * (0.6f - lifeRatio));
@@ -495,6 +525,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[2] += 1f;
                     if (npc.ai[2] >= slowDownGateValue)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         float decelerationScalar = death ? ((lifeRatio - 0.3f) / 0.3f) : 1f;
                         if (decelerationScalar < 0f)
                             decelerationScalar = 0f;
@@ -518,6 +551,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float numCharges = death ? 4f : 3f;
                         if (npc.ai[3] >= numCharges)
                         {
+                            // Avoid cheap bullshit
+                            npc.damage = 0;
+
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
                             npc.netUpdate = true;
@@ -534,6 +570,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 {
                     if ((npc.ai[3] == 4f & phase3) && npc.Center.Y > Main.player[npc.target].Center.Y)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         npc.TargetClosest();
                         npc.ai[1] = 0f;
                         npc.ai[2] = 0f;
@@ -545,6 +584,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                     else if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
+                        // Set damage
+                        npc.damage = setDamage;
+
                         float speedBoost = death ? 10f * (0.3f - lifeRatio) : 7f * (0.3f - lifeRatio);
                         float finalChargeSpeed = 18f + speedBoost;
                         finalChargeSpeed += 10f * enrageScale;
@@ -616,6 +658,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 4f)
                 {
+                    // Set damage
+                    npc.damage = setDamage;
+
                     if (npc.ai[2] == 0f)
                         SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
 
@@ -627,6 +672,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[2] >= lineUpDistControl)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         npc.velocity *= 0.95f;
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                             npc.velocity.X = 0f;
@@ -650,6 +698,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float maxCharges = death ? (finalPhaseDeath ? 0f : penultimatePhaseDeath ? 1f : 2f) : finalPhaseRev ? 2f : 3f;
                         if (npc.ai[3] >= maxCharges)
                         {
+                            // Avoid cheap bullshit
+                            npc.damage = 0;
+
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
                         }
@@ -660,6 +711,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 5f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     float offset = death ? 540f : 600f;
                     float speedBoost = death ? 15f * (0.3f - lifeRatio) : 5f * (0.3f - lifeRatio);
                     float accelerationBoost = death ? 0.425f * (0.3f - lifeRatio) : 0.125f * (0.3f - lifeRatio);
@@ -783,6 +837,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 6f)
                 {
+                    // Set damage
+                    npc.damage = setDamage;
+
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         float speedBoost = death ? 15f * (0.3f - lifeRatio) : 5f * (0.3f - lifeRatio);
@@ -800,6 +857,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 7f)
                 {
+                    // Set damage
+                    npc.damage = setDamage;
+
                     if (npc.ai[2] == 0f)
                         SoundEngine.PlaySound(SoundID.Roar, npc.Center);
 
@@ -811,6 +871,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[2] >= lineUpDistControl)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         npc.velocity *= 0.95f;
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                             npc.velocity.X = 0f;
@@ -823,6 +886,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float lineUpDistNetUpdate = lineUpDistControl + 13f;
                     if (npc.ai[2] >= lineUpDistNetUpdate)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         npc.netUpdate = true;
 
                         if (npc.netSpam > 10)
