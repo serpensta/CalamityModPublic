@@ -978,6 +978,8 @@ namespace CalamityMod.CalPlayer
         public bool avertorBonus = false;
         public bool divineBless = false;
         public bool infiniteFlight = false;
+        public int hasteCounter = 0;
+        public int hasteLevel = 0;
         #endregion
 
         #region Minion
@@ -2469,6 +2471,8 @@ namespace CalamityMod.CalPlayer
             healingPotionMultiplier = 1f;
             avertorBonus = false;
             divineBless = false;
+            hasteLevel = 0;
+            hasteCounter = 0;
             #endregion
 
             #region Armor Set Bonuses
@@ -3656,7 +3660,8 @@ namespace CalamityMod.CalPlayer
                     (silvaSet ? 0.05f : 0f) +
                     (blueCandle ? 0.05f : 0f) +
                     (planarSpeedBoost > 0 ? (0.01f * planarSpeedBoost) : 0f) +
-                    ((deepDiver && Player.IsUnderwater()) ? 0.15f : 0f);
+                    ((deepDiver && Player.IsUnderwater()) ? 0.15f : 0f) +
+                    (hasteLevel * 0.05f);
 
                 float runSpeedMult = 1f +
                     (lunicCorpsLegs ? 0.1f : 0f) +
@@ -3670,7 +3675,8 @@ namespace CalamityMod.CalPlayer
                     (CobaltSet ? CobaltArmorSetChange.SpeedBoostSetBonusPercentage * 0.01f : 0f) +
                     (silvaSet ? 0.05f : 0f) +
                     (planarSpeedBoost > 0 ? (0.01f * planarSpeedBoost) : 0f) +
-                    ((deepDiver && Player.IsUnderwater()) ? 0.15f : 0f);
+                    ((deepDiver && Player.IsUnderwater()) ? 0.15f : 0f) +
+                    (hasteLevel * 0.05f);
 
                 if ((Player.slippy || Player.slippy2) && Player.iceSkate)
                     runAccMult *= 0.6f;
@@ -4813,8 +4819,15 @@ namespace CalamityMod.CalPlayer
             if (CalamityConfig.Instance.SpeedrunTimer)
                 CalamityMod.SpeedrunTimer.Restart();
 
-            // Set a random delay between 12 and 20 seconds. When this delay hits zero, the music mod and wiki reminder messages display
-            if ((CalamityMod.Instance.musicMod is null && CalamityConfig.Instance.MusicModReminderMessage) || CalamityConfig.Instance.WikiStatusMessage)
+            //
+            // 04JAN2024: Ozzatron: Added a temporary message for the Gimme Swag plushie campaign.
+            // This message should not exist indefinitely. It is being pushed as a silent public update just for itself.
+            // As this message always displays and is not configurable, the previous rules about startup messages have been replaced with always-true.
+            //
+
+            // Set a random delay between 12 and 20 seconds. When this delay hits zero, startup messages display
+            bool plushieMessage = true;
+            if (plushieMessage || (CalamityMod.Instance.musicMod is null && CalamityConfig.Instance.MusicModReminderMessage) || CalamityConfig.Instance.WikiStatusMessage)
             {
                 startMessageDisplayDelay = Main.rand.Next(CalamityUtils.SecondsToFrames(12), CalamityUtils.SecondsToFrames(20) + 1);
             }

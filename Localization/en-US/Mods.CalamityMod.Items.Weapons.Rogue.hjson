@@ -391,9 +391,8 @@ Exorcism: {
 	DisplayName: Exorcism
 	Tooltip:
 		'''
-		Throws a hallowed cross which explodes into a flash of light that damages nearby enemies, closer enemies receiving more damage
-		As the cross travels downwards, the damage inflicted by both the cross and flash increases constantly
-		Stealth strikes cause the cross to be thrown with full damage immediately. Hallowed stars fall when the cross explodes
+		Throws a hallowed cross which explodes into a flash of light that damages nearby enemies
+		Stealth strikes create larger flashes and rain stars infused with holy light
 		'''
 }
 
