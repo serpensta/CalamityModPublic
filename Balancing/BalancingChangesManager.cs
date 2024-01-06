@@ -324,9 +324,6 @@ namespace CalamityMod.Balancing
 
             // 15% resist to Enforcer projectiles.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AresIDs, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<EssenceFlame2>()))));
-
-            // 15% resist to Murasama.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AresIDs, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<MurasamaSlash>()))));
             #endregion
 
             #region Exo Mechs: Artemis and Apollo
