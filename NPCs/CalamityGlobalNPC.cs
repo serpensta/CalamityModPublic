@@ -167,9 +167,6 @@ namespace CalamityMod.NPCs
         // Used to change the Expert Mode coin drop multiplier
         private const double NPCValueMultiplier_ExpertCalamity = 1.5;
 
-        // Max velocity used in contact damage scaling
-        public float maxVelocity = 0f;
-
         // Dash damage immunity timer
         public const int maxPlayerImmunities = Main.maxPlayers + 1;
         public int[] dashImmunityTime = new int[maxPlayerImmunities];
@@ -386,8 +383,6 @@ namespace CalamityMod.NPCs
             myClone.canBreakPlayerDefense = canBreakPlayerDefense;
 
             myClone.miscDefenseLoss = miscDefenseLoss;
-
-            myClone.maxVelocity = maxVelocity;
 
             myClone.dashImmunityTime = new int[maxPlayerImmunities];
             for (int i = 0; i < maxPlayerImmunities; ++i)
@@ -2820,12 +2815,6 @@ namespace CalamityMod.NPCs
             {
                 if (dashImmunityTime[i] > 0)
                     dashImmunityTime[i]--;
-            }
-
-            if (CalamityPlayer.areThereAnyDamnBosses)
-            {
-                if (npc.velocity.Length() > maxVelocity)
-                    maxVelocity = npc.velocity.Length();
             }
 
             if (KillTime > 0 || npc.type == NPCType<Draedon>())

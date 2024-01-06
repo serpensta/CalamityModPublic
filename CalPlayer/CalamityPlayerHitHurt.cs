@@ -741,30 +741,6 @@ namespace CalamityMod.CalPlayer
             // The amount of damage that will be dealt is yet to be determined.
             //
 
-            if (areThereAnyDamnBosses && CalamityMod.bossVelocityDamageScaleValues.ContainsKey(npc.type))
-            {
-                CalamityMod.bossVelocityDamageScaleValues.TryGetValue(npc.type, out float velocityScalar);
-
-                if (((npc.type == NPCID.EyeofCthulhu || npc.type == NPCID.Spazmatism) && npc.ai[0] >= 2f) || (npc.type == NPCID.Plantera && npc.life / (float)npc.lifeMax <= 0.5f) ||
-                    (npc.type == ModContent.NPCType<Apollo>() && npc.life / (float)npc.lifeMax < 0.6f))
-                    velocityScalar = CalamityMod.bitingEnemeyVelocityScale;
-
-                if (npc.velocity == Vector2.Zero)
-                {
-                    contactDamageReduction += 1f - velocityScalar;
-                }
-                else
-                {
-                    float amount = npc.velocity.Length() / (npc.Calamity().maxVelocity * 0.5f);
-                    if (amount > 1f)
-                        amount = 1f;
-
-                    float damageReduction = MathHelper.Lerp(velocityScalar, 1f, amount);
-                    if (damageReduction < 1f)
-                        contactDamageReduction += 1f - damageReduction;
-                }
-            }
-
             if (transformer)
             {
                 if (npc.type == NPCID.BlueJellyfish || npc.type == NPCID.PinkJellyfish || npc.type == NPCID.GreenJellyfish ||
