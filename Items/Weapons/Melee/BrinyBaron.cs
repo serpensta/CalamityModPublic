@@ -68,11 +68,6 @@ namespace CalamityMod.Items.Weapons.Melee
             if (Main.rand.NextBool(3))
                 Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 187, 0f, 0f, 100, new Color(53, Main.DiscoG, 255));
         }
-
-        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
-        {
-            modifiers.CritDamage *= 0.5f;
-        }
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             var source = player.GetSource_ItemUse(Item);
