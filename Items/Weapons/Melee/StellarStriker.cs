@@ -1,17 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Items.Weapons.Melee
 {
     public class StellarStriker : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-
-        private int OnHitDamage => (int)(0.5f * Item.damage);
 
         public override void SetDefaults()
         {
@@ -32,16 +30,19 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shootSpeed = 12f;
         }
 
+        // Stellar Striker is classed as a regular melee weapon, so despite being a true melee on-hit, these scale with regular melee.
+        private int GetOnHitDamage(Player player) => (int)player.GetTotalDamage<MeleeDamageClass>().ApplyTo(0.5f * Item.damage);
+
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (player.whoAmI == Main.myPlayer)
-                SpawnFlares(player, Item.knockBack, OnHitDamage);
+                SpawnFlares(player, Item.knockBack, GetOnHitDamage(player));
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             if (player.whoAmI == Main.myPlayer)
-                SpawnFlares(player, Item.knockBack, OnHitDamage);
+                SpawnFlares(player, Item.knockBack, GetOnHitDamage(player));
         }
 
         private void SpawnFlares(Player player, float knockback, int damage)
