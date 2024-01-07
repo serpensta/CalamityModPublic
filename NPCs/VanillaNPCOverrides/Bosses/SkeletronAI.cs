@@ -357,7 +357,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Float above target
             if (npc.ai[1] == 0f)
             {
-                npc.damage = lifeRatio > 0.99f ? 0 : npc.defDamage;
+                // Avoid cheap bullshit
+                npc.damage = 0;
 
                 calamityGlobalNPC.newAI[1] += 1f;
                 float phaseChangeRateBoost = 3f * (1f - lifeRatio);
@@ -433,6 +434,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Spin charge
             else if (npc.ai[1] == 1f)
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 if (Main.getGoodWorld)
                 {
                     npc.reflectsProjectiles = true;
@@ -577,6 +581,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Despawn
             else if (npc.ai[1] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.velocity.Y += 0.1f;
                 if (npc.velocity.Y < 0f)
                     npc.velocity.Y *= 0.95f;
@@ -676,6 +683,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float handSwipeVelocity = MathHelper.Lerp(22f, death ? 33f : 27.5f, 1f - skeletronLifeRatio);
             if (npc.ai[2] == 0f || npc.ai[2] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (Main.npc[(int)npc.ai[1]].ai[1] == 3f && npc.timeLeft > 10)
                     npc.timeLeft = 10;
 
@@ -778,6 +788,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             if (npc.ai[2] == 1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 Vector2 handCurrentPosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
                 float handDrawbackXPos = Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0] - handCurrentPosition.X;
                 float handDrawbackYPos = Main.npc[(int)npc.ai[1]].position.Y + 230f - handCurrentPosition.Y;
@@ -793,6 +806,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 200f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     npc.TargetClosest();
                     npc.ai[2] = 2f;
                     handCurrentPosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
@@ -807,6 +823,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             else if (npc.ai[2] == 2f)
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 if (npc.position.Y > Main.player[npc.target].position.Y || npc.velocity.Y < 0f || npc.velocity == Vector2.Zero)
                 {
                     npc.ai[2] = 3f;
@@ -815,6 +834,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             else if (npc.ai[2] == 4f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 Vector2 handStrikeCurrentPos = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
                 float handStrikeXPos = Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0] - handStrikeCurrentPos.X;
                 float handStrikeYPos = Main.npc[(int)npc.ai[1]].position.Y + 230f - handStrikeCurrentPos.Y;
@@ -830,6 +852,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 if (npc.position.X + (npc.width / 2) < Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) - 500f || npc.position.X + (npc.width / 2) > Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) + 500f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     npc.TargetClosest();
                     npc.ai[2] = 5f;
                     handStrikeCurrentPos = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
@@ -844,6 +869,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             else if (npc.ai[2] == 5f && ((npc.velocity.X > 0f && npc.position.X + (npc.width / 2) > Main.player[npc.target].position.X + (Main.player[npc.target].width / 2)) || (npc.velocity.X < 0f && npc.position.X + (npc.width / 2) < Main.player[npc.target].position.X + (Main.player[npc.target].width / 2)) || npc.velocity == Vector2.Zero))
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 npc.ai[2] = 0f;
                 npc.netUpdate = true;
             }
