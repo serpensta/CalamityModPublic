@@ -363,7 +363,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 calamityGlobalNPC.newAI[1] += 1f;
                 float phaseChangeRateBoost = 3f * (1f - lifeRatio);
                 npc.ai[2] += 1f + phaseChangeRateBoost;
-                if (npc.ai[2] >= 600f)
+                float chargePhaseGateValue = 600f;
+                bool charge = npc.ai[2] >= chargePhaseGateValue;
+                if (charge)
                 {
                     npc.ai[2] = 0f;
                     npc.ai[1] = 1f;
@@ -374,8 +376,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.netUpdate = true;
                 }
 
-                npc.rotation = npc.velocity.X / 15f;
-
                 float headYAcceleration = 0.04f + (death ? 0.04f * (1f - lifeRatio) : 0f);
                 float headYTopSpeed = 3.5f - (death ? 1.75f - lifeRatio : 0f);
                 float headXAcceleration = 0.08f + (death ? 0.08f * (1f - lifeRatio) : 0f);
@@ -383,9 +383,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (Main.getGoodWorld)
                 {
                     headYAcceleration += 0.01f;
-                    headYTopSpeed += 1f;
+                    headYTopSpeed -= 1f;
                     headXAcceleration += 0.05f;
-                    headXTopSpeed += 2f;
+                    headXTopSpeed -= 2f;
                 }
                 if (bossRush)
                 {
@@ -394,6 +394,28 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     headXAcceleration *= 1.25f;
                     headXTopSpeed *= 0.75f;
                 }
+
+                float moveAwayGateValue = chargePhaseGateValue - (5f + phaseChangeRateBoost);
+                bool moveAwayBeforeCharge = npc.ai[2] >= moveAwayGateValue;
+                if (moveAwayBeforeCharge)
+                {
+                    if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 240f) // 15 tile distance
+                    {
+                        npc.ai[2] -= 1f + phaseChangeRateBoost;
+                        float maxAcceleration = headXAcceleration + headYAcceleration;
+                        npc.velocity += Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * maxAcceleration;
+                        float maxVelocity = (headXTopSpeed + headYTopSpeed) / 2f;
+                        if (npc.velocity.Length() > maxVelocity)
+                        {
+                            npc.velocity.Normalize();
+                            npc.velocity *= maxVelocity;
+                        }
+                    }
+
+                    return false;
+                }
+
+                npc.rotation = npc.velocity.X / 15f;
 
                 if (npc.position.Y > Main.player[npc.target].position.Y - 250f)
                 {
