@@ -399,14 +399,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.defense = 0;
                 int setDamage = (int)(npc.defDamage * (phase3 ? 1.4f : 1.2f));
+                int reducedSetDamage = (int)(setDamage * 0.5f);
 
                 if (npc.ai[1] == 0f & phase3)
                     npc.ai[1] = 5f;
 
                 if (npc.ai[1] == 0f)
                 {
-                    // Avoid cheap bullshit
-                    npc.damage = 0;
+                    // Deal less damage overall while not charging
+                    npc.damage = reducedSetDamage;
 
                     float hoverSpeed = 5.5f + 3f * (0.6f - lifeRatio);
                     float hoverAcceleration = 0.06f + 0.02f * (0.6f - lifeRatio);
@@ -525,8 +526,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[2] += 1f;
                     if (npc.ai[2] >= slowDownGateValue)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
+                        // Deal less damage overall while not charging
+                        npc.damage = reducedSetDamage;
 
                         float decelerationScalar = death ? ((lifeRatio - 0.3f) / 0.3f) : 1f;
                         if (decelerationScalar < 0f)
@@ -551,8 +552,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float numCharges = death ? 4f : 3f;
                         if (npc.ai[3] >= numCharges)
                         {
-                            // Avoid cheap bullshit
-                            npc.damage = 0;
+                            // Deal less damage overall while not charging
+                            npc.damage = reducedSetDamage;
 
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
@@ -570,8 +571,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 {
                     if ((npc.ai[3] == 4f & phase3) && npc.Center.Y > Main.player[npc.target].Center.Y)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
+                        // Deal less damage overall while not charging
+                        npc.damage = reducedSetDamage;
 
                         npc.TargetClosest();
                         npc.ai[1] = 0f;
@@ -672,8 +673,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[2] >= lineUpDistControl)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
+                        // Deal less damage overall while not charging
+                        npc.damage = reducedSetDamage;
 
                         npc.velocity *= 0.95f;
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
@@ -698,8 +699,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float maxCharges = death ? (finalPhaseDeath ? 0f : penultimatePhaseDeath ? 1f : 2f) : finalPhaseRev ? 2f : 3f;
                         if (npc.ai[3] >= maxCharges)
                         {
-                            // Avoid cheap bullshit
-                            npc.damage = 0;
+                            // Deal less damage overall while not charging
+                            npc.damage = reducedSetDamage;
 
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
@@ -711,8 +712,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 else if (npc.ai[1] == 5f)
                 {
-                    // Avoid cheap bullshit
-                    npc.damage = 0;
+                    // Deal less damage overall while not charging
+                    npc.damage = reducedSetDamage;
 
                     float offset = death ? 540f : 600f;
                     float speedBoost = death ? 15f * (0.3f - lifeRatio) : 5f * (0.3f - lifeRatio);
@@ -871,8 +872,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[2] >= lineUpDistControl)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
+                        // Deal less damage overall while not charging
+                        npc.damage = reducedSetDamage;
 
                         npc.velocity *= 0.95f;
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
@@ -886,8 +887,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float lineUpDistNetUpdate = lineUpDistControl + 13f;
                     if (npc.ai[2] >= lineUpDistNetUpdate)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
+                        // Deal less damage overall while not charging
+                        npc.damage = reducedSetDamage;
 
                         npc.netUpdate = true;
 
