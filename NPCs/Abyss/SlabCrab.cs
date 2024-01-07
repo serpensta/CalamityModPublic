@@ -28,6 +28,8 @@ namespace CalamityMod.NPCs.Abyss
         public ref float AITimer => ref NPC.ai[1];
         public ref float HopTimer => ref NPC.ai[2];
         public ref float CalmDownTimer => ref NPC.ai[3];
+
+        public bool playerCrossed = false;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 23;
@@ -86,18 +88,19 @@ namespace CalamityMod.NPCs.Abyss
                     NPC.ShowNameOnHover = false;
                     NPC.chaseable = false;
                     NPC.defense = 999998;
-                    NPC.velocity.X = 0;
                     AITimer++;
+                    NPC.TargetClosest(false);
                     // if the block below it is mined, instantly start running
-                    //if (NPC.velocity.Y > 0)
+                    if (NPC.velocity.Y > 0)
                     {
-                        //ChangePhase((int)AIState.Active);
+                        ChangePhase((int)AIState.Active);
                     }
                     // randomly start looking around after a bit
                     if (AITimer > 300 && Main.rand.NextBool(420))
                     {
                         ChangePhase((int)AIState.IdleAnim);
                     }
+                    HandlePlayerDetection();
                     HandlePickaxeInteraction();
                     break;
                 case (int)AIState.IdleAnim:
@@ -105,23 +108,18 @@ namespace CalamityMod.NPCs.Abyss
                     NPC.chaseable = false;
                     NPC.defense = 999998;
                     AITimer++;
-                    NPC.velocity.X = 0;
+                    NPC.TargetClosest(false);
                     // if the block below it is mined, instantly start running
                     if (NPC.velocity.Y > 0)
                     {
                         ChangePhase((int)AIState.Active);
-                    }
-                    NPC.TargetClosest();
-                    // if a player gets too close while it's looking, pop out
-                    if (Target.Distance(NPC.Center) < 480 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
-                    {
-                        ChangePhase((int)AIState.Enraged);
                     }
                     // if the animation finishes, go back to stone mode
                     if (AITimer > 90)
                     {
                         ChangePhase((int)AIState.Hiding);
                     }
+                    HandlePlayerDetection();
                     HandlePickaxeInteraction();
                     break;
                 case (int)AIState.Enraged:
@@ -130,6 +128,7 @@ namespace CalamityMod.NPCs.Abyss
                     NPC.defense = 10;
                     NPC.knockBackResist = 0f;
                     NPC.chaseable = false;
+                    NPC.TargetClosest(false);
                     // give the animation time to play out then start attacking
                     if (AITimer > 24)
                     {
@@ -138,7 +137,6 @@ namespace CalamityMod.NPCs.Abyss
                     break;
                 case (int)AIState.Active:
                     NPC.ShowNameOnHover = true;
-                    NPC.TargetClosest();
                     NPC.defense = 10;
                     NPC.knockBackResist = 1f;
                     NPC.damage = 20;
@@ -191,6 +189,7 @@ namespace CalamityMod.NPCs.Abyss
                     // go back to hiding if on the ground, has been angri for over 5 seconds, and is far enough from the player (distance reduced if no line of sight)
                     if (CalmDownTimer > 300 && outofRange && NPC.velocity.Y == 0 && Main.rand.NextBool(180))
                     {
+                        playerCrossed = false;
                         ChangePhase(0);
                     }
                     break;
@@ -333,7 +332,7 @@ namespace CalamityMod.NPCs.Abyss
             {
                 if (tileMaus.Intersects(NPC.getRect()))
                 {
-                    if (player.Distance(NPC.Center) < new Vector2(Player.tileRangeX, Player.tileRangeY).Length() * 16)
+                    if (player.Distance(NPC.Center) < (new Vector2(Player.tileRangeX, Player.tileRangeY).Length() + player.HeldItem.tileBoost) * 16)
                     {
                         if (player.ItemAnimationActive)
                         {
@@ -346,6 +345,24 @@ namespace CalamityMod.NPCs.Abyss
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public void HandlePlayerDetection()
+        {
+            if (!playerCrossed)
+            {
+                if (Math.Abs(Target.position.X - NPC.position.X) < 4 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
+                {
+                    playerCrossed = true;
+                }
+            }
+            else
+            {
+                if (Target.Distance(NPC.Center) > 128)
+                {
+                    ChangePhase((int)AIState.Enraged);
                 }
             }
         }
@@ -375,7 +392,7 @@ namespace CalamityMod.NPCs.Abyss
             {
                 Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/NPCs/Abyss/SlabCrabGlow").Value;
 
-                var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                var effects = NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
                 Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4),
                 NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
