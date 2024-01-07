@@ -134,6 +134,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Despawn phase
             if (npc.ai[0] == 5f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.velocity.Y *= 0.98f;
 
                 if (npc.velocity.X < 0f)
@@ -214,6 +217,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Line up and initiate charge
                 if (npc.ai[1] % 2f == 0f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     // Initiate charge
                     float chargeDistance = 20f;
                     chargeDistance += 20f * enrageScale;
@@ -222,6 +228,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (Math.Abs(npc.position.Y + (npc.height / 2) - (Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2))) < chargeDistance)
                     {
+                        // Set damage
+                        npc.damage = npc.defDamage;
+
                         // Set AI variables and speed
                         npc.localAI[0] = 1f;
                         npc.ai[1] += 1f;
@@ -299,6 +308,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
                 else
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     // Face the correct direction
                     if (npc.velocity.X < 0f)
                         npc.direction = -1;
@@ -427,6 +439,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Fly above target before bee spawning phase
             else if (npc.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
                 npc.direction = playerLocation < 0 ? 1 : -1;
                 npc.spriteDirection = npc.direction;
@@ -480,6 +495,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Bee spawn phase
             else if (npc.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.localAI[0] = 0f;
 
                 // Get target location and spawn bees from ass
@@ -621,6 +639,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Stinger phase
             else if (npc.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Get target location and shoot from ass
                 Vector2 stingerSpawnLocation = new Vector2(npc.position.X + (npc.width / 2) + (Main.rand.Next(20) * npc.direction), npc.position.Y + npc.height * 0.8f);
                 Vector2 stingerQueenBeeLocation = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
@@ -752,6 +773,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             else if (npc.ai[0] == 4f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.localAI[0] = 1f;
                 float despawnVelMult = 14f;
 
