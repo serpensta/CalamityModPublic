@@ -284,21 +284,10 @@ namespace CalamityMod.Items
             if (item.type == ItemID.AnkhShield)
                 EditTooltipByNum(1, (line) => line.Text += ", including Mighty Wind");
 
-            // Water removing items cannot be used in the Abyss
-            string noAbyssLine = "\nCannot be used in the Abyss";
-            if (item.type == ItemID.SuperAbsorbantSponge)
-                EditTooltipByNum(0, (line) => line.Text += noAbyssLine);
-            if (item.type == ItemID.EmptyBucket)
-                EditTooltipByName("Defense", (line) => line.Text += noAbyssLine);
-
             // If Early Hardmode Rework is enabled: Remind users that ores will NOT spawn when an altar is smashed.
             if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && (item.type == ItemID.Pwnhammer || item.type == ItemID.Hammush))
                 EditTooltipByNum(0, (line) => line.Text += "\nDemon Altars now drop Souls of Night instead of generating ores when destroyed" +
                 "\nHardmode ores now generate after defeating Mechanical Bosses for the first time");
-
-            // Bottled Honey gives the Honey buff
-            if (item.type == ItemID.BottledHoney)
-                EditTooltipByName("HealLife", (line) => line.Text += "\nGrants the Honey buff for 2 minutes");
 
             // Warmth Potion provides debuff immunities
             if (item.type == ItemID.WarmthPotion)
@@ -573,7 +562,7 @@ namespace CalamityMod.Items
             if (item.type == ItemID.HellfireTreads)
             {
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("fire blocks", "the Burning and On Fire! debuffs"));
-                EditTooltipByNum(3, (line) => line.Text += "\nMultiplies all fire-based debuff damage by 1.5\n" +
+                EditTooltipByNum(2, (line) => line.Text += "\nMultiplies all fire-based debuff damage by 1.5\n" +
                 "All attacks inflict Hellfire");
             }
 
@@ -582,10 +571,6 @@ namespace CalamityMod.Items
                 EditTooltipByNum(2, (line) => line.Text += "\nFairies can spawn at any time on the surface and spawn far more frequently\n" +
                 "Nearby fairies grant +2 HP/s life regen, 10 defense and  10% movement speed\n" +
                 "Fairies are immune to damage and will no longer flee");
-
-            // Armor Crunch immunity pre-Golem.
-            if (item.type == ItemID.ArmorPolish || item.type == ItemID.ArmorBracing)
-                EditTooltipByNum(0, (line) => line.Text += " and Armor Crunch");
 
             // Reduced Nightwither and Holy Flames damage, and melee speed removal.
             if (item.type == ItemID.MoonStone)
