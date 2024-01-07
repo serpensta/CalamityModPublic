@@ -340,8 +340,21 @@ namespace CalamityMod.NPCs.Abyss
                             SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
                             if (CurrentPhase < (int)AIState.Enraged)
                             {
-                                ChangePhase((int)AIState.Enraged);
+                                if (Main.netMode == NetmodeID.SinglePlayer)
+                                {
+                                    ChangePhase((int)AIState.Enraged);
+                                }
+                                else
+                                {
+                                    var netMessage = Mod.GetPacket();
+                                    netMessage.Write((byte)CalamityModMessageType.SyncSlabCrabAI);
+                                    netMessage.Write(NPC.whoAmI);
+                                    netMessage.Write((int)AIState.Enraged);
+                                    netMessage.Send();
+                                }
                                 NPC.netUpdate = true;
+                                if (Main.netMode == NetmodeID.Server)
+                                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
                             }
                         }
                     }
