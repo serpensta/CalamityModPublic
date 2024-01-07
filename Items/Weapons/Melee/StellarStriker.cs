@@ -10,6 +10,9 @@ namespace CalamityMod.Items.Weapons.Melee
     public class StellarStriker : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
+
+        private int OnHitDamage => (int)(0.5f * Item.damage);
+
         public override void SetDefaults()
         {
             Item.width = 90;
@@ -32,16 +35,16 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (player.whoAmI == Main.myPlayer)
-                SpawnFlares(player, Item.knockBack, Item.damage, hit.Crit);
+                SpawnFlares(player, Item.knockBack, OnHitDamage);
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             if (player.whoAmI == Main.myPlayer)
-                SpawnFlares(player, Item.knockBack, Item.damage, true);
+                SpawnFlares(player, Item.knockBack, OnHitDamage);
         }
 
-        private void SpawnFlares(Player player, float knockback, int damage, bool crit)
+        private void SpawnFlares(Player player, float knockback, int damage)
         {
             var source = player.GetSource_ItemUse(Item);
             SoundEngine.PlaySound(SoundID.Item88, player.Center);
@@ -66,9 +69,6 @@ namespace CalamityMod.Items.Weapons.Melee
                 mouseDistance = cometSpeed / mouseDistance;
             }
 
-            if (crit)
-                damage /= 2;
-
             for (int j = 0; j < 2; j++)
             {
                 realPlayerPos = new Vector2(player.Center.X + (float)(Main.rand.Next(201) * -(float)player.direction) + ((float)Main.mouseX + Main.screenPosition.X - player.position.X), player.MountedCenter.Y - 600f);
@@ -90,7 +90,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 mouseYDist *= mouseDistance;
                 float speedX = mouseXDist;
                 float speedY = mouseYDist + (float)Main.rand.Next(-80, 81) * 0.02f;
-                int proj = Projectile.NewProjectile(source, realPlayerPos.X, realPlayerPos.Y, speedX, speedY, ProjectileID.LunarFlare, (int)(damage * 0.5), knockback, i, 0f, (float)Main.rand.Next(3));
+                int proj = Projectile.NewProjectile(source, realPlayerPos.X, realPlayerPos.Y, speedX, speedY, ProjectileID.LunarFlare, damage, knockback, i, 0f, (float)Main.rand.Next(3));
                 if (proj.WithinBounds(Main.maxProjectiles))
                     Main.projectile[proj].DamageType = DamageClass.Melee;
             }
