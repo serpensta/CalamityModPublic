@@ -93,12 +93,12 @@ namespace CalamityMod.NPCs.Abyss
                     // if the block below it is mined, instantly start running
                     if (NPC.velocity.Y > 0)
                     {
-                        ChangePhase((int)AIState.Active);
+                        ChangeAIHook((int)AIState.Active);
                     }
                     // randomly start looking around after a bit
                     if (AITimer > 300 && Main.rand.NextBool(420))
                     {
-                        ChangePhase((int)AIState.IdleAnim);
+                        ChangeAIHook((int)AIState.IdleAnim);
                     }
                     HandlePlayerDetection();
                     HandlePickaxeInteraction();
@@ -112,12 +112,12 @@ namespace CalamityMod.NPCs.Abyss
                     // if the block below it is mined, instantly start running
                     if (NPC.velocity.Y > 0)
                     {
-                        ChangePhase((int)AIState.Active);
+                        ChangeAIHook((int)AIState.Active);
                     }
                     // if the animation finishes, go back to stone mode
                     if (AITimer > 90)
                     {
-                        ChangePhase((int)AIState.Hiding);
+                        ChangeAIHook((int)AIState.Hiding);
                     }
                     HandlePlayerDetection();
                     HandlePickaxeInteraction();
@@ -132,80 +132,98 @@ namespace CalamityMod.NPCs.Abyss
                     // give the animation time to play out then start attacking
                     if (AITimer > 24)
                     {
-                        ChangePhase((int)AIState.Active);
+                        ChangeAIHook((int)AIState.Active);
                     }
                     break;
                 case (int)AIState.Active:
-                    NPC.ShowNameOnHover = true;
-                    NPC.defense = 10;
-                    NPC.knockBackResist = 1f;
-                    NPC.damage = 20;
-                    NPC.chaseable = true;
-                    bool outofRange = ((Target.Center.Distance(NPC.Center) > 600) || (Target.Center.Distance(NPC.Center) > 320 && !Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1)));
-                    if (outofRange)
                     {
-                        CalmDownTimer++;
-                    }
-                    else if (CalmDownTimer > 0)
-                    {
-                        CalmDownTimer--;
-                    }
-                    if (NPC.velocity.Y == 0f)
-                    {
-                        AITimer++;
-                        NPC.knockBackResist = 0.6f;
-                        NPC.TargetClosest(true);
-                        NPC.velocity.X *= 0.85f;
-
-                        float hopRate = MathHelper.Lerp(25f, 10f, 1f - NPC.life / (float)NPC.lifeMax);
-                        float lungeForwardSpeed = 6f;
-                        float jumpSpeed = 7f;
-                        if (Collision.CanHit(NPC.Center, 1, 1, Target.Center, 1, 1))
-                            lungeForwardSpeed *= 1.2f;
-
-                        if (HopTimer == 3)
+                        NPC.ShowNameOnHover = true;
+                        NPC.defense = 10;
+                        NPC.knockBackResist = 1f;
+                        NPC.damage = 20;
+                        NPC.chaseable = true;
+                        bool outofRange = ((Target.Center.Distance(NPC.Center) > 600) || (Target.Center.Distance(NPC.Center) > 320 && !Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1)));
+                        if (outofRange)
                         {
-                            ChangePhase(4);
+                            CalmDownTimer++;
                         }
-                        if (Main.netMode != NetmodeID.MultiplayerClient && AITimer > hopRate)
+                        else if (CalmDownTimer > 0)
                         {
-                            HopTimer++;
-
-                            // Make a bigger leap every 3 hops.
-                            if (HopTimer % 3f == 2f)
-                                lungeForwardSpeed *= 1.5f;
-
-                            AITimer = 0f;
-                            NPC.velocity.Y -= jumpSpeed;
-                            NPC.velocity.X = lungeForwardSpeed * NPC.direction;
-                            NPC.netUpdate = true;
+                            CalmDownTimer--;
                         }
-                    }
-                    else
-                    {
-                        NPC.knockBackResist = 0.2f;
-                        NPC.velocity.X *= 0.995f;
-                    }
-                    // go back to hiding if on the ground, has been angri for over 5 seconds, and is far enough from the player (distance reduced if no line of sight)
-                    if (CalmDownTimer > 300 && outofRange && NPC.velocity.Y == 0 && Main.rand.NextBool(180))
-                    {
-                        playerCrossed = false;
-                        ChangePhase(0);
+                        if (NPC.velocity.Y == 0f)
+                        {
+                            AITimer++;
+                            NPC.knockBackResist = 0.6f;
+                            NPC.TargetClosest(true);
+                            NPC.velocity.X *= 0.85f;
+
+                            float hopRate = MathHelper.Lerp(25f, 10f, 1f - NPC.life / (float)NPC.lifeMax);
+                            float lungeForwardSpeed = 6f;
+                            float jumpSpeed = 7f;
+                            if (Collision.CanHit(NPC.Center, 1, 1, Target.Center, 1, 1))
+                                lungeForwardSpeed *= 1.2f;
+
+                            if (outofRange && NPC.velocity.Y == 0 && CalmDownTimer > 180)
+                            {
+                                playerCrossed = false;
+                                ChangeAIHook((int)AIState.Hiding);
+                                NPC.velocity.X = 0;
+                            }
+                            if (HopTimer >= 3 && NPC.velocity.Y == 0)
+                            {
+                                ChangeAIHook(4);
+                            }
+                            if (Main.netMode != NetmodeID.MultiplayerClient && AITimer > hopRate)
+                            {
+                                HopTimer++;
+
+                                // Make a bigger leap every 3 hops.
+                                if (HopTimer % 3f == 2f)
+                                    lungeForwardSpeed *= 1.5f;
+
+                                AITimer = 0f;
+                                NPC.velocity.Y -= jumpSpeed;
+                                NPC.velocity.X = lungeForwardSpeed * NPC.direction;
+                                NPC.netUpdate = true;
+                            }
+                        }
+                        else
+                        {
+                            NPC.knockBackResist = 0.2f;
+                            NPC.velocity.X *= 0.995f;
+                        }
                     }
                     break;
                 case 4:
-                    AITimer++;
-                    NPC.knockBackResist = 0.6f;
-                    //NPC.TargetClosest(true);
-                    if (NPC.oldPosition == NPC.position)
                     {
-                        NPC.direction *= -1;
-                        NPC.netUpdate = true;
-                    }
-                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 5 * NPC.direction, 0.0125f);
-                    if (AITimer > 240 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
-                    {
-                        ChangePhase((int)AIState.Active);
+                        AITimer++;
+                        NPC.knockBackResist = 0.6f;
+                        bool outofRange = ((Target.Center.Distance(NPC.Center) > 300) || (Target.Center.Distance(NPC.Center) > 120 && !Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1)));
+                        if (outofRange)
+                        {
+                            CalmDownTimer++;
+                        }
+                        else if (CalmDownTimer > 0)
+                        {
+                            CalmDownTimer--;
+                        }
+                        if (NPC.oldPosition == NPC.position)
+                        {
+                            NPC.direction *= -1;
+                            NPC.netUpdate = true;
+                        }
+                        NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, 5 * NPC.direction, 0.0125f);
+                        if (outofRange && Main.rand.NextBool(3) && CalmDownTimer > 180)
+                        {
+                            playerCrossed = false;
+                            ChangeAIHook((int)AIState.Hiding);
+                            NPC.velocity.X = 0;
+                        }
+                        if (AITimer > 240 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
+                        {
+                            ChangeAIHook((int)AIState.Active);
+                        }
                     }
                     break;
             }
@@ -221,6 +239,25 @@ namespace CalamityMod.NPCs.Abyss
             AITimer = ai1 == -1 ? 0 : ai1;
             HopTimer = ai2 == -1 ? 0 : ai2;    
             CalmDownTimer = ai3 == -1 ? 0 : ai3;
+            NPC.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+        }
+
+        public void ChangeAIHook(float phase)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                ChangePhase((int)phase);
+            }
+            else
+            {
+                var netMessage = Mod.GetPacket();
+                netMessage.Write((byte)CalamityModMessageType.SyncSlabCrabAI);
+                netMessage.Write(NPC.whoAmI);
+                netMessage.Write((int)phase);
+                netMessage.Send();
+            }
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
@@ -285,15 +322,15 @@ namespace CalamityMod.NPCs.Abyss
                     }
                     break;
                 case (int)AIState.Enraged:
-                    if (NPC.frame.Y < frameHeight * 18)
-                    {
-                        NPC.frameCounter++;
-                    }
                     if (NPC.frame.Y > frameHeight * 18 || NPC.frame.Y < frameHeight * 15)
                     {
                         NPC.frame.Y = frameHeight * 15;
                     }
-                    if (NPC.frameCounter == 6)
+                    if (NPC.frame.Y < frameHeight * 18)
+                    {
+                        NPC.frameCounter++;
+                    }
+                    if (NPC.frameCounter >= 6)
                     {
                         NPC.frame.Y += frameHeight;
                         NPC.frameCounter = 0;
@@ -314,10 +351,6 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
         {
-            if (CurrentPhase < (int)AIState.Enraged)
-            {
-                ChangePhase((int)AIState.Enraged);
-            }
         }
 
         public override bool? CanBeHitByItem(Player player, Item item) => CurrentPhase > (int)AIState.IdleAnim;
@@ -340,21 +373,7 @@ namespace CalamityMod.NPCs.Abyss
                             SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
                             if (CurrentPhase < (int)AIState.Enraged)
                             {
-                                if (Main.netMode == NetmodeID.SinglePlayer)
-                                {
-                                    ChangePhase((int)AIState.Enraged);
-                                }
-                                else
-                                {
-                                    var netMessage = Mod.GetPacket();
-                                    netMessage.Write((byte)CalamityModMessageType.SyncSlabCrabAI);
-                                    netMessage.Write(NPC.whoAmI);
-                                    netMessage.Write((int)AIState.Enraged);
-                                    netMessage.Send();
-                                }
-                                NPC.netUpdate = true;
-                                if (Main.netMode == NetmodeID.Server)
-                                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+                                ChangeAIHook((int)AIState.Enraged);
                             }
                         }
                     }
@@ -375,7 +394,7 @@ namespace CalamityMod.NPCs.Abyss
             {
                 if (Target.Distance(NPC.Center) > 128)
                 {
-                    ChangePhase((int)AIState.Enraged);
+                    ChangeAIHook((int)AIState.Enraged);
                 }
             }
         }
