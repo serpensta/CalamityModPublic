@@ -4,6 +4,7 @@ using CalamityMod.Items.Placeables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -20,7 +21,8 @@ namespace CalamityMod.NPCs.Abyss
             Hiding = 0,
             IdleAnim = 1,
             Enraged = 2,
-            Active = 3
+            Active = 3,
+            Walking = 4
         }
 
         public Player Target => Main.player[NPC.target];
@@ -30,6 +32,9 @@ namespace CalamityMod.NPCs.Abyss
         public ref float CalmDownTimer => ref NPC.ai[3];
 
         public bool playerCrossed = false;
+        public const int BaseDefense = 10; // the crab's defense while hostile
+        public const int BaseAttack = 20; // the crab's damage while hostile
+        public const float BaseKB = 1f; // the crab's knockback taken while hostile
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 23;
@@ -40,7 +45,7 @@ namespace CalamityMod.NPCs.Abyss
             NPC.width = 44;
             NPC.height = 30;
 
-            NPC.damage = 20;
+            NPC.damage = BaseAttack;
             NPC.lifeMax = 300;
 
             NPC.aiStyle = AIType = -1;
@@ -73,10 +78,23 @@ namespace CalamityMod.NPCs.Abyss
             });
         }
 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(NPC.localAI[0]);
+            writer.Write(playerCrossed);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            playerCrossed = reader.ReadBoolean();
+            NPC.localAI[0] = reader.ReadSingle();
+        }
+
         public override void AI()
         {
             NPC.direction = NPC.velocity.X != 0 ? Math.Sign(NPC.velocity.X) : NPC.direction;
             NPC.spriteDirection = -NPC.direction;
+            // the crab cannot be awoken for 1.5 seconds after spawning
             NPC.localAI[0]++;
             if (NPC.localAI[0] < 90)
                 return;
@@ -125,7 +143,7 @@ namespace CalamityMod.NPCs.Abyss
                 case (int)AIState.Enraged:
                     NPC.ShowNameOnHover = true;
                     AITimer++;
-                    NPC.defense = 10;
+                    NPC.defense = BaseDefense;
                     NPC.knockBackResist = 0f;
                     NPC.chaseable = false;
                     NPC.TargetClosest(false);
@@ -138,10 +156,11 @@ namespace CalamityMod.NPCs.Abyss
                 case (int)AIState.Active:
                     {
                         NPC.ShowNameOnHover = true;
-                        NPC.defense = 10;
-                        NPC.knockBackResist = 1f;
-                        NPC.damage = 20;
+                        NPC.defense = BaseDefense;
+                        NPC.knockBackResist = BaseKB;
+                        NPC.damage = BaseAttack;
                         NPC.chaseable = true;
+                        // if the player is out of range (affected by if the crab can see the player), start ticking down the calmdown timer
                         bool outofRange = ((Target.Center.Distance(NPC.Center) > 600) || (Target.Center.Distance(NPC.Center) > 320 && !Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1)));
                         if (outofRange)
                         {
@@ -164,15 +183,17 @@ namespace CalamityMod.NPCs.Abyss
                             if (Collision.CanHit(NPC.Center, 1, 1, Target.Center, 1, 1))
                                 lungeForwardSpeed *= 1.2f;
 
-                            if (outofRange && NPC.velocity.Y == 0 && CalmDownTimer > 180)
+                            // ocne the calmdown timer hits 3 seconds and the crab is on the ground, go back to hiding
+                            if (outofRange && CalmDownTimer > 180)
                             {
                                 playerCrossed = false;
                                 ChangeAIHook((int)AIState.Hiding);
                                 NPC.velocity.X = 0;
                             }
-                            if (HopTimer >= 3 && NPC.velocity.Y == 0)
+                            // after 3 hops, start walking once the crab is on the ground
+                            if (HopTimer >= 3)
                             {
-                                ChangeAIHook(4);
+                                ChangeAIHook((int)AIState.Walking);
                             }
                             if (Main.netMode != NetmodeID.MultiplayerClient && AITimer > hopRate)
                             {
@@ -198,7 +219,10 @@ namespace CalamityMod.NPCs.Abyss
                 case 4:
                     {
                         AITimer++;
-                        NPC.knockBackResist = 0.6f;
+                        NPC.knockBackResist = BaseKB;
+                        NPC.damage = BaseAttack;
+                        NPC.defense = BaseDefense;
+                        // deaggro code is the same as above
                         bool outofRange = ((Target.Center.Distance(NPC.Center) > 300) || (Target.Center.Distance(NPC.Center) > 120 && !Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1)));
                         if (outofRange)
                         {
@@ -208,6 +232,7 @@ namespace CalamityMod.NPCs.Abyss
                         {
                             CalmDownTimer--;
                         }
+                        // turn around
                         if (NPC.oldPosition == NPC.position)
                         {
                             NPC.direction *= -1;
@@ -220,6 +245,7 @@ namespace CalamityMod.NPCs.Abyss
                             ChangeAIHook((int)AIState.Hiding);
                             NPC.velocity.X = 0;
                         }
+                        // after 4 seconds and the player is still in the crab's line of sight, start leaping at them again
                         if (AITimer > 240 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
                         {
                             ChangeAIHook((int)AIState.Active);
@@ -227,6 +253,7 @@ namespace CalamityMod.NPCs.Abyss
                     }
                     break;
             }
+            // heavy
             if (NPC.velocity.Y > 0)
             {
                 NPC.velocity.Y *= 1.1f;
@@ -348,11 +375,7 @@ namespace CalamityMod.NPCs.Abyss
                     break;
             }
         }
-
-        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
-        {
-        }
-
+        // the crab is invincible while hiding
         public override bool? CanBeHitByItem(Player player, Item item) => CurrentPhase > (int)AIState.IdleAnim;
 
         public override bool? CanBeHitByProjectile(Projectile projectile) => CurrentPhase > (int)AIState.IdleAnim;
@@ -361,16 +384,21 @@ namespace CalamityMod.NPCs.Abyss
         {
             Player player = Main.LocalPlayer;
             Rectangle tileMaus = new Rectangle(Player.tileTargetX * 16, Player.tileTargetY * 16, 16, 16);
+            // check if the player is holding a pickaxe
             if (player.HeldItem.pick > 0)
             {
+                // check if the tile sized cursor intersects with the crab
                 if (tileMaus.Intersects(NPC.getRect()))
                 {
+                    // check if the crab is within range of the player's mining distance
                     if (player.Distance(NPC.Center) < (new Vector2(Player.tileRangeX, Player.tileRangeY).Length() + player.HeldItem.tileBoost) * 16)
                     {
+                        // finally check if the player is actually swinging their pickaxe
                         if (player.ItemAnimationActive)
                         {
+                            // ouch!
                             player.ApplyDamageToNPC(NPC, (int)player.GetDamage(DamageClass.MeleeNoSpeed).ApplyTo(player.HeldItem.damage), 0, player.direction);
-                            SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
+                            SoundEngine.PlaySound(SoundID.Dig, NPC.Center); // this is the dig sound that shale piles use
                             if (CurrentPhase < (int)AIState.Enraged)
                             {
                                 ChangeAIHook((int)AIState.Enraged);
@@ -385,6 +413,7 @@ namespace CalamityMod.NPCs.Abyss
         {
             if (!playerCrossed)
             {
+                // if the player is within a 4 pixel distance of the NPC's horizontal position and is within its line of sight, mark the player as noticed
                 if (Math.Abs(Target.position.X - NPC.position.X) < 4 && Collision.CanHitLine(NPC.Center, 1, 1, Target.Center, 1, 1))
                 {
                     playerCrossed = true;
@@ -392,6 +421,7 @@ namespace CalamityMod.NPCs.Abyss
             }
             else
             {
+                // once the player moves 8 blocks away, jump them
                 if (Target.Distance(NPC.Center) > 128)
                 {
                     ChangeAIHook((int)AIState.Enraged);
