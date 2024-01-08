@@ -489,7 +489,7 @@ GildedDagger: {
 	Tooltip:
 		'''
 		Throws a shiny blade that ricochets towards another enemy on hit
-		Stealth strikes cause the blade to home in after ricocheting, with each ricochet dealing 20% more damage
+		Stealth strikes cause the blade to home in after ricocheting, with each ricochet dealing 5% more damage
 		Stealth strikes also have increased piercing
 		'''
 }
@@ -508,7 +508,7 @@ GleamingDagger: {
 	Tooltip:
 		'''
 		Throws a shiny blade that ricochets towards another enemy on hit
-		Stealth strikes cause the blade to home in after ricocheting, with each ricochet dealing 20% more damage
+		Stealth strikes cause the blade to home in after ricocheting, with each ricochet dealing 5% more damage
 		Stealth strikes also have increased piercing
 		'''
 }
