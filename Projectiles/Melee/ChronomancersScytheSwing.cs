@@ -18,7 +18,7 @@ namespace CalamityMod.Projectiles.Melee
         public static int IcicleSpeed = 24;
         public static int IcicleVariance = 4;
         public static int IcicleFrequency = 5;
-        public static float IcicleDamageMultiplier = 0.3f;
+        public static float IcicleDamageMultiplier = 1.2f;
         public static int ClockChance = 30;
         public override void SetStaticDefaults()
         {
@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
-            Projectile.DamageType = TrueMeleeNoSpeedDamageClass.Instance;
+            Projectile.DamageType = DamageClass.MeleeNoSpeed;
             Projectile.ownerHitCheck = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 5;
