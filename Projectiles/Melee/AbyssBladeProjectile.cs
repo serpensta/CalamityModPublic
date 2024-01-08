@@ -159,7 +159,7 @@ namespace CalamityMod.Projectiles.Melee
                     Projectile.extraUpdates = 1;
                     Projectile.rotation = 0;
                     spinMode = false;
-                    SoundEngine.PlaySound(new("CalamityMod/Sounds/NPCHit/ExoHit", 3), Projectile.Center);
+                    SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/CeramicImpact", 2) { Volume = 0.65f, PitchVariance = 0.3f}, Projectile.Center);
                     for (int i = 0; i < 3; i++)
                     {
                         GenericSparkle sparker = new GenericSparkle(Projectile.Center, Vector2.Zero, Color.DodgerBlue, Color.MediumBlue, Main.rand.NextFloat(2.5f, 2.9f) - i * 0.55f, 14, Main.rand.NextFloat(-0.01f, 0.01f), 2.5f);
@@ -168,8 +168,6 @@ namespace CalamityMod.Projectiles.Melee
                     Projectile.penetrate = 1;
                     Projectile.damage = startDamage;
                     Time = 0;
-
-                    SoundStyle HitSound = new("CalamityMod/Sounds/Custom/AbyssGravelMine2") { Volume = 0.6f, PitchVariance = 0.3f };
 
                     bool foundTarget = false;
                     for (int i = 0; i < Main.maxNPCs; i++)
@@ -192,7 +190,6 @@ namespace CalamityMod.Projectiles.Melee
                         Projectile.velocity = (NPCDestination - Projectile.Center).SafeNormalize(Vector2.UnitX * Projectile.direction) * 25;
                     }
 
-                    SoundEngine.PlaySound(HitSound, Projectile.Center);
                     for (int i = 0; i < 6; i++)
                     {
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, ((Projectile.velocity).SafeNormalize(Vector2.UnitX * Projectile.direction) * 5).RotatedByRandom(0.75f) * Main.rand.NextFloat(1.4f, 2.2f), ModContent.ProjectileType<AbyssBladeSplitProjectile>(), startDamage / 4, Projectile.knockBack / 4, Projectile.owner);
@@ -222,10 +219,10 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<CrushDepth>(), 180);
-            SoundStyle HitSound = new("CalamityMod/Sounds/Custom/AbyssGravelMine2") { Volume = 0.6f, PitchVariance = 0.3f };
+            SoundStyle HitSound = new("CalamityMod/Sounds/Custom/AbyssGravelMine2") { Volume = 0.7f, PitchVariance = 0.3f };
             if (!spinMode)
             {
-                SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/AbyssGravelMine2") { Volume = 0.65f, Pitch = 0.15f }, Projectile.Center);
+                SoundEngine.PlaySound(HitSound, Projectile.Center);
                 for (int i = 0; i < 30; i++)
                 {
                     Vector2 dustPos = Projectile.Center;
