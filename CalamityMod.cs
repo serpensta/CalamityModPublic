@@ -643,7 +643,7 @@ namespace CalamityMod
                 { NPCID.EaterofWorldsHead, 7200 }, // 2:00 (120 seconds)
                 { NPCID.EaterofWorldsBody, 7200 },
                 { NPCID.EaterofWorldsTail, 7200 },
-                { NPCID.BrainofCthulhu, 5400 }, // 1:30 (90 seconds, total length of fight including Creepers phase)
+                { NPCID.BrainofCthulhu, 7200 }, // 2:00 (120 seconds, total length of fight including Creepers phase)
                 { NPCID.Creeper, 1800 }, // 0:30 (30 seconds, length of Creepers phase)
                 { NPCID.Deerclops, 5400 }, // 1:30 (90 seconds)
                 { NPCID.QueenBee, 7200 }, // 2:00 (120 seconds)

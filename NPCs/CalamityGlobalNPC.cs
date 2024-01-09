@@ -1415,7 +1415,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.BrainofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.1);
+                npc.lifeMax = (int)(npc.lifeMax * 1.65);
                 npc.npcSlots = 12f;
             }
             else if (npc.type == NPCID.Creeper)

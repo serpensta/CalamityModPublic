@@ -54,7 +54,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     brainX += Main.rand.Next(-npc.width, npc.width);
                     brainY += Main.rand.Next(-npc.height, npc.height);
 
-                    int creeperSpawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)brainX, (int)brainY, NPCID.Creeper, 0, 0f, 0f, 0f, 0f, 255);
+                    int creeperSpawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)brainX, (int)brainY, NPCID.Creeper, 0, 0f, i * 3f);
                     Main.npc[creeperSpawn].velocity = new Vector2(Main.rand.Next(-30, 31) * 0.1f, Main.rand.Next(-30, 31) * 0.1f);
                     Main.npc[creeperSpawn].netUpdate = true;
                 }
@@ -174,7 +174,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             SoundEngine.PlaySound(SoundID.ForceRoar, npc.position);
 
                             // Velocity
-                            npc.velocity = Vector2.Normalize(Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center) * ((death ? 20f : 16f) + 4f * enrageScale);
+                            npc.velocity = (Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * ((death ? 20f : 16f) + 4f * enrageScale);
                             if (Main.getGoodWorld)
                                 npc.velocity *= 1.15f;
                         }
@@ -192,7 +192,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         {
                             // Velocity and knockback
                             npc.knockBackResist = 0f;
-                            npc.velocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * 24f;
+                            npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 24f;
                             npc.ai[0] = -4f;
                             npc.ai[1] = playerLocation < 0 ? 1f : -1f;
                             npc.ai[2] = 0f;
@@ -237,7 +237,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 400f) // 25 tile distance
                         {
                             npc.ai[2] -= 1f;
-                            npc.velocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * ((death ? -10f : -8f) - 2f * enrageScale);
+                            npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * ((death ? -10f : -8f) - 2f * enrageScale);
                             if (Main.getGoodWorld)
                                 npc.velocity *= 1.15f;
                         }
@@ -387,7 +387,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             // Adjust knockback
                             npc.knockBackResist = 0f;
 
-                            npc.velocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * 24f;
+                            npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 24f;
 
                             npc.ai[0] = -4f;
                             npc.ai[1] = playerLocation < 0 ? 1f : -1f;
@@ -579,13 +579,20 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (!Main.player[npc.target].ZoneCrimson || bossRush)
                 enrageScale += 2f;
 
-            // Creeper count, 0 to 20
+            // Creeper count
             int creeperCount = NPC.CountNPCS(NPCID.Creeper);
+            float creeperRatio = creeperCount / GetBrainOfCthuluCreepersCountRevDeath();
+
+            // Start firing blood projectiles phase
+            bool phase2 = creeperRatio < 0.5f;
 
             // Stay near Brain
             if (npc.ai[0] == 0f)
             {
-                Vector2 creeperCenter = new Vector2(npc.Center.X, npc.Center.Y);
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
+                Vector2 creeperCenter = npc.Center;
                 float brainXDist = Main.npc[NPC.crimsonBoss].Center.X - creeperCenter.X;
                 float brainYDist = Main.npc[NPC.crimsonBoss].Center.Y - creeperCenter.Y;
                 float brainDistance = (float)Math.Sqrt(brainXDist * brainXDist + brainYDist * brainYDist);
@@ -605,15 +612,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 // Increase speed
                 if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < velocity)
-                {
                     npc.velocity *= 1.05f;
-                }
 
                 // Charge at target
-                int creeperScale = GetBrainOfCthuluCreepersCountRevDeath() + 1 - creeperCount;
-                creeperScale *= (int)enrageScale;
-                npc.ai[1] += (death ? 1f : 0.5f) + (creeperScale * 0.25f);
-                if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[1] >= 150f)
+                npc.ai[1] += 1f;
+                float chargeGateValue = GetBrainOfCthuluCreepersCountRevDeath() * 3f;
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[1] >= chargeGateValue)
                 {
                     npc.ai[1] = 0f;
                     npc.TargetClosest();
@@ -632,13 +636,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Charge
             else
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 float chargeVelocity = death ? 10f : 7f;
                 chargeVelocity += 4f * enrageScale;
                 Vector2 targetDirection = Main.player[npc.target].Center - npc.Center;
-                targetDirection.Normalize();
+                targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
                 if (Main.getGoodWorld)
                 {
-                    targetDirection *= 12f;
+                    targetDirection *= chargeVelocity + 6f;
                     npc.velocity = (npc.velocity * 49f + targetDirection) / 50f;
                 }
                 else
@@ -647,14 +654,32 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.velocity = (npc.velocity * 99f + targetDirection) / 100f;
                 }
 
-                Vector2 creeperCenterCharge = new Vector2(npc.Center.X, npc.Center.Y);
-                float brainXDistCharge = Main.npc[NPC.crimsonBoss].Center.X - creeperCenterCharge.X;
-                float brainYDistCharge = Main.npc[NPC.crimsonBoss].Center.Y - creeperCenterCharge.Y;
-                float brainDistanceCharge = (float)Math.Sqrt(brainXDistCharge * brainXDistCharge + brainYDistCharge * brainYDistCharge);
+                // Return to Brain after a set time
+                float chargeDistance = 700f;
+                float returnToBrainGateValue = chargeDistance / chargeVelocity;
+                npc.ai[1] += 1f;
+                if (npc.ai[1] >= returnToBrainGateValue)
+                {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
 
-                // Return to Brain
-                if (brainDistanceCharge > 700f || npc.justHit)
+                    // Shoot blood shots in phase 2
+                    if (phase2 && Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
+                    {
+                        SoundEngine.PlaySound(SoundID.NPCHit20, npc.Center);
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            int projectileType = ProjectileID.BloodShot;
+                            int damage = npc.GetProjectileDamage(projectileType);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, projectileVelocity, projectileType, damage, 0f, Main.myPlayer);
+                        }
+                    }
+
                     npc.ai[0] = 0f;
+                    npc.ai[1] = 0f;
+                }
             }
 
             // Push away from each other in death mode
