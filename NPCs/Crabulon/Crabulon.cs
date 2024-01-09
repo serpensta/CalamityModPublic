@@ -245,6 +245,9 @@ namespace CalamityMod.NPCs.Crabulon
 
             if (NPC.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.velocity *= 0.98f;
 
                 NPC.ai[1] += 1f;
@@ -267,6 +270,9 @@ namespace CalamityMod.NPCs.Crabulon
             }
             else if (NPC.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 float walkingVelocity = 2f;
                 if (phase2)
                     walkingVelocity = 2.5f;
@@ -356,6 +362,9 @@ namespace CalamityMod.NPCs.Crabulon
             }
             else if (NPC.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.noTileCollide = false;
                 if (NPC.velocity.Y == 0f)
                 {
@@ -458,6 +467,9 @@ namespace CalamityMod.NPCs.Crabulon
             {
                 if (NPC.velocity.Y == 0f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     SoundEngine.PlaySound(SoundID.Item14, NPC.Center);
 
                     int type = ModContent.ProjectileType<MushBombFall>();
@@ -559,6 +571,9 @@ namespace CalamityMod.NPCs.Crabulon
                 }
                 else
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     if (!player.dead && expertMode)
                     {
                         if ((player.position.Y > NPC.Bottom.Y && NPC.velocity.Y > 0f) || (player.position.Y < NPC.Bottom.Y && NPC.velocity.Y < 0f))

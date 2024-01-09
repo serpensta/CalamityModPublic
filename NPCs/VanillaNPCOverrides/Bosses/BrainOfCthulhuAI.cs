@@ -116,9 +116,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Take damage
                 npc.dontTakeDamage = false;
 
-                // Deal no damage while spinning
-                npc.damage = spinning ? 0 : npc.defDamage;
-
                 // Target distance X
                 float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
 
@@ -128,6 +125,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Not charging
                     if (npc.ai[0] != -6f)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         // Rubber band movement
                         Vector2 brainCenter = new Vector2(npc.Center.X, npc.Center.Y);
                         float targetXDist = Main.player[npc.target].Center.X - brainCenter.X;
@@ -167,6 +167,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         // Charge sound and velocity
                         else if (npc.ai[1] == 10f)
                         {
+                            // Set damage
+                            npc.damage = npc.defDamage;
+
                             // Sound
                             SoundEngine.PlaySound(SoundID.ForceRoar, npc.position);
 
@@ -180,6 +183,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Rubber band movement, -5
                     if (npc.ai[0] == -5f)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         // Spin or teleport
                         npc.ai[2] += 1f;
                         if (npc.ai[2] >= 180f)
@@ -200,6 +206,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Circle around, -4
                 if (spinning)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     // Charge sound
                     if (npc.ai[2] == 0f)
                     {
@@ -255,6 +264,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Pick teleport location
                 else if (npc.ai[0] == -1f || npc.ai[0] == -7f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     // Adjust knockback
                     if (npc.ai[0] == -1f)
                     {
