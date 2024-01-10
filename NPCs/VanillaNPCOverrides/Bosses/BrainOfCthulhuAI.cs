@@ -135,7 +135,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
                         float velocityScale = death ? 4f : 2f;
                         float velocityBoost = velocityScale * (1f - lifeRatio);
-                        float nonChargeSpeed = 8f + velocityBoost + 3f * enrageScale;
+                        float nonChargeSpeed = 8f + velocityBoost + 2f * enrageScale;
                         if (Main.getGoodWorld)
                             nonChargeSpeed *= 1.15f;
 
@@ -417,8 +417,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 // Creeper count
                 int creeperCount = NPC.CountNPCS(NPCID.Creeper);
-                int creeperScale = GetBrainOfCthuluCreepersCountRevDeath() + 1 - creeperCount;
-                creeperScale *= (int)enrageScale;
+                if (creeperCount > GetBrainOfCthuluCreepersCountRevDeath())
+                    creeperCount = GetBrainOfCthuluCreepersCountRevDeath();
+
+                float creeperRatio = creeperCount / GetBrainOfCthuluCreepersCountRevDeath();
+                float velocityScale = MathHelper.Lerp(0f, 2f, 1f - creeperRatio) + 2f * enrageScale;
+
+                // Check for phase 2
                 bool phase2 = creeperCount <= 0;
 
                 // Go to phase 2
@@ -433,11 +438,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Move towards target
-                Vector2 brainCenterPhase1 = new Vector2(npc.Center.X, npc.Center.Y);
+                Vector2 brainCenterPhase1 = npc.Center;
                 float targetXDistPhase1 = Main.player[npc.target].Center.X - brainCenterPhase1.X;
                 float targetYDistPhase1 = Main.player[npc.target].Center.Y - brainCenterPhase1.Y;
                 float targetDistancePhase1 = (float)Math.Sqrt(targetXDistPhase1 * targetXDistPhase1 + targetYDistPhase1 * targetYDistPhase1);
-                float maxMoveVelocity = (death ? 2f : 1f) + (creeperScale * 0.1f);
+                float maxMoveVelocity = (death ? 2f : 1f) + velocityScale;
                 if (Main.getGoodWorld)
                     maxMoveVelocity *= 2f;
 
@@ -459,7 +464,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         // Teleport location
-                        npc.localAI[1] += (death ? 2f : 1f) + (creeperScale * 0.1f);
+                        npc.localAI[1] += (death ? 2f : 1f) + velocityScale;
                         if (npc.localAI[1] >= 300f)
                         {
                             npc.localAI[1] = 0f;
@@ -581,6 +586,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             // Creeper count
             int creeperCount = NPC.CountNPCS(NPCID.Creeper);
+            if (creeperCount > GetBrainOfCthuluCreepersCountRevDeath())
+                creeperCount = GetBrainOfCthuluCreepersCountRevDeath();
+
             float creeperRatio = creeperCount / GetBrainOfCthuluCreepersCountRevDeath();
 
             // Start firing blood projectiles phase
@@ -597,7 +605,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float brainYDist = Main.npc[NPC.crimsonBoss].Center.Y - creeperCenter.Y;
                 float brainDistance = (float)Math.Sqrt(brainXDist * brainXDist + brainYDist * brainYDist);
                 float velocity = death ? 10f : 7f;
-                velocity += 4f * enrageScale;
+                velocity += 2f * enrageScale;
 
                 // Max distance from Brain
                 if (brainDistance > 90f)
@@ -640,7 +648,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.damage = npc.defDamage;
 
                 float chargeVelocity = death ? 10f : 7f;
-                chargeVelocity += 4f * enrageScale;
+                chargeVelocity += 2f * enrageScale;
                 Vector2 targetDirection = Main.player[npc.target].Center - npc.Center;
                 targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
                 if (Main.getGoodWorld)
