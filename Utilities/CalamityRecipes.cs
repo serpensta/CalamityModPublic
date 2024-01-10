@@ -1431,7 +1431,7 @@ namespace CalamityMod
             // Enchanted Boomerang
             r = Recipe.Create(ItemID.EnchantedBoomerang);
             r.AddIngredient(ItemID.WoodenBoomerang);
-            r.AddIngredient(ModContent.ItemType<PearlShard>(), 6);
+            r.AddIngredient(ItemID.FallenStar, 6);
             r.AddRecipeGroup(AnyGoldBar, 8);
             r.AddTile(TileID.Anvils);
             r.Register();
