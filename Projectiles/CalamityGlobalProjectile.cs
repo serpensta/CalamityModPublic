@@ -409,6 +409,39 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            else if (projectile.type == ProjectileID.BloodShot)
+            {
+                if (projectile.localAI[0] == 0f)
+                {
+                    SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
+                    projectile.localAI[0] = 1f;
+                    for (int num159 = 0; num159 < 8; num159++)
+                    {
+                        Dust obj9 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
+                        obj9.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
+                        obj9.scale = 1.5f;
+                        obj9.fadeIn = 1.7f;
+                        obj9.position = projectile.Center;
+                    }
+                }
+
+                projectile.alpha -= 20;
+                if (projectile.alpha < 0)
+                    projectile.alpha = 0;
+
+                for (int num160 = 0; num160 < 2; num160++)
+                {
+                    Dust obj10 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
+                    obj10.velocity = obj10.velocity / 4f + projectile.velocity / 2f;
+                    obj10.scale = 1.2f;
+                    obj10.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
+                }
+
+                projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.BloodNautilusShot)
             {
                 if (projectile.localAI[0] == 0f)

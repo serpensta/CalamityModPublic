@@ -103,8 +103,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Percent life remaining
                 float lifeRatio = npc.life / (float)npc.lifeMax;
 
-                // Phases based on HP
-                bool phase3 = lifeRatio < 0.6f;
+                // Phases
+
+                // Start spinning, projectile and charging phase
+                bool phase3 = lifeRatio < 0.7f;
+
+                // Create additional afterimages and fire projectiles from 4 locations phase
+                bool phase4 = lifeRatio < 0.4f;
+
                 bool spinning = npc.ai[0] == -4f;
 
                 // KnockBack
@@ -186,9 +192,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         // Avoid cheap bullshit
                         npc.damage = 0;
 
-                        // Spin or teleport
+                        // Spin
                         npc.ai[2] += 1f;
-                        if (npc.ai[2] >= 180f)
+                        float spinGateValue = death ? 120f : 180f;
+
+                        if (npc.ai[2] >= spinGateValue)
                         {
                             // Velocity and knockback
                             npc.knockBackResist = 0f;
@@ -243,9 +251,28 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
                     }
 
-                    // Charge at target, -6 is straight line movement, -5 is rubber band movement
+                    // Charge at target
                     if (npc.ai[2] >= timer)
                     {
+                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 6f;
+                        Vector2 projectileSpawnCenter = npc.Center + projectileVelocity;
+                        bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            int type = ProjectileID.BloodShot;
+                            int damage = npc.GetProjectileDamage(type);
+                            int numProj = phase4 ? 3 : 7;
+                            int spread = phase4 ? 20 : 40;
+                            float rotation = MathHelper.ToRadians(spread);
+                            for (int i = 0; i < numProj; i++)
+                            {
+                                Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                if (!canHit)
+                                    Main.projectile[proj].tileCollide = false;
+                            }
+                        }
+
                         // Complete stop
                         npc.velocity *= 0f;
 
@@ -672,16 +699,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.damage = 0;
 
                     // Shoot blood shots in phase 2
-                    if (phase2 && Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
+                    if (phase2)
                     {
-                        SoundEngine.PlaySound(SoundID.NPCHit20, npc.Center);
-
+                        bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
+                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int projectileType = ProjectileID.BloodShot;
                             int damage = npc.GetProjectileDamage(projectileType);
-                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, projectileVelocity, projectileType, damage, 0f, Main.myPlayer);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, projectileVelocity, projectileType, damage, 0f, Main.myPlayer);
+                            if (!canHit)
+                                Main.projectile[proj].tileCollide = false;
                         }
                     }
 

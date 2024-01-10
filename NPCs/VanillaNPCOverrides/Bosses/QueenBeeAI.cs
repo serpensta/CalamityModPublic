@@ -658,7 +658,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Fire stingers
                 if (npc.ai[1] % stingerAttackTimer == (stingerAttackTimer - 1) && npc.position.Y + npc.height < Main.player[npc.target].position.Y && Collision.CanHit(stingerSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                 {
-                    SoundEngine.PlaySound(SoundID.Item17, npc.position);
+                    SoundEngine.PlaySound(SoundID.Item17, stingerSpawnLocation);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         float stingerSpeed = 5f;

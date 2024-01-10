@@ -174,8 +174,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             bool spawnServant = NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants;
                             if (spawnServant)
                                 SoundEngine.PlaySound(SoundID.NPCHit1, servantSpawnCenter);
-                            else
-                                SoundEngine.PlaySound(SoundID.NPCHit18, servantSpawnCenter);
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -195,8 +193,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 }
                             }
 
-                            for (int m = 0; m < 10; m++)
-                                Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                            if (spawnServant)
+                            {
+                                for (int m = 0; m < 10; m++)
+                                    Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                            }
                         }
                     }
                 }
@@ -467,11 +468,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                             }
                         }
-
-                        SoundEngine.PlaySound(SoundID.NPCHit18, projectileSpawnCenter);
-
-                        for (int m = 0; m < 10; m++)
-                            Dust.NewDust(projectileSpawnCenter, 20, 20, 5, projectileVelocity.X * 0.4f, projectileVelocity.Y * 0.4f, 0, default, 1f);
                     }
 
                     if (npc.ai[2] >= phaseLimit)
@@ -753,8 +749,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         bool spawnServant = NPC.CountNPCS(NPCID.ServantofCthulhu) < maxServants;
                         if (spawnServant)
                             SoundEngine.PlaySound(SoundID.NPCDeath13, servantSpawnCenter);
-                        else
-                            SoundEngine.PlaySound(SoundID.NPCHit18, servantSpawnCenter);
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -789,8 +783,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
                         }
 
-                        for (int m = 0; m < 10; m++)
-                            Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                        if (spawnServant)
+                        {
+                            for (int m = 0; m < 10; m++)
+                                Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                        }
                     }
 
                     if (npc.ai[2] >= timeGateValue)
