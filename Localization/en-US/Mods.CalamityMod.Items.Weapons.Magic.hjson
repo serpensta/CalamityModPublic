@@ -775,6 +775,11 @@ TerraRay: {
 		'''
 }
 
+Teslastaff: {
+	DisplayName: Teslastaff
+	Tooltip: Fires a beam of lightning that increases in damage over time so long as it keeps hitting the same enemy
+}
+
 TheDanceofLight: {
 	DisplayName: The Dance of Light
 	Tooltip:
