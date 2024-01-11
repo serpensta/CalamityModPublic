@@ -20,9 +20,9 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = 72;
             Item.height = 72;
             Item.scale = 1.2f;
-            Item.damage = 108;
+            Item.damage = 152;
             Item.DamageType = DamageClass.Melee;
-            Item.useAnimation = Item.useTime = 15;
+            Item.useAnimation = Item.useTime = 16;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 4.25f;
@@ -59,8 +59,8 @@ namespace CalamityMod.Items.Weapons.Melee
         public override float UseSpeedMultiplier(Player player)
         {
             if (player.altFunctionUse != 2)
-                return 1f;
-            return 1.33f;
+                return 1.8f;
+            return 1f;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

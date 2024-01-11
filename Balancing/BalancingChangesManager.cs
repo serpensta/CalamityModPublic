@@ -174,8 +174,11 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Ravager
+            //50% resist to Aegis Blade's explosions cuz the true melee resist aint enough.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<AegisBlast>()))));
+
             // 50% resist to true melee.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(ResistTrueMelee(0.5f))));
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(ResistTrueMelee(0.5f))));   
 
             // 40% resist to Flying Dragon.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileID.DD2SquireSonicBoom))));
@@ -195,6 +198,9 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Lunatic Cultist
+            //50% resist to Aegis Blade's explosions cuz the true melee resist aint enough.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.CultistBoss, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<AegisBlast>()))));
+
             // 20% resist to Art Attack.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.CultistBoss, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<ArtAttackStrike>()))));
 
