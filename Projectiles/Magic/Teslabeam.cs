@@ -35,9 +35,9 @@ namespace CalamityMod.Projectiles.Magic
 
         public const float MaxDamageMultiplier = 5f; // the maximum damage multiplier
         public const float GracePeriod = 10; // this controls the amount of frames that the grace period lasts for. It is combined with the beam's i frame cooldown
-        public const float DamagePerHit = 0.05f; // how much the damage multiplier increases for each enemy hit
+        public const float DamagePerHit = 0.1f; // how much the damage multiplier increases for each enemy hit
         public const float DamageDecayPerFrame = 0.01f; // how much the damage multiplier decreases if damage is decaying
-        public const float AimResponsiveness = 0.99f; // Last Prism is 0.92f. Lower makes the laser turn faster.
+        public const float AimResponsiveness = 0.965f; // Last Prism is 0.92f. Lower makes the laser turn faster.
 
         public override void SetStaticDefaults()
         {
@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.hide = true;
             Projectile.timeLeft = 18000;
             Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = 10;
+            Projectile.idStaticNPCHitCooldown = 6;
         }
         public override void SendExtraAI(BinaryWriter writer)
         {

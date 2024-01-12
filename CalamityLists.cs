@@ -2149,6 +2149,7 @@ namespace CalamityMod
                 ProjectileType<StickyBol>(),
                 ProjectileType<SulphuricBlast>(),
                 ProjectileType<TaserHook>(),
+                ProjectileType<Teslabeam>(),
                 ProjectileType<TyphonsGreedStaff>(),
                 ProjectileType<UrchinBall>(),
                 ProjectileType<UrchinBallSpike>(),
