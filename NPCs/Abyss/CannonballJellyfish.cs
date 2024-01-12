@@ -283,8 +283,8 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
-            target.AddBuff(BuffID.Poisoned, 60 * (this.shouldTarget ? 4 : 2)); //10 sec for explosion, 5 sec for non explosion
-            target.AddBuff(ModContent.BuffType<RiptideDebuff>(), 60 * (this.shouldTarget ? 4 : 2)); //10 sec for explosion, 5 sec for non explosion
+            target.AddBuff(BuffID.Poisoned, 60 * (this.shouldTarget ? 4 : 2)); //4 sec for explosion, 2 sec for non explosion
+            target.AddBuff(ModContent.BuffType<RiptideDebuff>(), 60 * (this.shouldTarget ? 4 : 2)); //4 sec for explosion, 2 sec for non explosion
         }
 
         public override bool CheckDead()
