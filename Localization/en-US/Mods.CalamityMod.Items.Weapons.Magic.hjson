@@ -777,7 +777,14 @@ TerraRay: {
 
 Teslastaff: {
 	DisplayName: Teslastaff
-	Tooltip: Fires a beam of lightning that increases in damage over time so long as it keeps hitting the same enemy
+	Tooltip:
+		'''
+		Fires a channeled beam of pinpoint-accurate lightning
+		The beam has extremely limited turning speed capability
+		Each successive hit on the same enemy increases damage per hit
+		The damage increases 5% per hit to a maximum of 500% damage
+		This damage will rapidly decrease after the enemy stops being hit
+		'''
 }
 
 TheDanceofLight: {
