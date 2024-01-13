@@ -314,3 +314,5 @@ DepthCrusherProjectile.DisplayName: Depth Crusher Projectile
 DepthCrusherSplitProjectile.DisplayName: Depth Crusher Split Projectile
 AbyssBladeProjectile.DisplayName: Abyss Blade Projectile
 AbyssBladeSplitProjectile.DisplayName: Abyss Blade Split Projectile
+NeptunesBountyProjectile.DisplayName: Neptunes Bounty Projectile
+NeptunesBountySplitProjectile.DisplayName: Neptunes Bounty Split Projectile

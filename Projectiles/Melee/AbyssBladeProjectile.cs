@@ -115,6 +115,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.velocity = (Main.MouseWorld - Owner.Center).SafeNormalize(Vector2.UnitX * Owner.direction) * 20;
                 startDamage = Projectile.damage;
                 Projectile.spriteDirection = Projectile.direction;
+                SpinSoundSlot = SoundEngine.PlaySound(AbyssBlade.SpinSound, Projectile.Center);
                 Time = 0;
             }
 
@@ -134,12 +135,6 @@ namespace CalamityMod.Projectiles.Melee
                 if (Projectile.velocity.Y > 0)
                     Projectile.velocity.X *= 0.975f;
 
-
-                if (Projectile.soundDelay <= 0)
-                {
-                    SpinSoundSlot = SoundEngine.PlaySound(AbyssBlade.SpinSound, Projectile.Center);
-                    Projectile.soundDelay = 8;
-                }
                 Vector2 particlePosition = Projectile.Center + new Vector2(13.5f * Projectile.direction, 0) + Projectile.velocity * 0.5f;
                 if (Time % 3 == 0)
                 {
@@ -156,7 +151,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 if (Collision.SolidCollision(Projectile.Center, 10, 10) && Time >= 2)
                 {
-                    Projectile.extraUpdates = 1;
+                    Projectile.extraUpdates = 2;
                     Projectile.rotation = 0;
                     spinMode = false;
                     SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/CeramicImpact", 2) { Volume = 0.65f, PitchVariance = 0.3f}, Projectile.Center);
@@ -204,13 +199,13 @@ namespace CalamityMod.Projectiles.Melee
 
                 if (Time > 9)
                 {
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 6; i++)
                     {
                         Vector2 dustPos = Projectile.Center - Projectile.velocity * 3 + Main.rand.NextVector2Circular(15, 15);
                         Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(3) ? dustType2 : dustType1);
                         dust.noGravity = true;
                         dust.scale = Main.rand.NextFloat(1.3f, 1.6f);
-                        dust.velocity = -Projectile.velocity * Main.rand.NextFloat(0.1f, 0.6f);
+                        dust.velocity = -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.7f);
                     }
                 }
             }
@@ -255,11 +250,6 @@ namespace CalamityMod.Projectiles.Melee
                 dust.scale = Main.rand.NextFloat(1.6f, 2.5f) - dustMulti;
                 dust.velocity = new Vector2(5, 5).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 1f) * dustMulti;
             }
-        }
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            
-            return false;
         }
     }
 }
