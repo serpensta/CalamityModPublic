@@ -11,6 +11,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 {
     public static class BrainOfCthulhuAI
     {
+        public const float TimeBeforeCreeperAttack = 500f;
+        public const float CreeperTelegraphTime = 180f;
+
         public static bool BuffedBrainofCthulhuAI(NPC npc, Mod mod)
         {
             // whoAmI variable
@@ -27,11 +30,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > CalamityGlobalNPC.CatchUpDistance200Tiles)
                 npc.TargetClosest();
 
-            float enrageScale = bossRush ? 1f : 0f;
+            float enrageScale = bossRush ? 1.5f : 0f;
             if ((npc.position.Y / 16f) < Main.worldSurface || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
-                enrageScale += 1f;
+                enrageScale += 0.5f;
             }
             if (!Main.player[npc.target].ZoneCrimson || bossRush)
             {
@@ -47,6 +50,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.localAI[0] = 1f;
                 int brainOfCthuluCreepersCount = GetBrainOfCthuluCreepersCountRevDeath();
+                float attackTimerIncrement = 10f;
                 for (int i = 0; i < brainOfCthuluCreepersCount; i++)
                 {
                     float brainX = npc.Center.X;
@@ -54,7 +58,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     brainX += Main.rand.Next(-npc.width, npc.width);
                     brainY += Main.rand.Next(-npc.height, npc.height);
 
-                    int creeperSpawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)brainX, (int)brainY, NPCID.Creeper, 0, 0f, i * 3f);
+                    int creeperSpawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)brainX, (int)brainY, NPCID.Creeper, 0, 0f, i * attackTimerIncrement);
                     Main.npc[creeperSpawn].velocity = new Vector2(Main.rand.Next(-30, 31) * 0.1f, Main.rand.Next(-30, 31) * 0.1f);
                     Main.npc[creeperSpawn].netUpdate = true;
                 }
@@ -105,12 +109,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 // Phases
 
-                // Start spinning, projectile and charging phase
-                bool phase3 = lifeRatio < 0.7f;
+                // Start spinning, create additional afterimages, shoot projectiles and charging phase
+                bool phase3 = lifeRatio < 0.8f;
 
-                // Create additional afterimages and fire projectiles from 4 locations phase
+                // Fire projectiles from 4 locations phase
                 bool phase4 = lifeRatio < 0.4f;
 
+                // Super fast charges phase
+                bool phase5 = lifeRatio < 0.1f;
+
+                // Whether the fucking thing is spinning or not, dipshit
                 bool spinning = npc.ai[0] == -4f;
 
                 // KnockBack
@@ -131,17 +139,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Not charging
                     if (npc.ai[0] != -6f)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
-
                         // Rubber band movement
                         Vector2 brainCenter = new Vector2(npc.Center.X, npc.Center.Y);
                         float targetXDist = Main.player[npc.target].Center.X - brainCenter.X;
                         float targetYDist = Main.player[npc.target].Center.Y - brainCenter.Y;
                         float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
-                        float velocityScale = death ? 4f : 2f;
+                        float velocityScale = death ? 6f : 3f;
                         float velocityBoost = velocityScale * (1f - lifeRatio);
-                        float nonChargeSpeed = 8f + velocityBoost + 2f * enrageScale;
+                        float nonChargeSpeed = 12f + velocityBoost + 3f * enrageScale;
                         if (Main.getGoodWorld)
                             nonChargeSpeed *= 1.15f;
 
@@ -157,8 +162,27 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         npc.ai[1] += 1f;
 
+                        float chargeVelocity = (death ? 20f : 16f) + 4f * enrageScale;
+                        if (phase5)
+                            chargeVelocity *= 1.3f;
+
+                        float chargeDistance = phase5 ? 1200f : 1500f;
+                        float chargeDuration = chargeDistance / chargeVelocity;
+                        float chargeGateValue = 10f;
+
+                        if (npc.ai[1] < chargeGateValue)
+                        {
+                            // Avoid cheap bullshit
+                            npc.damage = 0;
+                        }
+                        else
+                        {
+                            // Set damage
+                            npc.damage = npc.defDamage;
+                        }
+
                         // Teleport
-                        float timeGateValue = death ? 90f : 115f;
+                        float timeGateValue = chargeDuration + chargeGateValue;
                         if (npc.ai[1] >= timeGateValue)
                         {
                             if (npc.knockBackResist == 0f)
@@ -171,16 +195,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
 
                         // Charge sound and velocity
-                        else if (npc.ai[1] == 10f)
+                        else if (npc.ai[1] == chargeGateValue)
                         {
-                            // Set damage
-                            npc.damage = npc.defDamage;
-
                             // Sound
                             SoundEngine.PlaySound(SoundID.ForceRoar, npc.position);
 
                             // Velocity
-                            npc.velocity = (Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * ((death ? 20f : 16f) + 4f * enrageScale);
+                            npc.velocity = (Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
                             if (Main.getGoodWorld)
                                 npc.velocity *= 1.15f;
                         }
@@ -189,22 +210,27 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Rubber band movement, -5
                     if (npc.ai[0] == -5f)
                     {
-                        // Avoid cheap bullshit
-                        npc.damage = 0;
+                        // Set damage
+                        npc.damage = npc.defDamage;
 
                         // Spin
                         npc.ai[2] += 1f;
-                        float spinGateValue = death ? 120f : 180f;
+                        float spinGateValue = death ? 90f : 180f;
 
                         if (npc.ai[2] >= spinGateValue)
                         {
+                            // Avoid cheap bullshit
+                            npc.damage = 0;
+
                             // Velocity and knockback
                             npc.knockBackResist = 0f;
                             npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 24f;
                             npc.ai[0] = -4f;
                             npc.ai[1] = playerLocation < 0 ? 1f : -1f;
                             npc.ai[2] = 0f;
-                            npc.ai[3] = Main.rand.Next(61);
+
+                            int maxRandomTime = phase5 ? 30 : 60;
+                            npc.ai[3] = Main.rand.Next(maxRandomTime) + 1;
                             npc.localAI[1] = 0f;
                             npc.netUpdate = true;
                         }
@@ -240,12 +266,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     float timer = (death ? 0f : 30f) + npc.ai[3];
 
+                    // Move the brain away from the target in order to ensure fairness
                     if (npc.ai[2] >= timer - 5f)
                     {
-                        if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 400f) // 25 tile distance
+                        float minChargeDistance = phase5 ? 600f : 480f; // 40 tile distance in final phase, 30 tile distance otherwise
+                        if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) < minChargeDistance)
                         {
                             npc.ai[2] -= 1f;
-                            npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * ((death ? -10f : -8f) - 2f * enrageScale);
+                            npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * ((death ? -18f : -12f) - 2f * enrageScale);
+                            if (phase5)
+                                npc.velocity *= 1.3f;
                             if (Main.getGoodWorld)
                                 npc.velocity *= 1.15f;
                         }
@@ -254,22 +284,118 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Charge at target
                     if (npc.ai[2] >= timer)
                     {
-                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 6f;
-                        Vector2 projectileSpawnCenter = npc.Center + projectileVelocity;
-                        bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        // Shoot projectiles from 4 directions, alternating between diagonal and cardinal
+                        float bloodShotVelocity = death ? 7.5f : 6f;
+                        if (phase5)
+                            bloodShotVelocity *= 1.15f;
+
+                        if (phase4)
                         {
-                            int type = ProjectileID.BloodShot;
-                            int damage = npc.GetProjectileDamage(type);
-                            int numProj = phase4 ? 3 : 7;
-                            int spread = phase4 ? 20 : 40;
-                            float rotation = MathHelper.ToRadians(spread);
-                            for (int i = 0; i < numProj; i++)
+                            bool diagonalShots = npc.ai[3] % 2f == 0f;
+                            int totalProjectileSpreads = 4;
+                            for (int i = 0; i < totalProjectileSpreads; i++)
                             {
-                                Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
-                                if (!canHit)
-                                    Main.projectile[proj].tileCollide = false;
+                                Vector2 position = npc.position;
+                                float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                                float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+
+                                switch (i)
+                                {
+                                    case 0:
+
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        if (diagonalShots)
+                                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        else
+                                            position.Y = Main.player[Main.myPlayer].Center.Y;
+
+                                        break;
+
+                                    case 1:
+
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        if (diagonalShots)
+                                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        else
+                                            position.X = Main.player[Main.myPlayer].Center.X;
+
+                                        break;
+
+                                    case 2:
+
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        if (diagonalShots)
+                                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        else
+                                            position.Y = Main.player[Main.myPlayer].Center.Y;
+
+                                        break;
+
+                                    case 3:
+
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        if (diagonalShots)
+                                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        else
+                                            position.X = Main.player[Main.myPlayer].Center.X;
+
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                                position.X -= npc.width / 2;
+                                position.Y -= npc.height / 2;
+
+                                Vector2 projectileVelocity = (Main.player[npc.target].Center - position).SafeNormalize(Vector2.UnitY) * bloodShotVelocity;
+                                Vector2 projectileSpawnCenter = position + projectileVelocity;
+                                if (Vector2.Distance(projectileSpawnCenter, Main.player[npc.target].Center) > 320f) // The projectiles can only be fired if the target is more than 15 tiles away from the firing position
+                                {
+                                    bool canHit = Collision.CanHitLine(position, 1, 1, Main.player[npc.target].Center, 1, 1);
+                                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    {
+                                        int type = ProjectileID.BloodShot;
+                                        int damage = npc.GetProjectileDamage(type);
+                                        int numProj = death ? 5 : 3;
+                                        int spread = death ? 30 : 20;
+                                        if (phase5)
+                                        {
+                                            numProj = death ? 4 : 2;
+                                            spread = death ? 15 : 10;
+                                        }
+
+                                        float rotation = MathHelper.ToRadians(spread);
+                                        for (int j = 0; j < numProj; j++)
+                                        {
+                                            Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1)));
+                                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), position + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                            if (!canHit)
+                                                Main.projectile[proj].tileCollide = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * bloodShotVelocity;
+                            Vector2 projectileSpawnCenter = npc.Center + projectileVelocity;
+                            bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                int type = ProjectileID.BloodShot;
+                                int damage = npc.GetProjectileDamage(type);
+                                int numProj = 7;
+                                int spread = 40;
+                                float rotation = MathHelper.ToRadians(spread);
+                                for (int i = 0; i < numProj; i++)
+                                {
+                                    Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                    if (!canHit)
+                                        Main.projectile[proj].tileCollide = false;
+                                }
                             }
                         }
 
@@ -291,8 +417,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Pick teleport location
                 else if (npc.ai[0] == -1f || npc.ai[0] == -7f)
                 {
-                    // Avoid cheap bullshit
-                    npc.damage = 0;
+                    // Set damage
+                    npc.damage = npc.defDamage;
 
                     // Adjust knockback
                     if (npc.ai[0] == -1f)
@@ -316,13 +442,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
 
                         npc.localAI[1] += 1f;
-
-                        int randomReduction = death ? 4 : (int)(5f * (1f - lifeRatio));
-                        int random = 5 - randomReduction;
-                        if (npc.justHit)
-                            npc.localAI[1] -= Main.rand.Next(random);
-
-                        if (npc.localAI[1] >= 60f)
+                        if (npc.localAI[1] >= 120f)
                         {
                             npc.localAI[1] = 0f;
                             npc.TargetClosest();
@@ -357,6 +477,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 if (numTeleportTries > 100)
                                     goto Block_2784;
                             }
+
+                            // Avoid cheap bullshit
+                            npc.damage = 0;
+
                             npc.ai[3] = 0f;
                             npc.ai[0] = npc.ai[0] == -7f ? -8f : -2f;
                             npc.ai[1] = teleportTileX;
@@ -448,7 +572,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     creeperCount = GetBrainOfCthuluCreepersCountRevDeath();
 
                 float creeperRatio = creeperCount / GetBrainOfCthuluCreepersCountRevDeath();
-                float velocityScale = MathHelper.Lerp(0f, 2f, 1f - creeperRatio) + 2f * enrageScale;
+                float velocityScale = MathHelper.Lerp(0f, 1.5f, 1f - creeperRatio) + enrageScale;
 
                 // Check for phase 2
                 bool phase2 = creeperCount <= 0;
@@ -469,7 +593,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float targetXDistPhase1 = Main.player[npc.target].Center.X - brainCenterPhase1.X;
                 float targetYDistPhase1 = Main.player[npc.target].Center.Y - brainCenterPhase1.Y;
                 float targetDistancePhase1 = (float)Math.Sqrt(targetXDistPhase1 * targetXDistPhase1 + targetYDistPhase1 * targetYDistPhase1);
-                float maxMoveVelocity = (death ? 2f : 1f) + velocityScale;
+                float maxMoveVelocity = (death ? 1.5f : 1f) + velocityScale;
                 if (Main.getGoodWorld)
                     maxMoveVelocity *= 2f;
 
@@ -491,7 +615,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         // Teleport location
-                        npc.localAI[1] += (death ? 2f : 1f) + velocityScale;
+                        npc.localAI[1] += (death ? 1.5f : 1f) + velocityScale;
                         if (npc.localAI[1] >= 300f)
                         {
                             npc.localAI[1] = 0f;
@@ -505,7 +629,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 phase1TeleportTileX = (int)Main.player[npc.target].Center.X / 16;
                                 phase1TeleportTileY = (int)Main.player[npc.target].Center.Y / 16;
 
-                                int min = 18 + teleportDistanceIncrease;
+                                int min = 22 + teleportDistanceIncrease;
                                 int max = 26 + teleportDistanceIncrease;
 
                                 if (Main.rand.NextBool())
@@ -524,14 +648,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 }
                                 if (phase1TeleportTries > 100)
                                 {
-                                    goto Block_2801;
+                                    goto Block;
                                 }
                             }
                             npc.ai[0] = 1f;
                             npc.ai[1] = phase1TeleportTileX;
                             npc.ai[2] = phase1TeleportTileY;
                             npc.netUpdate = true;
-                            Block_2801:
+                            Block:
                             ;
                         }
                     }
@@ -605,21 +729,38 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
                 npc.TargetClosest();
 
-            float enrageScale = bossRush ? 1f : 0f;
+            float enrageScale = bossRush ? 1.5f : 0f;
             if ((npc.position.Y / 16f) < Main.worldSurface || bossRush)
-                enrageScale += 1f;
+                enrageScale += 0.5f;
             if (!Main.player[npc.target].ZoneCrimson || bossRush)
                 enrageScale += 2f;
 
             // Creeper count
-            int creeperCount = NPC.CountNPCS(NPCID.Creeper);
+            int creeperCount = NPC.CountNPCS(npc.type);
             if (creeperCount > GetBrainOfCthuluCreepersCountRevDeath())
                 creeperCount = GetBrainOfCthuluCreepersCountRevDeath();
 
             float creeperRatio = creeperCount / GetBrainOfCthuluCreepersCountRevDeath();
 
-            // Start firing blood projectiles phase
-            bool phase2 = creeperRatio < 0.5f;
+            // Scale the aggressiveness of the charges with amount of Creepers remaining
+            float chargeAggressionScale = (float)Math.Round((death ? 1.75f : 1f) * (1f - creeperRatio));
+
+            // Give off blood dust before charging
+            float beginTelegraphGateValue = TimeBeforeCreeperAttack - CreeperTelegraphTime;
+            bool showTelegraph = npc.ai[1] >= beginTelegraphGateValue || npc.ai[0] == 1f;
+            if (showTelegraph)
+            {
+                float dustScalar = npc.ai[0] == 1f ? 1f : MathHelper.Clamp((npc.ai[1] - beginTelegraphGateValue) / CreeperTelegraphTime, 0f, 1f);
+                int dustAmt = 1 + (int)Math.Round(4 * dustScalar);
+                Color dustColor = new Color(255, 50, 50, 0) * dustScalar;
+                for (int i = 0; i < dustAmt; i++)
+                {
+                    Dust dust = Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, 5, npc.velocity.X, npc.velocity.Y, 100, dustColor)];
+                    dust.noGravity = true;
+                    dust.velocity = Vector2.Zero;
+                    dust.scale = 1.2f;
+                }
+            }
 
             // Stay near Brain
             if (npc.ai[0] == 0f)
@@ -631,7 +772,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float brainXDist = Main.npc[NPC.crimsonBoss].Center.X - creeperCenter.X;
                 float brainYDist = Main.npc[NPC.crimsonBoss].Center.Y - creeperCenter.Y;
                 float brainDistance = (float)Math.Sqrt(brainXDist * brainXDist + brainYDist * brainYDist);
-                float velocity = death ? 10f : 7f;
+                float velocity = death ? 12f : 10f;
                 velocity += 2f * enrageScale;
 
                 // Max distance from Brain
@@ -642,17 +783,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     brainYDist *= brainDistance;
                     npc.velocity.X = (npc.velocity.X * 15f + brainXDist) / 16f;
                     npc.velocity.Y = (npc.velocity.Y * 15f + brainYDist) / 16f;
-                    return false;
                 }
 
                 // Increase speed
-                if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < velocity)
+                if (npc.velocity.Length() < velocity)
                     npc.velocity *= 1.05f;
 
                 // Charge at target
-                npc.ai[1] += 1f;
-                float chargeGateValue = GetBrainOfCthuluCreepersCountRevDeath() * 3f;
-                if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[1] >= chargeGateValue)
+                npc.ai[1] += 1f + chargeAggressionScale;
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[1] >= TimeBeforeCreeperAttack)
                 {
                     npc.ai[1] = 0f;
                     npc.TargetClosest();
@@ -674,7 +813,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Set damage
                 npc.damage = npc.defDamage;
 
-                float chargeVelocity = death ? 10f : 7f;
+                float chargeVelocity = (death ? 6f : 5f) + chargeAggressionScale * 2f;
                 chargeVelocity += 2f * enrageScale;
                 Vector2 targetDirection = Main.player[npc.target].Center - npc.Center;
                 targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
@@ -690,7 +829,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Return to Brain after a set time
-                float chargeDistance = 700f;
+                float chargeDistance = 600f;
                 float returnToBrainGateValue = chargeDistance / chargeVelocity;
                 npc.ai[1] += 1f;
                 if (npc.ai[1] >= returnToBrainGateValue)
@@ -698,19 +837,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Avoid cheap bullshit
                     npc.damage = 0;
 
-                    // Shoot blood shots in phase 2
-                    if (phase2)
+                    // Shoot blood shots
+                    bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
+                    Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
-                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            int projectileType = ProjectileID.BloodShot;
-                            int damage = npc.GetProjectileDamage(projectileType);
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, projectileVelocity, projectileType, damage, 0f, Main.myPlayer);
-                            if (!canHit)
-                                Main.projectile[proj].tileCollide = false;
-                        }
+                        int projectileType = ProjectileID.BloodShot;
+                        int damage = npc.GetProjectileDamage(projectileType);
+                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, projectileVelocity, projectileType, damage, 0f, Main.myPlayer);
+                        if (!canHit)
+                            Main.projectile[proj].tileCollide = false;
                     }
 
                     npc.ai[0] = 0f;
@@ -721,14 +857,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Push away from each other in death mode
             if (death)
             {
-                float pushVelocity = 0.5f;
+                float pushVelocity = MathHelper.Lerp(0.05f, 0.5f, 1f - creeperRatio);
+                float pushDistance = MathHelper.Lerp(4f, 40f, 1f - creeperRatio);
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     if (Main.npc[i].active)
                     {
                         if (i != npc.whoAmI && Main.npc[i].type == npc.type)
                         {
-                            if (Vector2.Distance(npc.Center, Main.npc[i].Center) < 48f)
+                            if (Vector2.Distance(npc.Center, Main.npc[i].Center) < pushDistance)
                             {
                                 if (npc.position.X < Main.npc[i].position.X)
                                     npc.velocity.X -= pushVelocity;
