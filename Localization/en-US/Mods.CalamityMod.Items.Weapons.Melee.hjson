@@ -288,8 +288,9 @@ CosmicShiv: {
 	DisplayName: Cosmic Shiv
 	Tooltip:
 		'''
-		Fires a cosmic beam that homes in on enemies
-		Upon hitting an enemy, a barrage of offscreen objects home in on the enemy as well as raining stars
+		Fires a cosmic star that homes in on enemies
+		Upon hitting an enemy, a barrage of blades will persistently strike
+		Landing more stars causes more blades to strike
 		'''
 }
 
