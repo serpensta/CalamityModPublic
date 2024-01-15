@@ -1,14 +1,9 @@
 using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
-using Terraria.GameContent;
-using Terraria.Graphics;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -91,7 +86,7 @@ namespace CalamityMod.Projectiles.Melee.Shortswords
                     float scale = Main.rand.NextFloat(1.5f, 1.9f);
                     float randomWhitingValue = Main.rand.NextFloat(0.0f, 0.2f);
                     Color color = Color.Lerp(CosmicShivTrail.DustColors[Main.rand.Next(0, CosmicShivTrail.DustColors.Count)], Color.White, randomWhitingValue);  // Just for even more variety in colors idk
-                    Vector2 velocity = StarPolarEquation(petalCount, k, rand2PI) * speed * 2;
+                    Vector2 velocity = StarPolarEquation(petalCount, k, rand2PI) * speed * 2f;
                     Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, velocity, 0, color, scale);
                     dust.noGravity = true;
                     dust.fadeIn = -1f;      // I don't know if this does anything but it looks like the dust fades out faster with this

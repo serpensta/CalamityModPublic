@@ -1,15 +1,11 @@
-﻿using System;
+﻿using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Buffs.DamageOverTime;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.DataStructures;
-using Newtonsoft.Json.Linq;
-using Terraria.Graphics.Shaders;
-using Terraria.Graphics;
 
 namespace CalamityMod.Projectiles.Melee
 {
