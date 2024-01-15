@@ -1420,7 +1420,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.Creeper)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.1);
+                npc.lifeMax = (int)(npc.lifeMax * 1.4);
             }
             else if (CalamityLists.EaterofWorldsIDs.Contains(npc.type))
             {

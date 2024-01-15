@@ -189,7 +189,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 {
                                     int projType = ProjectileID.BloodNautilusShot;
                                     int projDamage = npc.GetProjectileDamage(projType);
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * 10f, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * 10f, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                    Main.projectile[proj].timeLeft = 600;
                                 }
                             }
 
@@ -348,7 +349,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                Main.projectile[proj].timeLeft = 600;
                             }
                         }
                     }
@@ -465,7 +467,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                Main.projectile[proj].timeLeft = 600;
                             }
                         }
                     }
@@ -765,7 +768,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             {
                                 int projType = ProjectileID.BloodNautilusShot;
                                 int projDamage = npc.GetProjectileDamage(projType);
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), servantSpawnCenter, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), servantSpawnCenter, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                Main.projectile[proj].timeLeft = 600;
                             }
 
                             if (CalamityWorld.LegendaryMode)
@@ -778,7 +782,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 for (int i = 0; i < numProj; i++)
                                 {
                                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                    Main.projectile[proj].timeLeft = 600;
                                 }
                             }
                         }
