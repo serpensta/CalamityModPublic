@@ -20,7 +20,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noUseGraphic = true;
             Item.autoReuse = true;
             Item.useStyle = ItemUseStyleID.Rapier;
-            Item.damage = 240;
+            Item.damage = 270;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = Item.useTime = 40;
             Item.shoot = ModContent.ProjectileType<CosmicShivProj>();
@@ -29,7 +29,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.UseSound = SoundID.Item1;
             Item.value = CalamityGlobalItem.Rarity14BuyPrice;
             Item.rare = ModContent.RarityType<DarkBlue>();
-            Item.Calamity().donorItem = true;               // revertusernamechange on Discord (Yatagarasu)
+            Item.Calamity().donorItem = true; // revertusernamechange on Discord (Yatagarasu)
         }
 
         public override bool MeleePrefix() => true;

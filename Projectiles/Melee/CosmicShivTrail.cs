@@ -104,40 +104,6 @@ namespace CalamityMod.Projectiles.Melee
             target.AddBuff(ModContent.BuffType<GodSlayerInferno>(), 60);
         }
 
-        // pretty much entirely from the Oracle circular damage code
-        private void CircularDamage(float radius)
-        {
-            if (Projectile.owner != Main.myPlayer)
-                return;
-            Player owner = Main.player[Projectile.owner];
-
-            for (int i = 0; i < Main.npc.Length; ++i)
-            {
-                NPC target = Main.npc[i];
-                if (!target.active || target.dontTakeDamage || target.friendly)
-                    continue;
-
-                // Shock any valid target within range. Check all four corners of their hitbox.
-                float d1 = Vector2.Distance(Projectile.Center, target.Hitbox.TopLeft());
-                float d2 = Vector2.Distance(Projectile.Center, target.Hitbox.TopRight());
-                float d3 = Vector2.Distance(Projectile.Center, target.Hitbox.BottomLeft());
-                float d4 = Vector2.Distance(Projectile.Center, target.Hitbox.BottomRight());
-                float dist = MathHelper.Min(d1, d2);
-                dist = MathHelper.Min(dist, d3);
-                dist = MathHelper.Min(dist, d4);
-
-                if (dist <= radius)
-                {
-                    int damage = (int)(Projectile.damage * ExplosionDamageMultiplier);
-                    bool crit = Main.rand.Next(100) <= owner.GetCritChance<MeleeDamageClass>() + 4;
-                    target.StrikeNPC(target.CalculateHitInfo(damage, 0, crit, 0));
-
-                    if (Main.netMode != NetmodeID.SinglePlayer)
-                        NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, i, damage, 0f, 0f, crit ? 1 : 0, 0, 0);
-                }
-            }
-        }
-
         // Very similar to CosmicShivBlade PreDraw
         public override bool PreDraw(ref Color lightColor)
         {
@@ -216,8 +182,6 @@ namespace CalamityMod.Projectiles.Melee
                     dust.fadeIn = -1f;
                 }
             }
-
-            CircularDamage(80f);
         }
 
         public override Color? GetAlpha(Color lightColor)
