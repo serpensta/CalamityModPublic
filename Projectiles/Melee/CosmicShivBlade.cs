@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -35,7 +35,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.timeLeft = 6000;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
-            Projectile.extraUpdates = 2;
+            Projectile.extraUpdates = 3;
             Projectile.alpha = 0;
             Projectile.scale = 1.2f;
         }
