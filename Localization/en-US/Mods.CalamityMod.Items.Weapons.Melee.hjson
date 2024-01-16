@@ -794,8 +794,8 @@ NeptunesBounty: {
 	DisplayName: Neptune's Bounty
 	Tooltip:
 		'''
-		Fires a trident that rains additional tridents as it travels
-		Hitting enemies will inflict the crush depth debuff
+		Tosses a spinning abyssal sword constantly releases water energy while spinning
+		Once the blade begins falling it will redirect itself towards enemies with increased velocity
 		'''
 }
 

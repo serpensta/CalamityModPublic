@@ -4,6 +4,7 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Ranged;
 using Humanizer;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
 using Terraria;
@@ -52,7 +53,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.DamageType = DamageClass.Melee;
             Projectile.ignoreWater = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 9;
+            Projectile.localNPCHitCooldown = 11;
         }
 
         public override bool ShouldUpdatePosition()

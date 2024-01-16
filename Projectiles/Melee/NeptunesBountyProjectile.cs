@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Melee
         public int dustType1 = 103;
         public int dustType2 = 172;
         public bool spinMode = false; // Initial spinning
-        public bool spinMode2 = false; // After [thing] happens spin effect
+        public bool spinMode2 = false; // After falling happens spin effect
         public Vector2 NPCDestination = new Vector2(0, 0);
         public float OverallProgress => 1 - Projectile.timeLeft / (float)Lifetime;
         public float ThrowProgress => 1 - Projectile.timeLeft / (float)(Lifetime);
@@ -53,7 +53,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.DamageType = DamageClass.Melee;
             Projectile.ignoreWater = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 9;
+            Projectile.localNPCHitCooldown = 11;
         }
 
         public override bool ShouldUpdatePosition()
@@ -220,7 +220,7 @@ namespace CalamityMod.Projectiles.Melee
                             velocity = (NPCDestination - location).SafeNormalize(Vector2.UnitX * Projectile.direction) * 25;
                         }
 
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), location, velocity, ModContent.ProjectileType<NeptunesBountySplitProjectile>(), startDamage / 5, Projectile.knockBack / 4, Projectile.owner);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), location, velocity, ModContent.ProjectileType<NeptunesBountySplitProjectile>(), startDamage / 6, Projectile.knockBack / 4, Projectile.owner);
                     }
 
                 }
