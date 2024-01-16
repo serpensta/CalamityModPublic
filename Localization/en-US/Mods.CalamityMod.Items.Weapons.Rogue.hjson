@@ -9,7 +9,7 @@ AcidicRainBarrel: {
 
 AdamantiteThrowingAxe: {
 	DisplayName: Adamantite Throwing Axe
-	Tooltip: Stealth strikes summon lightning bolts on enemy hits
+	Tooltip: Stealth strikes ignore gravity and rain down lightning on enemy hits
 }
 
 AlphaVirus: {
@@ -1170,7 +1170,7 @@ SubductionSlicer: {
 	Tooltip:
 		'''
 		Throws a scythe that explodes on enemy hits
-		Stealth strikes also summon an orange pillar of fire on enemy hits
+		Stealth strikes also summon a pillar of fire on enemy hits
 		'''
 }
 
