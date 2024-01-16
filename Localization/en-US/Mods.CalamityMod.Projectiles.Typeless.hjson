@@ -8,6 +8,7 @@ ArtifactOfResilienceShard3.DisplayName: Artifact Shard
 ArtifactOfResilienceShard4.DisplayName: Artifact Shard
 ArtifactOfResilienceShard5.DisplayName: Artifact Shard
 ArtifactOfResilienceShard6.DisplayName: Artifact Shard
+AstralBlaze.DisplayName: Blaze
 AstralFallingSand.DisplayName: Astral Falling Sand
 AstralSandBallFalling.DisplayName: Astral Sand
 AstralSandBallGun.DisplayName: Astral Sand
@@ -59,7 +60,6 @@ FungalClumpMinion.DisplayName: Fungal Clump
 GemTechArmorGem.DisplayName: Trireme's Gem
 GhostlyBolt.DisplayName: Bolt
 GodKiller.DisplayName: God Killer
-GodSlayerBlaze.DisplayName: Blaze
 GodSlayerShrapnel.DisplayName: Flame
 GodSlayerShrapnelRound.DisplayName: Round
 GoldenGunProj.DisplayName: Golden Round
