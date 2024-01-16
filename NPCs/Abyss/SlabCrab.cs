@@ -1,6 +1,7 @@
 ﻿using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Placeables;
+using CalamityMod.Items.Placeables.Banners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -60,8 +61,8 @@ namespace CalamityMod.NPCs.Abyss
             NPC.defense = 999998;
             NPC.HitSound = SoundID.NPCHit33;
             NPC.DeathSound = SoundID.NPCDeath36;
-            //Banner = NPC.type;
-            //BannerItem = ModContent.ItemType<SlabCrabBanner>();
+            Banner = NPC.type;
+            BannerItem = ModContent.ItemType<SlabCrabBanner>();
             NPC.Calamity().VulnerableToHeat = false;
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToElectricity = true;
