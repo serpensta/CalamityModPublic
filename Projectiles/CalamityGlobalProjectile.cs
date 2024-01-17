@@ -425,9 +425,7 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                projectile.alpha -= 20;
-                if (projectile.alpha < 0)
-                    projectile.alpha = 0;
+                projectile.alpha = 0;
 
                 for (int num160 = 0; num160 < 2; num160++)
                 {
@@ -458,9 +456,7 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                projectile.alpha -= 20;
-                if (projectile.alpha < 0)
-                    projectile.alpha = 0;
+                projectile.alpha = 0;
 
                 for (int num161 = 0; num161 < 2; num161++)
                 {
