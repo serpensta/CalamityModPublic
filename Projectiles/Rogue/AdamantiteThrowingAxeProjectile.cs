@@ -30,6 +30,12 @@ namespace CalamityMod.Projectiles.Rogue
         {
             float rotation = (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.025f;
             Projectile.rotation += rotation * Projectile.direction;
+
+            if (Projectile.Calamity().stealthStrike && Main.rand.NextBool(3))
+            {
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 226, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+            }
+
             if (Projectile.timeLeft < 570 && !Projectile.Calamity().stealthStrike)
             {
                 Projectile.velocity.X *= 0.96f;
