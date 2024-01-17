@@ -544,8 +544,8 @@ DimensionalSoulArtifact: {
 	DisplayName: Dimensional Soul Artifact
 	Tooltip:
 		'''
-		Power
 		Multiplies all damage by 1.2x, but at the cost of increasing damage taken by 15%
+		Power
 		'''
 }
 

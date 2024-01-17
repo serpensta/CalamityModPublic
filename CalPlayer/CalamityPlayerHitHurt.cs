@@ -1987,8 +1987,8 @@ namespace CalamityMod.CalPlayer
             if (hideOfDeus)
             {
                 hideOfDeusMeleeBoostTimer += 3 * hurtInfo.Damage;
-                if (hideOfDeusMeleeBoostTimer > 900)
-                    hideOfDeusMeleeBoostTimer = 900;
+                if (hideOfDeusMeleeBoostTimer > 600)
+                    hideOfDeusMeleeBoostTimer = 600;
             }
 
             if (Player.whoAmI == Main.myPlayer)
@@ -2384,7 +2384,7 @@ namespace CalamityMod.CalPlayer
                     int astralStarDamage = (int)Player.GetBestClassDamage().ApplyTo(320);
                     astralStarDamage = Player.ApplyArmorAccDamageBonusesTo(astralStarDamage);
 
-                    Projectile.NewProjectile(source, Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<GodSlayerBlaze>(), blazeDamage, 5f, Player.whoAmI, 0f, 1f);
+                    Projectile.NewProjectile(source, Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<HideOfAstrumDeusExplosion>(), blazeDamage, 5f, Player.whoAmI, 0f, 1f);
                     for (int n = 0; n < 12; n++)
                     {
                         CalamityUtils.ProjectileRain(source, Player.Center, 400f, 100f, 500f, 800f, 29f, ModContent.ProjectileType<AstralStar>(), astralStarDamage, 5f, Player.whoAmI);

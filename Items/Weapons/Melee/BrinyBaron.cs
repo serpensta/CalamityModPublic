@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityMod.Buffs.DamageOverTime;
 
 namespace CalamityMod.Items.Weapons.Melee
 {
@@ -70,6 +71,7 @@ namespace CalamityMod.Items.Weapons.Melee
         }
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
+            target.AddBuff(ModContent.BuffType<CrushDepth>(), 180);
             var source = player.GetSource_ItemUse(Item);
             if (player.ownedProjectileCounts[ModContent.ProjectileType<BrinySpout>()] == 0)
                 Projectile.NewProjectile(source, target.Center, Vector2.Zero, ModContent.ProjectileType<BrinyTyphoonBubble>(), Item.damage, Item.knockBack, player.whoAmI);
@@ -77,6 +79,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
+            target.AddBuff(ModContent.BuffType<CrushDepth>(), 180);
             var source = player.GetSource_ItemUse(Item);
             if (player.ownedProjectileCounts[ModContent.ProjectileType<BrinySpout>()] == 0)
                 Projectile.NewProjectile(source, target.Center, Vector2.Zero, ModContent.ProjectileType<BrinyTyphoonBubble>(), Item.damage, Item.knockBack, player.whoAmI);
