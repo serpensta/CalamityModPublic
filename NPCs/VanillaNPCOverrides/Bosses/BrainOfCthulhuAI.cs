@@ -303,11 +303,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.ai[2] >= timer)
                     {
                         // Shoot projectiles from 4 directions, alternating between diagonal and cardinal
-                        float bloodShotVelocity = death ? 7f : 6f;
+                        float bloodShotVelocity = (death ? 7.5f : 6f) + enrageScale;
+
+                        // Scale projectile velocity
+                        float phase7ProjectileVelocityMult = 1.2f;
+                        float phase6ProjectileVelocityMult = 1.1f;
                         if (phase7)
-                            bloodShotVelocity *= 1.2f;
+                            bloodShotVelocity *= phase7ProjectileVelocityMult;
                         else if (phase6)
-                            bloodShotVelocity *= 1.1f;
+                            bloodShotVelocity *= phase6ProjectileVelocityMult;
 
                         if (phase4)
                         {
@@ -369,9 +373,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 }
 
                                 Vector2 projectileVelocity = (Main.player[npc.target].Center - position).SafeNormalize(Vector2.UnitY) * bloodShotVelocity;
-                                Vector2 projectileSpawnCenter = position + projectileVelocity;
                                 float minFiringDistance = 560f; // 35 tile distance
-                                if (Vector2.Distance(projectileSpawnCenter, Main.player[npc.target].Center) > minFiringDistance) // The projectiles can only be fired if the target is more than 15 tiles away from the firing position
+                                bool firedFromRealBrain = Vector2.Distance(position, npc.Center) < 8f;
+                                if (Vector2.Distance(position, Main.player[npc.target].Center) > minFiringDistance && !firedFromRealBrain) // The projectiles can only be fired if the target is more than 15 tiles away from the firing position
                                 {
                                     bool canHit = Collision.CanHitLine(position, 1, 1, Main.player[npc.target].Center, 1, 1);
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -404,26 +408,39 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 }
                             }
                         }
-                        else
+                        
+                        Vector2 projectileVelocity2 = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * bloodShotVelocity;
+                        bool canHit2 = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * bloodShotVelocity;
-                            Vector2 projectileSpawnCenter = npc.Center + projectileVelocity;
-                            bool canHit = Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1);
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            int type = ProjectileID.BloodNautilusShot;
+                            int damage = npc.GetProjectileDamage(type);
+                            int numProj = death ? 9 : 7;
+                            int spread = death ? 45 : 40;
+                            if (phase7)
                             {
-                                int type = ProjectileID.BloodShot;
-                                int damage = npc.GetProjectileDamage(type);
-                                int numProj = death ? 9 : 7;
-                                int spread = death ? 45 : 40;
-                                float rotation = MathHelper.ToRadians(spread);
-                                for (int i = 0; i < numProj; i++)
-                                {
-                                    Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
-                                    Main.projectile[proj].timeLeft = 600;
-                                    if (!canHit)
-                                        Main.projectile[proj].tileCollide = false;
-                                }
+                                numProj = death ? 3 : 1;
+                                spread = death ? 10 : 5;
+                            }
+                            else if (phase5)
+                            {
+                                numProj = death ? 4 : 2;
+                                spread = death ? 15 : 10;
+                            }
+                            else if (phase4)
+                            {
+                                numProj = death ? 5 : 3;
+                                spread = death ? 15 : 10;
+                            }
+
+                            float rotation = MathHelper.ToRadians(spread);
+                            for (int i = 0; i < numProj; i++)
+                            {
+                                Vector2 perturbedSpeed = projectileVelocity2.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                Main.projectile[proj].timeLeft = 600;
+                                if (!canHit2)
+                                    Main.projectile[proj].tileCollide = false;
                             }
                         }
 

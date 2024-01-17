@@ -415,25 +415,22 @@ namespace CalamityMod.Projectiles
                 {
                     SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
                     projectile.localAI[0] = 1f;
-                    for (int num159 = 0; num159 < 8; num159++)
+                    for (int i = 0; i < 8; i++)
                     {
-                        Dust obj9 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
-                        obj9.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
-                        obj9.scale = 1.5f;
-                        obj9.fadeIn = 1.7f;
-                        obj9.position = projectile.Center;
+                        Dust blood1 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
+                        blood1.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
+                        blood1.scale = 1.5f;
+                        blood1.fadeIn = 1.7f;
+                        blood1.position = projectile.Center;
                     }
                 }
 
                 projectile.alpha = 0;
 
-                for (int num160 = 0; num160 < 2; num160++)
-                {
-                    Dust obj10 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
-                    obj10.velocity = obj10.velocity / 4f + projectile.velocity / 2f;
-                    obj10.scale = 1.2f;
-                    obj10.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
-                }
+                Dust blood2 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
+                blood2.velocity = blood2.velocity / 4f + projectile.velocity / 2f;
+                blood2.scale = 1.2f;
+                blood2.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
 
                 projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
@@ -446,7 +443,7 @@ namespace CalamityMod.Projectiles
                 {
                     SoundEngine.PlaySound(SoundID.Item171, projectile.Center);
                     projectile.localAI[0] = 1f;
-                    for (int num160 = 0; num160 < 8; num160++)
+                    for (int i = 0; i < 8; i++)
                     {
                         Dust blood1 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
                         blood1.velocity = (Main.rand.NextFloatDirection() * MathHelper.Pi).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
@@ -458,22 +455,19 @@ namespace CalamityMod.Projectiles
 
                 projectile.alpha = 0;
 
-                for (int num161 = 0; num161 < 2; num161++)
-                {
-                    Dust blood2 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
-                    blood2.velocity = blood2.velocity / 4f + projectile.velocity / 2f;
-                    blood2.scale = 1.2f;
-                    blood2.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
-                }
+                Dust blood2 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                blood2.velocity = blood2.velocity / 4f + projectile.velocity / 2f;
+                blood2.scale = 1.2f;
+                blood2.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
 
-                for (int num162 = 1; num162 < projectile.oldPos.Length && !(projectile.oldPos[num162] == Vector2.Zero); num162++)
+                for (int j = 1; j < projectile.oldPos.Length && !(projectile.oldPos[j] == Vector2.Zero); j++)
                 {
-                    if (Main.rand.Next(3) == 0)
+                    if (Main.rand.NextBool(3))
                     {
-                        Dust blood3 = Dust.NewDustDirect(projectile.oldPos[num162], projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                        Dust blood3 = Dust.NewDustDirect(projectile.oldPos[j], projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
                         blood3.velocity = blood3.velocity / 4f + projectile.velocity / 2f;
                         blood3.scale = 1.2f;
-                        blood3.position = projectile.oldPos[num162] + projectile.Size / 2f + Main.rand.NextFloat() * projectile.velocity * 2f;
+                        blood3.position = projectile.oldPos[j] + projectile.Size / 2f + Main.rand.NextFloat() * projectile.velocity * 2f;
                     }
                 }
 
@@ -582,7 +576,7 @@ namespace CalamityMod.Projectiles
             {
                 float maxSpeed = 12f;
                 int accelerationTime = 30;
-                
+
                 if (projectile.localAI[0] > 0f)
                     projectile.localAI[0]--;
 

@@ -323,7 +323,7 @@ namespace CalamityMod
                 { NPCID.VileSpitEaterOfWorlds, new int[] { -1, 64, 64, 64, 96 } },
 
                 { NPCID.BrainofCthulhu, new int[] { 30, 54, 81, 99, 135 } },
-                { NPCID.Creeper, new int[] { 20, 36, 54, 72, 90 } },
+                { NPCID.Creeper, new int[] { 20, 36, 66, 80, 108 } },
 
                 { ModContent.NPCType<HiveMind>(), new int[] { 35, 63, 81, 90, 135 } },
                 { ModContent.NPCType<DankCreeper>(), new int[] { 25, 50, 62, 68, 90 } },
@@ -565,6 +565,7 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.EaterofWorldsHead, ProjectileID.CursedFlameHostile), new int[] { 0, 0, 60, 68, 90 } },
                 { new Tuple<int, int>(NPCID.EaterofWorldsHead, ModContent.ProjectileType<ShadowflameFireball>()), new int[] { 0, 0, 0, 48, 66 } },
 
+                { new Tuple<int, int>(NPCID.BrainofCthulhu, ProjectileID.BloodNautilusShot), new int[] { 0, 0, 68, 76, 102 } },
                 { new Tuple<int, int>(NPCID.BrainofCthulhu, ProjectileID.BloodShot), new int[] { 0, 0, 60, 68, 90 } },
                 { new Tuple<int, int>(NPCID.Creeper, ProjectileID.BloodShot), new int[] { 0, 0, 60, 68, 90 } },
 
