@@ -30,7 +30,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.reflectsProjectiles = true;
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 2f;
+            float minimalContactDamageVelocity = 4f;
             float minimalDamageVelocity = 8f;
             if (npc.velocity.Length() <= minimalContactDamageVelocity)
             {

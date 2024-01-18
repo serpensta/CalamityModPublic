@@ -454,7 +454,7 @@ namespace CalamityMod.NPCs.HiveMind
                     NPC.scale = 1f;
                     NPC.alpha = 0;
                     NPC.dontTakeDamage = false;
-                    NPC.damage = NPC.defDamage;
+                    NPC.damage = 0;
                     NPC.netSpam = 0;
                     NPC.netUpdate = true;
                 }

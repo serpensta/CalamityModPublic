@@ -247,7 +247,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (decelerationScalar < 0f)
                             decelerationScalar = 0f;
 
-                        npc.velocity *= (MathHelper.Lerp(0.925f, 0.975f, decelerationScalar));
+                        npc.velocity *= (MathHelper.Lerp(0.95f, 0.975f, decelerationScalar));
                         if (Main.getGoodWorld)
                             npc.velocity *= 0.99f;
 
