@@ -64,7 +64,7 @@ namespace CalamityMod.NPCs
                 }
 
                 // Calculate contact damage based on velocity
-                float minimalContactDamageVelocity = 2f;
+                float minimalContactDamageVelocity = 4f;
                 float minimalDamageVelocity = 8f;
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)
                 {
@@ -629,9 +629,6 @@ namespace CalamityMod.NPCs
             // Emit light
             Lighting.AddLight((int)((npc.position.X + (npc.width / 2)) / 16f), (int)((npc.position.Y + (npc.height / 2)) / 16f), 1.2f, 0f, 0f);
 
-            // Set damage
-            npc.damage = npc.defDamage;
-
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
                 npc.TargetClosest();
@@ -805,6 +802,9 @@ namespace CalamityMod.NPCs
 
             if (npc.ai[0] == -1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int phase;
@@ -833,6 +833,9 @@ namespace CalamityMod.NPCs
             // Pick a location to teleport to
             else if (npc.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.chaseable = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
@@ -980,6 +983,9 @@ namespace CalamityMod.NPCs
             // Float above target and fire projectiles
             else if (npc.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.chaseable = true;
                 npc.rotation = npc.velocity.X * 0.04f;
 
@@ -1059,6 +1065,9 @@ namespace CalamityMod.NPCs
             // Cocoon bullet hell
             else if (npc.ai[0] == 4f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.defense = npc.defDefense * 4;
 
                 npc.chaseable = false;
@@ -1168,6 +1177,9 @@ namespace CalamityMod.NPCs
             // Laser beam attack
             else if (npc.ai[0] == 5f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.chaseable = true;
 
                 npc.defense = npc.defDefense * 2;
