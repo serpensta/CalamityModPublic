@@ -2959,6 +2959,9 @@ namespace CalamityMod.Projectiles
                     return Color.Coral;
             }
 
+            if (projectile.type == ProjectileID.BloodNautilusShot)
+                return new Color(200, 0, 0, projectile.alpha);
+
             if (projectile.type == ProjectileID.Stinger)
                 return new Color(200, 200, 0, projectile.alpha);
 

@@ -419,8 +419,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             int spread = death ? 45 : 40;
                             if (phase7)
                             {
-                                numProj = death ? 3 : 1;
-                                spread = death ? 10 : 5;
+                                numProj = death ? 3 : 2;
+                                spread = death ? 8 : 5;
                             }
                             else if (phase5)
                             {
