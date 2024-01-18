@@ -164,7 +164,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     chargeVelocity *= 1.2f;
 
                 // KnockBack
-                float baseKnockBackResist = death ? 0.4f : 0.45f;
+                float baseKnockBackResist = death ? 0.2f : 0.45f;
                 if (!phase3)
                     npc.knockBackResist = GetCrimsonBossKnockBack(npc, CalamityGlobalNPC.GetActivePlayerCount(), lifeRatio, baseKnockBackResist);
                 else
@@ -792,7 +792,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Scale the aggressiveness of the charges with amount of Creepers remaining
             float chargeAggressionScale = creeperRatio <= 0.1f ? 5f : creeperRatio <= 0.2f ? 3f : creeperRatio <= 0.4f ? 2f : creeperRatio <= 0.6f ? 1f : creeperRatio <= 0.8f ? 0.5f : 0f;
             if (death)
-                chargeAggressionScale *= 1.25f;
+                chargeAggressionScale *= 1.5f;
 
             // Give off blood dust before charging
             float beginTelegraphGateValue = TimeBeforeCreeperAttack - CreeperTelegraphTime;
@@ -930,7 +930,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
         public static int GetBrainOfCthuluCreepersCountRevDeath()
         {
-            return CalamityWorld.LegendaryMode ? 40 : Main.getGoodWorld ? 30 : (CalamityWorld.death || BossRushEvent.BossRushActive) ? 25 : 20;
+            return CalamityWorld.LegendaryMode ? 40 : Main.getGoodWorld ? 35 : (CalamityWorld.death || BossRushEvent.BossRushActive) ? 30 : 20;
         }
 
         private static float GetCrimsonBossKnockBack(NPC npc, int numPlayers, float lifeScale, float baseKnockBackResist)
