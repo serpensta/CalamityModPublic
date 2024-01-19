@@ -1564,9 +1564,6 @@ namespace CalamityMod.NPCs
             else if (npc.timeLeft < 1800)
                 npc.timeLeft = 1800;
 
-            // Reset damage from bullet hell phases
-            npc.damage = npc.defDamage;
-
             // Distance from destination where Cal Clone stops moving
             float movementDistanceGateValue = 100f;
 
@@ -1635,10 +1632,12 @@ namespace CalamityMod.NPCs
             // Bullet hell phase
             if (calamityGlobalNPC.newAI[2] > 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (calamityGlobalNPC.newAI[3] < 900f)
                 {
                     calamityGlobalNPC.newAI[3] += 1f;
-                    npc.damage = 0;
                     npc.dontTakeDamage = true;
                     npc.alpha = 255;
 
@@ -1828,11 +1827,13 @@ namespace CalamityMod.NPCs
             }
 
             npc.alpha = npc.dontTakeDamage ? 255 : 0;
-            npc.damage = npc.dontTakeDamage ? 0 : npc.defDamage;
 
             // Float above target and fire lasers or fireballs
             if (npc.ai[1] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.ai[2] += 1f;
                 float phaseTimer = 400f - (death ? 120f * (1f - lifeRatio) : 0f);
                 if (npc.ai[2] >= phaseTimer || phase4)
@@ -1882,6 +1883,9 @@ namespace CalamityMod.NPCs
             // Float to the side of the target and fire
             else if (npc.ai[1] == 1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.localAI[1] += 1f;
@@ -1938,6 +1942,9 @@ namespace CalamityMod.NPCs
             }
             else if (npc.ai[1] == 2f)
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 npc.rotation = rotation;
 
                 float chargeVelocity = phase4 ? 30f : death ? 28f : 25f;
@@ -1951,11 +1958,17 @@ namespace CalamityMod.NPCs
             }
             else if (npc.ai[1] == 3f)
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 npc.ai[2] += 1f;
 
                 float chargeTime = phase4 ? 35f : death ? 40f : 45f;
                 if (npc.ai[2] >= chargeTime)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     npc.velocity *= 0.9f;
                     if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                         npc.velocity.X = 0f;
@@ -1999,6 +2012,9 @@ namespace CalamityMod.NPCs
             }
             else
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.ai[2] += 1f;
                 if (npc.ai[2] >= (phase4 ? 15f : 30f))
                 {
@@ -2118,6 +2134,9 @@ namespace CalamityMod.NPCs
 
             if (npc.ai[1] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = (int)(npc.defDamage * 0.5f);
+
                 float calCloneBroProjAttackMaxSpeed = 5f;
                 float calCloneBroProjAttackAccel = 0.1f;
                 calCloneBroProjAttackMaxSpeed += 2f * enrageScale;
@@ -2236,6 +2255,9 @@ namespace CalamityMod.NPCs
             {
                 if (npc.ai[1] == 1f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     npc.rotation = calCloneBroRotation;
 
@@ -2283,6 +2305,9 @@ namespace CalamityMod.NPCs
 
                 if (npc.ai[1] == 2f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     npc.ai[2] += 1f + (death ? 0.5f * (1f - lifeRatio) : 0f);
                     if (expertMode)
                         npc.ai[2] += 0.25f;
@@ -2291,6 +2316,9 @@ namespace CalamityMod.NPCs
 
                     if (npc.ai[2] >= 75f)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = (int)(npc.defDamage * 0.5f);
+
                         npc.velocity.X *= 0.93f;
                         npc.velocity.Y *= 0.93f;
 
@@ -2425,6 +2453,9 @@ namespace CalamityMod.NPCs
 
             if (npc.ai[1] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = (int)(npc.defDamage * 0.5f);
+
                 float calCloneBroProjAttackMaxSpeed = 4.5f;
                 float calCloneBroProjAttackAccel = 0.2f;
                 calCloneBroProjAttackMaxSpeed += 2f * enrageScale;
@@ -2543,6 +2574,9 @@ namespace CalamityMod.NPCs
             {
                 if (npc.ai[1] == 1f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     npc.rotation = calCloneBroRotation;
 
@@ -2590,6 +2624,9 @@ namespace CalamityMod.NPCs
 
                 if (npc.ai[1] == 2f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     npc.ai[2] += 1f + (death ? 0.5f * (1f - lifeRatio) : 0f);
                     if (expertMode)
                         npc.ai[2] += 0.25f;
@@ -2598,6 +2635,9 @@ namespace CalamityMod.NPCs
 
                     if (npc.ai[2] >= 60f) //50
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = (int)(npc.defDamage * 0.5f);
+
                         npc.velocity.X *= 0.93f;
                         npc.velocity.Y *= 0.93f;
 
