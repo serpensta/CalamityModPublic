@@ -108,6 +108,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.SafeDirectionTo(Main.player[npc.target].Center).AngleBetween((npc.rotation + MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
                 Vector2.Distance(npc.Center, Main.player[npc.target].Center) > 240f;
 
+            bool charge = Vector2.Distance(Main.player[npc.target].Center, npc.Center) >= 320f; // 20 tile distance
+
             if (dead)
             {
                 npc.velocity.Y -= 0.04f;
@@ -140,13 +142,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         hoverAcceleration += 0.08f;
                     }
 
+                    float attackSwitchTimer = 180f - (death ? 180f * (1f - lifeRatio) : 0f);
+                    bool timeToCharge = npc.ai[2] >= attackSwitchTimer;
                     Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * 400f;
-                    Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * hoverSpeed;
-                    npc.SimpleFlyMovement(idealVelocity, hoverAcceleration);
+                    Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * (hoverSpeed + (timeToCharge ? ((npc.ai[2] - attackSwitchTimer) * 0.01f) : 0f));
+                    npc.SimpleFlyMovement(idealVelocity, hoverAcceleration + (timeToCharge ? ((npc.ai[2] - attackSwitchTimer) * 0.001f) : 0f));
 
                     npc.ai[2] += 1f;
-                    float attackSwitchTimer = 180f - (death ? 180f * (1f - lifeRatio) : 0f);
-                    if (npc.ai[2] >= attackSwitchTimer)
+                    if (timeToCharge && charge)
                     {
                         npc.ai[1] = 1f;
                         npc.ai[2] = 0f;
@@ -209,7 +212,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     npc.rotation = eyeRotation;
                     float additionalVelocityPerCharge = 2f;
-                    float chargeSpeed = 6f + npc.ai[3] * additionalVelocityPerCharge;
+                    float chargeSpeed = 8f + npc.ai[3] * additionalVelocityPerCharge;
                     chargeSpeed += 5f * enrageScale;
                     if (death)
                         chargeSpeed += 10f * (1f - lifeRatio);
@@ -235,7 +238,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (Main.getGoodWorld)
                         chargeDelay -= 30;
 
-                    float slowDownGateValue = chargeDelay * (death ? 0.5f : 0.44f);
+                    float slowDownGateValue = chargeDelay * (death ? 0.75f : 0.65f);
 
                     npc.ai[2] += 1f;
                     if (npc.ai[2] >= slowDownGateValue)
@@ -247,7 +250,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (decelerationScalar < 0f)
                             decelerationScalar = 0f;
 
-                        npc.velocity *= (MathHelper.Lerp(0.95f, 0.975f, decelerationScalar));
+                        npc.velocity *= (MathHelper.Lerp(0.92f, 0.96f, decelerationScalar));
                         if (Main.getGoodWorld)
                             npc.velocity *= 0.99f;
 
@@ -448,11 +451,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         hoverAcceleration += 0.1f;
                     }
 
-                    Vector2 idealHoverVelocity = npc.SafeDirectionTo(hoverDestination) * hoverSpeed;
-                    npc.SimpleFlyMovement(idealHoverVelocity, hoverAcceleration);
+                    float phaseLimit = 200f - (death ? 150f * (0.6f - lifeRatio) : 0f);
+                    bool timeToCharge = npc.ai[2] >= phaseLimit;
+                    Vector2 idealHoverVelocity = npc.SafeDirectionTo(hoverDestination) * (hoverSpeed + (timeToCharge ? ((npc.ai[2] - phaseLimit) * 0.01f) : 0f));
+                    npc.SimpleFlyMovement(idealHoverVelocity, hoverAcceleration + (timeToCharge ? ((npc.ai[2] - phaseLimit) * 0.001f) : 0f));
 
                     npc.ai[2] += 1f;
-                    float phaseLimit = 200f - (death ? 150f * (0.6f - lifeRatio) : 0f);
                     float projectileGateValue = (lifeRatio < 0.5f && death) ? 50f : 80f;
                     if (npc.ai[2] % projectileGateValue == 0f && shootProjectile)
                     {
@@ -473,7 +477,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
                     }
 
-                    if (npc.ai[2] >= phaseLimit)
+                    if (timeToCharge && charge)
                     {
                         npc.ai[1] = 1f;
                         npc.ai[2] = 0f;
@@ -492,7 +496,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.rotation = eyeRotation;
 
                     float additionalVelocityPerCharge = 3f;
-                    float chargeSpeed = 9f + (3.5f * (0.6f - lifeRatio)) + npc.ai[3] * additionalVelocityPerCharge;
+                    float chargeSpeed = 10f + (3.5f * (0.6f - lifeRatio)) + npc.ai[3] * additionalVelocityPerCharge;
                     chargeSpeed += 4f * enrageScale;
                     if (death)
                         chargeSpeed += 6.5f * (0.6f - lifeRatio);
@@ -520,7 +524,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (death)
                         phase2ChargeDelay -= (int)Math.Round(35f * (0.6f - lifeRatio));
 
-                    float slowDownGateValue = phase2ChargeDelay * 0.75f;
+                    float slowDownGateValue = phase2ChargeDelay * (death ? 0.85f : 0.75f);
 
                     npc.ai[2] += 1f;
                     if (npc.ai[2] >= slowDownGateValue)
@@ -532,7 +536,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (decelerationScalar < 0f)
                             decelerationScalar = 0f;
 
-                        npc.velocity *= (MathHelper.Lerp(0.9f, 0.96f, decelerationScalar));
+                        npc.velocity *= (MathHelper.Lerp(0.9f, 0.95f, decelerationScalar));
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                             npc.velocity.X = 0f;
                         if (npc.velocity.Y > -0.1 && npc.velocity.Y < 0.1)

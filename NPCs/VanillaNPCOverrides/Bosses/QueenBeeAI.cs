@@ -221,12 +221,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.damage = 0;
 
                     // Initiate charge
-                    float chargeDistance = 20f;
-                    chargeDistance += 20f * enrageScale;
+                    float chargeDistanceX = 400f;
+                    float chargeDistanceY = 20f;
+                    chargeDistanceY += 20f * enrageScale;
                     if (death)
-                        chargeDistance += MathHelper.Lerp(0f, 100f, 1f - lifeRatio);
+                        chargeDistanceY += MathHelper.Lerp(0f, 100f, 1f - lifeRatio);
 
-                    if (Math.Abs(npc.position.Y + (npc.height / 2) - (Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2))) < chargeDistance)
+                    float distanceFromTargetX = Math.Abs(npc.position.X + (npc.width / 2) - (Main.player[npc.target].position.X + (Main.player[npc.target].width / 2)));
+                    float distanceFromTargetY = Math.Abs(npc.position.Y + (npc.height / 2) - (Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2)));
+                    if (distanceFromTargetY < chargeDistanceY && distanceFromTargetX >= chargeDistanceX)
                     {
                         // Set damage
                         npc.damage = npc.defDamage;
@@ -283,9 +286,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.velocity.Y > chargeVelocity)
                         npc.velocity.Y = chargeVelocity;
 
-                    if (Math.Abs(npc.position.X + (npc.width / 2) - (Main.player[npc.target].position.X + (Main.player[npc.target].width / 2))) > 500f)
+                    if (distanceFromTargetX > 500f)
                         npc.velocity.X += chargeAcceleration * npc.direction;
-                    else if (Math.Abs(npc.position.X + (npc.width / 2) - (Main.player[npc.target].position.X + (Main.player[npc.target].width / 2))) < 300f)
+                    else if (distanceFromTargetX < chargeDistanceX)
                         npc.velocity.X -= chargeAcceleration * npc.direction;
                     else
                         npc.velocity.X *= 0.8f;

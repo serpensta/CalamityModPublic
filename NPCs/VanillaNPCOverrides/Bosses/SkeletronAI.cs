@@ -364,7 +364,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float phaseChangeRateBoost = 3f * (1f - lifeRatio);
                 npc.ai[2] += 1f + phaseChangeRateBoost;
                 float chargePhaseGateValue = 600f;
-                bool charge = npc.ai[2] >= chargePhaseGateValue;
+                bool canCharge = Vector2.Distance(Main.player[npc.target].Center, npc.Center) >= 320f; // 20 tile distance
+                bool charge = npc.ai[2] >= chargePhaseGateValue && canCharge;
                 if (charge)
                 {
                     npc.ai[2] = 0f;
@@ -399,18 +400,19 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 bool moveAwayBeforeCharge = npc.ai[2] >= moveAwayGateValue;
                 if (moveAwayBeforeCharge)
                 {
-                    if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 240f) // 15 tile distance
+                    if (!canCharge)
                     {
-                        npc.ai[2] -= 1f + phaseChangeRateBoost;
-                        float maxAcceleration = headXAcceleration + headYAcceleration;
-                        npc.velocity += Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * maxAcceleration;
-                        float maxVelocity = (headXTopSpeed + headYTopSpeed) / 2f;
+                        float maxAcceleration = headXAcceleration + headYAcceleration + (npc.ai[2] - moveAwayGateValue) * 0.001f;
+                        npc.velocity += Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * -maxAcceleration;
+                        float maxVelocity = (headXTopSpeed + headYTopSpeed + (npc.ai[2] - moveAwayGateValue) * 0.01f) / 2f;
                         if (npc.velocity.Length() > maxVelocity)
                         {
                             npc.velocity.Normalize();
                             npc.velocity *= maxVelocity;
                         }
                     }
+
+                    npc.rotation = npc.velocity.X / 15f;
 
                     return false;
                 }
