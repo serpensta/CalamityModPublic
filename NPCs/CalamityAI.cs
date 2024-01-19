@@ -2694,23 +2694,13 @@ namespace CalamityMod.NPCs
             bool exhausted = npc.ai[2] >= (phase3 ? 2f : 1f);
             calamityGlobalNPC.DR = exhausted ? 0.25f : 0.5f;
             npc.defense = exhausted ? npc.defDefense / 2 : npc.defDefense;
-            npc.damage = exhausted ? 0 : npc.defDamage;
 
             // Don't fire projectiles and don't increment phase timers for 4 seconds after the teleport phase to avoid cheap bullshit
             float noProjectileOrPhaseIncrementTime = 240f;
 
-            // Don't deal contact damage for 2 seconds after the teleport phase to avoid cheap bullshit
-            float noContactDamageTime = 120f;
-
-            bool dontDealContactDamage = npc.localAI[3] > noProjectileOrPhaseIncrementTime - noContactDamageTime;
             bool dontAttack = npc.localAI[3] > 0f;
             if (dontAttack)
-            {
                 npc.localAI[3] -= 1f;
-
-                if (dontDealContactDamage)
-                    npc.damage = 0;
-            }
 
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
@@ -2964,6 +2954,9 @@ namespace CalamityMod.NPCs
             // Start up
             if (npc.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.ai[0] = 1f;
                 npc.netUpdate = true;
                 CustomGravity();
@@ -2972,6 +2965,9 @@ namespace CalamityMod.NPCs
             // Idle
             else if (npc.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Slow down
                 npc.velocity.X *= 0.8f;
 
@@ -3013,6 +3009,9 @@ namespace CalamityMod.NPCs
             // Walk
             else if (npc.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Set walking direction
                 if (Math.Abs(npc.Center.X - player.Center.X) < 200f * npc.scale)
                 {
@@ -3103,6 +3102,9 @@ namespace CalamityMod.NPCs
             // Jump
             else if (npc.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.noTileCollide = false;
 
                 if (npc.velocity.Y == 0f)
@@ -3120,6 +3122,9 @@ namespace CalamityMod.NPCs
                     }
                     else if (npc.ai[1] == -1f)
                     {
+                        // Set damage
+                        npc.damage = npc.defDamage;
+
                         // Set jump velocity, reset and set AI to next phase (Stomp)
                         float distanceFromPlayerOnXAxis = npc.Center.X - player.Center.X;
                         npc.direction = distanceFromPlayerOnXAxis < 0 ? 1 : -1;
@@ -3183,6 +3188,9 @@ namespace CalamityMod.NPCs
             {
                 if (npc.velocity.Y == 0f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     // Play stomp sound. Gotta specify the filepath to avoid confusion between the namespace and npc
                     SoundStyle soundToPlay = Main.zenithWorld ? NPCs.ExoMechs.Ares.AresGaussNuke.NukeExplosionSound : NPCs.AstrumAureus.AstrumAureus.StompSound;
                     SoundEngine.PlaySound(soundToPlay, npc.Center);
@@ -3301,6 +3309,9 @@ namespace CalamityMod.NPCs
                 }
                 else
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     // Set velocities while falling, this happens before the stomp
                     // Fall through
                     if (!player.dead)
@@ -3385,6 +3396,9 @@ namespace CalamityMod.NPCs
             // Teleport
             else if (npc.ai[0] == 5f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Slow down
                 npc.velocity.X *= 0.8f;
 
