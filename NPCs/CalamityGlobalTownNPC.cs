@@ -90,6 +90,7 @@ namespace CalamityMod.NPCs
         private static readonly string[] DemolitionistNames =
         {
             "Tavish DeGroot", // <@!442447226992721930> (magicoal)
+            "Fimmy", // <@!407348617079160832> (darkmega5)
         };
         private static readonly string[] DryadNames =
         {
