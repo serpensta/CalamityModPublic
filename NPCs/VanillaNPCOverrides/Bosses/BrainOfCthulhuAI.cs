@@ -164,7 +164,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     chargeVelocity *= 1.2f;
 
                 // KnockBack
-                float baseKnockBackResist = death ? 0.2f : 0.45f;
+                float baseKnockBackResist = death ? 0.15f : 0.3f;
                 if (!phase3)
                     npc.knockBackResist = GetCrimsonBossKnockBack(npc, CalamityGlobalNPC.GetActivePlayerCount(), lifeRatio, baseKnockBackResist);
                 else
@@ -192,7 +192,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             float targetXDist = Main.player[npc.target].Center.X - brainCenter.X;
                             float targetYDist = Main.player[npc.target].Center.Y - brainCenter.Y;
                             float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
-                            float velocityScale = death ? 9f : 4.5f;
+                            float velocityScale = death ? 6f : 4.5f;
                             float velocityBoost = velocityScale * (1f - lifeRatio);
                             float nonChargeSpeed = 18f + velocityBoost + 3f * enrageScale;
                             if (Main.getGoodWorld)
@@ -202,8 +202,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             targetXDist *= targetDistance;
                             targetYDist *= targetDistance;
 
-                            float minInertia = death ? 50f : 75f;
-                            float maxInertia = death ? 75f : 100f;
+                            float minInertia = death ? 60f : 75f;
+                            float maxInertia = death ? 80f : 100f;
                             float inertia = MathHelper.Lerp(minInertia, maxInertia, lifeRatio);
                             npc.velocity.X = (npc.velocity.X * inertia + targetXDist) / (inertia + 1f);
                             npc.velocity.Y = (npc.velocity.Y * inertia + targetYDist) / (inertia + 1f);
@@ -792,7 +792,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Scale the aggressiveness of the charges with amount of Creepers remaining
             float chargeAggressionScale = creeperRatio <= 0.1f ? 5f : creeperRatio <= 0.2f ? 3f : creeperRatio <= 0.4f ? 2f : creeperRatio <= 0.6f ? 1f : creeperRatio <= 0.8f ? 0.5f : 0f;
             if (death)
-                chargeAggressionScale *= 1.5f;
+                chargeAggressionScale *= 1.25f;
 
             // Give off blood dust before charging
             float beginTelegraphGateValue = TimeBeforeCreeperAttack - CreeperTelegraphTime;
