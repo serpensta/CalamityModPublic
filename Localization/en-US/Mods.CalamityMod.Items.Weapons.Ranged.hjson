@@ -329,7 +329,7 @@ CrackshotColt: {
 		Press <right> to toss a Copper Coin in the air
 		Striking a coin with a bullet causes it to ricochet into the nearest enemy
 		Up to 4 coins can be tossed simultaneously, and shots will ricochet off multiple coins if possible
-		Ricocheted bullets always critically strike
+		Ricocheted bullets always critically strike after a short time
 		'''
 }
 
@@ -731,7 +731,7 @@ MidasPrime: {
 		Press <right> to toss a Gold Coin or Silver Coin in the air
 		Striking a coin with a bullet causes it to ricochet into the nearest enemy
 		Up to 4 coins can be tossed simultaneously, and shots will ricochet off multiple coins if possible
-		Ricocheted bullets always critically strike and do bonus damage based on the coins used
+		Ricocheted bullets always critically strike after a short time and do bonus damage based on the coins used
 		'''
 	UltrakillEasterEgg:
 		'''
