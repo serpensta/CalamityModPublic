@@ -11,6 +11,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 {
     public static class EyeOfCthulhuAI
     {
+        private const float ProjectileOffset = 50f;
+
         public static bool BuffedEyeofCthulhuAI(NPC npc, Mod mod)
         {
             CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
@@ -192,7 +194,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 {
                                     int projType = ProjectileID.BloodNautilusShot;
                                     int projDamage = npc.GetProjectileDamage(projType);
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * 10f, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * ProjectileOffset, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
                                     Main.projectile[proj].timeLeft = 600;
                                 }
                             }
@@ -352,7 +354,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                         }
@@ -471,7 +473,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                         }
@@ -666,7 +668,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.damage = setDamage;
 
                     if (npc.ai[2] == 0f)
-                        SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
+                        SoundEngine.PlaySound(SoundID.ForceRoarPitched, npc.Center);
 
                     float lineUpDistControl = lineUpDist;
                     npc.ai[2] += 1f;
@@ -772,7 +774,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             {
                                 int projType = ProjectileID.BloodNautilusShot;
                                 int projDamage = npc.GetProjectileDamage(projType);
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), servantSpawnCenter, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * ProjectileOffset, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
                                 Main.projectile[proj].timeLeft = 600;
                             }
 
@@ -786,7 +788,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 for (int i = 0; i < numProj; i++)
                                 {
                                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                                     Main.projectile[proj].timeLeft = 600;
                                 }
                             }
@@ -868,7 +870,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.damage = setDamage;
 
                     if (npc.ai[2] == 0f)
-                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
 
                     float lineUpDistControl = (float)Math.Round(lineUpDist * 2.5f);
                     npc.ai[2] += 1f;
