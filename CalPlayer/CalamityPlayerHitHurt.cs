@@ -1294,6 +1294,10 @@ namespace CalamityMod.CalPlayer
                 {
                     Player.AddBuff(BuffID.Weak, 300);
                 }
+                else if (proj.type == ProjectileID.CursedFlameHostile)
+                {
+                    Player.AddBuff(BuffID.CursedInferno, 120);
+                }
                 else if (proj.type == ProjectileID.ThornBall)
                 {
                     Player.AddBuff(BuffID.Poisoned, 480);

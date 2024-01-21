@@ -476,6 +476,34 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            else if (projectile.type == ProjectileID.QueenBeeStinger)
+            {
+                if (Main.rand.NextBool())
+                    Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 0.9f).noGravity = true;
+
+                if (projectile.localAI[0] == 0f)
+                {
+                    projectile.localAI[0] = 1f;
+                    for (int num99 = 0; num99 < 20; num99++)
+                    {
+                        Dust dust3 = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 1.3f);
+                        dust3.noGravity = true;
+                        dust3.velocity += projectile.velocity * 0.75f;
+                    }
+
+                    for (int num100 = 0; num100 < 10; num100++)
+                    {
+                        Dust dust4 = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 1.3f);
+                        dust4.noGravity = true;
+                        dust4.velocity *= 2f;
+                    }
+                }
+
+                projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.FrostWave && projectile.ai[1] > 0f)
             {
                 if (projectile.ai[0] < 0f)
@@ -3115,10 +3143,12 @@ namespace CalamityMod.Projectiles
                         int availableAmountOfNPCsToSpawnUpToSlot = NPC.GetAvailableAmountOfNPCsToSpawnUpToSlot(beeAmt);
                         for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
-                            int beeType = Main.rand.Next(210, 212);
+                            int beeType = Main.rand.Next(NPCID.Bee, NPCID.BeeSmall + 1);
                             int beeSpawn = NPC.NewNPC(projectile.GetSource_FromThis(), (int)projectile.Center.X, (int)projectile.Center.Y, beeType, 1);
                             Main.npc[beeSpawn].velocity.X = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].velocity.Y = (float)Main.rand.Next(-200, 201) * 0.002f;
+                            Main.npc[beeSpawn].ai[3] = 1f;
+                            Main.npc[beeSpawn].localAI[0] = 60f;
                             Main.npc[beeSpawn].netUpdate = true;
                         }
                     }

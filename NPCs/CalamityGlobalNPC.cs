@@ -4319,6 +4319,11 @@ namespace CalamityMod.NPCs
 
             switch (npc.type)
             {
+                case NPCID.VileSpitEaterOfWorlds:
+                case NPCID.VileSpit:
+                    target.AddBuff(BuffType<BrainRot>(), 240);
+                    break;
+
                 case NPCID.ShadowFlameApparition:
                     target.AddBuff(BuffType<Shadowflame>(), 180);
                     break;

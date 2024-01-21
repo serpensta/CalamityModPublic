@@ -120,7 +120,16 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ItemID.BeeKeeper:
+                case ItemID.BladeofGrass:
                     target.AddBuff(BuffID.Poisoned, 240);
+                    break;
+
+                case ItemID.FieryGreatsword:
+                    target.AddBuff(BuffID.OnFire3, 180);
+                    break;
+
+                case ItemID.Muramasa:
+                    target.AddBuff(BuffType<Nightwither>(), 30);
                     break;
 
                 case ItemID.IceSickle:
@@ -155,6 +164,7 @@ namespace CalamityMod.CalPlayer
             // Shattered Community tracks all damage dealt with Rage Mode (ignoring dummies).
             if (target.type == NPCID.TargetDummy || target.type == NPCType<SuperDummyNPC>())
                 return;
+
             if (rageModeActive && shatteredCommunity)
                 Player.GetModPlayer<ShatteredCommunityPlayer>().AccumulateRageDamage(damageDone);
         }
@@ -245,6 +255,7 @@ namespace CalamityMod.CalPlayer
 
                 case ProjectileID.Bee:
                 case ProjectileID.GiantBee:
+                case ProjectileID.BladeOfGrass:
                     target.AddBuff(BuffID.Poisoned, 120);
                     break;
 

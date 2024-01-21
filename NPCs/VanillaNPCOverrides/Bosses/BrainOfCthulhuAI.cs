@@ -159,7 +159,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Charge variables
-                float chargeVelocity = (death ? 20f : 15f) + 3f * enrageScale;
+                float chargeVelocity = (death ? 18f : 15f) + 3f * enrageScale;
                 if (phase7)
                     chargeVelocity *= 1.2f;
 
@@ -790,7 +790,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float creeperRatio = creeperCount / (float)GetBrainOfCthuluCreepersCountRevDeath();
 
             // Scale the aggressiveness of the charges with amount of Creepers remaining
-            float chargeAggressionScale = creeperRatio <= 0.1f ? 5f : creeperRatio <= 0.2f ? 3f : creeperRatio <= 0.4f ? 2f : creeperRatio <= 0.6f ? 1f : creeperRatio <= 0.8f ? 0.5f : 0f;
+            float chargeAggressionScale = creeperRatio <= 0.1f ? 3.5f : creeperRatio <= 0.2f ? 2.5f : creeperRatio <= 0.4f ? 1.75f : creeperRatio <= 0.6f ? 1f : creeperRatio <= 0.8f ? 0.5f : 0f;
             if (death)
                 chargeAggressionScale *= 1.25f;
 
