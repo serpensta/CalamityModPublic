@@ -15,29 +15,29 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         #region Other Stats
-        public static float TimeBetweenShots = 20f;
+        public static float TimeBetweenShots = 21;
         public static float ProjectilesPerBurst = 2f;
 
-        public static float OwnerKnockbackStrength = 5f;
+        public static float OwnerKnockbackStrength = 3.5f;
 
-        public static float ProjectileGravityStrength = 0.15f;
-        public static float ProjectileShootSpeed = 20f;
+        public static float ProjectileGravityStrength = 0.22f;
+        public static float ProjectileShootSpeed = 25f;
 
         public static float InitialShotDamageMultiplier = 0.5f;
         public static float InitialShotHitShrapnelDamageMultiplier = 0.75f;
 
-        public static int ShrapnelAmount = 12;
+        public static int ShrapnelAmount = 7;
         public static float ShrapnelAngleOffset = MathHelper.PiOver4;
 
-        public static int ClusterShrapnelAmount = 20;
-        public static float ClusterShrapnelAngleOffset = MathHelper.PiOver2 + MathHelper.ToRadians(10f);
+        public static int ClusterShrapnelAmount = 13;
+        public static float ClusterShrapnelAngleOffset = MathHelper.PiOver2 + MathHelper.ToRadians(50f);
         #endregion
 
         public override void SetDefaults()
         {
             Item.damage = 88; // Here you're modifying the shrapnel's damage.
             Item.DamageType = DamageClass.Ranged;
-            Item.useTime = Item.useAnimation = 180;
+            Item.useTime = Item.useAnimation = 63;
             Item.shoot = ModContent.ProjectileType<FlakKrakenHoldout>();
             Item.shootSpeed = 15f;
 

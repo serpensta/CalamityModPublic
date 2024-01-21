@@ -33,7 +33,7 @@ namespace CalamityMod.Projectiles.Ranged
         {
             Main.projFrames[Type] = 5;
             ProjectileID.Sets.TrailingMode[Type] = 2;
-            ProjectileID.Sets.TrailCacheLength[Type] = 4;
+            ProjectileID.Sets.TrailCacheLength[Type] = 12;
         }
 
         public override void SetDefaults()
@@ -62,8 +62,17 @@ namespace CalamityMod.Projectiles.Ranged
         public override void AI()
         {
             // Enforces the gravity.
-            if (Projectile.velocity.Y < 25f)
-                Projectile.velocity.Y += ProjectileGravityStrength;
+            if (IsShrapnel)
+            {
+                if (Projectile.velocity.Y < 25f)
+                    Projectile.velocity.Y += ProjectileGravityStrength;
+            }
+            // Scale for non Shrapnel
+            if (!IsShrapnel)
+            {
+                Projectile.scale = 1.5f;
+                Projectile.extraUpdates = 3;
+            }
 
             // Rotates towards its velocity.
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
@@ -87,6 +96,24 @@ namespace CalamityMod.Projectiles.Ranged
 
             // The projectile will fade away as its time alive is ending.
             Projectile.alpha = (int)Utils.Remap(Projectile.timeLeft, 30f, 0f, 0f, 255f);
+
+            // Shrapnel trail
+            if (IsShrapnel)
+            {
+                if (Projectile.timeLeft % 2 == 0 && Projectile.timeLeft <= 590)
+                {
+                    AltSparkParticle spark = new AltSparkParticle(Projectile.Center - Projectile.velocity * 1.5f, Projectile.velocity * 0.01f, false, 8, 1.3f, EffectsColor * 0.135f);
+                    GeneralParticleHandler.SpawnParticle(spark);
+                }
+            }
+            else
+            {
+                Vector2 dustPos = Projectile.Center - Projectile.velocity * 3 + Main.rand.NextVector2Circular(12, 12);
+                Dust dust = Dust.NewDustPerfect(dustPos, Main.rand.NextBool(4) ? 191 : DustEffectsID);
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(1.4f, 1.65f);
+                dust.velocity = -Projectile.velocity * Main.rand.NextFloat(0.1f, 0.7f);
+            }
 
             Dust trailDust = Dust.NewDustDirect(Projectile.position,
                 Projectile.width,
@@ -145,7 +172,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Projectile shrapnel = Projectile.NewProjectileDirect(
                         Projectile.GetSource_FromThis(),
                         Projectile.Center,
-                        Projectile.velocity.SafeNormalize(-Vector2.UnitY).RotatedByRandom(usedClusterRockets ? ClusterShrapnelAngleOffset : ShrapnelAngleOffset) * ProjectileShootSpeed,
+                        Projectile.velocity.SafeNormalize(-Vector2.UnitY).RotatedByRandom(usedClusterRockets ? ClusterShrapnelAngleOffset : ShrapnelAngleOffset) * ProjectileShootSpeed * Main.rand.NextFloat(0.45f, 0.85f),
                         ProjectileType<FlakKrakenProjectile>(),
                         (int)(Projectile.damage * (HasHitEnemyWithInitialShot ? InitialShotHitShrapnelDamageMultiplier : 1f)),
                         Projectile.knockBack,
@@ -206,13 +233,13 @@ namespace CalamityMod.Projectiles.Ranged
                 for (int mistIndex = 0; mistIndex < mistAmount; mistIndex++)
                 {
                     float angle = MathHelper.TwoPi / mistAmount * mistIndex;
-                    Vector2 velocity = angle.ToRotationVector2() * Main.rand.NextFloat(5f, 15f);
-                    Particle boomMist = new MediumMistParticleAlphaBlend(Projectile.Center,
+                    Vector2 velocity = angle.ToRotationVector2() * Main.rand.NextFloat(2f, 7f);
+                    Particle boomMist = new HeavySmokeParticle(Projectile.Center,
                         velocity,
-                        EffectsColor * Main.rand.NextFloat(0.1f, 0.3f),
-                        Color.Transparent,
-                        Main.rand.NextFloat(.6f, 1.4f),
-                        Main.rand.NextFloat(200f, 400f));
+                        EffectsColor * Main.rand.NextFloat(0.15f, 0.25f),
+                        Main.rand.Next(45, 61),
+                        Main.rand.NextFloat(.4f, 1.1f),
+                        Main.rand.NextFloat(0.2f, 0.35f));
                     GeneralParticleHandler.SpawnParticle(boomMist);
                 }
             }
@@ -223,10 +250,11 @@ namespace CalamityMod.Projectiles.Ranged
             Texture2D texture = Request<Texture2D>(Texture).Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
-            Color drawColor = Projectile.GetAlpha(lightColor);
+            Color drawColor = IsShrapnel ? Projectile.GetAlpha(lightColor) : Color.Black;
             Vector2 origin = frame.Size() * 0.5f;
 
-            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Type], lightColor);
+            if (!IsShrapnel)
+                CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Type], lightColor);
 
             Main.EntitySpriteDraw(texture, drawPosition, frame, drawColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None);
 

@@ -485,7 +485,12 @@ FirestormCannon: {
 
 FlakKraken: {
 	DisplayName: Flak Kraken
-	Tooltip: Fires an energy reticle that becomes more powerful over time
+	Tooltip:
+        '''
+		Fires a burst of two large shots that explode at the cursor
+		Large shots burst into a wide cone of ink shrapnel
+        Hitting enemies directly causes the large shots and its shrapnel deal decreased damage
+        '''
 }
 
 FlakToxicannon: {

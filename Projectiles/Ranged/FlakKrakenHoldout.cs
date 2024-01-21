@@ -63,7 +63,7 @@ namespace CalamityMod.Projectiles.Ranged
                 // Every X frames it'll shoot a projectile.
                 if (ShootingTimer % TimeBetweenShots == 0f)
                 {
-                    // We use the velocity of this projectie as its direction vector.
+                    // We use the velocity of this projectile as its direction vector.
                     Vector2 direction = Projectile.velocity.SafeNormalize(Vector2.Zero);
 
                     // The position of the tip of the gun.
@@ -77,8 +77,8 @@ namespace CalamityMod.Projectiles.Ranged
                     switch (rocketTypeShot)
                     {
                         case ItemID.WetRocket:
-                            DustEffectsID = DustID.Water;
-                            EffectsColor = Color.Blue;
+                            DustEffectsID = 45;
+                            EffectsColor = Color.RoyalBlue;
                             break;
                         case ItemID.LavaRocket:
                             DustEffectsID = DustID.Torch;
@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles.Ranged
                         // By decreasing the offset length of the gun from the arms, we give an effect of recoil.
                         OffsetLengthScalar = 10f;
 
-                        Owner.Calamity().GeneralScreenShakePower = 5f;
+                        Owner.Calamity().GeneralScreenShakePower = 3.5f;
 
                         Particle shootPulse = new DirectionalPulseRing(nuzzlePosition,
                             Vector2.Zero,
@@ -131,13 +131,13 @@ namespace CalamityMod.Projectiles.Ranged
                         int smokeAmount = Main.rand.Next(12, 16 + 1);
                         for (int i = 0; i < smokeAmount; i++)
                         {
-                            Particle smoke = new MediumMistParticleAlphaBlend(
+                            Particle smoke = new HeavySmokeParticle(
                                 nuzzlePosition,
                                 direction.RotatedByRandom(MathHelper.ToRadians(25f)) * Main.rand.NextFloat(2f, 30f),
                                 EffectsColor * 0.1f,
-                                Color.Transparent,
-                                Main.rand.NextFloat(0.5f, 1.2f),
-                                Main.rand.NextFloat(300f, 400f));
+                                Main.rand.Next(45, 61),
+                                Main.rand.NextFloat(.6f, 1.3f),
+                                Main.rand.NextFloat(0.2f, 0.35f));
                             GeneralParticleHandler.SpawnParticle(smoke);
                         }
 
