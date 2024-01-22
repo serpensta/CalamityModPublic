@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Core;
 
 namespace CalamityMod.UI
 {
@@ -55,10 +57,10 @@ namespace CalamityMod.UI
             gUIs.First(gui => gui.GetType() == type).Active = !gUIs.First(gui => gui.GetType() == type).Active;
         }
 
-        public static void LoadGUIs()
+        public static void LoadGUIs(Mod mod)
         {
             // Look through every type in the mod, and check if it's derived from PopupGUI. If it is, create a copy and save it in the static list.
-            foreach (Type type in typeof(CalamityMod).Assembly.GetTypes())
+            foreach (Type type in AssemblyManager.GetLoadableTypes(mod.Code))
             {
                 // Don't load abstract classes since they cannot have instances.
                 if (type.IsAbstract)
