@@ -188,6 +188,11 @@ namespace CalamityMod.Projectiles.Ranged
                 }
             }
 
+            // Since we do our own spread for the cluster rockets, it won't explode tiles.
+            // So we do it manually here.
+            if (RocketID == ItemID.ClusterRocketII)
+                Projectile.ExplodeTiles(blastRadius, info.respectStandardBlastImmunity, info.tilesToCheck, info.wallsToCheck);
+
             // Inside here go all the things that dedicated servers shouldn't spend resources on.
             // Like visuals and sounds.
             if (Main.dedServ)
