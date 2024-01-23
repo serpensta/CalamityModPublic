@@ -437,12 +437,18 @@ namespace CalamityMod.Items
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIncreases how frequently the Orichalcum set bonus triggers on hit");
 
             // Adamantite
-            if (item.type == ItemID.AdamantiteSword || item.type == ItemID.AdamantiteGlaive)
+            if (item.type == ItemID.AdamantiteSword)
                 EditTooltipByName("Material", (line) => line.Text += "\nSlows enemies on hit");
 
+            if (item.type == ItemID.AdamantiteGlaive)
+                EditTooltipByName("Knockback", (line) => line.Text += "\nSlows enemies on hit");
+
             // Titanium
-            if (item.type == ItemID.TitaniumSword || item.type == ItemID.TitaniumTrident)
+            if (item.type == ItemID.TitaniumSword)
                 EditTooltipByName("Material", (line) => line.Text += "\nDeals increased damage to enemies with high knockback resistance");
+
+            if (item.type == ItemID.TitaniumTrident)
+                EditTooltipByName("Knockback", (line) => line.Text += "\nDeals increased damage to enemies with high knockback resistance");
 
             // Hallowed (and True Excalibur)
             if (item.type == ItemID.Excalibur || item.type == ItemID.Gungnir || item.type == ItemID.TrueExcalibur)
@@ -923,7 +929,7 @@ namespace CalamityMod.Items
                 EditTooltipByName("Material", (line) => line.Text += "\nCan mine Uelibloom Ore");
 
             if (item.type == ItemID.SolarFlareDrill || item.type == ItemID.VortexDrill || item.type == ItemID.NebulaDrill || item.type == ItemID.StardustDrill)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nCan mine Uelibloom Ore");
+                EditTooltipByName("TileBoost", (line) => line.Text += "\nCan mine Uelibloom Ore");
             #endregion
 
             // Rebalances and information about vanilla set bonuses
