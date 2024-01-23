@@ -478,6 +478,12 @@ namespace CalamityMod.Projectiles
 
             else if (projectile.type == ProjectileID.QueenBeeStinger)
             {
+                if (projectile.ai[1] != 0f)
+                {
+                    if (projectile.position.Y > projectile.ai[1])
+                        projectile.tileCollide = true;
+                }
+
                 if (Main.rand.NextBool())
                     Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 0.9f).noGravity = true;
 
@@ -549,6 +555,119 @@ namespace CalamityMod.Projectiles
                 projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
                 return false;
+            }
+
+            else if (projectile.type == ProjectileID.CultistBossLightningOrb)
+            {
+                if (NPC.AnyNPCs(NPCID.CultistBoss))
+                {
+                    if (projectile.localAI[1] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item121, projectile.position);
+                        projectile.localAI[1] = 1f;
+                    }
+
+                    if (projectile.ai[0] < 180f)
+                    {
+                        projectile.alpha -= 5;
+                        if (projectile.alpha < 0)
+                            projectile.alpha = 0;
+                    }
+                    else
+                    {
+                        projectile.alpha += 5;
+                        if (projectile.alpha > 255)
+                        {
+                            projectile.alpha = 255;
+                            projectile.Kill();
+                            return false;
+                        }
+                    }
+
+                    ref float reference = ref projectile.ai[0];
+                    ref float reference46 = ref reference;
+                    float num15 = reference;
+                    reference46 = num15 + 1f;
+
+                    if (projectile.ai[0] % 30f == 0f && projectile.ai[0] < 180f && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        int maxTargets = 2;
+                        int[] array6 = new int[maxTargets];
+                        Vector2[] array7 = new Vector2[maxTargets];
+                        int num731 = 0;
+                        float num732 = 2000f;
+
+                        for (int num733 = 0; num733 < Main.maxPlayers; num733++)
+                        {
+                            if (!Main.player[num733].active || Main.player[num733].dead)
+                                continue;
+
+                            Vector2 center9 = Main.player[num733].Center;
+                            float num734 = Vector2.Distance(center9, projectile.Center);
+                            if (num734 < num732 && Collision.CanHit(projectile.Center, 1, 1, center9, 1, 1))
+                            {
+                                array6[num731] = num733;
+                                array7[num731] = center9;
+                                int num34 = num731 + 1;
+                                num731 = num34;
+                                if (num34 >= array7.Length)
+                                    break;
+                            }
+                        }
+
+                        for (int num735 = 0; num735 < num731; num735++)
+                        {
+                            Vector2 vector52 = array7[num735] + Main.player[array6[num735]].velocity * 40f - projectile.Center;
+                            float ai = Main.rand.Next(100);
+                            Vector2 vector53 = Vector2.Normalize(vector52.RotatedByRandom(MathHelper.PiOver4)) * 7f;
+                            Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector53, 466, projectile.damage, 0f, Main.myPlayer, vector52.ToRotation(), ai);
+                        }
+                    }
+
+                    Lighting.AddLight(projectile.Center, 0.4f, 0.85f, 0.9f);
+
+                    if (++projectile.frameCounter >= 4)
+                    {
+                        projectile.frameCounter = 0;
+                        if (++projectile.frame >= Main.projFrames[projectile.type])
+                            projectile.frame = 0;
+                    }
+
+                    if (projectile.alpha >= 150 || !(projectile.ai[0] < 180f))
+                        return false;
+
+                    for (int num736 = 0; num736 < 1; num736++)
+                    {
+                        float num737 = (float)Main.rand.NextDouble() * 1f - 0.5f;
+                        if (num737 < -0.5f)
+                            num737 = -0.5f;
+                        if (num737 > 0.5f)
+                            num737 = 0.5f;
+
+                        Vector2 value40 = new Vector2(-projectile.width * 0.2f * projectile.scale, 0f).RotatedBy(num737 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
+                        Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
+                        zap.position = projectile.Center + value40;
+                        zap.velocity = Vector2.Normalize(zap.position - projectile.Center) * 2f;
+                        zap.noGravity = true;
+                    }
+
+                    for (int num739 = 0; num739 < 1; num739++)
+                    {
+                        float num740 = (float)Main.rand.NextDouble() * 1f - 0.5f;
+                        if (num740 < -0.5f)
+                            num740 = -0.5f;
+                        if (num740 > 0.5f)
+                            num740 = 0.5f;
+
+                        Vector2 value41 = new Vector2(-projectile.width * 0.6f * projectile.scale, 0f).RotatedBy(num740 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
+                        Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
+                        zap.velocity = Vector2.Zero;
+                        zap.position = projectile.Center + value41;
+                        zap.noGravity = true;
+                    }
+
+                    return false;
+                }
             }
 
             else if (projectile.type == ProjectileID.Starfury)
@@ -1731,118 +1850,6 @@ namespace CalamityMod.Projectiles
                 {
                     if (projectile.velocity.Length() < 8f)
                         projectile.velocity *= 1.01f;
-                }
-
-                else if (projectile.type == ProjectileID.CultistBossLightningOrb && BossRushEvent.BossRushActive)
-                {
-                    if (NPC.AnyNPCs(NPCID.CultistBoss))
-                    {
-                        if (projectile.localAI[1] == 0f)
-                        {
-                            SoundEngine.PlaySound(SoundID.Item121, projectile.position);
-                            projectile.localAI[1] = 1f;
-                        }
-
-                        if (projectile.ai[0] < 180f)
-                        {
-                            projectile.alpha -= 5;
-                            if (projectile.alpha < 0)
-                                projectile.alpha = 0;
-                        }
-                        else
-                        {
-                            projectile.alpha += 5;
-                            if (projectile.alpha > 255)
-                            {
-                                projectile.alpha = 255;
-                                projectile.Kill();
-                                return false;
-                            }
-                        }
-
-                        ref float reference = ref projectile.ai[0];
-                        ref float reference46 = ref reference;
-                        float num15 = reference;
-                        reference46 = num15 + 1f;
-
-                        if (projectile.ai[0] % 30f == 0f && projectile.ai[0] < 180f && Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            int[] array6 = new int[5];
-                            Vector2[] array7 = new Vector2[5];
-                            int num731 = 0;
-                            float num732 = 2000f;
-
-                            for (int num733 = 0; num733 < 255; num733++)
-                            {
-                                if (!Main.player[num733].active || Main.player[num733].dead)
-                                    continue;
-
-                                Vector2 center9 = Main.player[num733].Center;
-                                float num734 = Vector2.Distance(center9, projectile.Center);
-                                if (num734 < num732 && Collision.CanHit(projectile.Center, 1, 1, center9, 1, 1))
-                                {
-                                    array6[num731] = num733;
-                                    array7[num731] = center9;
-                                    int num34 = num731 + 1;
-                                    num731 = num34;
-                                    if (num34 >= array7.Length)
-                                        break;
-                                }
-                            }
-
-                            for (int num735 = 0; num735 < num731; num735++)
-                            {
-                                Vector2 vector52 = array7[num735] + Main.player[array6[num735]].velocity * 40f - projectile.Center;
-                                float ai = Main.rand.Next(100);
-                                Vector2 vector53 = Vector2.Normalize(vector52.RotatedByRandom(MathHelper.PiOver4)) * 7f;
-                                Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector53, 466, projectile.damage, 0f, Main.myPlayer, vector52.ToRotation(), ai);
-                            }
-                        }
-
-                        Lighting.AddLight(projectile.Center, 0.4f, 0.85f, 0.9f);
-
-                        if (++projectile.frameCounter >= 4)
-                        {
-                            projectile.frameCounter = 0;
-                            if (++projectile.frame >= Main.projFrames[projectile.type])
-                                projectile.frame = 0;
-                        }
-
-                        if (projectile.alpha >= 150 || !(projectile.ai[0] < 180f))
-                            return false;
-
-                        for (int num736 = 0; num736 < 1; num736++)
-                        {
-                            float num737 = (float)Main.rand.NextDouble() * 1f - 0.5f;
-                            if (num737 < -0.5f)
-                                num737 = -0.5f;
-                            if (num737 > 0.5f)
-                                num737 = 0.5f;
-
-                            Vector2 value40 = new Vector2(-projectile.width * 0.2f * projectile.scale, 0f).RotatedBy(num737 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
-                            Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
-                            zap.position = projectile.Center + value40;
-                            zap.velocity = Vector2.Normalize(zap.position - projectile.Center) * 2f;
-                            zap.noGravity = true;
-                        }
-
-                        for (int num739 = 0; num739 < 1; num739++)
-                        {
-                            float num740 = (float)Main.rand.NextDouble() * 1f - 0.5f;
-                            if (num740 < -0.5f)
-                                num740 = -0.5f;
-                            if (num740 > 0.5f)
-                                num740 = 0.5f;
-
-                            Vector2 value41 = new Vector2(-projectile.width * 0.6f * projectile.scale, 0f).RotatedBy(num740 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
-                            Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
-                            zap.velocity = Vector2.Zero;
-                            zap.position = projectile.Center + value41;
-                            zap.noGravity = true;
-                        }
-
-                        return false;
-                    }
                 }
 
                 else if (projectile.type == ProjectileID.CultistBossIceMist)
@@ -3139,7 +3146,7 @@ namespace CalamityMod.Projectiles
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        int beeAmt = Main.rand.Next(2, 5);
+                        int beeAmt = Main.rand.Next(2, 4);
                         int availableAmountOfNPCsToSpawnUpToSlot = NPC.GetAvailableAmountOfNPCsToSpawnUpToSlot(beeAmt);
                         for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
