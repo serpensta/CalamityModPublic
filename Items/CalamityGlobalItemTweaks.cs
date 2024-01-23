@@ -160,7 +160,7 @@ namespace CalamityMod.Items
                 { ItemID.MonkStaffT1, Do(TrueMeleeNoSpeed, DamageExact(83)) }, // Sleepy Octopod
                 { ItemID.MonkStaffT2, Do(AutoReuse, TrueMelee, DamageRatio(2f)) }, // Ghastly Glaive
                 { ItemID.MonkStaffT3, Do(DamageExact(225)) }, // Sky Dragon's Fury
-                { ItemID.Muramasa, Do(CritDelta(+20)) },
+                { ItemID.Muramasa, Do(CritDelta(+10)) },
                 { ItemID.MushroomSpear, Do(AutoReuse, TrueMelee, UseRatio(0.8f), DamageExact(100)) },
                 { ItemID.Musket, Do(PointBlank, DamageExact(22)) },
                 { ItemID.MythrilHalberd, Do(AutoReuse, TrueMelee, UseRatio(0.8f), DamageExact(95), ShootSpeedRatio(1.25f)) },
