@@ -340,8 +340,8 @@ namespace CalamityMod
                 { ModContent.NPCType<PerforatorTailSmall>(), new int[] { 10, 20, 26, 30, 45 } },
 
                 { NPCID.QueenBee, new int[] { 30, 54, 81, 99, 135 } },
-                { NPCID.Bee, new int[] { 20, 24, 30, 36, 54 } },
-                { NPCID.BeeSmall, new int[] { 15, 18, 24, 30, 45 } },
+                { NPCID.Bee, new int[] { 20, 24, 48, 60, 72 } },
+                { NPCID.BeeSmall, new int[] { 15, 18, 30, 44, 54 } },
 
                 { NPCID.SkeletronHead, new int[] {
                     35, // Same for all phases

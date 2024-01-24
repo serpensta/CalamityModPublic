@@ -3155,7 +3155,6 @@ namespace CalamityMod.Projectiles
                             Main.npc[beeSpawn].velocity.X = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].velocity.Y = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].ai[3] = 1f;
-                            Main.npc[beeSpawn].localAI[0] = 60f;
                             Main.npc[beeSpawn].netUpdate = true;
                         }
                     }

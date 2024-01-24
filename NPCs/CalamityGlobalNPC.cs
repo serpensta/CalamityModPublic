@@ -1410,7 +1410,7 @@ namespace CalamityMod.NPCs
             }
             else if ((npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall) && CalamityPlayer.areThereAnyDamnBosses)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 2.5);
+                npc.lifeMax = (int)(npc.lifeMax * 1.5);
                 npc.scale *= 1.25f;
             }
             else if (npc.type == NPCID.BrainofCthulhu)
@@ -5822,31 +5822,63 @@ namespace CalamityMod.NPCs
                         currentColor.G = (byte)((float)(int)currentColor.G * opacity);
                         currentColor.B = (byte)((float)(int)currentColor.B * opacity);
                         currentColor.A = (byte)((float)(int)currentColor.A * opacity);
-                        for (int i = 0; i < 4; i++)
+                        int totalAfterimages = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 12 : 4;
+                        for (int i = 0; i < totalAfterimages; i++)
                         {
                             Vector2 position = npc.position;
                             float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
                             float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                            if (i > 3)
+                            {
+                                currentColor *= 0.5f;
+                                distanceFromTargetX *= 0.5f;
+                                distanceFromTargetY *= 0.5f;
+                            }
+
                             switch (i)
                             {
                                 case 0:
+                                case 4:
                                     position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
                                     position.Y = Main.player[Main.myPlayer].Center.Y;
                                     break;
 
                                 case 1:
+                                case 5:
                                     position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
                                     position.X = Main.player[Main.myPlayer].Center.X;
                                     break;
 
                                 case 2:
+                                case 6:
                                     position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
                                     position.Y = Main.player[Main.myPlayer].Center.Y;
                                     break;
 
                                 case 3:
+                                case 7:
                                     position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
                                     position.X = Main.player[Main.myPlayer].Center.X;
+                                    break;
+
+                                case 8:
+                                    position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                    position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                    break;
+
+                                case 9:
+                                    position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                    position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                    break;
+
+                                case 10:
+                                    position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                    position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                    break;
+
+                                case 11:
+                                    position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                    position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
                                     break;
 
                                 default:

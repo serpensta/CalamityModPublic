@@ -39,7 +39,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 enrage = false;
 
             float maxEnrageScale = 2f;
-            float enrageScale = death ? 0.25f : 0f;
+            float enrageScale = death ? 0.5f : 0f;
             if (((npc.position.Y / 16f) < Main.worldSurface && enrage) || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
@@ -64,7 +64,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
             // Bee spawn limit
-            int beeLimit = 20;
+            int beeLimit = 15;
 
             // Queen Bee Bee count
             int totalBees = 0;
@@ -189,7 +189,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.TargetClosest();
                     npc.ai[0] = phase;
                     npc.ai[1] = 0f;
+
+                    // Movement direction for the stinger arcs
                     npc.ai[2] = (phase == 5 && phase5) ? (Main.rand.NextBool() ? 1f : -1f) : phase == 5 ? 1f : 0f;
+
+                    // Velocity for the charges
+                    npc.ai[3] = phase == 0 ? ((phase6 ? 25f : phase5 ? 14f : phase4 ? 25f : phase2 ? 20f : 15f) + 6f * enrageScale) : 0f;
                 }
             }
 
@@ -202,6 +207,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 // Number of charges
                 int chargeAmt = (int)Math.Ceiling((phase6 ? 2f : phase5 ? 4f : phase4 ? 3f : 2f) + enrageScale);
+                if (death)
+                    chargeAmt = phase6 ? 1 : phase5 ? 3 : phase4 ? 2 : 1;
 
                 // Switch to a random phase if chargeAmt has been exceeded
                 if (npc.ai[1] > (2 * chargeAmt) && npc.ai[1] % 2f == 0f)
@@ -214,7 +221,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 // Charge velocity
-                float speed = (phase6 ? 30f : phase5 ? 14f : phase4 ? 25f : phase2 ? 20f : 15f) + 8f * enrageScale;
+                float velocity = npc.ai[3];
 
                 // Line up and initiate charge
                 if (npc.ai[1] % 2f == 0f)
@@ -224,7 +231,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     // Initiate charge
                     float chargeDistanceY = phase6 ? 100f : phase4 ? 50f : 20f;
-                    chargeDistanceY += 50f * enrageScale;
+                    chargeDistanceY += 100f * enrageScale;
                     if (death)
                         chargeDistanceY += MathHelper.Lerp(0f, 100f, 1f - lifeRatio);
 
@@ -245,7 +252,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float targetXDist = Main.player[npc.target].Center.X - beeLocation.X;
                         float targetYDist = Main.player[npc.target].Center.Y - beeLocation.Y;
                         float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
-                        targetDistance = speed / targetDistance;
+                        targetDistance = velocity / targetDistance;
                         npc.velocity.X = targetXDist * targetDistance;
                         npc.velocity.Y = targetYDist * targetDistance;
 
@@ -287,7 +294,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.velocity.Y > chargeVelocity)
                         npc.velocity.Y = chargeVelocity;
 
-                    if (distanceFromTargetX > chargeDistanceX + 100f)
+                    if (distanceFromTargetX > chargeDistanceX + 120f)
                         npc.velocity.X += chargeAcceleration * 2f * npc.direction;
                     else if (distanceFromTargetX < chargeDistanceX + 20f)
                         npc.velocity.X -= chargeAcceleration * 2f * npc.direction;
@@ -347,19 +354,26 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.ai[2] != 1f)
                     {
                         // Velocity fix if Queen Bee is slowed
-                        if (npc.velocity.Length() < speed)
-                            npc.velocity.X = speed * npc.direction;
+                        if (npc.velocity.Length() < velocity)
+                            npc.velocity.X = velocity * npc.direction;
+
+                        float accelerateGateValue = phase6 ? 30f : phase5 ? 10f : 90f;
+                        if (enrageScale > 0f)
+                            accelerateGateValue *= 0.5f;
 
                         calamityGlobalNPC.newAI[0] += 1f;
-                        if (calamityGlobalNPC.newAI[0] > (phase5 ? 9f : 90f))
+                        if (calamityGlobalNPC.newAI[0] > accelerateGateValue)
                         {
                             npc.SyncExtraAI();
-                            npc.velocity.X *= 1.01f;
+                            float velocityXLimit = velocity * 2f;
+                            if (Math.Abs(npc.velocity.X) < velocityXLimit)
+                                npc.velocity.X *= 1.01f;
                         }
 
                         // Spawn bees
-                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % 20f == 0f;
-                        if (Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee)
+                        float beeSpawnGateValue = 20f;
+                        bool spawnBee = phase4 && calamityGlobalNPC.newAI[0] % beeSpawnGateValue == 0f && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
+                        if (spawnBee)
                         {
                             SoundEngine.PlaySound(SoundID.NPCHit1, npc.Center);
 
@@ -384,7 +398,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     {
                                         Main.npc[spawn].ai[2] = enrageScale;
                                         Main.npc[spawn].ai[3] = 1f;
-                                        Main.npc[spawn].localAI[0] = 60f;
                                     }
                                     Main.npc[spawn].netUpdate = true;
                                 }
@@ -537,7 +550,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             {
                                 Main.npc[spawn].ai[2] = enrageScale;
                                 Main.npc[spawn].ai[3] = 1f;
-                                Main.npc[spawn].localAI[0] = 60f;
                             }
                             Main.npc[spawn].netUpdate = true;
                         }
@@ -600,7 +612,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     SoundEngine.PlaySound(SoundID.Item17, stingerSpawnLocation);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        float stingerSpeed = (phase3 ? 6f : 5f) + 2f * enrageScale;
+                        float stingerSpeed = (phase3 ? 6f : 5f) + enrageScale;
                         float stingerTargetX = Main.player[npc.target].Center.X - stingerSpawnLocation.X;
                         float stingerTargetY = Main.player[npc.target].Center.Y - stingerSpawnLocation.Y;
                         float stingerTargetDist = (float)Math.Sqrt(stingerTargetX * stingerTargetX + stingerTargetY * stingerTargetY);
@@ -611,7 +623,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         int type = Main.zenithWorld ? (phase3 ? ModContent.ProjectileType<PlagueStingerGoliathV2>() : ProjectileID.FlamingWood) : ProjectileID.QueenBeeStinger;
 
                         int projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation, stingerVelocity, type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, (Main.zenithWorld && phase3) ? Main.player[npc.target].position.Y : 0f);
-                        Main.projectile[projectile].timeLeft = 600;
+                        Main.projectile[projectile].timeLeft = 1200;
                         Main.projectile[projectile].extraUpdates = 1;
 
                         if (phase2)
@@ -619,8 +631,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             int numExtraStingers = death ? (phase6 ? 4 : 2) : (phase6 ? 2 : 1);
                             for (int i = 0; i < numExtraStingers; i++)
                             {
-                                projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation + Main.rand.NextVector2CircularEdge(16f, 16f) * (i + 1), stingerVelocity * (0.75f * (i * 0.2f + 1)), type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, (Main.zenithWorld && phase3) ? Main.player[npc.target].position.Y : 0f);
-                                Main.projectile[projectile].timeLeft = 600;
+                                projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation + Main.rand.NextVector2CircularEdge(16f, 16f) * (i + 1), stingerVelocity * MathHelper.Lerp(0.75f, 1f, i / (float)numExtraStingers), type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, (Main.zenithWorld && phase3) ? Main.player[npc.target].position.Y : 0f);
+                                Main.projectile[projectile].timeLeft = 1200;
                                 Main.projectile[projectile].extraUpdates = 1;
                             }
                         }
@@ -685,15 +697,21 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (enrageScale > 0f)
                     stingerAttackAccel = MathHelper.Lerp(phase6 ? 0.9f : 0.7f, phase6 ? 2.4f : 1.8f, enrageScale / maxEnrageScale);
 
-                float numStingerArcs = phase6 ? 3f : phase5 ? 2f : 1f;
+                int numStingerArcs = phase6 ? 3 : phase5 ? 2 : 1;
+                if (death)
+                    numStingerArcs++;
+
                 float phaseLimit = phase6 ? 180f : phase5 ? 150f : 120f;
-                float stingerAttackTimer = phaseLimit / (numStingerArcs + 1);
+                if (death)
+                    phaseLimit *= 1.5f;
+
+                float stingerAttackTimer = (float)Math.Ceiling(phaseLimit / (numStingerArcs + 1));
 
                 float maxDistance = 480f;
                 float xLocationScale = MathHelper.Lerp(-maxDistance, maxDistance, npc.ai[1] / phaseLimit) * npc.ai[2];
                 Vector2 stingerSpawnLocation = new Vector2(npc.Center.X + (Main.rand.Next(20) * npc.direction), npc.position.Y + npc.height * 0.8f);
                 bool canHitTarget = Collision.CanHit(new Vector2(stingerSpawnLocation.X, stingerSpawnLocation.Y - 30f), 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
-                Vector2 hoverDestination = Main.player[npc.target].Center + Vector2.UnitX * xLocationScale * 1.25f - Vector2.UnitY * maxDistance;
+                Vector2 hoverDestination = Main.player[npc.target].Center + Vector2.UnitX * xLocationScale * (death ? 1.5f : 1.25f) - Vector2.UnitY * maxDistance;
                 Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * stingerAttackSpeed;
 
                 // Fire stingers
@@ -706,7 +724,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         SoundEngine.PlaySound(SoundID.Item17, stingerSpawnLocation);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            float stingerSpeed = (phase6 ? 5f : 4f) + 2f * enrageScale;
+                            float stingerSpeed = (phase6 ? 5f : 4f) + enrageScale;
                             Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * stingerSpeed;
                             int type = Main.zenithWorld ? ModContent.ProjectileType<PlagueStingerGoliathV2>() : ProjectileID.QueenBeeStinger;
                             int numProj = phase6 ? 5 : phase5 ? 10 : 15;
@@ -716,7 +734,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
                                 int projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, Main.player[npc.target].position.Y);
-                                Main.projectile[projectile].timeLeft = 600;
+                                Main.projectile[projectile].timeLeft = 1200;
                                 Main.projectile[projectile].extraUpdates = 1;
 
                                 if (!Main.zenithWorld)
