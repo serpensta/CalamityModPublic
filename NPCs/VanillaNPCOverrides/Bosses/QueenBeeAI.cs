@@ -182,6 +182,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     do phase = Main.rand.Next(maxRandom);
                     while (phase == npc.ai[1] || phase == 1 || (phase == 2 && phase4));
 
+                    bool charging = phase == 0;
+
                     // 5 is stinger arc and charge
                     if (phase == 4)
                         phase = 5;
@@ -194,7 +196,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[2] = (phase == 5 && phase5) ? (Main.rand.NextBool() ? 1f : -1f) : phase == 5 ? 1f : 0f;
 
                     // Velocity for the charges
-                    npc.ai[3] = phase == 0 ? ((phase6 ? 25f : phase5 ? 14f : phase4 ? 25f : phase2 ? 20f : 15f) + 6f * enrageScale) : 0f;
+                    npc.ai[3] = charging ? ((phase6 ? 25f : phase5 ? 14f : phase4 ? 25f : phase2 ? 20f : 15f) + 6f * enrageScale) : 0f;
+
+                    // Distance for the charges
+                    calamityGlobalNPC.newAI[1] = charging ? ((phase6 ? 750f : phase5 ? 350f : phase4 ? 650f : phase2 ? 550f : 450f) - 100f * enrageScale) : 0f;
+                    npc.SyncExtraAI();
                 }
             }
 
@@ -202,8 +208,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             else if (npc.ai[0] == 0f)
             {
                 // Charging distance from player
-                int chargeDistanceX = phase6 ? 750 : phase5 ? 350 : phase4 ? 650 : phase2 ? 550 : 450;
-                chargeDistanceX -= (int)(100f * enrageScale);
+                int chargeDistanceX = (int)calamityGlobalNPC.newAI[1];
 
                 // Number of charges
                 int chargeAmt = (int)Math.Ceiling((phase6 ? 2f : phase5 ? 4f : phase4 ? 3f : 2f) + enrageScale);
