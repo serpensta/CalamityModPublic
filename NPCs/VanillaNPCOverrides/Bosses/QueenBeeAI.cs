@@ -273,44 +273,38 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     // Velocity variables
                     npc.localAI[0] = 0f;
-                    float chargeVelocity = 12f;
-                    float chargeAcceleration = 0.2f;
-                    if (phase2)
-                    {
-                        chargeVelocity += 3f;
-                        chargeAcceleration += 0.1f;
-                    }
-                    if (phase4)
-                    {
-                        chargeVelocity += 3f;
-                        chargeAcceleration += 0.1f;
-                    }
-                    chargeVelocity += 3f * enrageScale;
-                    chargeAcceleration += 0.5f * enrageScale;
+                    float chargeVelocityX = (phase4 ? 24f : phase2 ? 20f : 16f) + 8f * enrageScale;
+                    float chargeVelocityY = (phase4 ? 18f : phase2 ? 15f : 12f) + 6f * enrageScale;
+                    float chargeAccelerationX = (phase4 ? 0.9f : phase2 ? 0.7f : 0.5f) + 0.5f * enrageScale;
+                    float chargeAccelerationY = (phase4 ? 0.45f : phase2 ? 0.35f : 0.25f) + 0.25f * enrageScale;
 
                     // Velocity calculations
-                    if (npc.Center.Y < Main.player[npc.target].Center.Y)
-                        npc.velocity.Y += chargeAcceleration;
+                    if (npc.Center.Y < Main.player[npc.target].Center.Y - chargeDistanceY)
+                        npc.velocity.Y += chargeAccelerationY;
+                    else if (npc.Center.Y > Main.player[npc.target].Center.Y + chargeDistanceY)
+                        npc.velocity.Y -= chargeAccelerationY;
                     else
-                        npc.velocity.Y -= chargeAcceleration;
+                        npc.velocity.Y *= 0.7f;
 
-                    if (npc.velocity.Y < -chargeVelocity)
-                        npc.velocity.Y = -chargeVelocity;
-                    if (npc.velocity.Y > chargeVelocity)
-                        npc.velocity.Y = chargeVelocity;
+                    if (npc.velocity.Y < -chargeVelocityY)
+                        npc.velocity.Y = -chargeVelocityY;
+                    if (npc.velocity.Y > chargeVelocityY)
+                        npc.velocity.Y = chargeVelocityY;
 
-                    if (distanceFromTargetX > chargeDistanceX + 120f)
-                        npc.velocity.X += chargeAcceleration * 2f * npc.direction;
-                    else if (distanceFromTargetX < chargeDistanceX + 20f)
-                        npc.velocity.X -= chargeAcceleration * 2f * npc.direction;
+                    float distanceXMax = 100f;
+                    float distanceXMin = 20f;
+                    if (distanceFromTargetX > chargeDistanceX + distanceXMax)
+                        npc.velocity.X += chargeAccelerationX * npc.direction;
+                    else if (distanceFromTargetX < chargeDistanceX + distanceXMin)
+                        npc.velocity.X -= chargeAccelerationX * npc.direction;
                     else
-                        npc.velocity.X *= 0.8f;
+                        npc.velocity.X *= 0.7f;
 
                     // Limit velocity
-                    if (npc.velocity.X < -chargeVelocity)
-                        npc.velocity.X = -chargeVelocity;
-                    if (npc.velocity.X > chargeVelocity)
-                        npc.velocity.X = chargeVelocity;
+                    if (npc.velocity.X < -chargeVelocityX)
+                        npc.velocity.X = -chargeVelocityX;
+                    if (npc.velocity.X > chargeVelocityX)
+                        npc.velocity.X = chargeVelocityX;
 
                     // Face the correct direction
                     float playerLocation2 = npc.Center.X - Main.player[npc.target].Center.X;
