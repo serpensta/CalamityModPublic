@@ -60,6 +60,7 @@ namespace CalamityMod.Items
                 { ItemID.CandyCornRifle, Do(PointBlank, DamageExact(66)) },
                 { ItemID.Cascade, Do(AutoReuse, DamageExact(30)) },
                 { ItemID.ChainGuillotines, Do(DamageExact(100)) },
+                { ItemID.ChainGun, Do(PointBlank, DamageExact(35)) },
                 { ItemID.ChainKnife, Do(AutoReuse, DamageRatio(1.34f)) },  // Uses ratios due to remix seed
                 // Charged Blaster Cannon is now an earlier Last Prism-like, so it will probably need careful balance attention.
                 // { ItemID.ChargedBlasterCannon, Do(DamageRatio(1.33f)) },
@@ -434,7 +435,6 @@ namespace CalamityMod.Items
                 #region CATEGORY 5: Point Blank support
                 { ItemID.Blowpipe, pointBlank },
                 { ItemID.BorealWoodBow, pointBlank },
-                { ItemID.ChainGun, pointBlank },
                 { ItemID.ChlorophyteShotbow, pointBlank },
                 { ItemID.CopperBow, pointBlank },
                 { ItemID.DartPistol, pointBlank },
