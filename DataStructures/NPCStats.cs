@@ -349,7 +349,7 @@ namespace CalamityMod
                     88, // 114 while spinning
                     99, // 128 while spinning
                     132 } }, // 171 while spinning
-                { NPCID.SkeletronHand, new int[] { 20, 44, 55, 66, 99 } },
+                { NPCID.SkeletronHand, new int[] { 20, 44, 77, 88, 110 } },
                 { NPCID.ChaosBall, new int[] { -1, -1, -1, 40, 60 } },
 
                 { NPCID.Deerclops, new int[] { 20, 40, 50, 60, 80 } },

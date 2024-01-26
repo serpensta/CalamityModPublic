@@ -5919,6 +5919,27 @@ namespace CalamityMod.NPCs
                     }
                 }
 
+                // Telegraph for slaps
+                else if (npc.type == NPCID.SkeletronHand)
+                {
+                    float beginTelegraphGateValue = SkeletronAI.HandSlapGateValue - SkeletronAI.HandSlapTelegraphTime;
+                    if (npc.ai[3] > beginTelegraphGateValue)
+                    {
+                        float colorScale = MathHelper.Clamp((npc.ai[3] - beginTelegraphGateValue) / SkeletronAI.HandSlapTelegraphTime, 0f, 1f);
+                        Color drawColor2 = new Color(150, 150, 150, 0) * colorScale;
+                        Vector2 halfSize = npc.frame.Size() / 2;
+                        SpriteEffects spriteEffects = SpriteEffects.None;
+                        if (npc.spriteDirection == 1)
+                            spriteEffects = SpriteEffects.FlipHorizontally;
+
+                        for (int i = 0; i < 2; i++)
+                        {
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
+                                drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        }
+                    }
+                }
+
                 // His afterimages I can't get to work, so fuck it
                 else if (npc.type == NPCID.SkeletronPrime)
                 {
