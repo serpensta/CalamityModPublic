@@ -139,7 +139,10 @@ namespace CalamityMod.Projectiles.Melee
         public override bool? CanHitNPC(NPC target)
         {
             // the icicles cannot hit while glued to the player
-            return Projectile.ai[0] > 0;
+            if (Projectile.ai[0] > 0)
+                return null;
+            else
+                return false;
         }
     }
 }
