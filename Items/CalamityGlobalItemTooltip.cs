@@ -696,10 +696,9 @@ namespace CalamityMod.Items
 
             if (item.type == ItemID.MechanicalGlove)
             {
-                string extraLine = "\n12% increased melee speed, does not stack with downgrades";
-                EditTooltipByNum(1, (line) => line.Text = "12% increased melee damage" + extraLine);
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("12% increased melee speed", "12% increased melee speed, does not stack with downgrades"));
-                EditTooltipByNum(0, (line) => line.Text += "\n10% increased true melee damage");
+                string extraLine = "\n10% increased true melee damage";
+                string extraLine2 = "\n12% increased melee speed, does not stack with downgrades" + extraLine;
+                EditTooltipByNum(1, (line) => line.Text = "12% increased melee damage" + extraLine2);
             }
 
             if (item.type == ItemID.FireGauntlet)
