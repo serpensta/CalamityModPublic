@@ -4043,7 +4043,7 @@ namespace CalamityMod.CalPlayer
 
                     Vector2 startingPosition = Main.MouseWorld - Vector2.UnitY.RotatedByRandom(0.4f) * 1250f;
                     Vector2 directionToMouse = (Main.MouseWorld - startingPosition).SafeNormalize(Vector2.UnitY).RotatedByRandom(0.1f);
-                    int drop = Projectile.NewProjectile(source, startingPosition, directionToMouse * 15f, ModContent.ProjectileType<ToxicannonDrop>(), d, 0f, Player.whoAmI);
+                    int drop = Projectile.NewProjectile(source, startingPosition, directionToMouse * 15f, ModContent.ProjectileType<FlakToxicannonHoldout>(), d, 0f, Player.whoAmI);
                     if (drop.WithinBounds(Main.maxProjectiles))
                     {
                         Main.projectile[drop].penetrate = 2;

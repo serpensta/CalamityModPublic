@@ -486,20 +486,20 @@ FirestormCannon: {
 FlakKraken: {
 	DisplayName: Flak Kraken
 	Tooltip:
-        '''
+		'''
 		Fires a burst of two large shots that explode at the cursor
 		Large shots burst into a wide cone of ink shrapnel
-        Hitting enemies directly causes the large shots and its shrapnel deal decreased damage
-        '''
+		Hitting enemies directly causes the large shots and their shrapnel to deal decreased damage
+		'''
 }
 
 FlakToxicannon: {
 	DisplayName: Flak Toxicannon
 	Tooltip:
 		'''
-		Fires angled shots in the direction of the cursor
-		Can only be shot in a wide cone above the player
-		'High IQ required'
+		Fires a large shot that explodes at the cursor
+		Large shots burst into a cone of irradiated shrapnel drops
+		Hitting enemies directly causes the large shot and its shrapnel to deal decreased damage
 		'''
 }
 

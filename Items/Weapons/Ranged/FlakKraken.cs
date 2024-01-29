@@ -18,7 +18,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static float TimeBetweenShots = 21;
         public static float ProjectilesPerBurst = 2f;
 
-        public static float OwnerKnockbackStrength = 3.5f;
+        public static float OwnerKnockbackStrength = 2.5f;
 
         public static float ProjectileGravityStrength = 0.22f;
         public static float ProjectileShootSpeed = 25f;
@@ -50,7 +50,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.value = CalamityGlobalItem.Rarity7BuyPrice;
             Item.rare = ItemRarityID.Lime;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.UseSound = new SoundStyle("CalamityMod/Sounds/Item/DudFire") with { Volume = .4f, Pitch = -.9f, PitchVariance = 0.1f };
+            Item.UseSound = new SoundStyle("CalamityMod/Sounds/Item/DudFire") with { Volume = .4f, Pitch = -.95f, PitchVariance = 0.1f };
         }
 
         // Obviously we don't want multiple holdouts existing at the same time.
