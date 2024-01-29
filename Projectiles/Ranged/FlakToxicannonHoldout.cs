@@ -1,15 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using CalamityMod.Buffs.StatDebuffs;
+﻿using System;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
+using Terraria.ModLoader;
 using static CalamityMod.Items.Weapons.Ranged.FlakToxicannon;
 using static Terraria.ModLoader.ModContent;
 
@@ -32,7 +31,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = 152;
+            Projectile.width = Projectile.height = 88;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
@@ -115,7 +114,7 @@ namespace CalamityMod.Projectiles.Ranged
                     if (!Main.dedServ)
                     {
                         // By decreasing the offset length of the gun from the arms, we give an effect of recoil.
-                        OffsetLengthScalar = 10f;
+                        OffsetLengthScalar = 25f;
 
                         Owner.Calamity().GeneralScreenShakePower = 2f;
 
@@ -174,8 +173,8 @@ namespace CalamityMod.Projectiles.Ranged
 
             // When we change the distance of the gun from the arms for the recoil,
             // recover to the original position smoothly.
-            if (OffsetLengthScalar != 30f)
-                OffsetLengthScalar = MathHelper.Lerp(OffsetLengthScalar, 30f, 0.05f);
+            if (OffsetLengthScalar != 38f)
+                OffsetLengthScalar = MathHelper.Lerp(OffsetLengthScalar, 38f, 0.1f);
 
             ShootingTimer++;
         }
@@ -191,7 +190,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             Vector2 armPosition = Owner.RotatedRelativePoint(mountedCenter, true);
             Vector2 lengthOffset = rotationVector * OffsetLengthScalar;
-            Vector2 armOffset = new Vector2(Utils.Remap(proximityLookingUpwards, -1f, 1f, 2f, -4f) * direction, -3f + Utils.Remap(MathF.Abs(proximityLookingUpwards), 0f, 1f, 0f, proximityLookingUpwards > 0f ? 10f : 5f));
+            Vector2 armOffset = new Vector2(Utils.Remap(proximityLookingUpwards, -1f, 1f, 2f, -10f) * direction, -10f + Utils.Remap(MathF.Abs(proximityLookingUpwards), 0f, 1f, 0f, proximityLookingUpwards > 0f ? 10f : 5f));
             Projectile.Center = armPosition + lengthOffset + armOffset;
             Projectile.velocity = velocityRotation.AngleTowards(ownerToMouse.ToRotation(), 0.2f).ToRotationVector2();
             Projectile.rotation = velocityRotation;
@@ -206,7 +205,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             float armRotation = Projectile.rotation - MathHelper.PiOver2; // -Pi/2 because the arms rotation starts with arms pointing down.
             Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.ThreeQuarters, armRotation);
-            Owner.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armRotation);
+            Owner.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armRotation + MathHelper.ToRadians(25f) * direction);
         }
 
         public void NetUpdate()
@@ -221,7 +220,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void OnSpawn(IEntitySource source)
         {
             Owner = Main.player[Projectile.owner];
-            OffsetLengthScalar = 30f;
+            OffsetLengthScalar = 38f;
         }
 
         // Because we use the velocity as a direction, we don't need it to change its position.

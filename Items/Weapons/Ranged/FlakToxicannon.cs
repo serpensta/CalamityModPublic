@@ -1,16 +1,17 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Ranged;
+﻿using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
     public class FlakToxicannon : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
         #region Other Stats
         public static float TimeBetweenShots = 1;
         public static float ProjectilesPerBurst = 1f;

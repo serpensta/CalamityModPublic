@@ -1,11 +1,8 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System.IO;
 using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Dusts;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -13,6 +10,7 @@ using Terraria.ModLoader;
 using static CalamityMod.Items.Weapons.Ranged.FlakToxicannon;
 using static CalamityMod.Projectiles.Ranged.FlakToxicannonHoldout;
 using static Terraria.ModLoader.ModContent;
+
 namespace CalamityMod.Projectiles.Ranged
 {
     public class FlakToxicannonProjectile : ModProjectile, ILocalizedModType
@@ -193,7 +191,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (Main.dedServ)
                 return;
 
-            for (int i = 0; i < (IsShrapnel ? 4 : 12) ; ++i)
+            for (int i = 0; i < (IsShrapnel ? 4 : 12); ++i)
             {
                 int sprayLifetime = Main.rand.Next(15, 20 + 1);
                 float sprayScale = Main.rand.NextFloat(0.6f, 0.8f);
@@ -248,7 +246,7 @@ namespace CalamityMod.Projectiles.Ranged
                         Main.rand.NextFloat(0.2f, 0.35f),
                         0,
                         true);
-                    
+
                     GeneralParticleHandler.SpawnParticle(boomMist);
                 }
             }
