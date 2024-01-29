@@ -58,10 +58,12 @@ namespace CalamityMod.Projectiles.Ranged
 
             // If the timer reaches Item.useTime, it'll shoot.
             // It'll shoot once immediately as the timer reaches.
-            if (ShootingTimer >= Owner.itemTimeMax)
+            Item heldItem = Owner.ActiveItem();
+            if (ShootingTimer >= heldItem.useAnimation)
             {
+                float adaptiveTimeBetweenShots = MathF.Floor(TimeBetweenShots * heldItem.useAnimation / OriginalUseTime);
                 // Every X frames it'll shoot a projectile.
-                if (ShootingTimer % TimeBetweenShots == 0f)
+                if (ShootingTimer % adaptiveTimeBetweenShots == 0f)
                 {
                     // We use the velocity of this projectile as its direction vector.
                     Vector2 direction = Projectile.velocity.SafeNormalize(Vector2.Zero);
@@ -161,7 +163,7 @@ namespace CalamityMod.Projectiles.Ranged
                 }
 
                 // When it has shot all the projectiles in the burst, reset all the variables and back to shooting.
-                if (ShootingTimer >= Owner.itemTimeMax + TimeBetweenShots * (ProjectilesPerBurst - 1))
+                if (ShootingTimer >= heldItem.useAnimation + adaptiveTimeBetweenShots * (ProjectilesPerBurst - 1))
                 {
                     ShootingTimer = 0f;
                     TimerBetweenBursts = 0f;

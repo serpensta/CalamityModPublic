@@ -13,9 +13,6 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         #region Other Stats
-        public static float TimeBetweenShots = 1;
-        public static float ProjectilesPerBurst = 1f;
-
         public static float OwnerKnockbackStrength = 1.1f;
 
         public static float ProjectileGravityStrength = 0.17f;
