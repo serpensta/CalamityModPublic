@@ -1256,7 +1256,8 @@ namespace CalamityMod.Items
             }
             else if (item.type == ItemID.FinWings) // Boosted water abilities, faster fall in water
             {
-                player.gills = true;
+                if (player.IsUnderwater())
+                    player.gills = true;
                 player.ignoreWater = true;
                 player.noFallDmg = true;
                 if (!player.mount.Active)

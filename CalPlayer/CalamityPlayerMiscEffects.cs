@@ -2499,7 +2499,7 @@ namespace CalamityMod.CalPlayer
             if (decayEffigy)
             {
                 Player.buffImmune[ModContent.BuffType<SulphuricPoisoning>()] = true;
-                if (!ZoneAbyss)
+                if (!ZoneAbyss && Player.IsUnderwater())
                 {
                     Player.gills = true;
                 }
