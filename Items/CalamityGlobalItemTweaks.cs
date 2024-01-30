@@ -134,7 +134,7 @@ namespace CalamityMod.Items
                 { ItemID.IceBoomerang, Do(UseExact(25), ShootSpeedExact(9)) },
                 { ItemID.IceRod, Do(UseExact(6), DamageExact(30), ShootSpeedExact(20)) },
                 { ItemID.IceSickle, Do(AutoReuse, UseMeleeSpeed, DamageExact(75), ShootSpeedExact(20f)) },
-                { ItemID.IchorArrow, Do(DamageExact(14)) },
+                { ItemID.IchorArrow, Do(DamageExact(11)) },
                 { ItemID.ImpStaff, Do(AutoReuse, UseExact(30), DamageExact(25)) },
                 { ItemID.InfernoFork, Do(DamageRatio(1.2f)) },
                 { ItemID.InfluxWaver, Do(UseMeleeSpeed, DamageExact(80), UseExact(25)) },
@@ -156,6 +156,8 @@ namespace CalamityMod.Items
                 { ItemID.MedusaHead, Do(ManaExact(6), DamageRatio(1.2f)) },
                 { ItemID.Meowmere, Do(UseMeleeSpeed, DamageExact(240)/*, DamageRatio(1.33f) */) },
                 { ItemID.MeteorStaff, Do(DamageExact(58), ManaExact(7), ShootSpeedExact(13f)) },
+                { ItemID.MiniNukeI, Do(DamageExact(90)) },
+                { ItemID.MiniNukeII, Do(DamageExact(90)) },
                 { ItemID.Minishark, Do(PointBlank, DamageExact(4)) },
                 { ItemID.MoltenFury, Do(PointBlank, UseExact(29), AutoReuse) },
                 { ItemID.MonkStaffT1, Do(TrueMeleeNoSpeed, DamageExact(83)) }, // Sleepy Octopod
@@ -205,8 +207,6 @@ namespace CalamityMod.Items
                 { ItemID.RedPhasesaber, Do(ScaleRatio(1.5f), DamageExact(60)) },
                 { ItemID.RedRyder, Do(PointBlank, DamageExact(24)) },
                 { ItemID.RedsYoyo, Do(AutoReuse, DamageExact(48)) }, // Red's throw and valkyrie's yoyo are the same weapon
-                { ItemID.RocketIII, Do(DamageRatio(0.75f)) },
-                { ItemID.RocketIV, Do(DamageRatio(0.75f)) },
                 { ItemID.Sandgun, Do(PointBlank, DamageExact(22), UseExact(20)) },
                 { ItemID.SapphireStaff, Do(DamageExact(25)) },
                 { ItemID.SDMG, Do(PointBlank, DamageExact(80)) },

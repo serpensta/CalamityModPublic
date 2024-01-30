@@ -1949,6 +1949,22 @@ namespace CalamityMod
             r.AddIngredient(ItemID.SoulofSight);
             r.Register();
             r.DisableDecraft();
+
+            // Tiershift Mini Nuke 1s to post Moon Lord.
+            r = Recipe.Create(ItemID.MiniNukeI, 333);
+            r.AddIngredient(ItemID.RocketIII, 333);
+            r.AddIngredient(ItemID.LunarBar);
+            r.AddTile(TileID.LunarCraftingStation);
+            r.Register();
+            r.DisableDecraft();
+
+            // Tiershift Mini Nuke 2s to post Moon Lord.
+            r = Recipe.Create(ItemID.MiniNukeII, 333);
+            r.AddIngredient(ItemID.RocketIV, 333);
+            r.AddIngredient(ItemID.LunarBar);
+            r.AddTile(TileID.LunarCraftingStation);
+            r.Register();
+            r.DisableDecraft();
         }
         #endregion
 
