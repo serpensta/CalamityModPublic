@@ -810,6 +810,8 @@ namespace CalamityMod
             var edits = new Dictionary<Func<Recipe, bool>, Action<Recipe>>(128)
             {
                 { Vanilla(ItemID.EnchantedBoomerang), Disable }, // Calamity adds its own recipe
+                { Vanilla(ItemID.MiniNukeI), Disable },
+                { Vanilla(ItemID.MiniNukeII), Disable },
 
                 // Make various things cheaper (sorted by progression)
                 { Vanilla(ItemID.Leather), ChangeIngredientStack(ItemID.RottenChunk, 2) },
