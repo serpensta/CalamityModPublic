@@ -235,16 +235,13 @@ namespace CalamityMod.Balancing
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(ResistTrueMelee(0.5f))));
 
-            // 25% resist to Resurrection Butterfly.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<SakuraBullet>(), ProjectileType<PurpleButterfly>()))));
+            // 20% resist to Resurrection Butterfly.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<SakuraBullet>(), ProjectileType<PurpleButterfly>()))));
             #endregion
 
             #region Moon Lord
             // 20% resist to Mercurial Tides (True Biome Blade).
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<MercurialTides>(), ProjectileType<MercurialTidesMonolith>(), ProjectileType<MercurialTidesBlast>()))));
-
-            // 15% resist to Pestilent Defiler.
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<SicknessRound>(), ProjectileType<Sickness>()))));
             #endregion
 
             #region Profaned Guardians
