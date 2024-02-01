@@ -23,7 +23,6 @@ BallistaGreatArrow.DisplayName: Ballista Great Arrow
 BarinadeArrow.DisplayName: Fin Arrow
 BeeRPG.DisplayName: Bee RPG
 BigCoral.DisplayName: Big Coral
-BigNuke.DisplayName: Big Nuke
 BlightFlames.DisplayName: Blight Flames
 BlissfulBombardierDustProjectile.DisplayName: Holy Flare Dust
 BloodBoilerFire.DisplayName: Blood Fire
@@ -126,7 +125,6 @@ MeowCreature.DisplayName: the creature :3
 MeowFire.DisplayName: Purr Fire
 MineralMortarProjectile.DisplayName: Onyx Bomb
 MiniatureFolly.DisplayName: Miniature Folly
-MiniRocket.DisplayName: Rocket
 MiniSharkron.DisplayName: Mini Sharkron
 MistArrow.DisplayName: Mist Arrow
 MortarRoundProj.DisplayName: Mortar
@@ -243,3 +241,5 @@ WaterSpout.DisplayName: Spout
 WulfrumScrapBullet.DisplayName: High Speed Scrap
 DragonsBreathFlames.DisplayName: Draconic Flames
 DragonsBreathMag.DisplayName: Dragons Breath Cartridge
+ScorpioLargeRocket.DisplayName: Scorpio Nuke
+ScorpioRocket.DisplayName: Scorpio Missile
