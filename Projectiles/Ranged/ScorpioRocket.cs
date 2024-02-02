@@ -1,7 +1,9 @@
-﻿using CalamityMod.Particles;
+﻿using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -98,42 +100,58 @@ namespace CalamityMod.Projectiles.Ranged
             if (Main.dedServ)
                 return;
 
-            int dustAmount = Main.rand.Next(30, 35 + 1);
+            int dustAmount = Main.rand.Next(25, 30 + 1);
             for (int i = 0; i < dustAmount; i++)
             {
-                Dust boomDust = Dust.NewDustPerfect(Projectile.Center, DustEffectsID, (MathHelper.TwoPi / dustAmount * i).ToRotationVector2() * Main.rand.NextFloat(4f, 10f), Scale: Main.rand.NextFloat(0.4f, 0.6f));
+                Dust boomDust = Dust.NewDustPerfect(Projectile.Center, DustEffectsID, (MathHelper.TwoPi / dustAmount * i).ToRotationVector2() * Main.rand.NextFloat(4f, 10f), Scale: Main.rand.NextFloat(1f, 1.45f));
                 boomDust.noGravity = true;
                 boomDust.noLight = true;
                 boomDust.noLightEmittence = true;
             }
 
-            Particle explosion = new DetailedExplosion(
+            SoundEngine.PlaySound(RocketHit, Projectile.Center);
+
+            Particle smallBlastRing = new DirectionalPulseRing(
                 Projectile.Center,
                 Vector2.Zero,
-                EffectsColor * 0.6f,
+                StaticEffectsColor,
                 Vector2.One,
-                Main.rand.NextFloat(MathHelper.TwoPi),
-                Projectile.width / 3600f,
-                Projectile.width / 360f,
-                20);
-            GeneralParticleHandler.SpawnParticle(explosion);
+                0f,
+                Projectile.width / 2180f,
+                Projectile.width / 312f,
+                40);
+            GeneralParticleHandler.SpawnParticle(smallBlastRing);
 
             Particle blastRing = new DirectionalPulseRing(
                 Projectile.Center,
                 Vector2.Zero,
-                EffectsColor,
+                EffectsColor * 0.6f,
                 Vector2.One,
                 0f,
-                Projectile.width / 3120f,
-                Projectile.width / 312f,
-                15);
+                Projectile.width / 1755f,
+                Projectile.width / 175f,
+                20);
             GeneralParticleHandler.SpawnParticle(blastRing);
+            for (int i = 0; i < 7; i++)
+            {
+                float blastVel = Projectile.width / 35f;
+                Vector2 velocity = new Vector2(blastVel, blastVel).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f);
+                Particle nanoDust = new NanoParticle(Projectile.Center, velocity, Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor, Main.rand.NextFloat(1f, 1.5f), 40, Main.rand.NextBool(), true);
+                GeneralParticleHandler.SpawnParticle(nanoDust);
+            }
+        }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (Projectile.numHits > 1)
+                Projectile.damage = (int)(Projectile.damage * 0.88f); // 12% penalty on explosion hits
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
 
         public override bool? CanDamage() => Time >= TimeToLaunch ? null : false;
 
-        public float TrailWidthFunction(float completionRatio) => Utils.Remap(completionRatio, 0f, 0.8f, 15f, 0f);
-        public Color TrailColorFunction(float completionRatio) => Color.Lerp(EffectsColor, EffectsColor * 0.3f, Utils.GetLerpValue(0f, 0.8f, completionRatio)) * Utils.GetLerpValue(255f, 0f, Projectile.alpha);
+        public float TrailWidthFunction(float completionRatio) => Utils.Remap(completionRatio, 0f, 0.8f, 6f, 0f);
+        public Color TrailColorFunction(float completionRatio) => Color.Lerp(EffectsColor, StaticEffectsColor * 0.75f, Utils.GetLerpValue(0f, 0.5f, completionRatio)) * Utils.GetLerpValue(255f, 0f, Projectile.alpha);
 
         public override bool PreDraw(ref Color lightColor)
         {

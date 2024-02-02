@@ -16,24 +16,27 @@ namespace CalamityMod.Items.Weapons.Ranged
         #region Other stats
 
         // Weapon stats.
-        public static int OriginalUseTime = 60;
-        public static int TimeBetweenBursts = 10;
-        public static int ProjectilesPerBurst = 6;
+        public static int OriginalUseTime = 30;
+        public static int TimeBetweenBursts = 8;
+        public static int ProjectilesPerBurst = 8;
 
         // Small rocket stats.
         public static float EnemyDetectionDistance = 2000f;
         public static float TrackingSpeed = 0.06f; // VERY DELICATE VALUE, CHANGE SLOWLY.
 
         // Large rocket stats. 
-        public static float NukeEnemyDistanceDetection = 320f;
-        public static float NukeRequiredRotationProximity = 0.95f;
-        public static float NukeTrackingSpeed = 0.01f; // VERY DELICATE VALUE, CHANGE SLOWLY.
+        public static float NukeEnemyDistanceDetection = 300f;
+        public static float NukeRequiredRotationProximity = 0.96f;
+        public static float NukeTrackingSpeed = 0.0095f; // VERY DELICATE VALUE, CHANGE SLOWLY.
 
         #endregion
 
+        public static readonly SoundStyle RocketShoot = new("CalamityMod/Sounds/Item/ScorpioShot") { Volume = 0.45f };
+        public static readonly SoundStyle RocketHit = new("CalamityMod/Sounds/Item/ScorpioHit") { Volume = 0.35f };
+        public static readonly SoundStyle NukeHit = new("CalamityMod/Sounds/Item/ScorpioNukeHit") { Volume = 0.6f };
         public override void SetDefaults()
         {
-            Item.damage = 40;
+            Item.damage = 20;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = OriginalUseTime;
             Item.shoot = ModContent.ProjectileType<ScorpioHoldout>();
@@ -62,7 +65,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<ScorpioHoldout>(), 0, 0f, player.whoAmI);
+            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<ScorpioHoldout>(), 0, 0f, player.whoAmI, -30);
 
             // We set the rotation to the direction to the mouse so the first frame doesn't appear bugged out.
             holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);

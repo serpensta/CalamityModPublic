@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,8 +29,8 @@ namespace CalamityMod.Projectiles.Ranged
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.MaxUpdates = 2;
-            Projectile.width = Projectile.height = 62;
+            Projectile.MaxUpdates = 3;
+            Projectile.width = Projectile.height = 15;
             Projectile.timeLeft = 600;
             Projectile.localNPCHitCooldown = -1;
 
@@ -69,24 +70,48 @@ namespace CalamityMod.Projectiles.Ranged
             trailDust.noLight = true;
             trailDust.noLightEmittence = true;
 
-            Particle thrustSpark = new SparkleParticle(
-                Projectile.Center - Vector2.UnitX.RotatedBy(Projectile.rotation) * 8f,
-                Vector2.Zero,
-                EffectsColor,
-                EffectsColor,
-                0.8f,
-                2);
-            GeneralParticleHandler.SpawnParticle(thrustSpark);
+            if (Projectile.timeLeft < 595)
+            {
+                SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity * 2f, Projectile.velocity * 0.01f, false, 8, 1.3f, StaticEffectsColor);
+                GeneralParticleHandler.SpawnParticle(spark);
+            }
+            
+            if (Projectile.timeLeft % 3 == 0)
+            {
+                Particle nanoDust = new NanoParticle(Projectile.Center, -Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f)), Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor, Main.rand.NextFloat(0.65f, 0.9f), Main.rand.Next(15, 20 + 1), Main.rand.NextBool(), true);
+                GeneralParticleHandler.SpawnParticle(nanoDust);
+            }
+            Particle blastRing = new DirectionalPulseRing(
+            Projectile.Center + Projectile.velocity * 1.5f,
+            Vector2.Zero,
+            StaticEffectsColor * 2,
+            Vector2.One,
+            0f,
+            0.25f,
+            0.25f,
+            2);
+            GeneralParticleHandler.SpawnParticle(blastRing);
+
+            Projectile.velocity *= 1.032f;
         }
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.SourceDamage *= 1.25f;
-        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) => modifiers.SourceDamage *= 1.25f;
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.SourceDamage *= 5f;
+            if (Projectile.numHits == 1)
+                Projectile.damage = (int)(Projectile.damage * 0.2f); // Inital shot does big damage, AOE does a 5th of that damage so Deus doesn't get to cash in for healthcare
+            if (Projectile.numHits > 1)
+                Projectile.damage = (int)(Projectile.damage * 0.92f); // 8% penalty on explosion hits
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
+        }
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) => modifiers.SourceDamage *= 1.8f;
 
         public override void OnKill(int timeLeft)
         {
             var info = new CalamityUtils.RocketBehaviorInfo((int)RocketID);
             int blastRadius = Projectile.RocketBehavior(info);
-            Projectile.ExpandHitboxBy((float)blastRadius);
+            Projectile.ExpandHitboxBy((float)blastRadius * 4.4f);
             Projectile.Damage();
 
             // Inside here go all the things that dedicated servers shouldn't spend resources on.
@@ -94,38 +119,71 @@ namespace CalamityMod.Projectiles.Ranged
             if (Main.dedServ)
                 return;
 
-            Main.player[Projectile.owner].Calamity().GeneralScreenShakePower = 3f;
+            SoundEngine.PlaySound(RocketHit, Projectile.Center);
 
             int dustAmount = Main.rand.Next(30, 35 + 1);
             for (int i = 0; i < dustAmount; i++)
             {
-                Dust boomDust = Dust.NewDustPerfect(Projectile.Center, 226, (MathHelper.TwoPi / dustAmount * i).ToRotationVector2() * Main.rand.NextFloat(4f, 10f), Scale: Main.rand.NextFloat(0.4f, 0.6f));
+                Dust boomDust = Dust.NewDustPerfect(Projectile.Center, DustEffectsID, (MathHelper.TwoPi / dustAmount * i).ToRotationVector2() * Main.rand.NextFloat(4f, 10f), Scale: Main.rand.NextFloat(1.2f, 1.75f));
                 boomDust.noGravity = true;
                 boomDust.noLight = true;
                 boomDust.noLightEmittence = true;
             }
+            for (int i = 0; i < 40; i++)
+            {
+                float blastVel = Projectile.width / 33f;
+                Vector2 velocity = new Vector2(blastVel, blastVel).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 1.7f);
+                Particle nanoDust = new NanoParticle(Projectile.Center, velocity, Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor, Main.rand.NextFloat(2f, 3f), 45, Main.rand.NextBool(), true);
+                GeneralParticleHandler.SpawnParticle(nanoDust);
+            }
 
-            Particle explosion = new DetailedExplosion(
+            Particle smallBlastRing = new DirectionalPulseRing(
                 Projectile.Center,
                 Vector2.Zero,
-                EffectsColor * 0.6f,
+                StaticEffectsColor,
                 Vector2.One,
-                Main.rand.NextFloat(MathHelper.TwoPi),
-                Projectile.width / 3600f,
-                Projectile.width / 360f,
-                20);
-            GeneralParticleHandler.SpawnParticle(explosion);
+                0f,
+                Projectile.width / 2180f,
+                Projectile.width / 312f,
+                40);
+            GeneralParticleHandler.SpawnParticle(smallBlastRing);
 
             Particle blastRing = new DirectionalPulseRing(
                 Projectile.Center,
                 Vector2.Zero,
-                EffectsColor,
+                EffectsColor * 0.6f,
                 Vector2.One,
                 0f,
-                Projectile.width / 3120f,
-                Projectile.width / 312f,
-                15);
+                Projectile.width / 1755f,
+                Projectile.width / 175f,
+                20);
             GeneralParticleHandler.SpawnParticle(blastRing);
+
+            SoundEngine.PlaySound(NukeHit, Projectile.Center);
+
+            Vector2 BurstFXDirection = new Vector2(15, 0);
+            for (int i = 0; i < 4; i++)
+            {
+                SparkParticle spark = new SparkParticle(Projectile.Center, (BurstFXDirection) * (i + 1), false, 11, 5f - i * 0.6f, StaticEffectsColor * 0.8f);
+                GeneralParticleHandler.SpawnParticle(spark);
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                SparkParticle spark = new SparkParticle(Projectile.Center, (-BurstFXDirection) * (i + 1), false, 11, 5f - i * 0.6f, StaticEffectsColor * 0.8f);
+                GeneralParticleHandler.SpawnParticle(spark);
+            }
+
+            Particle orb = new GenericBloom(Projectile.Center, Vector2.Zero, StaticEffectsColor, 2, 13, false);
+            GeneralParticleHandler.SpawnParticle(orb);
+            Particle orb2 = new GenericBloom(Projectile.Center, Vector2.Zero, Color.White, 1.5f, 12, false);
+            GeneralParticleHandler.SpawnParticle(orb2);
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Projectile.numHits < 1)
+            {
+                Main.player[Projectile.owner].Calamity().GeneralScreenShakePower = 6f;
+            }
         }
 
         public float TrailWidthFunction(float completionRatio) => Utils.Remap(completionRatio, 0f, 0.8f, 15f, 0f);
