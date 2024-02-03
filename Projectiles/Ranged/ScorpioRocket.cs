@@ -1,5 +1,4 @@
-﻿using CalamityMod.Items.Weapons.Melee;
-using CalamityMod.Particles;
+﻿using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -21,8 +20,8 @@ namespace CalamityMod.Projectiles.Ranged
         public ref float ProjectileSpeed => ref Projectile.ai[1];
         public ref float Time => ref Projectile.ai[2];
 
-        public const float TimeToLaunch = 15f;
-        public const float TimeForFullPropulsion = 10f;
+        public static float TimeToLaunch = 15f;
+        public static float TimeForFullPropulsion = 10f;
 
         public override void SetStaticDefaults()
         {
@@ -37,9 +36,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.width = Projectile.height = 34;
             Projectile.timeLeft = 600;
             Projectile.localNPCHitCooldown = -1;
-
             Projectile.friendly = true;
-            Projectile.ignoreWater = true;
             Projectile.usesLocalNPCImmunity = true;
         }
 
@@ -75,6 +72,9 @@ namespace CalamityMod.Projectiles.Ranged
             else
                 Projectile.velocity *= 0.9f;
 
+            if (Projectile.wet && RocketID == ItemID.DryRocket && RocketID == ItemID.WetRocket && RocketID == ItemID.LavaRocket && RocketID == ItemID.HoneyRocket)
+                Projectile.Kill();
+
             // Rotates towards its velocity.
             Projectile.rotation = Projectile.velocity.ToRotation();
 
@@ -109,7 +109,13 @@ namespace CalamityMod.Projectiles.Ranged
                 boomDust.noLightEmittence = true;
             }
 
-            SoundEngine.PlaySound(RocketHit, Projectile.Center);
+            for (int i = 0; i < 7; i++)
+            {
+                float blastVel = Projectile.width / 35f;
+                Vector2 velocity = new Vector2(blastVel, blastVel).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f);
+                Particle nanoDust = new NanoParticle(Projectile.Center, velocity, Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor, Main.rand.NextFloat(1f, 1.5f), 40, Main.rand.NextBool(), true);
+                GeneralParticleHandler.SpawnParticle(nanoDust);
+            }
 
             Particle smallBlastRing = new DirectionalPulseRing(
                 Projectile.Center,
@@ -132,13 +138,8 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.width / 175f,
                 20);
             GeneralParticleHandler.SpawnParticle(blastRing);
-            for (int i = 0; i < 7; i++)
-            {
-                float blastVel = Projectile.width / 35f;
-                Vector2 velocity = new Vector2(blastVel, blastVel).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f);
-                Particle nanoDust = new NanoParticle(Projectile.Center, velocity, Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor, Main.rand.NextFloat(1f, 1.5f), 40, Main.rand.NextBool(), true);
-                GeneralParticleHandler.SpawnParticle(nanoDust);
-            }
+
+            SoundEngine.PlaySound(RocketHit, Projectile.Center);
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
@@ -156,6 +157,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
+            Texture2D glowTexture = Request<Texture2D>("CalamityMod/Projectiles/Ranged/ScorpioRocket_Glow").Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
             Color drawColor = Projectile.GetAlpha(lightColor);
@@ -170,6 +172,7 @@ namespace CalamityMod.Projectiles.Ranged
             }
 
             Main.EntitySpriteDraw(texture, drawPosition, frame, drawColor, drawRotation, rotationPoint, Projectile.scale, SpriteEffects.None);
+            Main.EntitySpriteDraw(glowTexture, drawPosition, frame, Color.White, drawRotation, rotationPoint, Projectile.scale, SpriteEffects.None);
 
             return false;
         }

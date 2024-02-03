@@ -1,10 +1,12 @@
 ﻿using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
@@ -34,12 +36,13 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle RocketShoot = new("CalamityMod/Sounds/Item/ScorpioShot") { Volume = 0.45f };
         public static readonly SoundStyle RocketHit = new("CalamityMod/Sounds/Item/ScorpioHit") { Volume = 0.35f };
         public static readonly SoundStyle NukeHit = new("CalamityMod/Sounds/Item/ScorpioNukeHit") { Volume = 0.6f };
+
         public override void SetDefaults()
         {
             Item.damage = 20;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = OriginalUseTime;
-            Item.shoot = ModContent.ProjectileType<ScorpioHoldout>();
+            Item.shoot = ProjectileType<ScorpioHoldout>();
             Item.shootSpeed = 15f;
             Item.knockBack = 6.5f;
 
@@ -65,13 +68,15 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<ScorpioHoldout>(), 0, 0f, player.whoAmI, -30);
+            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ProjectileType<ScorpioHoldout>(), 0, 0f, player.whoAmI, -30);
 
             // We set the rotation to the direction to the mouse so the first frame doesn't appear bugged out.
             holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
 
             return false;
         }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) => Item.DrawItemGlowmaskSingleFrame(spriteBatch, rotation, Request<Texture2D>("CalamityMod/Items/Weapons/Ranged/Scorpio_Glow").Value);
 
         public override void AddRecipes()
         {

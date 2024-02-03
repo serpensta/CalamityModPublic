@@ -22,8 +22,8 @@ namespace CalamityMod.Projectiles.Ranged
         public Player Owner { get; set; }
         public ref float ShootingTimer => ref Projectile.ai[0];
         public ref float TimerBetweenBursts => ref Projectile.ai[1];
+        public ref float ChargeLV => ref Projectile.ai[2];
         public ref float OffsetLengthScalar => ref Projectile.localAI[0];
-        public int ChargeLV = 0;
 
         // The maximum amount that the gun is away from the player's hands.
         public const float MaxOffsetScalarLength = 15f;
@@ -291,6 +291,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
+            Texture2D glowTexture = Request<Texture2D>("CalamityMod/Projectiles/Ranged/ScorpioHoldout_Glow").Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Color drawColor = Projectile.GetAlpha(lightColor);
             float drawRotation = Projectile.rotation + (Projectile.spriteDirection == -1 ? MathHelper.Pi : 0f);
@@ -298,6 +299,7 @@ namespace CalamityMod.Projectiles.Ranged
             SpriteEffects flipSprite = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Main.EntitySpriteDraw(texture, drawPosition, null, drawColor, drawRotation, rotationPoint, Projectile.scale, flipSprite);
+            Main.EntitySpriteDraw(glowTexture, drawPosition, null, Color.White, drawRotation, rotationPoint, Projectile.scale, flipSprite);
 
             return false;
         }

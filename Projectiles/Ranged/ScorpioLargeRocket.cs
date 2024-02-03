@@ -19,6 +19,8 @@ namespace CalamityMod.Projectiles.Ranged
         public ref float RocketID => ref Projectile.ai[0];
         public ref float ProjectileSpeed => ref Projectile.ai[1];
 
+        public static int Lifetime = 600;
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 4;
@@ -31,7 +33,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.MaxUpdates = 3;
             Projectile.width = Projectile.height = 15;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = Lifetime;
             Projectile.localNPCHitCooldown = -1;
 
             Projectile.friendly = true;
@@ -45,13 +47,23 @@ namespace CalamityMod.Projectiles.Ranged
             if (target is not null)
             {
                 Vector2 targetDirection = Projectile.SafeDirectionTo(target.Center);
+
+                // If the projectile is aligned a certain amount to the direction to the target, it gets small homing.
                 float trackingSpeed = Vector2.Dot(targetDirection, Projectile.rotation.ToRotationVector2()) > NukeRequiredRotationProximity ? NukeTrackingSpeed : 0f;
+
                 Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetDirection.ToRotation(), trackingSpeed).ToRotationVector2() * ProjectileSpeed;
             }
 
+            Projectile.velocity *= 1.032f;
+
+            if (Projectile.wet && RocketID == ItemID.DryRocket && RocketID == ItemID.WetRocket && RocketID == ItemID.LavaRocket && RocketID == ItemID.HoneyRocket)
+                Projectile.Kill();
+
+            // Every X frames it changes the projectile to its next animation frame.
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 4)
             {
+                // Cycles through the 4 frames of the animation.
                 Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Type];
                 Projectile.frameCounter = 0;
             }
@@ -59,6 +71,8 @@ namespace CalamityMod.Projectiles.Ranged
             // Rotates towards its velocity.
             Projectile.rotation = Projectile.velocity.ToRotation();
 
+            // Inside here go all the things that dedicated servers shouldn't spend resources on.
+            // Like visuals and sounds.
             if (Main.dedServ)
                 return;
 
@@ -70,29 +84,28 @@ namespace CalamityMod.Projectiles.Ranged
             trailDust.noLight = true;
             trailDust.noLightEmittence = true;
 
-            if (Projectile.timeLeft < 595)
+            if (Projectile.timeLeft < Lifetime - 5)
             {
                 SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity * 2f, Projectile.velocity * 0.01f, false, 8, 1.3f, StaticEffectsColor);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
-            
+
             if (Projectile.timeLeft % 3 == 0)
             {
                 Particle nanoDust = new NanoParticle(Projectile.Center, -Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f)), Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor, Main.rand.NextFloat(0.65f, 0.9f), Main.rand.Next(15, 20 + 1), Main.rand.NextBool(), true);
                 GeneralParticleHandler.SpawnParticle(nanoDust);
             }
-            Particle blastRing = new DirectionalPulseRing(
-            Projectile.Center + Projectile.velocity * 1.5f,
-            Vector2.Zero,
-            StaticEffectsColor * 2,
-            Vector2.One,
-            0f,
-            0.25f,
-            0.25f,
-            2);
-            GeneralParticleHandler.SpawnParticle(blastRing);
 
-            Projectile.velocity *= 1.032f;
+            Particle blastRing = new DirectionalPulseRing(
+                Projectile.Center + Projectile.velocity * 1.5f,
+                Vector2.Zero,
+                StaticEffectsColor * 2,
+                Vector2.One,
+                0f,
+                0.25f,
+                0.25f,
+                2);
+            GeneralParticleHandler.SpawnParticle(blastRing);
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -109,17 +122,20 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnKill(int timeLeft)
         {
-            var info = new CalamityUtils.RocketBehaviorInfo((int)RocketID);
+            var info = new CalamityUtils.RocketBehaviorInfo((int)RocketID)
+            {
+                smallRadius = 13,
+                mediumRadius = 26,
+                largeRadius = 40
+            };
             int blastRadius = Projectile.RocketBehavior(info);
-            Projectile.ExpandHitboxBy((float)blastRadius * 4.4f);
+            Projectile.ExpandHitboxBy(blastRadius);
             Projectile.Damage();
 
             // Inside here go all the things that dedicated servers shouldn't spend resources on.
             // Like visuals and sounds.
             if (Main.dedServ)
                 return;
-
-            SoundEngine.PlaySound(RocketHit, Projectile.Center);
 
             int dustAmount = Main.rand.Next(30, 35 + 1);
             for (int i = 0; i < dustAmount; i++)
@@ -129,6 +145,7 @@ namespace CalamityMod.Projectiles.Ranged
                 boomDust.noLight = true;
                 boomDust.noLightEmittence = true;
             }
+
             for (int i = 0; i < 40; i++)
             {
                 float blastVel = Projectile.width / 33f;
@@ -159,8 +176,6 @@ namespace CalamityMod.Projectiles.Ranged
                 20);
             GeneralParticleHandler.SpawnParticle(blastRing);
 
-            SoundEngine.PlaySound(NukeHit, Projectile.Center);
-
             Vector2 BurstFXDirection = new Vector2(15, 0);
             for (int i = 0; i < 4; i++)
             {
@@ -177,13 +192,15 @@ namespace CalamityMod.Projectiles.Ranged
             GeneralParticleHandler.SpawnParticle(orb);
             Particle orb2 = new GenericBloom(Projectile.Center, Vector2.Zero, Color.White, 1.5f, 12, false);
             GeneralParticleHandler.SpawnParticle(orb2);
+
+            SoundEngine.PlaySound(RocketHit, Projectile.Center);
+            SoundEngine.PlaySound(NukeHit, Projectile.Center);
         }
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.numHits < 1)
-            {
                 Main.player[Projectile.owner].Calamity().GeneralScreenShakePower = 6f;
-            }
         }
 
         public float TrailWidthFunction(float completionRatio) => Utils.Remap(completionRatio, 0f, 0.8f, 15f, 0f);
@@ -192,6 +209,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = Request<Texture2D>(Texture).Value;
+            Texture2D glowTexture = Request<Texture2D>("CalamityMod/Projectiles/Ranged/ScorpioLargeRocket_Glow").Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
             Color drawColor = Projectile.GetAlpha(lightColor);
@@ -203,6 +221,7 @@ namespace CalamityMod.Projectiles.Ranged
             trail.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition, 25);
 
             Main.EntitySpriteDraw(texture, drawPosition, frame, drawColor, drawRotation, rotationPoint, Projectile.scale, SpriteEffects.None);
+            Main.EntitySpriteDraw(glowTexture, drawPosition, frame, Color.White, drawRotation, rotationPoint, Projectile.scale, SpriteEffects.None);
 
             return false;
         }
