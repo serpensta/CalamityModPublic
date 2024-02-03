@@ -2264,29 +2264,6 @@ namespace CalamityMod.CalPlayer
                     var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<TheAmalgam>()));
                     Projectile.NewProjectile(source, Player.Center.X + Main.rand.Next(-40, 40), Player.Center.Y - Main.rand.Next(20, 60), Player.velocity.X * 0.3f, Player.velocity.Y * 0.3f, ProjectileID.BrainOfConfusion, 0, 0f, Player.whoAmI);
                 }
-
-                if (polarisBoost)
-                {
-                    polarisBoostCounter -= 10;
-                    if (polarisBoostCounter < 0)
-                        polarisBoostCounter = 0;
-
-                    if (polarisBoostCounter >= 20)
-                    {
-                        polarisBoostTwo = false;
-                        polarisBoostThree = true;
-                    }
-                    else if (polarisBoostCounter >= 10)
-                    {
-                        polarisBoostTwo = true;
-                        polarisBoostThree = false;
-                    }
-                    else
-                    {
-                        polarisBoostThree = false;
-                        polarisBoostTwo = false;
-                    }
-                }
             }
 
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<DrataliornusBow>()] != 0)

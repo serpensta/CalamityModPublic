@@ -203,7 +203,6 @@ namespace CalamityMod.CalPlayer
         public int brimLoreInfernoTimer = 0;
         public int tarraLifeAuraTimer = 0;
         public int bloodflareHeartTimer = 300;
-        public int polarisBoostCounter = 0;
         public int dragonRageHits = 0;
         public int dragonRageCooldown = 0;
         public float modStealth = 1f;
@@ -967,9 +966,6 @@ namespace CalamityMod.CalPlayer
         public bool yellowCandle = false;
         public bool trippy = false;
         public bool amidiasBlessing = false;
-        public bool polarisBoost = false;
-        public bool polarisBoostTwo = false;
-        public bool polarisBoostThree = false;
         public bool bloodfinBoost = false;
         public int bloodfinTimer = 30;
         public bool hallowedRegen = false;
@@ -1971,9 +1967,6 @@ namespace CalamityMod.CalPlayer
             AbsorberRegen = false;
             cFreeze = false;
             tRegen = false;
-            polarisBoost = false;
-            polarisBoostTwo = false;
-            polarisBoostThree = false;
             bloodfinBoost = false;
             divineBless = false;
 
@@ -2291,7 +2284,6 @@ namespace CalamityMod.CalPlayer
             hideOfDeusMeleeBoostTimer = 0;
             externalAbyssLight = 0;
             externalColdImmunity = externalHeatImmunity = false;
-            polarisBoostCounter = 0;
             dragonRageHits = 0;
             dragonRageCooldown = 0;
             spectralVeilImmunity = 0;
@@ -2460,9 +2452,6 @@ namespace CalamityMod.CalPlayer
             yellowCandle = false;
             trippy = false;
             amidiasBlessing = false;
-            polarisBoost = false;
-            polarisBoostTwo = false;
-            polarisBoostThree = false;
             bloodfinBoost = false;
             bloodfinTimer = 0;
             healCounter = 300;

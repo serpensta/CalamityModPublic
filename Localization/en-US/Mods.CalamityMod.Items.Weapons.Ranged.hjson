@@ -911,11 +911,19 @@ PlanetaryAnnihilation: {
 
 PolarisParrotfish: {
 	DisplayName: Polaris Parrotfish
-	Tooltip:
+	Tooltip: "[GFB]"
+	TooltipNormal:
 		'''
-		Projectile hits grant buffs to the weapon
-		Buffs are removed on hit
+		Rapidly fires an array of colorful star shots that bounce off tiles
+		However, only two shots can exist at once
 		'It carries the mark of the Northern Star'
+		'''
+	TooltipGFB:
+		'''
+		Rapidly fires an array of colorful star shots that bounce off tiles
+		However, only two shots can exist at once
+		Right click to give the little girl some attention
+		'She is a happy girl'
 		'''
 }
 

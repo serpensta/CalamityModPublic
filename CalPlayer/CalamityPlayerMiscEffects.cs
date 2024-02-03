@@ -1844,25 +1844,6 @@ namespace CalamityMod.CalPlayer
                 Player.GetCritChance<RangedDamageClass>() -= (int)((1f - Player.stealth) * 5f); // Change 20 to 15
             }
 
-            // Polaris fish stuff
-            if (!polarisBoost || Player.ActiveItem().type != ModContent.ItemType<PolarisParrotfish>())
-            {
-                polarisBoost = false;
-                if (Player.FindBuffIndex(ModContent.BuffType<PolarisBuff>()) > -1)
-                    Player.ClearBuff(ModContent.BuffType<PolarisBuff>());
-
-                polarisBoostCounter = 0;
-                polarisBoostTwo = false;
-                polarisBoostThree = false;
-            }
-            if (polarisBoostCounter >= 20)
-            {
-                polarisBoostTwo = false;
-                polarisBoostThree = true;
-            }
-            else if (polarisBoostCounter >= 10)
-                polarisBoostTwo = true;
-
             // Haste buff
             if (hasteLevel > 0)
             {

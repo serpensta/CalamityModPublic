@@ -555,10 +555,6 @@ namespace CalamityMod.CalPlayer
                         }
                     }
                 }
-                if (proj.type == ProjectileType<PolarStar>())
-                {
-                    polarisBoostCounter += 1;
-                }
             }
         }
         #endregion
