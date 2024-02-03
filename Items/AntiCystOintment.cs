@@ -22,8 +22,7 @@ namespace CalamityMod.Items
 
         public override void UpdateInventory(Player player)
         {
-            if (Item.favorited)
-                player.Calamity().disablePerfCystSpawns = true;
+            player.Calamity().disablePerfCystSpawns = true;
         }
 
         public override void AddRecipes()

@@ -23,8 +23,7 @@ namespace CalamityMod.Items
 
         public override void UpdateInventory(Player player)
         {
-            if (Item.favorited)
-                player.Calamity().noStupidNaturalARSpawns = true;
+            player.Calamity().noStupidNaturalARSpawns = true;
         }
 
         public override void AddRecipes()

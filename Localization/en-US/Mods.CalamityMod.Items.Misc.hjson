@@ -198,32 +198,31 @@ StarlightFuelCell: {
 // Spawn Blockers
 AntiCystOintment: {
 	DisplayName: Anti-Cyst Ointment
-	Tooltip: Favorite this item to prevent perforator cysts from spawning near you
+	Tooltip: This item prevents perforator cysts from spawning while on the inventory
 }
 
 AntiTumorOintment: {
 	DisplayName: Anti-Tumor Ointment
-	Tooltip: Favorite this item to prevent hive tumors from spawning near you
+	Tooltip: This item prevents hive tumors from spawning while on the inventory
 }
 
 BleachBall: {
 	DisplayName: Bleach Ball
-	Tooltip: Favorite this item to prevent the Aquatic Scourge from naturally spawning near you
+	Tooltip: This item prevents Aquatic Scourge from spawning while on the inventory
 }
 
 BrokenWaterFilter: {
 	DisplayName: Broken Water Filter
-	Tooltip: Favorite this item to disable natural Acid Rain spawns
-}
+	Tooltip: This item prevents Acid Rains from happening while on the inventory
 
 SirenproofEarMuffs: {
 	DisplayName: Sirenproof Earmuffs
-	Tooltip: Favorite this item to prevent Anahita from spawning near you
+	Tooltip: This item prevents Anahita from spawning while on the inventory
 }
 
 VoodooDemonVoodooDoll: {
 	DisplayName: Voodoo Demon Voodoo Doll
-	Tooltip: Favorite this item to prevent voodoo demons from spawning near you
+	Tooltip: This item prevents voodoo demons from spawning while on the inventory
 }
 
 // Uncategorized

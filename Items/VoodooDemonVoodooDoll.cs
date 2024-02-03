@@ -22,8 +22,7 @@ namespace CalamityMod.Items
 
         public override void UpdateInventory(Player player)
         {
-            if (Item.favorited)
-                player.Calamity().disableVoodooSpawns = true;
+            player.Calamity().disableVoodooSpawns = true;
         }
 
         public override void AddRecipes()
