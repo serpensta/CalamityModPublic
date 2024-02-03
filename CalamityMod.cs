@@ -132,6 +132,7 @@ namespace CalamityMod
         internal Mod ancientsAwakened = null;
         internal Mod bossChecklist = null;
         internal Mod crouchMod = null;
+        internal Mod coloredDamageTypes = null;
         internal Mod dialogueTweak = null;
         internal Mod fargos = null;
         internal Mod magicStorage = null;
@@ -163,6 +164,8 @@ namespace CalamityMod
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
             crouchMod = null;
             ModLoader.TryGetMod("CrouchMod", out crouchMod);
+            coloredDamageTypes = null;
+            ModLoader.TryGetMod("ColoredDamageTypes", out coloredDamageTypes);
             dialogueTweak = null;
             ModLoader.TryGetMod("DialogueTweak", out dialogueTweak);
             fargos = null;
@@ -396,6 +399,7 @@ namespace CalamityMod
             ancientsAwakened = null;
             bossChecklist = null;
             crouchMod = null;
+            coloredDamageTypes = null;
             dialogueTweak = null;
             fargos = null;
             magicStorage = null;

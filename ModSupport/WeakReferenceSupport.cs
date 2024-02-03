@@ -188,6 +188,7 @@ namespace CalamityMod
             FargosSupport();
             DialogueTweakSupport();
             SummonersAssociationSupport();
+            ColoredDamageTypesSupport();
         }
 
         #region WikiThis
@@ -1193,6 +1194,26 @@ namespace CalamityMod
                     ["ProjID"] = ProjectileType<WhiteDragonHead>()
                 }
             });
+        }
+        #endregion
+
+        #region ColoredDamageTypes
+        public static void ColoredDamageTypesSupport()
+        {
+            Mod coloredDamageTypes = GetInstance<CalamityMod>().coloredDamageTypes;
+            if (coloredDamageTypes is null)
+                return;
+                //Rogue
+                coloredDamageTypes.Call("AddDamageType", RogueDamageClass.Instance, new Color(170, 118, 185), new Color(170, 118, 185), new Color(200, 70, 195));
+                coloredDamageTypes.Call("AddDamageType", StealthDamageClass.Instance, new Color(170, 118, 185), new Color(170, 118, 185), new Color(200, 70, 195));
+
+                //True melee uses the same color as that mod has for now
+                coloredDamageTypes.Call("AddDamageType", TrueMeleeDamageClass.Instance, new Color(254, 121, 2, 255), new Color(254, 121, 2, 255), new Color(253, 62, 3, 255));
+                coloredDamageTypes.Call("AddDamageType", TrueMeleeNoSpeedDamageClass.Instance, new Color(254, 121, 2, 255), new Color(254, 121, 2, 255), new Color(253, 62, 3, 255));
+
+                // AverageDamageClass due to being all classes will not get a new color and instead just get the default vanilla ones
+                coloredDamageTypes.Call("AddDamageType", AverageDamageClass.Instance, new Color(255, 255, 255), new Color(255, 160, 80), new Color(255, 100, 30));
+            
         }
         #endregion
     }
