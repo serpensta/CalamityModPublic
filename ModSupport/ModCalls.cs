@@ -1981,20 +1981,6 @@ namespace CalamityMod
                     BossRushEvent.BossDeathEffects[npcType5] = deathEffect;
                     return null;
 
-                case "LoadParticleInstances":
-                    if (args.Length != 2 || !(args[1] is Mod))
-                        return new ArgumentNullException("ERROR: Must specify a Mod instance to load particles from.");
-
-                    GeneralParticleHandler.LoadModParticleInstances(args[1] as Mod);
-                    return null;
-
-                case "RegisterModCooldowns":
-                    if (args.Length != 2 || !(args[1] is Mod))
-                        return new ArgumentNullException("ERROR: Must specify a Mod instance to register cooldowns from.");
-
-                    CooldownRegistry.RegisterModCooldowns(args[1] as Mod);
-                    return null;
-
                 case "GetSummonerNerfDisabledByItem":
                     if (args.Length != 2 || !isValidItemArg(args[1]))
                         return new ArgumentException("ERROR: Must specify a valid item to check status of.");
