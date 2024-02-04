@@ -340,8 +340,8 @@ namespace CalamityMod
                 { ModContent.NPCType<PerforatorTailSmall>(), new int[] { 10, 20, 26, 30, 45 } },
 
                 { NPCID.QueenBee, new int[] { 30, 54, 81, 99, 135 } },
-                { NPCID.Bee, new int[] { 20, 24, 30, 36, 54 } },
-                { NPCID.BeeSmall, new int[] { 15, 18, 24, 30, 45 } },
+                { NPCID.Bee, new int[] { 20, 24, 48, 60, 72 } },
+                { NPCID.BeeSmall, new int[] { 15, 18, 30, 44, 54 } },
 
                 { NPCID.SkeletronHead, new int[] {
                     35, // Same for all phases
@@ -349,7 +349,7 @@ namespace CalamityMod
                     88, // 114 while spinning
                     99, // 128 while spinning
                     132 } }, // 171 while spinning
-                { NPCID.SkeletronHand, new int[] { 20, 44, 55, 66, 99 } },
+                { NPCID.SkeletronHand, new int[] { 20, 44, 77, 88, 110 } },
                 { NPCID.ChaosBall, new int[] { -1, -1, -1, 40, 60 } },
 
                 { NPCID.Deerclops, new int[] { 20, 40, 50, 60, 80 } },

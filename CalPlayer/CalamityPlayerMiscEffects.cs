@@ -2499,7 +2499,7 @@ namespace CalamityMod.CalPlayer
             if (decayEffigy)
             {
                 Player.buffImmune[ModContent.BuffType<SulphuricPoisoning>()] = true;
-                if (!ZoneAbyss)
+                if (!ZoneAbyss && Player.IsUnderwater())
                 {
                     Player.gills = true;
                 }
@@ -2777,9 +2777,6 @@ namespace CalamityMod.CalPlayer
                     }
                 }
             }
-
-            if (CalamityLists.scopedWeaponList.Contains(Player.ActiveItem().type))
-                Player.scope = true;
 
             if (CalamityLists.highTestFishList.Contains(Player.ActiveItem().type))
                 Player.accFishingLine = true;

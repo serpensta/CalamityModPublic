@@ -1588,17 +1588,7 @@ namespace CalamityMod
                 NPCType<SuperDummyNPC>()
             };
 
-            // TODO -- override HoldItem => Player.scope = true; on these items
-            scopedWeaponList = new List<int>()
-            {
-                ItemType<AntiMaterielRifle>(),
-                ItemType<Auralis>(),
-                ItemType<HalleysInferno>(),
-                ItemType<Shroomer>(),
-                ItemType<Svantechnical>(),
-                ItemType<TyrannysEnd>()
-            };
-
+            // TODO -- override HoldItem => Player.accFishingLine = true; on these items, just like the scope fix...
             highTestFishList = new List<int>()
             {
                 ItemID.GoldenFishingRod,
@@ -2098,7 +2088,7 @@ namespace CalamityMod
             {
                 ProjectileID.Arkhalis,
                 ProjectileID.ChargedBlasterLaser,
-		        ProjectileID.ClingerStaff,
+                ProjectileID.ClingerStaff,
                 ProjectileID.FinalFractal,
                 ProjectileID.FlyingKnife,
                 ProjectileID.LastPrismLaser,

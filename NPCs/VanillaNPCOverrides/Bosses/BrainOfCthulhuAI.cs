@@ -164,7 +164,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     chargeVelocity *= 1.2f;
 
                 // KnockBack
-                float baseKnockBackResist = death ? 0.15f : 0.3f;
+                float baseKnockBackResist = death ? 0.1f : 0.3f;
                 if (!phase3)
                     npc.knockBackResist = GetCrimsonBossKnockBack(npc, CalamityGlobalNPC.GetActivePlayerCount(), lifeRatio, baseKnockBackResist);
                 else
@@ -691,13 +691,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     phase1TeleportTileY -= Main.rand.Next(min, max);
 
                                 if (!WorldGen.SolidTile(phase1TeleportTileX, phase1TeleportTileY) && Collision.CanHit(new Vector2(phase1TeleportTileX * 16, phase1TeleportTileY * 16), 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
-                                {
                                     break;
-                                }
+
                                 if (phase1TeleportTries > 100)
-                                {
                                     goto Block;
-                                }
                             }
                             npc.ai[0] = 1f;
                             npc.ai[1] = phase1TeleportTileX;
