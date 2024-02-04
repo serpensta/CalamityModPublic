@@ -1995,14 +1995,6 @@ namespace CalamityMod
                     CooldownRegistry.RegisterModCooldowns(args[1] as Mod);
                     return null;
 
-                case "RegisterModPopupGUIs":
-                case "RegisterModDraedonLogs":
-                    if (args.Length != 2 || !(args[1] is Mod))
-                        return new ArgumentNullException("ERROR: Must specify a Mod instance to register popup GUIs from.");
-
-                    PopupGUIManager.LoadGUIs(args[1] as Mod);
-                    return null;
-
                 case "GetSummonerNerfDisabledByItem":
                     if (args.Length != 2 || !isValidItemArg(args[1]))
                         return new ArgumentException("ERROR: Must specify a valid item to check status of.");
