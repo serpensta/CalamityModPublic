@@ -386,7 +386,6 @@ namespace CalamityMod
                 return Color.Lerp(player.hairColor, new Color(186, 85, 211), stealthInterpolant);
             }));
 
-            PopupGUIManager.LoadGUIs();
             InvasionProgressUIManager.LoadGUIs();
         }
         #endregion

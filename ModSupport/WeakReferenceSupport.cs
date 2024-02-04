@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityMod.Buffs.Summon;
+using CalamityMod.Cooldowns;
 using CalamityMod.Events;
 using CalamityMod.Items;
 using CalamityMod.Items.Armor.Vanity;
@@ -55,9 +56,11 @@ using CalamityMod.NPCs.SunkenSea;
 using CalamityMod.NPCs.SupremeCalamitas;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.NPCs.Yharon;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.DraedonsArsenal;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Summon.Umbrella;
+using CalamityMod.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -189,6 +192,13 @@ namespace CalamityMod
             DialogueTweakSupport();
             SummonersAssociationSupport();
             ColoredDamageTypesSupport();
+            // done here to assure that all other mods have already loaded so that Calamity can automatically grab any of these types they may have
+            if (!Main.dedServ)
+            {
+                GeneralParticleHandler.LoadModParticleInstances();
+                CooldownRegistry.RegisterModCooldowns();
+                PopupGUIManager.LoadGUIs();
+            }
         }
 
         #region WikiThis
