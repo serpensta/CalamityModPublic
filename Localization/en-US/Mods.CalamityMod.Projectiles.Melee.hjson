@@ -310,9 +310,9 @@ WulfrumScrewdriverProj.DisplayName: Wulfrum Screwdriver
 YateveoBloomProj.DisplayName: Yateveo Bloom
 YinYoDark.DisplayName: Dark Shard
 YinYoLight.DisplayName: Light Shard
-DepthCrusherProjectile.DisplayName: Depth Crusher Projectile
-DepthCrusherSplitProjectile.DisplayName: Depth Crusher Split Projectile
-AbyssBladeProjectile.DisplayName: Abyss Blade Projectile
-AbyssBladeSplitProjectile.DisplayName: Abyss Blade Split Projectile
-NeptunesBountyProjectile.DisplayName: Neptunes Bounty Projectile
-NeptunesBountySplitProjectile.DisplayName: Neptunes Bounty Split Projectile
+DepthCrusherProjectile.DisplayName: Depth Crusher
+DepthCrusherSplitProjectile.DisplayName: Depth Crusher Jet
+AbyssBladeProjectile.DisplayName: Abyss Blade
+AbyssBladeSplitProjectile.DisplayName: Abyss Blade Jet
+NeptunesBountyProjectile.DisplayName: Neptune's Bounty
+NeptunesBountySplitProjectile.DisplayName: Neptune's Bounty Jet
