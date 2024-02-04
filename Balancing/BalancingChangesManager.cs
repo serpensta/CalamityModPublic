@@ -201,6 +201,9 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Empress of Light
+            // 25% resist to Abyss Blade's blade.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.HallowBoss, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<AbyssBladeProjectile>()))));
+
             // 20% resist to Plague Tainted SMG's drones.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.HallowBoss, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<PlagueTaintedDrone>()))));
             #endregion

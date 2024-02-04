@@ -12,8 +12,8 @@ AbyssBlade: {
 	DisplayName: Abyss Blade
 	Tooltip:
 		'''
-		Tosses a spinning abyssal sword that ricochets and releases water energy upon hitting a tile
-		The sword will fly towards enemies after a ricochet
+		Tosses a spinning abyssal sword that slices through enemies and releases water energy upon hitting a tile
+		The sword will fly towards enemies after a ricochet, dealing 2x damage
 		'''
 }
 
@@ -794,8 +794,8 @@ NeptunesBounty: {
 	DisplayName: Neptune's Bounty
 	Tooltip:
 		'''
-		Tosses a spinning abyssal sword constantly releases water energy while spinning
-		Once the blade begins falling it will redirect itself towards enemies with increased velocity
+		Tosses a spinning abyssal sword which constantly sprays water energy
+		Once the blade begins falling, it will redirect itself towards enemies with increased velocity and 2x damage
 		'''
 }
 

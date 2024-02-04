@@ -53,7 +53,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.DamageType = DamageClass.Melee;
             Projectile.ignoreWater = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 11;
+            Projectile.localNPCHitCooldown = 15;
         }
 
         public override bool ShouldUpdatePosition()
@@ -162,7 +162,7 @@ namespace CalamityMod.Projectiles.Melee
                         GeneralParticleHandler.SpawnParticle(sparker);
                     }
                     Projectile.penetrate = 1;
-                    Projectile.damage = startDamage;
+                    Projectile.damage = (int)(startDamage * 2); // Launched blade deals 200% damage
                     Time = 0;
 
                     bool foundTarget = false;
@@ -188,7 +188,7 @@ namespace CalamityMod.Projectiles.Melee
 
                     for (int i = 0; i < 6; i++)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, ((Projectile.velocity).SafeNormalize(Vector2.UnitX * Projectile.direction) * 5).RotatedByRandom(0.75f) * Main.rand.NextFloat(1.4f, 2.2f), ModContent.ProjectileType<AbyssBladeSplitProjectile>(), startDamage / 4, Projectile.knockBack / 4, Projectile.owner);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, ((Projectile.velocity).SafeNormalize(Vector2.UnitX * Projectile.direction) * 5).RotatedByRandom(0.75f) * Main.rand.NextFloat(1.4f, 2.2f), ModContent.ProjectileType<AbyssBladeSplitProjectile>(), (int)(startDamage * 0.3), Projectile.knockBack / 4, Projectile.owner);
                     }
                 }
             }
@@ -228,13 +228,6 @@ namespace CalamityMod.Projectiles.Melee
                     dust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.7f);
                 }
             }
-        }
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            if (Projectile.numHits > 0)
-                Projectile.damage = (int)(Projectile.damage * 0.93f);
-            if (Projectile.damage < 1)
-                Projectile.damage = 1;
         }
 
         public override void OnKill(int timeLeft)
