@@ -1981,6 +1981,14 @@ namespace CalamityMod
                     BossRushEvent.BossDeathEffects[npcType5] = deathEffect;
                     return null;
 
+                case "LoadParticleInstances":
+                    CalamityMod.Instance.Logger.Warn("This mod call is deprecated. Calamity automatically registers particles.");
+                    return null;
+
+                case "RegisterModCooldowns":
+                    CalamityMod.Instance.Logger.Warn("This mod call is deprecated. Calamity automatically registers cooldowns.");
+                    return null;
+
                 case "GetSummonerNerfDisabledByItem":
                     if (args.Length != 2 || !isValidItemArg(args[1]))
                         return new ArgumentException("ERROR: Must specify a valid item to check status of.");
