@@ -2778,9 +2778,6 @@ namespace CalamityMod.CalPlayer
                 }
             }
 
-            if (CalamityLists.scopedWeaponList.Contains(Player.ActiveItem().type))
-                Player.scope = true;
-
             if (CalamityLists.highTestFishList.Contains(Player.ActiveItem().type))
                 Player.accFishingLine = true;
 
