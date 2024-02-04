@@ -127,6 +127,8 @@ namespace CalamityMod.Projectiles.Ranged
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            Time = 2;
+
             if (tileBounces >= 2)
                 Projectile.Kill();
             else
@@ -134,7 +136,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             for (int i = 0; i <= 5; i++)
             {
-                SquishyLightParticle energy = new(Projectile.Center, Projectile.velocity.RotatedByRandom(100) * Main.rand.NextFloat(0.04f, 0.08f), Main.rand.NextFloat(0.5f, 0.9f), EffectsColor, Main.rand.Next(40, 50 + 1), 0.25f, 2f);
+                SquishyLightParticle energy = new(Projectile.Center, Projectile.velocity.RotatedByRandom(100) * Main.rand.NextFloat(0.08f, 0.15f), Main.rand.NextFloat(0.4f, 0.7f), EffectsColor, Main.rand.Next(40, 50 + 1), 0.25f, 2f);
                 GeneralParticleHandler.SpawnParticle(energy);
             }
             if (Projectile.velocity.X != oldVelocity.X)
