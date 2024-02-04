@@ -26,28 +26,22 @@ namespace CalamityMod.Projectiles.Ranged
 
         public ref float Time => ref Projectile.ai[0];
 
-        public int dustTypeColored = 66;
         public int dustTypeWhite = 91;
         public int tileBounces = 0;
-        public float DustScaleMultiplier = 1;
-        public bool DoSlowdown = true;
+        public float DustScaleMultiplier = 1; // Rocket type dust has to be smaller to look good with the others
+        public bool DoSlowdown = true; // On hit projectiles exist for a few extra frames to prevent projectile spam from far away
         public Vector2 StartVelocity;
         public Color EffectsColor;
         public int DustEffectsID;
 
-        public override void SetStaticDefaults()
-        {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
-        }
         public override void SetDefaults()
         {
-            Projectile.width = 30;
-            Projectile.height = 30;
+            Projectile.width = 35; // Projectile size is higher than normal because hitting constantly is important for this weapon
+            Projectile.height = 35;
             Projectile.friendly = true;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = -1; // Only hits once, "pierces" so that it can last a bit after hitting
             Projectile.extraUpdates = 2;
-            Projectile.timeLeft = 65;
+            Projectile.timeLeft = 50;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
@@ -58,7 +52,7 @@ namespace CalamityMod.Projectiles.Ranged
             Time++;
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
-            if (Time == 1)
+            if (Time == 1) // Start of the shot visuals and other things that happen when it spawns
             {
                 StartVelocity = Projectile.velocity;
                 switch (Projectile.ai[1])
@@ -101,15 +95,15 @@ namespace CalamityMod.Projectiles.Ranged
                 dust.velocity = -Projectile.velocity * Main.rand.NextFloat(0.01f, 0.045f);
             }
 
-            if (Projectile.timeLeft % 2 == 0 && Time > 4 && DoSlowdown)
+            if (Projectile.timeLeft % 2 == 0 && Time > 4 && DoSlowdown) // Particle trail
             {
-                PointParticle spark = new PointParticle(Projectile.Center - Projectile.velocity * 1.5f, -Projectile.velocity * 0.01f, false, 6, 2f, EffectsColor * 0.6f);
+                PointParticle spark = new PointParticle(Projectile.Center - Projectile.velocity * 1f, -Projectile.velocity * 0.01f, false, 7, 2f, EffectsColor * 0.6f);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
 
             if (Projectile.timeLeft <= 2 && DoSlowdown)
             {
-                Projectile.timeLeft = Main.zenithWorld ? 3 : 7;
+                Projectile.timeLeft = Main.zenithWorld ? 3 : 7; // Adds extra projectile time on hit so that you can only fire faster if you're quite close
                 Projectile.velocity = Vector2.Zero;
                 DoSlowdown = false;
             }
@@ -122,35 +116,25 @@ namespace CalamityMod.Projectiles.Ranged
 
             Lighting.AddLight(Projectile.Center, EffectsColor.ToVector3() * 1f);
         }
-
-        public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D texture = Request<Texture2D>(Texture).Value;
-
-            Color drawColor = EffectsColor;
-            //CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor * 0.7f, 1, texture);
-
-            return true;
-        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (DoSlowdown)
             {
-                Projectile.timeLeft = Main.zenithWorld ? 3 : 7;
+                Projectile.timeLeft = Main.zenithWorld ? 3 : 7; // Adds extra projectile time on hit so that you can only fire faster if you're quite close
                 Projectile.velocity = Vector2.Zero;
                 DoSlowdown = false;
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (tileBounces >= 4)
+            if (tileBounces >= 2)
                 Projectile.Kill();
             else
                 tileBounces++;
 
-            for (int i = 0; i <= 3; i++)
+            for (int i = 0; i <= 5; i++)
             {
-                SquishyLightParticle energy = new(Projectile.Center, Projectile.velocity.RotatedByRandom(100) * Main.rand.NextFloat(0.04f, 0.08f), Main.rand.NextFloat(0.2f, 0.6f), EffectsColor, Main.rand.Next(40, 50 + 1), 0.25f, 2f);
+                SquishyLightParticle energy = new(Projectile.Center, Projectile.velocity.RotatedByRandom(100) * Main.rand.NextFloat(0.04f, 0.08f), Main.rand.NextFloat(0.5f, 0.9f), EffectsColor, Main.rand.Next(40, 50 + 1), 0.25f, 2f);
                 GeneralParticleHandler.SpawnParticle(energy);
             }
             if (Projectile.velocity.X != oldVelocity.X)

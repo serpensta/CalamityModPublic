@@ -44,7 +44,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
-            Item.knockBack = 0.3f;
+            Item.knockBack = 0.5f;
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;
             Item.rare = ItemRarityID.LightRed;
             Item.UseSound = null;
@@ -53,14 +53,14 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.shootSpeed = 10f;
         }
         public override void ModifyTooltips(List<TooltipLine> list) => list.FindAndReplace("[GFB]", this.GetLocalizedValue(Main.zenithWorld ? "TooltipGFB" : "TooltipNormal"));
-        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] < 2;
+        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] < 2; // Max of 2 shots on screen at once, get closer to fire faster
         public override bool AltFunctionUse(Player player) => Main.zenithWorld ? true : false;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (Main.zenithWorld && player.altFunctionUse == 2)
             {
                 //GFB stuff
-                if (Happy && Main.rand.NextBool(50))
+                if (Happy && Main.rand.NextBool(50)) // If you pet her too much, you will regret it
                 {
                     Happy = false;
                     player.itemTime = 200;
@@ -81,9 +81,8 @@ namespace CalamityMod.Items.Weapons.Ranged
                         Vector2 projVelocity = spinningPoint.RotatedBy(radians * k);
                         Projectile.NewProjectile(player.GetSource_FromThis(), player.Center + projVelocity * 2000, -projVelocity * 4, theFuckening, projDamage, 0f, Main.myPlayer);
                     }
-
                 }
-                else
+                else // Pet Polaris
                 {
                     SoundEngine.PlaySound(Squeak, player.Center);
                     CombatText.NewText(player.Hitbox, Color.Violet, "^-^");
@@ -122,18 +121,18 @@ namespace CalamityMod.Items.Weapons.Ranged
             }
             else
             {
-                if (Happy)
+                if (Happy) // If she's happy, fire much faster
                 {
-                    Item.useTime = (int)(SetUseTime * 0.4f);
-                    Item.useAnimation = (int)(SetUseAnimation * 0.4f);
+                    Item.useTime = (int)(SetUseTime * 0.5f);
+                    Item.useAnimation = (int)(SetUseAnimation * 0.5f);
                 }
-                else
+                else // Otherwise reset usetime
                 {
                     Item.useTime = SetUseTime;
                     Item.useAnimation = SetUseAnimation;
                 }
 
-                if (Main.zenithWorld)
+                if (Main.zenithWorld) // 1% chance to get tired when firing a projectile
                 {
                     if (Happy && Main.rand.NextBool(100))
                     {
@@ -149,16 +148,12 @@ namespace CalamityMod.Items.Weapons.Ranged
 
                 Projectile.NewProjectile(source, position + velocity * 5f, velocity.RotatedByRandom(0.05f), ModContent.ProjectileType<PolarStar>(), damage, knockback, player.whoAmI, 0f, ShotNumber);
 
-                if (ShotNumber >= 2)
+                if (ShotNumber >= 2) // Cycle the shot color
                     ShotNumber = 0;
                 else
                     ShotNumber++;
             }
             return false;
-        }
-        public override Vector2? HoldoutOrigin() //so it looks normal when holding
-        {
-            return new Vector2(0, 0);
         }
     }
 }
