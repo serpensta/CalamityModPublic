@@ -1212,8 +1212,8 @@ namespace CalamityMod
         private static Color RogueDamageColor = new(206, 132, 227);
         private static Color RogueCritColor = new(194, 38, 212);
         private static Color StealthTooltipColor = RogueTooltipColor;
-        private static Color StealthDamageColor = new(219, 81, 219);
-        private static Color StealthCritColor = new(184, 18, 151);
+        private static Color StealthDamageColor = new(185, 105, 250);
+        private static Color StealthCritColor = new(144, 33, 235);
 
         public static void ColoredDamageTypesSupport()
         {
@@ -1228,7 +1228,8 @@ namespace CalamityMod
             coloredDamageTypes.Call("AddDamageType", TrueMeleeDamageClass.Instance, MeleeTooltipColor, MeleeDamageColor, MeleeCritColor);
             coloredDamageTypes.Call("AddDamageType", TrueMeleeNoSpeedDamageClass.Instance, MeleeTooltipColor, MeleeDamageColor, MeleeCritColor);
 
-            // Rogue has its own lavender color. Stealth strikes are hued towards magenta so they stick out more.
+            // Rogue has its own lavender color. Stealth strikes are hued towards violet so they stick out more.
+            // They would be hued towards magenta, but that would make them collide with Nebula-colored Magic in Colored Damage Types config.
             coloredDamageTypes.Call("AddDamageType", RogueDamageClass.Instance, RogueTooltipColor, RogueDamageColor, RogueCritColor);
             coloredDamageTypes.Call("AddDamageType", StealthDamageClass.Instance, StealthTooltipColor, StealthDamageColor, StealthCritColor);
         }
