@@ -403,7 +403,7 @@ FAP: {
 		DislikeNPC_DD2Bartender: "{NPCName} is so bald."
 		DislikeNPC_TaxCollector: "{NPCName} had best keep his distance... he wouldn't want to wake up one morning with a pipe bomb in his mailbox."
 		HateNPC_GoblinTinkerer: "{NPCName} was so terrible that I had to FORCE him to have a better reforge system. Why would you house me next to him? Do you enjoy watching me relive the stress he gave me!?"
-		HateNPC_Angler: "{NPCName} never stops blabbering about his insane fishing quests. Get me away from him before I stomp him into the ground!"
+		HateNPC_Angler: "{NPCName} never stops blabbering about his inane fishing quests. Get me away from him before I stomp him into the ground!"
 		LikeNPC_Princess: You think I'd dislike {NPCName} because we're too different? Quite the contrary, there's a lot we like to talk about, over non-alcoholic drinks of course.
 		Princess_LovesNPC: "{NPCName} has really interesting stories to tell, I've learned a lot from her already!"
 		HateNPC: I hate {NPCName}.
