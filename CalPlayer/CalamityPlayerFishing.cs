@@ -234,13 +234,16 @@ namespace CalamityMod.CalPlayer
                             }
                             if (ZoneSunkenSea)
                             {
-                                switch (Main.rand.Next(2))
+                                switch (Main.rand.Next(3))
                                 {
                                     case 0:
                                         rareItemList.Add(ModContent.ItemType<SerpentsBite>());
                                         break;
                                     case 1:
                                         rareItemList.Add(ModContent.ItemType<RustedJingleBell>());
+                                        break;
+                                    case 2:
+                                        rareItemList.Add(ModContent.ItemType<SparklingEmpress>());
                                         break;
                                 }
                             }
@@ -484,14 +487,17 @@ namespace CalamityMod.CalPlayer
                     {
 						List<int> legendaryCatches = new List<int>()
 						{
-							ModContent.ItemType<RustedJingleBell>(),
-							ModContent.ItemType<GreenwaveLoach>()
+							ModContent.ItemType<RustedJingleBell>()
 						};
                         legendaryCatches.AddWithCondition<int>(ModContent.ItemType<SparklingEmpress>(), DownedBossSystem.downedDesertScourge);
                         legendaryCatches.AddWithCondition<int>(ModContent.ItemType<SerpentsBite>(), Main.hardMode);
 						itemDrop = legendaryCatches[Main.rand.Next(legendaryCatches.Count)];
                     }
-					else if (attempt.uncommon || attempt.rare || attempt.veryrare)
+                    else if (attempt.veryrare)
+                    {
+                        itemDrop = ModContent.ItemType<GreenwaveLoach>();
+                    }
+					else if (attempt.uncommon || attempt.rare)
                     {
                         itemDrop = ModContent.ItemType<SunkenSailfish>();
                     }
