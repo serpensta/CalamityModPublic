@@ -793,9 +793,9 @@ namespace CalamityMod.Items
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
             }
             if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "4%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "5%"));
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
             // Shadow
             if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
