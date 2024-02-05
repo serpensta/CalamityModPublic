@@ -190,7 +190,7 @@ namespace CalamityMod.CalPlayer
                         if (Main.rand.NextBool(chanceForBiomeCrate))
                         {
                             if (ZoneCalamity)
-                                itemDrop = ModContent.ItemType<BrimstoneCrate>();
+                                itemDrop = Main.hardMode ? ModContent.ItemType<BrimstoneCrate>() : ModContent.ItemType<SlagCrate>();
 							else
 								itemDrop = Main.hardMode ? ItemID.LavaCrateHard : ItemID.LavaCrate;
                         }
@@ -234,13 +234,16 @@ namespace CalamityMod.CalPlayer
                             }
                             if (ZoneSunkenSea)
                             {
-                                switch (Main.rand.Next(2))
+                                switch (Main.rand.Next(3))
                                 {
                                     case 0:
                                         rareItemList.Add(ModContent.ItemType<SerpentsBite>());
                                         break;
                                     case 1:
                                         rareItemList.Add(ModContent.ItemType<RustedJingleBell>());
+                                        break;
+                                    case 2:
+                                        rareItemList.Add(ModContent.ItemType<SparklingEmpress>());
                                         break;
                                 }
                             }
@@ -267,9 +270,9 @@ namespace CalamityMod.CalPlayer
                         {
                             List<int> biomeCrateList = new List<int>();
 
-                            biomeCrateList.AddWithCondition<int>(ModContent.ItemType<AstralCrate>(), ZoneAstral);
-                            biomeCrateList.AddWithCondition<int>(ModContent.ItemType<SunkenCrate>(), ZoneSunkenSea);
-                            biomeCrateList.AddWithCondition<int>(ModContent.ItemType<SulphurousCrate>(), canSulphurFish);
+                            biomeCrateList.AddWithCondition<int>(Main.hardMode ? ModContent.ItemType<AstralCrate>() : ModContent.ItemType<MonolithCrate>(), ZoneAstral);
+                            biomeCrateList.AddWithCondition<int>(Main.hardMode ? ModContent.ItemType<PrismCrate>() : ModContent.ItemType<EutrophicCrate>(), ZoneSunkenSea);
+                            biomeCrateList.AddWithCondition<int>(Main.hardMode ? ModContent.ItemType<HydrothermalCrate>() : ModContent.ItemType<SulphurousCrate>(), canSulphurFish);
                             biomeCrateList.AddWithCondition<int>(Main.hardMode ? ItemID.CorruptFishingCrateHard : ItemID.CorruptFishingCrate, Player.ZoneCorrupt);
                             biomeCrateList.AddWithCondition<int>(Main.hardMode ? ItemID.CrimsonFishingCrateHard : ItemID.CrimsonFishingCrate, Player.ZoneCrimson);
                             biomeCrateList.AddWithCondition<int>(Main.hardMode ? ItemID.HallowedFishingCrateHard : ItemID.HallowedFishingCrate, Player.ZoneHallow);
@@ -309,15 +312,15 @@ namespace CalamityMod.CalPlayer
 					{
 						if (ZoneAstral)
 						{
-							itemDrop = ModContent.ItemType<AstralCrate>();
+							itemDrop = Main.hardMode ? ModContent.ItemType<AstralCrate>() : ModContent.ItemType<MonolithCrate>();
 						}
 						if (ZoneSunkenSea)
 						{
-							itemDrop = ModContent.ItemType<SunkenCrate>();
+							itemDrop = Main.hardMode ? ModContent.ItemType<PrismCrate>() : ModContent.ItemType<EutrophicCrate>();
 						}
 						if (canSulphurFish)
 						{
-							itemDrop = ModContent.ItemType<SulphurousCrate>();
+							itemDrop = Main.hardMode ? ModContent.ItemType<HydrothermalCrate>() : ModContent.ItemType<SulphurousCrate>();
 						}
 					}
 					return;
@@ -484,14 +487,17 @@ namespace CalamityMod.CalPlayer
                     {
 						List<int> legendaryCatches = new List<int>()
 						{
-							ModContent.ItemType<RustedJingleBell>(),
-							ModContent.ItemType<GreenwaveLoach>()
+							ModContent.ItemType<RustedJingleBell>()
 						};
                         legendaryCatches.AddWithCondition<int>(ModContent.ItemType<SparklingEmpress>(), DownedBossSystem.downedDesertScourge);
                         legendaryCatches.AddWithCondition<int>(ModContent.ItemType<SerpentsBite>(), Main.hardMode);
 						itemDrop = legendaryCatches[Main.rand.Next(legendaryCatches.Count)];
                     }
-					else if (attempt.uncommon || attempt.rare || attempt.veryrare)
+                    else if (attempt.veryrare)
+                    {
+                        itemDrop = ModContent.ItemType<GreenwaveLoach>();
+                    }
+					else if (attempt.uncommon || attempt.rare)
                     {
                         itemDrop = ModContent.ItemType<SunkenSailfish>();
                     }
@@ -546,7 +552,7 @@ namespace CalamityMod.CalPlayer
                 {
 					if (attempt.crate)
                     {
-                        itemDrop = ModContent.ItemType<BrimstoneCrate>();
+                        itemDrop = Main.hardMode? ModContent.ItemType<BrimstoneCrate>() : ModContent.ItemType<SlagCrate>();
                     }
 					else if (attempt.legendary)
                     {

@@ -29,6 +29,25 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (CalamityWorld.LegendaryMode && npc.type == NPCID.EaterofWorldsHead)
                 npc.reflectsProjectiles = true;
 
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = 4f;
+            float minimalDamageVelocity = 8f;
+            if (npc.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                if (npc.type == NPCID.EaterofWorldsHead)
+                    npc.damage = (int)(npc.defDamage * 0.5f);
+                else
+                    npc.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                if (npc.type == NPCID.EaterofWorldsHead)
+                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                else
+                    npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
+            }
+
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
                 npc.TargetClosest();
@@ -551,7 +570,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         float pushDistanceLowerLimit = 16f - numHeads;
                         float pushDistanceUpperLimit = 160f - numHeads * 10f;
                         float pushDistance = MathHelper.Lerp(pushDistanceLowerLimit, pushDistanceUpperLimit, 1f - lifeRatio) * npc.scale;
-                        float pushVelocity = 0.5f;
+                        float pushVelocity = 0.5f + enrageScale * 0.25f;
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             if (Main.npc[i].active)

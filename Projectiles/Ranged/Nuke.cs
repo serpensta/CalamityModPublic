@@ -57,9 +57,9 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlissfulBombardierDustProjectile>(), (int)(Projectile.damage * 0.5), Projectile.knockBack, Projectile.owner, 0f, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlissfulBombardierDustProjectile>(), (int)(Projectile.damage * 0.75), Projectile.knockBack, Projectile.owner, 0f, 0f);
                 }
-                flarePowderTimer = 12;
+                flarePowderTimer = 6;
             }
 
             if (Math.Abs(Projectile.velocity.X) >= 8f || Math.Abs(Projectile.velocity.Y) >= 8f)
@@ -86,11 +86,13 @@ namespace CalamityMod.Projectiles.Ranged
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 300);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlissfulBombardierDustProjectile>(), (int)(Projectile.damage * 0.33), Projectile.knockBack, Projectile.owner, 0f, 2f);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 300);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlissfulBombardierDustProjectile>(), (int)(Projectile.damage * 0.33), Projectile.knockBack, Projectile.owner, 0f, 2f);
         }
 
         public override void OnKill(int timeLeft)

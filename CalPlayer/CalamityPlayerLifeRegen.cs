@@ -666,12 +666,6 @@ namespace CalamityMod.CalPlayer
                 }
             }
 
-            if (polarisBoost)
-            {
-                Player.lifeRegen += 1;
-                Player.lifeRegenTime += 1;
-            }
-
             if (evolutionLifeRegenCounter > 0)
             {
                 Player.lifeRegenTime += 2;

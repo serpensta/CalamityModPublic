@@ -753,6 +753,11 @@ HallowedRuneRegeneration: {
 	Description: Regenerating life
 }
 
+Haste: {
+	DisplayName: Haste
+	Description: Increased movement speed and acceleration
+}
+
 IceShieldBuff: {
 	DisplayName: Ice Shield
 	Description: Absorbs 20% damage from the next hit you take, then shatters
@@ -785,11 +790,6 @@ PhantomicShield: {
 		Defense increased by 10 and damage reduction increased by 5%
 		An ephemeral bulwark protects you
 		'''
-}
-
-PolarisBuff: {
-	DisplayName: Polaris Boost
-	Description: The Northern Star empowers your life regeneration
 }
 
 ProfanedCrystalBuff: {

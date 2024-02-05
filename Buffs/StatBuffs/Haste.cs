@@ -1,9 +1,9 @@
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Buffs.StatBuffs
 {
-    public class PolarisBuff : ModBuff
+    public class Haste : ModBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,7 +15,11 @@ namespace CalamityMod.Buffs.StatBuffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.Calamity().polarisBoost = true;
+            // keep the buff active as long as the player's haste level is up
+            if (player.Calamity().hasteLevel > 0)
+            {
+                player.buffTime[buffIndex] = 60;
+            }
         }
     }
 }
