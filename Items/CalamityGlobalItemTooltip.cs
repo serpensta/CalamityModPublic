@@ -464,7 +464,6 @@ namespace CalamityMod.Items
             // Stylish Scissors, all Phaseblades, and all Phasesabers ignore 100% of defense
             if (item.type == ItemID.StylistKilLaKillScissorsIWish || (item.type >= ItemID.BluePhasesaber && item.type <= ItemID.YellowPhasesaber) || item.type == ItemID.OrangePhasesaber)
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIgnores 100% of enemy defense");
-
             // Phaseblades are done separately to ensure it appears under the Material line
             if (item.type >= ItemID.BluePhaseblade && item.type <= ItemID.YellowPhaseblade || item.type == ItemID.OrangePhaseblade)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 100% of enemy defense");
@@ -472,14 +471,9 @@ namespace CalamityMod.Items
             // Bone Sword, Breaker Blade, and Mandible Blade ignore 50% of defense
             if (item.type == ItemID.BoneSword || item.type == ItemID.BreakerBlade)
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIgnores 50% of enemy defense");
-
             // Mandible Blade is done separately to ensure it appears under the Material line
             if (item.type == ItemID.AntlionClaw)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 50% of enemy defense");
-
-            // Muramasa inflicts Frostbite
-            if (item.type == ItemID.Muramasa)
-                EditTooltipByName("Material", (line) => line.Text += "\nInflicts Frostbite on hit");
 
             // Death Sickle inflict Whispering Death
             if (item.type == ItemID.DeathSickle)
