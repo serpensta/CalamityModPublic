@@ -477,9 +477,9 @@ namespace CalamityMod.Items
             if (item.type == ItemID.AntlionClaw)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 50% of enemy defense");
 
-            // Muramasa inflicts Nightwither
+            // Muramasa inflicts Frostbite
             if (item.type == ItemID.Muramasa)
-                EditTooltipByName("Material", (line) => line.Text += "\nInflicts Nightwither on hit");
+                EditTooltipByName("Material", (line) => line.Text += "\nInflicts Frostbite on hit");
 
             // Death Sickle inflict Whispering Death
             if (item.type == ItemID.DeathSickle)

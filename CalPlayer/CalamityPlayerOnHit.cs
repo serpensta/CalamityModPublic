@@ -129,7 +129,7 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ItemID.Muramasa:
-                    target.AddBuff(BuffType<Nightwither>(), 30);
+                    target.AddBuff(BuffID.Frostburn2, 180);
                     break;
 
                 case ItemID.IceSickle:

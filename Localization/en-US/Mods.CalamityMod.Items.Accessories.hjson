@@ -1091,7 +1091,7 @@ MoonstoneCrown: {
 		'''
 		15% increased rogue projectile velocity
 		Stealth strikes summon lunar flares on enemy hits
-		Rogue projectiles very occasionally summon moon sigils behind them
+		Rogue projectiles summon homing moon sigils as they travel
 		'''
 }
 
@@ -1454,7 +1454,8 @@ SandCloak: {
 	Tooltip:
 		'''
 		5% increased movement speed
-		Press [KEY] to consume 10% of your maximum stealth to create a protective dust veil which provides +6 defense and +1 HP/s life regen
+		Press [KEY] to consume 10% of your maximum stealth to create a protective dust veil which damages and knocks back enemies
+		While inside the veil, you are given +6 defense and +1 HP/s life regen
 		This effect has a 30 second cooldown before it can be used again
 		'''
 }
