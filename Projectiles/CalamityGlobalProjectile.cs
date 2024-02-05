@@ -59,7 +59,7 @@ namespace CalamityMod.Projectiles
         // For every 100% critical strike chance over 100%, "supercrit" projectiles do a guaranteed +100% damage.
         // They then take the remainder (e.g. the remaining 16%) and roll against that for a final +100% (like normal crits).
         // For example if you have 716% critical strike chance, you are guaranteed +700% damage and then have a 16% chance for +800% damage instead.
-        // Examples of these are Soma Prime and Animosity's sniper mode, but any bullet fired from that gun can supercrit when this bool is activated.
+        // An example of this is Soma Prime, but any bullet fired from that gun can supercrit when this bool is activated.
         // Set this to -1 if you want the projectile to supercrit forever, and to any positive value to make it supercrit only x times
         public int supercritHits  = 0;
 

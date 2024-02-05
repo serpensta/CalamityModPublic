@@ -119,8 +119,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
                 if (p.WithinBounds(Main.maxProjectiles))
                 {
-                    Main.projectile[p].Calamity().supercritHits = 1;
-                    Main.projectile[p].Calamity().brimstoneBullets = true;
+                    Main.projectile[p].Calamity().brimstoneBullets = true; //This is just there for the trail, could be removed if you have a better idea
                 }
 
 
