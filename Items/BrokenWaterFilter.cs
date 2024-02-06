@@ -34,6 +34,7 @@ namespace CalamityMod.Items
                 player.Calamity().noStupidNaturalARSpawns = false;
             else
                 player.Calamity().noStupidNaturalARSpawns = true;
+            Item.NetStateChanged();
             state = player.Calamity().noStupidNaturalARSpawns;
 
             bool favorited = Item.favorited;

@@ -33,6 +33,7 @@ namespace CalamityMod.Items
                 player.Calamity().disablePerfCystSpawns = false;
             else
                 player.Calamity().disablePerfCystSpawns = true;
+            Item.NetStateChanged();
             state = player.Calamity().disablePerfCystSpawns;
 
             bool favorited = Item.favorited;

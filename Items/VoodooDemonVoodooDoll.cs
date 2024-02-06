@@ -35,6 +35,7 @@ namespace CalamityMod.Items
                 player.Calamity().disableVoodooSpawns = false;
             else
                 player.Calamity().disableVoodooSpawns = true;
+            Item.NetStateChanged();
             state = player.Calamity().disableVoodooSpawns;
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<VoodooDemonVoodooDoll>());

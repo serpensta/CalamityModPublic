@@ -34,6 +34,7 @@ namespace CalamityMod.Items
                 player.Calamity().disableNaturalScourgeSpawns = false;
             else
                 player.Calamity().disableNaturalScourgeSpawns = true;
+            Item.NetStateChanged();
             state = player.Calamity().disableNaturalScourgeSpawns;
 
             bool favorited = Item.favorited;

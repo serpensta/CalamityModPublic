@@ -33,6 +33,7 @@ namespace CalamityMod.Items
                 player.Calamity().disableHiveCystSpawns = false;
             else
                 player.Calamity().disableHiveCystSpawns = true;
+            Item.NetStateChanged();
             state = player.Calamity().disableHiveCystSpawns;
 
             bool favorited = Item.favorited;
