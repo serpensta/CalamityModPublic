@@ -24,6 +24,11 @@ namespace CalamityMod.Items
 			itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.SpawnPrevention;
 		}
 
+        public override void UpdateInventory(Player player)
+        {
+            state = player.Calamity().disableHiveCystSpawns; //So that any item of this type always has the proper flag for use in the tooltip
+        }
+
         public override bool CanRightClick() => true;
 
         public override void RightClick(Player player)
@@ -32,7 +37,6 @@ namespace CalamityMod.Items
                 player.Calamity().disableHiveCystSpawns = false;
             else
                 player.Calamity().disableHiveCystSpawns = true;
-            state = player.Calamity().disableHiveCystSpawns; //Tooltip...
 
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<AntiTumorOintment>());

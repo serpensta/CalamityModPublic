@@ -26,6 +26,11 @@ namespace CalamityMod.Items
             itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.SpawnPrevention;
         }
 
+        public override void UpdateInventory(Player player)
+        {
+            state = player.Calamity().disableVoodooSpawns; //So that any item of this type always has the proper flag for use in the tooltip
+        }
+
         public override bool CanRightClick() => true;
 
         public override void RightClick(Player player)
@@ -34,7 +39,6 @@ namespace CalamityMod.Items
                 player.Calamity().disableVoodooSpawns = false;
             else
                 player.Calamity().disableVoodooSpawns = true;
-            state = player.Calamity().disableVoodooSpawns; //Tooltip...
 
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<VoodooDemonVoodooDoll>());
