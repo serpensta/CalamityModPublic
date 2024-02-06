@@ -41,6 +41,7 @@ namespace CalamityMod.Items
             Item.favorited = favorited;
         }
 
+        /*
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frameI, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D texture;
@@ -77,6 +78,7 @@ namespace CalamityMod.Items
             }
             return false;
         }
+        */
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
