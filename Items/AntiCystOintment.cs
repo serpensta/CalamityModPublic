@@ -28,11 +28,11 @@ namespace CalamityMod.Items
 
         public override void RightClick(Player player)
         {
-            if (player.Calamity().disableHiveCystSpawns == true)
-                player.Calamity().disableHiveCystSpawns = false;
+            if (player.Calamity().disablePerfCystSpawns == true)
+                player.Calamity().disablePerfCystSpawns = false;
             else
-                player.Calamity().disableHiveCystSpawns = true;
-            state = player.Calamity().disableHiveCystSpawns; //Tooltip...
+                player.Calamity().disablePerfCystSpawns = true;
+            state = player.Calamity().disablePerfCystSpawns; //Tooltip...
 
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<AntiCystOintment>());

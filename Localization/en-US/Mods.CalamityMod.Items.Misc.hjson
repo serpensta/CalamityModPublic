@@ -208,7 +208,11 @@ AntiCystOintment: {
 
 AntiTumorOintment: {
 	DisplayName: Anti-Tumor Ointment
-	Tooltip: This item prevents hive tumors from spawning while on the inventory
+	Tooltip:'''
+		Toggle this item to prevent hive tumors from spawning near you
+		Press <right> to toggle
+		[STATE]
+		'''
 }
 
 BleachBall: {
