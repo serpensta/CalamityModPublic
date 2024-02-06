@@ -5,6 +5,7 @@ using CalamityMod.Items.Materials;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using static CalamityMod.CalamityUtils;
 
 namespace CalamityMod.Items
 {
@@ -82,9 +83,9 @@ namespace CalamityMod.Items
         {
             string text;
             if (state == true)
-                text = "Currently On";
+                text = GetTextValue("Items.Misc.SpawnBlockersOn");
             else
-                text = "Currently Off";
+                text = GetTextValue("Items.Misc.SpawnBlockersOff");
             tooltips.FindAndReplace("[STATE]", text);
         }
 

@@ -196,6 +196,9 @@ StarlightFuelCell: {
 }
 
 // Spawn Blockers
+SpawnBlockersOn: Currently enabled
+SpawnBlockersOff: Currently disabled
+
 AntiCystOintment: {
 	DisplayName: Anti-Cyst Ointment
 	Tooltip:

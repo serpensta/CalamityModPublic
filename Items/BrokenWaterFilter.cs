@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using static CalamityMod.CalamityUtils;
 
 namespace CalamityMod.Items
 {
@@ -29,11 +30,11 @@ namespace CalamityMod.Items
 
         public override void RightClick(Player player)
         {
-            if (player.Calamity().disableAnahitaSpawns == true)
-                player.Calamity().disableAnahitaSpawns = false;
+            if (player.Calamity().noStupidNaturalARSpawns == true)
+                player.Calamity().noStupidNaturalARSpawns = false;
             else
-                player.Calamity().disableAnahitaSpawns = true;
-            state = player.Calamity().disableAnahitaSpawns;
+                player.Calamity().noStupidNaturalARSpawns = true;
+            state = player.Calamity().noStupidNaturalARSpawns;
 
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<BrokenWaterFilter>());
@@ -82,9 +83,9 @@ namespace CalamityMod.Items
         {
             string text;
             if (state == true)
-                text = "Currently On";
+                text = GetTextValue("Items.Misc.SpawnBlockersOn");
             else
-                text = "Currently Off";
+                text = GetTextValue("Items.Misc.SpawnBlockersOff");
             tooltips.FindAndReplace("[STATE]", text);
         }
 
