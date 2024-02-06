@@ -222,7 +222,12 @@ SirenproofEarMuffs: {
 
 VoodooDemonVoodooDoll: {
 	DisplayName: Voodoo Demon Voodoo Doll
-	Tooltip: This item prevents voodoo demons from spawning while on the inventory
+	Tooltip:
+		'''
+		Favorite this item to prevent voodoo demons from spawning near you
+		Press <right> to toggle
+		[STATE]
+		'''
 }
 
 // Uncategorized
