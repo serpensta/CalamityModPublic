@@ -38,8 +38,8 @@ Animosity: {
 	DisplayName: Animosity
 	Tooltip:
 		'''
-		Fires a powerful shotgun blast which is imbued with Brimstone Flames
-		Press <right> to fire a powerful brimstone round that can super crit
+		Fires a shotgun blast with a tight spread which is imbued with Brimstone Flames
+		Press <right> to fire a powerful brimstone round that inflicts Whispering Death
 		'''
 }
 

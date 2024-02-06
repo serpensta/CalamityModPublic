@@ -20,9 +20,9 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
         // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
-        public static float SniperDmgMult = 3.5f;
-        public static float SniperCritMult = 4f;
-        public static float SniperVelocityMult = 3.5f;
+        public float SniperDmgMult = 5f;
+        public float SniperCritMult = 4f;
+        public float SniperVelocityMult = 2f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
@@ -34,20 +34,20 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             Item.width = 70;
             Item.height = 18;
-            Item.damage = 34;
+            Item.damage = 47;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 70;
             Item.height = 18;
             Item.scale = 0.85f;
-            Item.useTime = 16;
+            Item.useTime = 30;
             Item.reuseDelay = 10;
-            Item.useAnimation = 16;
+            Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2f;
             Item.value = CalamityGlobalItem.Rarity7BuyPrice;
             Item.rare = ItemRarityID.Lime;
-            Item.UseSound = ShootAndReloadSound;
+            Item.UseSound = null;
             Item.autoReuse = true;
             Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = 6.5f;
@@ -88,7 +88,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override float UseSpeedMultiplier(Player player)
         {
             if (player.altFunctionUse == 2)
-                return 1/2.5f;
+                return 1/2f;
 
             return 1f;
         }
@@ -109,41 +109,41 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             //It should feel powerful but also not too much given feedback
-            player.Calamity().GeneralScreenShakePower = 1f;
-
+            
             if (player.altFunctionUse == 2)
             {
+                player.Calamity().GeneralScreenShakePower = 2f;
+                SoundEngine.PlaySound(ShootAndReloadSound with { PitchVariance = 0.3f }, position);
                 //Shoot from muzzle
                 Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
 
                 int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
-                if (p.WithinBounds(Main.maxProjectiles))
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    Main.projectile[p].Calamity().brimstoneBullets = true; //This is just there for the trail, could be removed if you have a better idea
+                    // TO DO: Replace with actual bullet shells or used casings
+                    Gore.NewGore(source, position, velocity.RotatedBy(2f * -player.direction) * Main.rand.NextFloat(0.6f, 0.7f), Mod.Find<ModGore>("Polt5").Type);
                 }
-
-
             }
             else
             {
+                SoundEngine.PlaySound(SoundID.Item38 with { Volume = 0.8f, Pitch = 0.5f, PitchVariance = 0.3f}, position);
                 //Shoot from muzzle
                 Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
 
                 // Fire a shotgun spread of bullets.
                 for (int i = 0; i < 6; ++i)
                 {
-                    float dx = Main.rand.NextFloat(-1.3f, 1.3f);
-                    float dy = Main.rand.NextFloat(-1.3f, 1.3f);
-                    Vector2 randomVelocity = velocity + new Vector2(dx, dy);
+                    Vector2 randomVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(i * 2.5f));
                     Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, randomVelocity, type, damage, knockback, player.whoAmI);
                     CalamityGlobalProjectile cgp = shot.Calamity();
                     cgp.brimstoneBullets = true; //add a brimstone trail to all bullets
                 }
-            }
-            if (Main.netMode != NetmodeID.Server)
-            {
-                // TO DO: Replace with actual bullet shells or used casings
-                Gore.NewGore(source, position, velocity * Main.rand.NextFloat(-0.15f, -0.35f), Mod.Find<ModGore>("Polt5").Type);
+                for (int i = 0; i <= 10; i++)
+                {
+                    Dust dust = Dust.NewDustPerfect(nuzzlePos, 303, velocity.RotatedByRandom(MathHelper.ToRadians(7f)) * Main.rand.NextFloat(0.05f, 0.4f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+                    dust.noGravity = true;
+                    dust.alpha = 150;
+                }
             }
             return false;
         }

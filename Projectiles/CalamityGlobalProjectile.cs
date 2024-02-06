@@ -2687,13 +2687,14 @@ namespace CalamityMod.Projectiles
                 }
                 if (brimstoneBullets) 
                 {
-                    Dust fireTrail = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, (int)CalamityDusts.Brimstone, projectile.velocity.X, projectile.velocity.Y, 100, default, 1f)];
-                    fireTrail.velocity = Vector2.Zero;
-                    fireTrail.position -= projectile.velocity / 5f; 
-                    fireTrail.noGravity = true;
-                    fireTrail.scale = 1f;
-                    fireTrail.noLight = true;
+                    PointParticle spark = new PointParticle(projectile.Center + projectile.velocity * 3, projectile.velocity, false, 2, 0.9f, Color.Crimson * 0.7f);
+                    GeneralParticleHandler.SpawnParticle(spark);
+
+                    Dust dust = Dust.NewDustPerfect(projectile.Center - projectile.velocity, Main.rand.NextBool(3) ? 90 : ModContent.DustType<BrimstoneFlame>(), projectile.velocity * Main.rand.NextFloat(0.05f, 0.9f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(0.5f, 1f);
                 }
+
             }
         }
         #endregion

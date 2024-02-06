@@ -7,16 +7,19 @@ using CalamityMod.Dusts;
 using CalamityMod.Particles;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
+using Microsoft.CodeAnalysis;
 
 namespace CalamityMod.Projectiles.Ranged
 {
     internal class AnimosityBullet : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
+
+        public ref float Time => ref Projectile.ai[0];
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
         public override void SetDefaults()
         {
@@ -26,38 +29,54 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
+            Projectile.extraUpdates = 2;
             Projectile.timeLeft = 300;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
         public override void AI()
         {
+            Projectile.scale = 1.4f;
             Projectile.rotation = Projectile.velocity.ToRotation();
+            Time++;
 
             // Lighting
             Lighting.AddLight(Projectile.Center, 0.9f, 0f, 0.15f);
 
-            // Dust
-            Projectile.localAI[0] += 1f;
-            if (Projectile.localAI[0] > 6f)
+            // Visuals
+            if (Time > 3f)
             {
-                float scale = Main.rand.NextFloat(0.6f, 0.9f);
-                Dust d = Dust.NewDustDirect(Projectile.Center, 0, 0, (int)CalamityDusts.Brimstone);
-                Vector2 posOffset = Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f;
-                d.position += posOffset - 2f * Vector2.UnitY;
-                d.noGravity = true;
-                d.velocity *= 0.6f;
-                d.velocity += Projectile.velocity * 0.15f;
-                d.scale = scale;
+                SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity * 1.8f, -Projectile.velocity * 0.01f, false, 11, 1.6f, Color.Red * 0.65f);
+                GeneralParticleHandler.SpawnParticle(spark);
+            }
+            
+            for (int i = 0; i <= 2; i++)
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity * Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextBool(3) ? 90 : 60, -Projectile.velocity.RotatedBy(-0.5) * Main.rand.NextFloat(0.05f, 0.2f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.5f, 1.1f);
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity * Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextBool(3) ? 90 : 60, -Projectile.velocity.RotatedBy(0.5) * Main.rand.NextFloat(0.05f, 0.2f));
+                dust2.noGravity = true;
+                dust2.scale = Main.rand.NextFloat(0.5f, 1.1f);
             }
         }
-
         public override void Kill(int timeLeft)
         { 
-            SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.NPCDeath55 with { Pitch = -0.7f }, Projectile.Center);
             //DesertProwelerSkullParticle is a placeholder, maybe replace with evil skull or broken heart (maybe both?, maybe one of Gfb?)
-            Particle skull = new DesertProwlerSkullParticle(Projectile.Center, new Vector2(0f,Main.rand.NextFloat(0.5f,1f)), Color.DarkRed, Color.Red, Main.rand.NextFloat(0.7f, 1.2f), 150);
-            GeneralParticleHandler.SpawnParticle(skull);
-
+            for (int i = 0; i <= 11; i++)
+            {
+                Particle skull = new DesertProwlerSkullParticle(Projectile.Center, new Vector2(2.5f, 2.5f).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1f), Main.rand.NextBool() ? Color.Crimson : Color.DarkRed, Color.Red, Main.rand.NextFloat(0.2f, 0.9f), 175);
+                GeneralParticleHandler.SpawnParticle(skull);
+            }
+            for (int i = 0; i <= 25; i++)
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 90 : 60, new Vector2(0, -5).RotatedByRandom(MathHelper.ToRadians(35f)) * Main.rand.NextFloat(0.1f, 1.9f));
+                dust.noGravity = false;
+                dust.scale = Main.rand.NextFloat(0.9f, 1.5f);
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 90 : 60, new Vector2(0, -2).RotatedByRandom(MathHelper.ToRadians(35f)) * Main.rand.NextFloat(0.1f, 1.9f));
+                dust2.noGravity = false;
+                dust2.scale = Main.rand.NextFloat(0.9f, 1.5f);
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -69,6 +88,11 @@ namespace CalamityMod.Projectiles.Ranged
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 120);
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.Crimson * 0.45f, 1);
+            return true;
         }
     }
 }
