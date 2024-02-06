@@ -209,7 +209,7 @@ AntiCystOintment: {
 AntiTumorOintment: {
 	DisplayName: Anti-Tumor Ointment
 	Tooltip:
-        '''
+		'''
 		Toggle this item to prevent hive tumors from spawning near you
 		Press <right> to toggle
 		[STATE]
@@ -218,8 +218,8 @@ AntiTumorOintment: {
 
 BleachBall: {
 	DisplayName: Bleach Ball
-	Tooltip: 
-        '''
+	Tooltip:
+		'''
 		Toggle this item to prevent Aquatic Scourge from spawning
 		Press <right> to toggle
 		[STATE]
@@ -228,8 +228,8 @@ BleachBall: {
 
 BrokenWaterFilter: {
 	DisplayName: Broken Water Filter
-	Tooltip: 
-        '''
+	Tooltip:
+		'''
 		Toggle this item to prevent Acid Rain from occurring
 		Press <right> to toggle
 		[STATE]
@@ -238,8 +238,8 @@ BrokenWaterFilter: {
 
 SirenproofEarMuffs: {
 	DisplayName: Sirenproof Earmuffs
-	Tooltip: 
-        '''
+	Tooltip:
+		'''
 		Toggle this item to prevent Anahita from spawning
 		Press <right> to toggle
 		[STATE]

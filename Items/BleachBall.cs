@@ -25,11 +25,6 @@ namespace CalamityMod.Items
 			itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.SpawnPrevention;
 		}
 
-        public override void UpdateInventory(Player player)
-        {
-            state = player.Calamity().disableNaturalScourgeSpawns; //So that any item of this type always has the proper flag for use in the tooltip
-        }
-
         public override bool CanRightClick() => true;
 
         public override void RightClick(Player player)
@@ -38,6 +33,7 @@ namespace CalamityMod.Items
                 player.Calamity().disableNaturalScourgeSpawns = false;
             else
                 player.Calamity().disableNaturalScourgeSpawns = true;
+            state = player.Calamity().disableNaturalScourgeSpawns;
 
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<BleachBall>());
@@ -71,12 +67,12 @@ namespace CalamityMod.Items
             if (state)
             {
                 //Replace with enabled texture
-                texture = ModContent.Request<Texture2D>("CalamityMod/Items/AntiTumorOintment").Value;
+                texture = ModContent.Request<Texture2D>("CalamityMod/Items/BleachBall").Value;
                 spriteBatch.Draw(texture, Item.position - Main.screenPosition, null, lightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             else
             {
-                texture = ModContent.Request<Texture2D>("CalamityMod/Items/AntiTumorOintment").Value;
+                texture = ModContent.Request<Texture2D>("CalamityMod/Items/BleachBall").Value;
                 spriteBatch.Draw(texture, Item.position - Main.screenPosition, null, lightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             return false;

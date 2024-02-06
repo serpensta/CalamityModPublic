@@ -24,11 +24,6 @@ namespace CalamityMod.Items
 			itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.SpawnPrevention;
 		}
 
-        public override void UpdateInventory(Player player)
-        {
-            state = player.Calamity().disablePerfCystSpawns; //So that any item of this type always has the proper flag for use in the tooltip
-        }
-
         public override bool CanRightClick() => true;
 
         public override void RightClick(Player player)
@@ -37,6 +32,7 @@ namespace CalamityMod.Items
                 player.Calamity().disablePerfCystSpawns = false;
             else
                 player.Calamity().disablePerfCystSpawns = true;
+            state = player.Calamity().disablePerfCystSpawns;
 
             bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<AntiCystOintment>());
