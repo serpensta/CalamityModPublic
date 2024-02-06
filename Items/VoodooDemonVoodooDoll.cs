@@ -48,6 +48,7 @@ namespace CalamityMod.Items
 
             if (state)
             {
+                //Replace with enabled texture
                 texture = ModContent.Request<Texture2D>("CalamityMod/Items/VoodooDemonVoodooDoll").Value;
                 spriteBatch.Draw(texture, position, null, Color.White, 0f, origin, scale, SpriteEffects.None, 0);
             }
@@ -66,7 +67,8 @@ namespace CalamityMod.Items
 
             if (state)
             {
-                texture = ModContent.Request<Texture2D>(Texture).Value;
+                //Replace with enabled texture
+                texture = ModContent.Request<Texture2D>("CalamityMod/Items/VoodooDemonVoodooDoll").Value;
                 spriteBatch.Draw(texture, Item.position - Main.screenPosition, null, lightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             else
