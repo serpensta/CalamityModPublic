@@ -111,6 +111,8 @@ SetBonus: {
 		Increases all knockback by 33%, this counts for the above boost
 		Current bonus: {0}% critical strike chance from {1} knockback
 		'''
+	MagicHat: Increases maximum mana by 40
+	Wizard: 4% increased magic critical strike chance
 	CrystalAssassin:
 		'''
 		Allows the ability to dash
