@@ -7,6 +7,7 @@ using CalamityMod.Buffs.Potions;
 using CalamityMod.Buffs.StatBuffs;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Buffs.Summon;
+using CalamityMod.CalPlayer.Dashes;
 using CalamityMod.Cooldowns;
 using CalamityMod.CustomRecipes;
 using CalamityMod.DataStructures;
@@ -317,6 +318,11 @@ namespace CalamityMod.CalPlayer
                 }
                 else
                     HasReducedDashFirstFrame = false;
+            }
+
+            if (deepDiver)
+            {
+
             }
 
             if (tortShell)
@@ -3066,13 +3072,6 @@ namespace CalamityMod.CalPlayer
                     infiniteFlight = true;
                     ascendantInsigniaBuffTime--;
                 }
-            }
-
-            if (deepDiver && Player.IsUnderwater())
-            {
-                Player.GetDamage<GenericDamageClass>() += 0.15f;
-                Player.statDefense += 15;
-                Player.moveSpeed += 0.15f;
             }
 
             if (abyssalDivingSuit && !Player.IsUnderwater())

@@ -516,8 +516,9 @@ DeepDiver: {
 	DisplayName: Deep Diver
 	Tooltip:
 		'''
-		15% increased damage, movement speed and +15 defense while underwater
-		While underwater you gain the ability to dash great distances
+		Allows the ability to do a small ram dash
+		This dash can slam through enemies without taking damage and can be used quickly in succession
+		Provides greatly improved water mobility
 		'''
 }
 
