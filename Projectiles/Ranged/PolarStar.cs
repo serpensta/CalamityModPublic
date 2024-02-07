@@ -25,6 +25,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override string Texture => "CalamityMod/Projectiles/Ranged/PolarStar";
 
         public ref float Time => ref Projectile.ai[0];
+        private static float HitboxSize = 30f;
 
         public int dustTypeWhite = 91;
         public int tileBounces = 0;
@@ -36,8 +37,8 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void SetDefaults()
         {
-            Projectile.width = 35; // Projectile size is higher than normal because hitting constantly is important for this weapon
-            Projectile.height = 35;
+            Projectile.width = 18; // Projectile size is higher than normal because hitting constantly is important for this weapon
+            Projectile.height = 26;
             Projectile.friendly = true;
             Projectile.penetrate = -1; // Only hits once, "pierces" so that it can last a bit after hitting
             Projectile.extraUpdates = 2;
@@ -163,5 +164,6 @@ namespace CalamityMod.Projectiles.Ranged
             }
         }
         public override bool? CanDamage() => Projectile.numHits > 1 ? false : null;
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, HitboxSize, targetHitbox);
     }
 }
