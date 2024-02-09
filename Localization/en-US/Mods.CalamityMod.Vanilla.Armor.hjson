@@ -31,6 +31,7 @@ SetBonus: {
 	Copper: Increases all damage by 2
 	Crimson:
 		'''
+		Greatly increased natural life regen
 		Life regen is further increased the longer you avoid taking damage
 		Standing still also greatly amplifies life regen
 		'''
