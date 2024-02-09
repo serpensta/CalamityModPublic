@@ -511,7 +511,7 @@ namespace CalamityMod.Items
                     }
                 }
             }
-            if (modPlayer.harpyWingBoost && (modPlayer.harpyRing|| modPlayer.angelTreads))
+            if (modPlayer.harpyWingBoost && (modPlayer.harpyRing || modPlayer.angelTreads))
             {
                 if (Main.rand.NextBool(5) && !item.channel)
                 {
