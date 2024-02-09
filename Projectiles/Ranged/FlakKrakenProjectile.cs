@@ -176,7 +176,7 @@ namespace CalamityMod.Projectiles.Ranged
                         Projectile.Center,
                         Projectile.velocity.SafeNormalize(-Vector2.UnitY).RotatedByRandom(usedClusterRockets ? ClusterShrapnelAngleOffset : ShrapnelAngleOffset) * ProjectileShootSpeed * Main.rand.NextFloat(0.45f, 0.85f),
                         ProjectileType<FlakKrakenProjectile>(),
-                        (int)(Projectile.damage * (HasHitEnemyWithInitialShot ? InitialShotHitShrapnelDamageMultiplier : 1f)),
+                        (int)(Projectile.damage * (HasHitEnemyWithInitialShot ? InitialShotHitShrapnelDamageMultiplier : .6f)),
                         Projectile.knockBack,
                         Projectile.owner,
                         RocketID,
