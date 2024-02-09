@@ -26,8 +26,9 @@ BloodfireBullet: {
 	DisplayName: Bloodfire Bullet
 	Tooltip:
 		'''
-		Accelerates your life regeneration on hit
-		Deals bonus damage based on your current life regeneration
+		Accelerates your natural life regen on hit
+		Deals bonus damage based on your current life regen and natural life regen
+		This damage caps at 25
 		'''
 }
 

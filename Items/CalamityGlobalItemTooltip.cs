@@ -828,7 +828,7 @@ namespace CalamityMod.Items
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
                 EditTooltipByNum(0, (line) => {
-                    string newTooltip = line.Text.Replace("2%", "5%");
+                    string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });

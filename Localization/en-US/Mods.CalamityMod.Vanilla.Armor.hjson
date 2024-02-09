@@ -29,6 +29,11 @@ SetBonus: {
 	}
 
 	Copper: Increases all damage by 2
+	Crimson:
+		'''
+		Life regen is further increased the longer you avoid taking damage
+		Standing still also greatly amplifies life regen
+		'''
 	Eskimo:
 		'''
 		Multiplies all cold-based debuff damage by 1.25
