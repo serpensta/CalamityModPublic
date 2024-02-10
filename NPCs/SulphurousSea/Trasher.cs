@@ -89,7 +89,7 @@ namespace CalamityMod.NPCs.SulphurousSea
                     NPC.TargetClosest(true);
                 }
                 NPC.noTileCollide = false;
-                bool canAttack = hasBeenHit;
+                bool canAttack = hasBeenHit || Main.zenithWorld;
                 NPC.TargetClosest(false);
                 if (Main.player[NPC.target].wet && !Main.player[NPC.target].dead &&
                     Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height) &&
@@ -129,6 +129,8 @@ namespace CalamityMod.NPCs.SulphurousSea
                 if (canAttack)
                 {
                     NPC.TargetClosest(true);
+                    if (Main.zenithWorld)
+                        NPC.noTileCollide = true;
                     NPC.velocity.X = NPC.velocity.X + (float)NPC.direction * (CalamityWorld.death ? 0.6f : CalamityWorld.revenge ? 0.45f : 0.3f);
                     NPC.velocity.Y = NPC.velocity.Y + (float)NPC.directionY * (CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f);
                     float velocityX = CalamityWorld.death ? 20f : CalamityWorld.revenge ? 15f : 10f;
@@ -286,7 +288,7 @@ namespace CalamityMod.NPCs.SulphurousSea
                         NPC.netUpdate = true;
                     }
                 }
-                NPC.velocity.Y = NPC.velocity.Y + 0.55f;
+                NPC.velocity.Y = NPC.velocity.Y + (Main.zenithWorld ? 0.5f : 0.55f); // Lets them jump up walls infinitely in GFB
                 if (NPC.velocity.Y > 10f)
                 {
                     NPC.velocity.Y = 10f;
