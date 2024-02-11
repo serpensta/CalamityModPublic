@@ -8,7 +8,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Magic
 {
-    public class ShadecrystalTome : ModItem, ILocalizedModType
+    [LegacyName("ShadecrystalTome")]
+    public class ShadecrystalBarrage : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()

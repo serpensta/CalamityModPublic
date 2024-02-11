@@ -8,7 +8,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Melee
 {
-    public class LifefruitScythe : ModItem, ILocalizedModType
+    [LegacyName("LifefruitScythe")]
+    public class LifehuntScythe : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
         public override void SetDefaults()

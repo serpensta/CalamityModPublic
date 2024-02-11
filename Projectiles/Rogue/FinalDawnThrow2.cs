@@ -72,7 +72,7 @@ namespace CalamityMod.Projectiles.Rogue
 
             if (Projectile.localAI[0] == 0)
             {
-                SoundEngine.PlaySound(FinalDawn.UseSound, Projectile.position);
+                SoundEngine.PlaySound(TheFinalDawn.UseSound, Projectile.position);
                 Projectile.localAI[0] = 1;
             }
 

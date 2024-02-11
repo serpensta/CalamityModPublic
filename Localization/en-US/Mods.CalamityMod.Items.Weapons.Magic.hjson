@@ -675,7 +675,7 @@ Serpentine: {
 		'''
 }
 
-ShadecrystalTome: {
+ShadecrystalBarrage: {
 	DisplayName: Shadecrystal Barrage
 	Tooltip: Summons rapid fire shadecrystals, can shoot two crystals at once
 }

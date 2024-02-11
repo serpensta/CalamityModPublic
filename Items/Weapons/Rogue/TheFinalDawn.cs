@@ -8,7 +8,8 @@ using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Items.Weapons.Rogue
 {
-    public class FinalDawn : RogueWeapon
+    [LegacyName("FinalDawn")]
+    public class TheFinalDawn : RogueWeapon
     {
         public static readonly SoundStyle UseSound = new("CalamityMod/Sounds/Item/FinalDawnSlash");
         public override void SetDefaults()

@@ -5,7 +5,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
-    public class AstralRepeater : ModItem, ILocalizedModType
+    [LegacyName("AstralRepeater")]
+    public class AstralBow : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()
