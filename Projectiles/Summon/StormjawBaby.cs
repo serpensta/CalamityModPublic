@@ -282,12 +282,6 @@ namespace CalamityMod.Projectiles.Summon
                         {
                             Vector2 sparkS = new Vector2(Main.rand.NextFloat(-5f, 5f), Main.rand.NextFloat(-5f, 5f));
                             int spark = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, sparkS, ModContent.ProjectileType<StormjawSpark>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                            /*
-                            if (spark.WithinBounds(Main.maxProjectiles))
-                            {
-                                Main.projectile[spark].originalDamage = Projectile.originalDamage;
-                            }
-                            */
                         }
                         sparkCounter = 0;
                     }
