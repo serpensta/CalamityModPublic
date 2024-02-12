@@ -25,7 +25,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
-            Item.damage = 153;
+            Item.damage = 159;
             Item.knockBack = 4f;
             Item.useAnimation = 25;
             Item.useTime = 5;

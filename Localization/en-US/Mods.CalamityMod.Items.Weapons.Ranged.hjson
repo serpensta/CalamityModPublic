@@ -87,7 +87,7 @@ AstralBlaster: {
 	Tooltip: Converts musket balls into homing astral rounds
 }
 
-AstralRepeater: {
+AstralBow: {
 	DisplayName: Astral Bow
 	Tooltip: Fires a burst of three arrows
 }
@@ -135,7 +135,7 @@ BarracudaGun: {
 	Tooltip: Fires two barracudas that latch onto enemies and shred them
 }
 
-BladedgeGreatbow: {
+BladedgeRailbow: {
 	DisplayName: Bladedge Railbow
 	Tooltip: Fires a spread of 4 arrows and 2 leaves at once
 }
@@ -795,7 +795,7 @@ Norfleet: {
 	Tooltip: Fire everything!
 }
 
-NullificationRifle: {
+NullificationPistol: {
 	DisplayName: Nullification Pistol
 	Tooltip:
 		'''
@@ -911,11 +911,19 @@ PlanetaryAnnihilation: {
 
 PolarisParrotfish: {
 	DisplayName: Polaris Parrotfish
-	Tooltip:
+	Tooltip: "[GFB]"
+	TooltipNormal:
 		'''
-		Projectile hits grant buffs to the weapon
-		Buffs are removed on hit
+		Rapidly fires an array of colorful star shots that bounce off tiles
+		However, only two shots can exist at once
 		'It carries the mark of the Northern Star'
+		'''
+	TooltipGFB:
+		'''
+		Rapidly fires an array of colorful star shots that bounce off tiles
+		However, only two shots can exist at once
+		Right click to give the little girl some attention
+		'She is a happy girl'
 		'''
 }
 

@@ -128,10 +128,6 @@ namespace CalamityMod.CalPlayer
                     target.AddBuff(BuffID.OnFire3, 180);
                     break;
 
-                case ItemID.Muramasa:
-                    target.AddBuff(BuffType<Nightwither>(), 30);
-                    break;
-
                 case ItemID.IceSickle:
                 case ItemID.Frostbrand:
                     target.AddBuff(BuffID.Frostburn2, 300);
@@ -554,10 +550,6 @@ namespace CalamityMod.CalPlayer
                             Projectile.NewProjectile(source, proj.Center, velocity, ProjectileType<TarraEnergy>(), energyDamage, 0f, proj.owner);
                         }
                     }
-                }
-                if (proj.type == ProjectileType<PolarStar>())
-                {
-                    polarisBoostCounter += 1;
                 }
             }
         }

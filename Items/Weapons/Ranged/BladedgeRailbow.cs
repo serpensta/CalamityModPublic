@@ -7,7 +7,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
-    public class BladedgeGreatbow : ModItem, ILocalizedModType
+    [LegacyName("BladedgeGreatbow")]
+    public class BladedgeRailbow : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()

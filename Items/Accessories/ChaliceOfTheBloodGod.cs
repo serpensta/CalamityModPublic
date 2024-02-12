@@ -87,7 +87,7 @@ namespace CalamityMod.Items.Accessories
                     // If this reduces the player's health to zero, make sure they actually die.
                     if (player.statLife <= 0)
                     {
-                        player.KillMe(PlayerDeathReason.ByCustomReason(CalamityUtils.GetText("Status.Death.ChaliceOfTheBloodGod" + Main.rand.Next(1, 4 + 1)).Format(player.name)), modPlayer.chaliceBleedoutBuffer, 0, false);
+                        player.KillMe(PlayerDeathReason.ByCustomReason(CalamityUtils.GetText("Status.Death.ChaliceOfTheBloodGod" + Main.rand.Next(1, 18 + 1)).Format(player.name)), modPlayer.chaliceBleedoutBuffer, 0, false);
                     }
                 }
 

@@ -792,11 +792,6 @@ PhantomicShield: {
 		'''
 }
 
-PolarisBuff: {
-	DisplayName: Polaris Boost
-	Description: The Northern Star empowers your life regeneration
-}
-
 ProfanedCrystalBuff: {
 	DisplayName: Devotion
 	Description: You are an emissary of the profaned goddess now!

@@ -12,8 +12,8 @@ AbyssBlade: {
 	DisplayName: Abyss Blade
 	Tooltip:
 		'''
-		Fires short-range tridents
-		Hitting enemies will inflict the crush depth debuff
+		Tosses a spinning abyssal sword that slices through enemies and releases water energy upon hitting a tile
+		The sword will fly towards enemies after a ricochet, dealing 2x damage
 		'''
 }
 
@@ -321,8 +321,8 @@ DepthCrusher: {
 	DisplayName: Depth Crusher
 	Tooltip:
 		'''
-		Hitting enemies will inflict the Riptide debuff
-		Press <right> to use without hammering down walls
+		Tosses a heavy abyssal crusher that releases water energy upon hitting a tile
+		The crusher will ricochet off of tiles and enemies
 		'''
 }
 
@@ -697,7 +697,7 @@ Lacerator: {
 	TooltipGFB: May be a viable weapon against DoG...
 }
 
-LifefruitScythe: {
+LifehuntScythe: {
 	DisplayName: Lifehunt Scythe
 	Tooltip: Heals you on hit and shoots an energy scythe
 }
@@ -794,8 +794,8 @@ NeptunesBounty: {
 	DisplayName: Neptune's Bounty
 	Tooltip:
 		'''
-		Fires a trident that rains additional tridents as it travels
-		Hitting enemies will inflict the crush depth debuff
+		Tosses a spinning abyssal sword which constantly sprays water energy
+		Once the blade begins falling, it will redirect itself towards enemies with increased velocity and 2x damage
 		'''
 }
 
@@ -841,17 +841,6 @@ OmegaBiomeBlade: {
 Omniblade: {
 	DisplayName: Omniblade
 	Tooltip: An ancient blade forged by the legendary Omnir
-}
-
-Oracle: {
-	DisplayName: The Oracle
-	Tooltip:
-		'''
-		Emits an aura of red lightning which charges up when hitting enemies
-		Fires auric orbs when supercharged
-		An exceptionally agile yoyo
-		'Gaze into the past, the present, the future... and the circumstances of your inevitable demise'
-		'''
 }
 
 Orderbringer: {
@@ -1262,6 +1251,17 @@ TheObliterator: {
 		'''
 		Ruins nearby enemies with death lasers
 		An exceptionally agile yoyo
+		'''
+}
+
+TheOracle: {
+	DisplayName: The Oracle
+	Tooltip:
+		'''
+		Emits an aura of red lightning which charges up when hitting enemies
+		Fires auric orbs when supercharged
+		An exceptionally agile yoyo
+		'Gaze into the past, the present, the future... and the circumstances of your inevitable demise'
 		'''
 }
 

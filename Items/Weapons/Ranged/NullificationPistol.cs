@@ -7,7 +7,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
-    public class NullificationRifle : ModItem, ILocalizedModType
+    [LegacyName("NullificationRifle")]
+    public class NullificationPistol : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()

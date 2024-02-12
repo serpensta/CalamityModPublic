@@ -415,18 +415,6 @@ FeatherKnife: {
 		'''
 }
 
-FinalDawn: {
-	DisplayName: The Final Dawn
-	Tooltip:
-		'''
-		Attack enemies with a giant scythe swing to replenish stealth
-		Press up and attack to throw the scythe 
-		Stealth strikes perform a horizontal swing that leaves a lingering fire aura
-		Stealth strikes performed while pressing up fling yourself at the enemy and slice through them, causing homing fireballs to emerge
-		'We shall ride into the sunrise once more'
-		'''
-}
-
 FishboneBoomerang: {
 	DisplayName: Fishbone Boomerang
 	Tooltip:
@@ -1217,6 +1205,18 @@ TheAtomSplitter: {
 		'''
 		Throws a quantum-superimposed javelin that strikes from numerous timelines at once
 		Stealth strikes perform far more simultaneous strikes
+		'''
+}
+
+TheFinalDawn: {
+	DisplayName: The Final Dawn
+	Tooltip:
+		'''
+		Attack enemies with a giant scythe swing to replenish stealth
+		Press up and attack to throw the scythe 
+		Stealth strikes perform a horizontal swing that leaves a lingering fire aura
+		Stealth strikes performed while pressing up fling yourself at the enemy and slice through them, causing homing fireballs to emerge
+		'We shall ride into the sunrise once more'
 		'''
 }
 

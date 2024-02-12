@@ -464,7 +464,6 @@ namespace CalamityMod.Items
             // Stylish Scissors, all Phaseblades, and all Phasesabers ignore 100% of defense
             if (item.type == ItemID.StylistKilLaKillScissorsIWish || (item.type >= ItemID.BluePhasesaber && item.type <= ItemID.YellowPhasesaber) || item.type == ItemID.OrangePhasesaber)
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIgnores 100% of enemy defense");
-
             // Phaseblades are done separately to ensure it appears under the Material line
             if (item.type >= ItemID.BluePhaseblade && item.type <= ItemID.YellowPhaseblade || item.type == ItemID.OrangePhaseblade)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 100% of enemy defense");
@@ -472,14 +471,9 @@ namespace CalamityMod.Items
             // Bone Sword, Breaker Blade, and Mandible Blade ignore 50% of defense
             if (item.type == ItemID.BoneSword || item.type == ItemID.BreakerBlade)
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIgnores 50% of enemy defense");
-
             // Mandible Blade is done separately to ensure it appears under the Material line
             if (item.type == ItemID.AntlionClaw)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 50% of enemy defense");
-
-            // Muramasa inflicts Nightwither
-            if (item.type == ItemID.Muramasa)
-                EditTooltipByName("Material", (line) => line.Text += "\nInflicts Nightwither on hit");
 
             // Death Sickle inflict Whispering Death
             if (item.type == ItemID.DeathSickle)
@@ -670,7 +664,30 @@ namespace CalamityMod.Items
 
             // Magic Hat nerf
             if (item.type == ItemID.MagicHat)
-                EditTooltipByNum(0, (line) => line.Text = "5% increased magic damage and critical strike chance");
+                EditTooltipByNum(0, (line) => line.Text = "6% increased magic critical strike chance");
+
+            // Gem Robe nerfs
+            if (item.type == ItemID.AmethystRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("5%", "4%"));
+            if (item.type == ItemID.TopazRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("7%", "5%"));
+            }
+            if (item.type == ItemID.SapphireRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("9%", "6%"));
+            if (item.type == ItemID.EmeraldRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("60", "40"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("11%", "7%"));
+            }
+            if (item.type == ItemID.RubyRobe || item.type == ItemID.AmberRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("13%", "8%"));
+            if (item.type == ItemID.DiamondRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("80", "60"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("15%", "9%"));
+            }
 
             // Worm Scarf only gives 10% DR instead of 17%
             if (item.type == ItemID.WormScarf)
@@ -696,10 +713,9 @@ namespace CalamityMod.Items
 
             if (item.type == ItemID.MechanicalGlove)
             {
-                string extraLine = "\n12% increased melee speed, does not stack with downgrades";
-                EditTooltipByNum(1, (line) => line.Text = "12% increased melee damage" + extraLine);
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("12% increased melee speed", "12% increased melee speed, does not stack with downgrades"));
-                EditTooltipByNum(0, (line) => line.Text += "\n10% increased true melee damage");
+                string extraLine = "\n10% increased true melee damage";
+                string extraLine2 = "\n12% increased melee speed, does not stack with downgrades" + extraLine;
+                EditTooltipByNum(1, (line) => line.Text = "12% increased melee damage" + extraLine2);
             }
 
             if (item.type == ItemID.FireGauntlet)
@@ -800,9 +816,9 @@ namespace CalamityMod.Items
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
             }
             if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "4%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "5%"));
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
             // Shadow
             if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
@@ -812,7 +828,7 @@ namespace CalamityMod.Items
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
                 EditTooltipByNum(0, (line) => {
-                    string newTooltip = line.Text.Replace("2%", "5%");
+                    string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });

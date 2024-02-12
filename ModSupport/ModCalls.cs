@@ -1982,17 +1982,11 @@ namespace CalamityMod
                     return null;
 
                 case "LoadParticleInstances":
-                    if (args.Length != 2 || !(args[1] is Mod))
-                        return new ArgumentNullException("ERROR: Must specify a Mod instance to load particles from.");
-
-                    GeneralParticleHandler.LoadModParticleInstances(args[1] as Mod);
+                    CalamityMod.Instance.Logger.Warn("This mod call is deprecated. Calamity automatically registers particles.");
                     return null;
 
                 case "RegisterModCooldowns":
-                    if (args.Length != 2 || !(args[1] is Mod))
-                        return new ArgumentNullException("ERROR: Must specify a Mod instance to register cooldowns from.");
-
-                    CooldownRegistry.RegisterModCooldowns(args[1] as Mod);
+                    CalamityMod.Instance.Logger.Warn("This mod call is deprecated. Calamity automatically registers cooldowns.");
                     return null;
 
                 case "GetSummonerNerfDisabledByItem":

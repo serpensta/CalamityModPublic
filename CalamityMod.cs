@@ -131,6 +131,7 @@ namespace CalamityMod
         // Please keep this in alphabetical order so it's easy to read
         internal Mod ancientsAwakened = null;
         internal Mod bossChecklist = null;
+        internal Mod coloredDamageTypes = null;
         internal Mod crouchMod = null;
         internal Mod dialogueTweak = null;
         internal Mod fargos = null;
@@ -161,6 +162,8 @@ namespace CalamityMod
             ModLoader.TryGetMod("AAMod", out ancientsAwakened);
             bossChecklist = null;
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
+            coloredDamageTypes = null;
+            ModLoader.TryGetMod("ColoredDamageTypes", out coloredDamageTypes);
             crouchMod = null;
             ModLoader.TryGetMod("CrouchMod", out crouchMod);
             dialogueTweak = null;
@@ -383,7 +386,6 @@ namespace CalamityMod
                 return Color.Lerp(player.hairColor, new Color(186, 85, 211), stealthInterpolant);
             }));
 
-            PopupGUIManager.LoadGUIs();
             InvasionProgressUIManager.LoadGUIs();
         }
         #endregion
@@ -395,6 +397,7 @@ namespace CalamityMod
 
             ancientsAwakened = null;
             bossChecklist = null;
+            coloredDamageTypes = null;
             crouchMod = null;
             dialogueTweak = null;
             fargos = null;
