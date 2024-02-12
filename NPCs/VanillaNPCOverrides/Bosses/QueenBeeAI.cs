@@ -643,7 +643,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.SimpleFlyMovement(idealVelocity, stingerAttackAccel);
 
                 // Go to a random phase
-                float numStingerShots = phase6 ? 7f : phase2 ? 10f : 15f;
+                float numStingerShots = phase6 ? 5f : phase2 ? 8f : 15f;
                 if (npc.ai[1] > stingerAttackTimer * numStingerShots)
                 {
                     npc.ai[0] = -1f;
@@ -679,7 +679,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
             }
 
-            // Stinger arcs above the player, followed by a dash
+            // Stinger arcs above the player
             else if (npc.ai[0] == 5f)
             {
                 // Avoid cheap bullshit
@@ -726,7 +726,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             float stingerSpeed = (phase6 ? 5f : 4f) + enrageScale;
                             Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * stingerSpeed;
                             int type = Main.zenithWorld ? ModContent.ProjectileType<PlagueStingerGoliathV2>() : ProjectileID.QueenBeeStinger;
-                            int numProj = phase6 ? 5 : phase5 ? 10 : 15;
+                            int numProj = death ? (phase6 ? 5 : phase5 ? 10 : 15) : (phase6 ? 4 : phase5 ? 8 : 12);
                             int spread = phase6 ? 30 : phase5 ? 50 : 60;
                             float rotation = MathHelper.ToRadians(spread);
                             for (int i = 0; i < numProj; i++)

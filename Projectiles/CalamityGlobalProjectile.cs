@@ -287,6 +287,8 @@ namespace CalamityMod.Projectiles
 
             if (projectile.type == ProjectileID.Skull && (projectile.ai[0] == 0f || projectile.ai[0] == -2f))
             {
+                bool fromRevSkeletron = projectile.ai[0] == -2f;
+
                 if (projectile.alpha > 0)
                     projectile.alpha -= 75;
 
@@ -297,21 +299,23 @@ namespace CalamityMod.Projectiles
                 if (projectile.frame > 2)
                     projectile.frame = 0;
 
-                // Accelerate if fired in a spread from Skeletron
-                if (projectile.ai[0] == -2f)
+                // Accelerate if fired in a spread from Skeletron in Rev+
+                if (fromRevSkeletron)
                 {
-                    if (projectile.velocity.Length() < 15f)
+                    float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
+                    if (projectile.velocity.Length() < maxVelocity)
                     {
                         projectile.velocity *= 1.02f;
-                        if (projectile.velocity.Length() > 15f)
+                        if (projectile.velocity.Length() > maxVelocity)
                         {
                             projectile.velocity.Normalize();
-                            projectile.velocity *= 12f;
+                            projectile.velocity *= maxVelocity;
                         }
                     }
                 }
 
-                for (int num172 = 0; num172 < 2; num172++)
+                int numDust = fromRevSkeletron ? 1 : 2;
+                for (int i = 0; i < numDust; i++)
                 {
                     Dust flame = Dust.NewDustDirect(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
                     flame.position -= projectile.velocity * 2f;
@@ -405,6 +409,40 @@ namespace CalamityMod.Projectiles
                     projectile.rotation = (float)Math.Atan2(0f - projectile.velocity.Y, 0f - projectile.velocity.X);
                 else
                     projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X);
+
+                return false;
+            }
+
+            // This has 2 extra updates, dust was reduced because of this fact
+            else if (projectile.type == ProjectileID.Shadowflames)
+            {
+                float spawnDustGateValue = 2f * projectile.MaxUpdates;
+                if (projectile.localAI[0] == spawnDustGateValue)
+                {
+                    SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
+                    for (int i = 0; i < 20; i++)
+                    {
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 181, 0f, 0f, 100);
+                        Main.dust[dust].velocity *= 3f;
+                        Main.dust[dust].velocity += projectile.velocity * 0.75f;
+                        Main.dust[dust].scale *= 1.2f;
+                        Main.dust[dust].noGravity = true;
+                    }
+                }
+
+                projectile.localAI[0] += 1f;
+                if (projectile.localAI[0] > spawnDustGateValue)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 181, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
+                        Main.dust[dust].velocity *= 0.6f;
+                        Main.dust[dust].scale *= 1.4f;
+                        Main.dust[dust].noGravity = true;
+                    }
+                }
+
+                projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
                 return false;
             }

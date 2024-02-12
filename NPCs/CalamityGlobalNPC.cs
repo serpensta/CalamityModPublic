@@ -1387,10 +1387,10 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.SkeletronHead)
             {
-                if (CalamityWorld.death)
+                /*if (CalamityWorld.death)
                     npc.lifeMax = (int)(npc.lifeMax * 0.65);
                 else
-                    npc.lifeMax = (int)(npc.lifeMax * 0.9);
+                    npc.lifeMax = (int)(npc.lifeMax * 0.9);*/
 
                 npc.npcSlots = 12f;
             }
@@ -5918,23 +5918,24 @@ namespace CalamityMod.NPCs
                         }
                     }
                 }
-
+                
                 // Telegraph for slaps
                 else if (npc.type == NPCID.SkeletronHand)
                 {
                     float beginTelegraphGateValue = SkeletronAI.HandSlapGateValue - SkeletronAI.HandSlapTelegraphTime;
-                    if (npc.ai[3] > beginTelegraphGateValue)
+                    if (newAI[2] > beginTelegraphGateValue)
                     {
-                        float colorScale = MathHelper.Clamp((npc.ai[3] - beginTelegraphGateValue) / SkeletronAI.HandSlapTelegraphTime, 0f, 1f);
+                        float colorScale = MathHelper.Clamp((newAI[2] - beginTelegraphGateValue) / SkeletronAI.HandSlapTelegraphTime, 0f, 1f);
                         Color drawColor2 = new Color(150, 150, 150, 0) * colorScale;
                         Vector2 halfSize = npc.frame.Size() / 2;
                         SpriteEffects spriteEffects = SpriteEffects.None;
                         if (npc.spriteDirection == 1)
                             spriteEffects = SpriteEffects.FlipHorizontally;
 
+                        Vector2 glowOffset = Vector2.UnitY * 8f;
                         for (int i = 0; i < 2; i++)
                         {
-                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY) - glowOffset, npc.frame,
                                 drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                         }
                     }
