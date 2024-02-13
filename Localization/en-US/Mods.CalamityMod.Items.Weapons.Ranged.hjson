@@ -1008,9 +1008,12 @@ Scorpio: {
 	DisplayName: Scorpio
 	Tooltip:
 		'''
-		Press <right> to fire a nuke
-		Rockets will destroy tiles with tile-destroying ammo
-		'BOOM'
+		Fires short streams of homing interstellar missiles
+		Each stream shot contributes to the charging of surplus energy
+		Maximum charge is reached after 3 streams fired
+		At maximum charge, <right> while holding <left> to fire a powerful gamma-ray burst
+		Gamma-ray bursts deal massively increased direct hit damage
+		Firing the gamma-ray burst resets the cooldown of missile shots
 		'''
 }
 
