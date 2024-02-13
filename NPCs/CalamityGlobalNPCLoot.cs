@@ -772,7 +772,7 @@ namespace CalamityMod.NPCs
                             ItemID.LaserMachinegun,
                             ItemID.ElectrosphereLauncher,
                             ItemID.InfluxWaver,
-                            ModContent.ItemType<NullificationRifle>()
+                            ModContent.ItemType<NullificationPistol>()
                         };
 
                         npcLoot.Add(DropHelper.CalamityStyle(DropHelper.NormalWeaponDropRateFraction, saucerItems));

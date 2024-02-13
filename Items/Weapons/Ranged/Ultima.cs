@@ -53,7 +53,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 AddIngredient(ItemID.PulseBow).
                 AddIngredient(ItemID.LaserRifle).
                 AddIngredient<TheStorm>().
-                AddIngredient<AstralRepeater>().
+                AddIngredient<AstralBow>().
                 AddIngredient<ExodiumCluster>(15).
                 AddIngredient<CosmiliteBar>(8).
                 AddIngredient<DarksunFragment>(8).

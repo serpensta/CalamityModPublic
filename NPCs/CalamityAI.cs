@@ -1588,10 +1588,6 @@ namespace CalamityMod.NPCs
                 baseAcceleration *= 1.15f;
             }
 
-            // Reduce acceleration if target is holding a true melee weapon
-            if (player.HoldingTrueMeleeWeapon())
-                baseAcceleration *= 0.5f;
-
             // What side Cal Clone should be on, relative to the target
             int xPos = 1;
             if (npc.Center.X < player.Center.X)
