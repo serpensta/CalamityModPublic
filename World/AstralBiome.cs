@@ -453,9 +453,8 @@ namespace CalamityMod.World
                             y += 5;
                         }
 
-                        if (Main.tile[x, y].HasTile || Main.tile[x, y].WallType > 0 && (!CalamityUtils.TileActiveAndOfType(x, y, TileID.Torches) &&
-                            !CalamityUtils.TileActiveAndOfType(x, y, TileID.Containers) && !CalamityUtils.TileActiveAndOfType(x, y, TileID.Containers2)
-                            && (magicStorage is not null && MSTilesToAvoid.Contains(Main.tile[x, y].TileType)))) //AVOID HOUSES
+                        if (Main.tile[x, y].HasTile || Main.tile[x, y].WallType > 0 && !TileID.Sets.Torch[Main.tile[x,y].TileType] && !TileID.Sets.IsAContainer[Main.tile[x, y].TileType] 
+                            && (magicStorage is not null && MSTilesToAvoid.Contains(Main.tile[x, y].TileType))) //AVOID HOUSES
                         {
                             bool place = true;
                             SchematicManager.PlaceSchematic<Action<Chest>>(SchematicManager.AstralBeaconKey, new Point(x, y - 5), SchematicAnchor.Center, ref place);
