@@ -31,8 +31,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.reflectsProjectiles = true;
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
+            float minimalContactDamageVelocity = 3f;
+            float minimalDamageVelocity = 6f;
             if (npc.type == NPCID.EaterofWorldsHead)
             {
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)
@@ -669,8 +669,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
         public static bool VanillaEaterofWorldsAI(NPC npc, Mod mod)
         {
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
+            float minimalContactDamageVelocity = 2.5f;
+            float minimalDamageVelocity = 5f;
             if (npc.type == NPCID.EaterofWorldsHead)
             {
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)
