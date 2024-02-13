@@ -194,6 +194,10 @@ namespace CalamityMod.CalPlayer
 							else
 								itemDrop = Main.hardMode ? ItemID.LavaCrateHard : ItemID.LavaCrate;
                         }
+                        if ((Main.rand.NextBool(chanceForRareItems) && enchantedPearl && fishingStation && Player.cratePotion) && ZoneCalamity)
+                        {
+                            itemDrop = ModContent.ItemType<DragoonDrizzlefish>();
+                        }
                     }
                 }
 
@@ -556,23 +560,22 @@ namespace CalamityMod.CalPlayer
                     }
 					else if (attempt.legendary)
                     {
-						List<int> legendaryCatches = new List<int>()
-						{
-							ModContent.ItemType<CharredLasher>(),
-							ModContent.ItemType<DragoonDrizzlefish>()
-						};
-						itemDrop = legendaryCatches[Main.rand.Next(legendaryCatches.Count)];
+						itemDrop = ModContent.ItemType<DragoonDrizzlefish>();
                     }
 					// Increased chance of Dragoon Drizzlefish in Prehardmode
 					else if (attempt.veryrare && !Main.hardMode)
 					{
                         itemDrop = ModContent.ItemType<DragoonDrizzlefish>();
 					}
+                    else if (attempt.veryrare)
+                    {
+                        itemDrop = ModContent.ItemType<CharredLasher>();
+                    }
 					else if ((attempt.rare || attempt.veryrare) && DownedBossSystem.downedProvidence && Main.rand.Next(3) >= 2)
 					{
                         itemDrop = ModContent.ItemType<Bloodfin>();
 					}
-					else if (attempt.uncommon || attempt.rare || attempt.veryrare)
+					else if (attempt.uncommon || attempt.rare)
                     {
 						List<int> uncommonCatches = new List<int>()
 						{

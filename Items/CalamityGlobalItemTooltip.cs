@@ -664,7 +664,30 @@ namespace CalamityMod.Items
 
             // Magic Hat nerf
             if (item.type == ItemID.MagicHat)
-                EditTooltipByNum(0, (line) => line.Text = "5% increased magic damage and critical strike chance");
+                EditTooltipByNum(0, (line) => line.Text = "6% increased magic critical strike chance");
+
+            // Gem Robe nerfs
+            if (item.type == ItemID.AmethystRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("5%", "4%"));
+            if (item.type == ItemID.TopazRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("7%", "5%"));
+            }
+            if (item.type == ItemID.SapphireRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("9%", "6%"));
+            if (item.type == ItemID.EmeraldRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("60", "40"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("11%", "7%"));
+            }
+            if (item.type == ItemID.RubyRobe || item.type == ItemID.AmberRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("13%", "8%"));
+            if (item.type == ItemID.DiamondRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("80", "60"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("15%", "9%"));
+            }
 
             // Worm Scarf only gives 10% DR instead of 17%
             if (item.type == ItemID.WormScarf)
@@ -805,7 +828,7 @@ namespace CalamityMod.Items
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
                 EditTooltipByNum(0, (line) => {
-                    string newTooltip = line.Text.Replace("2%", "5%");
+                    string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });

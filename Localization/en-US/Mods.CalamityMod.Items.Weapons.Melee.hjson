@@ -697,7 +697,7 @@ Lacerator: {
 	TooltipGFB: May be a viable weapon against DoG...
 }
 
-LifefruitScythe: {
+LifehuntScythe: {
 	DisplayName: Lifehunt Scythe
 	Tooltip: Heals you on hit and shoots an energy scythe
 }
@@ -841,17 +841,6 @@ OmegaBiomeBlade: {
 Omniblade: {
 	DisplayName: Omniblade
 	Tooltip: An ancient blade forged by the legendary Omnir
-}
-
-Oracle: {
-	DisplayName: The Oracle
-	Tooltip:
-		'''
-		Emits an aura of red lightning which charges up when hitting enemies
-		Fires auric orbs when supercharged
-		An exceptionally agile yoyo
-		'Gaze into the past, the present, the future... and the circumstances of your inevitable demise'
-		'''
 }
 
 Orderbringer: {
@@ -1262,6 +1251,17 @@ TheObliterator: {
 		'''
 		Ruins nearby enemies with death lasers
 		An exceptionally agile yoyo
+		'''
+}
+
+TheOracle: {
+	DisplayName: The Oracle
+	Tooltip:
+		'''
+		Emits an aura of red lightning which charges up when hitting enemies
+		Fires auric orbs when supercharged
+		An exceptionally agile yoyo
+		'Gaze into the past, the present, the future... and the circumstances of your inevitable demise'
 		'''
 }
 

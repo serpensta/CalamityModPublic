@@ -10,7 +10,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Melee
 {
-    public class Oracle : ModItem, ILocalizedModType
+    [LegacyName("Oracle")]
+    public class TheOracle : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
         public const int YoyoBaseDamage = 170;

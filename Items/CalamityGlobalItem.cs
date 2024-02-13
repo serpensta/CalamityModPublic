@@ -511,14 +511,14 @@ namespace CalamityMod.Items
                     }
                 }
             }
-            if (modPlayer.harpyWingBoost && modPlayer.harpyRing)
+            if (modPlayer.harpyWingBoost && (modPlayer.harpyRing || modPlayer.angelTreads))
             {
                 if (Main.rand.NextBool(5) && !item.channel)
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
                         float spreadX = velocity.X + Main.rand.NextFloat(-0.75f, 0.75f);
-                        float spreadY = velocity.X + Main.rand.NextFloat(-0.75f, 0.75f);
+                        float spreadY = velocity.Y + Main.rand.NextFloat(-0.75f, 0.75f);
                         int feather = Projectile.NewProjectile(source, position, new Vector2(spreadX, spreadY) * 1.25f, ModContent.ProjectileType<TradewindsProjectile>(), (int)(damage * 0.3), 2f, player.whoAmI);
                         if (feather.WithinBounds(Main.maxProjectiles))
                         {
@@ -935,6 +935,10 @@ namespace CalamityMod.Items
             if (!string.IsNullOrEmpty(managedArmorSetName))
                 return managedArmorSetName;
 
+            if (head.type == ItemID.WizardHat && (body.type == ItemID.AmethystRobe || body.type == ItemID.TopazRobe || body.type == ItemID.SapphireRobe || body.type == ItemID.EmeraldRobe || body.type == ItemID.RubyRobe || body.type == ItemID.DiamondRobe || body.type == ItemID.AmberRobe))
+                return "WizardHat";
+            if (head.type == ItemID.MagicHat && (body.type == ItemID.AmethystRobe || body.type == ItemID.TopazRobe || body.type == ItemID.SapphireRobe || body.type == ItemID.EmeraldRobe || body.type == ItemID.RubyRobe || body.type == ItemID.DiamondRobe || body.type == ItemID.AmberRobe))
+                return "MagicHat";
             if (head.type == ItemID.CrystalNinjaHelmet && body.type == ItemID.CrystalNinjaChestplate && legs.type == ItemID.CrystalNinjaLeggings)
                 return "CrystalAssassin";
             if (head.type == ItemID.SquireGreatHelm && body.type == ItemID.SquirePlating && legs.type == ItemID.SquireGreaves)
@@ -964,6 +968,16 @@ namespace CalamityMod.Items
             VanillaArmorChangeManager.CreateTooltipManuallyAsNecessary(player);
             VanillaArmorChangeManager.ApplyPotentialEffectsTo(player);
 
+            if (set == "WizardHat")
+            {
+                player.GetCritChance<MagicDamageClass>() -= 6;
+                player.setBonus = CalamityUtils.GetTextValue("Vanilla.Armor.SetBonus.Wizard");
+            }
+            if (set == "MagicHat")
+            {
+                player.statManaMax2 -= 20;
+                player.setBonus = CalamityUtils.GetTextValue("Vanilla.Armor.SetBonus.MagicHat");
+            }
             if (set == "CrystalAssassin")
             {
                 player.setBonus = CalamityUtils.GetTextValue("Vanilla.Armor.SetBonus.CrystalAssassin");
@@ -1034,8 +1048,35 @@ namespace CalamityMod.Items
             switch (item.type)
             {
                 case ItemID.MagicHat:
-                    player.GetDamage<MagicDamageClass>() -= 0.01f;
-                    player.GetCritChance<MagicDamageClass>() -= 1;
+                    player.GetDamage<MagicDamageClass>() -= 0.06f;
+                    break;
+
+                case ItemID.AmethystRobe:
+                    player.manaCost += 0.01f; // 5% to 4%
+                    break;
+
+                case ItemID.TopazRobe:
+                    player.statManaMax2 -= 20;
+                    player.manaCost += 0.02f ; // 7% to 5%
+                    break;
+
+                case ItemID.SapphireRobe:
+                    player.manaCost += 0.03f; // 9% to 6%
+                    break;
+
+                case ItemID.EmeraldRobe:
+                    player.statManaMax2 -= 20;
+                    player.manaCost += 0.04f; // 11% to 7%
+                    break;
+
+                case ItemID.RubyRobe:
+                case ItemID.AmberRobe:
+                    player.manaCost += 0.05f; // 13% to 8%
+                    break;
+
+                case ItemID.DiamondRobe:
+                    player.statManaMax2 -= 20;
+                    player.manaCost += 0.06f; // 15% to 9%
                     break;
 
                 case ItemID.Gi:

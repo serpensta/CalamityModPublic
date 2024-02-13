@@ -88,7 +88,7 @@ AstralBlaster: {
 	Tooltip: Converts musket balls into homing astral rounds
 }
 
-AstralRepeater: {
+AstralBow: {
 	DisplayName: Astral Bow
 	Tooltip: Fires a burst of three arrows
 }
@@ -136,7 +136,7 @@ BarracudaGun: {
 	Tooltip: Fires two barracudas that latch onto enemies and shred them
 }
 
-BladedgeGreatbow: {
+BladedgeRailbow: {
 	DisplayName: Bladedge Railbow
 	Tooltip: Fires a spread of 4 arrows and 2 leaves at once
 }
@@ -796,7 +796,7 @@ Norfleet: {
 	Tooltip: Fire everything!
 }
 
-NullificationRifle: {
+NullificationPistol: {
 	DisplayName: Nullification Pistol
 	Tooltip:
 		'''

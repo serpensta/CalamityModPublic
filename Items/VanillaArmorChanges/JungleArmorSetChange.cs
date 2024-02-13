@@ -36,6 +36,6 @@ namespace CalamityMod.Items.VanillaArmorChanges
 
         public override void ApplyLegPieceEffect(Player player) => player.GetCritChance<MagicDamageClass>() -= 3;
 
-        public override void ApplyArmorSetBonus(Player player) => player.manaCost *= 1.0714f; // Reduces to -10% mana cost
+        public override void ApplyArmorSetBonus(Player player) => player.manaCost += 0.06f; // Reduces to -10% mana cost
     }
 }

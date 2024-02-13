@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             Item.width = 66;
             Item.height = 68;
-            Item.damage = 90;
+            Item.damage = 120;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
             Item.useTime = 23;
@@ -46,7 +46,7 @@ namespace CalamityMod.Items.Weapons.Magic
             }
             for (int index = 0; index < 3; ++index)
             {
-                Projectile.NewProjectile(source, position, velocity.RotatedByRandom(MathHelper.ToRadians(30f)) * 1.5f, ModContent.ProjectileType<NettleRight>(), (int)(damage * 1.10), knockback, player.whoAmI);
+                Projectile.NewProjectile(source, position, velocity.RotatedByRandom(MathHelper.ToRadians(30f)) * 1.5f, ModContent.ProjectileType<NettleRight>(), (int)(damage * 1.35), knockback, player.whoAmI);
             }
             Projectile.NewProjectile(source, position, velocity * 0.66f, type, damage, knockback, player.whoAmI, 1f);
             return false;

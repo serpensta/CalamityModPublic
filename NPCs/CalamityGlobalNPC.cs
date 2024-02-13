@@ -1387,10 +1387,10 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.SkeletronHead)
             {
-                if (CalamityWorld.death)
+                /*if (CalamityWorld.death)
                     npc.lifeMax = (int)(npc.lifeMax * 0.65);
                 else
-                    npc.lifeMax = (int)(npc.lifeMax * 0.9);
+                    npc.lifeMax = (int)(npc.lifeMax * 0.9);*/
 
                 npc.npcSlots = 12f;
             }
@@ -3054,8 +3054,110 @@ namespace CalamityMod.NPCs
                         break;
                 }
             }
-            else if (npc.type == NPCID.Retinazer && !Main.getGoodWorld)
-                return TwinsAI.TrueMeleeRetinazerPhase2AI(npc);
+
+            // Adjust vanilla AI in Classic, Expert and Master
+            // Fair contact damage and a few Expert/Master AI edits happen here
+            // Deerclops doesn't deserve love so he's not here
+            else
+            {
+                switch (npc.type)
+                {
+                    case NPCID.KingSlime:
+                        return KingSlimeAI.VanillaKingSlimeAI(npc, Mod);
+
+                    case NPCID.EyeofCthulhu:
+                        return EyeOfCthulhuAI.VanillaEyeofCthulhuAI(npc, Mod);
+
+                    /*case NPCID.EaterofWorldsHead:
+                    case NPCID.EaterofWorldsBody:
+                    case NPCID.EaterofWorldsTail:
+                        return EaterOfWorldsAI.VanillaEaterofWorldsAI(npc, Mod);
+
+                    case NPCID.BrainofCthulhu:
+                        return BrainOfCthulhuAI.VanillaBrainofCthulhuAI(npc, Mod);
+                    case NPCID.Creeper:
+                        return BrainOfCthulhuAI.VanillaCreeperAI(npc, Mod);
+
+                    case NPCID.QueenBee:
+                        return QueenBeeAI.VanillaQueenBeeAI(npc, Mod);
+
+                    case NPCID.SkeletronHand:
+                        return SkeletronAI.VanillaSkeletronHandAI(npc, Mod);
+                    case NPCID.SkeletronHead:
+                        return SkeletronAI.VanillaSkeletronAI(npc, Mod);
+
+                    case NPCID.WallofFlesh:
+                        return WallOfFleshAI.VanillaWallofFleshAI(npc, Mod);
+                    case NPCID.WallofFleshEye:
+                        return WallOfFleshAI.VanillaWallofFleshEyeAI(npc, Mod);
+
+                    case NPCID.QueenSlimeBoss:
+                        return QueenSlimeAI.VanillaQueenSlimeAI(npc, Mod);
+
+                    case NPCID.TheDestroyer:
+                    case NPCID.TheDestroyerBody:
+                    case NPCID.TheDestroyerTail:
+                        return DestroyerAI.VanillaDestroyerAI(npc, Mod);
+                    case NPCID.Probe:
+                        return DestroyerAI.VanillaProbeAI(npc, Mod);
+
+                    case NPCID.Retinazer:
+                        return TwinsAI.VanillaRetinazerAI(npc, Mod);
+                    case NPCID.Spazmatism:
+                        return TwinsAI.VanillaSpazmatismAI(npc, Mod);
+
+                    case NPCID.SkeletronPrime:
+                        return SkeletronPrimeAI.VanillaSkeletronPrimeAI(npc, Mod);
+                    case NPCID.PrimeLaser:
+                        return SkeletronPrimeAI.VanillaPrimeLaserAI(npc, Mod);
+                    case NPCID.PrimeCannon:
+                        return SkeletronPrimeAI.VanillaPrimeCannonAI(npc, Mod);
+                    case NPCID.PrimeVice:
+                        return SkeletronPrimeAI.VanillaPrimeViceAI(npc, Mod);
+                    case NPCID.PrimeSaw:
+                        return SkeletronPrimeAI.VanillaPrimeSawAI(npc, Mod);
+
+                    case NPCID.Plantera:
+                        return PlanteraAI.VanillaPlanteraAI(npc, Mod);
+                    case NPCID.PlanterasHook:
+                        return PlanteraAI.VanillaPlanterasHookAI(npc, Mod);
+                    case NPCID.PlanterasTentacle:
+                        return PlanteraAI.VanillaPlanterasTentacleAI(npc, Mod);
+
+                    case NPCID.HallowBoss:
+                        return EmpressofLightAI.VanillaEmpressofLightAI(npc, Mod);
+
+                    case NPCID.Golem:
+                        return GolemAI.VanillaGolemAI(npc, Mod);
+                    case NPCID.GolemFistLeft:
+                    case NPCID.GolemFistRight:
+                        return GolemAI.VanillaGolemFistAI(npc, Mod);
+                    case NPCID.GolemHead:
+                        return GolemAI.VanillaGolemHeadAI(npc, Mod);
+                    case NPCID.GolemHeadFree:
+                        return GolemAI.VanillaGolemHeadFreeAI(npc, Mod);
+
+                    case NPCID.DukeFishron:
+                        return DukeFishronAI.VanillaDukeFishronAI(npc, Mod);
+
+                    case NPCID.CultistBoss:
+                    case NPCID.CultistBossClone:
+                        return CultistAI.VanillaCultistAI(npc, Mod);
+                    case NPCID.AncientLight:
+                        return CultistAI.VanillaAncientLightAI(npc, Mod);
+                    case NPCID.AncientDoom:
+                        return CultistAI.VanillaAncientDoomAI(npc, Mod);
+
+                    case NPCID.MoonLordCore:
+                    case NPCID.MoonLordHand:
+                    case NPCID.MoonLordHead:
+                    case NPCID.MoonLordFreeEye:
+                        return MoonLordAI.VanillaMoonLordAI(npc, Mod);*/
+
+                    default:
+                        break;
+                }
+            }
 
             if (CalamityWorld.revenge)
             {
@@ -5918,23 +6020,24 @@ namespace CalamityMod.NPCs
                         }
                     }
                 }
-
+                
                 // Telegraph for slaps
                 else if (npc.type == NPCID.SkeletronHand)
                 {
                     float beginTelegraphGateValue = SkeletronAI.HandSlapGateValue - SkeletronAI.HandSlapTelegraphTime;
-                    if (npc.ai[3] > beginTelegraphGateValue)
+                    if (newAI[2] > beginTelegraphGateValue)
                     {
-                        float colorScale = MathHelper.Clamp((npc.ai[3] - beginTelegraphGateValue) / SkeletronAI.HandSlapTelegraphTime, 0f, 1f);
+                        float colorScale = MathHelper.Clamp((newAI[2] - beginTelegraphGateValue) / SkeletronAI.HandSlapTelegraphTime, 0f, 1f);
                         Color drawColor2 = new Color(150, 150, 150, 0) * colorScale;
                         Vector2 halfSize = npc.frame.Size() / 2;
                         SpriteEffects spriteEffects = SpriteEffects.None;
                         if (npc.spriteDirection == 1)
                             spriteEffects = SpriteEffects.FlipHorizontally;
 
+                        Vector2 glowOffset = Vector2.UnitY * 8f;
                         for (int i = 0; i < 2; i++)
                         {
-                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY) - glowOffset, npc.frame,
                                 drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                         }
                     }
