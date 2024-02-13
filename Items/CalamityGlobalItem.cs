@@ -1189,6 +1189,8 @@ namespace CalamityMod.Items
             // Arcane and Magnet Flower buffs
             if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
                 player.manaCost -= 0.04f;
+            if (item.type == ItemID.ArcaneFlower)
+                player.GetDamage<MagicDamageClass>() += 0.05f;
 
             if (item.type == ItemID.SniperScope)
             {
