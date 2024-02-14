@@ -985,6 +985,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (npc.ai[0] < 0f)
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 if (Main.getGoodWorld)
                     NPC.brainOfGravity = npc.whoAmI;
 
@@ -1057,6 +1060,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 num848 += (int)(v.Y / 16f);
                                 if (num846 > 100 || !WorldGen.SolidTile(num847, num848))
                                 {
+                                    // Avoid cheap bullshit
+                                    npc.damage = 0;
+
                                     npc.ai[3] = 0f;
                                     npc.ai[0] = -2f;
                                     npc.ai[1] = num847;
@@ -1072,6 +1078,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
                 else if (npc.ai[0] == -2f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     npc.velocity *= 0.9f;
                     if (Main.netMode != NetmodeID.SinglePlayer)
                         npc.ai[3] += 15f;
@@ -1093,7 +1102,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
                 else if (npc.ai[0] == -3f)
                 {
-                    if (Main.netMode != 0)
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
+                    if (Main.netMode != NetmodeID.SinglePlayer)
                         npc.ai[3] -= 15f;
                     else
                         npc.ai[3] -= 25f;
@@ -1111,6 +1123,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             else
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.TargetClosest();
                 Vector2 vector105 = new Vector2(npc.Center.X, npc.Center.Y);
                 float num853 = Main.player[npc.target].Center.X - vector105.X;
@@ -1247,6 +1262,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (npc.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.ai[1] = 0f;
                 float maxVelocity = Main.masterMode ? 10f : 8f;
                 Vector2 vector106 = new Vector2(npc.Center.X, npc.Center.Y);
@@ -1287,6 +1305,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 return false;
             }
 
+            // Set damage
+            npc.damage = npc.defDamage;
+
             if (Main.expertMode)
             {
                 Vector2 vector107 = Main.player[npc.target].Center - npc.Center;
@@ -1323,10 +1344,20 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[1] += 1f;
                     float returnToBrainGateValue = Main.masterMode ? 35f : 5f;
                     if (npc.ai[1] > returnToBrainGateValue)
+                    {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         npc.ai[0] = 0f;
+                    }
                 }
                 else
+                {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     npc.ai[0] = 0f;
+                }
             }
 
             return false;
