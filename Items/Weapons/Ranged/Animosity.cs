@@ -1,39 +1,54 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using CalamityMod.Projectiles;
+using CalamityMod.Projectiles.Ranged;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
     public class Animosity : ModItem, ILocalizedModType
     {
-        public new string LocalizationCategory => "Items.Weapons.Ranged";
-        public override void SetStaticDefaults()
-        {
-            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
-        }
+        public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
+        // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
+        
+        public float SniperDmgMult = 5f;
+        public float SniperCritMult = 4f;
+        public float SniperVelocityMult = 2f;
+         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
+        //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
+        public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayNameGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayName");
+
+        public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
         public override void SetDefaults()
         {
             Item.width = 70;
             Item.height = 18;
-            Item.damage = 33;
+            Item.damage = 47;
             Item.DamageType = DamageClass.Ranged;
-            Item.useTime = 4;
-            Item.useAnimation = 12;
-            Item.reuseDelay = 15;
-            Item.useLimitPerAnimation = 3;
+            Item.width = 70;
+            Item.height = 18;
+            Item.scale = 0.85f;
+            Item.useTime = 30;
+            Item.reuseDelay = 10;
+            Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2f;
             Item.value = CalamityGlobalItem.Rarity7BuyPrice;
             Item.rare = ItemRarityID.Lime;
-            Item.UseSound = SoundID.Item31;
+            Item.UseSound = null;
             Item.autoReuse = true;
             Item.shoot = ProjectileID.PurificationPowder;
-            Item.shootSpeed = 11f;
+            Item.shootSpeed = 6.5f;
             Item.useAmmo = AmmoID.Bullet;
+            Item.crit = 8;
             Item.Calamity().canFirePointBlankShots = true;
         }
 
@@ -47,48 +62,151 @@ namespace CalamityMod.Items.Weapons.Ranged
             return true;
         }
 
+        #region Stat changing
+        public override void ModifyWeaponCrit(Player player, ref float crit)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                crit *= SniperCritMult;
+            }
+
+        }
+
+        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                damage *= SniperDmgMult;
+            }
+
+        }
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+                return 1/2f;
+
+            return 1f;
+        }
+
+
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-            {
-                Item.useTime = 4;
-                Item.reuseDelay = 13;
-                Item.useAnimation = 12;
-                Item.UseSound = SoundID.Item31;
-                Item.shootSpeed = 10f;
-            }
+               Item.reuseDelay = 5;
             else
-            {
-                Item.useTime = 35;
-                Item.reuseDelay = 0;
-                Item.useAnimation = 35;
-                Item.UseSound = SoundID.Item40;
-                Item.shootSpeed = 15f;
-            }
+               Item.reuseDelay = 10;
+
             return base.CanUseItem(player);
         }
+        #endregion
 
+        #region Shooting
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            //It should feel powerful but also not too much given feedback
+            
             if (player.altFunctionUse == 2)
             {
-                float SpeedX = velocity.X + (float)Main.rand.Next(-10, 11) * 0.05f;
-                float SpeedY = velocity.Y + (float)Main.rand.Next(-10, 11) * 0.05f;
-                Projectile.NewProjectile(source, position.X, position.Y, SpeedX, SpeedY, type, damage, knockback, player.whoAmI, 0f, 0f);
-                return false;
+                player.Calamity().GeneralScreenShakePower = 2f;
+                SoundEngine.PlaySound(ShootAndReloadSound with { PitchVariance = 0.3f }, position);
+                //Shoot from muzzle
+                Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
+
+                int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    // TO DO: Replace with actual bullet shells or used casings
+                    Gore.NewGore(source, position, velocity.RotatedBy(2f * -player.direction) * Main.rand.NextFloat(0.6f, 0.7f), Mod.Find<ModGore>("Polt5").Type);
+                }
             }
             else
             {
-                Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, ProjectileID.BulletHighVelocity, (int)(damage * 5.8f), knockback, player.whoAmI, 0f, 0f);
-                return false;
+                SoundEngine.PlaySound(SoundID.Item38 with { Volume = 0.8f, Pitch = 0.5f, PitchVariance = 0.3f}, position);
+                //Shoot from muzzle
+                Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
+
+                // Fire a shotgun spread of bullets.
+                for (int i = 0; i < 6; ++i)
+                {
+                    Vector2 randomVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(i * 2.5f));
+                    Projectile shot = Projectile.NewProjectileDirect(source, nuzzlePos, randomVelocity, type, damage, knockback, player.whoAmI);
+                    CalamityGlobalProjectile cgp = shot.Calamity();
+                    cgp.brimstoneBullets = true; //add a brimstone trail to all bullets
+                }
+                for (int i = 0; i <= 10; i++)
+                {
+                    Dust dust = Dust.NewDustPerfect(nuzzlePos, 303, velocity.RotatedByRandom(MathHelper.ToRadians(7f)) * Main.rand.NextFloat(0.05f, 0.4f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+                    dust.noGravity = true;
+                    dust.alpha = 150;
+                }
             }
+            return false;
+        }
+        #endregion
+
+        #region Animations
+        public override void HoldItem(Player player) => player.Calamity().mouseWorldListener = true;
+
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
+            float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
+
+            Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 35f;
+            Vector2 itemSize = new Vector2(Item.width, Item.height);
+            Vector2 itemOrigin = new Vector2(-5, 6);
+
+            
+            //Sniper's horizontal recoil; can be a bit subtle but it is noticeable
+            if (player.altFunctionUse == 2)
+            { 
+                //Recoil:
+                int anim = 0;
+                for (int r = 0; r < Item.useAnimation; ++r)
+                {
+                    if (anim == 10 && r < Item.useAnimation / 2) //animates every 10 frames so that the player notices a recoil because this happens way too fast
+                    {
+                        itemPosition.X -= player.direction * 0.025f;
+                        itemPosition.Y -= player.direction * 0.025f;
+                        anim = 0;
+                    }
+                    else if (anim == 10 && r > Item.useAnimation / 2)
+                    {
+                        itemPosition.X += player.direction * 0.025f;
+                        itemPosition.Y += player.direction * 0.025f;
+                        anim = 0;
+                    }
+                    ++anim;
+                }
+            }
+
+            CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);
+            base.UseStyle(player, heldItemFrame);
         }
 
-        public override bool CanConsumeAmmo(Item ammo, Player player)
+        // Recoil + Not having the gun aim downwards
+        public override void UseItemFrame(Player player)
         {
-            if (Main.rand.Next(0, 100) < 50)
-                return false;
-            return true;
+            player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
+
+            float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
+            float rotation = (player.Center - player.Calamity().mouseWorld).ToRotation() * player.gravDir + MathHelper.PiOver2;
+            if (animProgress < 0.5)
+                rotation += (player.altFunctionUse == 2 ? -1f : -0.45f) * (float)Math.Pow((0.5f - animProgress)/0.5f, 2) * player.direction;
+            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation); //must be here otherwise it will vibrate
+
+            
+            //Reloads the gun 
+            if (animProgress > 0.5f)
+            {
+                float backArmRotation = rotation + 0.52f * player.direction;
+
+                Player.CompositeArmStretchAmount stretch = ((float)Math.Sin(MathHelper.Pi * (animProgress - 0.5f) / 0.36f)).ToStretchAmount();
+                player.SetCompositeArmBack(true, stretch, backArmRotation);
+            }
+            
         }
+        #endregion
     }
 }

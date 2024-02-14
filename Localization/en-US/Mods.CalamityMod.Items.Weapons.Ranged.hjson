@@ -36,11 +36,11 @@ AngelicShotgun: {
 
 Animosity: {
 	DisplayName: Animosity
+	DisplayNameGfb: Shotgun Full of Hate
 	Tooltip:
 		'''
-		Fires a powerful sniper round
-		Press <right> to fire a burst of bullets
-		50% chance to save ammo
+		Fires a shotgun blast with a tight spread which is imbued with Brimstone Flames
+		Press <right> to fire a powerful brimstone round that inflicts Whispering Death
 		'''
 }
 
