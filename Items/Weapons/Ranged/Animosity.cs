@@ -1,17 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using static CalamityMod.CalamityUtils;
+﻿using System;
 using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Ranged;
-
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
-using CalamityMod.Sounds;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
@@ -26,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Ranged
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
-        public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.AnimosityGfb") : GetText("Items.Weapons.Ranged.Animosity.DisplayName");
+        public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayNameGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayName");
 
         public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
