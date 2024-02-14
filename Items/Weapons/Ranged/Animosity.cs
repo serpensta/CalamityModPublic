@@ -16,8 +16,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
         // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
         
-        public float SniperDmgMult = 5f;
-        public float SniperCritMult = 4f;
+        public float SniperDmgMult = 8f;
+        public float SniperCritMult = 1.2f;
         public float SniperVelocityMult = 2f;
          public new string LocalizationCategory => "Items.Weapons.Ranged";
 
@@ -62,25 +62,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             return true;
         }
 
-        #region Stat changing
-        public override void ModifyWeaponCrit(Player player, ref float crit)
-        {
-            if (player.altFunctionUse == 2)
-            {
-                crit *= SniperCritMult;
-            }
-
-        }
-
-        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
-        {
-            if (player.altFunctionUse == 2)
-            {
-                damage *= SniperDmgMult;
-            }
-
-        }
-
         public override float UseSpeedMultiplier(Player player)
         {
             if (player.altFunctionUse == 2)
@@ -88,7 +69,6 @@ namespace CalamityMod.Items.Weapons.Ranged
 
             return 1f;
         }
-
 
         public override bool CanUseItem(Player player)
         {
@@ -99,7 +79,6 @@ namespace CalamityMod.Items.Weapons.Ranged
 
             return base.CanUseItem(player);
         }
-        #endregion
 
         #region Shooting
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -113,7 +92,9 @@ namespace CalamityMod.Items.Weapons.Ranged
                 //Shoot from muzzle
                 Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
 
-                int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), damage, knockback, player.whoAmI);
+                //The dmg mult has to be applied here otherwise the left click gets it instead (for one shot), and the crit needs to be applied down here too cuz otherwise it never affects the weapon
+                int p = Projectile.NewProjectile(source, nuzzlePos, velocity*SniperVelocityMult, ModContent.ProjectileType<AnimosityBullet>(), (int)(damage*SniperDmgMult), knockback, player.whoAmI);
+                Main.projectile[p].CritChance = (int)(Main.projectile[p].CritChance * SniperCritMult); //To support crit mults with decimals
                 if (Main.netMode != NetmodeID.Server)
                 {
                     // TO DO: Replace with actual bullet shells or used casings
