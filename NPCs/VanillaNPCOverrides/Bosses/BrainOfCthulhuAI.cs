@@ -525,14 +525,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     }
                                 }
 
-                                teleportTileX += Main.rand.Next(minX, maxX + 1) + teleportDistanceIncrease;
-                                teleportTileY += Main.rand.Next(minY, maxY + 1) + teleportDistanceIncrease;
+                                int teleportX = Main.rand.Next(minX, maxX + 1) + teleportDistanceIncrease;
+                                int teleportY = Main.rand.Next(minY, maxY + 1) + teleportDistanceIncrease;
 
                                 if (Main.rand.NextBool())
-                                    teleportTileX *= -1;
+                                    teleportX *= -1;
 
                                 if (Main.rand.NextBool())
-                                    teleportTileY *= -1;
+                                    teleportY *= -1;
+
+                                teleportTileX += teleportX;
+                                teleportTileY += teleportY;
 
                                 if (numTeleportTries > maxTeleportTries || !WorldGen.SolidTile(teleportTileX, teleportTileY))
                                 {
