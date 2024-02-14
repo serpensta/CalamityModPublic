@@ -106,6 +106,19 @@ namespace CalamityMod.NPCs.Perforator
             bool revenge = CalamityWorld.revenge || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = 4f;
+            float minimalDamageVelocity = 8f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)(NPC.defDamage * 0.5f);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
+            }
+
             // Enrage
             if ((!Main.player[NPC.target].ZoneCrimson || (NPC.position.Y / 16f) < Main.worldSurface) && !bossRush)
             {

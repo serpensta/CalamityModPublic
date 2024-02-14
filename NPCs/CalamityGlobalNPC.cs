@@ -3068,12 +3068,12 @@ namespace CalamityMod.NPCs
                     case NPCID.EyeofCthulhu:
                         return EyeOfCthulhuAI.VanillaEyeofCthulhuAI(npc, Mod);
 
-                    /*case NPCID.EaterofWorldsHead:
+                    case NPCID.EaterofWorldsHead:
                     case NPCID.EaterofWorldsBody:
                     case NPCID.EaterofWorldsTail:
                         return EaterOfWorldsAI.VanillaEaterofWorldsAI(npc, Mod);
 
-                    case NPCID.BrainofCthulhu:
+                    /*case NPCID.BrainofCthulhu:
                         return BrainOfCthulhuAI.VanillaBrainofCthulhuAI(npc, Mod);
                     case NPCID.Creeper:
                         return BrainOfCthulhuAI.VanillaCreeperAI(npc, Mod);

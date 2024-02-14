@@ -133,16 +133,6 @@ namespace CalamityMod.NPCs.Perforator
             float blobPhaseGateValue = bossRush ? 450f : 600f;
             bool floatAboveToFireBlobs = NPC.ai[2] >= blobPhaseGateValue - 120f;
 
-            // Don't deal damage for 3 seconds after spawning or while firing blobs
-            NPC.damage = NPC.defDamage;
-            if (NPC.ai[1] < 180f || floatAboveToFireBlobs)
-            {
-                if (NPC.ai[1] < 180f)
-                    NPC.ai[1] += 1f;
-
-                NPC.damage = 0;
-            }
-
             Player player = Main.player[NPC.target];
 
             // Percent life remaining
@@ -383,6 +373,9 @@ namespace CalamityMod.NPCs.Perforator
             // When firing blobs, float above the target and don't call any other projectile firing or movement code
             if (floatAboveToFireBlobs)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (revenge)
                     Movement(player, 6f + velocityEnrageIncrease, 0.3f, 450f);
                 else
@@ -444,6 +437,10 @@ namespace CalamityMod.NPCs.Perforator
                 switch (wormsAlive)
                 {
                     case 0:
+
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         if (large || death)
                             Movement(player, 11f + velocityEnrageIncrease, death ? 0.1125f : 0.0975f, 20f);
                         else if (medium)
@@ -452,23 +449,44 @@ namespace CalamityMod.NPCs.Perforator
                             Movement(player, 9f + velocityEnrageIncrease, death ? 0.0975f : 0.0825f, 40f);
                         else
                             Movement(player, 8f + velocityEnrageIncrease, death ? 0.09f : 0.075f, 50f);
+
                         break;
 
                     case 1:
+
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         Movement(player, 6f + velocityEnrageIncrease, 0.15f, 350f);
+
                         break;
 
                     case 2:
+
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         Movement(player, 6f + velocityEnrageIncrease, 0.15f, 275f);
+
                         break;
 
                     case 3:
+
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         Movement(player, 6f + velocityEnrageIncrease, 0.15f, 200f);
+
                         break;
                 }
             }
             else
+            {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 Movement(player, 6f + velocityEnrageIncrease, 0.075f, 350f);
+            }
         }
 
         private void Movement(Player target, float velocity, float acceleration, float y)

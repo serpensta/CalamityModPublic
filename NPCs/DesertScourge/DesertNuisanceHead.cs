@@ -83,6 +83,19 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void AI()
         {
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = 4f;
+            float minimalDamageVelocity = 8f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)(NPC.defDamage * 0.5f);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
+            }
+
             if (NPC.ai[2] > 0f)
                 NPC.realLife = (int)NPC.ai[2];
 

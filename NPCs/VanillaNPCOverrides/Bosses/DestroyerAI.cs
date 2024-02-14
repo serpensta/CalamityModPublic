@@ -81,20 +81,30 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Calculate contact damage based on velocity
             float minimalContactDamageVelocity = 4f;
             float minimalDamageVelocity = 8f;
-            if (npc.velocity.Length() <= minimalContactDamageVelocity)
+            if (npc.type == NPCID.TheDestroyer)
             {
-                if (npc.type == NPCID.TheDestroyer)
+                if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                {
                     npc.damage = (int)(npc.defDamage * 0.5f);
+                }
                 else
-                    npc.damage = 0;
+                {
+                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                }
             }
             else
             {
-                float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                if (npc.type == NPCID.TheDestroyer)
-                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
+                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                {
+                    npc.damage = 0;
+                }
                 else
+                {
+                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
                     npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
+                }
             }
 
             // Get a target
