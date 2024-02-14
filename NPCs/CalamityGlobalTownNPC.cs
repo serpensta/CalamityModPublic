@@ -132,7 +132,6 @@ namespace CalamityMod.NPCs
             "Alfred Rend", // <@!606301806481375255> (Deadsqurp300#0907)
             "Leeman", // <@!281999243168841728> (Tweee#5831)
             "Mihai", // <@!373941893467209730> (cmihaii.)
-            "Aka Retribution", // <@!302318734633205761> (azurr_nihilo)
             "Cooler Kevin", // <@!614126424751603714> (exellent.)
         };
         private static readonly string[] MechanicNames =
