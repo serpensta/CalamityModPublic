@@ -247,6 +247,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.TargetClosest();
                     npc.netUpdate = true;
                     npc.netSpam = 0;
+                    npc.alpha = 0;
                 }
 
                 // If this segment is a body and its next segment is dead (or was rendered into a head), transform into a tail.
@@ -267,6 +268,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.TargetClosest();
                     npc.netUpdate = true;
                     npc.netSpam = 0;
+                    npc.alpha = 0;
                 }
 
                 // If for any reason this segment was deleted, send info to clients so they also see it die.
@@ -648,6 +650,26 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                     if (((npc.velocity.X > 0f && npc.oldVelocity.X < 0f) || (npc.velocity.X < 0f && npc.oldVelocity.X > 0f) || (npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f) || (npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f)) && !npc.justHit)
                         npc.netUpdate = true;
+                }
+            }
+
+            if (npc.type == NPCID.EaterofWorldsHead || (npc.type != NPCID.EaterofWorldsHead && Main.npc[(int)npc.ai[1]].alpha >= 85))
+            {
+                if (npc.alpha > 0 && npc.life > 0)
+                {
+                    for (int dustIndex = 0; dustIndex < 2; dustIndex++)
+                    {
+                        int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, 14, 0f, 0f, 100, default(Color), 2f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].noLight = true;
+                    }
+                }
+
+                if ((npc.position - npc.oldPosition).Length() > 2f)
+                {
+                    npc.alpha -= 42;
+                    if (npc.alpha < 0)
+                        npc.alpha = 0;
                 }
             }
 
