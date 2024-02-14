@@ -77,7 +77,11 @@ GodSlayerSlug: {
 
 HolyFireBullet: {
 	DisplayName: Holy Fire Bullet
-	Tooltip: Explosive holy bullets
+	Tooltip:
+		'''
+		Explosive holy bullets
+		Explosions are larger right when the bullets are fired
+		'''
 }
 
 HyperiusBullet: {
