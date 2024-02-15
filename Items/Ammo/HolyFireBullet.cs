@@ -29,7 +29,7 @@ namespace CalamityMod.Items.Ammo
             Item.value = Item.sellPrice(copper: 24);
             Item.rare = ItemRarityID.Purple;
             Item.shoot = ModContent.ProjectileType<HolyFireBulletProj>();
-            Item.shootSpeed = 6f;
+            Item.shootSpeed = 1f;
             Item.ammo = AmmoID.Bullet;
         }
 

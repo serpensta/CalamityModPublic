@@ -31,7 +31,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.height = 4;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.MaxUpdates = 3;
+            Projectile.MaxUpdates = 5;
             Projectile.timeLeft = Lifetime;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
@@ -42,6 +42,7 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 SizeVariance = Main.rand.NextFloat(0.95f, 1.05f);
                 ColorStyle = Main.rand.NextBool();
+                Projectile.velocity *= 0.7f;
             }
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
             Projectile.spriteDirection = Projectile.direction;

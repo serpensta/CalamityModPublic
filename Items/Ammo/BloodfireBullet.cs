@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Ammo
             Item.value = Item.sellPrice(copper: 24);
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.shoot = ModContent.ProjectileType<BloodfireBulletProj>();
-            Item.shootSpeed = 4.8f;
+            Item.shootSpeed = 0.1f;
             Item.ammo = ItemID.MusketBall;
         }
 
