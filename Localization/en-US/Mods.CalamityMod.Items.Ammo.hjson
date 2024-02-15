@@ -19,7 +19,11 @@ AstralSolution: {
 
 BloodfireArrow: {
 	DisplayName: Bloodfire Arrow
-	Tooltip: Heals you a small amount on enemy hits
+	Tooltip:
+		'''
+		Accelerates your natural life regen on hit
+		When at high enough natural life regen, arrows will heal you
+		'''
 }
 
 BloodfireBullet: {

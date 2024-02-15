@@ -83,16 +83,18 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!target.canGhostHeal || Main.player[Projectile.owner].moonLeech)
-                return;
-
             Player player = Main.player[Projectile.owner];
 
-            int chance = 3;
-            if (player.ActiveItem().type == ModContent.ItemType<TheStorm>())
-                chance = 6;
+            player.lifeRegenTime += 1;
 
-            if (Main.rand.NextBool(chance))
+            if (!target.canGhostHeal || player.moonLeech)
+                return;
+
+            int chance = 2;
+            if (player.ActiveItem().type == ModContent.ItemType<TheStorm>())
+                chance = 4;
+
+            if (player.lifeRegenTime > 1200 && Main.rand.NextBool(chance))
             {
                 player.statLife += 1;
                 player.HealEffect(1);
