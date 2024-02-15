@@ -110,7 +110,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            modifiers.SourceDamage *= 5f;
+            modifiers.SourceDamage *= 13f;
             if (Projectile.numHits == 1)
                 Projectile.damage = (int)(Projectile.damage * 0.2f); // Inital shot does big damage, AOE does a 5th of that damage so Deus doesn't get to cash in for healthcare
             if (Projectile.numHits > 1)
