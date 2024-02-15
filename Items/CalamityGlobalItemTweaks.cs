@@ -76,10 +76,12 @@ namespace CalamityMod.Items
                 { ItemID.Code2, Do(AutoReuse, DamageExact(43)) },
                 { ItemID.CorruptYoyo, Do(AutoReuse, DamageExact(20)) }, // Malaise
                 { ItemID.CrimsonYoyo, Do(AutoReuse, DamageExact(20)) }, // Artery
+                { ItemID.CrystalBullet, Do(DamageExact(8)) },
                 { ItemID.CrystalDart, Do(DamageExact(20)) },
                 { ItemID.CrystalSerpent, Do(DamageExact(45)) },
                 { ItemID.CrystalStorm, Do(DamageExact(40)) },
                 { ItemID.CursedArrow, Do(DamageExact(15)) },
+                { ItemID.CursedBullet, Do(DamageExact(13)) },
                 { ItemID.CursedDart, Do(DamageExact(25)) },
                 { ItemID.Cutlass, Do(UseRatio(0.9f), DamageRatio(1.85f)) },
                 { ItemID.DaedalusStormbow, Do(DamageExact(30)) },

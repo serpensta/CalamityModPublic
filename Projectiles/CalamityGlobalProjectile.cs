@@ -9,6 +9,7 @@ using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
 using CalamityMod.Particles;
+using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Projectiles.Ranged;
@@ -58,7 +59,7 @@ namespace CalamityMod.Projectiles
         // For every 100% critical strike chance over 100%, "supercrit" projectiles do a guaranteed +100% damage.
         // They then take the remainder (e.g. the remaining 16%) and roll against that for a final +100% (like normal crits).
         // For example if you have 716% critical strike chance, you are guaranteed +700% damage and then have a 16% chance for +800% damage instead.
-        // These are currently only enabled for Soma Prime, but any bullet fired from that gun can supercrit.
+        // An example of this is Soma Prime, but any bullet fired from that gun can supercrit when this bool is activated.
         // Set this to -1 if you want the projectile to supercrit forever, and to any positive value to make it supercrit only x times
         public int supercritHits  = 0;
 
@@ -71,6 +72,9 @@ namespace CalamityMod.Projectiles
 
         // If true, this projectile can apply the infinitely-stacking Shred debuff iconic to Soma Prime.
         public bool appliesSomaShred = false;
+
+        // Adds Brimstone flames to bullets, currently only used by Animosity
+        public bool brimstoneBullets = false;
 
         // If true, this projectile creates impact sparks upon hitting enemies
         public bool deepcoreBullet = false;
@@ -2719,6 +2723,16 @@ namespace CalamityMod.Projectiles
                 {
                     CalamityUtils.HomeInOnNPC(projectile, !projectile.tileCollide, 300f, 12f, 20f);
                 }
+                if (brimstoneBullets) 
+                {
+                    PointParticle spark = new PointParticle(projectile.Center + projectile.velocity * 3, projectile.velocity, false, 2, 0.9f, Color.Crimson * 0.7f);
+                    GeneralParticleHandler.SpawnParticle(spark);
+
+                    Dust dust = Dust.NewDustPerfect(projectile.Center - projectile.velocity, Main.rand.NextBool(3) ? 90 : ModContent.DustType<BrimstoneFlame>(), projectile.velocity * Main.rand.NextFloat(0.05f, 0.9f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(0.5f, 1f);
+                }
+
             }
         }
         #endregion
@@ -2956,6 +2970,10 @@ namespace CalamityMod.Projectiles
                     }
                 }
             }
+
+            //Crystal bullet projectiles deal 50% of the bullet's damage which is absurd in vanilla, this nerfs them to 20%
+            if (projectile.type == ProjectileID.CrystalShard)
+                modifiers.SourceDamage *= 0.4f;
         }
         #endregion
 
