@@ -7,6 +7,7 @@ using CalamityMod.Dusts;
 using CalamityMod.Particles;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Systems;
 using Microsoft.CodeAnalysis;
 
 namespace CalamityMod.Projectiles.Ranged
@@ -83,6 +84,10 @@ namespace CalamityMod.Projectiles.Ranged
         {
             target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 300);
             target.AddBuff(ModContent.BuffType<WhisperingDeath>(), 120);
+
+            // Music easter egg in GFB
+            if (Main.zenithWorld)
+                GungeonMusicSystem.GUN();
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
