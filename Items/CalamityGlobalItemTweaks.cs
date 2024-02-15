@@ -170,6 +170,7 @@ namespace CalamityMod.Items
                 { ItemID.MythrilRepeater, Do(PointBlank, UseExact(16)) },
                 { ItemID.MythrilSword, Do(UseTurn, ScaleRatio(1.45f), DamageExact(100)) },
                 { ItemID.NettleBurst, Do(ManaExact(10), DamageExact(70)) },
+                { ItemID.NightsEdge, Do(DamageExact(45)) },
                 { ItemID.NorthPole, Do(AutoReuse, UseMeleeSpeed) },
                 { ItemID.OrangePhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.OrangePhasesaber, Do(ScaleRatio(1.5f), DamageExact(60)) },
