@@ -1008,12 +1008,10 @@ Scorpio: {
 	DisplayName: Scorpio
 	Tooltip:
 		'''
-		Fires short streams of homing interstellar missiles
-		Each stream shot contributes to the charging of surplus energy
-		Maximum charge is reached after 3 streams fired
-		At maximum charge, <right> while holding <left> to fire a powerful gamma-ray burst
-		Gamma-ray bursts deal massively increased direct hit damage
-		Firing the gamma-ray burst resets the cooldown of missile shots
+		Hold <left> to fire streams of homing nano missiles and charge energy
+		Maximum charge is reached after firing 3 streams
+		<right> while holding <left> at max charge to launch a nano nuke
+		Nano nukes deal massive damage and reset the cooldown of missile streams
 		'''
 }
 
