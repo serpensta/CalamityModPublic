@@ -26,7 +26,7 @@ namespace CalamityMod.Items.Ammo
             Item.value = Item.sellPrice(copper: 16);
             Item.rare = ItemRarityID.Lime;
             Item.shoot = ModContent.ProjectileType<TerraBulletMain>();
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 2f;
             Item.ammo = AmmoID.Bullet;
         }
 

@@ -45,14 +45,14 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 Projectile.alpha -= 85;
             }
-            float x2 = Projectile.position.X - Projectile.velocity.X / 10f;
-            float y2 = Projectile.position.Y - Projectile.velocity.Y / 10f;
-            int terraDust = Dust.NewDust(new Vector2(x2, y2), 1, 1, 74, 0f, 0f, 0, default, 0.8f);
-            Main.dust[terraDust].alpha = Projectile.alpha;
-            Main.dust[terraDust].position.X = x2;
-            Main.dust[terraDust].position.Y = y2;
-            Main.dust[terraDust].velocity *= 0f;
-            Main.dust[terraDust].noGravity = true;
+
+            Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(5) ? 131 : 294, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.5f));
+            dust.noGravity = true;
+            dust.scale = Main.rand.NextFloat(0.35f, 0.55f);
+            if (dust.type == 131)
+                dust.scale = Main.rand.NextFloat(0.25f, 0.45f);
+            else
+                dust.fadeIn = 0.5f;
 
             if (speed == 0f)
                 speed = Projectile.velocity.Length();
