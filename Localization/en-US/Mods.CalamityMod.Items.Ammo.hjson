@@ -55,11 +55,6 @@ ElysianArrow: {
 	Tooltip: Summons meteors from the sky on death
 }
 
-EnhancedNanoRound: {
-	DisplayName: Enhanced Nano Round
-	Tooltip: Confuses enemies and releases a cloud of nanites when enemies die
-}
-
 FlashRound: {
 	DisplayName: Flash Round
 	Tooltip: Gives off a concussive blast that confuses enemies in a large area for a short time
