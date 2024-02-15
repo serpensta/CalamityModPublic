@@ -31,7 +31,7 @@ namespace CalamityMod.Systems
             if (currentlyPlaying)
             {
                 // If the reset timer has run out, stop the active sound instance entirely.
-                // The next Ricoshot will start the song from the beginning.
+                // The next bullet hit will start the song from the beginning.
                 if (timeUntilReset <= 0f)
                 {
                     currentlyPlaying = false;
