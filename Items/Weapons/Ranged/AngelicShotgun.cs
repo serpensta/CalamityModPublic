@@ -59,8 +59,9 @@ namespace CalamityMod.Items.Weapons.Ranged
                 float dy = Main.rand.NextFloat(-1.3f, 1.3f);
                 Vector2 randomVelocity = baseVelocity + new Vector2(dx, dy);
 
+                // Damage is set to match Hallow-Point Rounds
                 if (type == ProjectileID.Bullet)
-                    Projectile.NewProjectile(source, position, randomVelocity, Item.shoot, damage, knockback, player.whoAmI);
+                    Projectile.NewProjectile(source, position, randomVelocity, Item.shoot, damage + 11, knockback, player.whoAmI);
                 else
                     Projectile.NewProjectile(source, position, randomVelocity, type, damage, knockback, player.whoAmI);
             }
