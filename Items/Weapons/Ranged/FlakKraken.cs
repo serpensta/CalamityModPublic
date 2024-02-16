@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 124; // Here you're modifying the shrapnel's damage.
+            Item.damage = 124;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = OriginalUseTime;
             Item.shoot = ModContent.ProjectileType<FlakKrakenHoldout>();
