@@ -23,6 +23,7 @@ using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
+using CalamityMod.Systems;
 using Microsoft.Xna.Framework;
 using MonoMod.Cil;
 using Terraria;
@@ -312,6 +313,10 @@ namespace CalamityMod.CalPlayer
                 if (cgp.brimstoneBullets)
                 {
                     target.AddBuff(BuffType<BrimstoneFlames>(), 90);
+
+                    // Music easter egg in GFB
+                    if (Main.zenithWorld)
+                        GungeonMusicSystem.GUN();
                 }
 
                 ProjLifesteal(target, proj, damageDone, hit.Crit);

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using CalamityMod.Projectiles;
+using CalamityMod.Projectiles.Magic;
 using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -14,15 +16,12 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class Animosity : ModItem, ILocalizedModType
     {
         public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
-        // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
+        // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made in the future
         
         public float SniperDmgMult = 8f;
         public float SniperCritMult = 1.2f;
         public float SniperVelocityMult = 2f;
-         public new string LocalizationCategory => "Items.Weapons.Ranged";
-
-        //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
-        public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayNameGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayName");
+        public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
@@ -50,6 +49,19 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useAmmo = AmmoID.Bullet;
             Item.crit = 8;
             Item.Calamity().canFirePointBlankShots = true;
+        }
+
+        public override void UpdateInventory(Player player)
+        {
+            if (Main.zenithWorld)
+                Item.SetNameOverride(this.GetLocalizedValue("GFBName"));
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> list)
+        {
+            //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
+            string tooltip = Main.zenithWorld ? this.GetLocalizedValue("TooltipGFB") : this.GetLocalizedValue("TooltipNormal");
+            list.FindAndReplace("[GFB]", tooltip);
         }
 
         public override Vector2? HoldoutOffset()
@@ -89,6 +101,12 @@ namespace CalamityMod.Items.Weapons.Ranged
             {
                 player.Calamity().GeneralScreenShakePower = 2f;
                 SoundEngine.PlaySound(ShootAndReloadSound with { PitchVariance = 0.3f }, position);
+
+                if (Main.zenithWorld) // Why only shotgun full of hate, why not Hexagun too? (See AnimosityBullet for more)
+                {
+                    SoundEngine.PlaySound(SoundID.Item9, position);
+                    SoundEngine.PlaySound(SoundID.Item25, position);
+                }
                 //Shoot from muzzle
                 Vector2 nuzzlePos = player.MountedCenter + velocity*4f;
 
@@ -100,6 +118,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                     // TO DO: Replace with actual bullet shells or used casings
                     Gore.NewGore(source, position, velocity.RotatedBy(2f * -player.direction) * Main.rand.NextFloat(0.6f, 0.7f), Mod.Find<ModGore>("Polt5").Type);
                 }
+
             }
             else
             {
@@ -120,6 +139,46 @@ namespace CalamityMod.Items.Weapons.Ranged
                     Dust dust = Dust.NewDustPerfect(nuzzlePos, 303, velocity.RotatedByRandom(MathHelper.ToRadians(7f)) * Main.rand.NextFloat(0.05f, 0.4f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
                     dust.noGravity = true;
                     dust.alpha = 150;
+                }
+
+                // Fires other assorted things in GFB, because funni!
+                if (Main.zenithWorld)
+                {
+                    // Packed full of skulls,
+                    if (Main.rand.Next(4) < 3)
+                    {
+                        for (int k = 0; k < 3; k++)
+                        {
+                            Vector2 skullVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(k * 2f));
+                            Projectile skullHate = Projectile.NewProjectileDirect(source, nuzzlePos, skullVelocity, ProjectileID.BookOfSkullsSkull, damage, knockback, player.whoAmI);
+                            skullHate.DamageType = DamageClass.Ranged;
+                            skullHate.extraUpdates += 1;
+                            skullHate.penetrate = 1;
+                        }
+                    }
+                    // nails,
+                    if (Main.rand.Next(4) < 3)
+                    {
+                        for (int n = 0; n < 3; n++)
+                        {
+                            Vector2 nailVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(n * 2f));
+                            Projectile nailHate = Projectile.NewProjectileDirect(source, nuzzlePos, nailVelocity, ProjectileID.NailFriendly, damage, knockback, player.whoAmI);
+                            nailHate.DamageType = DamageClass.Ranged;
+                            nailHate.extraUpdates += 1;
+                        }
+                    }
+                    // and poison.
+                    if (Main.rand.Next(4) < 3)
+                    {
+                        for (int p = 0; p < 3; p++)
+                        {
+                            Vector2 poisonVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(p * 2f));
+                            Projectile poisonHate = Projectile.NewProjectileDirect(source, nuzzlePos, poisonVelocity, ModContent.ProjectileType<AcidicSaxBubble>(), damage, knockback, player.whoAmI, 0f, 1f);
+                            poisonHate.DamageType = DamageClass.Ranged;
+                            poisonHate.extraUpdates += 1;
+                            poisonHate.penetrate = 1;
+                        }
+                    }
                 }
             }
             return false;
