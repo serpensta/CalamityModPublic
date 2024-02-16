@@ -18,8 +18,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static float ProjectileGravityStrength = 0.17f;
         public static float ProjectileShootSpeed = 25f;
 
-        public static float InitialShotDamageMultiplier = .3f;
-        public static float InitialShotHitShrapnelDamageMultiplier = .3f;
+        public static float InitialShotDamageMultiplier = 1f;
+        public static float InitialShotHitShrapnelDamageMultiplier = .2f;
 
         public static int ShrapnelAmount = 4;
         public static float ShrapnelAngleOffset = 0.11f;

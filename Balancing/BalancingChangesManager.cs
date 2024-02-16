@@ -191,6 +191,9 @@ namespace CalamityMod.Balancing
             // 40% resist to Flying Dragon.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileID.DD2SquireSonicBoom))));
 
+            // 30% resist to Flak Kraken.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<FlakKrakenProjectile>()))));
+
             // 30% resist to Aurora Blazer.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<AuroraFire>()))));
             #endregion
@@ -234,6 +237,9 @@ namespace CalamityMod.Balancing
 
             // 60% resist to Aurora Blazer.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.4f, ProjectileType<AuroraFire>()))));
+
+            // 55% resist to Flak Kraken.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.45f, ProjectileType<FlakKrakenProjectile>()))));
 
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(ResistTrueMelee(0.5f))));
