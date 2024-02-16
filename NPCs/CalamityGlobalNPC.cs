@@ -3081,12 +3081,12 @@ namespace CalamityMod.NPCs
                     case NPCID.QueenBee:
                         return QueenBeeAI.VanillaQueenBeeAI(npc, Mod);
 
-                    /*case NPCID.SkeletronHand:
+                    case NPCID.SkeletronHand:
                         return SkeletronAI.VanillaSkeletronHandAI(npc, Mod);
                     case NPCID.SkeletronHead:
                         return SkeletronAI.VanillaSkeletronAI(npc, Mod);
 
-                    case NPCID.WallofFlesh:
+                    /*case NPCID.WallofFlesh:
                         return WallOfFleshAI.VanillaWallofFleshAI(npc, Mod);
                     case NPCID.WallofFleshEye:
                         return WallOfFleshAI.VanillaWallofFleshEyeAI(npc, Mod);
