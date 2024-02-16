@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.Calamity().donorItem = true;
 
             Item.shootSpeed = BulletSpeed;
-            Item.shoot = ModContent.ProjectileType<IlluminatedBullet>();
+            Item.shoot = ModContent.ProjectileType<HallowPointRoundProj>();
             Item.useAmmo = AmmoID.Bullet;
             Item.Calamity().canFirePointBlankShots = true;
         }
@@ -60,7 +60,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Vector2 randomVelocity = baseVelocity + new Vector2(dx, dy);
 
                 if (type == ProjectileID.Bullet)
-                    Projectile.NewProjectile(source, position, randomVelocity, ModContent.ProjectileType<IlluminatedBullet>(), damage, knockback, player.whoAmI);
+                    Projectile.NewProjectile(source, position, randomVelocity, Item.shoot, damage, knockback, player.whoAmI);
                 else
                     Projectile.NewProjectile(source, position, randomVelocity, type, damage, knockback, player.whoAmI);
             }
