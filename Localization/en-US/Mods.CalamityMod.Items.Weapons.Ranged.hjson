@@ -37,15 +37,16 @@ AngelicShotgun: {
 Animosity: {
 	DisplayName: Animosity
 	DisplayNameGfb: Shotgun Full of Hate
-	Tooltip:
+	Tooltip: "[GFB]"
+	TooltipNormal:
 		'''
 		Fires a shotgun blast with a tight spread which is imbued with Brimstone Flames
-		Press <right> to fire a powerful brimstone round that inflicts Whispering Death
+		Press Right Click to fire a powerful brimstone round that inflicts Whispering Death
 		'''
 	TooltipGfb:
 		'''
 		[c/9c0b0b:Fires a shotgun blast full of hatred... among other things]
-		[c/ac14ba:Press <right> to use a hexing rifle round instead]
+		[c/ac14ba:Press Right Click to use a hexing rifle round instead]
 		[c/454545:By Cthulhu Eye, Yharon tooth...]
 		'''
 }

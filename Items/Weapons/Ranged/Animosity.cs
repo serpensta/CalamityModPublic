@@ -25,8 +25,8 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
 
-        public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayNameGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayName");
-        public override LocalizedText Tooltip => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.TooltipGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.Tooltip");
+        // public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayNameGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayName");
+        // public override LocalizedText Tooltip => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.TooltipGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.Tooltip");
 
         public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
@@ -60,6 +60,12 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             if (Main.zenithWorld)
                 Item.SetNameOverride(this.GetLocalizedValue("DisplayNameGfb"));
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> list)
+        {
+            string tooltip = Main.zenithWorld ? this.GetLocalizedValue("TooltipGfb") : this.GetLocalizedValue("TooltipNormal");
+            list.FindAndReplace("[GFB]", tooltip);
         }
 
         public override Vector2? HoldoutOffset()
