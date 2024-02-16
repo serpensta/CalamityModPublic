@@ -5,6 +5,7 @@ using CalamityMod.Buffs.Summon;
 using CalamityMod.Cooldowns;
 using CalamityMod.Events;
 using CalamityMod.Items;
+using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Vanity;
 using CalamityMod.Items.LoreItems;
 using CalamityMod.Items.Materials;
@@ -231,6 +232,7 @@ namespace CalamityMod
             ItemRedirect(ItemType<PineapplePet>(), "Pineapple (calamity)");
             ItemRedirect(ItemType<TrashmanTrashcan>(), "Trash Can (pet)");
             ItemRedirect(ItemType<Butcher>(), "Butcher (weapon)");
+            ItemRedirect(ItemType<Purity>(), "Purity (accessory)");
             ItemRedirect(ItemType<SandstormGun>(), "Sandstorm (weapon)");
             ItemRedirect(ItemType<Thunderstorm>(), "Thunderstorm (weapon)");
             // Lore items

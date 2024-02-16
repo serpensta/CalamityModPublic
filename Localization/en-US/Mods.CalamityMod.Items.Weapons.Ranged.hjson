@@ -36,11 +36,18 @@ AngelicShotgun: {
 
 Animosity: {
 	DisplayName: Animosity
-	DisplayNameGfb: Shotgun Full of Hate
-	Tooltip:
+	GFBName: Shotgun Full of Hate
+	Tooltip: "[GFB]"
+	TooltipNormal:
 		'''
 		Fires a shotgun blast with a tight spread which is imbued with Brimstone Flames
-		Press <right> to fire a powerful brimstone round that inflicts Whispering Death
+		Press Right Click to fire a powerful brimstone round that inflicts Whispering Death
+		'''
+	TooltipGFB:
+		'''
+		[c/9c0b0b:Fires a shotgun blast full of hatred... among other things]
+		[c/ac14ba:Press Right Click to use a hexing rifle round instead]
+		[c/454545:By Cthulhu Eye, Yharon tooth...]
 		'''
 }
 
@@ -1008,9 +1015,10 @@ Scorpio: {
 	DisplayName: Scorpio
 	Tooltip:
 		'''
-		Press <right> to fire a nuke
-		Rockets will destroy tiles with tile-destroying ammo
-		'BOOM'
+		Hold <left> to fire streams of homing nano missiles and charge energy
+		Maximum charge is reached after firing 3 streams
+		<right> while holding <left> at max charge to launch a nano nuke
+		Nano nukes deal massive damage and reset the cooldown of missile streams
 		'''
 }
 

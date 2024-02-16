@@ -172,6 +172,7 @@ namespace CalamityMod.Items
                 { ItemID.MythrilRepeater, Do(PointBlank, UseExact(16)) },
                 { ItemID.MythrilSword, Do(UseTurn, ScaleRatio(1.45f), DamageExact(100)) },
                 { ItemID.NettleBurst, Do(ManaExact(10), DamageExact(70)) },
+                { ItemID.NightsEdge, Do(TrueMelee, DamageExact(45)) },
                 { ItemID.NorthPole, Do(AutoReuse, UseMeleeSpeed) },
                 { ItemID.OrangePhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.OrangePhasesaber, Do(ScaleRatio(1.5f), DamageExact(60)) },
@@ -319,7 +320,7 @@ namespace CalamityMod.Items
                 { ItemID.BloodLustCluster, Do(AxePower(100), UseTimeExact(13), TileBoostExact(+0)) },
                 { ItemID.BonePickaxe, Do(PickPower(55), UseTimeExact(6)) },
                 { ItemID.BorealWoodHammer, Do(HammerPower(25), UseTimeExact(11), TileBoostExact(+0)) },
-                { ItemID.ButchersChainsaw, Do(TrueMeleeNoSpeed, AxePower(150), UseTimeExact(3), TileBoostExact(+0), DamageExact(194)) },
+                { ItemID.ButchersChainsaw, Do(TrueMeleeNoSpeed, AxePower(150), UseTimeExact(3), TileBoostExact(+0), DamageExact(177)) },
                 { ItemID.CactusPickaxe, Do(PickPower(34), UseTimeExact(9)) },
                 { ItemID.CnadyCanePickaxe, Do(PickPower(55), UseTimeExact(9), TileBoostExact(+1)) }, // Candy Cane Pickaxe
                 { ItemID.ChlorophyteChainsaw, Do(TrueMeleeNoSpeed, AxePower(120), UseTimeExact(3), TileBoostExact(+0), DamageExact(112)) },
@@ -421,7 +422,6 @@ namespace CalamityMod.Items
                 { ItemID.HallowJoustingLance, trueMelee },
                 { ItemID.JoustingLance, trueMelee },
                 { ItemID.NebulaChainsaw, trueMeleeNoSpeed },
-                { ItemID.NightsEdge, trueMelee },
                 { ItemID.ObsidianSwordfish, Do(AutoReuse, TrueMelee) },
                 { ItemID.PiercingStarlight, trueMelee }, // Starlight
                 { ItemID.Ruler, trueMelee },
