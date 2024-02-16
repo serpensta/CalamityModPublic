@@ -82,8 +82,8 @@ HyperiusBullet: {
 	DisplayName: Hyperius Bullet
 	Tooltip:
 		'''
-		Your enemies might have a bad time
-		Spawns additional bullets on enemy hits
+		Powerful multicolor bullets
+		Bullets split into swirling lights on impact
 		'''
 }
 
