@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Magic;
 using CalamityMod.Projectiles.Ranged;
@@ -15,15 +16,17 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class Animosity : ModItem, ILocalizedModType
     {
         public static readonly SoundStyle ShootAndReloadSound = new("CalamityMod/Sounds/Item/WulfrumBlunderbussFireAndReload") { PitchVariance = 0.25f }; 
-        // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made
+        // Very cool sound and it would be a shame for it to not be used elsewhere, would be even better if a new sound is made in the future
         
         public float SniperDmgMult = 8f;
         public float SniperCritMult = 1.2f;
         public float SniperVelocityMult = 2f;
-         public new string LocalizationCategory => "Items.Weapons.Ranged";
+        public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         //ITS MY REWORK SO I CAN PUT A REFERENCE: Shotgun full of hate, returns Animosity otherwise
+
         public override LocalizedText DisplayName => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayNameGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.DisplayName");
+        public override LocalizedText Tooltip => Main.zenithWorld ? CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.TooltipGfb") : CalamityUtils.GetText("Items.Weapons.Ranged.Animosity.Tooltip");
 
         public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
@@ -107,6 +110,9 @@ namespace CalamityMod.Items.Weapons.Ranged
                     // TO DO: Replace with actual bullet shells or used casings
                     Gore.NewGore(source, position, velocity.RotatedBy(2f * -player.direction) * Main.rand.NextFloat(0.6f, 0.7f), Mod.Find<ModGore>("Polt5").Type);
                 }
+
+                // Why only shotgun full of hate, why not Hexagun too? (see: AnimosityBullet)
+
             }
             else
             {
