@@ -3078,10 +3078,10 @@ namespace CalamityMod.NPCs
                     case NPCID.Creeper:
                         return BrainOfCthulhuAI.VanillaCreeperAI(npc, Mod);
 
-                    /*case NPCID.QueenBee:
+                    case NPCID.QueenBee:
                         return QueenBeeAI.VanillaQueenBeeAI(npc, Mod);
 
-                    case NPCID.SkeletronHand:
+                    /*case NPCID.SkeletronHand:
                         return SkeletronAI.VanillaSkeletronHandAI(npc, Mod);
                     case NPCID.SkeletronHead:
                         return SkeletronAI.VanillaSkeletronAI(npc, Mod);

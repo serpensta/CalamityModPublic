@@ -7,6 +7,7 @@ using CalamityMod.Dusts;
 using CalamityMod.Particles;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Systems;
 using Microsoft.CodeAnalysis;
 
 namespace CalamityMod.Projectiles.Ranged
@@ -45,7 +46,7 @@ namespace CalamityMod.Projectiles.Ranged
             // Visuals
             if (Time > 3f)
             {
-                SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity * 1.8f, -Projectile.velocity * 0.01f, false, 11, 1.6f, Color.Red * 0.65f);
+                SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity * 1.8f, -Projectile.velocity * 0.01f, false, 11, 1.6f, (Main.zenithWorld ? Color.MediumPurple : Color.Red) * 0.65f);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
             
@@ -62,7 +63,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void Kill(int timeLeft)
         { 
             SoundEngine.PlaySound(SoundID.NPCDeath55 with { Pitch = -0.7f }, Projectile.Center);
-            //DesertProwelerSkullParticle is a placeholder, maybe replace with evil skull or broken heart (maybe both?, maybe one of Gfb?)
+            //DesertProwelerSkullParticle was a placeholder, but honestly it fits too well
             for (int i = 0; i <= 11; i++)
             {
                 Particle skull = new DesertProwlerSkullParticle(Projectile.Center, new Vector2(2.5f, 2.5f).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1f), Main.rand.NextBool() ? Color.Crimson : Color.DarkRed, Color.Red, Main.rand.NextFloat(0.2f, 0.9f), 175);
@@ -83,6 +84,14 @@ namespace CalamityMod.Projectiles.Ranged
         {
             target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 300);
             target.AddBuff(ModContent.BuffType<WhisperingDeath>(), 120);
+
+            // Music easter egg in GFB, and more!
+            if (Main.zenithWorld)
+            {
+                target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 45);
+                target.AddBuff(BuffID.ShadowFlame, 120);
+                GungeonMusicSystem.GUN();
+            }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
