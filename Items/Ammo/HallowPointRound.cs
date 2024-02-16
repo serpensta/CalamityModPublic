@@ -1,7 +1,4 @@
-﻿using CalamityMod.Items.Materials;
-using CalamityMod.Projectiles.Ranged;
-using CalamityMod.Rarities;
-using CalamityMod.Tiles.Furniture.CraftingStations;
+﻿using CalamityMod.Projectiles.Ranged;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,6 +7,7 @@ namespace CalamityMod.Items.Ammo
 {
     public class HallowPointRound : ModItem, ILocalizedModType
     {
+        public static int BaseDamage = 18;
         public new string LocalizationCategory => "Items.Ammo";
         public override void SetStaticDefaults()
         {
@@ -20,7 +18,7 @@ namespace CalamityMod.Items.Ammo
         {
             Item.width = 8;
             Item.height = 18;
-            Item.damage = 18;
+            Item.damage = BaseDamage;
             Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 9999;
             Item.consumable = true;
