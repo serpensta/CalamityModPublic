@@ -43,8 +43,8 @@ namespace CalamityMod.Systems
                 // Otherwise, set the volume of the active sound instance appropriately.
                 else
                 {
-                    bool foundOrder = SoundEngine.TryGetActiveSound(gungeonSoundSlot, out var activeSound);
-                    if (!foundOrder)
+                    bool foundTheGun = SoundEngine.TryGetActiveSound(gungeonSoundSlot, out var activeSound);
+                    if (!foundTheGun)
                     {
                         currentlyPlaying = false;
                         return;
@@ -64,7 +64,7 @@ namespace CalamityMod.Systems
                 gungeonSoundSlot = SoundEngine.PlaySound(GungeonTrack);
 
             currentlyPlaying = true;
-            remainingPlaytime = DefaultMusicTime;
+            remainingPlaytime = DefaultMusicTime + 30;
             timeUntilReset = DefaultResetTime;
         }
     }
