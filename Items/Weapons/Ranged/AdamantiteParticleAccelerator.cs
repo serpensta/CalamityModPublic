@@ -13,6 +13,11 @@ namespace CalamityMod.Items.Weapons.Ranged
         public const int ChargeFrames = 28;
         public const int CooldownFrames = 16;
         public static readonly Color[] LightColors = new Color[] { new Color(235, 40, 121), new Color(49, 161, 246) }; //beam colors
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
             Item.width = 54;

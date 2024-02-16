@@ -30,6 +30,10 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(DashCooldown / 60);
 
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
             Item.width = 52;
