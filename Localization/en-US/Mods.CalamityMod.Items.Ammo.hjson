@@ -69,6 +69,11 @@ GodSlayerSlug: {
 		'''
 }
 
+HallowPointRound: {
+	DisplayName: Hallow-Point Round
+	Tooltip: ""
+}
+
 HolyFireBullet: {
 	DisplayName: Holy Fire Bullet
 	Tooltip:
