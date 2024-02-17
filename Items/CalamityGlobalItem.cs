@@ -1036,6 +1036,7 @@ namespace CalamityMod.Items
             }
             else if (set == "SolarFlare")
             {
+                player.endurance *= 0.8928f; // Removes the base 12% DR
                 if (player.solarShields > 0)
                     modPlayer.DashID = string.Empty;
             }
@@ -1139,6 +1140,15 @@ namespace CalamityMod.Items
                 case ItemID.ApprenticeAltPants:
                     player.GetDamage<SummonDamageClass>() -= 0.1f;
                     player.GetCritChance<MagicDamageClass>() -= 15;
+                    break;
+
+                case ItemID.SolarFlareHelmet:
+                    player.GetCritChance<MeleeDamageClass>() -= 6;
+                    break;
+
+                case ItemID.VortexHelmet:
+                    player.GetDamage<RangedDamageClass>() -= 0.06f;
+                    player.GetCritChance<RangedDamageClass>() -= 2;
                     break;
             }
         }

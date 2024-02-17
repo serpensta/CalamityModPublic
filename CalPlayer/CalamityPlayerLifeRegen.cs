@@ -646,6 +646,9 @@ namespace CalamityMod.CalPlayer
             if (trinketOfChi || chiRegen)
                 Player.lifeRegen += 2;
 
+            // Nebula armor life booster nerf
+            if (Player.nebulaLevelLife > 0)
+                Player.lifeRegen -= 2 * Player.nebulaLevelLife;
 
             if (ursaSergeant)
             {
