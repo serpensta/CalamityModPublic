@@ -14,16 +14,11 @@ namespace CalamityMod.Projectiles.Ranged
     public class HyperiusSplit : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
-        public override string Texture => "CalamityMod/Projectiles/Ranged/HyperiusBulletProj";
+        public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
         private Color currentColor = Color.Black;
         private int rotDirection = 1;
         private float rotIntensity;
         private bool rotPhase2 = false;
-        public override void SetStaticDefaults()
-        {
-            ProjectileID.Sets.TrailingMode[Type] = 2;
-            ProjectileID.Sets.TrailCacheLength[Type] = 8;
-        }
         public override void SetDefaults()
         {
             Projectile.width = 12;

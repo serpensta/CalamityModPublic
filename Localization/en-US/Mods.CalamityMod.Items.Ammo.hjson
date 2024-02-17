@@ -97,12 +97,13 @@ IcicleArrow: {
 	Tooltip: Shatters into shards on impact
 }
 
-IcyBullet: {
-	DisplayName: Icy Bullet
+HailstormBullet: {
+	DisplayName: Hailstorm Bullet
 	Tooltip:
 		'''
-		Can hit up to three times
-		Breaks into ice shards on last impact
+		Bullets imbued with potent ice magic
+		These bullets rapidly decelerate after being fired
+		Critical hits cause a flash freeze, dealing additional damage
 		'''
 }
 

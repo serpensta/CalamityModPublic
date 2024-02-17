@@ -150,7 +150,7 @@ namespace CalamityMod.NPCs.TownNPCs
                 .Add(ModContent.ItemType<AbsoluteZero>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
                 .Add(ModContent.ItemType<EternalBlizzard>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
                 .Add(ModContent.ItemType<WintersFury>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
-                .Add(ModContent.ItemType<IcyBullet>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
+                .Add(ModContent.ItemType<HailstormBullet>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
                 .Add(ModContent.ItemType<IcicleArrow>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
                 .Add(ModContent.ItemType<PermafrostsConcoction>())
                 .Add(ItemID.SuperManaPotion)

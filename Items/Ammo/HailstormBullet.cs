@@ -5,7 +5,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Ammo
 {
-    public class IcyBullet : ModItem, ILocalizedModType
+    [LegacyName("IcyBullet")]
+    public class HailstormBullet : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Ammo";
         public override void SetStaticDefaults()
@@ -16,14 +17,14 @@ namespace CalamityMod.Items.Ammo
         {
             Item.width = 14;
             Item.height = 20;
-            Item.damage = 10;
+            Item.damage = 13;
             Item.DamageType = DamageClass.Ranged;
             Item.consumable = true;
             Item.knockBack = 2f;
             Item.value = Item.buyPrice(0, 0, 0, 80);
             Item.rare = ItemRarityID.LightPurple;
-            Item.shoot = ModContent.ProjectileType<IcyBulletProj>();
-            Item.shootSpeed = 5f;
+            Item.shoot = ModContent.ProjectileType<HailstormBulletProj>();
+            Item.shootSpeed = 0.3f;
             Item.ammo = AmmoID.Bullet;
             Item.maxStack = 9999;
         }
