@@ -819,3 +819,8 @@ MutatedTruffle: {
 		There can only be one minion
 		'''
 }
+
+HarvestStaff: {
+	DisplayName: Harvest Staff
+	Tooltip: ""
+}
