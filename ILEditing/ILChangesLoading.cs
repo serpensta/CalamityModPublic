@@ -109,6 +109,7 @@ namespace CalamityMod.ILEditing
 
             // Life regen balance
             IL_Player.UpdateLifeRegen += PreventWellFedFromBeingRequiredInExpertModeForFullLifeRegen;
+            IL_Player.UpdateLifeRegen += RemoveNebulaLifeBoosterDoTImmunity;
 
             // Mana regen balance
             IL_Player.Update += ManaRegenDelayAdjustment;

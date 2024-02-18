@@ -493,6 +493,22 @@ namespace CalamityMod.ILEditing
             // There are multiple branches pointing to this instruction, so it cannot be removed. Instead, swap its value directly.
             cursor.Next.Operand = BalancingConstants.NebulaDamagePerBooster;
         }
+
+        private static void RemoveNebulaLifeBoosterDoTImmunity(ILContext il)
+        {
+            // Prevent Nebula Life Boosters from canceling out all DoT debuff damage.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("nebulaLevelLife")))
+            {
+                LogFailure("Nebula Armor DoT Ignoring Nerf", "Could not locate the Nebula Armor Life Booster variable.");
+                return;
+            }
+
+            // Pop this value off the stack and replace it with a zero.
+            // Zero will never be greater than zero, so negative life regen will never be canceled out.
+            cursor.Emit(OpCodes.Pop);
+            cursor.Emit(OpCodes.Ldc_I4_0);
+        }
         #endregion
 
         #region Remove Melee Armor (Beetle Shell + Solar Flare) Multiplicative DR
