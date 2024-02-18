@@ -6020,7 +6020,29 @@ namespace CalamityMod.NPCs
                         }
                     }
                 }
-                
+
+                // Telegraph for charges
+                else if (npc.type == NPCID.SkeletronHead)
+                {
+                    float beginTelegraphGateValue = SkeletronAI.ChargeGateValue - SkeletronAI.ChargeTelegraphTime;
+                    if (npc.localAI[1] > beginTelegraphGateValue)
+                    {
+                        float colorScale = MathHelper.Clamp((npc.localAI[1] - beginTelegraphGateValue) / SkeletronAI.ChargeTelegraphTime, 0f, 1f);
+                        Color drawColor2 = new Color(150, 150, 150, 0) * colorScale;
+                        Vector2 halfSize = npc.frame.Size() / 2;
+                        SpriteEffects spriteEffects = SpriteEffects.None;
+                        if (npc.spriteDirection == 1)
+                            spriteEffects = SpriteEffects.FlipHorizontally;
+
+                        Vector2 glowOffset = Vector2.UnitY * 8f;
+                        for (int i = 0; i < 2; i++)
+                        {
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY) - glowOffset, npc.frame,
+                                drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        }
+                    }
+                }
+
                 // Telegraph for slaps
                 else if (npc.type == NPCID.SkeletronHand)
                 {
