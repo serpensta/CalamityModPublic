@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -270,18 +271,15 @@ namespace CalamityMod.Projectiles.Summon
             if (Main.dedServ)
                 return;
 
-            Particle boomRing = new DirectionalPulseRing(Projectile.Center,
-                Vector2.Zero,
-                Color.Orange,
-                Vector2.One,
-                0f,
-                0.05f,
-                0.5f,
-                20);
-            GeneralParticleHandler.SpawnParticle(boomRing);
-
-            for (int i = 0; i < 10; i++)
-                Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch);
+            for (int i = 0; i < 20; i++)
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 278 : 51, (new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f)) + new Vector2(0, -0.75f));
+                dust.noGravity = false;
+                dust.scale = Main.rand.NextFloat(0.8f, 1.4f);
+                dust.color = Color.Chocolate;
+            }
+            SoundEngine.PlaySound(SoundID.Item110 with { Pitch = -0.5f, Volume = 0.2f, PitchVariance = 0.2f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item89 with { Pitch = 0.5f, Volume = 0.25f, PitchVariance = 0.2f }, Projectile.Center);
         }
 
         /// <summary>
@@ -356,6 +354,11 @@ namespace CalamityMod.Projectiles.Summon
 
                 // When the pumpkin encounters a 1-tile-height obstacle, it'll climb it, like the player.
                 Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
+
+                // Pumpkins relase a bit of fire from their heads when running after enemies
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(0, -Projectile.height * 0.5f), 6, new Vector2(0, -4).RotatedBy(0.7f * -Projectile.direction) * Main.rand.NextFloat(0.1f, 0.8f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.4f, 0.95f);
             }
             else
             {
