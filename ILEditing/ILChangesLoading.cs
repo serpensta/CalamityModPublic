@@ -97,6 +97,7 @@ namespace CalamityMod.ILEditing
             IL_Projectile.AI_099_2 += LimitTerrarianProjectiles;
             IL_Player.UpdateBuffs += NerfSharpeningStation;
             IL_Player.UpdateBuffs += NerfBeetleScaleMail;
+            IL_Player.UpdateBuffs += NerfNebulaArmorBaseLifeRegenAndDamage;
             IL_Player.ApplyVanillaHurtEffectModifiers += RemoveBeetleAndSolarFlareMultiplicativeDR;
 
             // Movement speed balance

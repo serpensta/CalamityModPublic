@@ -450,6 +450,52 @@ namespace CalamityMod.ILEditing
         }
         #endregion
 
+        #region Nebula Armor Nerfs
+        private static void NerfNebulaArmorBaseLifeRegenAndDamage(ILContext il)
+        {
+            // Nebula's buffs are processed in the order Mana, Life, Damage
+            // The mana buff is merely tracked and updated in this function, so it is not IL edited here.
+            var cursor = new ILCursor(il);
+
+            // Adjust life regen from the Nebula Life Boosters.
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.NebulaUpLife1)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the Nebula Life buff ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdfld<Player>("lifeRegen")))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the player's life regen being loaded.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(6)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the amount of life regen to grant.");
+                return;
+            }
+
+            // Replace the constant "load 6" opcode with a regular integer load with Calamity's value.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_I4, BalancingConstants.NebulaLifeRegenPerBooster);
+
+            // Adjust damage from Nebula Damage Boosters.
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.NebulaUpDmg1)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the Nebula Damage buff ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.15f)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the amount of damage to grant.");
+                return;
+            }
+
+            // Replace the value entirely.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.NebulaDamagePerBooster);
+        }
+        #endregion
+
         #region Remove Melee Armor (Beetle Shell + Solar Flare) Multiplicative DR
         private static void RemoveBeetleAndSolarFlareMultiplicativeDR(ILContext il)
         {

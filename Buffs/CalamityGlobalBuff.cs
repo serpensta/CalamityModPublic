@@ -89,11 +89,6 @@ namespace CalamityMod.Buffs
                 player.endurance += BalancingConstants.SolarFlareShieldDR;
             }
 
-            else if (type >= BuffID.NebulaUpDmg1 && type <= BuffID.NebulaUpDmg3)
-            {
-                float nebulaDamage = 0.075f * player.nebulaLevelDamage; // 15% to 45% changed to 7.5% to 22.5%
-                player.GetDamage<GenericDamageClass>() -= nebulaDamage;
-            }
             else if (type == BuffID.Warmth)
             {
                 player.buffImmune[ModContent.BuffType<GlacialState>()] = true;

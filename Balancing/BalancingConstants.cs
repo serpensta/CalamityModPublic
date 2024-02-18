@@ -71,6 +71,12 @@
         // Beetle Scale Mail stats
         internal static readonly float BeetleScaleMailMeleeDamagePerBeetle = 0.1f;
         internal static readonly float BeetleScaleMailMeleeSpeedPerBeetle = 0.05f;
+
+        // Nebula Armor Damage Booster
+        internal static readonly float NebulaDamagePerBooster = 0.075f; // 0.15f in vanilla
+
+        // Nebula Armor Mana Booster
+        // nothing here yet
         #endregion
 
         #region Rogue Base Stats
@@ -86,13 +92,18 @@
         internal static readonly float MovingStealthGenRatio = 0.5f;
         #endregion
 
-        #region Defense and Defense Damage
+        #region Defense and Health
         // Beetle Shell's multiplicative DR is removed by Calamity. In compensation, you get this much regular DR per beetle.
         internal static readonly float BeetleShellDRPerBeetle = 0.1f;
 
         // Solar Flare Armor's multiplicative DR is removed by Calamity. In compensation, you get this much DR from having at least one solar shield up.
         internal static readonly float SolarFlareShieldDR = 0.25f;
 
+        // Nebula Armor Life Regen
+        internal static readonly int NebulaLifeRegenPerBooster = 4; // 6 in vanilla
+        #endregion
+
+        #region Defense Damage
         internal const double DefaultDefenseDamageRatio = 0.3333;
 
         // Defense damage floor: PHM | HM | PML

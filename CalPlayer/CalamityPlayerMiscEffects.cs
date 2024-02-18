@@ -901,22 +901,6 @@ namespace CalamityMod.CalPlayer
             float lifeStealCooldown = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.25f : CalamityWorld.revenge ? 0.2f : Main.expertMode ? 0.15f : 0.1f;
             Player.lifeSteal -= lifeStealCooldown;
 
-            // Nebula Armor nerf
-            if (Player.nebulaLevelMana > 0 && Player.statMana < Player.statManaMax2)
-            {
-                int num = 12;
-                nebulaManaNerfCounter += Player.nebulaLevelMana;
-                if (nebulaManaNerfCounter >= num)
-                {
-                    nebulaManaNerfCounter -= num;
-                    Player.statMana--;
-                    if (Player.statMana < 0)
-                        Player.statMana = 0;
-                }
-            }
-            else
-                nebulaManaNerfCounter = 0;
-
             // Bool for drawing boss health bar small text or not
             if (Main.myPlayer == Player.whoAmI)
                 BossHealthBarManager.CanDrawExtraSmallText = shouldDrawSmallText;

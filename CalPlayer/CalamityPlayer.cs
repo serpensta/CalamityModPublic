@@ -191,7 +191,6 @@ namespace CalamityMod.CalPlayer
         public int StellarHammer = 0;
         public int GalaxyHammer = 0;
         public int hideOfDeusMeleeBoostTimer = 0;
-        public int nebulaManaNerfCounter = 0;
         public int alcoholPoisonLevel = 0;
         public int modStealthTimer;
         public int dashTimeMod;
