@@ -1903,6 +1903,9 @@ namespace CalamityMod.CalPlayer
                 chaliceBleedoutBuffer += bleedoutToApply;
                 info.Damage = ChaliceOfTheBloodGod.MinAllowedDamage;
 
+                // Defense damage is applied here.
+                DealDefenseDamage(info, bleedoutToApply);
+
                 // Display text indicating that damage was transferred to bleedout.
                 string text = $"({-bleedoutToApply})";
                 Rectangle location = new Rectangle((int)Player.position.X + 4, (int)Player.position.Y - 3, Player.width - 4, Player.height - 4);
@@ -1925,9 +1928,10 @@ namespace CalamityMod.CalPlayer
             // If the player was just hit by something capable of dealing defense damage, then apply defense damage.
             // Bloodflare Core makes every hit deal defense damage (to enable its function).
             // Defense damage is not applied if the player has iframes.
+            // This function will be ignored if the player is wearing Chalice, as it handles its defense damage elsewhere.
             bool hitCanApplyDefenseDamage = nextHitDealsDefenseDamage || bloodflareCore;
 
-            if (hitCanApplyDefenseDamage && !hasIFrames && !Player.creativeGodMode)
+            if (hitCanApplyDefenseDamage && !chaliceOfTheBloodGod && !hasIFrames && !Player.creativeGodMode)
             {
                 double halfDefense = Player.statDefense / 2.0;
                 int netMitigation = hurtInfo.SourceDamage - hurtInfo.Damage;
@@ -2716,6 +2720,31 @@ namespace CalamityMod.CalPlayer
             // Under typical circumstances, defense damage scales with "net mitigation", aka how much damage the player DIDN'T take.
             // Thematically, this means it scales with how much damage the player's defense took instead of them.
             int netMitigation = hurtInfo.SourceDamage - hurtInfo.Damage;
+            int incomingDamageToUse = netMitigation <= 0 ? 0 : netMitigation;
+
+            // Leave it to the direct function to determine how much defense damage is taken. Use standard ratios.
+            DealDefenseDamage(incomingDamageToUse, false);
+        }
+
+        /// <summary>
+        /// Deals Calamity defense damage to a player, specifically built to handle Chalice of the Blood God's bleedout.
+        /// </summary>
+        /// <param name="hurtInfo">HurtInfo of the incoming strike to the player.</param>
+        /// <param name="bleedoutApplied">The bleedout applied on this specific hit. Used for reducing the defense damage inflicted.</param>
+        public void DealDefenseDamage(Player.HurtInfo hurtInfo, int bleedoutApplied)
+        {
+            // Legacy safeguard: Skip defense damage if the player is somehow "hit for zero" (this should never happen).
+            if (hurtInfo.Damage <= 0 || hurtInfo.SourceDamage <= 0)
+                return;
+
+            // Under typical circumstances, defense damage scales with "net mitigation", aka how much damage the player DIDN'T take.
+            // Thematically, this means it scales with how much damage the player's defense took instead of them.
+
+            CalamityPlayer modPlayer = Player.Calamity();
+
+            // Subtract the bleedout applied on this hit from the net mitigation.
+            // This prevents Chalice from making the player take much more defense damage than intended.
+            int netMitigation = hurtInfo.SourceDamage - (hurtInfo.Damage + bleedoutApplied);
             int incomingDamageToUse = netMitigation <= 0 ? 0 : netMitigation;
 
             // Leave it to the direct function to determine how much defense damage is taken. Use standard ratios.
