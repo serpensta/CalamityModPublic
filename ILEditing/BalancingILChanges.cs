@@ -1,9 +1,6 @@
 ﻿using System;
 using CalamityMod.Balancing;
 using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Placeables.FurniturePlagued;
-using CalamityMod.Items.Potions;
-using CalamityMod.NPCs.DraedonLabThings;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;

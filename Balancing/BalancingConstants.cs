@@ -87,6 +87,12 @@
         #endregion
 
         #region Defense and Defense Damage
+        // Beetle Shell's multiplicative DR is removed by Calamity. In compensation, you get this much regular DR per beetle.
+        internal static readonly float BeetleShellDRPerBeetle = 0.1f;
+
+        // Solar Flare Armor's multiplicative DR is removed by Calamity. In compensation, you get this much DR from having at least one solar shield up.
+        internal static readonly float SolarFlareShieldDR = 0.25f;
+
         internal const double DefaultDefenseDamageRatio = 0.3333;
 
         // Defense damage floor: PHM | HM | PML

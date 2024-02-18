@@ -1,6 +1,6 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using CalamityMod.Balancing;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -73,6 +73,22 @@ namespace CalamityMod.Buffs
             {
                 player.endurance -= 0.1f;
             }
+
+            // Beetle Shell DR is a full compensation, as the vanilla multiplicative DR is removed entirely.
+            else if (type >= BuffID.BeetleEndurance1 && type <= BuffID.BeetleEndurance3 && player.beetleDefense)
+            {
+                int orbsToGrant = player.beetleOrbs < 0 ? 0 : player.beetleOrbs;
+                if (orbsToGrant > 3)
+                    orbsToGrant = 3;
+                player.endurance += BalancingConstants.BeetleShellDRPerBeetle * orbsToGrant;
+            }
+
+            // Solar Flare DR is a full compensation, as the vanilla multiplicative DR is removed entirely.
+            else if (type >= BuffID.SolarShield1 && type <= BuffID.SolarShield3)
+            {
+                player.endurance += BalancingConstants.SolarFlareShieldDR;
+            }
+
             else if (type >= BuffID.NebulaUpDmg1 && type <= BuffID.NebulaUpDmg3)
             {
                 float nebulaDamage = 0.075f * player.nebulaLevelDamage; // 15% to 45% changed to 7.5% to 22.5%
