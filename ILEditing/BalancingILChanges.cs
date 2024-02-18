@@ -484,15 +484,14 @@ namespace CalamityMod.ILEditing
                 LogFailure("Nebula Armor Nerf", "Could not locate the Nebula Damage buff ID.");
                 return;
             }
-            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.15f)))
+            if (!cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdcR4(0.15f)))
             {
                 LogFailure("Nebula Armor Nerf", "Could not locate the amount of damage to grant.");
                 return;
             }
 
-            // Replace the value entirely.
-            cursor.Remove();
-            cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.NebulaDamagePerBooster);
+            // There are multiple branches pointing to this instruction, so it cannot be removed. Instead, swap its value directly.
+            cursor.Next.Operand = BalancingConstants.NebulaDamagePerBooster;
         }
         #endregion
 
