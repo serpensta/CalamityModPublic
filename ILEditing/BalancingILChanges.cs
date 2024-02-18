@@ -509,6 +509,24 @@ namespace CalamityMod.ILEditing
             cursor.Emit(OpCodes.Pop);
             cursor.Emit(OpCodes.Ldc_I4_0);
         }
+
+        private static void NerfNebulaArmorManaRegen(ILContext il)
+        {
+            // Reduce Nebula armor mana regen.
+            // The regen is controlled by a frame counter threshold right at the top of the function, typically 6.
+            // 1 value is added to the counter for every Mana Booster you have.
+            // If the value reaches the threshold, you gain 1 mana.
+            // All that needs to be done is raising the threshold, so it takes more frames to get each point of mana.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdcI4(6)))
+            {
+                LogFailure("Nebula Armor Mana Regen Nerf", "Could not locate the Nebula Armor mana regeneration frame counter threshold.");
+                return;
+            }
+
+            // Swap the threshold with Calamity's value.
+            cursor.Next.Operand = BalancingConstants.NebulaManaRegenFrameCounterThreshold;
+        }
         #endregion
 
         #region Remove Melee Armor (Beetle Shell + Solar Flare) Multiplicative DR

@@ -92,7 +92,7 @@
         internal static readonly float MovingStealthGenRatio = 0.5f;
         #endregion
 
-        #region Defense and Health
+        #region Defense, Health and Mana (Armor set stuff)
         // Beetle Shell's multiplicative DR is removed by Calamity. In compensation, you get this much regular DR per beetle.
         internal static readonly float BeetleShellDRPerBeetle = 0.1f;
 
@@ -101,6 +101,18 @@
 
         // Nebula Armor Life Regen
         internal static readonly int NebulaLifeRegenPerBooster = 4; // 6 in vanilla
+
+        // Nebula Armor Mana Regen
+        // This value works differently than you might expect. Raising it actually nerfs the mana regeneration of Nebula Armor
+        // Every frame, Terraria adds 1 to a counter for each Mana Booster the player has.
+        // If this counter reaches the below threshold, that player gains 1 mana.
+        // By default, it's 6, which has the following effects:
+        // 1 booster  = +1 mana every 6 frames = +10 mana per second
+        // 2 boosters = +1 mana every 3 frames = +20 mana per second
+        // 3 boosters = +1 mana every 2 frames = +30 mana per second
+        //
+        // Calamity just halves this, that's probably good enough.
+        internal static readonly int NebulaManaRegenFrameCounterThreshold = 12; // 6 in vanilla
         #endregion
 
         #region Defense Damage

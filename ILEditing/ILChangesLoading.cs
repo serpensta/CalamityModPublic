@@ -114,6 +114,7 @@ namespace CalamityMod.ILEditing
             // Mana regen balance
             IL_Player.Update += ManaRegenDelayAdjustment;
             IL_Player.UpdateManaRegen += ManaRegenAdjustment;
+            IL_Player.UpdateManaRegen += NerfNebulaArmorManaRegen;
 
             // Debuff balancing
             IL_Projectile.StatusPlayer += RemoveFrozenInflictionFromDeerclopsIceSpikes;
