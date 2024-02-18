@@ -1582,11 +1582,6 @@ namespace CalamityMod.CalPlayer
             if (enraged) // Demonshade Enrage increases incoming damage by 25%.
                 damageMult += 0.25;
 
-            // Add 5% damage multiplier for each Beetle Shell beetle that is active, thus reducing the DR from 10% to 5% per stack.
-            // TODO -- Remove this when the new DR scaling system is implemented.
-            if (Player.beetleDefense && Player.beetleOrbs > 0)
-                damageMult += 0.05 * Player.beetleOrbs;
-
             modifiers.SourceDamage *= (float)damageMult;
             #endregion
 

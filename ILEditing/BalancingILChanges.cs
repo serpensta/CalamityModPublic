@@ -421,7 +421,7 @@ namespace CalamityMod.ILEditing
         #region Beetle Scale Mail (DPS chestplate) Nerf
         private static void NerfBeetleScaleMail(ILContext il)
         {
-            // Reduce melee speed from each Beetle in Beetle Scale Mail from +10% to +5%.
+            // Adjust melee damage from the Beetle Might buff.
             var cursor = new ILCursor(il);
             if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.BeetleMight1)))
             {
@@ -440,6 +440,7 @@ namespace CalamityMod.ILEditing
 
             cursor.GotoNext();
 
+            // Adjust melee speed from the Beetle Might buff. 
             if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.1f))) // The amount of melee speed to grant.
             {
                 LogFailure("Beetle Scale Mail Nerf", "Could not locate the amount of melee speed granted.");
@@ -449,6 +450,34 @@ namespace CalamityMod.ILEditing
             // Replace the value entirely.
             cursor.Remove();
             cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.BeetleScaleMailMeleeSpeedPerBeetle);
+        }
+        #endregion
+
+        #region Remove Melee Armor (Beetle Shell + Solar Flare) Multiplicative DR
+        private static void RemoveBeetleAndSolarFlareMultiplicativeDR(ILContext il)
+        {
+            // Remove the multiplicative DR from Solar Flare armor's Solar Shields
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("setSolar")))
+            {
+                LogFailure("Melee Multiplicative DR Removal", "Could not locate the Solar Flare set bonus field.");
+                return;
+            }
+
+            // AND with 0 (false) so that the Solar Flare set bonus is never considered to be active. This stops the multiplicative DR from applying.
+            cursor.Emit(OpCodes.Ldc_I4_0);
+            cursor.Emit(OpCodes.And);
+
+            // Remove the multiplicative DR from Beetle Shell's beetles
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("beetleDefense")))
+            {
+                LogFailure("Melee Multiplicative DR Removal", "Could not locate the Beetle Shell set bonus field.");
+                return;
+            }
+
+            // AND with 0 (false) so that the Beetle Shell set bonus is never considered to be active. This stops the multiplicative DR from applying.
+            cursor.Emit(OpCodes.Ldc_I4_0);
+            cursor.Emit(OpCodes.And);
         }
         #endregion
 
