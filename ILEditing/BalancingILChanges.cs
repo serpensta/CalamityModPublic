@@ -418,6 +418,40 @@ namespace CalamityMod.ILEditing
         }
         #endregion
 
+        #region Beetle Scale Mail (DPS chestplate) Nerf
+        private static void NerfBeetleScaleMail(ILContext il)
+        {
+            // Reduce melee speed from each Beetle in Beetle Scale Mail from +10% to +5%.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.BeetleMight1)))
+            {
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the Beetle Might bff ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.1f))) // The amount of melee damage to grant.
+            {
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the amount of melee damage granted.");
+                return;
+            }
+
+            // Replace the value entirely.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.BeetleScaleMailMeleeDamagePerBeetle);
+
+            cursor.GotoNext();
+
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.1f))) // The amount of melee speed to grant.
+            {
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the amount of melee speed granted.");
+                return;
+            }
+
+            // Replace the value entirely.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.BeetleScaleMailMeleeSpeedPerBeetle);
+        }
+        #endregion
+
         #region Remove Lunatic Cultist Homing Resist
         private static void RemoveLunaticCultistHomingResist(ILContext il)
         {

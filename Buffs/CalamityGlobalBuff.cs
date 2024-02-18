@@ -88,18 +88,6 @@ namespace CalamityMod.Buffs
             {
                 player.GetDamage<GenericDamageClass>() -= 0.2f;
             }
-            else if (type == BuffID.BeetleMight1)
-            {
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.05f;
-            }
-            else if (type == BuffID.BeetleMight2)
-            {
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
-            }
-            else if (type == BuffID.BeetleMight3)
-            {
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.15f;
-            }
         }
 
         public override void Update(int type, NPC npc, ref int buffIndex)

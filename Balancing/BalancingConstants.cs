@@ -22,6 +22,10 @@
         // Sharpening Station grants this much armor penetration to melee weapons.
         internal const float SharpeningStationArmorPenetration = 5f;
 
+        // Beetle Scale Mail stats
+        internal static readonly float BeetleScaleMailMeleeDamagePerBeetle = 0.1f;
+        internal static readonly float BeetleScaleMailMeleeSpeedPerBeetle = 0.05f;
+
         // Dash cooldowns (in frames)
         internal const int UniversalDashCooldown = 30;
         internal const int UniversalShieldSlamCooldown = 30;

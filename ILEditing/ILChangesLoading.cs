@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using CalamityMod.Graphics.Renderers.CalamityRenderers;
-using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Armor.LunicCorps;
 using CalamityMod.Tiles.DraedonStructures;
 using CalamityMod.Tiles.FurnitureExo;
 using Terraria;
@@ -98,6 +96,7 @@ namespace CalamityMod.ILEditing
             IL_Projectile.AI_001 += AdjustChlorophyteBullets;
             IL_Projectile.AI_099_2 += LimitTerrarianProjectiles;
             IL_Player.UpdateBuffs += NerfSharpeningStation;
+            IL_Player.UpdateBuffs += NerfBeetleScaleMail;
 
             // Movement speed balance
             IL_Player.UpdateJumpHeight += FixJumpHeightBoosts;
