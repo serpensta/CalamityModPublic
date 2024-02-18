@@ -110,13 +110,13 @@ namespace CalamityMod
             if (item.accessory)
             {
                 int accRerolls = 0;
-                int[][] accessoryReforgeTiers = new int[][]
-                {
-                    /* 0 */ new int[] { PrefixID.Hard, PrefixID.Jagged, PrefixID.Brisk, PrefixID.Wild, GetCalPrefix("Quiet") },
-                    /* 1 */ new int[] { PrefixID.Guarding, PrefixID.Spiked, PrefixID.Precise, PrefixID.Fleeting, PrefixID.Rash, GetCalPrefix("Cloaked") },
-                    /* 2 */ new int[] { PrefixID.Armored, PrefixID.Angry, PrefixID.Hasty2, PrefixID.Intrepid, PrefixID.Arcane, GetCalPrefix("Camouflaged") },
-                    /* 3 */ new int[] { PrefixID.Warding, PrefixID.Menacing, PrefixID.Lucky, PrefixID.Quick2, PrefixID.Violent, GetCalPrefix("Silent") },
-                };
+                int[][] accessoryReforgeTiers =
+                [
+                    /* 0 */ [PrefixID.Hard, PrefixID.Jagged, PrefixID.Brisk, PrefixID.Wild, GetCalPrefix("Quiet")],
+                    /* 1 */ [PrefixID.Guarding, PrefixID.Spiked, PrefixID.Precise, PrefixID.Fleeting, PrefixID.Rash, GetCalPrefix("Cloaked")],
+                    /* 2 */ [PrefixID.Armored, PrefixID.Angry, PrefixID.Hasty2, PrefixID.Intrepid, PrefixID.Arcane, GetCalPrefix("Camouflaged")],
+                    /* 3 */ [PrefixID.Warding, PrefixID.Menacing, PrefixID.Lucky, PrefixID.Quick2, PrefixID.Violent, GetCalPrefix("Silent")],
+                ];
 
                 // Try to prevent the player from rolling the same modifier twice
                 do
@@ -138,52 +138,54 @@ namespace CalamityMod
                 // Other items that want to use Legendary2 are also compatible
                 if (item.type == ItemID.Terrarian || PrefixLegacy.ItemSets.ItemsThatCanHaveLegendary2[item.type])
                 {
-                    int[][] terrarianReforgeTiers = new int[][]
-                    {
-                        /* 0 */ new int[] { PrefixID.Keen, PrefixID.Forceful, PrefixID.Strong },
-                        /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous },
-                        /* 2 */ new int[] { PrefixID.Superior, PrefixID.Demonic, PrefixID.Godly },
-                        /* 3 */ new int[] { PrefixID.Legendary2 },
-                    };
+                    int[][] terrarianReforgeTiers =
+                    [
+                        /* 0 */ [PrefixID.Keen, PrefixID.Forceful, PrefixID.Strong],
+                        /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous],
+                        /* 2 */ [PrefixID.Superior, PrefixID.Demonic, PrefixID.Godly],
+                        /* 3 */ [PrefixID.Legendary2],
+                    ];
                     prefix = IteratePrefix(rand, terrarianReforgeTiers, currentPrefix);
                 }
                 
                 // Yoyos, Flails, Spears, etc.
                 // Spears actually work fine with Legendary, but vanilla doesn't give it to them, so we won't either.
                 // Rapiers, whips, and other specific vanilla weapons (ie. Zenith or Excalibur) are specifically excluded from this, so they get broadsword reforges despite not scaling with melee speed.
-                else if ((item.channel || item.noMelee) && item.useStyle != ItemUseStyleID.Rapier && !item.CountsAsClass<SummonMeleeSpeedDamageClass>() && !PrefixLegacy.ItemSets.SwordsHammersAxesPicks[item.type])
+                //
+                // 18FEB2024: Ozzatron: removed the (item.channel || item.noMelee) because vanilla lets Burning Sky get Legendary
+                else if (item.channel && item.useStyle != ItemUseStyleID.Rapier && !item.CountsAsClass<SummonMeleeSpeedDamageClass>() && !PrefixLegacy.ItemSets.SwordsHammersAxesPicks[item.type])
                 {
-                    int[][] meleeNoSpeedReforgeTiers = new int[][]
-                    {
-                        /* 0 */ new int[] { PrefixID.Keen, PrefixID.Forceful, PrefixID.Strong },
-                        /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous },
-                        /* 2 */ new int[] { PrefixID.Superior, PrefixID.Demonic },
-                        /* 3 */ new int[] { PrefixID.Godly }
-                    };
+                    int[][] meleeNoSpeedReforgeTiers =
+                    [
+                        /* 0 */ [PrefixID.Keen, PrefixID.Forceful, PrefixID.Strong],
+                        /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous],
+                        /* 2 */ [PrefixID.Superior, PrefixID.Demonic],
+                        /* 3 */ [PrefixID.Godly]
+                    ];
                     prefix = IteratePrefix(rand, meleeNoSpeedReforgeTiers, currentPrefix);
                 }
 
                 // All other melee weapons
                 else
                 {
-                    int[][] meleeReforgeTiers = new int[][]
-                    {
-                        /* 0 */ new int[] { PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Light, PrefixID.Heavy, PrefixID.Light, PrefixID.Forceful, PrefixID.Strong },
-                        /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Pointy, PrefixID.Bulky },
-                        /* 2 */ new int[] { PrefixID.Murderous, PrefixID.Agile, PrefixID.Large, PrefixID.Dangerous, PrefixID.Sharp },
-                        /* 3 */ new int[] { PrefixID.Massive, PrefixID.Unpleasant, PrefixID.Savage, PrefixID.Superior },
-                        /* 4 */ new int[] { PrefixID.Demonic, PrefixID.Deadly2, PrefixID.Godly },
-                        /* 5 */ new int[] { PrefixID.Legendary } // for non-tools, Light is a mediocre low-tier reforge
-                    };
-                    int[][] toolReforgeTiers = new int[][]
-                    {
-                        /* 0 */ new int[] { PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Heavy, PrefixID.Light, PrefixID.Forceful, PrefixID.Strong },
-                        /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Pointy, PrefixID.Bulky },
-                        /* 2 */ new int[] { PrefixID.Murderous, PrefixID.Agile, PrefixID.Large, PrefixID.Dangerous, PrefixID.Sharp },
-                        /* 3 */ new int[] { PrefixID.Massive, PrefixID.Unpleasant, PrefixID.Savage, PrefixID.Superior },
-                        /* 4 */ new int[] { PrefixID.Demonic, PrefixID.Deadly2, PrefixID.Godly },
-                        /* 5 */ new int[] { PrefixID.Legendary, PrefixID.Light } // for some tools, light is better than legendary. for others, it's equal
-                    };
+                    int[][] meleeReforgeTiers =
+                    [
+                        /* 0 */ [PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Light, PrefixID.Heavy, PrefixID.Light, PrefixID.Forceful, PrefixID.Strong],
+                        /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Pointy, PrefixID.Bulky],
+                        /* 2 */ [PrefixID.Murderous, PrefixID.Agile, PrefixID.Large, PrefixID.Dangerous, PrefixID.Sharp],
+                        /* 3 */ [PrefixID.Massive, PrefixID.Unpleasant, PrefixID.Savage, PrefixID.Superior],
+                        /* 4 */ [PrefixID.Demonic, PrefixID.Deadly2, PrefixID.Godly],
+                        /* 5 */ [PrefixID.Legendary] // for non-tools, Light is a mediocre low-tier reforge
+                    ];
+                    int[][] toolReforgeTiers =
+                    [
+                        /* 0 */ [PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Heavy, PrefixID.Light, PrefixID.Forceful, PrefixID.Strong],
+                        /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Pointy, PrefixID.Bulky],
+                        /* 2 */ [PrefixID.Murderous, PrefixID.Agile, PrefixID.Large, PrefixID.Dangerous, PrefixID.Sharp],
+                        /* 3 */ [PrefixID.Massive, PrefixID.Unpleasant, PrefixID.Savage, PrefixID.Superior],
+                        /* 4 */ [PrefixID.Demonic, PrefixID.Deadly2, PrefixID.Godly],
+                        /* 5 */ [PrefixID.Legendary, PrefixID.Light] // for some tools, light is better than legendary. for others, it's equal
+                    ];
 
                     var tierListToUse = (item.pick > 0 || item.axe > 0 || item.hammer > 0) ? toolReforgeTiers : meleeReforgeTiers;
                     prefix = IteratePrefix(rand, tierListToUse, currentPrefix);
@@ -193,45 +195,45 @@ namespace CalamityMod
             // RANGED
             else if (item.CountsAsClass<RangedDamageClass>())
             {
-                int[][] rangedReforgeTiers = new int[][]
-                {
-                    /* 0 */ new int[] { PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Powerful, PrefixID.Forceful, PrefixID.Strong },
-                    /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Intimidating },
-                    /* 2 */ new int[] { PrefixID.Murderous, PrefixID.Agile, PrefixID.Hasty, PrefixID.Staunch, PrefixID.Unpleasant },
-                    /* 3 */ new int[] { PrefixID.Superior, PrefixID.Demonic, PrefixID.Sighted },
-                    /* 4 */ new int[] { PrefixID.Godly, PrefixID.Rapid, /* ranged Deadly */ PrefixID.Deadly, /* universal Deadly */ PrefixID.Deadly2 },
-                    /* 5 */ new int[] { PrefixID.Unreal }
-                };
+                int[][] rangedReforgeTiers =
+                [
+                    /* 0 */ [PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Powerful, PrefixID.Forceful, PrefixID.Strong],
+                    /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Intimidating],
+                    /* 2 */ [PrefixID.Murderous, PrefixID.Agile, PrefixID.Hasty, PrefixID.Staunch, PrefixID.Unpleasant],
+                    /* 3 */ [PrefixID.Superior, PrefixID.Demonic, PrefixID.Sighted],
+                    /* 4 */ [PrefixID.Godly, PrefixID.Rapid, /* ranged Deadly */ PrefixID.Deadly, /* universal Deadly */ PrefixID.Deadly2],
+                    /* 5 */ [PrefixID.Unreal]
+                ];
                 prefix = IteratePrefix(rand, rangedReforgeTiers, currentPrefix);
             }
 
             // MAGIC
             else if (item.CountsAsClass<MagicDamageClass>() || item.CountsAsClass<MagicSummonHybridDamageClass>())
             {
-                int[][] magicReforgeTiers = new int[][]
-                {
-                    /* 0 */ new int[] { PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Furious, PrefixID.Forceful, PrefixID.Strong },
-                    /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Taboo, PrefixID.Manic },
-                    /* 2 */ new int[] { PrefixID.Murderous, PrefixID.Agile, PrefixID.Adept, PrefixID.Celestial, PrefixID.Unpleasant },
-                    /* 3 */ new int[] { PrefixID.Superior, PrefixID.Demonic, PrefixID.Mystic },
-                    /* 4 */ new int[] { PrefixID.Godly, PrefixID.Masterful, PrefixID.Deadly2 },
-                    /* 5 */ new int[] { PrefixID.Mythical }
-                };
+                int[][] magicReforgeTiers =
+                [
+                    /* 0 */ [PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Furious, PrefixID.Forceful, PrefixID.Strong],
+                    /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, PrefixID.Taboo, PrefixID.Manic],
+                    /* 2 */ [PrefixID.Murderous, PrefixID.Agile, PrefixID.Adept, PrefixID.Celestial, PrefixID.Unpleasant],
+                    /* 3 */ [PrefixID.Superior, PrefixID.Demonic, PrefixID.Mystic],
+                    /* 4 */ [PrefixID.Godly, PrefixID.Masterful, PrefixID.Deadly2],
+                    /* 5 */ [PrefixID.Mythical]
+                ];
                 prefix = IteratePrefix(rand, magicReforgeTiers, currentPrefix);
             }
 
             // SUMMON (not whips)
             else if (item.CountsAsClass<SummonDamageClass>())
             {
-                int[][] summonReforgeTiers = new int[][]
-                {
-                    /* 0 */ new int[] { PrefixID.Nimble, PrefixID.Furious },
-                    /* 1 */ new int[] { PrefixID.Forceful, PrefixID.Strong, PrefixID.Quick, PrefixID.Taboo, PrefixID.Manic },
-                    /* 2 */ new int[] { PrefixID.Hurtful, PrefixID.Adept, PrefixID.Celestial },
-                    /* 3 */ new int[] { PrefixID.Superior, PrefixID.Demonic, PrefixID.Mystic, PrefixID.Deadly2 },
-                    /* 4 */ new int[] { PrefixID.Masterful, PrefixID.Godly },
-                    /* 5 */ new int[] { PrefixID.Mythical, PrefixID.Ruthless } // you may want mythical early game for the knockback.
-                };
+                int[][] summonReforgeTiers =
+                [
+                    /* 0 */ [PrefixID.Nimble, PrefixID.Furious],
+                    /* 1 */ [PrefixID.Forceful, PrefixID.Strong, PrefixID.Quick, PrefixID.Taboo, PrefixID.Manic],
+                    /* 2 */ [PrefixID.Hurtful, PrefixID.Adept, PrefixID.Celestial],
+                    /* 3 */ [PrefixID.Superior, PrefixID.Demonic, PrefixID.Mystic, PrefixID.Deadly2],
+                    /* 4 */ [PrefixID.Masterful, PrefixID.Godly],
+                    /* 5 */ [PrefixID.Mythical, PrefixID.Ruthless] // you may want mythical early game for the knockback.
+                ];
                 prefix = IteratePrefix(rand, summonReforgeTiers, currentPrefix);
             }
 
@@ -239,15 +241,15 @@ namespace CalamityMod
             else if (item.CountsAsClass<ThrowingDamageClass>())
             {
                 // Added appropriate universal reforges to rogue, so they don't ONLY get modded prefixes.
-                int[][] rogueReforgeTiers = new int[][]
-                {
-                    /* 0 */ new int[] { PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Forceful, PrefixID.Strong, GetCalPrefix("Radical"), GetCalPrefix("Pointy") },
-                    /* 1 */ new int[] { PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, GetCalPrefix("Sharp"), GetCalPrefix("Glorious") },
-                    /* 2 */ new int[] { PrefixID.Murderous, PrefixID.Agile, PrefixID.Unpleasant, GetCalPrefix("Feathered"), GetCalPrefix("Sleek"), GetCalPrefix("Hefty") },
-                    /* 3 */ new int[] { PrefixID.Superior, PrefixID.Demonic, GetCalPrefix("Mighty"), GetCalPrefix("Serrated") },
-                    /* 4 */ new int[] { PrefixID.Godly, PrefixID.Deadly2, GetCalPrefix("Vicious"), GetCalPrefix("Lethal") },
-                    /* 5 */ new int[] { GetCalPrefix("Flawless") }
-                };
+                int[][] rogueReforgeTiers =
+                [
+                    /* 0 */ [PrefixID.Keen, PrefixID.Nimble, PrefixID.Nasty, PrefixID.Forceful, PrefixID.Strong, GetCalPrefix("Radical"), GetCalPrefix("Pointy")],
+                    /* 1 */ [PrefixID.Hurtful, PrefixID.Ruthless, PrefixID.Zealous, PrefixID.Quick, GetCalPrefix("Sharp"), GetCalPrefix("Glorious")],
+                    /* 2 */ [PrefixID.Murderous, PrefixID.Agile, PrefixID.Unpleasant, GetCalPrefix("Feathered"), GetCalPrefix("Sleek"), GetCalPrefix("Hefty")],
+                    /* 3 */ [PrefixID.Superior, PrefixID.Demonic, GetCalPrefix("Mighty"), GetCalPrefix("Serrated")],
+                    /* 4 */ [PrefixID.Godly, PrefixID.Deadly2, GetCalPrefix("Vicious"), GetCalPrefix("Lethal")],
+                    /* 5 */ [GetCalPrefix("Flawless")]
+                ];
                 prefix = IteratePrefix(rand, rogueReforgeTiers, currentPrefix);
             }
 
@@ -772,29 +774,29 @@ namespace CalamityMod
                 mod.Find<ModPrefix>("Flimsy").Type,
                 mod.Find<ModPrefix>("Unbalanced").Type,
                 mod.Find<ModPrefix>("Atrocious").Type,
-				PrefixID.Keen,
-				PrefixID.Superior,
-				PrefixID.Forceful,
-				PrefixID.Broken,
-				PrefixID.Damaged,
-				PrefixID.Hurtful,
-				PrefixID.Strong,
-				PrefixID.Unpleasant,
-				PrefixID.Weak,
-				PrefixID.Ruthless,
-				PrefixID.Godly,
-				PrefixID.Demonic,
-				PrefixID.Zealous,
-				PrefixID.Quick,
-				PrefixID.Deadly2,
-				PrefixID.Agile,
-				PrefixID.Nimble,
-				PrefixID.Murderous,
-				PrefixID.Slow,
-				PrefixID.Sluggish,
-				PrefixID.Lazy,
-				PrefixID.Annoying,
-				PrefixID.Nasty
+                PrefixID.Keen,
+                PrefixID.Superior,
+                PrefixID.Forceful,
+                PrefixID.Broken,
+                PrefixID.Damaged,
+                PrefixID.Hurtful,
+                PrefixID.Strong,
+                PrefixID.Unpleasant,
+                PrefixID.Weak,
+                PrefixID.Ruthless,
+                PrefixID.Godly,
+                PrefixID.Demonic,
+                PrefixID.Zealous,
+                PrefixID.Quick,
+                PrefixID.Deadly2,
+                PrefixID.Agile,
+                PrefixID.Nimble,
+                PrefixID.Murderous,
+                PrefixID.Slow,
+                PrefixID.Sluggish,
+                PrefixID.Lazy,
+                PrefixID.Annoying,
+                PrefixID.Nasty
             });
             return roguePrefix;
         }
