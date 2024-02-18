@@ -422,7 +422,7 @@ namespace CalamityMod.ILEditing
             var cursor = new ILCursor(il);
             if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.BeetleMight1)))
             {
-                LogFailure("Beetle Scale Mail Nerf", "Could not locate the Beetle Might bff ID.");
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the Beetle Might buff ID.");
                 return;
             }
             if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.1f))) // The amount of melee damage to grant.

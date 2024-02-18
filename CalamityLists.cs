@@ -2111,7 +2111,6 @@ namespace CalamityMod
                 ProjectileType<EyeOfNightCell>(),
                 ProjectileType<FantasyTalismanProj>(),
                 ProjectileType<FantasyTalismanStealth>(),
-                ProjectileType<FlakKrakenProjectile>(),
                 ProjectileType<GodsParanoiaProj>(),
                 ProjectileType<InsidiousHarpoon>(),
                 ProjectileType<JawsProjectile>(),
