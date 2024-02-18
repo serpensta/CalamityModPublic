@@ -578,7 +578,7 @@ DragonScales: {
 	Tooltip:
 		'''
 		Rogue projectiles create slow fireballs as they travel
-		Stealth strikes create infernados on death
+		Stealth strikes create infernados where they hit
 		+10% max run speed and acceleration
 		Grants immunity to Dragonfire
 		'Only a living dragon holds true treasure'
@@ -680,7 +680,7 @@ EtherealExtorter: {
 	DisplayName: Ethereal Extorter
 	Tooltip:
 		'''
-		Rogue projectiles explode into homing souls on death
+		Rogue projectiles explode into homing souls on hit
 		8% increased rogue damage and +5 maximum stealth
 		'''
 }

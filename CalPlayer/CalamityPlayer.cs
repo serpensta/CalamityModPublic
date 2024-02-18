@@ -30,7 +30,6 @@ using CalamityMod.Items.TreasureBags.MiscGrabBags;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Items.Weapons.Melee;
-using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.NPCs;
@@ -192,7 +191,6 @@ namespace CalamityMod.CalPlayer
         public int StellarHammer = 0;
         public int GalaxyHammer = 0;
         public int hideOfDeusMeleeBoostTimer = 0;
-        public int nebulaManaNerfCounter = 0;
         public int alcoholPoisonLevel = 0;
         public int modStealthTimer;
         public int dashTimeMod;
@@ -4043,7 +4041,7 @@ namespace CalamityMod.CalPlayer
 
                     Vector2 startingPosition = Main.MouseWorld - Vector2.UnitY.RotatedByRandom(0.4f) * 1250f;
                     Vector2 directionToMouse = (Main.MouseWorld - startingPosition).SafeNormalize(Vector2.UnitY).RotatedByRandom(0.1f);
-                    int drop = Projectile.NewProjectile(source, startingPosition, directionToMouse * 15f, ModContent.ProjectileType<ToxicannonDrop>(), d, 0f, Player.whoAmI);
+                    int drop = Projectile.NewProjectile(source, startingPosition, directionToMouse * 15f, ModContent.ProjectileType<FlakToxicannonHoldout>(), d, 0f, Player.whoAmI);
                     if (drop.WithinBounds(Main.maxProjectiles))
                     {
                         Main.projectile[drop].penetrate = 2;

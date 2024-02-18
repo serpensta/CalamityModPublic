@@ -264,6 +264,7 @@ namespace CalamityMod.CalPlayer
 
             if (alcoholPoisonLevel > (cirrusDress ? 5 : 3))
             {
+                // Independently of Calamity's nerfs to Nebula life regen, it is disabled entirely by alcohol poisoning.
                 Player.nebulaLevelLife = 0;
 
                 if (Player.whoAmI == Main.myPlayer)
@@ -535,6 +536,8 @@ namespace CalamityMod.CalPlayer
             // 3. Air drowning in the Abyss
             //
 
+            // All forms of overtly disabling life regeneration disable Nebula Life boosters as well.
+
             if (noLifeRegen)
             {
                 Player.nebulaLevelLife = 0;
@@ -645,10 +648,6 @@ namespace CalamityMod.CalPlayer
 
             if (trinketOfChi || chiRegen)
                 Player.lifeRegen += 2;
-
-            // Nebula armor life booster nerf
-            if (Player.nebulaLevelLife > 0)
-                Player.lifeRegen -= 2 * Player.nebulaLevelLife;
 
             if (ursaSergeant)
             {

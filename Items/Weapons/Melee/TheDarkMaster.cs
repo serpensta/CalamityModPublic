@@ -15,7 +15,8 @@ namespace CalamityMod.Items.Weapons.Melee
         public const float DamagePerHealth = 0.001f; // 0.1 damage per additional health. 100 health = 10% damage.
         public new string LocalizationCategory => "Items.Weapons.Melee";
 
-        BloomRing ring;
+        [CloneByReference]
+        public BloomRing ring;
 
         public override void SetStaticDefaults()
         {

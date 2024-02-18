@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Ranged
                 timeToFire = true;
             }
 
-            bool canFire = player.channel && player.HasAmmo(player.ActiveItem()) && !player.noItems && !player.CCed;
+            bool canFire = !player.CantUseHoldout() && player.HasAmmo(player.ActiveItem());
 
             if (Projectile.soundDelay <= 0 && canFire)
             {

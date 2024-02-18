@@ -1,17 +1,17 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.IO;
 using CalamityMod.Items.Weapons.Melee;
-using Terraria.Graphics.Shaders;
+using CalamityMod.Particles;
+using CalamityMod.Tiles.Astral;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using static CalamityMod.CalamityUtils;
-using Terraria.Audio;
-using CalamityMod.Tiles.Astral;
+using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -27,15 +27,11 @@ namespace CalamityMod.Projectiles.Melee
         public ref float CurrentIndicator => ref Projectile.localAI[0]; //What "indicator" stage are you on.
         public ref float OverCharge => ref Projectile.localAI[1];
 
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
         const float MaxCharge = 360;
 
         public Vector2 lastDisplacement;
         public float dashDuration;
 
-        public override void SetStaticDefaults()
-        {
-        }
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
@@ -79,7 +75,7 @@ namespace CalamityMod.Projectiles.Melee
                 initialized = true;
             }
 
-            if (!OwnerCanShoot)
+            if (Owner.CantUseHoldout())
             {
                 if (State == 0f)
                 {

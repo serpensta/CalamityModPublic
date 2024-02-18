@@ -87,8 +87,7 @@ namespace CalamityMod.Projectiles.Ranged
                 }
                 if (fullSpeed && Main.myPlayer == Projectile.owner)
                 {
-                    bool canUseItem = player.channel && !player.noItems && !player.CCed;
-                    if (canUseItem)
+                    if (!player.CantUseHoldout())
                     {
                         float speed = player.ActiveItem().shootSpeed * Projectile.scale;
                         Vector2 spawnPos = vector;
