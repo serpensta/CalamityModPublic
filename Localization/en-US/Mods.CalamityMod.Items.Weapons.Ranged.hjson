@@ -537,7 +537,7 @@ FrostbiteBlaster: {
 
 Fungicide: {
 	DisplayName: Fungicide
-	Tooltip: Converts musket balls into fungal rounds that split on death
+	Tooltip: Converts musket balls into fungal rounds that split upon impact
 }
 
 Galeforce: {
@@ -699,7 +699,7 @@ Malevolence: {
 	Tooltip:
 		'''
 		Fires two arrows at once
-		Converts wooden arrows into plague arrows that explode into bees on death
+		Converts wooden arrows into plague arrows that explode into bees
 		'''
 }
 
@@ -873,7 +873,7 @@ PearlGod: {
 
 PestilentDefiler: {
 	DisplayName: Pestilent Defiler
-	Tooltip: Converts musket balls into plague rounds that explode and split apart on death
+	Tooltip: Converts musket balls into plague rounds that explode and split apart on hit
 }
 
 Phangasm: {
@@ -1094,7 +1094,7 @@ Shroomer: {
 
 SlagMagnum: {
 	DisplayName: Slag Magnum
-	Tooltip: Converts musket balls into fossil shards that split into additional shards on death
+	Tooltip: Converts musket balls into fossil shards that split into additional shards on impact
 }
 
 SomaPrime: {
