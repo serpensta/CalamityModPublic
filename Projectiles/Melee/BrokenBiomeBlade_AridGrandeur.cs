@@ -24,14 +24,10 @@ namespace CalamityMod.Projectiles.Melee
         public ref float PogoCooldown => ref Projectile.ai[1]; //Cooldown for the pogo
         public Player Owner => Main.player[Projectile.owner];
         public bool CanPogo => Owner.velocity.Y != 0 && PogoCooldown <= 0; //Only pogo when in the air and if the cooldown is zero
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
 
         public const float pogoStrenght = 16f; //How much the player gets pogoed up
         public const float maxShred = 500; //How much shred you get
 
-        public override void SetStaticDefaults()
-        {
-        }
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
@@ -102,7 +98,7 @@ namespace CalamityMod.Projectiles.Melee
                 initialized = true;
             }
 
-            if (!OwnerCanShoot)
+            if (Owner.CantUseHoldout())
             {
                 Projectile.Kill();
                 return;

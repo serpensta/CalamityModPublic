@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Ranged
                 FramesTillNextShot = FireRate;
                 shouldShoot = true;
             }
-            bool canShoot = player.channel && (player.HasAmmo(player.ActiveItem()) || FreeShotLoaded > 0) && !player.noItems && !player.CCed;
+            bool canShoot = !player.CantUseHoldout() && (player.HasAmmo(player.ActiveItem()) || FreeShotLoaded > 0);
             if (Projectile.soundDelay <= 0 && canShoot)
             {
                 Projectile.soundDelay = (int)FireRate;

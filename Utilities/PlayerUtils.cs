@@ -282,7 +282,7 @@ namespace CalamityMod
                 return false;
             return true;
         }
-        
+
         // See also: Player.IsStandingStillForSpecialEffects (Vanilla shiny stone + standing still mana regen)
         // That is more or less equivalent to this with the default value of 0.05
         public static bool StandingStill(this Player player, float velocity = 0.05f) => player.velocity.Length() < velocity;
@@ -713,7 +713,7 @@ namespace CalamityMod
         #endregion
 
         #region Visual Layers
-        public static void HideAccessories(this Player player, bool hideHeadAccs = true, bool hideBodyAccs = true, bool hideLegAccs = true,  bool hideShield = true)
+        public static void HideAccessories(this Player player, bool hideHeadAccs = true, bool hideBodyAccs = true, bool hideLegAccs = true, bool hideShield = true)
         {
             if (hideHeadAccs)
                 player.face = -1;
@@ -722,7 +722,7 @@ namespace CalamityMod
             {
                 player.handon = -1;
                 player.handoff = -1;
-                
+
                 player.back = -1;
                 player.front = -1;
                 player.neck = -1;
@@ -738,6 +738,13 @@ namespace CalamityMod
                 player.shield = -1;
         }
         #endregion
+
+        /// <summary>
+        /// A shorthand bool to check if the player can continue using the holdout or not.
+        /// </summary>
+        /// <param name="player">The player using the holdout.</param>
+        /// <returns>Returns <see langword="true"/> if the player CAN'T use the item.</returns>
+        public static bool CantUseHoldout(this Player player) => player == null || !player.active || player.dead || !player.channel || player.CCed || player.noItems;
 
         /// <summary>
         /// Makes the given player send the given packet to all appropriate receivers.<br />

@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Ranged
         {
             Player player = Main.player[Projectile.owner];
             Vector2 playerpos = player.RotatedRelativePoint(player.MountedCenter, true);
-            bool shouldBeHeld = player.channel && !player.noItems && !player.CCed;
+            bool shouldBeHeld = !player.CantUseHoldout();
 
             int shot;
             float scaleFactor = 14f;

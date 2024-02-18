@@ -66,7 +66,7 @@ namespace CalamityMod.Projectiles.Melee
                 if (MoveInIntervals > 0f)
                     MoveInIntervals -= 1f;
 
-            if (!Owner.channel || Owner.noItems || Owner.CCed)
+            if (Owner.CantUseHoldout())
                 Projectile.Kill();
 
             else if (MoveInIntervals <= 0f)

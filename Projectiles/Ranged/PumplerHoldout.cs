@@ -26,7 +26,6 @@ namespace CalamityMod.Projectiles.Ranged
 
         private Player Owner => Main.player[Projectile.owner];
 
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
         private ref float CurrentChargingFrames => ref Projectile.ai[0];
         private ref float PumpkinsCharge => ref Projectile.ai[1];
         private ref float FramesToLoadNextPumpkin => ref Projectile.localAI[0];
@@ -50,7 +49,7 @@ namespace CalamityMod.Projectiles.Ranged
             Vector2 tipPosition = armPosition + Projectile.velocity * Projectile.width * 0.5f;
 
             // Unloads all pumpkins if you can't shoot/stop holding out the projectile or if the gun is overfilled
-            if (!OwnerCanShoot || Overfilled == 1f)
+            if (Owner.CantUseHoldout() || Overfilled == 1f)
             {
 
                 if (PumpkinsCharge <= 0f && Overfilled == 0f) //If the projectile isnt playing its animation and if there arent any pumpkins loaded, kill it

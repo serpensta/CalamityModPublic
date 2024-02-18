@@ -1,10 +1,5 @@
 ﻿using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.Particles;
-using log4net.Core;
 using Microsoft.Xna.Framework;
-using Mono.Cecil;
-using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -25,7 +20,6 @@ namespace CalamityMod.Projectiles.Ranged
         public int ShotCooldown;
         public int FireBlobs = 0;
         public int Time = 0;
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
 
         public override void SetDefaults()
         {
@@ -55,10 +49,8 @@ namespace CalamityMod.Projectiles.Ranged
             Vector2 tipPosition = armPosition + Projectile.velocity * Projectile.width * 0.8f;
 
             // Kill if the owner stops channeling or otherwise cannot use the weapon.
-            if (!OwnerCanShoot)
-            {
+            if (Owner.CantUseHoldout())
                 Projectile.Kill();
-            }
             else
             {
                 var effectcolor = Main.rand.Next(4) switch
@@ -102,7 +94,7 @@ namespace CalamityMod.Projectiles.Ranged
                 else
                 {
                     if (ShootTimer == 1)
-                        SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.7f}, Projectile.Center);
+                        SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.7f }, Projectile.Center);
                     ShotsFired = 0;
                     for (int i = 0; i < 2; i++)
                     {

@@ -1,13 +1,11 @@
-﻿using CalamityMod.Items.Tools;
+﻿using System;
+using CalamityMod.Items.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -63,10 +61,10 @@ namespace CalamityMod.Projectiles.Melee
                 Lighting.AddLight(Projectile.Center, Color.Blue.ToVector3() * 0.7f);
             }
 
-                if (MoveInIntervals > 0f)
-                    MoveInIntervals -= 1f;
+            if (MoveInIntervals > 0f)
+                MoveInIntervals -= 1f;
 
-            if (!Owner.channel || Owner.noItems || Owner.CCed)
+            if (Owner.CantUseHoldout())
                 Projectile.Kill();
 
             else if (MoveInIntervals <= 0f)
@@ -203,7 +201,7 @@ namespace CalamityMod.Projectiles.Melee
             {
                 Main.EntitySpriteDraw(selectionTex, Projectile.Center + offset - Main.screenPosition, null, bloomColor.MultiplyRGB(colorMod), 0f, selectionTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
             });
-            
+
 
             //Draw laser beams going around the selection
             Texture2D beamTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/GreyscaleGradients/SimpleGradient").Value;

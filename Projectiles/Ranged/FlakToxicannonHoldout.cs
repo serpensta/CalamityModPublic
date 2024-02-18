@@ -40,10 +40,10 @@ namespace CalamityMod.Projectiles.Ranged
         public override void AI()
         {
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
-            bool cantUse = Owner == null || !Owner.active || Owner.dead || !Owner.channel || Main.myPlayer != Projectile.owner || Owner.CCed || Owner.noItems;
-            if (cantUse)
+            if (Owner.CantUseHoldout())
             {
                 Projectile.Kill();
+                NetUpdate();
                 return;
             }
 

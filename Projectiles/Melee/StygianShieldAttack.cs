@@ -104,7 +104,7 @@ namespace CalamityMod.Projectiles.Melee
             }
 
             // Attack upon releasing the button
-            if (!Owner.channel || Owner.noItems || Owner.CCed)
+            if (Owner.CantUseHoldout())
                 Attack();
         }
 
