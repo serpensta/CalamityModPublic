@@ -173,7 +173,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                         for (int p = 0; p < 3; p++)
                         {
                             Vector2 poisonVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(p * 2f));
-                            Projectile poisonHate = Projectile.NewProjectileDirect(source, nuzzlePos, poisonVelocity, ModContent.ProjectileType<AcidicSaxBubble>(), damage, knockback, player.whoAmI, 0f, 1f);
+                            Projectile poisonHate = Projectile.NewProjectileDirect(source, nuzzlePos, poisonVelocity, ModContent.ProjectileType<AcidicSaxBubble>(), damage, knockback, player.whoAmI, 0f, 0f, 1f);
                             poisonHate.DamageType = DamageClass.Ranged;
                             poisonHate.extraUpdates += 1;
                             poisonHate.penetrate = 1;

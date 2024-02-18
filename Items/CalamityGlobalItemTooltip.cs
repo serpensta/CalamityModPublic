@@ -841,7 +841,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("9%", "8%"));
             #endregion
 
-            // Hardmode ore armor tooltip edits
+            // Hardmode armor tooltip edits
             #region Hardmode Ore Armor
             // Cobalt
             if (item.type == ItemID.CobaltHat)
@@ -868,6 +868,17 @@ namespace CalamityMod.Items
             // Titanium
             if (item.type == ItemID.TitaniumMask)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("9", "14"));
+
+            // Solar Flare
+            if (item.type == ItemID.SolarFlareHelmet)
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("26%", "20%"));
+
+            // Vortex
+            if (item.type == ItemID.VortexHelmet)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("16%", "10%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("7%", "5%"));
+            }
             #endregion
 
             // DD2 armor tooltip edits

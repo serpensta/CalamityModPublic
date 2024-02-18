@@ -1361,8 +1361,6 @@ namespace CalamityMod.CalPlayer
                 phantomicBulwarkCooldown--;
             if (KameiBladeUseDelay > 0)
                 KameiBladeUseDelay--;
-            if (SpeedBlasterDashDelayCooldown > 0)
-                SpeedBlasterDashDelayCooldown--;
             if (galileoCooldown > 0)
                 galileoCooldown--;
             if (dragonRageCooldown > 0)
