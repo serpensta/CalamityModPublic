@@ -111,7 +111,7 @@ namespace CalamityMod.Projectiles.Ranged
         {
             if (Projectile.localAI[0] < 399)
             {
-                SoundEngine.PlaySound(SoundID.Item27 with { Volume = 0.3f, Pitch = 0.8f }, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item27 with { Volume = 0.3f, Pitch = 0.8f }, Projectile.Center);
 
                 for (int k = 0; k < 11; k++)
                 {

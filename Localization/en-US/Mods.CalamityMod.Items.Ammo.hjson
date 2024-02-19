@@ -94,7 +94,12 @@ HyperiusBullet: {
 
 IcicleArrow: {
 	DisplayName: Icicle Arrow
-	Tooltip: Shatters into shards on impact
+	Tooltip:
+        '''
+        Ice arrows with an enchanted tip
+        These arrows quickly freeze into falling icicles that deal increased damage
+        Hitting enemies or tiles before being frozen causes the arrow to fly upwards
+        '''
 }
 
 HailstormBullet: {
