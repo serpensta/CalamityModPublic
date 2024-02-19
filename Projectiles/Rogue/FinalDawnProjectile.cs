@@ -80,7 +80,7 @@ namespace CalamityMod.Projectiles.Rogue
 
             if (Main.myPlayer == Projectile.owner)
             {
-                if (!player.channel || player.noItems || player.CCed)
+                if (player.CantUseHoldout())
                 {
                     AttemptExecuteAttacks(player);
                     Projectile.Kill();

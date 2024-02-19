@@ -51,7 +51,7 @@ BubonicRound: {
 
 ElysianArrow: {
 	DisplayName: Elysian Arrow
-	Tooltip: Summons meteors from the sky on death
+	Tooltip: Summons meteors from the sky on impact
 }
 
 FlashRound: {

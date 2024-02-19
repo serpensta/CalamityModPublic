@@ -69,7 +69,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.ai[1] = baseUseTime - modifier * Projectile.localAI[0];
                 timeToFire = true;
             }
-            bool canFire = player.channel && player.HasAmmo(player.ActiveItem()) && !player.noItems && !player.CCed;
+            bool canFire = !player.CantUseHoldout() && player.HasAmmo(player.ActiveItem());
             if (Projectile.soundDelay <= 0 && canFire)
             {
                 Projectile.soundDelay = baseUseTime - modifier * (int)Projectile.localAI[0];

@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Armor.Tarragon
             player.GetDamage<ThrowingDamageClass>() += 0.1f;
             player.GetCritChance<ThrowingDamageClass>() += 10;
             player.moveSpeed += 0.05f;
-            player.endurance += 0.05f;
+            player.endurance += 0.1f;
         }
 
         public override void AddRecipes()

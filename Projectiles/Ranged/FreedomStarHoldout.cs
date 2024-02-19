@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items;
+﻿using System;
+using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Ranged;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -143,7 +143,7 @@ namespace CalamityMod.Projectiles.Ranged
                 // This grabs the weapon's current damage, taking current charge level into account.
                 int currentDamage = player.GetWeaponDamage(freedomStar);
 
-                bool stillInUse = player.channel && !player.noItems && !player.CCed;
+                bool stillInUse = !player.CantUseHoldout();
 
                 // Checks if the Freedom Star has sufficient charge to fire. If this is false, it stops functioning.
                 CalamityGlobalItem modItem = freedomStar.Calamity();

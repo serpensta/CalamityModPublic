@@ -46,8 +46,8 @@ namespace CalamityMod.Items.Armor.Tarragon
         public override void UpdateEquip(Player player)
         {
             player.GetDamage<MeleeDamageClass>() += 0.1f;
-            player.GetCritChance<MeleeDamageClass>() += 5;
-            player.endurance += 0.05f;
+            player.GetCritChance<MeleeDamageClass>() += 10;
+            player.endurance += 0.1f;
         }
 
         public override void AddRecipes()

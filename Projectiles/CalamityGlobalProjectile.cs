@@ -289,9 +289,14 @@ namespace CalamityMod.Projectiles
                 }
             }
 
-            if (projectile.type == ProjectileID.Skull && (projectile.ai[0] == 0f || projectile.ai[0] == -2f))
+            if (projectile.type == ProjectileID.Skull)
             {
-                bool fromRevSkeletron = projectile.ai[0] == -2f;
+                bool fromRevSkeletron = projectile.ai[0] < 0f;
+                bool revSkeletronHomingSkull = projectile.ai[0] == -1f;
+                bool revSkeletronAcceleratingSkull = projectile.ai[0] == -2f;
+
+                if (revSkeletronHomingSkull)
+                    projectile.alpha = 0;
 
                 if (projectile.alpha > 0)
                     projectile.alpha -= 75;
@@ -304,12 +309,12 @@ namespace CalamityMod.Projectiles
                     projectile.frame = 0;
 
                 // Accelerate if fired in a spread from Skeletron in Rev+
-                if (fromRevSkeletron)
+                if (revSkeletronAcceleratingSkull)
                 {
                     float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
                     if (projectile.velocity.Length() < maxVelocity)
                     {
-                        projectile.velocity *= 1.02f;
+                        projectile.velocity *= 1.015f;
                         if (projectile.velocity.Length() > maxVelocity)
                         {
                             projectile.velocity.Normalize();
@@ -318,13 +323,66 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                int numDust = fromRevSkeletron ? 1 : 2;
-                for (int i = 0; i < numDust; i++)
+                if (!revSkeletronHomingSkull)
                 {
-                    Dust flame = Dust.NewDustDirect(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
-                    flame.position -= projectile.velocity * 2f;
-                    flame.noGravity = true;
-                    flame.velocity *= 0.3f;
+                    int numDust = revSkeletronAcceleratingSkull ? 1 : 2;
+                    int dustType = revSkeletronAcceleratingSkull ? 91 : 6;
+                    float dustScale = revSkeletronAcceleratingSkull ? 1f : 2f;
+                    float dustVelocityOffset = revSkeletronAcceleratingSkull ? 1f : 2f;
+                    for (int i = 0; i < numDust; i++)
+                    {
+                        Dust flame = Dust.NewDustDirect(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, dustType, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), dustScale);
+                        flame.position -= projectile.velocity * dustVelocityOffset;
+                        flame.noGravity = true;
+                        flame.velocity *= 0.3f;
+                    }
+                }
+                else
+                {
+                    for (int num173 = 0; num173 < 2; num173++)
+                    {
+                        int num174 = Dust.NewDust(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 5, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 1.5f);
+                        Main.dust[num174].position -= projectile.velocity;
+                        Main.dust[num174].noGravity = true;
+                        Main.dust[num174].velocity.X *= 0.3f;
+                        Main.dust[num174].velocity.Y *= 0.3f;
+                    }
+
+                    int num133 = 0;
+                    num133 = Player.FindClosest(projectile.Center, 1, 1);
+                    projectile.ai[1] += 1f;
+                    float homingStartTime = 30f;
+                    float homingEndTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 90f : 75f;
+                    if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
+                    {
+                        float num134 = projectile.velocity.Length();
+                        Vector2 vector24 = Main.player[num133].Center - projectile.Center;
+                        vector24.Normalize();
+                        vector24 *= num134;
+                        float inertia = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 25f : 30f;
+                        projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
+                        projectile.velocity.Normalize();
+                        projectile.velocity *= num134;
+                    }
+
+                    float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
+                    if (projectile.velocity.Length() < maxVelocity)
+                        projectile.velocity *= 1.015f;
+
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        projectile.localAI[0] = 1f;
+                        SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
+                        for (int num135 = 0; num135 < 10; num135++)
+                        {
+                            int num136 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 0, default(Color), 2f);
+                            Main.dust[num136].noGravity = true;
+                            Main.dust[num136].velocity = projectile.Center - Main.dust[num136].position;
+                            Main.dust[num136].velocity.Normalize();
+                            Main.dust[num136].velocity *= -5f;
+                            Main.dust[num136].velocity += projectile.velocity / 2f;
+                        }
+                    }
                 }
 
                 if (projectile.ai[0] == 0f)
@@ -426,7 +484,7 @@ namespace CalamityMod.Projectiles
                     SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
                     for (int i = 0; i < 20; i++)
                     {
-                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 181, 0f, 0f, 100);
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 91, 0f, 0f, 100);
                         Main.dust[dust].velocity *= 3f;
                         Main.dust[dust].velocity += projectile.velocity * 0.75f;
                         Main.dust[dust].scale *= 1.2f;
@@ -439,7 +497,7 @@ namespace CalamityMod.Projectiles
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 181, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 91, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
                         Main.dust[dust].velocity *= 0.6f;
                         Main.dust[dust].scale *= 1.4f;
                         Main.dust[dust].noGravity = true;

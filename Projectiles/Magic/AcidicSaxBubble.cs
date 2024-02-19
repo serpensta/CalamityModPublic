@@ -137,14 +137,14 @@ namespace CalamityMod.Projectiles.Magic
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Irradiated>(), 180);
-            if (Projectile.ai[1] == 1f) // For GFB Animosity
+            if (Projectile.ai[2] == 1f) // For GFB Animosity
                 target.AddBuff(BuffID.Poisoned, 180);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<Irradiated>(), 180);
-            if (Projectile.ai[1] == 1f) // For GFB Animosity
+            if (Projectile.ai[2] == 1f) // For GFB Animosity
                 target.AddBuff(BuffID.Poisoned, 180);
         }
 

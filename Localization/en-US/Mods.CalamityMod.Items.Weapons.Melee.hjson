@@ -189,7 +189,7 @@ Brimlance: {
 
 Brimlash: {
 	DisplayName: Brimlash
-	Tooltip: Fires a brimstone bolt that explodes into more bolts on death
+	Tooltip: Fires a brimstone bolt that explodes into more bolts on hit
 }
 
 BrimstoneSword: {
@@ -305,7 +305,7 @@ CrescentMoon: {
 
 DarklightGreatsword: {
 	DisplayName: Darklight Greatsword
-	Tooltip: Fires darklight blades that split on death
+	Tooltip: Fires darklight blades that split on impact
 }
 
 DeathsAscension: {
@@ -622,7 +622,7 @@ GreatswordofJudgement: {
 	DisplayName: Greatsword of Judgement
 	Tooltip:
 		'''
-		Fires a white orb that emits white rain on death for a time
+		Fires a white orb that emits white rain from where it dissipates for a time
 		A pale white sword from a forgotten land
 		You can hear faint yet comforting whispers emanating from the blade
 		'No matter where you may be you are never alone
@@ -847,7 +847,7 @@ Orderbringer: {
 	DisplayName: Orderbringer
 	Tooltip:
 		'''
-		Fires a rainbow blade that emits rainbow rain on death for a time
+		Fires a rainbow blade that emits rainbow rain from where it dissipated for a time
 		A pale white sword from a forgotten land
 		You can hear faint yet comforting whispers emanating from the blade
 		'No matter where you may be you are never alone
@@ -988,7 +988,7 @@ SausageMaker: {
 
 ScourgeoftheCosmos: {
 	DisplayName: Scourge of the Cosmos
-	Tooltip: Throws a bouncing cosmic scourge that emits tiny homing cosmic scourges on death and tile hits
+	Tooltip: Throws a bouncing cosmic scourge that emits tiny homing cosmic scourges on enemy and tile hits
 }
 
 SeashineSword: {
@@ -1085,7 +1085,7 @@ StormRuler: {
 	DisplayName: Storm Ruler
 	Tooltip:
 		'''
-		Fires beams that generate tornadoes on death
+		Fires beams that generate tornadoes where they strike
 		Tornadoes suck enemies in
 		'Only a storm can fell a greatwood'
 		'''

@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.ai[1] = (float)(soundDelayer - soundDelayMult * aiSoundDelay);
                 isActive = true;
             }
-            bool canUseItem = player.channel && !player.noItems && !player.CCed;
+            bool canUseItem = !player.CantUseHoldout();
             if (Projectile.localAI[0] > 0f)
             {
                 Projectile.localAI[0] -= 1f;

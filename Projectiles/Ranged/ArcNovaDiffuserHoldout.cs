@@ -30,8 +30,6 @@ namespace CalamityMod.Projectiles.Ranged
         private bool ChargeLV1 => CurrentChargingFrames >= ArcNovaDiffuser.Charge1Frames;
         private bool ChargeLV2 => CurrentChargingFrames >= ArcNovaDiffuser.Charge2Frames;
 
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
-
         public override void SetDefaults()
         {
             Projectile.width = 72;
@@ -63,7 +61,7 @@ namespace CalamityMod.Projectiles.Ranged
                 ChargeSound.Position = Projectile.Center;
 
             // Fire if the owner stops channeling or otherwise cannot use the weapon.
-            if (!OwnerCanShoot)
+            if (Owner.CantUseHoldout())
             {
                 // Big Shot mode
                 if (ChargeLV2)
@@ -237,7 +235,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             // Rumble (only while channeling)
             float rumble = MathHelper.Clamp(CurrentChargingFrames, 0f, ArcNovaDiffuser.Charge2Frames);
-            if (OwnerCanShoot)
+            if (!Owner.CantUseHoldout())
                 Projectile.position += Main.rand.NextVector2Circular(rumble / 70f, rumble / 70f);
         }
 

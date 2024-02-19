@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Melee
 
         #region Throw variables
         //Only used for the long range throw
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed && Owner.HeldItem.type == ItemType<ArkoftheElements>();
+        private bool OwnerCanShoot => !Owner.CantUseHoldout() && Owner.HeldItem.type == ItemType<ArkoftheElements>();
         public bool Thrown => Combo == 2 || Combo == 3;
         const float MaxThrowTime = 80;
         const float ThrowReachMax = 500;

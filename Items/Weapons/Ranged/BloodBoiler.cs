@@ -17,6 +17,11 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle Heartbeat = new("CalamityMod/Sounds/Item/Heartbeat") { PitchVariance = 0.2f, Volume = 0.55f };
         
         public bool shotReturn = false;
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
             Item.width = 60;
