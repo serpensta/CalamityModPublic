@@ -311,10 +311,11 @@ namespace CalamityMod.Projectiles
                 // Accelerate if fired in a spread from Skeletron in Rev+
                 if (revSkeletronAcceleratingSkull)
                 {
-                    float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
+                    float maxVelocity = (Main.masterMode || BossRushEvent.BossRushActive) ? 20f : CalamityWorld.death ? 18f : 15f;
                     if (projectile.velocity.Length() < maxVelocity)
                     {
-                        projectile.velocity *= 1.015f;
+                        float acceleration = (Main.masterMode || BossRushEvent.BossRushActive) ? 1.02f : 1.015f;
+                        projectile.velocity *= acceleration;
                         if (projectile.velocity.Length() > maxVelocity)
                         {
                             projectile.velocity.Normalize();
@@ -352,7 +353,12 @@ namespace CalamityMod.Projectiles
                     num133 = Player.FindClosest(projectile.Center, 1, 1);
                     projectile.ai[1] += 1f;
                     float homingStartTime = 30f;
-                    float homingEndTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 90f : 75f;
+                    float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 115f : CalamityWorld.death ? 90f : 75f;
+
+                    // Stop homing when within a certain distance of the target
+                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)
+                        projectile.ai[1] = homingEndTime;
+
                     if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
                     {
                         float num134 = projectile.velocity.Length();
@@ -366,8 +372,9 @@ namespace CalamityMod.Projectiles
                     }
 
                     float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
+                    float acceleration = (Main.masterMode || BossRushEvent.BossRushActive) ? 1.02f : 1.015f;
                     if (projectile.velocity.Length() < maxVelocity)
-                        projectile.velocity *= 1.015f;
+                        projectile.velocity *= acceleration;
 
                     if (projectile.localAI[0] == 0f)
                     {

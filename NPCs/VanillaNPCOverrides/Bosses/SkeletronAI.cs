@@ -22,6 +22,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
 
             bool bossRush = BossRushEvent.BossRushActive;
+            bool masterMode = Main.masterMode || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
             // Percent life remaining
@@ -189,10 +190,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Reduce the amount of skulls per spread in later phases due to near-constant teleporting
-            if (phase4)
-                numProj--;
-            if (phase5)
-                numProj--;
+            if (!masterMode)
+            {
+                if (phase4)
+                    numProj--;
+                if (phase5)
+                    numProj--;
+            }
 
             if (death)
                 headSpinVelocityMult *= 1.2f;
@@ -360,7 +364,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Skull shooting
-            if (handsDead && npc.ai[1] == 0f && !phase4)
+            if ((handsDead || masterMode) && npc.ai[1] == 0f && !phase4)
             {
                 float skullProjFrequency = bossRush ? 10f : phase2 ? (48f - (death ? 17.5f * (1f - lifeRatio) : 0f)) : 60f;
                 if (Main.getGoodWorld)
@@ -401,8 +405,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 calamityGlobalNPC.newAI[1] += 1f;
                 float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 9f) : phase4 ? (death ? 4f : 1f) : ((1f - lifeRatio) / (1f - phase4LifeRatio));
-                npc.ai[2] += 1f + chargePhaseChangeRateBoost;
-                npc.localAI[1] += 1f + chargePhaseChangeRateBoost;
+                float chargePhaseChangeRate = chargePhaseChangeRateBoost + 1f;
+                npc.ai[2] += chargePhaseChangeRate;
+                npc.localAI[1] += chargePhaseChangeRate;
                 float chargePhaseGateValue = ChargeGateValue;
                 if (npc.localAI[1] > chargePhaseGateValue)
                     npc.localAI[1] = chargePhaseGateValue;
@@ -412,7 +417,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 bool hasMovedForcedDistance = npc.localAI[2] >= forcedMoveAwayTime;
                 bool canCharge = Vector2.Distance(Main.player[npc.target].Center, npc.Center) >= canChargeDistance;
                 bool charge = npc.ai[2] >= chargePhaseGateValue && canCharge;
-                if (charge)
+                bool forceCharge = npc.ai[2] > chargePhaseGateValue + 180f * chargePhaseChangeRate;
+                if (charge || forceCharge)
                 {
                     npc.localAI[2] += 1f;
                     if (hasMovedForcedDistance || !phase3)
@@ -434,6 +440,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float headYTopSpeed = 3.5f - (death ? 1.75f - lifeRatio : 0f);
                 float headXAcceleration = 0.08f + (death ? 0.08f * (1f - lifeRatio) : 0f);
                 float headXTopSpeed = 8.5f - (death ? 4.25f * (1f - lifeRatio) : 0f);
+
+                if (masterMode)
+                {
+                    headYAcceleration += 0.02f;
+                    headYTopSpeed -= 0.5f;
+                    headXAcceleration += 0.08f;
+                    headXTopSpeed -= 1f;
+                }
+
                 if (Main.getGoodWorld)
                 {
                     headYAcceleration += 0.01f;
@@ -441,6 +456,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     headXAcceleration += 0.05f;
                     headXTopSpeed -= 2f;
                 }
+
                 if (bossRush)
                 {
                     headYAcceleration *= 1.25f;
@@ -449,15 +465,30 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     headXTopSpeed *= 0.75f;
                 }
 
-                float moveAwayGateValue = chargePhaseGateValue - (5f + chargePhaseChangeRateBoost);
+                float headTopSpeedCap = 0.5f;
+                if (headYTopSpeed < headTopSpeedCap)
+                    headYTopSpeed = headTopSpeedCap;
+                if (headXTopSpeed < headTopSpeedCap)
+                    headXTopSpeed = headTopSpeedCap;
+
+                float moveAwayGateValue = chargePhaseGateValue - (5f + chargePhaseChangeRate);
                 bool moveAwayBeforeCharge = npc.ai[2] >= moveAwayGateValue;
                 if (moveAwayBeforeCharge)
                 {
                     if (!canCharge || !hasMovedForcedDistance)
                     {
-                        float maxAcceleration = headXAcceleration + headYAcceleration + (npc.ai[2] - moveAwayGateValue) * (phase5 ? 0.002f : 0.001f);
+                        float maxAcceleration = headXAcceleration + headYAcceleration + (npc.ai[2] - moveAwayGateValue) * (phase5 ? 0.006f : 0.004f);
+                        float maxAccelerationCap = (headXAcceleration + headYAcceleration) * 5f;
+                        if (maxAcceleration > maxAccelerationCap)
+                            maxAcceleration = maxAccelerationCap;
+
                         npc.velocity += Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * -maxAcceleration;
-                        float maxVelocity = (headXTopSpeed + headYTopSpeed + (npc.ai[2] - moveAwayGateValue) * 0.01f) / 2f;
+
+                        float maxVelocity = headSpinVelocityMult + (npc.ai[2] - moveAwayGateValue) * (phase5 ? 0.12f : 0.08f);
+                        float maxVelocityCap = headSpinVelocityMult * 2.5f;
+                        if (maxVelocity > maxVelocityCap)
+                            maxVelocity = maxVelocityCap;
+
                         if (npc.velocity.Length() > maxVelocity)
                         {
                             npc.velocity.Normalize();
@@ -594,7 +625,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Shoot shadowflames (giant cursed skull projectiles) while charging in phase 4
                 if (phase4 && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                 {
-                    float shadowFlameGateValue = death ? 20f : 30f;
+                    float shadowFlameGateValue = death ? 16f : 24f;
                     int shadowFlameLimit = death ? 3 : 2;
                     if (calamityGlobalNPC.newAI[1] % shadowFlameGateValue == 0f && calamityGlobalNPC.newAI[1] < shadowFlameGateValue * shadowFlameLimit)
                     {
@@ -604,6 +635,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > 160f)
                             {
                                 float shadowFlameProjectileSpeed = death ? 5f : 4f;
+                                if (masterMode)
+                                    shadowFlameProjectileSpeed *= 1.25f;
+
                                 Vector2 initialProjectileVelocity = npc.Center.DirectionTo(Main.player[npc.target].Center) * shadowFlameProjectileSpeed;
                                 int type = ProjectileID.Shadowflames;
                                 int damage = npc.GetProjectileDamage(type);
@@ -706,12 +740,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         headSpinVelocityMult += velocityBoost;
                 }
 
-                float altDashStopDistance = death ? 240f : 400f;
+                float altDashStopDistance = death ? (masterMode ? 210f : 240f) : (masterMode ? 320f : 400f);
                 float headSpeedIncreaseDist = phase3 ? altDashStopDistance : 160f;
                 if (headSpinTargetDist > headSpeedIncreaseDist)
                 {
                     float velocityMult = phase3 ? 0.00075f : 0.0015f;
-                    float baseDistanceVelocityMult = 1f + MathHelper.Clamp((headSpinTargetDist - headSpeedIncreaseDist) * 0.0015f, 0.05f, 1.5f);
+                    float baseDistanceVelocityMult = 1f + MathHelper.Clamp((headSpinTargetDist - headSpeedIncreaseDist) * 0.0015f, 0.05f, masterMode ? 2f : 1.5f);
                     headSpinVelocityMult *= baseDistanceVelocityMult;
                 }
 
