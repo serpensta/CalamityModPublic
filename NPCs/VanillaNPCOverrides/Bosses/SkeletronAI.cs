@@ -158,13 +158,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             switch (numHandsAlive)
             {
                 case 0:
-                    numProj = Main.getGoodWorld ? 36 : death ? 12 : 8;
+                    numProj = Main.getGoodWorld ? 36 : death ? 9 : 7;
                     spread = MathHelper.ToRadians(Main.getGoodWorld ? 180 : death ? 90 : 82);
                     headSpinVelocityMult = bossRush ? (phase3 ? 18f : 12f) : (phase3 ? 13.5f : 6f);
                     break;
 
                 case 1:
-                    numProj = Main.getGoodWorld ? 27 : death ? 9 : 6;
+                    numProj = Main.getGoodWorld ? 27 : death ? 7 : 5;
                     spread = MathHelper.ToRadians(Main.getGoodWorld ? 150 : death ? 76 : 68);
                     headSpinVelocityMult = bossRush ? (phase3 ? 15f : 10f) : (phase3 ? 12.75f : 5f);
                     break;
@@ -187,6 +187,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     headSpinVelocityMult = bossRush ? (phase3 ? 10.5f : 7f) : (phase3 ? 10.5f : 3.5f);
                     break;
             }
+
+            // Reduce the amount of skulls per spread in later phases due to near-constant teleporting
+            if (phase4)
+                numProj--;
+            if (phase5)
+                numProj--;
 
             if (death)
                 headSpinVelocityMult *= 1.2f;
@@ -398,20 +404,30 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.ai[2] += 1f + chargePhaseChangeRateBoost;
                 npc.localAI[1] += 1f + chargePhaseChangeRateBoost;
                 float chargePhaseGateValue = ChargeGateValue;
+                if (npc.localAI[1] > chargePhaseGateValue)
+                    npc.localAI[1] = chargePhaseGateValue;
+
+                float forcedMoveAwayTime = death ? 30f : 60f;
                 float canChargeDistance = phase3 ? 800f : 320f; // 20 tile distance, 50 tile distance in phase 3
+                bool hasMovedForcedDistance = npc.localAI[2] >= forcedMoveAwayTime;
                 bool canCharge = Vector2.Distance(Main.player[npc.target].Center, npc.Center) >= canChargeDistance;
                 bool charge = npc.ai[2] >= chargePhaseGateValue && canCharge;
                 if (charge)
                 {
-                    npc.ai[2] = 0f;
-                    npc.ai[1] = 1f;
-                    npc.localAI[1] = chargePhaseGateValue;
-                    calamityGlobalNPC.newAI[1] = 0f;
+                    npc.localAI[2] += 1f;
+                    if (hasMovedForcedDistance || !phase3)
+                    {
+                        npc.ai[2] = 0f;
+                        npc.ai[1] = 1f;
+                        npc.localAI[1] = chargePhaseGateValue;
+                        npc.localAI[2] = 0f;
+                        calamityGlobalNPC.newAI[1] = 0f;
 
-                    npc.TargetClosest();
-                    npc.SyncExtraAI();
-                    npc.SyncVanillaLocalAI();
-                    npc.netUpdate = true;
+                        npc.TargetClosest();
+                        npc.SyncExtraAI();
+                        npc.SyncVanillaLocalAI();
+                        npc.netUpdate = true;
+                    }
                 }
 
                 float headYAcceleration = 0.04f + (death ? 0.04f * (1f - lifeRatio) : 0f);
@@ -437,7 +453,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 bool moveAwayBeforeCharge = npc.ai[2] >= moveAwayGateValue;
                 if (moveAwayBeforeCharge)
                 {
-                    if (!canCharge)
+                    if (!canCharge || !hasMovedForcedDistance)
                     {
                         float maxAcceleration = headXAcceleration + headYAcceleration + (npc.ai[2] - moveAwayGateValue) * (phase5 ? 0.002f : 0.001f);
                         npc.velocity += Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * -maxAcceleration;
@@ -690,7 +706,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         headSpinVelocityMult += velocityBoost;
                 }
 
-                float altDashStopDistance = death ? 240f : 280f;
+                float altDashStopDistance = death ? 240f : 400f;
                 float headSpeedIncreaseDist = phase3 ? altDashStopDistance : 160f;
                 if (headSpinTargetDist > headSpeedIncreaseDist)
                 {
