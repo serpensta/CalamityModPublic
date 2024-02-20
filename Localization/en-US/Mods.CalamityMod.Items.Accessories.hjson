@@ -811,6 +811,7 @@ GiantTortoiseShell: {
 	DisplayName: Giant Tortoise Shell
 	Tooltip:
 		'''
+		Grants immunity to knockback
 		5% increased damage reduction
 		10% reduced dash velocity
 		Taking a hit will remove the dash penalty and reduce defense and damage reduction for 5 seconds
@@ -1753,6 +1754,7 @@ TheAbsorber: {
 	Tooltip:
 		'''
 		12% increased movement and jump speed
+		Grants immunity to knockback
 		Enemies take immense damage when they touch you and are afflicted with a damaging sickness debuff that reduces damage reduction significantly
 		Using a healing potion will spawn a cleansing aura
 		Walking into the aura removes all debuffs and defense damage one time
