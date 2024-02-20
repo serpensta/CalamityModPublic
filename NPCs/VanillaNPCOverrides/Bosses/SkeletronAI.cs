@@ -817,7 +817,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Emit dust
             if (npc.ai[1] != 2f && npc.ai[1] != 3f && numHandsAlive != 0)
             {
-                int idleDust = Dust.NewDust(new Vector2(npc.position.X + (npc.width / 2) - 15f - npc.velocity.X * 5f, npc.position.Y + npc.height - 2f), 30, 10, 5, -npc.velocity.X * 0.2f, 3f, 0, default, 2f);
+                int idleDust = Dust.NewDust(new Vector2(npc.Center.X - 15f - npc.velocity.X * 5f, npc.position.Y + npc.height - 2f), 30, 10, 5, -npc.velocity.X * 0.2f, 3f, 0, default, 2f);
                 Main.dust[idleDust].noGravity = true;
                 Main.dust[idleDust].velocity.X = Main.dust[idleDust].velocity.X * 1.3f;
                 Main.dust[idleDust].velocity.X = Main.dust[idleDust].velocity.X + npc.velocity.X * 0.4f;
@@ -1216,12 +1216,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.TargetClosest();
                 npc.ai[0] = 1f;
-                int num148 = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2)), (int)npc.position.Y + npc.height / 2, NPCID.SkeletronHand, npc.whoAmI);
+                int num148 = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)npc.Center.Y, NPCID.SkeletronHand, npc.whoAmI);
                 Main.npc[num148].ai[0] = -1f;
                 Main.npc[num148].ai[1] = npc.whoAmI;
                 Main.npc[num148].target = npc.target;
                 Main.npc[num148].netUpdate = true;
-                num148 = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2)), (int)npc.position.Y + npc.height / 2, NPCID.SkeletronHand, npc.whoAmI);
+                num148 = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)npc.Center.Y, NPCID.SkeletronHand, npc.whoAmI);
                 Main.npc[num148].ai[0] = 1f;
                 Main.npc[num148].ai[1] = npc.whoAmI;
                 Main.npc[num148].ai[3] = 150f;
@@ -1271,8 +1271,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[2] % num151 == 0f)
                     {
                         Vector2 center3 = npc.Center;
-                        float num152 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - center3.X;
-                        float num153 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - center3.Y;
+                        float num152 = Main.player[npc.target].Center.X - center3.X;
+                        float num153 = Main.player[npc.target].Center.Y - center3.Y;
                         float num154 = (float)Math.Sqrt(num152 * num152 + num153 * num153);
                         if (Collision.CanHit(center3, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                         {
@@ -1280,8 +1280,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (numHands == 0 || Main.masterMode)
                                 num155 += 2f;
 
-                            float num156 = Main.player[npc.target].position.X + (float)Main.player[npc.target].width * 0.5f - center3.X + (float)Main.rand.Next(-20, 21);
-                            float num157 = Main.player[npc.target].position.Y + (float)Main.player[npc.target].height * 0.5f - center3.Y + (float)Main.rand.Next(-20, 21);
+                            float num156 = Main.player[npc.target].Center.X - center3.X + (float)Main.rand.Next(-20, 21);
+                            float num157 = Main.player[npc.target].Center.Y - center3.Y + (float)Main.rand.Next(-20, 21);
                             float num158 = (float)Math.Sqrt(num156 * num156 + num157 * num157);
                             num158 = num155 / num158;
                             num156 *= num158;
@@ -1357,7 +1357,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.velocity.Y = 0f - num162;
                 }
 
-                if (npc.position.X + (float)(npc.width / 2) > Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))
+                if (npc.Center.X > Main.player[npc.target].Center.X)
                 {
                     if (npc.velocity.X > 0f)
                         npc.velocity.X *= 0.98f;
@@ -1367,7 +1367,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.velocity.X = num164;
                 }
 
-                if (npc.position.X + (float)(npc.width / 2) < Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))
+                if (npc.Center.X < Main.player[npc.target].Center.X)
                 {
                     if (npc.velocity.X < 0f)
                         npc.velocity.X *= 0.98f;
@@ -1426,9 +1426,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 npc.rotation += (float)npc.direction * 0.3f;
-                Vector2 vector20 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num172 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector20.X;
-                float num173 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector20.Y;
+                Vector2 vector20 = npc.Center;
+                float num172 = Main.player[npc.target].Center.X - vector20.X;
+                float num173 = Main.player[npc.target].Center.Y - vector20.Y;
                 float num174 = (float)Math.Sqrt(num172 * num172 + num173 * num173);
                 float num175 = 1.5f;
                 npc.damage = npc.GetAttackDamage_LerpBetweenFinalValues(npc.defDamage, (float)npc.defDamage * 1.3f);
@@ -1488,9 +1488,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.damage = 1000;
                 npc.defense = 9999;
                 npc.rotation += (float)npc.direction * 0.3f;
-                Vector2 vector21 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num176 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector21.X;
-                float num177 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector21.Y;
+                Vector2 vector21 = npc.Center;
+                float num176 = Main.player[npc.target].Center.X - vector21.X;
+                float num177 = Main.player[npc.target].Center.Y - vector21.Y;
                 float num178 = (float)Math.Sqrt(num176 * num176 + num177 * num177);
                 num178 = 8f / num178;
                 npc.velocity.X = num176 * num178;
@@ -1511,7 +1511,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (npc.ai[1] != 2f && npc.ai[1] != 3f && (numHands != 0 || !Main.expertMode))
             {
-                int num179 = Dust.NewDust(new Vector2(npc.position.X + (float)(npc.width / 2) - 15f - npc.velocity.X * 5f, npc.position.Y + (float)npc.height - 2f), 30, 10, 5, (0f - npc.velocity.X) * 0.2f, 3f, 0, default(Color), 2f);
+                int num179 = Dust.NewDust(new Vector2(npc.Center.X - 15f - npc.velocity.X * 5f, npc.position.Y + (float)npc.height - 2f), 30, 10, 5, (0f - npc.velocity.X) * 0.2f, 3f, 0, default(Color), 2f);
                 Main.dust[num179].noGravity = true;
                 Main.dust[num179].velocity.X *= 1.3f;
                 Main.dust[num179].velocity.X += npc.velocity.X * 0.4f;
@@ -1572,7 +1572,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.velocity.Y = -6f;
                     }
 
-                    if (npc.position.X + (float)(npc.width / 2) > Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 120f * npc.ai[0])
+                    if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 120f * npc.ai[0])
                     {
                         if (npc.velocity.X > 0f)
                             npc.velocity.X *= 0.96f;
@@ -1582,7 +1582,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.velocity.X = 8f;
                     }
 
-                    if (npc.position.X + (float)(npc.width / 2) < Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 120f * npc.ai[0])
+                    if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 120f * npc.ai[0])
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X *= 0.96f;
@@ -1628,7 +1628,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 npc.velocity.Y = -3f;
                         }
 
-                        if (npc.position.X + (float)(npc.width / 2) > Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0])
+                        if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                         {
                             if (npc.velocity.X > 0f)
                                 npc.velocity.X *= 0.96f;
@@ -1638,7 +1638,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 npc.velocity.X = 8f;
                         }
 
-                        if (npc.position.X + (float)(npc.width / 2) < Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0])
+                        if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                         {
                             if (npc.velocity.X < 0f)
                                 npc.velocity.X *= 0.96f;
@@ -1668,7 +1668,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.velocity.Y = -3f;
                     }
 
-                    if (npc.position.X + (float)(npc.width / 2) > Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0])
+                    if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                     {
                         if (npc.velocity.X > 0f)
                             npc.velocity.X *= 0.96f;
@@ -1678,7 +1678,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.velocity.X = 8f;
                     }
 
-                    if (npc.position.X + (float)(npc.width / 2) < Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0])
+                    if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X *= 0.96f;
@@ -1689,8 +1689,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                 }
 
-                Vector2 vector22 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num181 = Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0] - vector22.X;
+                Vector2 vector22 = npc.Center;
+                float num181 = Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0] - vector22.X;
                 float num182 = Main.npc[(int)npc.ai[1]].position.Y + 230f - vector22.Y;
                 float num183 = (float)Math.Sqrt(num181 * num181 + num182 * num182);
                 npc.rotation = (float)Math.Atan2(num182, num181) + MathHelper.PiOver2;
@@ -1700,8 +1700,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Avoid cheap bullshit
                 npc.damage = 0;
 
-                Vector2 vector23 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num184 = Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0] - vector23.X;
+                Vector2 vector23 = npc.Center;
+                float num184 = Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0] - vector23.X;
                 float num185 = Main.npc[(int)npc.ai[1]].position.Y + 230f - vector23.Y;
                 float num186 = (float)Math.Sqrt(num184 * num184 + num185 * num185);
                 npc.rotation = (float)Math.Atan2(num185, num184) + MathHelper.PiOver2;
@@ -1723,9 +1723,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     npc.TargetClosest();
                     npc.ai[2] = 2f;
-                    vector23 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                    num184 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector23.X;
-                    num185 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector23.Y;
+                    vector23 = npc.Center;
+                    num184 = Main.player[npc.target].Center.X - vector23.X;
+                    num185 = Main.player[npc.target].Center.Y - vector23.Y;
                     num186 = (float)Math.Sqrt(num184 * num184 + num185 * num185);
                     num186 = ((!Main.expertMode) ? (18f / num186) : ((Main.masterMode ? 24f : 21f) / num186));
                     npc.velocity.X = num184 * num186;
@@ -1751,8 +1751,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Avoid cheap bullshit
                 npc.damage = 0;
 
-                Vector2 vector24 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num187 = Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 200f * npc.ai[0] - vector24.X;
+                Vector2 vector24 = npc.Center;
+                float num187 = Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0] - vector24.X;
                 float num188 = Main.npc[(int)npc.ai[1]].position.Y + 230f - vector24.Y;
                 float num189 = (float)Math.Sqrt(num187 * num187 + num188 * num188);
                 npc.rotation = (float)Math.Atan2(num188, num187) + MathHelper.PiOver2;
@@ -1771,16 +1771,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 else if (npc.velocity.X > 8f)
                     npc.velocity.X = 8f;
 
-                if (npc.position.X + (float)(npc.width / 2) < Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) - 500f || npc.position.X + (float)(npc.width / 2) > Main.npc[(int)npc.ai[1]].position.X + (float)(Main.npc[(int)npc.ai[1]].width / 2) + 500f)
+                if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 500f || npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 500f)
                 {
                     // Set damage
                     npc.damage = npc.defDamage;
 
                     npc.TargetClosest();
                     npc.ai[2] = 5f;
-                    vector24 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                    num187 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector24.X;
-                    num188 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector24.Y;
+                    vector24 = npc.Center;
+                    num187 = Main.player[npc.target].Center.X - vector24.X;
+                    num188 = Main.player[npc.target].Center.Y - vector24.Y;
                     num189 = (float)Math.Sqrt(num187 * num187 + num188 * num188);
                     num189 = ((!Main.expertMode) ? (17f / num189) : ((Main.masterMode ? 25f : 22f) / num189));
                     npc.velocity.X = num187 * num189;
@@ -1788,7 +1788,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.netUpdate = true;
                 }
             }
-            else if (npc.ai[2] == 5f && ((npc.velocity.X > 0f && npc.position.X + (float)(npc.width / 2) > Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2)) || (npc.velocity.X < 0f && npc.position.X + (float)(npc.width / 2) < Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))))
+            else if (npc.ai[2] == 5f && ((npc.velocity.X > 0f && npc.Center.X > Main.player[npc.target].Center.X) || (npc.velocity.X < 0f && npc.Center.X < Main.player[npc.target].Center.X)))
             {
                 // Avoid cheap bullshit
                 npc.damage = 0;
