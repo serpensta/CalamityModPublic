@@ -357,9 +357,10 @@ ChaliceOfTheBloodGod: {
 	Tooltip:
 		'''
 		Increases max HP by 25%
+		+2 HP/s life regen and reduces the cooldown of healing potions by 25%
 		Taking more than 5 damage converts the hit into a damage over time bleed debuff
 		This bleeding does not interfere with life regeneration
-		Drinking a healing potion removes half of the remaining bleed damage
+		Drinking a healing potion cancels up to 50% of its heal value of remaining bleed damage
 		Unequipping this accessory while bleeding inflicts the remaining damage instantly
 		'All that for a drop of blood...'
 		'''
