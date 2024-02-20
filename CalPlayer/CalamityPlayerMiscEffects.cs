@@ -611,8 +611,8 @@ namespace CalamityMod.CalPlayer
             if (AdrenalineEnabled && nanomachinesLockoutTimer == 0)
             {
                 adrenaline += adrenalineDiff;
-                if (adrenaline < 0)
-                    adrenaline = 0;
+                if (adrenaline < 0f)
+                    adrenaline = 0f;
 
                 if (adrenaline >= adrenalineMax)
                 {

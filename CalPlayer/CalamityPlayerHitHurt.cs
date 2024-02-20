@@ -1406,6 +1406,17 @@ namespace CalamityMod.CalPlayer
             if (freeDodgeFromShieldAbsorption)
             {
                 freeDodgeFromShieldAbsorption = false;
+
+                // 20FEB2024: Ozzatron: Hits fully absorbed by shields remove half of your current Adrenaline.
+                if (AdrenalineEnabled)
+                {
+                    // Draedon's Heart instead pauses for half the usual duration.
+                    if (draedonsHeart)
+                        nanomachinesLockoutTimer += DraedonsHeart.NanomachinePauseAfterShieldDamage;
+                    else if (adrenaline >= 0f)
+                        adrenaline /= 2f;
+                }
+
                 return true;
             }
 
@@ -2052,7 +2063,7 @@ namespace CalamityMod.CalPlayer
 
                     // If using Draedon's Heart and not actively healing with Nanomachines, pause generation briefly.
                     if (draedonsHeart && !adrenalineModeActive)
-                        nanomachinesLockoutTimer = DraedonsHeart.NanomachinePauseAfterDamage;
+                        nanomachinesLockoutTimer += DraedonsHeart.NanomachinePauseAfterDamage;
                 }
 
                 if (evilSmasherBoost > 0)

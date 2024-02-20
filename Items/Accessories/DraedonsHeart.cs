@@ -20,8 +20,11 @@ namespace CalamityMod.Items.Accessories
         internal static readonly int NanomachinesDuration = 120;
         // Health gained per frame while using Nanomachines.
         internal static readonly int NanomachinesHealPerFrame = 3;
+
         // Duration of time where Nanomachines won't accumulate after taking damage, in frames.
         internal static readonly int NanomachinePauseAfterDamage = 60;
+        // Same as above, but for hits that are fully absorbed by a shield.
+        internal static readonly int NanomachinePauseAfterShieldDamage = 30;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(
             (ContactDamageReduction * 100).ToString("N0"),
