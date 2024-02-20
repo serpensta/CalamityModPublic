@@ -3097,16 +3097,14 @@ namespace CalamityMod.NPCs
                     /*case NPCID.TheDestroyer:
                     case NPCID.TheDestroyerBody:
                     case NPCID.TheDestroyerTail:
-                        return DestroyerAI.VanillaDestroyerAI(npc, Mod);
-                    case NPCID.Probe:
-                        return DestroyerAI.VanillaProbeAI(npc, Mod);
+                        return DestroyerAI.VanillaDestroyerAI(npc, Mod);*/
 
                     case NPCID.Retinazer:
                         return TwinsAI.VanillaRetinazerAI(npc, Mod);
                     case NPCID.Spazmatism:
                         return TwinsAI.VanillaSpazmatismAI(npc, Mod);
 
-                    case NPCID.SkeletronPrime:
+                    /*case NPCID.SkeletronPrime:
                         return SkeletronPrimeAI.VanillaSkeletronPrimeAI(npc, Mod);
                     case NPCID.PrimeLaser:
                         return SkeletronPrimeAI.VanillaPrimeLaserAI(npc, Mod);
