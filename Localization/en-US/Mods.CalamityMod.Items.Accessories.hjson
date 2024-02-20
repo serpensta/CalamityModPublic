@@ -555,9 +555,8 @@ DraedonsHeart: {
 	Tooltip:
 		'''
 		{0}% reduced contact damage from enemies
-		Reduces defense damage taken by {1}%
 		[NANODESC]
-		With full Nanomachines, press [KEY] to heal {2} health over {3} {^3:second;seconds}
+		With full Nanomachines, press [KEY] to heal {1} health over {2} {^2:second;seconds}
 		While healing, you take [DR]% less damage
 		'Nanomachines, son'
 		'''

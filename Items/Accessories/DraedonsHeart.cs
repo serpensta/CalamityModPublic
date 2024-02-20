@@ -15,7 +15,6 @@ namespace CalamityMod.Items.Accessories
     {
         public new string LocalizationCategory => "Items.Accessories";
         private const double ContactDamageReduction = 0.15D;
-        public const double DefenseDamageMultiplier = 0.5D;
 
         // Duration of Nanomachines in frames.
         internal static readonly int NanomachinesDuration = 120;
@@ -26,7 +25,6 @@ namespace CalamityMod.Items.Accessories
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(
             (ContactDamageReduction * 100).ToString("N0"),
-            (100 - (DefenseDamageMultiplier * 100)).ToString("N0"),
             NanomachinesHealPerFrame * NanomachinesDuration,
             NanomachinesDuration / 60);
 
@@ -59,9 +57,6 @@ namespace CalamityMod.Items.Accessories
             modPlayer.hadNanomachinesLastFrame = true;
             modPlayer.AdrenalineDuration = NanomachinesDuration;
             modPlayer.contactDamageReduction += ContactDamageReduction;
-
-            // Multiplies the player's defense damage ratio directly, instead of being hardcoded into various places
-            modPlayer.defenseDamageRatio *= DefenseDamageMultiplier;
         }
 
         public override void ModifyTooltips(List<TooltipLine> list)
