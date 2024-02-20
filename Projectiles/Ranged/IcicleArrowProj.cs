@@ -97,8 +97,8 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.velocity = new Vector2(0, -5.5f).RotatedByRandom(0.25f) * Main.rand.NextFloat(0.75f, 1.1f);
                 for (int k = 0; k < 3; k++)
                 {
-                    Vector2 velocity = startVelocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.4f, 0.8f);
-                    SparkParticle burst = new SparkParticle(Projectile.Center + velocity * 5, velocity, false, 6, 1f, Color.SkyBlue);
+                    Vector2 velocity = startVelocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.3f, 0.85f);
+                    WaterFlavoredParticle burst = new WaterFlavoredParticle(Projectile.Center + velocity * 3f, velocity, false, 5, 0.65f, Color.SkyBlue);
                     GeneralParticleHandler.SpawnParticle(burst);
                 }
             }
@@ -106,7 +106,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (falling)
-                Projectile.damage = (int)(Projectile.damage * 1.5f);
+                Projectile.damage = (int)(Projectile.damage * 1.35f);
         }
         public override void OnKill(int timeLeft)
         {

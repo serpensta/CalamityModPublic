@@ -51,7 +51,11 @@ BubonicRound: {
 
 ElysianArrow: {
 	DisplayName: Elysian Arrow
-	Tooltip: Summons meteors from the sky on impact
+	Tooltip: 
+        '''
+		Arrows carrying profaned energy
+        Summons purifying light from above and below on impact
+		'''
 }
 
 FlashRound: {
@@ -95,11 +99,11 @@ HyperiusBullet: {
 IcicleArrow: {
 	DisplayName: Icicle Arrow
 	Tooltip:
-        '''
-        Ice arrows with an enchanted tip
-        These arrows quickly freeze into falling icicles that deal increased damage
-        Hitting enemies or tiles before being frozen causes the arrow to fly upwards
-        '''
+		'''
+		Ice arrows with an enchanted tip
+		These arrows quickly freeze into falling icicles that deal increased damage
+		Hitting enemies or tiles before being frozen causes the arrow to fly upwards
+		'''
 }
 
 HailstormBullet: {
