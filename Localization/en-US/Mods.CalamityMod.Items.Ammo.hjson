@@ -51,10 +51,10 @@ BubonicRound: {
 
 ElysianArrow: {
 	DisplayName: Elysian Arrow
-	Tooltip: 
-        '''
+	Tooltip:
+		'''
 		Arrows carrying profaned energy
-        Summons purifying light from above and below on impact
+		Summons purifying light from above and below on impact
 		'''
 }
 
@@ -152,7 +152,11 @@ RubberMortarRound: {
 
 TerraArrow: {
 	DisplayName: Terra Arrow
-	Tooltip: Travels incredibly quickly and explodes into more arrows when it hits a certain velocity
+		Tooltip:
+        '''
+        Fires an energy arrow that quickly splits into two arrows
+        These arrows ignore 25 points of defense
+        '''
 }
 
 TerraBullet: {

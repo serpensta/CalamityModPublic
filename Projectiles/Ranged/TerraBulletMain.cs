@@ -26,32 +26,24 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 600;
-            Projectile.alpha = 255;
             Projectile.extraUpdates = 5;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
 
         public override void AI()
         {
-            Lighting.AddLight(Projectile.Center, 0f, 0.4f, 0f);
+            Lighting.AddLight(Projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
 
-            // localAI is used as an invisibility counter. The bullet fades into existence after 15 startup frames.
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > 4f)
             {
-                // After 15 frames, the alpha will be exactly 0
-                if (Projectile.alpha > 0)
-                    Projectile.alpha -= 17;
-                for (int b = 0; b < 2; b++)
-                {
-                    Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(5) ? 131 : 294, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.5f));
-                    dust.noGravity = true;
-                    dust.scale = Main.rand.NextFloat(0.45f, 0.65f);
-                    if (dust.type == 131)
-                        dust.scale = Main.rand.NextFloat(0.35f, 0.55f);
-                    else
-                        dust.fadeIn = 0.5f;
-                }
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(5) ? 131 : 294, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.45f, 0.65f);
+                if (dust.type == 131)
+                    dust.scale = Main.rand.NextFloat(0.35f, 0.55f);
+                else
+                    dust.fadeIn = 0.5f;
             }
         }
 
