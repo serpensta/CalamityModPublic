@@ -1463,10 +1463,10 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.QueenSlimeGelAttack)
                 {
-                    // Phase 1 and 2 projectiles do not bounce and do not have gravity.
+                    // Phase 1 and 2 projectiles do not bounce.
                     if (projectile.ai[1] == -2f)
                     {
-                        if (projectile.alpha == 0 && Main.rand.Next(3) == 0)
+                        if (projectile.alpha == 0 && Main.rand.NextBool(3))
                         {
                             Color newColor = NPC.AI_121_QueenSlime_GetDustColor();
                             newColor.A = 150;
@@ -1483,6 +1483,10 @@ namespace CalamityMod.Projectiles
                             projectile.alpha = 0;
 
                         projectile.rotation += (Math.Abs(projectile.velocity.X) + Math.Abs(projectile.velocity.Y)) * 0.05f;
+
+                        projectile.velocity.Y += 0.1f;
+                        if (projectile.velocity.Y > 16f)
+                            projectile.velocity.Y = 16f;
 
                         if (CalamityWorld.LegendaryMode && projectile.velocity.Length() > 2f)
                             projectile.velocity *= 0.985f;
@@ -1502,7 +1506,7 @@ namespace CalamityMod.Projectiles
                             projectile.frame = Main.rand.Next(3);
                         }
 
-                        if (projectile.alpha == 0 && Main.rand.Next(3) == 0)
+                        if (projectile.alpha == 0 && Main.rand.NextBool(3))
                         {
                             Color newColor = new Color(78, 136, 255, 150);
                             Dust slime = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 4, 0f, 0f, 50, newColor, 1.2f);
