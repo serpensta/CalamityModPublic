@@ -63,7 +63,6 @@ namespace CalamityMod.Items.Accessories
             }
         }
 
-
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 30));

@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
 
 namespace CalamityMod.Items.Accessories.Wings
 {
@@ -62,7 +62,7 @@ namespace CalamityMod.Items.Accessories.Wings
             player.noFallDmg = true;
             modPlayer.tracersDust = !hideVisual;
             modPlayer.elysianWingsDust = !hideVisual;
-            modPlayer.tracersSeraph = true;
+            modPlayer.tracersSeraph = true; // Grants immunity to Auric Rejection and other walk-on-block effects
         }
 
         public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)

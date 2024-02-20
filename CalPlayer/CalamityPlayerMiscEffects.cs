@@ -611,8 +611,8 @@ namespace CalamityMod.CalPlayer
             if (AdrenalineEnabled && nanomachinesLockoutTimer == 0)
             {
                 adrenaline += adrenalineDiff;
-                if (adrenaline < 0)
-                    adrenaline = 0;
+                if (adrenaline < 0f)
+                    adrenaline = 0f;
 
                 if (adrenaline >= adrenalineMax)
                 {
@@ -672,7 +672,6 @@ namespace CalamityMod.CalPlayer
                 // Seraph Tracers give immunity to block contact effects
                 if (!tracersSeraph)
                 {
-
                     // Astral Ore inflicts Astral Infection briefly on contact
                     if (tile.TileType == astralOreID)
                         Player.AddBuff(ModContent.BuffType<AstralInfectionDebuff>(), 2);
