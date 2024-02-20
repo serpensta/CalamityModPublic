@@ -29,14 +29,14 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = Main.zenithWorld ? 3 : 1;
             Projectile.extraUpdates = 2;
             Projectile.timeLeft = 300;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
         public override void AI()
         {
-            Projectile.scale = 1.4f;
+            Projectile.scale = Main.zenithWorld ? 2f : 1.4f;
             Projectile.rotation = Projectile.velocity.ToRotation();
             Time++;
 
@@ -88,16 +88,38 @@ namespace CalamityMod.Projectiles.Ranged
             // Music easter egg in GFB, and more!
             if (Main.zenithWorld)
             {
-                target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 45);
+                target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 60);
                 target.AddBuff(BuffID.ShadowFlame, 120);
                 GungeonMusicSystem.GUN();
+
+                //There's no chickens, so I'm using bunnies instead
+                if (target.life <= 0 && target.type != NPCID.Bunny && target.type != NPCID.ExplosiveBunny && target.type != NPCID.GoldBunny)
+                {
+                    SoundEngine.PlaySound(SoundID.NPCDeath7 with { Pitch = -0.7f }, Projectile.Center);
+                    NPC.NewNPC(target.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCID.Bunny);
+                }
             }
+            
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 120);
+
+            if (Main.zenithWorld)
+            {
+                target.AddBuff(BuffID.ShadowFlame, 120);
+                GungeonMusicSystem.GUN();
+
+                //You can turn your friends into bunnies too!
+                if (target.statLife <= 0)
+                {
+                    SoundEngine.PlaySound(SoundID.NPCDeath7 with { Pitch = -0.7f }, Projectile.Center);
+                    NPC.NewNPC(target.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCID.Bunny);
+                }
+            }
         }
+    
         public override bool PreDraw(ref Color lightColor)
         {
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.Crimson * 0.45f, 1);
