@@ -526,9 +526,9 @@ DeificAmulet: {
 	DisplayName: Deific Amulet
 	Tooltip:
 		'''
-		Causes stars to fall and grants increased immune time when damaged
-		+0.5 HP/s life regen
-		Reduces the cooldown of healing potions
+		Causes stars to fall and increases length of invincibility after taking damage
+		Grants bonus invincibility frames based on your missing health
+		This effect scales from 10 frames at full HP to 40 frames at 25% or less HP
 		'''
 }
 
@@ -1362,12 +1362,13 @@ RampartofDeities: {
 	DisplayName: Rampart of Deities
 	Tooltip:
 		'''
-		Causes stars to fall and gives increased immune time when damaged
-		+0.5 HP/s life regen and reduces the cooldown of healing potions
-		Absorbs 15% of damage done to players on your team
-		This effect is only active above 25% life
+		Causes stars to fall and increases length of invincibility after taking damage
+		Grants bonus invincibility frames based on your missing health
+		This effect scales from 10 frames at full HP to 40 frames at 25% or less HP
+		Being struck for over 200 damage grants 30 additional invincibility frames
 		Grants immunity to knockback
 		Puts a shell around the owner when below 50% life that reduces damage taken
+		Absorbs 25% of damage done to players on your team when above 25% life
 		'''
 }
 

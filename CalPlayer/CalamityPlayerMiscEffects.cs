@@ -672,7 +672,6 @@ namespace CalamityMod.CalPlayer
                 // Seraph Tracers give immunity to block contact effects
                 if (!tracersSeraph)
                 {
-
                     // Astral Ore inflicts Astral Infection briefly on contact
                     if (tile.TileType == astralOreID)
                         Player.AddBuff(ModContent.BuffType<AstralInfectionDebuff>(), 2);

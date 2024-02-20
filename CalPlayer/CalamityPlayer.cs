@@ -520,6 +520,7 @@ namespace CalamityMod.CalPlayer
         public bool transformer = false;
         public bool hideOfDeus = false;
         public bool dAmulet = false;
+        public bool rampartOfDeities = false;
         public bool gShell = false;
         public bool lAmbergris = false;
         public bool tortShell = false;
@@ -1649,6 +1650,7 @@ namespace CalamityMod.CalPlayer
             transformer = false;
             hideOfDeus = false;
             dAmulet = false;
+            rampartOfDeities = false;
             gShell = false;
             lAmbergris = false;
             tortShell = false;

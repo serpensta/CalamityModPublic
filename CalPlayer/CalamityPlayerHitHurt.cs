@@ -22,7 +22,6 @@ using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.Abyss;
-using CalamityMod.NPCs.ExoMechs.Apollo;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Other;
 using CalamityMod.NPCs.ProfanedGuardians;
@@ -2308,20 +2307,31 @@ namespace CalamityMod.CalPlayer
             if (Player.whoAmI == Main.myPlayer)
             {
                 int iFramesToAdd = 0;
-                if (tracersSeraph && hurtInfo.Damage > 200)
-                    iFramesToAdd += 30;
                 if (godSlayerThrowing && hurtInfo.Damage > 80)
                     iFramesToAdd += 30;
                 if (statigelSet && hurtInfo.Damage > 100)
                     iFramesToAdd += 30;
 
+                // Deific Amulet provides 10 to 40 bonus immunity frames when you get hit which scale with your missing health.
+                // If you only take 1 damage, you get 5 iframes.
+                // This effect is inherited by Rampart of Deities.
                 if (dAmulet)
                 {
-                    if (hurtInfo.Damage == 1)
-                        iFramesToAdd += 5;
+                    if (hurtInfo.Damage > 1)
+                    {
+                        float lifeRatio = (float)Player.statLife / Player.statLifeMax2;
+                        float iframeEffectivenessRatio = Utils.GetLerpValue(1.0f, 0.25f, lifeRatio, true);
+
+                        iFramesToAdd += (int)(iframeEffectivenessRatio * DeificAmulet.MaxBonusIFrames);
+                    }
                     else
-                        iFramesToAdd += 10;
+                        iFramesToAdd += 5;
                 }
+
+                // Ozzatron 20FEB2024: Moved extra iframes from Seraph Tracers to Rampart of Deities to counteract its loss of Charm of Myths
+                // This stacks with the above Deific Amulet effect
+                if (rampartOfDeities && hurtInfo.Damage > 200)
+                    iFramesToAdd += 30;
 
                 if (fabsolVodka)
                 {
@@ -2366,6 +2376,7 @@ namespace CalamityMod.CalPlayer
                         CalamityUtils.ProjectileRain(source, Player.Center, 400f, 100f, 500f, 800f, 29f, ModContent.ProjectileType<AstralStar>(), astralStarDamage, 5f, Player.whoAmI);
                     }
                 }
+                // TODO -- Make Deific Amulet and Rampart of Deities' retaliation effects way cooler
                 if (dAmulet)
                 {
                     var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<DeificAmulet>()));
