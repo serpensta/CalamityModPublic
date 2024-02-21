@@ -22,12 +22,12 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.arrow = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 20;
+            Projectile.timeLeft = 35;
             Projectile.extraUpdates = 8;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
-            Projectile.ArmorPenetration = 25;
+            Projectile.ArmorPenetration = 8;
             Projectile.tileCollide = false;
         }
 
@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 Projectile.damage = (int)(Projectile.damage * 0.18f);
                 Projectile.velocity *= 0.25f;
-                LineParticle spark = new LineParticle(Projectile.Center + Projectile.velocity * 4, Projectile.velocity * 2.95f, false, 7, 2f, Color.LimeGreen);
+                LineParticle spark = new LineParticle(Projectile.Center + Projectile.velocity * 4, Projectile.velocity * 4.95f, false, 9, 2.4f, Color.LimeGreen);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
             Projectile.ai[0]++;

@@ -1193,6 +1193,16 @@ namespace CalamityMod.CalPlayer
                     Main.player[Main.myPlayer].lifeSteal -= cooldown;
                 }
 
+                // Increases the degree to which Bloodfire Arrows contribute to the lifesteal cap
+                if (proj.type == ModContent.ProjectileType<BloodfireArrowProj>())
+                {
+                    float cooldown = 6;
+                    if (cooldown < 0f)
+                        cooldown = 0f;
+
+                    Main.player[Main.myPlayer].lifeSteal -= cooldown;
+                }
+
                 if (vampiricTalisman && proj.CountsAsClass<RogueDamageClass>() && crit)
                 {
                     float heal = MathHelper.Clamp(damage * 0.011f, 0f, 5f);

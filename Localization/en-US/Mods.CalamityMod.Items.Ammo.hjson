@@ -16,8 +16,9 @@ BloodfireArrow: {
 	DisplayName: Bloodfire Arrow
 	Tooltip:
 		'''
-		Accelerates your natural life regen on hit
-		When at high enough natural life regen, arrows will heal you
+		High-velocity arrows with a blood soaked tip
+		Firing these arrows will drain your health
+		Accelerates your natural life regen and heals you on hit
 		'''
 }
 
@@ -152,11 +153,11 @@ RubberMortarRound: {
 
 TerraArrow: {
 	DisplayName: Terra Arrow
-		Tooltip:
-        '''
-        Fires an energy arrow that quickly splits into two arrows
-        These arrows ignore 25 points of defense
-        '''
+	Tooltip:
+		'''
+		Fires an energy arrow that quickly splits into two arrows
+		These arrows ignore 25 points of defense
+		'''
 }
 
 TerraBullet: {

@@ -21,7 +21,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.extraUpdates = 2;
             Projectile.alpha = 255;
             Projectile.timeLeft = 450;
-            Projectile.ArmorPenetration = 25;
+            Projectile.ArmorPenetration = 8;
         }
         public override void AI()
         {

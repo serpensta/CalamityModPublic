@@ -4,13 +4,22 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using CalamityMod.Items.Ammo;
+using CalamityMod.Dusts;
+using CalamityMod.Particles;
+
 namespace CalamityMod.Projectiles.Ranged
 {
     public class NapalmArrowProj : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override string Texture => "CalamityMod/Items/Ammo/NapalmArrow";
-
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+        }
         public override void SetDefaults()
         {
             Projectile.width = 10;
@@ -26,96 +35,49 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void AI()
         {
+            Projectile.ai[1]++;
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
-            if (Main.rand.NextBool(5))
+            if (Projectile.ai[1] > 4)
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 6, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                float velMulti = Main.rand.NextFloat(0.1f, 0.75f);
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity * 2, 90, -Projectile.velocity.RotatedBy(0.45) * velMulti);
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.45f, 0.75f);
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity * 2, 90, -Projectile.velocity.RotatedBy(-0.45) * velMulti);
+                dust2.noGravity = true;
+                dust2.scale = Main.rand.NextFloat(0.45f, 0.75f);
             }
         }
 
         public override void OnKill(int timeLeft)
         {
-            Projectile.ExpandHitboxBy(32);
-            SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
-            for (int j = 0; j < 5; j++)
+            for (int b = 0; b < 20; b++)
             {
-                int fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
-                Main.dust[fire].velocity *= 3f;
-                if (Main.rand.NextBool())
-                {
-                    Main.dust[fire].scale = 0.5f;
-                    Main.dust[fire].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
-                }
+                int dustType = Main.rand.NextBool() ? 90 : ModContent.DustType<BrimstoneFlame>();
+                float velMulti = Main.rand.NextFloat(0.1f, 0.75f);
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, dustType, new Vector2(14, 14).RotatedByRandom(100) * velMulti);
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.75f, 1.35f);
             }
-            for (int k = 0; k < 10; k++)
-            {
-                int fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 3f);
-                Main.dust[fire].noGravity = true;
-                Main.dust[fire].velocity *= 5f;
-                fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
-                Main.dust[fire].velocity *= 2f;
-            }
-
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Vector2 goreSource = Projectile.Center;
-                int goreAmt = 3;
-                Vector2 source = new Vector2(goreSource.X - 24f, goreSource.Y - 24f);
-                for (int goreIndex = 0; goreIndex < goreAmt; goreIndex++)
-                {
-                    float velocityMult = 0.33f;
-                    if (goreIndex < (goreAmt / 3))
-                    {
-                        velocityMult = 0.66f;
-                    }
-                    if (goreIndex >= (2 * goreAmt / 3))
-                    {
-                        velocityMult = 1f;
-                    }
-                    Mod mod = ModContent.GetInstance<CalamityMod>();
-                    int type = Main.rand.Next(61, 64);
-                    int smoke = Gore.NewGore(Projectile.GetSource_Death(), source, default, type, 1f);
-                    Gore gore = Main.gore[smoke];
-                    gore.velocity *= velocityMult;
-                    gore.velocity.X += 1f;
-                    gore.velocity.Y += 1f;
-                    type = Main.rand.Next(61, 64);
-                    smoke = Gore.NewGore(Projectile.GetSource_Death(), source, default, type, 1f);
-                    gore = Main.gore[smoke];
-                    gore.velocity *= velocityMult;
-                    gore.velocity.X -= 1f;
-                    gore.velocity.Y += 1f;
-                    type = Main.rand.Next(61, 64);
-                    smoke = Gore.NewGore(Projectile.GetSource_Death(), source, default, type, 1f);
-                    gore = Main.gore[smoke];
-                    gore.velocity *= velocityMult;
-                    gore.velocity.X += 1f;
-                    gore.velocity.Y -= 1f;
-                    type = Main.rand.Next(61, 64);
-                    smoke = Gore.NewGore(Projectile.GetSource_Death(), source, default, type, 1f);
-                    gore = Main.gore[smoke];
-                    gore.velocity *= velocityMult;
-                    gore.velocity.X -= 1f;
-                    gore.velocity.Y -= 1f;
-                }
-            }
+            Particle pulse = new DirectionalPulseRing(Projectile.Center, Vector2.Zero, Color.Crimson, new Vector2(2f, 2f), Main.rand.NextFloat(12f, 25f), 0.1f, 0.5f, 15);
+            GeneralParticleHandler.SpawnParticle(pulse);
+            SoundEngine.PlaySound(SoundID.Item89 with { Volume = 0.45f, Pitch = -0.3f, PitchVariance = 0.15f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item69 with { Volume = 0.35f, Pitch = 0.9f, PitchVariance = 0.15f }, Projectile.Center);
 
             if (Projectile.owner == Main.myPlayer)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f, 0.1f);
-                    int flames = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity, ModContent.ProjectileType<TotalityFire>(), (int)(Projectile.damage * 0.3), 0f, Projectile.owner);
-                    if (flames.WithinBounds(Main.maxProjectiles))
-                    {
-                        Main.projectile[flames].DamageType = DamageClass.Ranged;
-                        Main.projectile[flames].penetrate = 3;
-                        Main.projectile[flames].usesLocalNPCImmunity = false;
-                        Main.projectile[flames].usesIDStaticNPCImmunity = true;
-                        Main.projectile[flames].idStaticNPCHitCooldown = 10;
-                    }
-                }
+                Projectile.damage = (int)(Projectile.damage * 0.3f);
+                Projectile.penetrate = -1;
+                Projectile.ExpandHitboxBy(110);
+                Projectile.Damage();
             }
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Ranged/BloodfireBulletProj").Value;
+            if (Projectile.ai[1] > 6)
+                CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White, 1, texture);
+            return true;
         }
     }
 }
