@@ -127,7 +127,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     for (int j = 0; j < 20; j++)
                         Dust.NewDust(npc.position, npc.width, npc.height, 5, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
 
-                    SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                    SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
                 }
 
                 // Percent life remaining
@@ -275,7 +275,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Charge sound
                     if (npc.ai[2] == 0f)
                     {
-                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
 
                         if (CalamityWorld.LegendaryMode)
                         {
@@ -1010,7 +1010,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     for (int num840 = 0; num840 < 20; num840++)
                         Dust.NewDust(npc.position, npc.width, npc.height, 5, (float)Main.rand.Next(-30, 31) * 0.2f, (float)Main.rand.Next(-30, 31) * 0.2f);
 
-                    SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                    SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
                 }
 
                 npc.dontTakeDamage = false;
