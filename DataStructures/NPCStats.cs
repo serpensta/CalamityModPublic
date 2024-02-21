@@ -629,7 +629,7 @@ namespace CalamityMod
                     186 } }, // 139 in rapid fire; 138 in non-rev master mode, 102 in rapid fire in non-rev master mode
                 { new Tuple<int, int>(NPCID.Retinazer, ModContent.ProjectileType<ScavengerLaser>()), new int[] { 70, 120, 136, 152, 210 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.CursedFlameHostile), new int[] { 50, 88, 120, 132, 180 } }, // 132 in non-rev master mode
-                { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.EyeFire), new int[] { 60, 108, 0, 0, 162 } }, // Only used in non-rev modes
+                { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.EyeFire), new int[] { 60, 108, 128, 140, 192 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ModContent.ProjectileType<Shadowflamethrower>()), new int[] { 70, 120, 148, 160, 222 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ModContent.ProjectileType<ShadowflameFireball>()), new int[] { 60, 100, 128, 140, 192 } },
 

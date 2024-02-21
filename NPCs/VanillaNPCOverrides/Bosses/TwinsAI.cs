@@ -783,7 +783,18 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (npc.ai[2] >= chargeTime + chargeGateValue)
                         {
                             npc.ai[2] = 0f;
-                            npc.ai[3] += 1f;
+
+                            float chargeIncrement = 1f;
+                            if (masterMode && Main.rand.NextBool() && npc.ai[3] < (spazAlive ? 1f : 3f))
+                            {
+                                chargeIncrement = 2f;
+
+                                // Net update due to the randomness in Master Mode
+                                npc.netUpdate = true;
+                            }
+
+                            npc.ai[3] += chargeIncrement;
+
                             npc.TargetClosest();
                             npc.rotation = retinazerHoverRotation;
                             float maxChargeAmt = spazAlive ? 2f : 4f;
@@ -1433,11 +1444,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.localAI[1] += 1f;
                             if (npc.localAI[1] > 2f)
                             {
+                                npc.ai[3] += 1f;
                                 npc.localAI[1] = 0f;
 
                                 float spazmatismShadowFireballSpeed = 6f;
                                 spazmatismShadowFireballSpeed += 2f * enrageScale;
-                                int type = ModContent.ProjectileType<Shadowflamethrower>();
+                                int type = npc.ai[3] % 2f == 0f ? ProjectileID.EyeFire : ModContent.ProjectileType<Shadowflamethrower>();
                                 int damage = npc.GetProjectileDamage(type);
 
                                 spazmatismFlamethrowerPos = npc.Center;
@@ -1675,7 +1687,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (npc.netSpam > 10)
                                 npc.netSpam = 10;
 
-                            npc.ai[3] += 1f;
+                            float chargeIncrement = 1f;
+                            if (masterMode && Main.rand.NextBool() && npc.ai[3] < (retAlive ? 2f : 3f))
+                                chargeIncrement = 2f;
+
+                            npc.ai[3] += chargeIncrement;
                             npc.ai[2] = 0f;
                             npc.ai[1] = 3f;
                         }
@@ -1739,14 +1755,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                         npc.ai[2] += 1f;
 
-                        // Fire shadowflames
+                        // Fire shadowflames and cursed fireballs
                         float fireRate = retAlive ? 30f : 20f;
                         if (npc.ai[2] % fireRate == 0f)
                         {
+                            npc.ai[3] += 1f;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 float velocity = 16f;
-                                int type = ModContent.ProjectileType<ShadowflameFireball>();
+                                int type = npc.ai[3] % 2f == 0f ? ProjectileID.CursedFlameHostile : ModContent.ProjectileType<ShadowflameFireball>();
                                 int damage = npc.GetProjectileDamage(type);
                                 Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center) * velocity;
                                 Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(projectileVelocity) * 4f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, retAlive ? 0f : 1f);
@@ -1759,6 +1776,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             npc.TargetClosest();
                             npc.ai[1] = 3f;
                             npc.ai[2] = -1f;
+                            npc.ai[3] = 0f;
                         }
 
                         npc.netUpdate = true;
@@ -1989,7 +2007,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 num424 = num429 / num424;
                                 num422 *= num424;
                                 num423 *= num424;
-                                int inaccuracy = Main.masterMode ? 20 : Main.expertMode ? 30 : 40;
+                                int inaccuracy = Main.masterMode ? 3 : Main.expertMode ? 6 : 9;
                                 num422 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.08f;
                                 num423 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.08f;
                                 vector43.X += num422 * 15f;
@@ -2588,7 +2606,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 num468 = num471 / num468;
                                 num466 *= num468;
                                 num467 *= num468;
-                                int inaccuracy = Main.masterMode ? 20 : Main.expertMode ? 30 : 40;
+                                int inaccuracy = Main.masterMode ? 10 : Main.expertMode ? 15 : 20;
                                 num466 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.05f;
                                 num467 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.05f;
                                 vector49.X += num466 * 4f;
@@ -2856,7 +2874,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             num485 = num487 / num485;
                             num483 *= num485;
                             num484 *= num485;
-                            int inaccuracy = Main.masterMode ? 5 : Main.expertMode ? 20 : 40;
+                            int inaccuracy = Main.masterMode ? 10 : Main.expertMode ? 15 : 20;
                             num484 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.01f;
                             num483 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.01f;
                             num484 += npc.velocity.Y * 0.5f;

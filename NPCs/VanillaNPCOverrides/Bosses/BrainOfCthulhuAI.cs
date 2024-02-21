@@ -1296,10 +1296,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.velocity.X *= velocityMult;
                 }
 
-                if (Main.netMode != NetmodeID.MultiplayerClient && ((Main.expertMode && Main.rand.NextBool(100)) || Main.rand.NextBool(200)))
+                if (Main.netMode != NetmodeID.MultiplayerClient && ((Main.expertMode && Main.rand.NextBool(Main.masterMode ? 50 : 100)) || Main.rand.NextBool(200)))
                 {
                     npc.TargetClosest();
-                    vector106 = new Vector2(npc.Center.X, npc.Center.Y);
+                    vector106 = npc.Center;
                     num866 = Main.player[npc.target].Center.X - vector106.X;
                     num867 = Main.player[npc.target].Center.Y - vector106.Y;
                     num868 = (float)Math.Sqrt(num866 * num866 + num867 * num867);

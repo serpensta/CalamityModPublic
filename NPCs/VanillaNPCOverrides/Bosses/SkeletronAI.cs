@@ -1280,8 +1280,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (numHands == 0 || Main.masterMode)
                                 num155 += 2f;
 
-                            float num156 = Main.player[npc.target].Center.X - center3.X + (float)Main.rand.Next(-20, 21);
-                            float num157 = Main.player[npc.target].Center.Y - center3.Y + (float)Main.rand.Next(-20, 21);
+                            float num156 = Main.player[npc.target].Center.X - center3.X + (float)Main.rand.Next(-5, 6);
+                            float num157 = Main.player[npc.target].Center.Y - center3.Y + (float)Main.rand.Next(-5, 6);
                             float num158 = (float)Math.Sqrt(num156 * num156 + num157 * num157);
                             num158 = num155 / num158;
                             num156 *= num158;

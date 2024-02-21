@@ -1351,8 +1351,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             num680 += stingerVelocityIncrease * 1.5f;
 
                         num680 += 7f * num644;
-                        int num681 = (int)(80f - 39f * num644);
-                        int num682 = (int)(40f - 19f * num644);
+                        int num681 = (int)(12f - 5f * num644);
+                        int num682 = (int)(6f - 2f * num644);
                         if (num681 < 1)
                             num681 = 1;
 
