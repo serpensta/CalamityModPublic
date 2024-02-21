@@ -97,7 +97,8 @@ namespace CalamityMod.Items.Placeables.Furniture.DevPaintings
 			"StipulateVenus",
 			"Tomat",
 			"Triangle",
-			"Xyk",
+            "Uncle Danny",
+            "Xyk",
 			"YuH",
             // Former devs
 			"Afzofa",
@@ -192,7 +193,6 @@ namespace CalamityMod.Items.Placeables.Furniture.DevPaintings
 			"Tinymanx",
 			"Trivaxy",
             "Uberransy",
-            "Uncle Danny",
 			"Vaikyia",
 			"Vladimier",
 			"Yatagarasu",
