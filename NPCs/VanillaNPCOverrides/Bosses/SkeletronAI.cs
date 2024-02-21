@@ -1430,7 +1430,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float num172 = Main.player[npc.target].Center.X - vector20.X;
                 float num173 = Main.player[npc.target].Center.Y - vector20.Y;
                 float num174 = (float)Math.Sqrt(num172 * num172 + num173 * num173);
-                float num175 = 1.5f;
+                float num175 = 3f;
                 npc.damage = npc.GetAttackDamage_LerpBetweenFinalValues(npc.defDamage, (float)npc.defDamage * 1.3f);
                 if (Main.expertMode)
                 {

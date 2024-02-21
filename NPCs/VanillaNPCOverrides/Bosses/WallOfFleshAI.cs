@@ -856,6 +856,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             npc.velocity.Y = 0f;
             npc.position.Y = num368;
+
             float masterModeVelocityBoost = 0f;
             if (Main.masterMode)
             {
@@ -865,36 +866,39 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 float lerpAmount = MathHelper.Clamp((distanceFromTargetX - velocityBoostStartDistance) / velocityBoostMaxDistance, 0f, 1f);
                 masterModeVelocityBoost = MathHelper.Lerp(0f, 8f, lerpAmount);
             }
-            float num369 = 1.5f + masterModeVelocityBoost;
-            if ((double)npc.life < (double)npc.lifeMax * 0.75)
-                num369 += 0.25f;
 
-            if ((double)npc.life < (double)npc.lifeMax * 0.5)
-                num369 += 0.4f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.25)
-                num369 += 0.5f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.1)
-                num369 += 0.6f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.66 && Main.expertMode)
-                num369 += 0.3f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.33 && Main.expertMode)
-                num369 += 0.3f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.05 && Main.expertMode)
-                num369 += 0.6f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.035 && Main.expertMode)
-                num369 += 0.6f;
-
-            if ((double)npc.life < (double)npc.lifeMax * 0.025 && Main.expertMode)
-                num369 += 0.6f;
-
-            if (Main.expertMode)
+            float num369 = (Main.expertMode ? 3.25f : 2.5f) + masterModeVelocityBoost;
+            if (!Main.expertMode)
             {
+                if ((double)npc.life < (double)npc.lifeMax * 0.75)
+                    num369 += 0.4f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.5)
+                    num369 += 0.5f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.25)
+                    num369 += 0.6f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.1)
+                    num369 += 0.7f;
+            }
+            else
+            {
+                if ((double)npc.life < (double)npc.lifeMax * 0.66)
+                    num369 += 0.3f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.33)
+                    num369 += 0.3f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.05)
+                    num369 += 0.6f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.035)
+                    num369 += 0.6f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.025)
+                    num369 += 0.6f;
+
                 num369 *= 1.35f;
                 num369 += 0.35f;
             }
