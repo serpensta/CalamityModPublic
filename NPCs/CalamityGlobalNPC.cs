@@ -1217,11 +1217,11 @@ namespace CalamityMod.NPCs
                     break;
 
                 case NPCID.Retinazer:
-                    npc.lifeMax = 22000;
+                    npc.lifeMax = 23500;
                     break;
 
                 case NPCID.Spazmatism:
-                    npc.lifeMax = 26000;
+                    npc.lifeMax = 24500;
                     break;
 
                 case NPCID.QueenSlimeBoss:

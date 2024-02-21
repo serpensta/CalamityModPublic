@@ -47,6 +47,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
 
             bool bossRush = BossRushEvent.BossRushActive;
+            bool masterMode = Main.masterMode || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
             // 10 seconds of resistance to prevent spawn killing
@@ -175,6 +176,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
             }
 
+            bool probeLaunched = npc.ai[2] == 1f;
             if (npc.type == NPCID.TheDestroyerBody)
             {
                 // Enrage, fire more cyan lasers
@@ -187,6 +189,20 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 {
                     if (calamityGlobalNPC.newAI[2] > 0f)
                         calamityGlobalNPC.newAI[2] -= 1f;
+                }
+
+                // Regenerate Probes in Master Mode
+                if (masterMode && probeLaunched)
+                {
+                    npc.localAI[2] += 1f;
+                    if (npc.localAI[2] >= 600f)
+                    {
+                        npc.ai[2] = 0f;
+                        npc.localAI[2] = 0f;
+
+                        npc.netUpdate = true;
+                        npc.SyncVanillaLocalAI();
+                    }
                 }
             }
 
@@ -207,7 +223,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (j == totalSegments)
                                 type = NPCID.TheDestroyerTail;
 
-                            int segment = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (npc.width / 2)), (int)(npc.position.Y + npc.height), type, npc.whoAmI);
+                            int segment = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)(npc.position.Y + npc.height), type, npc.whoAmI);
                             Main.npc[segment].ai[3] = npc.whoAmI;
                             Main.npc[segment].realLife = npc.whoAmI;
                             Main.npc[segment].ai[1] = index;
@@ -220,11 +236,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Laser breath in Death Mode
                     if (death)
                     {
-                        if (calamityGlobalNPC.newAI[0] < 600f)
+                        float laserBreathGateValue = 600f;
+                        if (calamityGlobalNPC.newAI[0] < laserBreathGateValue)
                             calamityGlobalNPC.newAI[0] += 1f;
 
                         if (npc.SafeDirectionTo(player.Center).AngleBetween((npc.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
-                            calamityGlobalNPC.newAI[0] >= 600f && Vector2.Distance(npc.Center, player.Center) > 480f &&
+                            calamityGlobalNPC.newAI[0] >= laserBreathGateValue && Vector2.Distance(npc.Center, player.Center) > 480f &&
                             Collision.CanHit(npc.position, npc.width, npc.height, player.position, player.width, player.height))
                         {
                             if (calamityGlobalNPC.newAI[0] % 30f == 0f)
@@ -233,8 +250,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 int type = ProjectileID.DeathLaser;
                                 int damage = npc.GetProjectileDamage(type);
                                 Vector2 projectileVelocity = (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
-                                int numProj = calamityGlobalNPC.newAI[0] % 60f == 0f ? 7 : 4;
-                                int spread = 54;
+                                int numProj = calamityGlobalNPC.newAI[0] % 60f == 0f ? (masterMode ? 9 : 7) : (masterMode ? 6 : 4);
+                                int spread = masterMode ? 75 : 54;
                                 float rotation = MathHelper.ToRadians(spread);
                                 for (int i = 0; i < numProj; i++)
                                 {
@@ -245,7 +262,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
 
                             calamityGlobalNPC.newAI[0] += 1f;
-                            if (calamityGlobalNPC.newAI[0] > 660f)
+                            if (calamityGlobalNPC.newAI[0] > laserBreathGateValue + 60f)
                                 calamityGlobalNPC.newAI[0] = 0f;
                         }
                     }
@@ -255,20 +272,29 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (npc.type == NPCID.TheDestroyerBody)
                 {
                     // Laser rate of fire
-                    calamityGlobalNPC.newAI[0] += 1f;
-                    float shootProjectile = death ? 180 : 300;
-                    float timer = npc.ai[0] * 30f;
-                    float shootProjectileGateValue = timer + shootProjectile;
+                    calamityGlobalNPC.newAI[0] += (float)Main.rand.Next(4);
+                    float shootProjectileTime = death ? 270 : 450;
+                    float bodySegmentTime = npc.ai[0] * 30f;
+                    float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
 
                     // Shoot lasers
                     // 50% chance to shoot harmless scrap if probe has been launched
-                    bool probeLaunched = npc.ai[2] == 1f;
                     if (calamityGlobalNPC.newAI[0] >= shootProjectileGateValue)
                     {
-                        calamityGlobalNPC.newAI[0] = 0f;
-                        npc.TargetClosest();
+                        if (!masterMode)
+                        {
+                            calamityGlobalNPC.newAI[0] = 0f;
+                            npc.TargetClosest();
+                        }
+
                         if (Collision.CanHit(npc.position, npc.width, npc.height, player.position, player.width, player.height))
                         {
+                            if (masterMode)
+                            {
+                                calamityGlobalNPC.newAI[0] = 0f;
+                                npc.TargetClosest();
+                            }
+
                             // Laser speed
                             float projectileSpeed = 3.5f + Main.rand.NextFloat() * 1.5f;
                             projectileSpeed += enrageScale;
@@ -366,7 +392,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     Rectangle rectangle = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
                     int noFlyZone = 1000;
                     int heightReduction = death ? 400 : (int)(400f * (1f - lifeRatio));
-                    int height = 1800 - heightReduction;
+                    int height = (masterMode ? 1600 : 1800) - heightReduction;
                     bool outsideNoFlyZone = true;
 
                     if (npc.position.Y > player.position.Y)
@@ -392,7 +418,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.localAI[1] = 0f;
 
             // Despawn
-            float fallSpeed = 16f;
+            float fallSpeed = masterMode ? 20f : 16f;
             if (player.dead)
             {
                 shouldFly = false;
@@ -401,7 +427,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (npc.position.Y > Main.worldSurface * 16.0)
                 {
                     npc.velocity.Y += 2f;
-                    fallSpeed = 32f;
+                    fallSpeed *= 2f;
                 }
 
                 if (npc.position.Y > Main.rockLayer * 16.0)
@@ -421,8 +447,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Speed and movement
             float speedBoost = death ? (0.14f * (1f - lifeRatio)) : (0.1f * (1f - lifeRatio));
             float turnSpeedBoost = death ? (0.19f * (1f - lifeRatio)) : (0.15f * (1f - lifeRatio));
-            float speed = 0.1f + speedBoost;
-            float turnSpeed = 0.15f + turnSpeedBoost;
+            float speed = (masterMode ? 0.125f : 0.1f) + speedBoost;
+            float turnSpeed = (masterMode ? 0.1875f : 0.15f) + turnSpeedBoost;
             speed += 0.04f * enrageScale;
             turnSpeed += 0.06f * enrageScale;
 
@@ -442,8 +468,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             Vector2 npcCenter = npc.Center;
-            float targetTilePosX = player.position.X + (player.width / 2);
-            float targetTilePosY = player.position.Y + (player.height / 2);
+            float targetTilePosX = player.Center.X;
+            float targetTilePosY = player.Center.Y;
             targetTilePosX = (int)(targetTilePosX / 16f) * 16;
             targetTilePosY = (int)(targetTilePosY / 16f) * 16;
             npcCenter.X = (int)(npcCenter.X / 16f) * 16;
@@ -458,8 +484,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 try
                 {
                     npcCenter = npc.Center;
-                    targetTilePosX = Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) - npcCenter.X;
-                    targetTilePosY = Main.npc[(int)npc.ai[1]].position.Y + (Main.npc[(int)npc.ai[1]].height / 2) - npcCenter.Y;
+                    targetTilePosX = Main.npc[(int)npc.ai[1]].Center.X - npcCenter.X;
+                    targetTilePosY = Main.npc[(int)npc.ai[1]].Center.Y - npcCenter.Y;
                 }
                 catch
                 {
@@ -474,7 +500,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (absoluteTilePosX > (float)mechdusaSegmentScale)
                         absoluteTilePosX = mechdusaSegmentScale;
 
-                    targetTilePosY = Main.npc[(int)npc.ai[1]].position.Y + (float)(Main.npc[(int)npc.ai[1]].height / 2) + absoluteTilePosX - npcCenter.Y;
+                    targetTilePosY = Main.npc[(int)npc.ai[1]].Center.Y + absoluteTilePosX - npcCenter.Y;
                 }
 
                 npc.rotation = (float)Math.Atan2(targetTilePosY, targetTilePosX) + MathHelper.PiOver2;
@@ -494,6 +520,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (!shouldFly)
                 {
                     npc.velocity.Y += 0.15f;
+                    if (masterMode && npc.velocity.Y > 0f)
+                        npc.velocity.Y += 0.05f;
+
                     if (npc.velocity.Y > fallSpeed)
                         npc.velocity.Y = fallSpeed;
 
@@ -850,7 +879,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             vector.X += num8 * 5f;
                             vector.Y += num9 * 5f;
                             int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, num8, num9, num11, attackDamage_ForProjectiles, 0f, Main.myPlayer);
-                            Main.projectile[num12].timeLeft = 300;
+                            Main.projectile[num12].timeLeft = 600;
                             npc.netUpdate = true;
                         }
                     }
