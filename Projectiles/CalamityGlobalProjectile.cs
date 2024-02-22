@@ -124,24 +124,6 @@ namespace CalamityMod.Projectiles
         // There are several enemies/NPCs in Calamity which do not take damage from minions in certain circumstances.
         public bool overridesMinionDamagePrevention = false;
 
-        public static List<int> MechBossProjectileIDs = new()
-        {
-            ProjectileID.DeathLaser,
-            ProjectileID.PinkLaser,
-            ProjectileID.BombSkeletronPrime,
-            ProjectileID.CursedFlameHostile,
-            ProjectileID.EyeFire,
-            ProjectileID.EyeLaser,
-            ProjectileID.Skull,
-            ProjectileID.SaucerMissile,
-            ProjectileID.RocketSkeleton,
-            ProjectileType<DestroyerCursedLaser>(),
-            ProjectileType<DestroyerElectricLaser>(),
-            ProjectileType<ShadowflameFireball>(),
-            ProjectileType<Shadowflamethrower>(),
-            ProjectileType<ScavengerLaser>()
-        };
-
         // Enchantment variables.
         public int ExplosiveEnchantCountdown = 0;
         public const int ExplosiveEnchantTime = 2400;
@@ -1655,22 +1637,6 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.DeathLaser && projectile.ai[0] == 1f)
                 {
-                    // Unlikely that vanilla sets originalDamage for hostile projectiles.
-                    // TODO -- this might not work and mech boss projectiles might deal too much damage again.
-                    if (projectile.originalDamage == 0)
-                    {
-                        // Reduce mech boss projectile damage depending on the new ore progression changes
-                        if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
-                        {
-                            if (!NPC.downedMechBossAny)
-                                projectile.damage = (int)(projectile.damage * 0.8);
-                            else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                projectile.damage = (int)(projectile.damage * 0.9);
-                        }
-
-                        projectile.originalDamage = projectile.damage;
-                    }
-
                     projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
                     Lighting.AddLight(projectile.Center, (255 - projectile.alpha) * 0.75f / 255f, 0f, 0f);
@@ -1878,22 +1844,6 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.FrostBeam && projectile.ai[0] == 1f)
                 {
-                    // Unlikely that vanilla sets originalDamage for hostile projectiles.
-                    // TODO -- this might not work and mech boss projectiles might deal too much damage again.
-                    if (projectile.originalDamage == 0)
-                    {
-                        // Reduce mech boss projectile damage depending on the new ore progression changes
-                        if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
-                        {
-                            if (!NPC.downedMechBossAny)
-                                projectile.damage = (int)(projectile.damage * 0.8);
-                            else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                projectile.damage = (int)(projectile.damage * 0.9);
-                        }
-
-                        projectile.originalDamage = projectile.damage;
-                    }
-
                     projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
                     Lighting.AddLight(projectile.Center, 0f, (255 - projectile.alpha) * 0.15f / 255f, (255 - projectile.alpha) * 0.6f / 255f);
@@ -2703,27 +2653,6 @@ namespace CalamityMod.Projectiles
 
                     if ((CalamityLists.hardModeNerfList.Contains(projectile.type) && Main.hardMode && !CalamityPlayer.areThereAnyDamnBosses && !Main.snowMoon) || projectile.type == ProjectileID.JavelinHostile)
                         projectile.damage = (int)(projectile.damage * 0.65);
-
-                    // Reduce mech boss projectile damage depending on the new ore progression changes
-                    if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
-                    {
-                        if (!NPC.downedMechBossAny)
-                        {
-                            if (MechBossProjectileIDs.Contains(projectile.type))
-                            {
-                                if (CalamityUtils.AnyBossNPCS(true))
-                                    projectile.damage = (int)(projectile.damage * 0.8);
-                            }
-                        }
-                        else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                        {
-                            if (MechBossProjectileIDs.Contains(projectile.type))
-                            {
-                                if (CalamityUtils.AnyBossNPCS(true))
-                                    projectile.damage = (int)(projectile.damage * 0.9);
-                            }
-                        }
-                    }
                 }
                 else
                 {

@@ -380,6 +380,16 @@ namespace CalamityMod.NPCs.NormalNPCs
                             float radians = MathHelper.TwoPi / totalProjectiles;
                             int type = ProjectileID.FrostBeam;
                             int damage = NPC.GetProjectileDamage(type);
+
+                            // Reduce mech boss projectile damage depending on the new ore progression changes
+                            if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
+                            {
+                                if (!NPC.downedMechBossAny)
+                                    damage = (int)(damage * 0.8);
+                                else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
+                                    damage = (int)(damage * 0.9);
+                            }
+
                             float velocity = 4.5f;
                             double angleA = radians * 0.5;
                             double angleB = MathHelper.ToRadians(90f) - angleA;
@@ -631,6 +641,16 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                                     int type = ProjectileID.BombSkeletronPrime;
                                     int damage = NPC.GetProjectileDamage(type);
+
+                                    // Reduce mech boss projectile damage depending on the new ore progression changes
+                                    if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
+                                    {
+                                        if (!NPC.downedMechBossAny)
+                                            damage = (int)(damage * 0.8);
+                                        else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
+                                            damage = (int)(damage * 0.9);
+                                    }
+
                                     headCenter += value * 5f;
                                     int enragedBombs = Projectile.NewProjectile(NPC.GetSource_FromAI(), headCenter.X, headCenter.Y, enragedHeadBombTargetX, enragedHeadBombTargetY, type, damage, 0f, Main.myPlayer, -1f);
                                     Main.projectile[enragedBombs].timeLeft = 600;
@@ -688,6 +708,16 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 float radians = MathHelper.TwoPi / totalProjectiles;
                                 int type = ProjectileID.BombSkeletronPrime;
                                 int damage = NPC.GetProjectileDamage(type);
+
+                                // Reduce mech boss projectile damage depending on the new ore progression changes
+                                if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
+                                {
+                                    if (!NPC.downedMechBossAny)
+                                        damage = (int)(damage * 0.8);
+                                    else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
+                                        damage = (int)(damage * 0.9);
+                                }
+
                                 float velocity = 12f;
                                 double angleA = radians * 0.5;
                                 double angleB = MathHelper.ToRadians(90f) - angleA;
