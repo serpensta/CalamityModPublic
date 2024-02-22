@@ -6,6 +6,8 @@ using CalamityMod.NPCs.SupremeCalamitas;
 using CalamityMod.Projectiles.Magic;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.World;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -26,7 +28,7 @@ namespace CalamityMod.NPCs.TownNPCs
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 25;
+            Main.npcFrameCount[NPC.type] = 27;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;
             NPCID.Sets.DangerDetectRange[NPC.type] = 400;
@@ -47,7 +49,7 @@ namespace CalamityMod.NPCs.TownNPCs
                 .SetNPCAffection(NPCID.TaxCollector, AffectionLevel.Dislike)
                 .SetNPCAffection(NPCID.GoblinTinkerer, AffectionLevel.Hate)
                 .SetNPCAffection(NPCID.Angler, AffectionLevel.Hate);
-			NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) {
+			NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers() {
 				Velocity = 1f // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
 			};
 			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
@@ -243,6 +245,13 @@ namespace CalamityMod.NPCs.TownNPCs
             }
 
             return dialogue;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            var something = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            spriteBatch.Draw(ModContent.Request<Texture2D>(Texture + (BirthdayParty.PartyIsUp ? "Alt" : "")).Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY) - new Vector2(0f, 6f), NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, something, 0);
+            return false;
         }
 
         public string Death()
