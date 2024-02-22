@@ -1355,7 +1355,7 @@ namespace CalamityMod.NPCs
 
                 npc.scale *= Main.zenithWorld ? 2f : CalamityWorld.death ? 1.3f : 1.2f;
             }
-            else if (npc.type == NPCID.SkeletronPrime)
+            else if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
             {
                 npc.lifeMax = (int)(npc.lifeMax * 1.2);
                 npc.npcSlots = 12f;
@@ -4817,6 +4817,26 @@ namespace CalamityMod.NPCs
         #region Check Dead
         public override bool CheckDead(NPC npc)
         {
+            if (npc.type == NPCID.SkeletronPrime)
+            {
+                if ((Main.masterMode || BossRushEvent.BossRushActive) && CalamityWorld.revenge)
+                {
+                    // Kill the other head if he's still alive when this head dies
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        NPC nPC = Main.npc[i];
+                        if (nPC.active && nPC.type == ModContent.NPCType<SkeletronPrime2>() && nPC.life > 0)
+                        {
+                            nPC.life = 0;
+                            nPC.HitEffect();
+                            nPC.checkDead();
+                            nPC.active = false;
+                            nPC.netUpdate = true;
+                        }
+                    }
+                }
+            }
+
             if (npc.lifeMax > 1000 && npc.type != NPCID.DungeonSpirit &&
                 npc.type != NPCType<PhantomSpirit>() &&
                 npc.type != NPCType<PhantomSpiritS>() &&
@@ -4838,7 +4858,7 @@ namespace CalamityMod.NPCs
                         NPCType<PhantomSpiritL>()
                     });
 
-                    NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, randomType, 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, randomType);
                 }
             }
 
@@ -5377,7 +5397,7 @@ namespace CalamityMod.NPCs
         {
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
             {
-                if (npc.type == NPCID.SkeletronPrime)
+                if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
                     npc.frameCounter = 0D;
             }
         }
@@ -5721,7 +5741,7 @@ namespace CalamityMod.NPCs
 
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
             {
-                if (npc.type == NPCID.SkeletronPrime || CalamityLists.DestroyerIDs.Contains(npc.type))
+                if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>() || CalamityLists.DestroyerIDs.Contains(npc.type))
                     return false;
             }
 
@@ -6064,7 +6084,7 @@ namespace CalamityMod.NPCs
                 }
 
                 // His afterimages I can't get to work, so fuck it
-                else if (npc.type == NPCID.SkeletronPrime)
+                else if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
                 {
                     Texture2D npcTexture = TextureAssets.Npc[npc.type].Value;
                     int frameHeight = npcTexture.Height / Main.npcFrameCount[npc.type];
@@ -6128,8 +6148,15 @@ namespace CalamityMod.NPCs
 
                     spriteBatch.Draw(npcTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, npc.GetAlpha(drawColor), npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
 
-                    spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY),
-                        npc.frame, new Color(200, 200, 200, 0), npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
+                    Color eyesColor = new Color(200, 200, 200, 0);
+                    if ((Main.masterMode || BossRushEvent.BossRushActive) && CalamityWorld.revenge)
+                    {
+                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(100, 50, 255, 0) : new Color(200, 255, 0, 0);
+                        for (int i = 0; i < 3; i++)
+                            spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
+                    }
+                    else
+                        spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                 }
                 else if (CalamityLists.DestroyerIDs.Contains(npc.type))
                 {

@@ -1692,18 +1692,241 @@ namespace CalamityMod.Projectiles
                     return false;
                 }
 
+                else if (projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && Main.masterMode)
+                {
+                    int num = (int)(projectile.Center.X / 16f);
+                    int num2 = (int)(projectile.Center.Y / 16f);
+                    if (WorldGen.InWorld(num, num2) && projectile.tileCollide)
+                    {
+                        Tile tile = Main.tile[num, num2];
+                        if (tile != null && tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || tile.TileType == TileID.PlanterBox))
+                        {
+                            projectile.Kill();
+                            return false;
+                        }
+                    }
+
+                    bool masterModeSkeletronPrimeHomingBomb = projectile.ai[0] == -1f;
+                    bool masterModeSkeletronPrimeFallingBomb = projectile.ai[0] == -2f;
+
+                    int target = 0;
+                    target = Player.FindClosest(projectile.Center, 1, 1);
+
+                    // Blow up when within a certain distance of the target
+                    if (Vector2.Distance(projectile.Center, Main.player[target].Center) < 16f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item14, projectile.position);
+                        projectile.position.X += projectile.width / 2;
+                        projectile.position.Y += projectile.height / 2;
+                        projectile.width = projectile.height = 22;
+                        projectile.position.X -= projectile.width / 2;
+                        projectile.position.Y -= projectile.height / 2;
+
+                        for (int num951 = 0; num951 < 20; num951++)
+                        {
+                            int num952 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                            Dust dust2 = Main.dust[num952];
+                            dust2.velocity *= 1.4f;
+                        }
+
+                        int num950 = 6;
+                        for (int num953 = 0; num953 < 10; num953++)
+                        {
+                            int num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 2.5f);
+                            Main.dust[num954].noGravity = true;
+                            Dust dust2 = Main.dust[num954];
+                            dust2.velocity *= 5f;
+                            num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 1.5f);
+                            dust2 = Main.dust[num954];
+                            dust2.velocity *= 3f;
+                        }
+
+                        int num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                        Gore gore2 = Main.gore[num955];
+                        gore2.velocity *= 0.4f;
+                        Main.gore[num955].velocity.X += 1f;
+                        Main.gore[num955].velocity.Y += 1f;
+                        num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                        gore2 = Main.gore[num955];
+                        gore2.velocity *= 0.4f;
+                        Main.gore[num955].velocity.X -= 1f;
+                        Main.gore[num955].velocity.Y += 1f;
+                        num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                        gore2 = Main.gore[num955];
+                        gore2.velocity *= 0.4f;
+                        Main.gore[num955].velocity.X += 1f;
+                        Main.gore[num955].velocity.Y -= 1f;
+                        num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                        gore2 = Main.gore[num955];
+                        gore2.velocity *= 0.4f;
+                        Main.gore[num955].velocity.X -= 1f;
+                        Main.gore[num955].velocity.Y -= 1f;
+
+                        Vector2 vector76 = projectile.position;
+                        projectile.position.X += projectile.width / 2;
+                        projectile.position.Y += projectile.height / 2;
+                        projectile.width = projectile.height = 128;
+                        projectile.position.X -= projectile.width / 2;
+                        projectile.position.Y -= projectile.height / 2;
+                        projectile.Damage();
+                        projectile.position = vector76;
+                        projectile.width = projectile.height = 22;
+                    }
+
+                    if (masterModeSkeletronPrimeHomingBomb)
+                    {
+                        projectile.ai[1] += 1f;
+                        float homingStartTime = 20f;
+                        float homingEndTime = CalamityWorld.death ? 140f : 110f;
+
+                        if (projectile.ai[1] < homingEndTime)
+                        {
+                            projectile.ai[1] = homingEndTime;
+
+                            if (projectile.timeLeft > 3)
+                                projectile.tileCollide = true;
+                        }
+
+                        if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
+                        {
+                            float num134 = projectile.velocity.Length();
+                            Vector2 vector24 = Main.player[target].Center - projectile.Center;
+                            vector24.Normalize();
+                            vector24 *= num134;
+                            float inertia = CalamityWorld.death ? 25f : 30f;
+                            projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
+                            projectile.velocity.Normalize();
+                            projectile.velocity *= num134;
+                        }
+
+                        float maxVelocity = CalamityWorld.death ? 18f : 15f;
+                        float acceleration = 1.02f;
+                        if (projectile.velocity.Length() < maxVelocity)
+                            projectile.velocity *= acceleration;
+                    }
+                    else
+                    {
+                        if (projectile.velocity.Y > 10f)
+                        {
+                            projectile.velocity.Y = 10f;
+
+                            if (!projectile.tileCollide && projectile.timeLeft > 3)
+                                projectile.tileCollide = true;
+                        }
+                    }
+
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        projectile.localAI[0] = 1f;
+                        SoundEngine.PlaySound(SoundID.Item10, projectile.Center);
+                    }
+
+                    projectile.frameCounter++;
+                    if (projectile.frameCounter > 3)
+                    {
+                        projectile.frame++;
+                        projectile.frameCounter = 0;
+                    }
+
+                    if (projectile.frame > 1)
+                        projectile.frame = 0;
+
+                    if (projectile.owner == Main.myPlayer && projectile.timeLeft <= 3)
+                    {
+                        projectile.tileCollide = false;
+                        projectile.ai[2] = 0f;
+                        projectile.alpha = 255;
+                    }
+                    else if (Main.rand.NextBool())
+                    {
+                        int num28 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100);
+                        Main.dust[num28].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
+                        Main.dust[num28].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
+                        Main.dust[num28].noGravity = true;
+                        Main.dust[num28].position = projectile.Center + new Vector2(0f, -projectile.height / 2).RotatedBy(projectile.rotation) * 1.1f;
+                        int num29 = 6;
+                        Dust dust8 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, num29, 0f, 0f, 100);
+                        dust8.scale = 1f + (float)Main.rand.Next(5) * 0.1f;
+                        dust8.noGravity = true;
+                        dust8.position = projectile.Center + new Vector2(0f, -projectile.height / 2 - 6).RotatedBy(projectile.rotation) * 1.1f;
+                    }
+
+                    if (!masterModeSkeletronPrimeHomingBomb)
+                    {
+                        projectile.ai[2] += 1f;
+                        if (projectile.ai[2] > 5f)
+                        {
+                            projectile.ai[2] = 10f;
+                            if (projectile.velocity.Y == 0f && projectile.velocity.X != 0f)
+                            {
+                                projectile.velocity.X *= 0.97f;
+                                if ((double)projectile.velocity.X > -0.01 && (double)projectile.velocity.X < 0.01)
+                                {
+                                    projectile.velocity.X = 0f;
+                                    projectile.netUpdate = true;
+                                }
+                            }
+
+                            projectile.velocity.Y += 0.2f;
+                        }
+                    }
+
+                    projectile.rotation += projectile.velocity.X * 0.1f;
+
+                    return false;
+                }
+
+                else if (projectile.type == ProjectileID.FrostBeam && projectile.ai[0] == 1f)
+                {
+                    // Unlikely that vanilla sets originalDamage for hostile projectiles.
+                    // TODO -- this might not work and mech boss projectiles might deal too much damage again.
+                    if (projectile.originalDamage == 0)
+                    {
+                        // Reduce mech boss projectile damage depending on the new ore progression changes
+                        if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
+                        {
+                            if (!NPC.downedMechBossAny)
+                                projectile.damage = (int)(projectile.damage * 0.8);
+                            else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
+                                projectile.damage = (int)(projectile.damage * 0.9);
+                        }
+
+                        projectile.originalDamage = projectile.damage;
+                    }
+
+                    projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                    Lighting.AddLight(projectile.Center, 0f, (255 - projectile.alpha) * 0.15f / 255f, (255 - projectile.alpha) * 0.6f / 255f);
+
+                    if (projectile.alpha > 0)
+                        projectile.alpha -= 125;
+                    if (projectile.alpha < 0)
+                        projectile.alpha = 0;
+
+                    if (projectile.localAI[1] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item33, projectile.position);
+                        projectile.localAI[1] = 1f;
+                    }
+
+                    if (projectile.velocity.Length() < 12f)
+                        projectile.velocity *= 1.0025f;
+
+                    return false;
+                }
+
                 else if (projectile.type == ProjectileID.RocketSkeleton && projectile.ai[1] == 1f)
                 {
                     bool homeIn = false;
                     float spreadOutCutoffTime = 510f;
                     float homeInCutoffTime = 420f;
-                    float minAcceleration = 0.05f;
-                    float maxAcceleration = 0.1f;
+                    float minAcceleration = Main.masterMode ? 0.1f : 0.05f;
+                    float maxAcceleration = Main.masterMode ? 0.2f : 0.1f;
                     float homingVelocity = 25f;
 
                     if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
                         homeIn = true;
-                    else if (projectile.velocity.Length() < 15f)
+                    else if (projectile.velocity.Length() < (Main.masterMode ? 20f : 15f))
                         projectile.velocity *= 1.1f;
 
                     if (homeIn)
