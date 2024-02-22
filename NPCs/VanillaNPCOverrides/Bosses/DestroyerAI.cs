@@ -1513,9 +1513,255 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             if (((npc.velocity.X > 0f && npc.oldVelocity.X < 0f) || (npc.velocity.X < 0f && npc.oldVelocity.X > 0f) || (npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f) || (npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f)) && !npc.justHit)
+                npc.netUpdate = true;
+
+            return false;
+        }
+
+        public static bool VanillaProbeAI(NPC npc, Mod mod)
+        {
+            if (npc.target < 0 || npc.target <= Main.maxPlayers || Main.player[npc.target].dead)
+                npc.TargetClosest();
+
+            NPCAimedTarget targetData = npc.GetTargetData();
+            bool flag = false;
+            if (targetData.Type == NPCTargetType.Player)
+                flag = Main.player[npc.target].dead;
+
+            float num = Main.zenithWorld ? 3f : 6f;
+            float num2 = 0.05f;
+
+            Vector2 vector = npc.Center;
+            float num4 = targetData.Center.X;
+            float num5 = targetData.Center.Y;
+            num4 = (int)(num4 / 8f) * 8;
+            num5 = (int)(num5 / 8f) * 8;
+            vector.X = (int)(vector.X / 8f) * 8;
+            vector.Y = (int)(vector.Y / 8f) * 8;
+            num4 -= vector.X;
+            num5 -= vector.Y;
+            float num6 = (float)Math.Sqrt(num4 * num4 + num5 * num5);
+            float num7 = num6;
+            bool flag2 = false;
+            if (num6 > 600f)
+                flag2 = true;
+
+            if (num6 == 0f)
+            {
+                num4 = npc.velocity.X;
+                num5 = npc.velocity.Y;
+            }
+            else
+            {
+                num6 = num / num6;
+                num4 *= num6;
+                num5 *= num6;
+            }
+
+            if (num7 > 100f)
+            {
+                npc.ai[0] += 1f;
+                if (npc.ai[0] > 0f)
+                    npc.velocity.Y += 0.023f;
+                else
+                    npc.velocity.Y -= 0.023f;
+
+                if (npc.ai[0] < -100f || npc.ai[0] > 100f)
+                    npc.velocity.X += 0.023f;
+                else
+                    npc.velocity.X -= 0.023f;
+
+                if (npc.ai[0] > 200f)
+                    npc.ai[0] = -200f;
+            }
+
+            if (flag)
+            {
+                num4 = (float)npc.direction * num / 2f;
+                num5 = (0f - num) / 2f;
+            }
+
+            if (npc.ai[3] != 0f)
+            {
+                if (NPC.IsMechQueenUp)
+                {
+                    NPC nPC = Main.npc[NPC.mechQueen];
+                    Vector2 vector2 = new Vector2(26f * npc.ai[3], 0f);
+                    int num9 = (int)npc.ai[2];
+                    if (num9 < 0 || num9 >= Main.maxNPCs)
+                    {
+                        num9 = NPC.FindFirstNPC(NPCID.TheDestroyer);
+                        npc.ai[2] = num9;
+                        npc.netUpdate = true;
+                    }
+
+                    if (num9 > -1)
+                    {
+                        NPC nPC2 = Main.npc[num9];
+                        if (!nPC2.active || nPC2.type != NPCID.TheDestroyer)
+                        {
+                            npc.dontTakeDamage = false;
+                            if (npc.ai[3] > 0f)
+                                npc.netUpdate = true;
+
+                            npc.ai[3] = 0f;
+                        }
+                        else
+                        {
+                            Vector2 spinningpoint = nPC2.Center + vector2;
+                            spinningpoint = spinningpoint.RotatedBy(nPC2.rotation, nPC2.Center);
+                            npc.Center = spinningpoint;
+                            npc.velocity = nPC.velocity;
+                            npc.dontTakeDamage = true;
+                        }
+                    }
+                    else
+                    {
+                        npc.dontTakeDamage = false;
+                        if (npc.ai[3] > 0f)
+                            npc.netUpdate = true;
+
+                        npc.ai[3] = 0f;
+                    }
+                }
+                else
+                {
+                    npc.dontTakeDamage = false;
+                    if (npc.ai[3] > 0f)
+                        npc.netUpdate = true;
+
+                    npc.ai[3] = 0f;
+                }
+            }
+            else
+            {
+                npc.dontTakeDamage = false;
+
+                if (npc.velocity.X < num4)
+                    npc.velocity.X += num2;
+                else if (npc.velocity.X > num4)
+                    npc.velocity.X -= num2;
+
+                if (npc.velocity.Y < num5)
+                    npc.velocity.Y += num2;
+                else if (npc.velocity.Y > num5)
+                    npc.velocity.Y -= num2;
+            }
+
+            npc.localAI[0] += 1f;
+            if (npc.ai[3] != 0f)
+                npc.localAI[0] += 2f;
+
+            if (npc.justHit)
+                npc.localAI[0] = 0f;
+
+            float num10 = 120f;
+            if (NPC.IsMechQueenUp)
+                num10 = 360f;
+
+            if (Main.netMode != NetmodeID.MultiplayerClient && npc.localAI[0] >= num10)
+            {
+                npc.localAI[0] = 0f;
+                if (targetData.Type != 0 && Collision.CanHit(npc, targetData))
+                {
+                    int damage = npc.GetAttackDamage_ForProjectiles(25f, 22f);
+
+                    // Reduce mech boss projectile damage depending on the new ore progression changes
+                    if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
+                    {
+                        if (!NPC.downedMechBossAny)
+                            damage = (int)(damage * 0.8);
+                        else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
+                            damage = (int)(damage * 0.9);
+                    }
+
+                    int num11 = ProjectileID.PinkLaser;
+                    Vector2 vector3 = new Vector2(num4, num5);
+                    if (NPC.IsMechQueenUp)
+                    {
+                        Vector2 v = targetData.Center - npc.Center - targetData.Velocity * 20f;
+                        float num12 = 8f;
+                        vector3 = v.SafeNormalize(Vector2.UnitY) * num12;
+                    }
+
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, vector3.X, vector3.Y, num11, damage, 0f, Main.myPlayer);
+                }
+            }
+
+            int num13 = (int)npc.Center.X;
+            int num14 = (int)npc.Center.Y;
+            num13 /= 16;
+            num14 /= 16;
+            if (WorldGen.InWorld(num13, num14) && !WorldGen.SolidTile(num13, num14))
+                Lighting.AddLight((int)(npc.Center.X / 16f), (int)(npc.Center.Y / 16f), 0.3f, 0.1f, 0.05f);
+
+            if (num4 > 0f)
+            {
+                npc.spriteDirection = 1;
+                npc.rotation = (float)Math.Atan2(num5, num4);
+            }
+
+            if (num4 < 0f)
+            {
+                npc.spriteDirection = -1;
+                npc.rotation = (float)Math.Atan2(num5, num4) + MathHelper.Pi;
+            }
+
+            float num15 = 0.7f;
+            if (npc.collideX)
             {
                 npc.netUpdate = true;
+                npc.velocity.X = npc.oldVelocity.X * (0f - num15);
+                if (npc.direction == -1 && npc.velocity.X > 0f && npc.velocity.X < 2f)
+                    npc.velocity.X = 2f;
+
+                if (npc.direction == 1 && npc.velocity.X < 0f && npc.velocity.X > -2f)
+                    npc.velocity.X = -2f;
             }
+
+            if (npc.collideY)
+            {
+                npc.netUpdate = true;
+                npc.velocity.Y = npc.oldVelocity.Y * (0f - num15);
+                if (npc.velocity.Y > 0f && (double)npc.velocity.Y < 1.5)
+                    npc.velocity.Y = 2f;
+
+                if (npc.velocity.Y < 0f && (double)npc.velocity.Y > -1.5)
+                    npc.velocity.Y = -2f;
+            }
+
+            if (flag2)
+            {
+                if ((npc.velocity.X > 0f && num4 > 0f) || (npc.velocity.X < 0f && num4 < 0f))
+                {
+                    int num27 = 12;
+                    if (NPC.IsMechQueenUp)
+                        num27 = 5;
+
+                    if (Math.Abs(npc.velocity.X) < (float)num27)
+                        npc.velocity.X *= 1.05f;
+                }
+                else
+                    npc.velocity.X *= 0.9f;
+            }
+
+            if (NPC.IsMechQueenUp && npc.ai[2] == 0f)
+            {
+                Vector2 center = npc.GetTargetData().Center;
+                Vector2 v2 = center - npc.Center;
+                int num28 = 120;
+                if (v2.Length() < (float)num28)
+                    npc.Center = center - v2.SafeNormalize(Vector2.UnitY) * num28;
+            }
+
+            if (Main.IsItDay() || flag)
+            {
+                npc.velocity.Y -= num2 * 2f;
+                npc.EncourageDespawn(10);
+            }
+
+            if (((npc.velocity.X > 0f && npc.oldVelocity.X < 0f) || (npc.velocity.X < 0f && npc.oldVelocity.X > 0f) || (npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f) || (npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f)) && !npc.justHit)
+                npc.netUpdate = true;
 
             return false;
         }

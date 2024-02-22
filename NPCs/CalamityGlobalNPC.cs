@@ -3098,6 +3098,8 @@ namespace CalamityMod.NPCs
                     case NPCID.TheDestroyerBody:
                     case NPCID.TheDestroyerTail:
                         return DestroyerAI.VanillaDestroyerAI(npc, Mod);
+                    case NPCID.Probe:
+                        return DestroyerAI.VanillaProbeAI(npc, Mod);
 
                     case NPCID.Retinazer:
                         return TwinsAI.VanillaRetinazerAI(npc, Mod);
