@@ -387,7 +387,7 @@ DeepcoreGK2: {
 	DisplayName: Deepcore GK2
 	Tooltip:
 		'''
-		Bullets are twice as large and ignores 10 points of enemy defense
+		Bullets are twice as large and ignore 10 points of enemy defense
 		'For rock and stone!'
 		'''
 }
