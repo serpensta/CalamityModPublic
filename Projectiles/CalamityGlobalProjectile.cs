@@ -632,12 +632,16 @@ namespace CalamityMod.Projectiles
                             continue;
 
                         Tile tileSafely = Framing.GetTileSafely(i, j);
-                        if (!tileSafely.HasTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType] || Main.tileFrameImportant[tileSafely.TileType])
-                            continue;
+                        bool isPlatform = tileSafely.HasTile && (TileID.Sets.Platforms[tileSafely.TileType] || tileSafely.TileType == TileID.PlanterBox);
+                        if (!isPlatform)
+                        {
+                            if (!tileSafely.HasTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType] || Main.tileFrameImportant[tileSafely.TileType])
+                                continue;
 
-                        Tile tileSafely2 = Framing.GetTileSafely(i, j - 1);
-                        if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType])
-                            continue;
+                            Tile tileSafely2 = Framing.GetTileSafely(i, j - 1);
+                            if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType])
+                                continue;
+                        }
 
                         int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j);
                         for (int k = 0; k < num5; k++)
