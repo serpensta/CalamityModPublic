@@ -1216,6 +1216,10 @@ namespace CalamityMod.NPCs
                     npc.lifeMax = 75000;
                     break;
 
+                case NPCID.PlanterasTentacle:
+                    npc.lifeMax = 500;
+                    break;
+
                 case NPCID.Retinazer:
                     npc.lifeMax = 23500;
                     break;
