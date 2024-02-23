@@ -249,9 +249,18 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 else
                     npc.rotation = npc.velocity.X / 15f;
 
-                float velocityY = 3f - (death ? 1f - lifeRatio : 0f);
-                float velocityX = 7f - (death ? 3.5f * (1f - lifeRatio) : 0f);
-                float acceleration = 0.1f + (death ? 0.05f * (1f - lifeRatio) : 0f);
+                float acceleration = (bossRush ? 0.2f : masterMode ? 0.125f : 0.1f) + (death ? 0.05f * (1f - lifeRatio) : 0f);
+                if (!cannonAlive)
+                    acceleration += 0.025f;
+                if (!laserAlive)
+                    acceleration += 0.025f;
+                if (!viceAlive)
+                    acceleration += 0.025f;
+                if (!sawAlive)
+                    acceleration += 0.025f;
+
+                float topVelocity = acceleration * 100f;
+                float deceleration = masterMode ? 0.8f : 0.85f;
 
                 float headDecelerationUpDist = 0f;
                 float headDecelerationDownDist = 0f;
@@ -264,81 +273,46 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     headDecelerationDownDist = -100f;
                 }
 
-                if (!cannonAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-                if (!laserAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-                if (!viceAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-                if (!sawAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-
-                if (bossRush)
-                {
-                    velocityY = 0.25f;
-                    velocityX = 0.5f;
-                    acceleration = 0.3f;
-                }
-
-                if (masterMode)
-                {
-                    velocityY *= 0.5f;
-                    velocityX *= 0.5f;
-                    acceleration *= 1.25f;
-                }
-
                 if (npc.position.Y > Main.player[npc.target].position.Y - (400f + headDecelerationUpDist))
                 {
                     if (npc.velocity.Y > 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     npc.velocity.Y -= acceleration;
 
-                    if (npc.velocity.Y > velocityY)
-                        npc.velocity.Y = velocityY;
+                    if (npc.velocity.Y > topVelocity)
+                        npc.velocity.Y = topVelocity;
                 }
                 else if (npc.position.Y < Main.player[npc.target].position.Y - (450f + headDecelerationDownDist))
                 {
                     if (npc.velocity.Y < 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     npc.velocity.Y += acceleration;
 
-                    if (npc.velocity.Y < -velocityY)
-                        npc.velocity.Y = -velocityY;
+                    if (npc.velocity.Y < -topVelocity)
+                        npc.velocity.Y = -topVelocity;
                 }
 
                 if (npc.Center.X > Main.player[npc.target].Center.X + (400f + headDecelerationHorizontalDist))
                 {
                     if (npc.velocity.X > 0f)
-                        npc.velocity.X *= 0.9f;
+                        npc.velocity.X *= deceleration;
 
                     npc.velocity.X -= acceleration;
 
-                    if (npc.velocity.X > velocityX)
-                        npc.velocity.X = velocityX;
+                    if (npc.velocity.X > topVelocity)
+                        npc.velocity.X = topVelocity;
                 }
                 if (npc.Center.X < Main.player[npc.target].Center.X - (400f + headDecelerationHorizontalDist))
                 {
                     if (npc.velocity.X < 0f)
-                        npc.velocity.X *= 0.9f;
+                        npc.velocity.X *= deceleration;
 
                     npc.velocity.X += acceleration;
 
-                    if (npc.velocity.X < -velocityX)
-                        npc.velocity.X = -velocityX;
+                    if (npc.velocity.X < -topVelocity)
+                        npc.velocity.X = -topVelocity;
                 }
             }
 
@@ -799,57 +773,57 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             bool normalLaserRotation = npc.localAI[1] % 2f == 0f;
 
             // Movement
-            float velocityY = bossRush ? 0.5f : death ? 2f : 2.5f;
-            float velocityX = bossRush ? 1f : death ? 5f : 7f;
-            float acceleration = bossRush ? 0.6f : death ? 0.3f : 0.25f;
+            float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+            if (!cannonAlive)
+                acceleration += 0.025f;
+            if (!viceAlive)
+                acceleration += 0.025f;
+            if (!sawAlive)
+                acceleration += 0.025f;
 
-            if (masterMode)
-            {
-                velocityY *= 0.5f;
-                velocityX *= 0.5f;
-                acceleration *= 1.25f;
-            }
+            float topVelocity = acceleration * 100f;
+            float deceleration = masterMode ? 0.75f : 0.8f;
 
             if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 100f)
             {
                 if (npc.velocity.Y > 0f)
-                    npc.velocity.Y *= 0.9f;
+                    npc.velocity.Y *= deceleration;
 
                 npc.velocity.Y -= acceleration;
 
-                if (npc.velocity.Y > velocityY)
-                    npc.velocity.Y = velocityY;
+                if (npc.velocity.Y > topVelocity)
+                    npc.velocity.Y = topVelocity;
             }
             else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 100f)
             {
                 if (npc.velocity.Y < 0f)
-                    npc.velocity.Y *= 0.9f;
+                    npc.velocity.Y *= deceleration;
 
                 npc.velocity.Y += acceleration;
 
-                if (npc.velocity.Y < -velocityY)
-                    npc.velocity.Y = -velocityY;
+                if (npc.velocity.Y < -topVelocity)
+                    npc.velocity.Y = -topVelocity;
             }
 
             if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 180f * npc.ai[0])
             {
                 if (npc.velocity.X > 0f)
-                    npc.velocity.X *= 0.9f;
+                    npc.velocity.X *= deceleration;
 
                 npc.velocity.X -= acceleration;
 
-                if (npc.velocity.X > velocityX)
-                    npc.velocity.X = velocityX;
+                if (npc.velocity.X > topVelocity)
+                    npc.velocity.X = topVelocity;
             }
             if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 180f * npc.ai[0])
             {
                 if (npc.velocity.X < 0f)
-                    npc.velocity.X *= 0.9f;
+                    npc.velocity.X *= deceleration;
 
                 npc.velocity.X += acceleration;
 
-                if (npc.velocity.X < -velocityX)
-                    npc.velocity.X = -velocityX;
+                if (npc.velocity.X < -topVelocity)
+                    npc.velocity.X = -topVelocity;
             }
 
             // Phase 1
@@ -1119,57 +1093,57 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Movement
-            float velocityY = bossRush ? 0.5f : death ? 2f : 2.5f;
-            float velocityX = bossRush ? 1f : death ? 5f : 7f;
-            float acceleration = bossRush ? 0.6f : death ? 0.3f : 0.25f;
+            float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+            if (!laserAlive)
+                acceleration += 0.025f;
+            if (!viceAlive)
+                acceleration += 0.025f;
+            if (!sawAlive)
+                acceleration += 0.025f;
 
-            if (masterMode)
-            {
-                velocityY *= 0.5f;
-                velocityX *= 0.5f;
-                acceleration *= 1.25f;
-            }
+            float topVelocity = acceleration * 100f;
+            float deceleration = masterMode ? 0.75f : 0.8f;
 
             if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 150f)
             {
                 if (npc.velocity.Y > 0f)
-                    npc.velocity.Y *= 0.9f;
+                    npc.velocity.Y *= deceleration;
 
                 npc.velocity.Y -= acceleration;
 
-                if (npc.velocity.Y > velocityY)
-                    npc.velocity.Y = velocityY;
+                if (npc.velocity.Y > topVelocity)
+                    npc.velocity.Y = topVelocity;
             }
             else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 150f)
             {
                 if (npc.velocity.Y < 0f)
-                    npc.velocity.Y *= 0.9f;
+                    npc.velocity.Y *= deceleration;
 
                 npc.velocity.Y += acceleration;
 
-                if (npc.velocity.Y < -velocityY)
-                    npc.velocity.Y = -velocityY;
+                if (npc.velocity.Y < -topVelocity)
+                    npc.velocity.Y = -topVelocity;
             }
 
             if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 200f)
             {
                 if (npc.velocity.X > 0f)
-                    npc.velocity.X *= 0.9f;
+                    npc.velocity.X *= deceleration;
 
                 npc.velocity.X -= acceleration;
 
-                if (npc.velocity.X > velocityX)
-                    npc.velocity.X = velocityX;
+                if (npc.velocity.X > topVelocity)
+                    npc.velocity.X = topVelocity;
             }
             if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X + 160f)
             {
                 if (npc.velocity.X < 0f)
-                    npc.velocity.X *= 0.9f;
+                    npc.velocity.X *= deceleration;
 
                 npc.velocity.X += acceleration;
 
-                if (npc.velocity.X < -velocityX)
-                    npc.velocity.X = -velocityX;
+                if (npc.velocity.X < -topVelocity)
+                    npc.velocity.X = -topVelocity;
             }
 
             if (fireSlower)
@@ -1346,57 +1320,57 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Return to the head
             if (npc.ai[2] == 99f)
             {
-                float velocityY = bossRush ? 1f : death ? 5f : 7f;
-                float velocityX = bossRush ? 1.5f : death ? 8f : 10f;
-                float acceleration = bossRush ? 0.6f : death ? 0.3f : 0.25f;
+                float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                if (!cannonAlive)
+                    acceleration += 0.025f;
+                if (!laserAlive)
+                    acceleration += 0.025f;
+                if (!sawAlive)
+                    acceleration += 0.025f;
 
-                if (masterMode)
-                {
-                    velocityY *= 0.5f;
-                    velocityX *= 0.5f;
-                    acceleration *= 1.25f;
-                }
+                float topVelocity = acceleration * 100f;
+                float deceleration = masterMode ? 0.75f : 0.8f;
 
                 if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y)
                 {
                     if (npc.velocity.Y > 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     npc.velocity.Y -= acceleration;
 
-                    if (npc.velocity.Y > velocityY)
-                        npc.velocity.Y = velocityY;
+                    if (npc.velocity.Y > topVelocity)
+                        npc.velocity.Y = topVelocity;
                 }
                 else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y)
                 {
                     if (npc.velocity.Y < 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     npc.velocity.Y += acceleration;
 
-                    if (npc.velocity.Y < -velocityY)
-                        npc.velocity.Y = -velocityY;
+                    if (npc.velocity.Y < -topVelocity)
+                        npc.velocity.Y = -topVelocity;
                 }
 
                 if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X)
                 {
                     if (npc.velocity.X > 0f)
-                        npc.velocity.X *= 0.9f;
+                        npc.velocity.X *= deceleration;
 
                     npc.velocity.X -= acceleration * 2f;
 
-                    if (npc.velocity.X > velocityX)
-                        npc.velocity.X = velocityX;
+                    if (npc.velocity.X > topVelocity)
+                        npc.velocity.X = topVelocity;
                 }
                 if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X)
                 {
                     if (npc.velocity.X < 0f)
-                        npc.velocity.X *= 0.9f;
+                        npc.velocity.X *= deceleration;
 
                     npc.velocity.X += acceleration * 2f;
 
-                    if (npc.velocity.X < -velocityX)
-                        npc.velocity.X = -velocityX;
+                    if (npc.velocity.X < -topVelocity)
+                        npc.velocity.X = -topVelocity;
                 }
             }
 
@@ -1427,59 +1401,57 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.netUpdate = true;
                     }
 
-                    float velocityY = bossRush ? 0.5f : death ? 2f : 2.5f;
-                    float velocityX = bossRush ? 1.5f : death ? 7f : 8f;
-                    float velocityX2 = bossRush ? 1.25f : death ? 6f : 7f;
-                    float acceleration = bossRush ? 0.6f : death ? 0.3f : 0.25f;
+                    float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                    if (!cannonAlive)
+                        acceleration += 0.025f;
+                    if (!laserAlive)
+                        acceleration += 0.025f;
+                    if (!sawAlive)
+                        acceleration += 0.025f;
 
-                    if (masterMode)
-                    {
-                        velocityY *= 0.5f;
-                        velocityX *= 0.5f;
-                        velocityX2 *= 0.5f;
-                        acceleration *= 1.25f;
-                    }
+                    float topVelocity = acceleration * 100f;
+                    float deceleration = masterMode ? 0.75f : 0.8f;
 
                     if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 300f)
                     {
                         if (npc.velocity.Y > 0f)
-                            npc.velocity.Y *= 0.9f;
+                            npc.velocity.Y *= deceleration;
 
                         npc.velocity.Y -= acceleration;
 
-                        if (npc.velocity.Y > velocityY)
-                            npc.velocity.Y = velocityY;
+                        if (npc.velocity.Y > topVelocity)
+                            npc.velocity.Y = topVelocity;
                     }
                     else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 230f)
                     {
                         if (npc.velocity.Y < 0f)
-                            npc.velocity.Y *= 0.9f;
+                            npc.velocity.Y *= deceleration;
 
                         npc.velocity.Y += acceleration;
 
-                        if (npc.velocity.Y < -velocityY)
-                            npc.velocity.Y = -velocityY;
+                        if (npc.velocity.Y < -topVelocity)
+                            npc.velocity.Y = -topVelocity;
                     }
 
                     if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 250f)
                     {
                         if (npc.velocity.X > 0f)
-                            npc.velocity.X *= 0.9f;
+                            npc.velocity.X *= deceleration;
 
                         npc.velocity.X -= acceleration;
 
-                        if (npc.velocity.X > velocityX)
-                            npc.velocity.X = velocityX;
+                        if (npc.velocity.X > topVelocity)
+                            npc.velocity.X = topVelocity;
                     }
                     if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X)
                     {
                         if (npc.velocity.X < 0f)
-                            npc.velocity.X *= 0.9f;
+                            npc.velocity.X *= deceleration;
 
                         npc.velocity.X += acceleration;
 
-                        if (npc.velocity.X < -velocityX2)
-                            npc.velocity.X = -velocityX2;
+                        if (npc.velocity.X < -topVelocity)
+                            npc.velocity.X = -topVelocity;
                     }
 
                     Vector2 viceArmReelbackCurrentPos = npc.Center;
@@ -1492,8 +1464,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Charge towards the player
                 if (npc.ai[2] == 1f)
                 {
+                    float deceleration = masterMode ? 0.75f : 0.8f;
                     if (npc.velocity.Y > 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     Vector2 viceArmChargePosition = npc.Center;
                     float viceArmChargeTargetX = Main.npc[(int)npc.ai[1]].Center.X - 280f * npc.ai[0] - viceArmChargePosition.X;
@@ -1704,57 +1677,57 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (npc.ai[2] == 99f)
             {
-                float velocityY = bossRush ? 1f : death ? 6f : 7f;
-                float velocityX = bossRush ? 1.5f : death ? 8f : 10f;
-                float acceleration = bossRush ? 0.6f : death ? 0.3f : 0.25f;
+                float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                if (!cannonAlive)
+                    acceleration += 0.025f;
+                if (!viceAlive)
+                    acceleration += 0.025f;
+                if (!laserAlive)
+                    acceleration += 0.025f;
 
-                if (masterMode)
-                {
-                    velocityY *= 0.5f;
-                    velocityX *= 0.5f;
-                    acceleration *= 1.25f;
-                }
+                float topVelocity = acceleration * 100f;
+                float deceleration = masterMode ? 0.75f : 0.8f;
 
                 if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y)
                 {
                     if (npc.velocity.Y > 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     npc.velocity.Y -= acceleration;
 
-                    if (npc.velocity.Y > velocityY)
-                        npc.velocity.Y = velocityY;
+                    if (npc.velocity.Y > topVelocity)
+                        npc.velocity.Y = topVelocity;
                 }
                 else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y)
                 {
                     if (npc.velocity.Y < 0f)
-                        npc.velocity.Y *= 0.9f;
+                        npc.velocity.Y *= deceleration;
 
                     npc.velocity.Y += acceleration;
 
-                    if (npc.velocity.Y < -velocityY)
-                        npc.velocity.Y = -velocityY;
+                    if (npc.velocity.Y < -topVelocity)
+                        npc.velocity.Y = -topVelocity;
                 }
 
                 if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X)
                 {
                     if (npc.velocity.X > 0f)
-                        npc.velocity.X *= 0.9f;
+                        npc.velocity.X *= deceleration;
 
                     npc.velocity.X -= acceleration * 2f;
 
-                    if (npc.velocity.X > velocityX)
-                        npc.velocity.X = velocityX;
+                    if (npc.velocity.X > topVelocity)
+                        npc.velocity.X = topVelocity;
                 }
                 if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X)
                 {
                     if (npc.velocity.X < 0f)
-                        npc.velocity.X *= 0.9f;
+                        npc.velocity.X *= deceleration;
 
                     npc.velocity.X += acceleration * 2f;
 
-                    if (npc.velocity.X < -velocityX)
-                        npc.velocity.X = -velocityX;
+                    if (npc.velocity.X < -topVelocity)
+                        npc.velocity.X = -topVelocity;
                 }
             }
             else
@@ -1781,57 +1754,57 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.netUpdate = true;
                     }
 
-                    float velocityY = bossRush ? 0.5f : death ? 2f : 2.5f;
-                    float velocityX = bossRush ? 1.5f : death ? 8f : 10f;
-                    float acceleration = bossRush ? 0.6f : death ? 0.3f : 0.25f;
+                    float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                    if (!cannonAlive)
+                        acceleration += 0.025f;
+                    if (!viceAlive)
+                        acceleration += 0.025f;
+                    if (!laserAlive)
+                        acceleration += 0.025f;
 
-                    if (masterMode)
-                    {
-                        velocityY *= 0.5f;
-                        velocityX *= 0.5f;
-                        acceleration *= 1.25f;
-                    }
+                    float topVelocity = acceleration * 100f;
+                    float deceleration = masterMode ? 0.75f : 0.8f;
 
                     if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 320f)
                     {
                         if (npc.velocity.Y > 0f)
-                            npc.velocity.Y *= 0.9f;
+                            npc.velocity.Y *= deceleration;
 
                         npc.velocity.Y -= acceleration;
 
-                        if (npc.velocity.Y > velocityY)
-                            npc.velocity.Y = velocityY;
+                        if (npc.velocity.Y > topVelocity)
+                            npc.velocity.Y = topVelocity;
                     }
                     else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 260f)
                     {
                         if (npc.velocity.Y < 0f)
-                            npc.velocity.Y *= 0.9f;
+                            npc.velocity.Y *= deceleration;
 
                         npc.velocity.Y += acceleration;
 
-                        if (npc.velocity.Y < -velocityY)
-                            npc.velocity.Y = -velocityY;
+                        if (npc.velocity.Y < -topVelocity)
+                            npc.velocity.Y = -topVelocity;
                     }
 
                     if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X)
                     {
                         if (npc.velocity.X > 0f)
-                            npc.velocity.X *= 0.9f;
+                            npc.velocity.X *= deceleration;
 
                         npc.velocity.X -= acceleration * 1.5f;
 
-                        if (npc.velocity.X > velocityX)
-                            npc.velocity.X = velocityX;
+                        if (npc.velocity.X > topVelocity)
+                            npc.velocity.X = topVelocity;
                     }
                     if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 250f)
                     {
                         if (npc.velocity.X < 0f)
-                            npc.velocity.X *= 0.9f;
+                            npc.velocity.X *= deceleration;
 
                         npc.velocity.X += acceleration * 1.5f;
 
-                        if (npc.velocity.X < -velocityX)
-                            npc.velocity.X = -velocityX;
+                        if (npc.velocity.X < -topVelocity)
+                            npc.velocity.X = -topVelocity;
                     }
 
                     Vector2 sawArmReelbackCurrentPos = npc.Center;
@@ -1848,7 +1821,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float sawArmChargeTargetY = Main.npc[(int)npc.ai[1]].position.Y + 230f - sawArmChargePos.Y;
                     npc.rotation = (float)Math.Atan2(sawArmChargeTargetY, sawArmChargeTargetX) + MathHelper.PiOver2;
 
-                    npc.velocity.X *= 0.95f;
+                    float deceleration = masterMode ? 0.875f : 0.9f;
+                    npc.velocity.X *= deceleration;
                     npc.velocity.Y -= 0.5f;
                     if (npc.velocity.Y < -12f)
                         npc.velocity.Y = -12f;
@@ -1917,31 +1891,33 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (masterMode)
                             acceleration *= 1.25f;
 
+                        float deceleration = masterMode ? 0.75f : 0.8f;
+
                         if (npc.velocity.X > sawArmOtherChargeTargetX)
                         {
                             if (npc.velocity.X > 0f)
-                                npc.velocity.X *= 0.9f;
+                                npc.velocity.X *= deceleration;
 
                             npc.velocity.X -= acceleration;
                         }
                         if (npc.velocity.X < sawArmOtherChargeTargetX)
                         {
                             if (npc.velocity.X < 0f)
-                                npc.velocity.X *= 0.9f;
+                                npc.velocity.X *= deceleration;
 
                             npc.velocity.X += acceleration;
                         }
                         if (npc.velocity.Y > sawArmOtherChargeTargetY)
                         {
                             if (npc.velocity.Y > 0f)
-                                npc.velocity.Y *= 0.9f;
+                                npc.velocity.Y *= deceleration;
 
                             npc.velocity.Y -= acceleration;
                         }
                         if (npc.velocity.Y < sawArmOtherChargeTargetY)
                         {
                             if (npc.velocity.Y < 0f)
-                                npc.velocity.Y *= 0.9f;
+                                npc.velocity.Y *= deceleration;
 
                             npc.velocity.Y += acceleration;
                         }

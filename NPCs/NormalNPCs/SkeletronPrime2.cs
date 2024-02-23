@@ -277,9 +277,18 @@ namespace CalamityMod.NPCs.NormalNPCs
                 else
                     NPC.rotation = NPC.velocity.X / 15f;
 
-                float velocityY = 3f - (death ? 1f - lifeRatio : 0f);
-                float velocityX = 7f - (death ? 3.5f * (1f - lifeRatio) : 0f);
-                float acceleration = 0.1f + (death ? 0.05f * (1f - lifeRatio) : 0f);
+                float acceleration = (bossRush ? 0.2f : 0.125f) + (death ? 0.05f * (1f - lifeRatio) : 0f);
+                if (!cannonAlive)
+                    acceleration += 0.025f;
+                if (!laserAlive)
+                    acceleration += 0.025f;
+                if (!viceAlive)
+                    acceleration += 0.025f;
+                if (!sawAlive)
+                    acceleration += 0.025f;
+
+                float topVelocity = acceleration * 100f;
+                float deceleration = 0.8f;
 
                 float headDecelerationUpDist = 0f;
                 float headDecelerationDownDist = 0f;
@@ -292,78 +301,46 @@ namespace CalamityMod.NPCs.NormalNPCs
                     headDecelerationDownDist = 50f;
                 }
 
-                if (!cannonAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-                if (!laserAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-                if (!viceAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-                if (!sawAlive)
-                {
-                    velocityY -= 0.35f;
-                    acceleration += 0.025f;
-                }
-
-                if (bossRush)
-                {
-                    velocityY = 0.25f;
-                    velocityX = 0.5f;
-                    acceleration = 0.3f;
-                }
-
-                velocityY *= 0.5f;
-                velocityX *= 0.5f;
-                acceleration *= 1.25f;
-
                 if (NPC.position.Y > Main.player[NPC.target].position.Y - (400f + headDecelerationUpDist))
                 {
                     if (NPC.velocity.Y > 0f)
-                        NPC.velocity.Y *= 0.9f;
+                        NPC.velocity.Y *= deceleration;
 
                     NPC.velocity.Y -= acceleration;
 
-                    if (NPC.velocity.Y > velocityY)
-                        NPC.velocity.Y = velocityY;
+                    if (NPC.velocity.Y > topVelocity)
+                        NPC.velocity.Y = topVelocity;
                 }
                 else if (NPC.position.Y < Main.player[NPC.target].position.Y - (450f + headDecelerationDownDist))
                 {
                     if (NPC.velocity.Y < 0f)
-                        NPC.velocity.Y *= 0.9f;
+                        NPC.velocity.Y *= deceleration;
 
                     NPC.velocity.Y += acceleration;
 
-                    if (NPC.velocity.Y < -velocityY)
-                        NPC.velocity.Y = -velocityY;
+                    if (NPC.velocity.Y < -topVelocity)
+                        NPC.velocity.Y = -topVelocity;
                 }
 
                 if (NPC.Center.X > Main.player[NPC.target].Center.X + (400f + headDecelerationHorizontalDist))
                 {
                     if (NPC.velocity.X > 0f)
-                        NPC.velocity.X *= 0.9f;
+                        NPC.velocity.X *= deceleration;
 
                     NPC.velocity.X -= acceleration;
 
-                    if (NPC.velocity.X > velocityX)
-                        NPC.velocity.X = velocityX;
+                    if (NPC.velocity.X > topVelocity)
+                        NPC.velocity.X = topVelocity;
                 }
                 if (NPC.Center.X < Main.player[NPC.target].Center.X - (400f + headDecelerationHorizontalDist))
                 {
                     if (NPC.velocity.X < 0f)
-                        NPC.velocity.X *= 0.9f;
+                        NPC.velocity.X *= deceleration;
 
                     NPC.velocity.X += acceleration;
 
-                    if (NPC.velocity.X < -velocityX)
-                        NPC.velocity.X = -velocityX;
+                    if (NPC.velocity.X < -topVelocity)
+                        NPC.velocity.X = -topVelocity;
                 }
             }
 
@@ -766,7 +743,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.75f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.75f * balance * bossAdjustment);
             NPC.damage = (int)(NPC.damage * NPC.GetExpertDamageMultiplier());
         }
 
