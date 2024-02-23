@@ -37,9 +37,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 NPC.mechQueen = npc.whoAmI;
 
             // Spawn arms
-            if (calamityGlobalNPC.newAI[2] == 0f)
+            if (calamityGlobalNPC.newAI[1] == 0f)
             {
-                calamityGlobalNPC.newAI[2] = 1f;
+                calamityGlobalNPC.newAI[1] = 1f;
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
@@ -208,7 +208,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             npc.buffImmune[BuffID.Slow] = immuneToSlowingDebuffs;
             npc.buffImmune[BuffID.Webbed] = immuneToSlowingDebuffs;
 
-            bool normalLaserRotation = calamityGlobalNPC.newAI[3] % 2f == 0f;
+            bool normalLaserRotation = npc.localAI[1] % 2f == 0f;
 
             // Float near player
             if (npc.ai[1] == 0f || npc.ai[1] == 4f)
@@ -352,10 +352,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        npc.localAI[1] += 1f;
-                        if (npc.localAI[1] >= 45f)
+                        npc.localAI[0] += 1f;
+                        if (npc.localAI[0] >= 45f)
                         {
-                            npc.localAI[1] = 0f;
+                            npc.localAI[0] = 0f;
 
                             int totalProjectiles = bossRush ? 24 : 12;
                             float radians = MathHelper.TwoPi / totalProjectiles;
@@ -382,7 +382,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(laserFireDirection) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 900;
                             }
-                            calamityGlobalNPC.newAI[3] += 1f;
+                            npc.localAI[1] += 1f;
                         }
                     }
 
@@ -400,7 +400,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.TargetClosest();
                         npc.ai[2] = 0f;
                         npc.ai[1] = 4f;
-                        npc.localAI[1] = 0f;
+                        npc.localAI[0] = 0f;
                     }
 
                     if (NPC.IsMechQueenUp)
@@ -585,6 +585,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         // Set spin velocity
                         npc.velocity.X = MathHelper.Pi * npc.localAI[3] / spinVelocity;
                         npc.velocity *= -calamityGlobalNPC.newAI[0];
+                        npc.SyncExtraAI();
                         npc.netUpdate = true;
                     }
 
@@ -597,7 +598,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                         if (npc.ai[2] % skullSpawnDivisor == 0f)
                         {
-                            calamityGlobalNPC.newAI[1] += 1f;
+                            npc.localAI[0] += 1f;
 
                             if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > 64f)
                             {
@@ -638,7 +639,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
 
                             // Go to floating phase, or spinning phase if in phase 2
-                            if (calamityGlobalNPC.newAI[1] >= totalSkulls)
+                            if (npc.localAI[0] >= totalSkulls)
                             {
                                 npc.velocity.Normalize();
 
@@ -646,9 +647,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 npc.ai[1] = phase3 ? 6f : 1f;
                                 npc.ai[2] = 0f;
                                 npc.localAI[3] = 0f;
-                                calamityGlobalNPC.newAI[1] = 0f;
+                                npc.localAI[0] = 0f;
                                 calamityGlobalNPC.newAI[0] = 0f;
                                 npc.SyncVanillaLocalAI();
+                                npc.SyncExtraAI();
                                 npc.TargetClosest();
                                 npc.netUpdate = true;
                             }
@@ -685,7 +687,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.ai[2] += 1f;
                         if (npc.ai[2] % missileSpawnDivisor == 0f)
                         {
-                            calamityGlobalNPC.newAI[1] += 1f;
+                            npc.localAI[0] += 1f;
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -710,14 +712,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                             SoundEngine.PlaySound(SoundID.Item62, npc.Center);
 
-                            if (calamityGlobalNPC.newAI[1] >= totalMissiles)
+                            if (npc.localAI[0] >= totalMissiles)
                             {
                                 npc.ai[1] = 0f;
                                 npc.ai[2] = 0f;
                                 npc.localAI[3] = 0f;
                                 calamityGlobalNPC.newAI[0] = 0f;
-                                calamityGlobalNPC.newAI[1] = 0f;
+                                npc.localAI[0] = 0f;
                                 npc.SyncVanillaLocalAI();
+                                npc.SyncExtraAI();
                                 npc.TargetClosest();
                                 npc.netUpdate = true;
                             }
@@ -781,9 +784,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Inflict 0 damage for 3 seconds after spawning
-            bool dontAttack = npc.Calamity().newAI[2] < 180f;
+            float timeToNotAttack = 180f;
+            bool dontAttack = npc.Calamity().newAI[2] < timeToNotAttack;
             if (dontAttack)
+            {
                 npc.Calamity().newAI[2] += 1f;
+                if (npc.Calamity().newAI[2] >= timeToNotAttack)
+                    npc.SyncExtraAI();
+            }
 
             // Avoid cheap bullshit
             npc.damage = 0;
@@ -1040,9 +1048,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Inflict 0 damage for 3 seconds after spawning
-            bool dontAttack = npc.Calamity().newAI[2] < 180f;
+            float timeToNotAttack = 180f;
+            bool dontAttack = npc.Calamity().newAI[2] < timeToNotAttack;
             if (dontAttack)
+            {
                 npc.Calamity().newAI[2] += 1f;
+                if (npc.Calamity().newAI[2] >= timeToNotAttack)
+                    npc.SyncExtraAI();
+            }
 
             // Avoid cheap bullshit
             npc.damage = 0;

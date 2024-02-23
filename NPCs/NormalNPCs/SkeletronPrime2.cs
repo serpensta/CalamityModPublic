@@ -99,9 +99,9 @@ namespace CalamityMod.NPCs.NormalNPCs
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
             // Spawn arms
-            if (calamityGlobalNPC.newAI[2] == 0f)
+            if (calamityGlobalNPC.newAI[1] == 0f)
             {
-                calamityGlobalNPC.newAI[2] = 1f;
+                calamityGlobalNPC.newAI[1] = 1f;
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
@@ -119,6 +119,8 @@ namespace CalamityMod.NPCs.NormalNPCs
                     Main.npc[arm].ai[3] = 150f;
                     Main.npc[arm].netUpdate = true;
                 }
+
+                NPC.SyncExtraAI();
             }
 
             if (!Main.npc[(int)NPC.ai[0]].active || Main.npc[(int)NPC.ai[0]].aiStyle != NPCAIStyleID.SkeletronPrimeHead)
@@ -230,7 +232,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.buffImmune[BuffID.Slow] = immuneToSlowingDebuffs;
             NPC.buffImmune[BuffID.Webbed] = immuneToSlowingDebuffs;
 
-            bool normalLaserRotation = calamityGlobalNPC.newAI[3] % 2f == 0f;
+            bool normalLaserRotation = NPC.localAI[1] % 2f == 0f;
 
             // Float near player
             if (NPC.ai[1] == 0f || NPC.ai[1] == 4f)
@@ -371,10 +373,10 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                     if (phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        NPC.localAI[1] += 1f;
-                        if (NPC.localAI[1] >= 60f)
+                        NPC.localAI[0] += 1f;
+                        if (NPC.localAI[0] >= 60f)
                         {
-                            NPC.localAI[1] = 0f;
+                            NPC.localAI[0] = 0f;
 
                             int totalProjectiles = bossRush ? 20 : 10;
                             float radians = MathHelper.TwoPi / totalProjectiles;
@@ -401,7 +403,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(laserFireDirection) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 600;
                             }
-                            calamityGlobalNPC.newAI[3] += 1f;
+                            NPC.localAI[1] += 1f;
                         }
                     }
 
@@ -419,7 +421,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         NPC.TargetClosest();
                         NPC.ai[2] = 0f;
                         NPC.ai[1] = 4f;
-                        NPC.localAI[1] = 0f;
+                        NPC.localAI[0] = 0f;
                     }
 
                     if (NPC.IsMechQueenUp)
@@ -604,6 +606,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         // Set spin velocity
                         NPC.velocity.X = MathHelper.Pi * NPC.localAI[3] / spinVelocity;
                         NPC.velocity *= -calamityGlobalNPC.newAI[0];
+                        NPC.SyncExtraAI();
                         NPC.netUpdate = true;
                     }
 
@@ -616,8 +619,8 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                         if (NPC.ai[2] % bombSpawnDivisor == 0f)
                         {
-                            calamityGlobalNPC.newAI[1] += 1f;
-
+                            NPC.localAI[0] += 1f;
+                            
                             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > 64f)
                             {
                                 SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
@@ -659,7 +662,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             }
 
                             // Go to floating phase, or spinning phase if in phase 2
-                            if (calamityGlobalNPC.newAI[1] >= totalBombs)
+                            if (NPC.localAI[0] >= totalBombs)
                             {
                                 NPC.velocity.Normalize();
 
@@ -667,9 +670,10 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 NPC.ai[1] = phase3 ? 6f : 1f;
                                 NPC.ai[2] = 0f;
                                 NPC.localAI[3] = 0f;
-                                calamityGlobalNPC.newAI[1] = 0f;
+                                NPC.localAI[0] = 0f;
                                 calamityGlobalNPC.newAI[0] = 0f;
                                 NPC.SyncVanillaLocalAI();
+                                NPC.SyncExtraAI();
                                 NPC.TargetClosest();
                                 NPC.netUpdate = true;
                             }
@@ -700,7 +704,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         NPC.ai[2] += 1f;
                         if (NPC.ai[2] % bombSpawnDivisor == 0f)
                         {
-                            calamityGlobalNPC.newAI[1] += 1f;
+                            NPC.localAI[0] += 1f;
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -731,19 +735,20 @@ namespace CalamityMod.NPCs.NormalNPCs
                                     Main.projectile[proj].timeLeft = 900;
                                     Main.projectile[proj].tileCollide = false;
                                 }
-                                calamityGlobalNPC.newAI[3] += 1f;
+                                NPC.localAI[1] += 1f;
                             }
 
                             SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 
-                            if (calamityGlobalNPC.newAI[1] >= totalBombSpreads)
+                            if (NPC.localAI[0] >= totalBombSpreads)
                             {
                                 NPC.ai[1] = 0f;
                                 NPC.ai[2] = 0f;
                                 NPC.localAI[3] = 0f;
                                 calamityGlobalNPC.newAI[0] = 0f;
-                                calamityGlobalNPC.newAI[1] = 0f;
+                                NPC.localAI[0] = 0f;
                                 NPC.SyncVanillaLocalAI();
+                                NPC.SyncExtraAI();
                                 NPC.TargetClosest();
                                 NPC.netUpdate = true;
                             }
