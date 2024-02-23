@@ -71,14 +71,13 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.frame = 7;
 
             bool timeToFire = noStars && Projectile.frame == 7;
-            bool canFire = player.channel && !player.noItems && !player.CCed;
-            if (!canFire)
+            if (player.CantUseHoldout())
                 Projectile.Kill();
 
             Vector2 playerPosition = player.RotatedRelativePoint(player.MountedCenter, true);
             if (timeToFire && Main.myPlayer == Projectile.owner)
             {
-                if (canFire)
+                if (!player.CantUseHoldout())
                 {
                     SoundEngine.PlaySound(SoundID.Item92, Projectile.Center);
 

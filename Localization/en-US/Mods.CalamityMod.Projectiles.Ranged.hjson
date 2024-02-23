@@ -10,7 +10,6 @@ Aquashard.DisplayName: Aquashard
 AquashardSplit.DisplayName: Aquashard
 ArcherfishRing.DisplayName: Archerfish Ring
 ArcherfishShot.DisplayName: Water Round
-ArcticArrowProj.DisplayName: Arctic Arrow
 AstralCannonProjectile.DisplayName: Astral Crystal
 AstralRound.DisplayName: Astral Round
 AstralSandgun.DisplayName: Astral Sandgun
@@ -243,3 +242,5 @@ WaterSpout.DisplayName: Spout
 WulfrumScrapBullet.DisplayName: High Speed Scrap
 DragonsBreathFlames.DisplayName: Draconic Flames
 DragonsBreathMag.DisplayName: Dragons Breath Cartridge
+FlakKrakenProjectile.DisplayName: Flak Kraken
+FlakToxicannonProjectile.DisplayName: Flak Toxicannon

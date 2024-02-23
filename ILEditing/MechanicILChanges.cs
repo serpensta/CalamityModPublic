@@ -512,13 +512,15 @@ namespace CalamityMod.ILEditing
                 return;
             }
 
-            // Load the player onto the stack for use in the following delegate.
+            // Load the player and the healing potion used onto the stack for use in the following delegate.
             cursor.Emit(OpCodes.Ldarg_0);
+            cursor.Emit(OpCodes.Ldarg_1);
 
             // Insert a delegate which applies Chalice of the Blood God's function as appropriate.
-            cursor.EmitDelegate<Action<Player>>(player =>
+            cursor.EmitDelegate<Action<Player, Item>>((player, potion) =>
             {
-                if (!player.active || player.dead)
+                // If the consumed item heals 0 health, don't bother.
+                if (!player.active || player.dead || potion.healLife <= 0)
                     return;
 
                 CalamityPlayer modPlayer = player.Calamity();
@@ -527,10 +529,13 @@ namespace CalamityMod.ILEditing
 
                 if (modPlayer.chaliceOfTheBloodGod && modPlayer.chaliceBleedoutBuffer > 0D)
                 {
-                    int amountOfBleedToClear = (int)(modPlayer.chaliceBleedoutBuffer * (1f - ChaliceOfTheBloodGod.HealingPotionBufferClear));
+                    // 20FEB2024: Ozzatron: to prevent abuse, buffer clearing is now 50% of the potion instead of 50% of your buffer
+                    float amountOfBleedToClear = ChaliceOfTheBloodGod.HealingPotionRatioForBufferClear * player.GetHealLife(potion, true);
+
+                    // Actually clear the buffer
                     modPlayer.chaliceBleedoutBuffer -= amountOfBleedToClear;
 
-                    // Display text indicating that damage was transferred to bleedout.
+                    // Display text indicating that healing was applied to the bleedout buffer.
                     if (Main.netMode != NetmodeID.Server)
                     {
                         string text = $"(+{amountOfBleedToClear})";

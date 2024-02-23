@@ -217,6 +217,7 @@ namespace CalamityMod
                 { ModContent.NPCType<BrimstoneElemental>(), 0.8 },
 
                 { NPCID.SkeletronPrime, 0.85 },
+                { ModContent.NPCType<SkeletronPrime2>(), 0.85 },
                 { NPCID.PrimeCannon, 0.85 },
                 { NPCID.PrimeLaser, 0.85 },
                 { NPCID.PrimeSaw, 0.85 },
@@ -412,6 +413,12 @@ namespace CalamityMod
                     102, // 204 while spinning
                     119, // 238 while spinning
                     153 } }, // 306 while spinning
+                { ModContent.NPCType<SkeletronPrime2>(), new int[] {
+                    50, // 100 while spinning
+                    85, // 170 while spinning
+                    102, // 204 while spinning
+                    119, // 238 while spinning
+                    153 } }, // 306 while spinning
                 { NPCID.PrimeVice, new int[] { 60, 102, 136, 153, 204 } },
                 { NPCID.PrimeSaw, new int[] { 60, 102, 136, 153, 204 } },
                 { NPCID.PrimeCannon, new int[] { 30, 51, 68, 85, 102 } },
@@ -586,6 +593,8 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.QueenBee, ProjectileID.QueenBeeStinger), new int[] { 22, 44, 64, 72, 96 } }, // 66 damage in non-rev master mode
 
                 { new Tuple<int, int>(NPCID.SkeletronHead, ProjectileID.Skull), new int[] { 46, 68, 84, 92, 126 } }, // 102 damage in non-rev master mode
+                { new Tuple<int, int>(NPCID.SkeletronHead, ProjectileID.Shadowflames), new int[] { 0, 0, 88, 96, 132 } },
+                { new Tuple<int, int>(NPCID.SkeletronHand, ProjectileID.Skull), new int[] { 0, 0, 68, 76, 102 } },
 
                 { new Tuple<int, int>(NPCID.Deerclops, ProjectileID.DeerclopsIceSpike), new int[] { 26, 52, 76, 84, 114 } }, // 78 damage in non-rev master mode
                 { new Tuple<int, int>(NPCID.Deerclops, ProjectileID.DeerclopsRangedProjectile), new int[] { 36, 72, 88, 96, 132 } }, // 108 damage in non-rev master mode
@@ -627,7 +636,7 @@ namespace CalamityMod
                     186 } }, // 139 in rapid fire; 138 in non-rev master mode, 102 in rapid fire in non-rev master mode
                 { new Tuple<int, int>(NPCID.Retinazer, ModContent.ProjectileType<ScavengerLaser>()), new int[] { 70, 120, 136, 152, 210 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.CursedFlameHostile), new int[] { 50, 88, 120, 132, 180 } }, // 132 in non-rev master mode
-                { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.EyeFire), new int[] { 60, 108, 0, 0, 162 } }, // Only used in non-rev modes
+                { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.EyeFire), new int[] { 60, 108, 128, 140, 192 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ModContent.ProjectileType<Shadowflamethrower>()), new int[] { 70, 120, 148, 160, 222 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ModContent.ProjectileType<ShadowflameFireball>()), new int[] { 60, 100, 128, 140, 192 } },
 
@@ -653,6 +662,9 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.SkeletronPrime, ProjectileID.Skull), new int[] { 50, 100, 124, 136, 186 } },
                 { new Tuple<int, int>(NPCID.SkeletronPrime, ProjectileID.DeathLaser), new int[] { 50, 100, 124, 136, 186 } },
                 { new Tuple<int, int>(NPCID.SkeletronPrime, ProjectileID.RocketSkeleton), new int[] { 60, 120, 148, 160, 222 } },
+                { new Tuple<int, int>(ModContent.NPCType<SkeletronPrime2>(), ProjectileID.Skull), new int[] { 50, 100, 124, 136, 186 } },
+                { new Tuple<int, int>(ModContent.NPCType<SkeletronPrime2>(), ProjectileID.BombSkeletronPrime), new int[] { 80, 160, 180, 200, 240 } },
+                { new Tuple<int, int>(ModContent.NPCType<SkeletronPrime2>(), ProjectileID.FrostBeam), new int[] { 50, 100, 124, 136, 186 } },
                 { new Tuple<int, int>(NPCID.PrimeCannon, ProjectileID.RocketSkeleton), new int[] { 60, 120, 148, 160, 222 } },
                 { new Tuple<int, int>(NPCID.PrimeCannon, ProjectileID.BombSkeletronPrime), new int[] { 80, 160, 0, 0, 240 } },
                 { new Tuple<int, int>(NPCID.PrimeLaser, ProjectileID.DeathLaser), new int[] { 50, 100, 124, 136, 186 } }, // 150 in non-rev master mode

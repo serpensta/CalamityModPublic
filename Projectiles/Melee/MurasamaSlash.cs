@@ -115,7 +115,7 @@ namespace CalamityMod.Projectiles.Melee
             Vector2 playerRotatedPoint = player.RotatedRelativePoint(player.MountedCenter, true);
             if (Main.myPlayer == Projectile.owner)
             {
-                if (player.channel && !player.noItems && !player.CCed)
+                if (!player.CantUseHoldout())
                     HandleChannelMovement(player, playerRotatedPoint);
                 else
                 {

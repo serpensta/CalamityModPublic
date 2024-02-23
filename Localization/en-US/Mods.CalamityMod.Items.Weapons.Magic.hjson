@@ -332,7 +332,7 @@ FlareBolt: {
 
 ForbiddenSun: {
 	DisplayName: Forbidden Sun
-	Tooltip: Casts a fire orb that emits a gigantic explosion on death
+	Tooltip: Casts a fire orb that emits a gigantic explosion on hit
 }
 
 FrigidflashBolt: {

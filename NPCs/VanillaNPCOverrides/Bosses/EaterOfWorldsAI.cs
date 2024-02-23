@@ -70,8 +70,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Fade in.
             npc.Opacity = MathHelper.Clamp(npc.Opacity + 0.08f, 0f, 1f);
 
+            bool enrage = true;
+            int targetTileX = (int)Main.player[npc.target].Center.X / 16;
+            int targetTileY = (int)Main.player[npc.target].Center.Y / 16;
+
+            Tile tile = Framing.GetTileSafely(targetTileX, targetTileY);
+            if (tile.WallType == WallID.EbonstoneUnsafe)
+                enrage = false;
+
             float enrageScale = bossRush ? 1.5f : 0f;
-            if ((npc.position.Y / 16f) < Main.worldSurface || bossRush)
+            if (((npc.position.Y / 16f) < Main.worldSurface && enrage) || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 0.5f;
@@ -120,7 +128,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         npc.TargetClosest();
                         if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1) && Vector2.Distance(npc.Center, Main.player[npc.target].Center) > 320f)
-                            NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (npc.width / 2) + npc.velocity.X), (int)(npc.position.Y + (npc.height / 2) + npc.velocity.Y), NPCID.VileSpitEaterOfWorlds, 0, 0f, 1f);
+                            NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X + npc.velocity.X), (int)(npc.Center.Y + npc.velocity.Y), NPCID.VileSpitEaterOfWorlds, 0, 0f, 1f);
                     }
                 }
 
@@ -144,9 +152,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Vector2.Distance(npc.Center, Main.player[npc.target].Center) > 320f)
                         {
                             calamityGlobalNPC.newAI[0] = 0f;
-                            Vector2 cursedFlameDirection = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
-                            float targetXDirection = Main.player[npc.target].position.X + (Main.player[npc.target].width / 2) - cursedFlameDirection.X;
-                            float targetYDirection = Main.player[npc.target].position.Y + (Main.player[npc.target].height / 2) - cursedFlameDirection.Y;
+                            Vector2 cursedFlameDirection = npc.Center;
+                            float targetXDirection = Main.player[npc.target].Center.X - cursedFlameDirection.X;
+                            float targetYDirection = Main.player[npc.target].Center.Y - cursedFlameDirection.Y;
                             float projSpeed = 7f + enrageScale * 2f;
                             float flameTargetDistance = (float)Math.Sqrt(targetXDirection * targetXDirection + targetYDirection * targetYDirection);
                             flameTargetDistance = projSpeed / flameTargetDistance;
@@ -482,7 +490,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             soundDelay = 20f;
 
                         npc.soundDelay = (int)soundDelay;
-                        SoundEngine.PlaySound(SoundID.WormDig, npc.position);
+                        SoundEngine.PlaySound(SoundID.WormDig, npc.Center);
                     }
 
                     targetDistance = (float)Math.Sqrt(targetPosX * targetPosX + targetPosY * targetPosY);
@@ -735,7 +743,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         {
                             npc.TargetClosest();
                             if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
-                                NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2) + npc.velocity.X), (int)(npc.position.Y + (float)(npc.height / 2) + npc.velocity.Y), NPCID.VileSpitEaterOfWorlds, 0, 0f, 1f);
+                                NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X + npc.velocity.X), (int)(npc.Center.Y + npc.velocity.Y), NPCID.VileSpitEaterOfWorlds, 0, 0f, 1f);
                         }
                     }
                 }
@@ -747,7 +755,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         npc.TargetClosest();
                         if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
-                            NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2) + npc.velocity.X), (int)(npc.position.Y + (float)(npc.height / 2) + npc.velocity.Y), NPCID.VileSpitEaterOfWorlds, 0, 0f, 1f);
+                            NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X + npc.velocity.X), (int)(npc.Center.Y + npc.velocity.Y), NPCID.VileSpitEaterOfWorlds, 0, 0f, 1f);
                     }
                 }
             }
@@ -767,17 +775,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.type == NPCID.EaterofWorldsHead)
                     {
                         npc.ai[2] = GetEaterOfWorldsSegmentsCountVanilla();
-                        npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2)), (int)(npc.position.Y + (float)npc.height), npc.type + 1, npc.whoAmI);
+                        npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)(npc.position.Y + (float)npc.height), npc.type + 1, npc.whoAmI);
                         Main.npc[(int)npc.ai[0]].CopyInteractions(npc);
                     }
                     else if (npc.type == NPCID.EaterofWorldsBody && npc.ai[2] > 0f)
                     {
-                        npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2)), (int)(npc.position.Y + (float)npc.height), npc.type, npc.whoAmI);
+                        npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)(npc.position.Y + (float)npc.height), npc.type, npc.whoAmI);
                         Main.npc[(int)npc.ai[0]].CopyInteractions(npc);
                     }
                     else
                     {
-                        npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.position.X + (float)(npc.width / 2)), (int)(npc.position.Y + (float)npc.height), npc.type + 1, npc.whoAmI);
+                        npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)(npc.position.Y + (float)npc.height), npc.type + 1, npc.whoAmI);
                         Main.npc[(int)npc.ai[0]].CopyInteractions(npc);
                     }
 

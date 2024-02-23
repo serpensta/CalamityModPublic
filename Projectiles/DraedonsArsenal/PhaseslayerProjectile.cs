@@ -129,7 +129,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 // In addition to typical channel cancellation criteria, the sword fizzles out if it runs out of charge.
                 Item playerItem = player.ActiveItem();
                 bool hasCharge = modItem.Charge > 0f;
-                if (player.channel && !player.noItems && !player.CCed && playerItem.type == ModContent.ItemType<Phaseslayer>() && hasCharge)
+                if (!player.CantUseHoldout() && playerItem.type == ModContent.ItemType<Phaseslayer>() && hasCharge)
                 {
                     // The distance ratio ranges from 0 (your mouse is directly on the player) to 1 (your mouse is at the max range considered, or any further distance).
                     float mouseDistance = Projectile.Distance(Main.MouseWorld);

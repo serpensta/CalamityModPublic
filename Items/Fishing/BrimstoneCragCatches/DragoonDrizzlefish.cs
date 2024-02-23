@@ -19,6 +19,7 @@ namespace CalamityMod.Items.Fishing.BrimstoneCragCatches
         public int shotCounter = 0;
         public override void SetStaticDefaults()
         {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
             Item.staff[Item.type] = true; //so it doesn't look weird af when holding it
         }
 

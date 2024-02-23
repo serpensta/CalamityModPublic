@@ -21,6 +21,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static int AftershotCooldownFrames = 17;
         public static int FullChargeFrames = 88;
 
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
             Item.width = 48;

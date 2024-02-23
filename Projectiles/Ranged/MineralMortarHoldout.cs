@@ -31,9 +31,11 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void AI()
         {
-            bool cantUse = Owner == null || !Owner.active || Owner.dead || !Owner.channel || Owner.CCed || Owner.noItems;
-            if (cantUse)
+            if (Owner.CantUseHoldout())
+            {
                 Projectile.Kill();
+                return;
+            }
 
             Vector2 mouse = Owner.Calamity().mouseWorld;
 

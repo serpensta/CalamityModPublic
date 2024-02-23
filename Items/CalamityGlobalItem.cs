@@ -1,12 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.Potions;
+﻿using System;
+using System.IO;
 using CalamityMod.Buffs.StatBuffs;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.CalPlayer;
 using CalamityMod.Enums;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables;
-using CalamityMod.Items.Potions;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Summon;
@@ -25,9 +25,6 @@ using CalamityMod.UI.CalamitasEnchants;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using CalamityMod.Buffs.StatDebuffs;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -36,7 +33,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
-using CalamityMod.Items.Potions.Alcohol;
 
 namespace CalamityMod.Items
 {
@@ -1036,6 +1032,10 @@ namespace CalamityMod.Items
             }
             else if (set == "SolarFlare")
             {
+                // Cancel out the base 12% DR
+                player.endurance -= 0.12f;
+
+                // Solar Flare armor dash overrides modded dashes by default
                 if (player.solarShields > 0)
                     modPlayer.DashID = string.Empty;
             }
@@ -1139,6 +1139,15 @@ namespace CalamityMod.Items
                 case ItemID.ApprenticeAltPants:
                     player.GetDamage<SummonDamageClass>() -= 0.1f;
                     player.GetCritChance<MagicDamageClass>() -= 15;
+                    break;
+
+                case ItemID.SolarFlareHelmet:
+                    player.GetCritChance<MeleeDamageClass>() -= 6;
+                    break;
+
+                case ItemID.VortexHelmet:
+                    player.GetDamage<RangedDamageClass>() -= 0.06f;
+                    player.GetCritChance<RangedDamageClass>() -= 2;
                     break;
             }
         }

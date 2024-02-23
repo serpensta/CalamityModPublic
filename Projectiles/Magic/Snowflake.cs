@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Magic
             Player player = Main.player[Projectile.owner];
             if (player == null)
                 return;
-            if (!(player.channel && !player.noItems && !player.CCed))
+            if (player.CantUseHoldout())
                 Projectile.Kill();
             if (Projectile.type != ModContent.ProjectileType<Snowflake>() ||
                 Main.player[Projectile.owner].HeldItem.type != ModContent.ItemType<SnowstormStaff>() || !Main.player[Projectile.owner].channel)

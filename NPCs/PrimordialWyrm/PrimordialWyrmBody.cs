@@ -158,6 +158,11 @@ namespace CalamityMod.NPCs.PrimordialWyrm
             NPC.spriteDirection = (directionToNextSegment.X > 0).ToDirectionInt();
         }
 
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+        {
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             SpriteEffects spriteEffects = SpriteEffects.None;

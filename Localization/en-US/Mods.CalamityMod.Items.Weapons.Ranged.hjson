@@ -36,16 +36,17 @@ AngelicShotgun: {
 
 Animosity: {
 	DisplayName: Animosity
-	DisplayNameGfb: Shotgun Full of Hate
-	Tooltip:
+	GFBName: Shotgun Full of Hate
+	Tooltip: "[GFB]"
+	TooltipNormal:
 		'''
 		Fires a shotgun blast with a tight spread which is imbued with Brimstone Flames
-		Press <right> to fire a powerful brimstone round that inflicts Whispering Death
+		Press Right Click to fire a powerful brimstone round that inflicts Whispering Death
 		'''
-	TooltipGfb:
+	TooltipGFB:
 		'''
 		[c/9c0b0b:Fires a shotgun blast full of hatred... among other things]
-		[c/ac14ba:Press <right> to use a hexing rifle round instead]
+		[c/ac14ba:Press Right Click to use a hexing rifle round instead]
 		[c/454545:By Cthulhu Eye, Yharon tooth...]
 		'''
 }
@@ -386,7 +387,7 @@ DeepcoreGK2: {
 	DisplayName: Deepcore GK2
 	Tooltip:
 		'''
-		Bullets are twice as large and ignores 10 points of enemy defense
+		Bullets are twice as large and ignore 10 points of enemy defense
 		'For rock and stone!'
 		'''
 }
@@ -484,16 +485,21 @@ FirestormCannon: {
 
 FlakKraken: {
 	DisplayName: Flak Kraken
-	Tooltip: Fires an energy reticle that becomes more powerful over time
+	Tooltip:
+		'''
+		Fires pairs of abyssal flak shells that explode into wide cones of ink shrapnel
+		Abyssal flak shells burst when they reach the cursor's position
+		Direct hits with the flak shell will deal reduced shrapnel damage
+		'''
 }
 
 FlakToxicannon: {
 	DisplayName: Flak Toxicannon
 	Tooltip:
 		'''
-		Fires angled shots in the direction of the cursor
-		Can only be shot in a wide cone above the player
-		'High IQ required'
+		Fires a toxic shell that explodes into a cone of radioactive sludge
+		Toxic shells burst when they reach the cursor's position
+		Direct hits with the toxic shell will reduce the damage dealt by the sludge
 		'''
 }
 
@@ -536,7 +542,7 @@ FrostbiteBlaster: {
 
 Fungicide: {
 	DisplayName: Fungicide
-	Tooltip: Converts musket balls into fungal rounds that split on death
+	Tooltip: Converts musket balls into fungal rounds that split upon impact
 }
 
 Galeforce: {
@@ -698,7 +704,7 @@ Malevolence: {
 	Tooltip:
 		'''
 		Fires two arrows at once
-		Converts wooden arrows into plague arrows that explode into bees on death
+		Converts wooden arrows into plague arrows that explode into bees
 		'''
 }
 
@@ -872,7 +878,7 @@ PearlGod: {
 
 PestilentDefiler: {
 	DisplayName: Pestilent Defiler
-	Tooltip: Converts musket balls into plague rounds that explode and split apart on death
+	Tooltip: Converts musket balls into plague rounds that explode and split apart on hit
 }
 
 Phangasm: {
@@ -1093,7 +1099,7 @@ Shroomer: {
 
 SlagMagnum: {
 	DisplayName: Slag Magnum
-	Tooltip: Converts musket balls into fossil shards that split into additional shards on death
+	Tooltip: Converts musket balls into fossil shards that split into additional shards on impact
 }
 
 SomaPrime: {

@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.ai[1] = (float)(initialRate - fireRateMult * fireRate);
                 shouldShoot = true;
             }
-            bool canShoot = player.channel && player.HasAmmo(player.ActiveItem()) && !player.noItems && !player.CCed;
+            bool canShoot = !player.CantUseHoldout() && player.HasAmmo(player.ActiveItem());
             if (Projectile.localAI[0] > 0f)
             {
                 Projectile.localAI[0] -= 1f;

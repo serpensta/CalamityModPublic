@@ -124,24 +124,6 @@ namespace CalamityMod.Projectiles
         // There are several enemies/NPCs in Calamity which do not take damage from minions in certain circumstances.
         public bool overridesMinionDamagePrevention = false;
 
-        public static List<int> MechBossProjectileIDs = new()
-        {
-            ProjectileID.DeathLaser,
-            ProjectileID.PinkLaser,
-            ProjectileID.BombSkeletronPrime,
-            ProjectileID.CursedFlameHostile,
-            ProjectileID.EyeFire,
-            ProjectileID.EyeLaser,
-            ProjectileID.Skull,
-            ProjectileID.SaucerMissile,
-            ProjectileID.RocketSkeleton,
-            ProjectileType<DestroyerCursedLaser>(),
-            ProjectileType<DestroyerElectricLaser>(),
-            ProjectileType<ShadowflameFireball>(),
-            ProjectileType<Shadowflamethrower>(),
-            ProjectileType<ScavengerLaser>()
-        };
-
         // Enchantment variables.
         public int ExplosiveEnchantCountdown = 0;
         public const int ExplosiveEnchantTime = 2400;
@@ -289,9 +271,14 @@ namespace CalamityMod.Projectiles
                 }
             }
 
-            if (projectile.type == ProjectileID.Skull && (projectile.ai[0] == 0f || projectile.ai[0] == -2f))
+            if (projectile.type == ProjectileID.Skull)
             {
-                bool fromRevSkeletron = projectile.ai[0] == -2f;
+                bool fromRevSkeletron = projectile.ai[0] < 0f;
+                bool revSkeletronHomingSkull = projectile.ai[0] == -1f;
+                bool revSkeletronAcceleratingSkull = projectile.ai[0] == -2f;
+
+                if (revSkeletronHomingSkull)
+                    projectile.alpha = 0;
 
                 if (projectile.alpha > 0)
                     projectile.alpha -= 75;
@@ -304,12 +291,13 @@ namespace CalamityMod.Projectiles
                     projectile.frame = 0;
 
                 // Accelerate if fired in a spread from Skeletron in Rev+
-                if (fromRevSkeletron)
+                if (revSkeletronAcceleratingSkull)
                 {
-                    float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
+                    float maxVelocity = (Main.masterMode || BossRushEvent.BossRushActive) ? 20f : CalamityWorld.death ? 18f : 15f;
                     if (projectile.velocity.Length() < maxVelocity)
                     {
-                        projectile.velocity *= 1.02f;
+                        float acceleration = (Main.masterMode || BossRushEvent.BossRushActive) ? 1.02f : 1.015f;
+                        projectile.velocity *= acceleration;
                         if (projectile.velocity.Length() > maxVelocity)
                         {
                             projectile.velocity.Normalize();
@@ -318,13 +306,72 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                int numDust = fromRevSkeletron ? 1 : 2;
-                for (int i = 0; i < numDust; i++)
+                if (!revSkeletronHomingSkull)
                 {
-                    Dust flame = Dust.NewDustDirect(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
-                    flame.position -= projectile.velocity * 2f;
-                    flame.noGravity = true;
-                    flame.velocity *= 0.3f;
+                    int numDust = revSkeletronAcceleratingSkull ? 1 : 2;
+                    int dustType = revSkeletronAcceleratingSkull ? 91 : 6;
+                    float dustScale = revSkeletronAcceleratingSkull ? 1f : 2f;
+                    float dustVelocityOffset = revSkeletronAcceleratingSkull ? 1f : 2f;
+                    for (int i = 0; i < numDust; i++)
+                    {
+                        Dust flame = Dust.NewDustDirect(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, dustType, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), dustScale);
+                        flame.position -= projectile.velocity * dustVelocityOffset;
+                        flame.noGravity = true;
+                        flame.velocity *= 0.3f;
+                    }
+                }
+                else
+                {
+                    for (int num173 = 0; num173 < 2; num173++)
+                    {
+                        int num174 = Dust.NewDust(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 5, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 1.5f);
+                        Main.dust[num174].position -= projectile.velocity;
+                        Main.dust[num174].noGravity = true;
+                        Main.dust[num174].velocity.X *= 0.3f;
+                        Main.dust[num174].velocity.Y *= 0.3f;
+                    }
+
+                    int num133 = 0;
+                    num133 = Player.FindClosest(projectile.Center, 1, 1);
+                    projectile.ai[1] += 1f;
+                    float homingStartTime = 30f;
+                    float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 115f : CalamityWorld.death ? 90f : 75f;
+
+                    // Stop homing when within a certain distance of the target
+                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)
+                        projectile.ai[1] = homingEndTime;
+
+                    if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
+                    {
+                        float num134 = projectile.velocity.Length();
+                        Vector2 vector24 = Main.player[num133].Center - projectile.Center;
+                        vector24.Normalize();
+                        vector24 *= num134;
+                        float inertia = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 25f : 30f;
+                        projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
+                        projectile.velocity.Normalize();
+                        projectile.velocity *= num134;
+                    }
+
+                    float maxVelocity = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 18f : 15f;
+                    float acceleration = (Main.masterMode || BossRushEvent.BossRushActive) ? 1.02f : 1.015f;
+                    if (projectile.velocity.Length() < maxVelocity)
+                        projectile.velocity *= acceleration;
+
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        projectile.localAI[0] = 1f;
+                        SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
+                        for (int num135 = 0; num135 < 10; num135++)
+                        {
+                            int num136 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 0, default(Color), 2f);
+                            Main.dust[num136].noGravity = true;
+                            Main.dust[num136].velocity = projectile.Center - Main.dust[num136].position;
+                            Main.dust[num136].velocity.Normalize();
+                            Main.dust[num136].velocity *= -5f;
+                            Main.dust[num136].velocity += projectile.velocity / 2f;
+                        }
+                    }
                 }
 
                 if (projectile.ai[0] == 0f)
@@ -426,7 +473,7 @@ namespace CalamityMod.Projectiles
                     SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
                     for (int i = 0; i < 20; i++)
                     {
-                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 181, 0f, 0f, 100);
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 91, 0f, 0f, 100);
                         Main.dust[dust].velocity *= 3f;
                         Main.dust[dust].velocity += projectile.velocity * 0.75f;
                         Main.dust[dust].scale *= 1.2f;
@@ -439,7 +486,7 @@ namespace CalamityMod.Projectiles
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 181, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 91, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
                         Main.dust[dust].velocity *= 0.6f;
                         Main.dust[dust].scale *= 1.4f;
                         Main.dust[dust].noGravity = true;
@@ -548,6 +595,127 @@ namespace CalamityMod.Projectiles
                 }
 
                 projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                return false;
+            }
+
+            else if (projectile.type == ProjectileID.DD2OgreSmash || projectile.type == ProjectileID.QueenSlimeSmash)
+            {
+                float maxHitboxSize = 30f;
+                if (projectile.type == ProjectileID.QueenSlimeSmash)
+                    maxHitboxSize = 20f;
+
+                projectile.ai[0] += 1f;
+                if (projectile.ai[0] > 9f)
+                {
+                    projectile.Kill();
+                    return false;
+                }
+
+                projectile.velocity = Vector2.Zero;
+                projectile.position = projectile.Center;
+                projectile.Size = new Vector2(16f, 8f) * MathHelper.Lerp(5f, maxHitboxSize, Utils.GetLerpValue(0f, 9f, projectile.ai[0]));
+                projectile.Center = projectile.position;
+                Point point = projectile.TopLeft.ToTileCoordinates();
+                Point point2 = projectile.BottomRight.ToTileCoordinates();
+                int num2 = point.X / 2 + point2.X / 2;
+                int num3 = projectile.width / 2;
+                if ((int)projectile.ai[0] % 3 != 0)
+                    return false;
+
+                int num4 = (int)projectile.ai[0] / 3;
+                for (int i = point.X; i <= point2.X; i++)
+                {
+                    for (int j = point.Y; j <= point2.Y; j++)
+                    {
+                        if (Vector2.Distance(projectile.Center, new Vector2(i * 16, j * 16)) > (float)num3)
+                            continue;
+
+                        Tile tileSafely = Framing.GetTileSafely(i, j);
+                        bool isPlatform = tileSafely.HasTile && (TileID.Sets.Platforms[tileSafely.TileType] || tileSafely.TileType == TileID.PlanterBox);
+                        if (!isPlatform)
+                        {
+                            if (!tileSafely.HasTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType] || Main.tileFrameImportant[tileSafely.TileType])
+                                continue;
+
+                            Tile tileSafely2 = Framing.GetTileSafely(i, j - 1);
+                            if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType])
+                                continue;
+                        }
+
+                        int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j);
+                        for (int k = 0; k < num5; k++)
+                        {
+                            Dust obj = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
+                            obj.velocity.Y -= 3f + (float)num4 * 1.5f;
+                            obj.velocity.Y *= Main.rand.NextFloat();
+                            obj.velocity.Y *= 0.75f;
+                            obj.scale += (float)num4 * 0.03f;
+                        }
+
+                        if (num4 >= 2)
+                        {
+                            if (projectile.type == ProjectileID.QueenSlimeSmash)
+                            {
+                                Color newColor = NPC.AI_121_QueenSlime_GetDustColor();
+                                newColor.A = 150;
+                                for (int l = 0; l < num5 - 1; l++)
+                                {
+                                    int num6 = Dust.NewDust(projectile.position, 12, 12, 4, 0f, 0f, 50, newColor, 1.5f);
+                                    Main.dust[num6].velocity.Y -= 0.1f + (float)num4 * 0.5f;
+                                    Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
+                                    Main.dust[num6].velocity.X *= Main.rand.NextFloatDirection() * 3f;
+                                    Main.dust[num6].position = new Vector2(i * 16 + Main.rand.Next(16), j * 16 + Main.rand.Next(16));
+                                    if (Main.rand.Next(3) != 0)
+                                    {
+                                        Main.dust[num6].velocity *= 0.5f;
+                                        Main.dust[num6].noGravity = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for (int m = 0; m < num5 - 1; m++)
+                                {
+                                    Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
+                                    obj2.velocity.Y -= 1f + (float)num4;
+                                    obj2.velocity.Y *= Main.rand.NextFloat();
+                                    obj2.velocity.Y *= 0.75f;
+                                }
+                            }
+                        }
+
+                        if (num5 <= 0 || Main.rand.NextBool(3))
+                            continue;
+
+                        float num7 = (float)Math.Abs(num2 - i) / (maxHitboxSize / 2f);
+                        if (projectile.type == ProjectileID.QueenSlimeSmash)
+                        {
+                            Color newColor2 = NPC.AI_121_QueenSlime_GetDustColor();
+                            newColor2.A = 150;
+                            for (int n = 0; n < 3; n++)
+                            {
+                                int num8 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 50, newColor2, 2f - (float)num4 * 0.15f + num7 * 0.5f);
+                                Main.dust[num8].velocity.Y -= 0.1f + (float)num4 * 0.5f + num7 * (float)num4 * 1f;
+                                Main.dust[num8].velocity.Y *= Main.rand.NextFloat();
+                                Main.dust[num8].velocity.X *= Main.rand.NextFloatDirection() * 3f;
+                                Main.dust[num8].position = new Vector2(i * 16 + 20, j * 16 + 20);
+                                if (Main.rand.Next(3) != 0)
+                                {
+                                    Main.dust[num8].velocity *= 0.5f;
+                                    Main.dust[num8].noGravity = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Gore gore = Gore.NewGoreDirect(projectile.GetSource_FromAI(), projectile.position, Vector2.Zero, 61 + Main.rand.Next(3), 1f - (float)num4 * 0.15f + num7 * 0.5f);
+                            gore.velocity.Y -= 0.1f + (float)num4 * 0.5f + num7 * (float)num4 * 1f;
+                            gore.velocity.Y *= Main.rand.NextFloat();
+                            gore.position = new Vector2(i * 16 + 20, j * 16 + 20);
+                        }
+                    }
+                }
 
                 return false;
             }
@@ -1398,10 +1566,10 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.QueenSlimeGelAttack)
                 {
-                    // Phase 1 and 2 projectiles do not bounce and do not have gravity.
+                    // Phase 1 and 2 projectiles do not bounce.
                     if (projectile.ai[1] == -2f)
                     {
-                        if (projectile.alpha == 0 && Main.rand.Next(3) == 0)
+                        if (projectile.alpha == 0 && Main.rand.NextBool(3))
                         {
                             Color newColor = NPC.AI_121_QueenSlime_GetDustColor();
                             newColor.A = 150;
@@ -1418,6 +1586,10 @@ namespace CalamityMod.Projectiles
                             projectile.alpha = 0;
 
                         projectile.rotation += (Math.Abs(projectile.velocity.X) + Math.Abs(projectile.velocity.Y)) * 0.05f;
+
+                        projectile.velocity.Y += 0.1f;
+                        if (projectile.velocity.Y > 16f)
+                            projectile.velocity.Y = 16f;
 
                         if (CalamityWorld.LegendaryMode && projectile.velocity.Length() > 2f)
                             projectile.velocity *= 0.985f;
@@ -1437,7 +1609,7 @@ namespace CalamityMod.Projectiles
                             projectile.frame = Main.rand.Next(3);
                         }
 
-                        if (projectile.alpha == 0 && Main.rand.Next(3) == 0)
+                        if (projectile.alpha == 0 && Main.rand.NextBool(3))
                         {
                             Color newColor = new Color(78, 136, 255, 150);
                             Dust slime = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 4, 0f, 0f, 50, newColor, 1.2f);
@@ -1469,25 +1641,162 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.DeathLaser && projectile.ai[0] == 1f)
                 {
-                    // Unlikely that vanilla sets originalDamage for hostile projectiles.
-                    // TODO -- this might not work and mech boss projectiles might deal too much damage again.
-                    if (projectile.originalDamage == 0)
-                    {
-                        // Reduce mech boss projectile damage depending on the new ore progression changes
-                        if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
-                        {
-                            if (!NPC.downedMechBossAny)
-                                projectile.damage = (int)(projectile.damage * 0.8);
-                            else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                projectile.damage = (int)(projectile.damage * 0.9);
-                        }
-
-                        projectile.originalDamage = projectile.damage;
-                    }
-
                     projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
 
                     Lighting.AddLight(projectile.Center, (255 - projectile.alpha) * 0.75f / 255f, 0f, 0f);
+
+                    if (projectile.alpha > 0)
+                        projectile.alpha -= 125;
+                    if (projectile.alpha < 0)
+                        projectile.alpha = 0;
+
+                    if (projectile.localAI[1] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item33, projectile.position);
+                        projectile.localAI[1] = 1f;
+                    }
+
+                    if (projectile.velocity.Length() < 12f)
+                        projectile.velocity *= 1.0025f;
+
+                    return false;
+                }
+
+                else if (projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && Main.masterMode)
+                {
+                    int num = (int)(projectile.Center.X / 16f);
+                    int num2 = (int)(projectile.Center.Y / 16f);
+                    if (WorldGen.InWorld(num, num2) && projectile.tileCollide)
+                    {
+                        Tile tile = Main.tile[num, num2];
+                        if (tile != null && tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || tile.TileType == TileID.PlanterBox))
+                        {
+                            projectile.Kill();
+                            return false;
+                        }
+                    }
+
+                    bool masterModeSkeletronPrimeHomingBomb = projectile.ai[0] == -1f;
+                    bool masterModeSkeletronPrimeFallingBomb = projectile.ai[0] == -2f;
+
+                    int target = 0;
+                    target = Player.FindClosest(projectile.Center, 1, 1);
+
+                    // Blow up when within a certain distance of the target
+                    if (Vector2.Distance(projectile.Center, Main.player[target].Center) < 16f)
+                    {
+                        projectile.Kill();
+                        return false;
+                    }
+
+                    if (masterModeSkeletronPrimeHomingBomb)
+                    {
+                        projectile.ai[1] += 1f;
+                        float homingStartTime = 20f;
+                        float homingEndTime = CalamityWorld.death ? 140f : 110f;
+
+                        if (projectile.ai[1] < homingEndTime)
+                        {
+                            projectile.ai[1] = homingEndTime;
+
+                            if (projectile.timeLeft > 3)
+                                projectile.tileCollide = true;
+                        }
+
+                        if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
+                        {
+                            float num134 = projectile.velocity.Length();
+                            Vector2 vector24 = Main.player[target].Center - projectile.Center;
+                            vector24.Normalize();
+                            vector24 *= num134;
+                            float inertia = CalamityWorld.death ? 25f : 30f;
+                            projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
+                            projectile.velocity.Normalize();
+                            projectile.velocity *= num134;
+                        }
+
+                        float maxVelocity = CalamityWorld.death ? 18f : 15f;
+                        float acceleration = 1.02f;
+                        if (projectile.velocity.Length() < maxVelocity)
+                            projectile.velocity *= acceleration;
+                    }
+                    else
+                    {
+                        if (projectile.velocity.Y > 10f)
+                        {
+                            projectile.velocity.Y = 10f;
+
+                            if (!projectile.tileCollide && projectile.timeLeft > 3)
+                                projectile.tileCollide = true;
+                        }
+                    }
+
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        projectile.localAI[0] = 1f;
+                        SoundEngine.PlaySound(SoundID.Item10, projectile.Center);
+                    }
+
+                    projectile.frameCounter++;
+                    if (projectile.frameCounter > 3)
+                    {
+                        projectile.frame++;
+                        projectile.frameCounter = 0;
+                    }
+
+                    if (projectile.frame > 1)
+                        projectile.frame = 0;
+
+                    if (projectile.owner == Main.myPlayer && projectile.timeLeft <= 3)
+                    {
+                        projectile.tileCollide = false;
+                        projectile.ai[2] = 0f;
+                        projectile.alpha = 255;
+                    }
+                    else if (Main.rand.NextBool())
+                    {
+                        int num28 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100);
+                        Main.dust[num28].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
+                        Main.dust[num28].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
+                        Main.dust[num28].noGravity = true;
+                        Main.dust[num28].position = projectile.Center + new Vector2(0f, -projectile.height / 2).RotatedBy(projectile.rotation) * 1.1f;
+                        int num29 = 6;
+                        Dust dust8 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, num29, 0f, 0f, 100);
+                        dust8.scale = 1f + (float)Main.rand.Next(5) * 0.1f;
+                        dust8.noGravity = true;
+                        dust8.position = projectile.Center + new Vector2(0f, -projectile.height / 2 - 6).RotatedBy(projectile.rotation) * 1.1f;
+                    }
+
+                    if (!masterModeSkeletronPrimeHomingBomb)
+                    {
+                        projectile.ai[2] += 1f;
+                        if (projectile.ai[2] > 5f)
+                        {
+                            projectile.ai[2] = 10f;
+                            if (projectile.velocity.Y == 0f && projectile.velocity.X != 0f)
+                            {
+                                projectile.velocity.X *= 0.97f;
+                                if ((double)projectile.velocity.X > -0.01 && (double)projectile.velocity.X < 0.01)
+                                {
+                                    projectile.velocity.X = 0f;
+                                    projectile.netUpdate = true;
+                                }
+                            }
+
+                            projectile.velocity.Y += 0.2f;
+                        }
+                    }
+
+                    projectile.rotation += projectile.velocity.X * 0.1f;
+
+                    return false;
+                }
+
+                else if (projectile.type == ProjectileID.FrostBeam && projectile.ai[0] == 1f)
+                {
+                    projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                    Lighting.AddLight(projectile.Center, 0f, (255 - projectile.alpha) * 0.15f / 255f, (255 - projectile.alpha) * 0.6f / 255f);
 
                     if (projectile.alpha > 0)
                         projectile.alpha -= 125;
@@ -1511,13 +1820,13 @@ namespace CalamityMod.Projectiles
                     bool homeIn = false;
                     float spreadOutCutoffTime = 510f;
                     float homeInCutoffTime = 420f;
-                    float minAcceleration = 0.05f;
-                    float maxAcceleration = 0.1f;
+                    float minAcceleration = Main.masterMode ? 0.1f : 0.05f;
+                    float maxAcceleration = Main.masterMode ? 0.2f : 0.1f;
                     float homingVelocity = 25f;
 
                     if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
                         homeIn = true;
-                    else if (projectile.velocity.Length() < 15f)
+                    else if (projectile.velocity.Length() < (Main.masterMode ? 20f : 15f))
                         projectile.velocity *= 1.1f;
 
                     if (homeIn)
@@ -2294,27 +2603,6 @@ namespace CalamityMod.Projectiles
 
                     if ((CalamityLists.hardModeNerfList.Contains(projectile.type) && Main.hardMode && !CalamityPlayer.areThereAnyDamnBosses && !Main.snowMoon) || projectile.type == ProjectileID.JavelinHostile)
                         projectile.damage = (int)(projectile.damage * 0.65);
-
-                    // Reduce mech boss projectile damage depending on the new ore progression changes
-                    if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
-                    {
-                        if (!NPC.downedMechBossAny)
-                        {
-                            if (MechBossProjectileIDs.Contains(projectile.type))
-                            {
-                                if (CalamityUtils.AnyBossNPCS(true))
-                                    projectile.damage = (int)(projectile.damage * 0.8);
-                            }
-                        }
-                        else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                        {
-                            if (MechBossProjectileIDs.Contains(projectile.type))
-                            {
-                                if (CalamityUtils.AnyBossNPCS(true))
-                                    projectile.damage = (int)(projectile.damage * 0.9);
-                            }
-                        }
-                    }
                 }
                 else
                 {
@@ -3187,18 +3475,123 @@ namespace CalamityMod.Projectiles
         }
         #endregion
 
-        #region Kill
-        public override void OnKill(Projectile projectile, int timeLeft)
+        public override bool PreKill(Projectile projectile, int timeLeft)
         {
-            Player player = Main.player[projectile.owner];
-            CalamityPlayer modPlayer = player.Calamity();
+            bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && Main.masterMode;
+            bool revQueenBeeBeeHive = projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet;
+
+            if (revQueenBeeBeeHive)
+            {
+                SoundEngine.PlaySound(SoundID.NPCDeath1, projectile.Center);
+                for (int num573 = 0; num573 < 30; num573++)
+                {
+                    int num574 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 147);
+                    if (Main.rand.NextBool())
+                    {
+                        Dust dust2 = Main.dust[num574];
+                        dust2.scale *= 1.4f;
+                    }
+
+                    projectile.velocity *= 1.9f;
+                }
+            }
+
             if (projectile.owner == Main.myPlayer)
             {
-                if (projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet)
+                if (masterRevSkeletronPrimeBomb)
+                {
+                    SoundEngine.PlaySound(SoundID.Item14, projectile.position);
+                    projectile.position.X += projectile.width / 2;
+                    projectile.position.Y += projectile.height / 2;
+                    projectile.width = projectile.height = 22;
+                    projectile.position.X -= projectile.width / 2;
+                    projectile.position.Y -= projectile.height / 2;
+
+                    for (int num951 = 0; num951 < 20; num951++)
+                    {
+                        int num952 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                        Dust dust2 = Main.dust[num952];
+                        dust2.velocity *= 1.4f;
+                    }
+
+                    int num950 = 6;
+                    for (int num953 = 0; num953 < 10; num953++)
+                    {
+                        int num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 2.5f);
+                        Main.dust[num954].noGravity = true;
+                        Dust dust2 = Main.dust[num954];
+                        dust2.velocity *= 5f;
+                        num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 1.5f);
+                        dust2 = Main.dust[num954];
+                        dust2.velocity *= 3f;
+                    }
+
+                    int num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    Gore gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X += 1f;
+                    Main.gore[num955].velocity.Y += 1f;
+                    num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X -= 1f;
+                    Main.gore[num955].velocity.Y += 1f;
+                    num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X += 1f;
+                    Main.gore[num955].velocity.Y -= 1f;
+                    num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X -= 1f;
+                    Main.gore[num955].velocity.Y -= 1f;
+
+                    Vector2 vector76 = projectile.position;
+                    projectile.position.X += projectile.width / 2;
+                    projectile.position.Y += projectile.height / 2;
+                    projectile.width = projectile.height = 128;
+                    projectile.position.X -= projectile.width / 2;
+                    projectile.position.Y -= projectile.height / 2;
+                    projectile.Damage();
+                    projectile.position = vector76;
+                    projectile.width = projectile.height = 22;
+
+                    if (Main.getGoodWorld && !Main.remixWorld)
+                    {
+                        int num1011 = 4;
+                        Vector2 center3 = projectile.position;
+                        int num1012 = num1011;
+                        int num1013 = num1011;
+                        int num1014 = (int)(center3.X / 16f - (float)num1012);
+                        int num1015 = (int)(center3.X / 16f + (float)num1012);
+                        int num1016 = (int)(center3.Y / 16f - (float)num1013);
+                        int num1017 = (int)(center3.Y / 16f + (float)num1013);
+                        if (num1014 < 0)
+                            num1014 = 0;
+
+                        if (num1015 > Main.maxTilesX)
+                            num1015 = Main.maxTilesX;
+
+                        if (num1016 < 0)
+                            num1016 = 0;
+
+                        if (num1017 > Main.maxTilesY)
+                            num1017 = Main.maxTilesY;
+
+                        bool wallSplode2 = projectile.ShouldWallExplode(center3, num1011, num1014, num1015, num1016, num1017);
+                        projectile.ExplodeTiles(center3, num1011, num1014, num1015, num1016, num1017, wallSplode2);
+                    }
+
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
+                }
+
+                else if (revQueenBeeBeeHive)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        int beeAmt = Main.rand.Next(2, 4);
+                        int beeAmt = Main.rand.Next(2, 6);
                         int availableAmountOfNPCsToSpawnUpToSlot = NPC.GetAvailableAmountOfNPCsToSpawnUpToSlot(beeAmt);
                         for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
@@ -3210,8 +3603,28 @@ namespace CalamityMod.Projectiles
                             Main.npc[beeSpawn].netUpdate = true;
                         }
                     }
-                }
 
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
+                }
+            }
+
+            if (masterRevSkeletronPrimeBomb || revQueenBeeBeeHive)
+            {
+                projectile.active = false;
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Kill
+        public override void OnKill(Projectile projectile, int timeLeft)
+        {
+            Player player = Main.player[projectile.owner];
+            CalamityPlayer modPlayer = player.Calamity();
+            if (projectile.owner == Main.myPlayer)
+            {
                 if (!projectile.npcProj && !projectile.trap)
                 {
                     if (projectile.CountsAsClass<RogueDamageClass>())

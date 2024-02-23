@@ -357,9 +357,10 @@ ChaliceOfTheBloodGod: {
 	Tooltip:
 		'''
 		Increases max HP by 25%
+		+2 HP/s life regen and reduces the cooldown of healing potions by 25%
 		Taking more than 5 damage converts the hit into a damage over time bleed debuff
 		This bleeding does not interfere with life regeneration
-		Drinking a healing potion removes half of the remaining bleed damage
+		Drinking a healing potion cancels up to 50% of its heal value of remaining bleed damage
 		Unequipping this accessory while bleeding inflicts the remaining damage instantly
 		'All that for a drop of blood...'
 		'''
@@ -525,9 +526,9 @@ DeificAmulet: {
 	DisplayName: Deific Amulet
 	Tooltip:
 		'''
-		Causes stars to fall and grants increased immune time when damaged
-		+0.5 HP/s life regen
-		Reduces the cooldown of healing potions
+		Causes stars to fall and increases length of invincibility after taking damage
+		Grants bonus invincibility frames based on your missing health
+		This effect scales from 10 frames at full HP to 40 frames at 25% or less HP
 		'''
 }
 
@@ -554,9 +555,8 @@ DraedonsHeart: {
 	Tooltip:
 		'''
 		{0}% reduced contact damage from enemies
-		Reduces defense damage taken by {1}%
 		[NANODESC]
-		With full Nanomachines, press [KEY] to heal {2} health over {3} {^3:second;seconds}
+		With full Nanomachines, press [KEY] to heal {1} health over {2} {^2:second;seconds}
 		While healing, you take [DR]% less damage
 		'Nanomachines, son'
 		'''
@@ -578,7 +578,7 @@ DragonScales: {
 	Tooltip:
 		'''
 		Rogue projectiles create slow fireballs as they travel
-		Stealth strikes create infernados on death
+		Stealth strikes create infernados where they hit
 		+10% max run speed and acceleration
 		Grants immunity to Dragonfire
 		'Only a living dragon holds true treasure'
@@ -680,7 +680,7 @@ EtherealExtorter: {
 	DisplayName: Ethereal Extorter
 	Tooltip:
 		'''
-		Rogue projectiles explode into homing souls on death
+		Rogue projectiles explode into homing souls on hit
 		8% increased rogue damage and +5 maximum stealth
 		'''
 }
@@ -811,6 +811,7 @@ GiantTortoiseShell: {
 	DisplayName: Giant Tortoise Shell
 	Tooltip:
 		'''
+		Grants immunity to knockback
 		5% increased damage reduction
 		10% reduced dash velocity
 		Taking a hit will remove the dash penalty and reduce defense and damage reduction for 5 seconds
@@ -1362,12 +1363,13 @@ RampartofDeities: {
 	DisplayName: Rampart of Deities
 	Tooltip:
 		'''
-		Causes stars to fall and gives increased immune time when damaged
-		+0.5 HP/s life regen and reduces the cooldown of healing potions
-		Absorbs 15% of damage done to players on your team
-		This effect is only active above 25% life
+		Causes stars to fall and increases length of invincibility after taking damage
+		Grants bonus invincibility frames based on your missing health
+		This effect scales from 10 frames at full HP to 40 frames at 25% or less HP
+		Being struck for over 200 damage grants 30 additional invincibility frames
 		Grants immunity to knockback
 		Puts a shell around the owner when below 50% life that reduces damage taken
+		Absorbs 25% of damage done to players on your team when above 25% life
 		'''
 }
 
@@ -1752,6 +1754,7 @@ TheAbsorber: {
 	Tooltip:
 		'''
 		12% increased movement and jump speed
+		Grants immunity to knockback
 		Enemies take immense damage when they touch you and are afflicted with a damaging sickness debuff that reduces damage reduction significantly
 		Using a healing potion will spawn a cleansing aura
 		Walking into the aura removes all debuffs and defense damage one time

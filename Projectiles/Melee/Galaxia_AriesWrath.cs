@@ -1,15 +1,15 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.Linq;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using static CalamityMod.CalamityUtils;
-using Terraria.Audio;
+using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -21,7 +21,6 @@ namespace CalamityMod.Projectiles.Melee
         public Player Owner => Main.player[Projectile.owner];
         public ref float ChainSwapTimer => ref Projectile.ai[0];
         public ref float BlastCooldown => ref Projectile.ai[1];
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed && Owner.HeldItem.type == ItemType<FourSeasonsGalaxia>();
 
         const float MaxProjReach = 500f; //How far away do you check for enemies for the extra projs from crits be
 
@@ -120,7 +119,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
-            if (!OwnerCanShoot)
+            if (Owner.CantUseHoldout() || Owner.HeldItem.type != ItemType<FourSeasonsGalaxia>())
             {
                 //Kill the projectile if too far away from the player or close enough to get "re-absorbed)
                 if ((Owner.Center - Projectile.Center).Length() < 30f || (Owner.Center - Projectile.Center).Length() > 2000f || Projectile.velocity.Length() > 100f)

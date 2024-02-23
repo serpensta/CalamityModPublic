@@ -56,7 +56,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 crystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel>());
 
             // Spawn crystal in phase 2
-            if (phase3 && npc.Calamity().newAI[0] == 0f && Main.netMode != NetmodeID.MultiplayerClient)
+            if (phase3 && npc.Calamity().newAI[0] == 0f)
             {
                 npc.Calamity().newAI[0] = 1f;
                 npc.SyncExtraAI();
@@ -72,8 +72,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         Main.dust[rubyDust].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
                     }
                 }
+
                 SoundEngine.PlaySound(SoundID.Item38, npc.position);
-                NPC.NewNPC(npc.GetSource_FromAI(), (int)vector.X, (int)vector.Y, ModContent.NPCType<KingSlimeJewel>());
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    NPC.NewNPC(npc.GetSource_FromAI(), (int)vector.X, (int)vector.Y, ModContent.NPCType<KingSlimeJewel>());
             }
 
             // Set up health value for spawning slimes

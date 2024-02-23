@@ -32,7 +32,11 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 22;
             NPC.defense = 10;
             NPC.DR_NERD(0.1f);
+
             NPC.lifeMax = 140;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
+
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;

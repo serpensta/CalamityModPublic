@@ -33,8 +33,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > CalamityGlobalNPC.CatchUpDistance200Tiles)
                 npc.TargetClosest();
 
+            bool enrage = true;
+            int targetTileX = (int)Main.player[npc.target].Center.X / 16;
+            int targetTileY = (int)Main.player[npc.target].Center.Y / 16;
+
+            Tile tile = Framing.GetTileSafely(targetTileX, targetTileY);
+            if (tile.WallType == WallID.CrimstoneUnsafe)
+                enrage = false;
+
             float enrageScale = bossRush ? 1.5f : masterMode ? 0.5f : 0f;
-            if ((npc.position.Y / 16f) < Main.worldSurface || bossRush)
+            if (((npc.position.Y / 16f) < Main.worldSurface && enrage) || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 0.5f;
@@ -119,7 +127,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     for (int j = 0; j < 20; j++)
                         Dust.NewDust(npc.position, npc.width, npc.height, 5, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
 
-                    SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                    SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
                 }
 
                 // Percent life remaining
@@ -189,7 +197,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         // Rubber band movement
                         if (!despawn)
                         {
-                            Vector2 brainCenter = new Vector2(npc.Center.X, npc.Center.Y);
+                            Vector2 brainCenter = npc.Center;
                             float targetXDist = Main.player[npc.target].Center.X - brainCenter.X;
                             float targetYDist = Main.player[npc.target].Center.Y - brainCenter.Y;
                             float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
@@ -267,7 +275,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     // Charge sound
                     if (npc.ai[2] == 0f)
                     {
-                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
 
                         if (CalamityWorld.LegendaryMode)
                         {
@@ -1002,12 +1010,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     for (int num840 = 0; num840 < 20; num840++)
                         Dust.NewDust(npc.position, npc.width, npc.height, 5, (float)Main.rand.Next(-30, 31) * 0.2f, (float)Main.rand.Next(-30, 31) * 0.2f);
 
-                    SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                    SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
                 }
 
                 npc.dontTakeDamage = false;
                 npc.TargetClosest();
-                Vector2 vector104 = new Vector2(npc.Center.X, npc.Center.Y);
+                Vector2 vector104 = npc.Center;
                 float num841 = Main.player[npc.target].Center.X - vector104.X;
                 float num842 = Main.player[npc.target].Center.Y - vector104.Y;
                 float num843 = (float)Math.Sqrt(num841 * num841 + num842 * num842);
@@ -1127,7 +1135,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.damage = 0;
 
                 npc.TargetClosest();
-                Vector2 vector105 = new Vector2(npc.Center.X, npc.Center.Y);
+                Vector2 vector105 = npc.Center;
                 float num853 = Main.player[npc.target].Center.X - vector105.X;
                 float num854 = Main.player[npc.target].Center.Y - vector105.Y;
                 float num855 = (float)Math.Sqrt(num853 * num853 + num854 * num854);
@@ -1267,7 +1275,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 npc.ai[1] = 0f;
                 float maxVelocity = Main.masterMode ? 10f : 8f;
-                Vector2 vector106 = new Vector2(npc.Center.X, npc.Center.Y);
+                Vector2 vector106 = npc.Center;
                 float num866 = Main.npc[NPC.crimsonBoss].Center.X - vector106.X;
                 float num867 = Main.npc[NPC.crimsonBoss].Center.Y - vector106.Y;
                 float num868 = (float)Math.Sqrt(num866 * num866 + num867 * num867);
@@ -1288,10 +1296,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.velocity.X *= velocityMult;
                 }
 
-                if (Main.netMode != NetmodeID.MultiplayerClient && ((Main.expertMode && Main.rand.NextBool(100)) || Main.rand.NextBool(200)))
+                if (Main.netMode != NetmodeID.MultiplayerClient && ((Main.expertMode && Main.rand.NextBool(Main.masterMode ? 50 : 100)) || Main.rand.NextBool(200)))
                 {
                     npc.TargetClosest();
-                    vector106 = new Vector2(npc.Center.X, npc.Center.Y);
+                    vector106 = npc.Center;
                     num866 = Main.player[npc.target].Center.X - vector106.X;
                     num867 = Main.player[npc.target].Center.Y - vector106.Y;
                     num868 = (float)Math.Sqrt(num866 * num866 + num867 * num867);
@@ -1326,7 +1334,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
             }
 
-            Vector2 vector108 = new Vector2(npc.Center.X, npc.Center.Y);
+            Vector2 vector108 = npc.Center;
             float num869 = Main.npc[NPC.crimsonBoss].Center.X - vector108.X;
             float num870 = Main.npc[NPC.crimsonBoss].Center.Y - vector108.Y;
             float num871 = (float)Math.Sqrt(num869 * num869 + num870 * num870);

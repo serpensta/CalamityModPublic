@@ -62,7 +62,7 @@ namespace CalamityMod.Projectiles.Melee
 
             if (Main.myPlayer == Projectile.owner)
             {
-                if (Owner.channel && !Owner.noItems && !Owner.CCed)
+                if (!Owner.CantUseHoldout())
                 {
                     float scaleFactor6 = 1f;
 

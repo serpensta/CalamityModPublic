@@ -987,9 +987,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
 
                         num650 += 7f * num644;
-                        Vector2 vector82 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                        float num651 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector82.X;
-                        float num652 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector82.Y;
+                        Vector2 vector82 = npc.Center;
+                        float num651 = Main.player[npc.target].Center.X - vector82.X;
+                        float num652 = Main.player[npc.target].Center.Y - vector82.Y;
                         float num653 = (float)Math.Sqrt(num651 * num651 + num652 * num652);
                         num653 = num650 / num653;
                         npc.velocity.X = num651 * num653;
@@ -1033,7 +1033,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     num654 += 3f * num644;
                     num655 += 0.5f * num644;
-                    if (npc.position.Y + (float)(npc.height / 2) < Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2))
+                    if (npc.Center.Y < Main.player[npc.target].Center.Y)
                         npc.velocity.Y += num655;
                     else
                         npc.velocity.Y -= num655;
@@ -1044,9 +1044,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.velocity.Y > num654)
                         npc.velocity.Y = num654;
 
-                    if (Math.Abs(npc.position.X + (float)(npc.width / 2) - (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))) > 600f)
+                    if (Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) > 600f)
                         npc.velocity.X += 0.15f * (float)npc.direction;
-                    else if (Math.Abs(npc.position.X + (float)(npc.width / 2) - (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))) < 300f)
+                    else if (Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < 300f)
                         npc.velocity.X -= 0.15f * (float)npc.direction;
                     else
                         npc.velocity.X *= 0.8f;
@@ -1085,7 +1085,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 int num657 = 1;
-                if (npc.position.X + (float)(npc.width / 2) < Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2))
+                if (npc.Center.X < Main.player[npc.target].Center.X)
                     num657 = -1;
 
                 num656 -= (int)(100f * num644);
@@ -1160,9 +1160,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (Main.expertMode)
                     num660 = Main.masterMode ? 0.15f : 0.1f;
 
-                Vector2 vector83 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num661 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector83.X;
-                float num662 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - 200f - vector83.Y;
+                Vector2 vector83 = npc.Center;
+                float num661 = Main.player[npc.target].Center.X - vector83.X;
+                float num662 = Main.player[npc.target].Center.Y - 200f - vector83.Y;
                 float num663 = (float)Math.Sqrt(num661 * num661 + num662 * num662);
                 if (num663 < 200f)
                 {
@@ -1206,10 +1206,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 npc.localAI[0] = 0f;
                 npc.TargetClosest();
-                Vector2 vector84 = new Vector2(npc.position.X + (float)(npc.width / 2) + (float)(Main.rand.Next(20) * npc.direction), npc.position.Y + (float)npc.height * 0.8f);
-                Vector2 vector85 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num664 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector85.X;
-                float num665 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector85.Y;
+                Vector2 vector84 = new Vector2(npc.Center.X + (float)(Main.rand.Next(20) * npc.direction), npc.position.Y + (float)npc.height * 0.8f);
+                Vector2 vector85 = npc.Center;
+                float num664 = Main.player[npc.target].Center.X - vector85.X;
+                float num665 = Main.player[npc.target].Center.Y - vector85.Y;
                 float num666 = (float)Math.Sqrt(num664 * num664 + num665 * num665);
                 npc.ai[1] += (Main.masterMode ? 2f : 1f);
                 if (Main.expertMode)
@@ -1267,8 +1267,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float num672 = Main.masterMode ? 16f : 14f;
                     float num673 = Main.masterMode ? 0.15f : 0.1f;
                     vector85 = vector84;
-                    num664 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector85.X;
-                    num665 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector85.Y;
+                    num664 = Main.player[npc.target].Center.X - vector85.X;
+                    num665 = Main.player[npc.target].Center.Y - vector85.Y;
                     num666 = (float)Math.Sqrt(num664 * num664 + num665 * num665);
                     num666 = num672 / num666;
                     if (npc.velocity.X < num664)
@@ -1324,10 +1324,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 num675 += 0.2f * num644;
                 num674 += 6f * num644;
-                Vector2 vector86 = new Vector2(npc.position.X + (float)(npc.width / 2) + (float)(Main.rand.Next(20) * npc.direction), npc.position.Y + (float)npc.height * 0.8f);
-                Vector2 vector87 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num676 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector87.X;
-                float num677 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - 300f - vector87.Y;
+                Vector2 vector86 = new Vector2(npc.Center.X + (float)(Main.rand.Next(20) * npc.direction), npc.position.Y + (float)npc.height * 0.8f);
+                Vector2 vector87 = npc.Center;
+                float num676 = Main.player[npc.target].Center.X - vector87.X;
+                float num677 = Main.player[npc.target].Center.Y - 300f - vector87.Y;
                 float num678 = (float)Math.Sqrt(num676 * num676 + num677 * num677);
                 npc.ai[1] += 1f;
                 int num679 = 40;
@@ -1351,16 +1351,16 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             num680 += stingerVelocityIncrease * 1.5f;
 
                         num680 += 7f * num644;
-                        int num681 = (int)(80f - 39f * num644);
-                        int num682 = (int)(40f - 19f * num644);
+                        int num681 = (int)(12f - 5f * num644);
+                        int num682 = (int)(6f - 2f * num644);
                         if (num681 < 1)
                             num681 = 1;
 
                         if (num682 < 1)
                             num682 = 1;
 
-                        float num683 = Main.player[npc.target].position.X + (float)Main.player[npc.target].width * 0.5f - vector86.X + (float)Main.rand.Next(-num681, num681 + 1);
-                        float num684 = Main.player[npc.target].position.Y + (float)Main.player[npc.target].height * 0.5f - vector86.Y + (float)Main.rand.Next(-num682, num682 + 1);
+                        float num683 = Main.player[npc.target].Center.X - vector86.X + (float)Main.rand.Next(-num681, num681 + 1);
+                        float num684 = Main.player[npc.target].Center.Y - vector86.Y + (float)Main.rand.Next(-num682, num682 + 1);
                         float num685 = (float)Math.Sqrt(num683 * num683 + num684 * num684);
                         num685 = num680 / num685;
                         num683 *= num685;
@@ -1380,8 +1380,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         num675 = 0.5f;
 
                     vector87 = vector86;
-                    num676 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector87.X;
-                    num677 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector87.Y;
+                    num676 = Main.player[npc.target].Center.X - vector87.X;
+                    num677 = Main.player[npc.target].Center.Y - vector87.Y;
                     num678 = (float)Math.Sqrt(num676 * num676 + num677 * num677);
                     num678 = num674 / num678;
                     if (npc.velocity.X < num676)

@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Magic
 
             bool shoot = CurrentFrame == ShootFrame && Projectile.ai[0] == 0f;
             bool ableToShoot = true;
-            bool weaponInUse = Owner.channel && !Owner.noItems && !Owner.CCed;
+            bool weaponInUse = !Owner.CantUseHoldout();
             int manaCost = (int)(30f * Owner.manaCost);
             Vector2 halvedSize = Projectile.Size / 2f;
             Vector2 staffOffset = halvedSize + new Vector2(24f, 24f);

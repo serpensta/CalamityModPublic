@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             Item.width = 64;
             Item.height = 66;
-            Item.damage = 56;
+            Item.damage = 50;
             Item.knockBack = 3.5f;
             Item.useAnimation = Item.useTime = 24;
             Item.autoReuse = true;
@@ -28,7 +28,7 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.value = CalamityGlobalItem.Rarity5BuyPrice;
         }
 
-        public override float StealthDamageMultiplier => 1.4f;
+        public override float StealthDamageMultiplier => 1.55f;
         public override float StealthVelocityMultiplier => 1.2f;
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

@@ -24,7 +24,6 @@ namespace CalamityMod.Projectiles.Melee
         public Player Owner => Main.player[Projectile.owner];
         public ref float ChainSwapTimer => ref Projectile.ai[0];
         public ref float SnapCoyoteTime => ref Projectile.ai[1];
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
 
         const float MaxTangleReach = 400f; //How long can tangling vines from crits be
 
@@ -36,9 +35,6 @@ namespace CalamityMod.Projectiles.Melee
         public Particle smear;
         public Particle smear2;
 
-        public override void SetStaticDefaults()
-        {
-        }
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
@@ -162,7 +158,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
-            if (!OwnerCanShoot)
+            if (Owner.CantUseHoldout())
             {
                 Projectile.Kill();
                 return;
