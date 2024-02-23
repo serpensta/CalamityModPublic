@@ -207,9 +207,9 @@ namespace CalamityMod
             Mount.drillPickPower = 225;
 
             // Make Graveyard biomes require more Gravestones
-            SceneMetrics.GraveyardTileMax = 88;
-            SceneMetrics.GraveyardTileMin = 68;
-            SceneMetrics.GraveyardTileThreshold = 80;
+            SceneMetrics.GraveyardTileMax = 60;
+            SceneMetrics.GraveyardTileMin = 40;
+            SceneMetrics.GraveyardTileThreshold = 52;
 
             if (!Main.dedServ)
             {
