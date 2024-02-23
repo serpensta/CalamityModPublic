@@ -2002,7 +2002,7 @@ namespace CalamityMod.NPCs
             {
                 string key = "Mods.CalamityMod.Status.Progression.HardmodeOreTier4Text";
                 Color messageColor = new Color(50, 255, 130);
-                CalamityUtils.SpawnOre(ModContent.TileType<HallowedOre>(), 12E-05, 0.55f, 0.9f, 3, 8, TileID.Pearlstone, TileID.HallowHardenedSand, TileID.HallowSandstone, TileID.HallowedIce);
+                CalamityUtils.SpawnOre(ModContent.TileType<HallowedOre>(), 17E-05, 0.55f, 0.9f, 8, 14, TileID.Pearlstone, TileID.HallowHardenedSand, TileID.HallowSandstone, TileID.HallowedIce);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
             }
         }

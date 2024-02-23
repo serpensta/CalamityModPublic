@@ -594,6 +594,13 @@ namespace CalamityMod
                 AddIngredient(ItemID.HellstoneBar, 4).
                 AddTile(TileID.Hellforge).
                 Register();
+            
+            // Magic Conch
+            Recipe.Create(ItemID.MagicConch).
+                AddIngredient(ItemID.ShellPileBlock, 20).
+                AddIngredient(ItemID.WhitePearl).
+                AddTile(TileID.Anvils).
+                Register();
 
             // Lava Fishing Hook
             Recipe.Create(ItemID.LavaFishingHook).
