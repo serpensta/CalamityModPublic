@@ -604,7 +604,8 @@ namespace CalamityMod.NPCs.NormalNPCs
                             
                             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > 64f)
                             {
-                                SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+                                SoundEngine.PlaySound(SoundID.Item61, NPC.Center);
+                                CreateParticles(NPC, new Vector2(NPC.Center.X + Main.rand.Next(NPC.width / 2), NPC.Center.Y + 4f));
 
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
@@ -720,6 +721,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             }
 
                             SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+                            CreateParticles(NPC, new Vector2(NPC.Center.X, NPC.Center.Y + 4f), 5);
 
                             if (NPC.localAI[0] >= totalBombSpreads)
                             {
@@ -736,6 +738,52 @@ namespace CalamityMod.NPCs.NormalNPCs
                         }
                     }
                 }
+            }
+        }
+
+        private void CreateParticles(NPC npc, Vector2 position, int amountMultiplier = 1)
+        {
+            int firstDustCloudParticleAmount = 30 * amountMultiplier;
+            int secondDustCloudParticleAmount = 20 * amountMultiplier;
+            int goreAmount = 2 * amountMultiplier;
+
+            for (int dustIndex = 0; dustIndex < firstDustCloudParticleAmount; dustIndex++)
+            {
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                Main.dust[dust].velocity *= 1.4f;
+            }
+
+            for (int dustIndex = 0; dustIndex < secondDustCloudParticleAmount; dustIndex++)
+            {
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 3.5f);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].velocity *= 7f;
+                dust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 1.5f);
+                Main.dust[dust].velocity *= 3f;
+            }
+
+            for (int goreIndex = 0; goreIndex < goreAmount; goreIndex++)
+            {
+                float goreVelocityMultiplier = 0.4f;
+                if (goreIndex >= goreAmount / 2)
+                    goreVelocityMultiplier = 0.8f;
+
+                int gore = Gore.NewGore(npc.GetSource_FromAI(), npc.Center, default(Vector2), Main.rand.Next(61, 64));
+                Main.gore[gore].velocity *= goreVelocityMultiplier;
+                Main.gore[gore].velocity.X += 1f;
+                Main.gore[gore].velocity.Y += 1f;
+                gore = Gore.NewGore(npc.GetSource_FromAI(), npc.Center, default(Vector2), Main.rand.Next(61, 64));
+                Main.gore[gore].velocity *= goreVelocityMultiplier;
+                Main.gore[gore].velocity.X -= 1f;
+                Main.gore[gore].velocity.Y += 1f;
+                gore = Gore.NewGore(npc.GetSource_FromAI(), npc.Center, default(Vector2), Main.rand.Next(61, 64));
+                Main.gore[gore].velocity *= goreVelocityMultiplier;
+                Main.gore[gore].velocity.X += 1f;
+                Main.gore[gore].velocity.Y -= 1f;
+                gore = Gore.NewGore(npc.GetSource_FromAI(), npc.Center, default(Vector2), Main.rand.Next(61, 64));
+                Main.gore[gore].velocity *= goreVelocityMultiplier;
+                Main.gore[gore].velocity.X -= 1f;
+                Main.gore[gore].velocity.Y -= 1f;
             }
         }
 
