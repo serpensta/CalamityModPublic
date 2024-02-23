@@ -24,7 +24,7 @@ namespace CalamityMod.Items.VanillaArmorChanges
         private void ApplyAnyPieceEffect(Player player)
         {
             // Remove the vanilla crit chance buff and replace it with damage
-            player.GetCritChance<GenericDamageClass>() -= 0.05f;
+            player.GetCritChance<GenericDamageClass>() -= 5;
             player.GetDamage<GenericDamageClass>() += ArmorPieceDamage;
 
             // Give jump boost

@@ -52,19 +52,19 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(BuffID.Poisoned, 180);
+            target.AddBuff(ModContent.BuffType<Irradiated>(), Projectile.Calamity().stealthStrike ? 180 : 90);
             if (Projectile.Calamity().stealthStrike) //stealth strike attack
             {
-                target.AddBuff(BuffID.Venom, 90);
+                target.AddBuff(BuffID.Venom, 180);
             }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(BuffID.Poisoned, 180);
+            target.AddBuff(ModContent.BuffType<Irradiated>(), Projectile.Calamity().stealthStrike ? 180 : 90);
             if (Projectile.Calamity().stealthStrike) //stealth strike attack
             {
-                target.AddBuff(BuffID.Venom, 90);
+                target.AddBuff(BuffID.Venom, 180);
             }
         }
 
