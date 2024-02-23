@@ -436,40 +436,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
                 }
 
-                float headYAcceleration = 0.04f + (death ? 0.04f * (1f - lifeRatio) : 0f);
-                float headYTopSpeed = 3.5f - (death ? 1.75f - lifeRatio : 0f);
-                float headXAcceleration = 0.08f + (death ? 0.08f * (1f - lifeRatio) : 0f);
-                float headXTopSpeed = 8.5f - (death ? 4.25f * (1f - lifeRatio) : 0f);
-
-                if (masterMode)
-                {
-                    headYAcceleration += 0.02f;
-                    headYTopSpeed -= 0.5f;
-                    headXAcceleration += 0.08f;
-                    headXTopSpeed -= 1f;
-                }
-
-                if (Main.getGoodWorld)
-                {
-                    headYAcceleration += 0.01f;
-                    headYTopSpeed -= 1f;
-                    headXAcceleration += 0.05f;
-                    headXTopSpeed -= 2f;
-                }
+                float headYAcceleration = (Main.getGoodWorld ? 0.07f : masterMode ? 0.06f : 0.04f) + (death ? 0.04f * (1f - lifeRatio) : 0f);
+                float headYTopSpeed = headYAcceleration * 100f;
+                float headXAcceleration = (Main.getGoodWorld ? 0.21f : masterMode ? 0.16f : 0.08f) + (death ? 0.08f * (1f - lifeRatio) : 0f);
+                float headXTopSpeed = headXAcceleration * 100f;
+                float deceleration = Main.getGoodWorld ? 0.83f : Main.masterMode ? 0.86f : Main.expertMode ? 0.89f : 0.92f;
 
                 if (bossRush)
                 {
                     headYAcceleration *= 1.25f;
-                    headYTopSpeed *= 0.75f;
                     headXAcceleration *= 1.25f;
-                    headXTopSpeed *= 0.75f;
                 }
-
-                float headTopSpeedCap = 0.5f;
-                if (headYTopSpeed < headTopSpeedCap)
-                    headYTopSpeed = headTopSpeedCap;
-                if (headXTopSpeed < headTopSpeedCap)
-                    headXTopSpeed = headTopSpeedCap;
 
                 float moveAwayGateValue = chargePhaseGateValue - (5f + chargePhaseChangeRate);
                 bool moveAwayBeforeCharge = npc.ai[2] >= moveAwayGateValue;
@@ -910,6 +887,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float velocityMultiplier = MathHelper.Lerp(death ? 0.5f : 0.7f, 1f, skeletronLifeRatio);
             float velocityIncrement = MathHelper.Lerp(0.2f, death ? 0.6f : 0.45f, 1f - skeletronLifeRatio);
             float handSwipeVelocity = MathHelper.Lerp(16f, death ? 28f : 22f, 1f - skeletronLifeRatio);
+            float deceleration = Main.getGoodWorld ? 0.78f : Main.masterMode ? 0.82f : Main.expertMode ? 0.86f : 0.9f;
+
             float handSwipeDuration = HandSwipeDistance / handSwipeVelocity;
             float slapGateValue = HandSlapGateValue;
 
@@ -929,13 +908,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 if (Main.npc[(int)npc.ai[1]].ai[1] != 0f)
                 {
-                    float maxX = (bossRush ? 4f : death ? 6f : 7f) * velocityMultiplier;
-                    float maxY = (bossRush ? 3f : death ? 4.5f : 5f) * velocityMultiplier;
+                    float maxX = velocityIncrement * 100f * velocityMultiplier;
+                    float maxY = velocityIncrement * 100f * velocityMultiplier;
 
                     if (npc.Top.Y > Main.npc[(int)npc.ai[1]].Top.Y - 100f * yMultiplier)
                     {
                         if (npc.velocity.Y > 0f)
-                            npc.velocity.Y *= 0.94f;
+                            npc.velocity.Y *= deceleration;
                         npc.velocity.Y -= velocityIncrement;
                         if (npc.velocity.Y > maxY)
                             npc.velocity.Y = maxY;
@@ -943,7 +922,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     else if (npc.Top.Y < Main.npc[(int)npc.ai[1]].Top.Y - 100f * yMultiplier)
                     {
                         if (npc.velocity.Y < 0f)
-                            npc.velocity.Y *= 0.94f;
+                            npc.velocity.Y *= deceleration;
                         npc.velocity.Y += velocityIncrement;
                         if (npc.velocity.Y < -maxY)
                             npc.velocity.Y = -maxY;
@@ -952,7 +931,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 120f * npc.ai[0])
                     {
                         if (npc.velocity.X > 0f)
-                            npc.velocity.X *= 0.94f;
+                            npc.velocity.X *= deceleration;
                         npc.velocity.X -= velocityIncrement;
                         if (npc.velocity.X > maxX)
                             npc.velocity.X = maxX;
@@ -961,7 +940,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 120f * npc.ai[0])
                     {
                         if (npc.velocity.X < 0f)
-                            npc.velocity.X *= 0.94f;
+                            npc.velocity.X *= deceleration;
                         npc.velocity.X += velocityIncrement;
                         if (npc.velocity.X < -maxX)
                             npc.velocity.X = -maxX;
@@ -993,13 +972,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         }
                     }
 
-                    float maxX = (bossRush ? 4f : death ? 6f : 7f) * velocityMultiplier;
-                    float maxY = (bossRush ? 1f : death ? 2f : 2.5f) * velocityMultiplier;
+                    float maxX = velocityIncrement * 100f * velocityMultiplier;
+                    float maxY = velocityIncrement * 100f * velocityMultiplier;
 
                     if (npc.Top.Y > Main.npc[(int)npc.ai[1]].Top.Y + 230f * yMultiplier)
                     {
                         if (npc.velocity.Y > 0f)
-                            npc.velocity.Y *= 0.92f;
+                            npc.velocity.Y *= deceleration;
                         npc.velocity.Y -= velocityIncrement;
                         if (npc.velocity.Y > maxY)
                             npc.velocity.Y = maxY;
@@ -1007,7 +986,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     else if (npc.Top.Y < Main.npc[(int)npc.ai[1]].Top.Y + 230f * yMultiplier)
                     {
                         if (npc.velocity.Y < 0f)
-                            npc.velocity.Y *= 0.92f;
+                            npc.velocity.Y *= deceleration;
                         npc.velocity.Y += velocityIncrement;
                         if (npc.velocity.Y < -maxY)
                             npc.velocity.Y = -maxY;
@@ -1016,7 +995,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                     {
                         if (npc.velocity.X > 0f)
-                            npc.velocity.X *= 0.92f;
+                            npc.velocity.X *= deceleration;
                         npc.velocity.X -= velocityIncrement;
                         if (npc.velocity.X > maxX)
                             npc.velocity.X = maxX;
@@ -1025,7 +1004,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                     {
                         if (npc.velocity.X < 0f)
-                            npc.velocity.X *= 0.92f;
+                            npc.velocity.X *= deceleration;
                         npc.velocity.X += velocityIncrement;
                         if (npc.velocity.X < -maxX)
                             npc.velocity.X = -maxX;
@@ -1318,63 +1297,49 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 npc.rotation = npc.velocity.X / 15f;
-                float num161 = 0.02f;
-                float num162 = 2f;
-                float num163 = 0.05f;
-                float num164 = 8f;
-                if (Main.expertMode)
-                {
-                    num161 = Main.masterMode ? 0.04f : 0.03f;
-                    num162 = Main.masterMode ? 3f : 4f;
-                    num163 = Main.masterMode ? 0.09f : 0.07f;
-                    num164 = Main.masterMode ? 8.5f : 9.5f;
-                }
-
-                if (Main.getGoodWorld)
-                {
-                    num161 += 0.01f;
-                    num162 += 1f;
-                    num163 += 0.05f;
-                    num164 += 2f;
-                }
+                float accelerationY = Main.getGoodWorld ? 0.05f : Main.masterMode ? 0.04f : Main.expertMode ? 0.03f : 0.02f;
+                float maxVelocityY = accelerationY * 100f;
+                float accelerationX = Main.getGoodWorld ? 0.093f : Main.masterMode ? 0.088f : Main.expertMode ? 0.076f : 0.064f;
+                float maxVelocityX = accelerationX * 100f;
+                float deceleration = Main.getGoodWorld ? 0.83f : Main.masterMode ? 0.86f : Main.expertMode ? 0.89f : 0.92f;
 
                 if (npc.position.Y > Main.player[npc.target].position.Y - 250f)
                 {
                     if (npc.velocity.Y > 0f)
-                        npc.velocity.Y *= 0.98f;
+                        npc.velocity.Y *= deceleration;
 
-                    npc.velocity.Y -= num161;
-                    if (npc.velocity.Y > num162)
-                        npc.velocity.Y = num162;
+                    npc.velocity.Y -= accelerationY;
+                    if (npc.velocity.Y > maxVelocityY)
+                        npc.velocity.Y = maxVelocityY;
                 }
                 else if (npc.position.Y < Main.player[npc.target].position.Y - 250f)
                 {
                     if (npc.velocity.Y < 0f)
-                        npc.velocity.Y *= 0.98f;
+                        npc.velocity.Y *= deceleration;
 
-                    npc.velocity.Y += num161;
-                    if (npc.velocity.Y < 0f - num162)
-                        npc.velocity.Y = 0f - num162;
+                    npc.velocity.Y += accelerationY;
+                    if (npc.velocity.Y < -maxVelocityY)
+                        npc.velocity.Y = -maxVelocityY;
                 }
 
                 if (npc.Center.X > Main.player[npc.target].Center.X)
                 {
                     if (npc.velocity.X > 0f)
-                        npc.velocity.X *= 0.98f;
+                        npc.velocity.X *= deceleration;
 
-                    npc.velocity.X -= num163;
-                    if (npc.velocity.X > num164)
-                        npc.velocity.X = num164;
+                    npc.velocity.X -= accelerationX;
+                    if (npc.velocity.X > maxVelocityX)
+                        npc.velocity.X = maxVelocityX;
                 }
 
                 if (npc.Center.X < Main.player[npc.target].Center.X)
                 {
                     if (npc.velocity.X < 0f)
-                        npc.velocity.X *= 0.98f;
+                        npc.velocity.X *= deceleration;
 
-                    npc.velocity.X += num163;
-                    if (npc.velocity.X < 0f - num164)
-                        npc.velocity.X = 0f - num164;
+                    npc.velocity.X += accelerationX;
+                    if (npc.velocity.X < 0f - maxVelocityX)
+                        npc.velocity.X = 0f - maxVelocityX;
                 }
             }
             else if (npc.ai[1] == 1f)
@@ -1553,43 +1518,49 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 if (Main.npc[(int)npc.ai[1]].ai[1] != 0f)
                 {
+                    float accelerationY = Main.getGoodWorld ? 0.1f : Main.masterMode ? 0.09f : Main.expertMode ? 0.08f : 0.07f;
+                    float maxVelocityY = accelerationY * 100f;
+                    float accelerationX = Main.getGoodWorld ? 0.16f : Main.masterMode ? 0.14f : Main.expertMode ? 0.12f : 0.1f;
+                    float maxVelocityX = accelerationX * 100f;
+                    float deceleration = Main.getGoodWorld ? 0.81f : Main.masterMode ? 0.84f : Main.expertMode ? 0.87f : 0.9f;
+
                     if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 100f)
                     {
                         if (npc.velocity.Y > 0f)
-                            npc.velocity.Y *= 0.96f;
+                            npc.velocity.Y *= deceleration;
 
-                        npc.velocity.Y -= (Main.masterMode ? 0.09f : 0.07f);
-                        if (npc.velocity.Y > 6f)
-                            npc.velocity.Y = 6f;
+                        npc.velocity.Y -= accelerationY;
+                        if (npc.velocity.Y > maxVelocityY)
+                            npc.velocity.Y = maxVelocityY;
                     }
                     else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 100f)
                     {
                         if (npc.velocity.Y < 0f)
-                            npc.velocity.Y *= 0.96f;
+                            npc.velocity.Y *= deceleration;
 
-                        npc.velocity.Y += (Main.masterMode ? 0.09f : 0.07f);
-                        if (npc.velocity.Y < -6f)
-                            npc.velocity.Y = -6f;
+                        npc.velocity.Y += accelerationY;
+                        if (npc.velocity.Y < -maxVelocityY)
+                            npc.velocity.Y = -maxVelocityY;
                     }
 
                     if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 120f * npc.ai[0])
                     {
                         if (npc.velocity.X > 0f)
-                            npc.velocity.X *= 0.96f;
+                            npc.velocity.X *= deceleration;
 
-                        npc.velocity.X -= (Main.masterMode ? 0.12f : 0.1f);
-                        if (npc.velocity.X > 8f)
-                            npc.velocity.X = 8f;
+                        npc.velocity.X -= accelerationX;
+                        if (npc.velocity.X > maxVelocityX)
+                            npc.velocity.X = maxVelocityX;
                     }
 
                     if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 120f * npc.ai[0])
                     {
                         if (npc.velocity.X < 0f)
-                            npc.velocity.X *= 0.96f;
+                            npc.velocity.X *= deceleration;
 
-                        npc.velocity.X += (Main.masterMode ? 0.12f : 0.1f);
-                        if (npc.velocity.X < -8f)
-                            npc.velocity.X = -8f;
+                        npc.velocity.X += accelerationX;
+                        if (npc.velocity.X < -maxVelocityX)
+                            npc.velocity.X = -maxVelocityX;
                     }
                 }
                 else
@@ -1607,85 +1578,91 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.netUpdate = true;
                     }
 
+                    float accelerationY = Main.getGoodWorld ? 0.07f : Main.masterMode ? 0.06f : Main.expertMode ? 0.05f : 0.04f;
+                    float maxVelocityY = accelerationY * 100f;
+                    float accelerationX = Main.getGoodWorld ? 0.13f : Main.masterMode ? 0.11f : Main.expertMode ? 0.09f : 0.07f;
+                    float maxVelocityX = accelerationX * 100f;
+                    float deceleration = Main.getGoodWorld ? 0.88f : Main.masterMode ? 0.9f : Main.expertMode ? 0.92f : 0.94f;
+
                     if (Main.expertMode)
                     {
                         if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 230f)
                         {
                             if (npc.velocity.Y > 0f)
-                                npc.velocity.Y *= 0.96f;
+                                npc.velocity.Y *= deceleration;
 
-                            npc.velocity.Y -= (Main.masterMode ? 0.06f : 0.04f);
-                            if (npc.velocity.Y > 3f)
-                                npc.velocity.Y = 3f;
+                            npc.velocity.Y -= accelerationY;
+                            if (npc.velocity.Y > maxVelocityY)
+                                npc.velocity.Y = maxVelocityY;
                         }
                         else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 230f)
                         {
                             if (npc.velocity.Y < 0f)
-                                npc.velocity.Y *= 0.96f;
+                                npc.velocity.Y *= deceleration;
 
-                            npc.velocity.Y += (Main.masterMode ? 0.06f : 0.04f);
-                            if (npc.velocity.Y < -3f)
-                                npc.velocity.Y = -3f;
+                            npc.velocity.Y += accelerationY;
+                            if (npc.velocity.Y < -maxVelocityY)
+                                npc.velocity.Y = -maxVelocityY;
                         }
 
                         if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                         {
                             if (npc.velocity.X > 0f)
-                                npc.velocity.X *= 0.96f;
+                                npc.velocity.X *= deceleration;
 
-                            npc.velocity.X -= (Main.masterMode ? 0.09f : 0.07f);
-                            if (npc.velocity.X > 8f)
-                                npc.velocity.X = 8f;
+                            npc.velocity.X -= accelerationX;
+                            if (npc.velocity.X > maxVelocityX)
+                                npc.velocity.X = maxVelocityX;
                         }
 
                         if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                         {
                             if (npc.velocity.X < 0f)
-                                npc.velocity.X *= 0.96f;
+                                npc.velocity.X *= deceleration;
 
-                            npc.velocity.X += (Main.masterMode ? 0.09f : 0.07f);
-                            if (npc.velocity.X < -8f)
-                                npc.velocity.X = -8f;
+                            npc.velocity.X += accelerationX;
+                            if (npc.velocity.X < -maxVelocityX)
+                                npc.velocity.X = -maxVelocityX;
                         }
                     }
 
                     if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 230f)
                     {
                         if (npc.velocity.Y > 0f)
-                            npc.velocity.Y *= 0.96f;
+                            npc.velocity.Y *= deceleration;
 
-                        npc.velocity.Y -= (Main.masterMode ? 0.06f : 0.04f);
-                        if (npc.velocity.Y > 3f)
-                            npc.velocity.Y = 3f;
+                        npc.velocity.Y -= accelerationY;
+                        if (npc.velocity.Y > maxVelocityY)
+                            npc.velocity.Y = maxVelocityY;
                     }
                     else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 230f)
                     {
                         if (npc.velocity.Y < 0f)
-                            npc.velocity.Y *= 0.96f;
+                            npc.velocity.Y *= deceleration;
 
-                        npc.velocity.Y += (Main.masterMode ? 0.06f : 0.04f);
-                        if (npc.velocity.Y < -3f)
-                            npc.velocity.Y = -3f;
+                        npc.velocity.Y += accelerationY;
+                        if (npc.velocity.Y < -maxVelocityY)
+                            npc.velocity.Y = -maxVelocityY;
                     }
 
                     if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                     {
                         if (npc.velocity.X > 0f)
-                            npc.velocity.X *= 0.96f;
+                            npc.velocity.X *= deceleration;
 
-                        npc.velocity.X -= (Main.masterMode ? 0.09f : 0.07f);
-                        if (npc.velocity.X > 8f)
-                            npc.velocity.X = 8f;
+                        npc.velocity.X -= accelerationX;
+                        if (npc.velocity.X > maxVelocityX)
+                            npc.velocity.X = maxVelocityX;
                     }
 
                     if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
                     {
                         if (npc.velocity.X < 0f)
-                            npc.velocity.X *= 0.96f;
+                            npc.velocity.X *= deceleration;
 
-                        npc.velocity.X += (Main.masterMode ? 0.09f : 0.07f);
-                        if (npc.velocity.X < -8f)
-                            npc.velocity.X = -8f;
+                        npc.velocity.X += accelerationX;
+                        if (npc.velocity.X < -maxVelocityX)
+                            npc.velocity.X = -maxVelocityX;
                     }
                 }
 

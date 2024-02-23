@@ -1685,62 +1685,8 @@ namespace CalamityMod.Projectiles
                     // Blow up when within a certain distance of the target
                     if (Vector2.Distance(projectile.Center, Main.player[target].Center) < 16f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item14, projectile.position);
-                        projectile.position.X += projectile.width / 2;
-                        projectile.position.Y += projectile.height / 2;
-                        projectile.width = projectile.height = 22;
-                        projectile.position.X -= projectile.width / 2;
-                        projectile.position.Y -= projectile.height / 2;
-
-                        for (int num951 = 0; num951 < 20; num951++)
-                        {
-                            int num952 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
-                            Dust dust2 = Main.dust[num952];
-                            dust2.velocity *= 1.4f;
-                        }
-
-                        int num950 = 6;
-                        for (int num953 = 0; num953 < 10; num953++)
-                        {
-                            int num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 2.5f);
-                            Main.dust[num954].noGravity = true;
-                            Dust dust2 = Main.dust[num954];
-                            dust2.velocity *= 5f;
-                            num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 1.5f);
-                            dust2 = Main.dust[num954];
-                            dust2.velocity *= 3f;
-                        }
-
-                        int num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
-                        Gore gore2 = Main.gore[num955];
-                        gore2.velocity *= 0.4f;
-                        Main.gore[num955].velocity.X += 1f;
-                        Main.gore[num955].velocity.Y += 1f;
-                        num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
-                        gore2 = Main.gore[num955];
-                        gore2.velocity *= 0.4f;
-                        Main.gore[num955].velocity.X -= 1f;
-                        Main.gore[num955].velocity.Y += 1f;
-                        num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
-                        gore2 = Main.gore[num955];
-                        gore2.velocity *= 0.4f;
-                        Main.gore[num955].velocity.X += 1f;
-                        Main.gore[num955].velocity.Y -= 1f;
-                        num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
-                        gore2 = Main.gore[num955];
-                        gore2.velocity *= 0.4f;
-                        Main.gore[num955].velocity.X -= 1f;
-                        Main.gore[num955].velocity.Y -= 1f;
-
-                        Vector2 vector76 = projectile.position;
-                        projectile.position.X += projectile.width / 2;
-                        projectile.position.Y += projectile.height / 2;
-                        projectile.width = projectile.height = 128;
-                        projectile.position.X -= projectile.width / 2;
-                        projectile.position.Y -= projectile.height / 2;
-                        projectile.Damage();
-                        projectile.position = vector76;
-                        projectile.width = projectile.height = 22;
+                        projectile.Kill();
+                        return false;
                     }
 
                     if (masterModeSkeletronPrimeHomingBomb)
@@ -3529,18 +3475,123 @@ namespace CalamityMod.Projectiles
         }
         #endregion
 
-        #region Kill
-        public override void OnKill(Projectile projectile, int timeLeft)
+        public override bool PreKill(Projectile projectile, int timeLeft)
         {
-            Player player = Main.player[projectile.owner];
-            CalamityPlayer modPlayer = player.Calamity();
+            bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && Main.masterMode;
+            bool revQueenBeeBeeHive = projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet;
+
+            if (revQueenBeeBeeHive)
+            {
+                SoundEngine.PlaySound(SoundID.NPCDeath1, projectile.Center);
+                for (int num573 = 0; num573 < 30; num573++)
+                {
+                    int num574 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 147);
+                    if (Main.rand.NextBool())
+                    {
+                        Dust dust2 = Main.dust[num574];
+                        dust2.scale *= 1.4f;
+                    }
+
+                    projectile.velocity *= 1.9f;
+                }
+            }
+
             if (projectile.owner == Main.myPlayer)
             {
-                if (projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet)
+                if (masterRevSkeletronPrimeBomb)
+                {
+                    SoundEngine.PlaySound(SoundID.Item14, projectile.position);
+                    projectile.position.X += projectile.width / 2;
+                    projectile.position.Y += projectile.height / 2;
+                    projectile.width = projectile.height = 22;
+                    projectile.position.X -= projectile.width / 2;
+                    projectile.position.Y -= projectile.height / 2;
+
+                    for (int num951 = 0; num951 < 20; num951++)
+                    {
+                        int num952 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                        Dust dust2 = Main.dust[num952];
+                        dust2.velocity *= 1.4f;
+                    }
+
+                    int num950 = 6;
+                    for (int num953 = 0; num953 < 10; num953++)
+                    {
+                        int num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 2.5f);
+                        Main.dust[num954].noGravity = true;
+                        Dust dust2 = Main.dust[num954];
+                        dust2.velocity *= 5f;
+                        num954 = Dust.NewDust(projectile.position, projectile.width, projectile.height, num950, 0f, 0f, 100, default(Color), 1.5f);
+                        dust2 = Main.dust[num954];
+                        dust2.velocity *= 3f;
+                    }
+
+                    int num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    Gore gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X += 1f;
+                    Main.gore[num955].velocity.Y += 1f;
+                    num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X -= 1f;
+                    Main.gore[num955].velocity.Y += 1f;
+                    num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X += 1f;
+                    Main.gore[num955].velocity.Y -= 1f;
+                    num955 = Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, default(Vector2), Main.rand.Next(61, 64));
+                    gore2 = Main.gore[num955];
+                    gore2.velocity *= 0.4f;
+                    Main.gore[num955].velocity.X -= 1f;
+                    Main.gore[num955].velocity.Y -= 1f;
+
+                    Vector2 vector76 = projectile.position;
+                    projectile.position.X += projectile.width / 2;
+                    projectile.position.Y += projectile.height / 2;
+                    projectile.width = projectile.height = 128;
+                    projectile.position.X -= projectile.width / 2;
+                    projectile.position.Y -= projectile.height / 2;
+                    projectile.Damage();
+                    projectile.position = vector76;
+                    projectile.width = projectile.height = 22;
+
+                    if (Main.getGoodWorld && !Main.remixWorld)
+                    {
+                        int num1011 = 4;
+                        Vector2 center3 = projectile.position;
+                        int num1012 = num1011;
+                        int num1013 = num1011;
+                        int num1014 = (int)(center3.X / 16f - (float)num1012);
+                        int num1015 = (int)(center3.X / 16f + (float)num1012);
+                        int num1016 = (int)(center3.Y / 16f - (float)num1013);
+                        int num1017 = (int)(center3.Y / 16f + (float)num1013);
+                        if (num1014 < 0)
+                            num1014 = 0;
+
+                        if (num1015 > Main.maxTilesX)
+                            num1015 = Main.maxTilesX;
+
+                        if (num1016 < 0)
+                            num1016 = 0;
+
+                        if (num1017 > Main.maxTilesY)
+                            num1017 = Main.maxTilesY;
+
+                        bool wallSplode2 = projectile.ShouldWallExplode(center3, num1011, num1014, num1015, num1016, num1017);
+                        projectile.ExplodeTiles(center3, num1011, num1014, num1015, num1016, num1017, wallSplode2);
+                    }
+
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
+                }
+
+                else if (revQueenBeeBeeHive)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        int beeAmt = Main.rand.Next(2, 4);
+                        int beeAmt = Main.rand.Next(2, 6);
                         int availableAmountOfNPCsToSpawnUpToSlot = NPC.GetAvailableAmountOfNPCsToSpawnUpToSlot(beeAmt);
                         for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
@@ -3552,8 +3603,28 @@ namespace CalamityMod.Projectiles
                             Main.npc[beeSpawn].netUpdate = true;
                         }
                     }
-                }
 
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
+                }
+            }
+
+            if (masterRevSkeletronPrimeBomb || revQueenBeeBeeHive)
+            {
+                projectile.active = false;
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Kill
+        public override void OnKill(Projectile projectile, int timeLeft)
+        {
+            Player player = Main.player[projectile.owner];
+            CalamityPlayer modPlayer = player.Calamity();
+            if (projectile.owner == Main.myPlayer)
+            {
                 if (!projectile.npcProj && !projectile.trap)
                 {
                     if (projectile.CountsAsClass<RogueDamageClass>())

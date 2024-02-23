@@ -6157,8 +6157,8 @@ namespace CalamityMod.NPCs
                     Color eyesColor = new Color(200, 200, 200, 0);
                     if ((Main.masterMode || BossRushEvent.BossRushActive) && CalamityWorld.revenge)
                     {
-                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(100, 50, 255, 0) : new Color(200, 255, 0, 0);
-                        for (int i = 0; i < 3; i++)
+                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, 0) : new Color(255, 255, 0, 0);
+                        for (int i = 0; i < 6; i++)
                             spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                     }
                     else
