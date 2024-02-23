@@ -3110,7 +3110,7 @@ namespace CalamityMod.NPCs
                     case NPCID.Spazmatism:
                         return TwinsAI.VanillaSpazmatismAI(npc, Mod);
 
-                    /*case NPCID.SkeletronPrime:
+                    case NPCID.SkeletronPrime:
                         return SkeletronPrimeAI.VanillaSkeletronPrimeAI(npc, Mod);
                     case NPCID.PrimeLaser:
                         return SkeletronPrimeAI.VanillaPrimeLaserAI(npc, Mod);
@@ -3121,7 +3121,7 @@ namespace CalamityMod.NPCs
                     case NPCID.PrimeSaw:
                         return SkeletronPrimeAI.VanillaPrimeSawAI(npc, Mod);
 
-                    case NPCID.Plantera:
+                    /*case NPCID.Plantera:
                         return PlanteraAI.VanillaPlanteraAI(npc, Mod);
                     case NPCID.PlanterasHook:
                         return PlanteraAI.VanillaPlanterasHookAI(npc, Mod);
