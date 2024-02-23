@@ -404,7 +404,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.damage = 0;
 
                 calamityGlobalNPC.newAI[1] += 1f;
-                float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 9f) : phase4 ? (death ? 4f : 1f) : ((1f - lifeRatio) / (1f - phase4LifeRatio));
+                float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 14f) : phase4 ? (death ? 4f : 3f) : (2f * ((1f - lifeRatio) / (1f - phase4LifeRatio)));
                 float chargePhaseChangeRate = chargePhaseChangeRateBoost + 1f;
                 npc.ai[2] += chargePhaseChangeRate;
                 npc.localAI[1] += chargePhaseChangeRate;
@@ -892,11 +892,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float handSwipeDuration = HandSwipeDistance / handSwipeVelocity;
             float slapGateValue = HandSlapGateValue;
 
-            float slapTimerIncrement = MathHelper.Lerp(1f, death ? 3f : 2f, 1f - skeletronLifeRatio);
+            float slapTimerIncrement = MathHelper.Lerp(1f, 2f, 1f - skeletronLifeRatio);
             if (phase3)
-                slapTimerIncrement *= (death ? 5f : 2f);
+                slapTimerIncrement *= (death ? 3f : 2f);
             else if (phase2)
-                slapTimerIncrement *= (death ? 3f : 1.5f);
+                slapTimerIncrement *= (death ? 2f : 1.5f);
 
             if (npc.ai[2] == 0f || npc.ai[2] == 3f)
             {
