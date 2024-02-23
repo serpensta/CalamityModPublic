@@ -1257,6 +1257,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
         public static bool BuffedProbeAI(NPC npc, Mod mod)
         {
             bool bossRush = BossRushEvent.BossRushActive;
+            bool masterMode = Main.masterMode || bossRush;
 
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
@@ -1267,8 +1268,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (targetData.Type == NPCTargetType.Player)
                 targetDead = Main.player[npc.target].dead;
 
-            float velocity = bossRush ? 8f : 6f;
-            float acceleration = bossRush ? 0.1f : 0.05f;
+            float velocity = bossRush ? 12f : masterMode ? 8.4f : 7.2f;
+            float acceleration = bossRush ? 0.1f : masterMode ? 0.07f : 0.06f;
 
             Vector2 probeCenter = npc.Center;
             float probeTargetX = targetData.Center.X;
@@ -1404,7 +1405,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             npc.localAI[0] += 1f;
-            if (npc.justHit)
+            if (npc.justHit && !masterMode)
                 npc.localAI[0] = 0f;
 
             float laserGateValue = NPC.IsMechQueenUp ? 360f : bossRush ? 150f : 240f;
@@ -1528,8 +1529,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (targetData.Type == NPCTargetType.Player)
                 flag = Main.player[npc.target].dead;
 
-            float num = Main.zenithWorld ? 3f : 6f;
-            float num2 = 0.05f;
+            float num = Main.zenithWorld ? 3f : Main.expertMode ? 7.2f : 6f;
+            float num2 = Main.expertMode ? 0.06f : 0.05f;
 
             Vector2 vector = npc.Center;
             float num4 = targetData.Center.X;
@@ -1652,7 +1653,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (npc.ai[3] != 0f)
                 npc.localAI[0] += 2f;
 
-            if (npc.justHit)
+            if (npc.justHit && !Main.masterMode)
                 npc.localAI[0] = 0f;
 
             float num10 = 120f;
