@@ -155,7 +155,6 @@ namespace CalamityMod.Items.Placeables.Furniture.DevPaintings
 			"MarieArk",
 			"Minecat",
 			"Mrrp",
-   			"nalyddd",
 			"Nao",
 			"Neverglide",
 			"Nincity",
