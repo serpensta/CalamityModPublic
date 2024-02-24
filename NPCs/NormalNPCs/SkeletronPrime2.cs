@@ -56,7 +56,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToSickness = false;
             AnimationType = NPCID.SkeletronPrime;
-            Music = MusicID.Boss1;
+            Music = MusicID.Boss3;
         }
 
         public override void SendExtraAI(BinaryWriter writer)

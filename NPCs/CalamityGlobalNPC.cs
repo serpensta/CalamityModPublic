@@ -3125,10 +3125,10 @@ namespace CalamityMod.NPCs
                     case NPCID.Plantera:
                         return PlanteraAI.VanillaPlanteraAI(npc, Mod);
                     
-                    /*case NPCID.HallowBoss:
+                    case NPCID.HallowBoss:
                         return EmpressofLightAI.VanillaEmpressofLightAI(npc, Mod);
 
-                    case NPCID.Golem:
+                    /*case NPCID.Golem:
                         return GolemAI.VanillaGolemAI(npc, Mod);
                     case NPCID.GolemFistLeft:
                     case NPCID.GolemFistRight:
