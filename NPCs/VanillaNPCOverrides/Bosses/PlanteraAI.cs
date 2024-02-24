@@ -257,11 +257,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (Main.rand.NextBool(dustChance))
                         {
                             int dust = Dust.NewDust(npc.position, npc.width, npc.height, 74, 0f, 0f, 0, default, 1.4f);
-                            Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                            vector.Normalize();
+                            Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101)).SafeNormalize(Vector2.UnitY);
                             vector *= Main.rand.Next(50, 100) * 0.04f;
                             Main.dust[dust].velocity = vector;
-                            vector.Normalize();
+                            vector = vector.SafeNormalize(Vector2.UnitY);
                             vector *= 86f;
                             Main.dust[dust].position = npc.Center - vector;
                         }
@@ -454,11 +453,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (Main.rand.NextBool(dustChance))
                     {
                         int dust = Dust.NewDust(npc.position, npc.width, npc.height, 74, 0f, 0f, 0, default, 1.4f);
-                        Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                        vector.Normalize();
+                        Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101)).SafeNormalize(Vector2.UnitY);
                         vector *= Main.rand.Next(50, 100) * 0.04f;
                         Main.dust[dust].velocity = vector;
-                        vector.Normalize();
+                        vector = vector.SafeNormalize(Vector2.UnitY);
                         vector *= 86f;
                         Main.dust[dust].position = npc.Center - vector;
                     }
@@ -798,11 +796,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 0.75f;
                     Main.dust[dust].fadeIn = 1.3f;
-                    Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                    vector.Normalize();
+                    Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101)).SafeNormalize(Vector2.UnitY);
                     vector *= Main.rand.Next(50, 100) * 0.04f;
                     Main.dust[dust].velocity = vector;
-                    vector.Normalize();
+                    vector = vector.SafeNormalize(Vector2.UnitY);
                     vector *= 86f;
                     Main.dust[dust].position = npc.Center - vector;
                 }

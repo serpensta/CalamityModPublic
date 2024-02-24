@@ -381,7 +381,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(laserFireDirection) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                             NPC.localAI[1] += 1f;
@@ -493,8 +493,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 enragedHeadSkullTargetX *= enragedHeadSkullTargetDist;
                                 enragedHeadSkullTargetY *= enragedHeadSkullTargetDist;
 
-                                Vector2 value = new Vector2(enragedHeadSkullTargetX * 1f + Main.rand.Next(-50, 51) * 0.01f, enragedHeadSkullTargetY * 1f + Main.rand.Next(-50, 51) * 0.01f);
-                                value.Normalize();
+                                Vector2 value = new Vector2(enragedHeadSkullTargetX * 1f + Main.rand.Next(-50, 51) * 0.01f, enragedHeadSkullTargetY * 1f + Main.rand.Next(-50, 51) * 0.01f).SafeNormalize(Vector2.UnitY);
                                 value *= enragedHeadSpeed;
                                 value += NPC.velocity;
                                 enragedHeadSkullTargetX = value.X;
@@ -618,8 +617,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                     enragedHeadBombTargetX *= enragedHeadBombTargetDist;
                                     enragedHeadBombTargetY *= enragedHeadBombTargetDist;
 
-                                    Vector2 value = new Vector2(enragedHeadBombTargetX + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f, enragedHeadBombTargetY + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f);
-                                    value.Normalize();
+                                    Vector2 value = new Vector2(enragedHeadBombTargetX + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f, enragedHeadBombTargetY + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f).SafeNormalize(Vector2.UnitY);
                                     value *= enragedHeadSpeed;
                                     enragedHeadBombTargetX = value.X;
                                     enragedHeadBombTargetY = value.Y;
@@ -646,7 +644,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             // Go to floating phase, or spinning phase if in phase 2
                             if (NPC.localAI[0] >= totalBombs)
                             {
-                                NPC.velocity.Normalize();
+                                NPC.velocity = NPC.velocity.SafeNormalize(Vector2.UnitY);
 
                                 // Fly overhead and spit spreads of bombs into the air if on low health
                                 NPC.ai[1] = phase3 ? 6f : 1f;
@@ -675,7 +673,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     float flightAcceleration = bossRush ? 0.3f : death ? 0.25f : 0.2f;
 
                     Vector2 destination = new Vector2(Main.player[NPC.target].Center.X, Main.player[NPC.target].Center.Y - 500f);
-                    NPC.SimpleFlyMovement(Vector2.Normalize(destination - NPC.Center) * flightVelocity, flightAcceleration);
+                    NPC.SimpleFlyMovement((destination - NPC.Center).SafeNormalize(Vector2.UnitY) * flightVelocity, flightAcceleration);
 
                     // Spit bombs and then go to floating phase
                     NPC.localAI[3] += 1f;
@@ -713,7 +711,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 for (int k = 0; k < totalProjectiles; k++)
                                 {
                                     Vector2 bombVelocity = spinningPoint.RotatedBy(radians * k);
-                                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(bombVelocity) * 30f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
+                                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + bombVelocity.SafeNormalize(Vector2.UnitY) * 30f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
                                     Main.projectile[proj].timeLeft = 900;
                                     Main.projectile[proj].tileCollide = false;
                                 }

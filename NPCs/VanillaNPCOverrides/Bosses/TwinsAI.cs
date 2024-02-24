@@ -399,7 +399,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -985,7 +985,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     chargeVelocity *= 1.3f;
 
                 lookAt += Main.player[npc.target].velocity * 20f;
-                rotationVector = Vector2.Normalize(npcCenter - lookAt) * chargeVelocity;
+                rotationVector = (npcCenter - lookAt).SafeNormalize(Vector2.UnitY) * chargeVelocity;
             }
 
             float spazmatismRotation = (float)Math.Atan2(rotationVector.Y, rotationVector.X) + MathHelper.PiOver2;
@@ -1348,7 +1348,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
 
                             Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(velocity, velocity);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(projectileVelocity) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
                         }
                     }
                 }
@@ -1603,7 +1603,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             spazmatismPhase2ChargeSpeed *= 1.2f;
 
                         Vector2 distanceVector = Main.player[npc.target].Center - npc.Center;
-                        npc.velocity = Vector2.Normalize(distanceVector) * spazmatismPhase2ChargeSpeed;
+                        npc.velocity = distanceVector.SafeNormalize(Vector2.UnitY) * spazmatismPhase2ChargeSpeed;
                         npc.ai[1] = 2f;
                         return false;
                     }
@@ -1685,7 +1685,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 spazmatismPhase3ChargeSpeed *= 1.2f;
 
                             Vector2 distanceVector = Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center;
-                            npc.velocity = Vector2.Normalize(distanceVector) * spazmatismPhase3ChargeSpeed;
+                            npc.velocity = distanceVector.SafeNormalize(Vector2.UnitY) * spazmatismPhase3ChargeSpeed;
 
                             if (retAlive)
                             {
@@ -1849,8 +1849,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                         damage = (int)(damage * 0.9);
                                 }
 
-                                Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center) * velocity;
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(projectileVelocity) * 4f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, retAlive ? 0f : 1f);
+                                Vector2 projectileVelocity = (Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 4f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, retAlive ? 0f : 1f);
                             }
                         }
 
@@ -2235,7 +2235,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -2869,7 +2869,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
 
                             Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(15f, 15f);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(projectileVelocity) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer);
                         }
                     }
                 }

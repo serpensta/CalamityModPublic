@@ -353,7 +353,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(laserFireDirection) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 900;
                             }
                             npc.localAI[1] += 1f;
@@ -465,8 +465,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 enragedHeadSkullTargetX *= enragedHeadSkullTargetDist;
                                 enragedHeadSkullTargetY *= enragedHeadSkullTargetDist;
 
-                                Vector2 value = new Vector2(enragedHeadSkullTargetX * 1f + Main.rand.Next(-50, 51) * 0.01f, enragedHeadSkullTargetY * 1f + Main.rand.Next(-50, 51) * 0.01f);
-                                value.Normalize();
+                                Vector2 value = new Vector2(enragedHeadSkullTargetX * 1f + Main.rand.Next(-50, 51) * 0.01f, enragedHeadSkullTargetY * 1f + Main.rand.Next(-50, 51) * 0.01f).SafeNormalize(Vector2.UnitY);
                                 value *= enragedHeadSpeed;
                                 value += npc.velocity;
                                 enragedHeadSkullTargetX = value.X;
@@ -587,8 +586,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     enragedHeadSkullTargetX *= enragedHeadSkullTargetDist;
                                     enragedHeadSkullTargetY *= enragedHeadSkullTargetDist;
 
-                                    Vector2 value = new Vector2(enragedHeadSkullTargetX + Main.rand.Next(-skullSpread, skullSpread + 1) * 0.01f, enragedHeadSkullTargetY + Main.rand.Next(-skullSpread, skullSpread + 1) * 0.01f);
-                                    value.Normalize();
+                                    Vector2 value = new Vector2(enragedHeadSkullTargetX + Main.rand.Next(-skullSpread, skullSpread + 1) * 0.01f, enragedHeadSkullTargetY + Main.rand.Next(-skullSpread, skullSpread + 1) * 0.01f).SafeNormalize(Vector2.UnitY);
                                     value *= enragedHeadSpeed;
                                     enragedHeadSkullTargetX = value.X;
                                     enragedHeadSkullTargetY = value.Y;
@@ -615,7 +613,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             // Go to floating phase, or spinning phase if in phase 2
                             if (npc.localAI[0] >= totalSkulls)
                             {
-                                npc.velocity.Normalize();
+                                npc.velocity = npc.velocity.SafeNormalize(Vector2.UnitY);
 
                                 // Fly overhead and spit missiles if on low health
                                 npc.ai[1] = phase3 ? 6f : 1f;
@@ -650,7 +648,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     }
 
                     Vector2 destination = new Vector2(Main.player[npc.target].Center.X, Main.player[npc.target].Center.Y - 500f);
-                    npc.SimpleFlyMovement(Vector2.Normalize(destination - npc.Center) * flightVelocity, flightAcceleration);
+                    npc.SimpleFlyMovement((destination - npc.Center).SafeNormalize(Vector2.UnitY) * flightVelocity, flightAcceleration);
 
                     // Spit homing missiles and then go to floating phase
                     npc.localAI[3] += 1f;
@@ -961,7 +959,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(laserFireDirection) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                             Main.projectile[proj].timeLeft = 900;
                         }
                         npc.localAI[1] += 1f;
@@ -1230,15 +1228,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 damage = (int)(damage * 0.9);
                         }
 
-                        Vector2 cannonSpreadTargetDist = Main.player[npc.target].Center - npc.Center;
-                        cannonSpreadTargetDist.Normalize();
+                        Vector2 cannonSpreadTargetDist = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
                         cannonSpreadTargetDist *= 0.5f;
                         int numProj = bossRush ? 5 : 3;
                         float rotation = MathHelper.ToRadians(bossRush ? 8 : 5);
                         for (int i = 0; i < numProj; i++)
                         {
                             Vector2 perturbedSpeed = cannonSpreadTargetDist.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * 30f, perturbedSpeed, type, damage, 0f, Main.myPlayer, npc.target, 1f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 30f, perturbedSpeed, type, damage, 0f, Main.myPlayer, npc.target, 1f);
                             Main.projectile[proj].timeLeft = 600;
                         }
                     }
