@@ -651,7 +651,6 @@ namespace CalamityMod.NPCs.TownNPCs
         {
             if (!CalamityWorld.spawnedCirrus)
                 CalamityWorld.spawnedCirrus = true;
-            Main.NewText(NPC.ai[0]);
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs)
