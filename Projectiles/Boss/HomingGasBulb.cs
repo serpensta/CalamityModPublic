@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using System;
 using CalamityMod.NPCs.TownNPCs;
+using CalamityMod.Events;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -62,7 +63,7 @@ namespace CalamityMod.Projectiles.Boss
                 }
             }
 
-            if (Projectile.ai[0] % 20f == 0f)
+            if (Projectile.ai[0] % ((Main.masterMode || BossRushEvent.BossRushActive) ? 15f : 20f) == 0f)
             {
                 SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
                 if (Projectile.owner == Main.myPlayer)

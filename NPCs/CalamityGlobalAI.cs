@@ -9439,8 +9439,8 @@ namespace CalamityMod.NPCs
             if (npc.ai[0] != -1f)
             {
                 npc.TargetClosest(true);
-                float acceleration = Main.expertMode ? 0.2f : 0.1f;
-                float velocity = Main.expertMode ? 5f : 3f;
+                float acceleration = Main.masterMode ? 0.25f : Main.expertMode ? 0.2f : 0.1f;
+                float velocity = Main.masterMode ? 6f : Main.expertMode ? 5f : 3f;
                 if (CalamityWorld.death)
                 {
                     acceleration *= 1.25f;

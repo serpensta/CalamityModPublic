@@ -1396,6 +1396,9 @@ namespace CalamityMod.Projectiles
 
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
             {
+                bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
+                bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
+
                 if (projectile.type == ProjectileID.DeerclopsIceSpike)
                 {
                     int dustType = 16;
@@ -1491,7 +1494,7 @@ namespace CalamityMod.Projectiles
                         if (projectile.ai[0] == projectile.ai[2])
                         {
                             projectile.velocity *= 100f;
-                            projectile.velocity *= (CalamityWorld.death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
+                            projectile.velocity *= (death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
                         }
                     }
 
@@ -1662,7 +1665,7 @@ namespace CalamityMod.Projectiles
                     return false;
                 }
 
-                else if (projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && Main.masterMode)
+                else if (projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && masterMode)
                 {
                     int num = (int)(projectile.Center.X / 16f);
                     int num2 = (int)(projectile.Center.Y / 16f);
@@ -1693,7 +1696,7 @@ namespace CalamityMod.Projectiles
                     {
                         projectile.ai[1] += 1f;
                         float homingStartTime = 20f;
-                        float homingEndTime = CalamityWorld.death ? 140f : 110f;
+                        float homingEndTime = death ? 140f : 110f;
 
                         if (projectile.ai[1] < homingEndTime)
                         {
@@ -1709,13 +1712,13 @@ namespace CalamityMod.Projectiles
                             Vector2 vector24 = Main.player[target].Center - projectile.Center;
                             vector24.Normalize();
                             vector24 *= num134;
-                            float inertia = CalamityWorld.death ? 25f : 30f;
+                            float inertia = death ? 25f : 30f;
                             projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
                             projectile.velocity.Normalize();
                             projectile.velocity *= num134;
                         }
 
-                        float maxVelocity = CalamityWorld.death ? 18f : 15f;
+                        float maxVelocity = death ? 18f : 15f;
                         float acceleration = 1.02f;
                         if (projectile.velocity.Length() < maxVelocity)
                             projectile.velocity *= acceleration;
@@ -1820,13 +1823,13 @@ namespace CalamityMod.Projectiles
                     bool homeIn = false;
                     float spreadOutCutoffTime = 510f;
                     float homeInCutoffTime = 420f;
-                    float minAcceleration = Main.masterMode ? 0.1f : 0.05f;
-                    float maxAcceleration = Main.masterMode ? 0.2f : 0.1f;
+                    float minAcceleration = masterMode ? 0.1f : 0.05f;
+                    float maxAcceleration = masterMode ? 0.2f : 0.1f;
                     float homingVelocity = 25f;
 
                     if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
                         homeIn = true;
-                    else if (projectile.velocity.Length() < (Main.masterMode ? 20f : 15f))
+                    else if (projectile.velocity.Length() < (masterMode ? 20f : 15f))
                         projectile.velocity *= 1.1f;
 
                     if (homeIn)
@@ -1911,7 +1914,7 @@ namespace CalamityMod.Projectiles
                         projectile.alpha = 0;
 
                     projectile.ai[0] += 1f;
-                    if (projectile.ai[0] >= 120f)
+                    if (projectile.ai[0] >= (masterMode ? 60f : 120f))
                     {
                         if (projectile.velocity.Length() < 18f)
                             projectile.velocity *= 1.01f;
@@ -1948,7 +1951,7 @@ namespace CalamityMod.Projectiles
                         {
                             if (projectile.owner == Main.myPlayer)
                             {
-                                int totalProjectiles = 8;
+                                int totalProjectiles = masterMode ? 12 : 8;
                                 float radians = MathHelper.TwoPi / totalProjectiles;
                                 int type = ModContent.ProjectileType<ThornBallSpike>();
                                 float velocity = 1f;
@@ -1989,9 +1992,9 @@ namespace CalamityMod.Projectiles
                     else
                     {
                         int closestPlayer = Player.FindClosest(projectile.Center, 1, 1);
-                        float homingSpeed = 7.5f + Vector2.Distance(Main.player[closestPlayer].Center, projectile.Center) * 0.01f;
+                        float homingSpeed = (masterMode ? 9f : 7.5f) + Vector2.Distance(Main.player[closestPlayer].Center, projectile.Center) * 0.01f;
                         Vector2 homingVelocity = Vector2.Normalize(Main.player[closestPlayer].Center - projectile.Center) * homingSpeed;
-                        int inertia = 200;
+                        int inertia = masterMode ? 150 : 200;
                         projectile.velocity.X = (projectile.velocity.X * (inertia - 1) + homingVelocity.X) / inertia;
 
                         if (projectile.velocity.Length() > 16f)
@@ -2391,7 +2394,7 @@ namespace CalamityMod.Projectiles
                             return false;
                         }
 
-                        float velocityLimit = ((CalamityWorld.death || BossRushEvent.BossRushActive) ? 28f : 24f) / MathHelper.Clamp(lineColor * 0.75f, 1f, 3f);
+                        float velocityLimit = (death ? 28f : 24f) / MathHelper.Clamp(lineColor * 0.75f, 1f, 3f);
                         if (projectile.velocity.Length() < velocityLimit)
                             projectile.velocity *= 1.01f;
                     }
@@ -2410,7 +2413,7 @@ namespace CalamityMod.Projectiles
                 // Moon Lord big eye spheres
                 else if (projectile.type == ProjectileID.PhantasmalSphere && Main.npc[(int)projectile.ai[1]].type == NPCID.MoonLordHand)
                 {
-                    float velocityLimit = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 14f : 12f;
+                    float velocityLimit = death ? 14f : 12f;
                     if (projectile.velocity.Length() < velocityLimit)
                         projectile.velocity *= 1.0075f;
 
@@ -3477,7 +3480,7 @@ namespace CalamityMod.Projectiles
 
         public override bool PreKill(Projectile projectile, int timeLeft)
         {
-            bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && Main.masterMode;
+            bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && (Main.masterMode || BossRushEvent.BossRushActive);
             bool revQueenBeeBeeHive = projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet;
 
             if (revQueenBeeBeeHive)

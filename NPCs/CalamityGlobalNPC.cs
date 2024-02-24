@@ -1458,10 +1458,6 @@ namespace CalamityMod.NPCs
             {
                 npc.knockBackResist = 0f;
             }
-            else if (npc.type == NPCID.Spore)
-            {
-                npc.dontTakeDamage = true;
-            }
 
             if (CalamityLists.revengeanceLifeStealExceptionList.Contains(npc.type))
             {
@@ -2351,6 +2347,11 @@ namespace CalamityMod.NPCs
                     npc.defDefense = npc.defense;
                     break;
 
+                // Make Plantera's Spores immune to damage because otherwise they're pointless
+                case NPCID.Spore:
+                    npc.dontTakeDamage = true;
+                    break;
+
                 default:
                     break;
             }
@@ -3121,14 +3122,10 @@ namespace CalamityMod.NPCs
                     case NPCID.PrimeSaw:
                         return SkeletronPrimeAI.VanillaPrimeSawAI(npc, Mod);
 
-                    /*case NPCID.Plantera:
+                    case NPCID.Plantera:
                         return PlanteraAI.VanillaPlanteraAI(npc, Mod);
-                    case NPCID.PlanterasHook:
-                        return PlanteraAI.VanillaPlanterasHookAI(npc, Mod);
-                    case NPCID.PlanterasTentacle:
-                        return PlanteraAI.VanillaPlanterasTentacleAI(npc, Mod);
-
-                    case NPCID.HallowBoss:
+                    
+                    /*case NPCID.HallowBoss:
                         return EmpressofLightAI.VanillaEmpressofLightAI(npc, Mod);
 
                     case NPCID.Golem:
