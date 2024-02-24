@@ -131,6 +131,12 @@ namespace CalamityMod.Projectiles
                 { ProjectileID.CrystalVileShardHead, Do(LocalIFrames(23)) },
                 { ProjectileID.CrystalVileShardShaft, Do(LocalIFrames(23)) },
                 { ProjectileID.CursedBullet, standardBulletTweaks },
+                { ProjectileID.ClusterRocketI, Do(LocalIFrames(15)) },
+                { ProjectileID.ClusterFragmentsI, Do(LocalIFrames(15)) },
+                { ProjectileID.ClusterRocketII, Do(LocalIFrames(15)) },
+                { ProjectileID.ClusterFragmentsII, Do(LocalIFrames(15)) },
+                { ProjectileID.ClusterSnowmanRocketI, Do(LocalIFrames(15)) },
+                { ProjectileID.ClusterSnowmanRocketII, Do(LocalIFrames(15)) },
                 { ProjectileID.DD2SquireSonicBoom, Do(PiercingExact(3)) }, // Flying Dragon
                 { ProjectileID.EmeraldBolt, Do(NoPiercing) },
                 { ProjectileID.EmpressBlade, Do(LocalIFrames(30)) }, // Terraprisma

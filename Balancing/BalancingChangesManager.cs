@@ -244,6 +244,9 @@ namespace CalamityMod.Balancing
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(ResistTrueMelee(0.5f))));
 
+            // 50% resist to Cluster Fragments.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileID.ClusterFragmentsI, ProjectileID.ClusterFragmentsII))));
+
             // 20% resist to Resurrection Butterfly.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<SakuraBullet>(), ProjectileType<PurpleButterfly>()))));
             #endregion

@@ -15,7 +15,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             Item.width = 32;
             Item.height = 52;
-            Item.damage = 8;
+            Item.damage = 13;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = 20;
             Item.useAnimation = 20;
@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             for (int i = -8; i <= 8; i += 8)
             {
                 Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(i));
-                Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<FeatherLarge>(), damage / 2, 0f, player.whoAmI);
+                Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<FeatherLarge>(), damage / 4, 0f, player.whoAmI);
             }
             return true;
         }

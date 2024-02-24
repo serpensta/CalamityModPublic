@@ -39,7 +39,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 65;
+            Item.damage = 50;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = OriginalUseTime;
             Item.shoot = ProjectileType<ScorpioHoldout>();
