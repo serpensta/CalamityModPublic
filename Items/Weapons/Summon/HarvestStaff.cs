@@ -11,6 +11,8 @@ namespace CalamityMod.Items.Weapons.Summon
     {
         public new string LocalizationCategory => "Items.Weapons.Summon";
 
+        public static int PumpkinsPerSentry = 5;
+        public static float TimePerPumpkin = 150f;
         public static float PlantedEnemyDistanceDetection = 160f;
         public static float NormalEnemyDistanceDetection = 1200f;
         public static float PumpkinGravityStrength = 0.8f;
@@ -34,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Summon
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;
             Item.rare = ItemRarityID.Green;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.UseSound = SoundID.Item20;
+            Item.UseSound = SoundID.Grass with { Volume = 0.6f, Pitch = -0.4f };
 
             Item.shootSpeed = 0.1f;
         }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
-using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static CalamityMod.Items.Weapons.Summon.HarvestStaff;
@@ -15,7 +15,7 @@ namespace CalamityMod.Projectiles.Summon
 {
     public class HarvestStaffMinion : ModProjectile, ILocalizedModType
     {
-        #region Properties and Enums
+        #region Members and Enums
 
         public new string LocalizationCategory => "Projectiles.Summon";
 
@@ -40,7 +40,10 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.ai[1] = (float)value;
 
                 if (value == AIState.Attack)
+                {
                     Animation = AnimationState.Run;
+                    SoundEngine.PlaySound(_screamSound, Projectile.Center);
+                }
                 else if (value == AIState.Idle)
                     Animation = AnimationState.Idle;
 
@@ -154,10 +157,37 @@ namespace CalamityMod.Projectiles.Summon
             set => Projectile.spriteDirection = Projectile.direction = value;
         }
 
+        private SoundStyle _growSound = new("CalamityMod/Sounds/Custom/PumpkinEmerge", 3);
+
+        private SoundStyle _idleSound = new("CalamityMod/Sounds/Custom/PumpkinIdle", 4);
+
+        private SoundStyle _idleRareSound = new("CalamityMod/Sounds/Custom/PumpkinRareIdle") { Volume = 0.2f };
+
+        private SoundStyle _screamSound = new("CalamityMod/Sounds/Custom/PumpkinScream", 2);
+
+        private SoundStyle _jumpSound = new("CalamityMod/Sounds/Custom/PumpkinJump");
+
+        private SoundStyle _boomSound = new("CalamityMod/Sounds/Custom/PumpkinExplode", 2) { Volume = 0.6f };
+
         /// <summary>
         /// The owner of this minion.
         /// </summary>
         public Player Owner { get; set; }
+
+        public Player AnyPlayer
+        {
+            get
+            {
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    Player p = Main.player[i];
+                    if (p == null || !p.active || p.dead)
+                        continue;
+                    return p;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// The target of this minion.
@@ -176,10 +206,8 @@ namespace CalamityMod.Projectiles.Summon
                     Projectile proj = Main.projectile[i];
                     if (proj == null || !proj.active || proj.owner != Projectile.owner || proj.type != ModContent.ProjectileType<HarvestStaffSentry>())
                         continue;
-
                     return proj;
                 }
-
                 return null;
             }
         }
@@ -222,7 +250,7 @@ namespace CalamityMod.Projectiles.Summon
             if (State == AIState.Idle && Projectile.velocity.Y == 0f)
             {
                 // While the pumpkin's idle and standing still on the ground, when the player gets close it'll jump.
-                if (Projectile.WithinRange(Owner.Center, 64f) && IdleJumpCooldown == 0)
+                if (AnyPlayer is not null && Projectile.WithinRange(AnyPlayer.Center, 64f) && IdleJumpCooldown == 0)
                     NearOwnerJump();
                 else
                     Animation = IdleWalkingTimer == 0f ? AnimationState.Idle : AnimationState.Run;
@@ -247,17 +275,13 @@ namespace CalamityMod.Projectiles.Summon
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            if (Target is not null)
-                fallThrough = Projectile.Bottom.Y < Target.Top.Y;
-            else
-                fallThrough = false;
-
+            fallThrough = Target is not null && Projectile.Bottom.Y < Target.Top.Y;
             return true;
         }
 
         public override void OnKill(int timeLeft)
         {
-            Projectile.ExpandHitboxBy(3f);
+            Projectile.ExpandHitboxBy(4f);
             Projectile.Damage();
 
             for (int i = 0; i < (int)Utils.Remap(Variant, 0f, 2f, 4f, 2f); i++)
@@ -273,13 +297,21 @@ namespace CalamityMod.Projectiles.Summon
 
             for (int i = 0; i < 20; i++)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 278 : 51, (new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f)) + new Vector2(0, -0.75f));
-                dust.noGravity = false;
-                dust.scale = Main.rand.NextFloat(0.8f, 1.4f);
-                dust.color = Color.Chocolate;
+                if (BirthdayParty.PartyIsUp)
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.Next(139, 143), (new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f)) + new Vector2(0, -0.75f));
+                    dust.scale = 0.8f;
+                }
+                else
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 278 : 51, (new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f)) + new Vector2(0, -0.75f));
+                    dust.noGravity = false;
+                    dust.scale = Main.rand.NextFloat(0.8f, 1.4f);
+                    dust.color = Color.Chocolate;
+                }
             }
-            SoundEngine.PlaySound(SoundID.Item110 with { Pitch = -0.5f, Volume = 0.2f, PitchVariance = 0.2f }, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.Item89 with { Pitch = 0.5f, Volume = 0.25f, PitchVariance = 0.2f }, Projectile.Center);
+
+            SoundEngine.PlaySound(_boomSound, Projectile.Center);
         }
 
         /// <summary>
@@ -289,8 +321,11 @@ namespace CalamityMod.Projectiles.Summon
         {
             // When the pumpkin has done its growing animation and there's a target nearby or the owner's on top of it,
             // it'll do the jump out animation.
-            if ((Target is not null || Projectile.getRect().Intersects(Owner.getRect())) && Animation == AnimationState.Grow && CompletedAnimation)
+            if ((Target is not null || (AnyPlayer is not null && Projectile.getRect().Intersects(AnyPlayer.getRect()))) && Animation == AnimationState.Grow && CompletedAnimation)
+            {
                 Animation = AnimationState.Rise;
+                SoundEngine.PlaySound(_growSound, Projectile.Center);
+            }
 
             // And when they have completed their jumping out animation, they idle until they find a target.
             else if (Animation == AnimationState.Rise && CompletedAnimation)
@@ -334,6 +369,9 @@ namespace CalamityMod.Projectiles.Summon
 
             // When the pumpkin encounters a 1-tile-height obstacle, it'll climb it, like the player.
             Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
+
+            if (Main.rand.NextBool(700))
+                SoundEngine.PlaySound(Main.rand.NextBool(20) ? _idleRareSound : _idleSound, Projectile.Center);
         }
 
         /// <summary>
@@ -343,12 +381,6 @@ namespace CalamityMod.Projectiles.Summon
         {
             if (Target is not null)
             {
-                if (Projectile.WithinRange(Target.Center, 32f))
-                {
-                    Projectile.Kill();
-                    return;
-                }
-
                 MoveToTarget();
                 Direction = MathF.Sign(Projectile.velocity.X);
 
@@ -356,9 +388,12 @@ namespace CalamityMod.Projectiles.Summon
                 Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
 
                 // Pumpkins relase a bit of fire from their heads when running after enemies
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(0, -Projectile.height * 0.5f), 6, new Vector2(0, -4).RotatedBy(0.7f * -Projectile.direction) * Main.rand.NextFloat(0.1f, 0.8f));
-                dust.noGravity = true;
-                dust.scale = Main.rand.NextFloat(0.4f, 0.95f);
+                if (!Main.dedServ)
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center + new Vector2(0, -Projectile.height * 0.5f), 6, new Vector2(0, -4).RotatedBy(0.7f * -Projectile.direction) * Main.rand.NextFloat(0.1f, 0.8f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(0.4f, 0.95f);
+                }
             }
             else
             {
@@ -383,8 +418,11 @@ namespace CalamityMod.Projectiles.Summon
                 IdleJumpCooldown = 30;
             }
 
-            Direction = MathF.Sign(Owner.Center.X - Projectile.Center.X);
+            Direction = MathF.Sign(AnyPlayer.Center.X - Projectile.Center.X);
             Animation = AnimationState.Jump;
+
+            SoundEngine.PlaySound(_jumpSound with { Pitch = Utils.Remap(Variant, 0f, 2f, -0.3f, 0.3f) }, Projectile.Center);
+
             NetUpdate();
         }
 
@@ -414,6 +452,7 @@ namespace CalamityMod.Projectiles.Summon
             // And now we need to negate the velocity to get it on Terraria's coordinate system: v = -sqrt(-2 * gravity * distance).
             Projectile.velocity.Y = -MathF.Sqrt(-2f * PumpkinGravityStrength * (destination.Y - Projectile.Bottom.Y));
             Animation = AnimationState.Jump;
+            SoundEngine.PlaySound(_jumpSound with { Pitch = Utils.Remap(Variant, 0f, 2f, -0.3f, 0.3f) }, Projectile.Center);
             NetUpdate();
         }
 
@@ -494,7 +533,6 @@ namespace CalamityMod.Projectiles.Summon
         {
             Projectile.DamageType = DamageClass.Summon;
             Projectile.localNPCHitCooldown = 30;
-            Projectile.penetrate = -1;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.usesLocalNPCImmunity = true;
@@ -519,7 +557,9 @@ namespace CalamityMod.Projectiles.Summon
             IdleWalkingDirection = reader.ReadInt32();
         }
 
-        public override bool? CanDamage() => null;
+        public override bool? CanDamage() => State == AIState.Attack ? null : false;
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.SourceDamage *= Utils.Remap(Variant, 0f, 2f, 1.5f, 0.5f);
 
         public override void OnSpawn(IEntitySource source)
         {

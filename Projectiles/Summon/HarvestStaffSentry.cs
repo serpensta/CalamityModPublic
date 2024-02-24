@@ -4,10 +4,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using static CalamityMod.Items.Weapons.Summon.HarvestStaff;
 
 namespace CalamityMod.Projectiles.Summon
 {
-    public class HarvestStaffSentry : ModProjectile
+    public class HarvestStaffSentry : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Summon";
 
@@ -28,10 +29,10 @@ namespace CalamityMod.Projectiles.Summon
 
         public override void AI()
         {
-            if (PumpkinQuantity() < 5)
+            if (PumpkinAmount() < PumpkinsPerSentry * SentryAmount())
                 Timer++;
 
-            if (Timer > 180f)
+            if (Timer > TimePerPumpkin)
             {
                 float randomOffset = 160f;
                 Vector2 spawnPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-randomOffset, randomOffset), -80f);
@@ -63,13 +64,29 @@ namespace CalamityMod.Projectiles.Summon
             }
         }
 
-        public int PumpkinQuantity()
+        #region AI Methods
+
+        public int PumpkinAmount()
         {
             int amount = 0;
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile proj = Main.projectile[i];
                 if (proj == null || !proj.active || proj.type != ModContent.ProjectileType<HarvestStaffMinion>() || proj.owner != Projectile.owner)
+                    continue;
+                amount++;
+            }
+
+            return amount;
+        }
+
+        public int SentryAmount()
+        {
+            int amount = 0;
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile proj = Main.projectile[i];
+                if (proj == null || !proj.active || proj.type != ModContent.ProjectileType<HarvestStaffSentry>() || proj.owner != Projectile.owner)
                     continue;
                 amount++;
             }
@@ -102,6 +119,8 @@ namespace CalamityMod.Projectiles.Summon
                 }
             }
         }
+
+        #endregion
 
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
 
