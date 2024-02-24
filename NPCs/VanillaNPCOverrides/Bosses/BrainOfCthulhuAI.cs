@@ -1318,8 +1318,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (Main.expertMode)
             {
-                Vector2 vector107 = Main.player[npc.target].Center - npc.Center;
-                vector107.Normalize();
+                Vector2 vector107 = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
                 if (Main.getGoodWorld)
                 {
                     vector107 *= 12f;

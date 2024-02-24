@@ -112,7 +112,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (phase2 || masterMode)
                     {
                         // Get target vector
-                        Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * npc.velocity.Length();
+                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * npc.velocity.Length();
                         Vector2 projectileSpawn = npc.Center + projectileVelocity * 5f;
 
                         int damage = npc.GetProjectileDamage(ProjectileID.DemonSickle);
@@ -632,7 +632,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         int damage = npc.GetProjectileDamage(projectileType);
 
                         float laserSpawnDistance = fireEnragedLasers ? 30f : 22.5f;
-                        Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * velocity;
+                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
                         Vector2 projectileSpawn = npc.Center + projectileVelocity * laserSpawnDistance;
 
                         int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, projectileType, damage, 0f, Main.myPlayer, 1f, 0f);

@@ -406,8 +406,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 if (!beeLimitReached)
                                 {
                                     int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, spawnType);
-                                    Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
-                                    Main.npc[spawn].velocity.Normalize();
+                                    Vector2 beeVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
+                                    Main.npc[spawn].velocity = beeVelocity;
                                     Main.npc[spawn].velocity *= 5f;
                                     if (!Main.zenithWorld)
                                     {
@@ -572,8 +572,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
 
                             int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)beeSpawnLocation.X, (int)beeSpawnLocation.Y, spawnType);
-                            Main.npc[spawn].velocity = Main.player[npc.target].Center - npc.Center;
-                            Main.npc[spawn].velocity.Normalize();
+                            Vector2 beeVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
+                            Main.npc[spawn].velocity = beeVelocity;
                             Main.npc[spawn].velocity *= 5f;
                             if (!Main.zenithWorld)
                             {
@@ -702,8 +702,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.localAI[0] = 1f;
                 float despawnVelMult = 14f;
 
-                Vector2 despawnTargetDist = Main.player[npc.target].Center - npc.Center;
-                despawnTargetDist.Normalize();
+                Vector2 despawnTargetDist = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
                 despawnTargetDist *= 14f;
 
                 npc.velocity = (npc.velocity * despawnVelMult + despawnTargetDist) / (despawnVelMult + 1f);
@@ -775,7 +774,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (masterMode)
                                 stingerSpeed += 1f;
 
-                            Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * stingerSpeed;
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * stingerSpeed;
                             int type = Main.zenithWorld ? ModContent.ProjectileType<PlagueStingerGoliathV2>() : ProjectileID.QueenBeeStinger;
                             int numProj = death ? (phase6 ? 7 : phase5 ? 11 : 15) : (phase6 ? 5 : phase5 ? 9 : 13);
                             int spread = phase6 ? 30 : phase5 ? 50 : 60;
@@ -793,7 +792,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 if (i % 2f != 0f)
                                     perturbedSpeed *= 0.8f;
 
-                                int projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation + Vector2.Normalize(perturbedSpeed) * 10f, perturbedSpeed, type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, Main.player[npc.target].position.Y);
+                                int projectile = Projectile.NewProjectile(npc.GetSource_FromAI(), stingerSpawnLocation + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 10f, perturbedSpeed, type, Main.zenithWorld ? 25 : npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, Main.player[npc.target].position.Y);
                                 Main.projectile[projectile].timeLeft = 1200;
                                 Main.projectile[projectile].extraUpdates = 1;
 
@@ -1252,10 +1251,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         int num670 = Main.rand.Next(NPCID.Bee, NPCID.BeeSmall + 1);
                         int num671 = NPC.NewNPC(npc.GetSource_FromAI(), (int)vector84.X, (int)vector84.Y, num670);
-                        Main.npc[num671].velocity = Main.player[npc.target].Center - npc.Center;
-                        Main.npc[num671].velocity.Normalize();
-                        NPC nPC3 = Main.npc[num671];
-                        nPC3.velocity *= 5f;
+                        Vector2 beeVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
+                        Main.npc[num671].velocity = beeVelocity;
+                        Main.npc[num671].velocity *= 5f;
                         Main.npc[num671].CanBeReplacedByOtherNPCs = true;
                         Main.npc[num671].localAI[0] = 60f;
                         Main.npc[num671].netUpdate = true;
@@ -1459,8 +1457,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.localAI[0] = 1f;
                 float num690 = 14f;
                 float num691 = 14f;
-                Vector2 vector88 = Main.player[npc.target].Center - npc.Center;
-                vector88.Normalize();
+                Vector2 vector88 = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
                 vector88 *= num690;
                 npc.velocity = (npc.velocity * num691 + vector88) / (num691 + 1f);
                 if (npc.velocity.X < 0f)

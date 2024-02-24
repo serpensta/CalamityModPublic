@@ -202,7 +202,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 {
                                     int projType = ProjectileID.BloodNautilusShot;
                                     int projDamage = npc.GetProjectileDamage(projType);
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * ProjectileOffset, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + servantSpawnVelocity.SafeNormalize(Vector2.UnitY) * ProjectileOffset, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
                                     Main.projectile[proj].timeLeft = 600;
                                 }
                             }
@@ -362,7 +362,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                         }
@@ -470,7 +470,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     float projectileGateValue = (lifeRatio < 0.5f && death) ? 50f : 80f;
                     if (npc.ai[2] % projectileGateValue == 0f && shootProjectile)
                     {
-                        Vector2 projectileVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * servantAndProjectileVelocity * 2f;
+                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * servantAndProjectileVelocity * 2f;
                         Vector2 projectileSpawnCenter = npc.Center + projectileVelocity;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -481,7 +481,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                         }
@@ -759,7 +759,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[2] += 1f;
                     if (npc.ai[2] % servantSpawnGateValue == 0f && shootProjectile && npc.ai[2] <= servantSpawnGateValue * maxServantSpawnsPerAttack)
                     {
-                        Vector2 servantSpawnVelocity = Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * servantAndProjectileVelocity;
+                        Vector2 servantSpawnVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * servantAndProjectileVelocity;
                         Vector2 servantSpawnCenter = npc.Center + servantSpawnVelocity.SafeNormalize(Vector2.UnitY) * ProjectileOffset;
 
                         int maxServants = death ? (finalPhaseDeath ? 1 : penultimatePhaseDeath ? 2 : 3) : (finalPhaseRev ? 2 : 4);
@@ -782,7 +782,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             {
                                 int projType = ProjectileID.BloodNautilusShot;
                                 int projDamage = npc.GetProjectileDamage(projType);
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(servantSpawnVelocity) * ProjectileOffset, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + servantSpawnVelocity.SafeNormalize(Vector2.UnitY) * ProjectileOffset, servantSpawnVelocity * 2f, projType, projDamage, 0f, Main.myPlayer);
                                 Main.projectile[proj].timeLeft = 600;
                             }
 
@@ -796,7 +796,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 for (int i = 0; i < numProj; i++)
                                 {
                                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + Vector2.Normalize(perturbedSpeed) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * ProjectileOffset, perturbedSpeed, type, 15, 0f, Main.myPlayer);
                                     Main.projectile[proj].timeLeft = 600;
                                 }
                             }
@@ -1604,7 +1604,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                         npc.velocity.X = num57 + npc.velocity.X;
                         npc.velocity.Y = num56 + npc.velocity.Y;
-                        npc.velocity.Normalize();
+                        npc.velocity = npc.velocity.SafeNormalize(Vector2.UnitY);
                         npc.velocity *= num50;
                         npc.velocity.X += (float)Main.rand.Next(-20, 21) * 0.1f;
                         npc.velocity.Y += (float)Main.rand.Next(-20, 21) * 0.1f;

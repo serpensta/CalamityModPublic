@@ -519,8 +519,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     float projectileVelocity = masterMode ? 15f : 12f;
                                     type = ProjectileID.QueenSlimeMinionBlueSpike;
                                     damage = npc.GetProjectileDamage(type);
-                                    Vector2 destination = new Vector2(npc.Center.X, npc.Center.Y - 100f) - npc.Center;
-                                    destination.Normalize();
+                                    Vector2 destination = (new Vector2(npc.Center.X, npc.Center.Y - 100f) - npc.Center).SafeNormalize(Vector2.UnitY);
                                     destination *= projectileVelocity;
                                     int numProj = 20;
                                     float rotation = MathHelper.ToRadians(100);
@@ -698,8 +697,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             int damage = npc.GetProjectileDamage(type);
                             if (phase2)
                             {
-                                Vector2 destination = new Vector2(npc.Center.X, npc.Center.Y + 100f) - npc.Center;
-                                destination.Normalize();
+                                Vector2 destination = (new Vector2(npc.Center.X, npc.Center.Y + 100f) - npc.Center).SafeNormalize(Vector2.UnitY);
                                 destination *= projectileVelocity;
                                 float rotation = MathHelper.ToRadians(120);
                                 for (int i = 0; i < numGelProjectiles; i++)
@@ -739,7 +737,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
                             foreach (int t in targets)
                             {
-                                Vector2 velocity2 = Vector2.Normalize(Main.player[t].Center - npc.Center) * projectileVelocity;
+                                Vector2 velocity2 = (Main.player[t].Center - npc.Center).SafeNormalize(Vector2.UnitY) * projectileVelocity;
                                 int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, -2f);
                                 Main.projectile[proj].timeLeft = 900;
                             }
@@ -1643,12 +1641,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             else if (distanceFromFlightTarget < 80f)
             {
-                desiredVelocity.Normalize();
+                desiredVelocity = desiredVelocity.SafeNormalize(Vector2.UnitY);
                 desiredVelocity *= flyVelocity * 0.65f;
             }
             else
             {
-                desiredVelocity.Normalize();
+                desiredVelocity = desiredVelocity.SafeNormalize(Vector2.UnitY);
                 desiredVelocity *= flyVelocity;
             }
 
@@ -1711,12 +1709,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             else if (num5 < 80f)
             {
-                desiredVelocity.Normalize();
+                desiredVelocity = desiredVelocity.SafeNormalize(Vector2.UnitY);
                 desiredVelocity *= num * 0.65f;
             }
             else
             {
-                desiredVelocity.Normalize();
+                desiredVelocity = desiredVelocity.SafeNormalize(Vector2.UnitY);
                 desiredVelocity *= num;
             }
 

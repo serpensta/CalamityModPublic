@@ -380,8 +380,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         float skullProjSpeed = phase2 ? (5f + (death ? 3f * (1f - lifeRatio) : 0f)) : 4f;
                         int spread2 = bossRush ? 100 : 50;
-                        Vector2 skullProjDirection = new Vector2(skullProjTargetX + Main.rand.Next(-spread2, spread2 + 1) * 0.01f, skullProjTargetY + Main.rand.Next(-spread2, spread2 + 1) * 0.01f);
-                        skullProjDirection.Normalize();
+                        Vector2 skullProjDirection = new Vector2(skullProjTargetX + Main.rand.Next(-spread2, spread2 + 1) * 0.01f, skullProjTargetY + Main.rand.Next(-spread2, spread2 + 1) * 0.01f).SafeNormalize(Vector2.UnitY);
                         skullProjDirection *= skullProjSpeed;
                         skullProjDirection += npc.velocity;
                         skullFiringPos += skullProjDirection * 5f;
@@ -459,7 +458,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (maxAcceleration > maxAccelerationCap)
                             maxAcceleration = maxAccelerationCap;
 
-                        npc.velocity += Vector2.Normalize(Main.player[npc.target].Center - npc.Center) * -maxAcceleration;
+                        npc.velocity += (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * -maxAcceleration;
 
                         float maxVelocity = headSpinVelocityMult + (npc.ai[2] - moveAwayGateValue) * (phase5 ? 0.12f : 0.08f);
                         float maxVelocityCap = headSpinVelocityMult * 2.5f;
@@ -468,7 +467,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                         if (npc.velocity.Length() > maxVelocity)
                         {
-                            npc.velocity.Normalize();
+                            npc.velocity = npc.velocity.SafeNormalize(Vector2.UnitY);
                             npc.velocity *= maxVelocity;
                         }
                     }
@@ -1169,8 +1168,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             distTarget = speed / distTarget;
                             velocity.X *= distTarget;
                             velocity.Y *= distTarget;
-                            Vector2 offset = new Vector2(velocity.X * 1f + Main.rand.Next(-50, 51) * 0.01f, velocity.Y * 1f + Main.rand.Next(-50, 51) * 0.01f);
-                            offset.Normalize();
+                            Vector2 offset = new Vector2(velocity.X * 1f + Main.rand.Next(-50, 51) * 0.01f, velocity.Y * 1f + Main.rand.Next(-50, 51) * 0.01f).SafeNormalize(Vector2.UnitY);
                             offset *= speed;
                             offset += npc.velocity;
                             velocity.X = offset.X;
@@ -1265,8 +1263,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             num158 = num155 / num158;
                             num156 *= num158;
                             num157 *= num158;
-                            Vector2 vector19 = new Vector2(num156 * 1f + (float)Main.rand.Next(-50, 51) * 0.01f, num157 * 1f + (float)Main.rand.Next(-50, 51) * 0.01f);
-                            vector19.Normalize();
+                            Vector2 vector19 = new Vector2(num156 * 1f + (float)Main.rand.Next(-50, 51) * 0.01f, num157 * 1f + (float)Main.rand.Next(-50, 51) * 0.01f).SafeNormalize(Vector2.UnitY);
                             vector19 *= num155;
                             vector19 += npc.velocity;
                             num156 = vector19.X;
