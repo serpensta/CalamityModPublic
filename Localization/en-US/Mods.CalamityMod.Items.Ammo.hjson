@@ -50,6 +50,11 @@ BubonicRound: {
 		'''
 }
 
+CinderArrow: {
+	DisplayName: Cinder Arrow
+	Tooltip: Explosive arrows that burst into weak flaming shards that inflict Brimstone Flames
+}
+
 ElysianArrow: {
 	DisplayName: Elysian Arrow
 	Tooltip:
@@ -88,6 +93,16 @@ HolyFireBullet: {
 		'''
 }
 
+HailstormBullet: {
+	DisplayName: Hailstorm Bullet
+	Tooltip:
+		'''
+		Bullets imbued with potent ice magic
+		These bullets rapidly decelerate after being fired
+		Critical hits cause a flash freeze, dealing additional damage
+		'''
+}
+
 HyperiusBullet: {
 	DisplayName: Hyperius Bullet
 	Tooltip:
@@ -104,16 +119,6 @@ IcicleArrow: {
 		Ice arrows with an enchanted tip
 		These arrows quickly freeze into falling icicles that deal increased damage
 		Hitting enemies or tiles before being frozen causes the arrow to fly upwards
-		'''
-}
-
-HailstormBullet: {
-	DisplayName: Hailstorm Bullet
-	Tooltip:
-		'''
-		Bullets imbued with potent ice magic
-		These bullets rapidly decelerate after being fired
-		Critical hits cause a flash freeze, dealing additional damage
 		'''
 }
 
@@ -136,11 +141,6 @@ MortarRound: {
 		'''
 }
 
-NapalmArrow: {
-	DisplayName: Napalm Arrow
-	Tooltip: Explodes into fire shards
-}
-
 RubberMortarRound: {
 	DisplayName: Rubber Mortar Round
 	Tooltip:
@@ -156,7 +156,7 @@ TerraArrow: {
 	Tooltip:
 		'''
 		Fires an energy arrow that quickly splits into two arrows
-		These arrows ignore 25 points of defense
+		These arrows ignore 8 points of defense
 		'''
 }
 

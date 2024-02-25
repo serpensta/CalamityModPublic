@@ -45,6 +45,7 @@ ChargedBlast.DisplayName: Blast
 ChargedBlast2.DisplayName: Blast
 ChickenExplosion.DisplayName: Kentucky Fried Explosion
 ChickenRocket.DisplayName: Chicken Rocket
+CinderArrowProj.DisplayName: Cinder Arrow
 ClamorRifleProj.DisplayName: Clamor Bolt
 ClamorRifleProjSplit.DisplayName: Clamor Bolt
 ClaretCannonProj.DisplayName: Claret Cannon
@@ -129,7 +130,6 @@ MiniatureFolly.DisplayName: Miniature Folly
 MiniSharkron.DisplayName: Mini Sharkron
 MistArrow.DisplayName: Mist Arrow
 MortarRoundProj.DisplayName: Mortar
-NapalmArrowProj.DisplayName: Napalm Arrow
 NeedlerProj.DisplayName: Needle
 NorfleetComet.DisplayName: Comet
 NorfleetExplosion.DisplayName: Explosion
