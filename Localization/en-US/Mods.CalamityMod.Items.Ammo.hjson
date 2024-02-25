@@ -1,8 +1,3 @@
-ArcticArrow: {
-	DisplayName: Arctic Arrow
-	Tooltip: Freezes enemies for a short time
-}
-
 AstralSolution: {
 	DisplayName: Astral Solution
 	Tooltip:
