@@ -515,6 +515,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.alpha = 0;
             }
 
+            NPC golem = Main.npc[NPC.golemBoss];
+            Vector2 fistCenter = golem.Center + golem.velocity + new Vector2(0f, -9f * npc.scale);
+            fistCenter.X += (float)((npc.type == NPCID.GolemFistLeft) ? -84 : 78) * npc.scale;
+            Vector2 distanceFromFistCenter = fistCenter - npc.Center;
+            float distanceFromRestPosition = distanceFromFistCenter.Length();
             if (npc.ai[0] == 0f)
             {
                 // Avoid cheap bullshit
@@ -522,23 +527,19 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 npc.noTileCollide = true;
 
-                float fistSpeed = 25f;
+                float fistSpeed = 24f;
                 fistSpeed *= (aggression + 3f) / 4f;
+                if (fistSpeed > 32f)
+                    fistSpeed = 32f;
 
-                Vector2 fistCenter = npc.Center;
-                float fistXPos = Main.npc[NPC.golemBoss].Center.X - fistCenter.X;
-                float fistYPos = Main.npc[NPC.golemBoss].Center.Y - fistCenter.Y;
-                fistYPos -= 9f * npc.scale;
-                fistXPos = ((npc.type != NPCID.GolemFistLeft) ? (fistXPos + 78f) : (fistXPos - 84f)) * npc.scale;
-
-                float fistRestDistance = (float)Math.Sqrt(fistXPos * fistXPos + fistYPos * fistYPos);
+                float fistRestDistance = distanceFromRestPosition;
                 if (fistRestDistance < 12f + fistSpeed)
                 {
                     npc.rotation = 0f;
-                    npc.velocity.X = fistXPos;
-                    npc.velocity.Y = fistYPos;
+                    npc.velocity.X = distanceFromFistCenter.X;
+                    npc.velocity.Y = distanceFromFistCenter.Y;
 
-                    bool canPunch = (npc.type == NPCID.GolemFistLeft && npc.Center.X + 100f > Main.player[npc.target].Center.X) || (npc.type == NPCID.GolemFistRight && npc.Center.X - 100f < Main.player[npc.target].Center.X);
+                    bool canPunch = npc.alpha == 0 && (npc.type == NPCID.GolemFistLeft && npc.Center.X + 100f > Main.player[npc.target].Center.X) || (npc.type == NPCID.GolemFistRight && npc.Center.X - 100f < Main.player[npc.target].Center.X);
                     if (canPunch)
                     {
                         float fistShootSpeed = aggression;
@@ -565,8 +566,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 else
                 {
                     fistRestDistance = fistSpeed / fistRestDistance;
-                    npc.velocity.X = fistXPos * fistRestDistance;
-                    npc.velocity.Y = fistYPos * fistRestDistance;
+                    npc.velocity.X = distanceFromFistCenter.X * fistRestDistance;
+                    npc.velocity.Y = distanceFromFistCenter.Y * fistRestDistance;
 
                     npc.rotation = (float)Math.Atan2(-npc.velocity.Y, -npc.velocity.X);
                     if (npc.type == NPCID.GolemFistLeft)
@@ -578,14 +579,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Avoid cheap bullshit
                 npc.damage = 0;
 
-                Vector2 fistCenter = npc.Center;
-                float fistXPos = Main.npc[NPC.golemBoss].Center.X - fistCenter.X;
-                float fistYPos = Main.npc[NPC.golemBoss].Center.Y - fistCenter.Y;
-                fistYPos -= 9f * npc.scale;
-                fistXPos = ((npc.type != NPCID.GolemFistLeft) ? (fistXPos + 78f) : (fistXPos - 84f)) * npc.scale;
-
                 npc.ai[1] += 1f;
-                npc.Center = new Vector2(fistXPos, fistYPos);
+                npc.Center = fistCenter;
                 npc.rotation = 0f;
                 npc.velocity = Vector2.Zero;
                 if (npc.ai[1] <= 15f)
@@ -683,16 +678,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.noTileCollide = false;
                 }
 
-                Vector2 projectileFirePos = npc.Center;
-                float fistGolemDistanceX = Main.npc[NPC.golemBoss].Center.X - projectileFirePos.X;
-                float fistGolemDistanceY = Main.npc[NPC.golemBoss].Center.Y - projectileFirePos.Y;
-                fistGolemDistanceX += Main.npc[NPC.golemBoss].velocity.X;
-                fistGolemDistanceY += Main.npc[NPC.golemBoss].velocity.Y;
-                fistGolemDistanceY -= 9f;
-                fistGolemDistanceX = (npc.type != NPCID.GolemFistLeft) ? (fistGolemDistanceX + 78f) : (fistGolemDistanceX - 84f);
-                float fistGolemDistance = (float)Math.Sqrt(fistGolemDistanceX * fistGolemDistanceX + fistGolemDistanceY * fistGolemDistanceY);
-
-                if (fistGolemDistance > 700f || npc.collideX || npc.collideY)
+                if (distanceFromRestPosition > 700f || npc.collideX || npc.collideY)
                 {
                     // Avoid cheap bullshit
                     npc.damage = 0;
@@ -1596,7 +1582,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             Player player = Main.player[npc.target];
             NPC nPC = Main.npc[NPC.golemBoss];
             Vector2 vector = nPC.Center + nPC.velocity + new Vector2(0f, -9f * npc.scale);
-            vector.X += (float)((npc.type == NPCID.GolemFistLeft) ? (-84) : 78) * npc.scale;
+            vector.X += (float)((npc.type == NPCID.GolemFistLeft) ? -84 : 78) * npc.scale;
             Vector2 vector2 = vector - npc.Center;
             float num2 = vector2.Length();
             if (npc.ai[0] == 0f)
