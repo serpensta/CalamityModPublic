@@ -4467,7 +4467,7 @@ namespace CalamityMod.NPCs
                     break;
 
                 case NPCID.HallowBoss:
-                    target.AddBuff(BuffType<HolyFlames>(), 320);
+                    target.AddBuff(Main.dayTime ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 320);
                     break;
 
                 case NPCID.BloodNautilus:

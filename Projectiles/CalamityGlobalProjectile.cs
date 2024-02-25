@@ -2021,11 +2021,11 @@ namespace CalamityMod.Projectiles
                     bool spreadOut = false;
                     bool homeIn = false;
                     float spreadOutCutoffTime = 140f;
-                    float homeInCutoffTime = Main.dayTime ? 55f : 80f;
+                    float homeInCutoffTime = Main.dayTime ? (masterMode ? 45f : 55f) : (masterMode ? 60f : 80f);
                     float spreadDeceleration = 0.98f;
-                    float minAcceleration = 0.05f;
-                    float maxAcceleration = 0.1f;
-                    float homingVelocity = 30f;
+                    float minAcceleration = masterMode ? 0.075f : 0.05f;
+                    float maxAcceleration = masterMode ? 0.125f : 0.1f;
+                    float homingVelocity = masterMode ? 36f : 30f;
 
                     if (projectile.timeLeft > spreadOutCutoffTime)
                         spreadOut = true;
@@ -2054,7 +2054,7 @@ namespace CalamityMod.Projectiles
                     }
 
                     projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
-                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi / 2f;
+                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
                     return false;
                 }
@@ -2736,7 +2736,7 @@ namespace CalamityMod.Projectiles
             if (projectile.type == ProjectileID.HallowBossLastingRainbow && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
             {
                 if (projectile.timeLeft > 570)
-                    projectile.velocity *= 1.015525f;
+                    projectile.velocity *= ((Main.masterMode || BossRushEvent.BossRushActive) ? 1.017078f : 1.015525f);
             }
 
             if (projectile.type == ProjectileID.OrnamentFriendly && lineColor == 1) //spawned by Festive Wings

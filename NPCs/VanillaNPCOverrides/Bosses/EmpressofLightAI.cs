@@ -18,6 +18,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             // Difficulty bools.
             bool bossRush = BossRushEvent.BossRushActive;
+            bool masterMode = Main.masterMode || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
             // Rotation
@@ -32,8 +33,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Percent life remaining.
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
+            float phase2LifeRatio = masterMode ? 0.7f : 0.6f;
+            float phase3LifeRatio = masterMode ? 0.3f : 0.15f;
             bool phase2 = npc.AI_120_HallowBoss_IsInPhase2();
-            bool shouldBeInPhase2ButIsStillInPhase1 = lifeRatio <= 0.5f && !phase2;
+            bool phase3 = lifeRatio <= phase3LifeRatio;
+
+            bool shouldBeInPhase2ButIsStillInPhase1 = lifeRatio <= phase2LifeRatio && !phase2;
             if (shouldBeInPhase2ButIsStillInPhase1)
                 calamityGlobalNPC.DR = 0.99f;
 
@@ -78,6 +83,30 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float extraPhaseTime;
             Vector2 destination;
 
+            // Variables for dust visuals on spawn and in phase 3
+            float playSpawnSoundTime = 10f;
+            float stopSpawningDustTime = 150f;
+            float spawnTime = 180f;
+
+            // Do visual stuff in phase 3
+            float maxOpacity = phase3 ? 0.7f : 1f;
+            int minAlpha = 255 - (int)(255 * maxOpacity);
+            if (phase3)
+            {
+                if (calamityGlobalNPC.newAI[0] == playSpawnSoundTime)
+                    SoundEngine.PlaySound(SoundID.Item161, npc.Center);
+
+                if (calamityGlobalNPC.newAI[0] > playSpawnSoundTime && calamityGlobalNPC.newAI[0] < stopSpawningDustTime)
+                    CreateSpawnDust(npc, false);
+
+                calamityGlobalNPC.newAI[0] += 1f;
+                if (calamityGlobalNPC.newAI[0] >= stopSpawningDustTime)
+                {
+                    calamityGlobalNPC.newAI[0] = playSpawnSoundTime + 1f;
+                    npc.SyncExtraAI();
+                }
+            }
+
             switch ((int)npc.ai[0])
             {
                 // Spawn animation.
@@ -93,12 +122,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + new Vector2(0f, -80f), Vector2.Zero, ProjectileID.HallowBossDeathAurora, 0, 0f, Main.myPlayer);
                     }
 
-                    if (npc.ai[1] == 10f)
+                    if (npc.ai[1] == playSpawnSoundTime)
                         SoundEngine.PlaySound(SoundID.Item161, npc.Center);
 
                     npc.velocity *= 0.95f;
 
-                    if (npc.ai[1] > 10f && npc.ai[1] < 150f)
+                    if (npc.ai[1] > playSpawnSoundTime && npc.ai[1] < stopSpawningDustTime)
                     {
                         for (int m = 0; m < 2; m++)
                         {
@@ -124,9 +153,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.ai[1] += 1f;
                     visible = false;
                     takeDamage = false;
-                    npc.Opacity = MathHelper.Clamp(npc.ai[1] / 180f, 0f, 1f);
+                    npc.Opacity = MathHelper.Clamp(npc.ai[1] / spawnTime, 0f, 1f);
 
-                    if (npc.ai[1] >= 180f)
+                    if (npc.ai[1] >= spawnTime)
                     {
                         if (dayTimeEnrage && !npc.AI_120_HallowBoss_IsGenuinelyEnraged())
                             npc.ai[3] += 2f;
@@ -221,7 +250,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             attackType = 4;
 
                             // Adjust the upcoming Ethereal Lance attack depending on what random variable is chosen here.
-                            calamityGlobalNPC.newAI[0] = Main.rand.Next(2);
+                            calamityGlobalNPC.newAI[3] = Main.rand.Next(2);
 
                             // Sync the Calamity AI variables.
                             npc.SyncExtraAI();
@@ -241,7 +270,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             attackType = 4;
 
                             // Adjust the upcoming Ethereal Lance attack depending on what random variable is chosen here.
-                            calamityGlobalNPC.newAI[0] = Main.rand.Next(2);
+                            calamityGlobalNPC.newAI[3] = Main.rand.Next(2);
 
                             // Sync the Calamity AI variables.
                             npc.SyncExtraAI();
@@ -253,7 +282,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (attackPatternLength % attackIncrement == phase1Attack10)
                             attackType = 5;
 
-                        if (lifeRatio <= 0.5f)
+                        if (lifeRatio <= phase2LifeRatio)
                             attackType = 10;
                     }
 
@@ -304,7 +333,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             attackType = 4;
 
                             // Adjust the upcoming Ethereal Lance attack depending on what random variable is chosen here.
-                            calamityGlobalNPC.newAI[0] = Main.rand.Next(2);
+                            calamityGlobalNPC.newAI[3] = Main.rand.Next(2);
 
                             // Sync the Calamity AI variables.
                             npc.SyncExtraAI();
@@ -328,7 +357,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         if (!Main.dayTime)
                             despawnFlag = true;
 
-                        if (Main.dayTime && Main.time >= 53400.0)
+                        if (Main.dayTime && Main.time >= 53400D)
                             despawnFlag = true;
                     }
 
@@ -467,7 +496,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         {
                             int lanceFrequency = (int)(npc.ai[1] / (dayTimeEnrage ? 2f : 3f));
                             Vector2 lanceDirection = Vector2.UnitX.RotatedBy((float)Math.PI / (lanceRotation * 2) + lanceFrequency * ((float)Math.PI / lanceRotation));
-                            if (calamityGlobalNPC.newAI[0] == 0f)
+                            if (calamityGlobalNPC.newAI[3] == 0f)
                                 lanceDirection.X += (lanceDirection.X > 0f) ? 0.5f : -0.5f;
 
                             lanceDirection.Normalize();
@@ -535,7 +564,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         npc.ai[0] = 1f;
                         npc.ai[1] = 0f;
-                        calamityGlobalNPC.newAI[0] = 0f;
+                        calamityGlobalNPC.newAI[3] = 0f;
                         npc.netUpdate = true;
 
                         // Sync the Calamity AI variables.
@@ -703,10 +732,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                             int randomLanceWallType;
                             do randomLanceWallType = Main.rand.Next(numLanceWalls);
-                            while (randomLanceWallType == calamityGlobalNPC.newAI[0]);
+                            while (randomLanceWallType == calamityGlobalNPC.newAI[3]);
 
                             // This is set so that Empress doesn't use the same wall type twice in a row.
-                            calamityGlobalNPC.newAI[0] = randomLanceWallType;
+                            calamityGlobalNPC.newAI[3] = randomLanceWallType;
 
                             // Keeps track of the total number of lance walls used.
                             calamityGlobalNPC.newAI[1] += 1f;
@@ -786,7 +815,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         npc.ai[0] = 1f;
                         npc.ai[1] = 0f;
-                        calamityGlobalNPC.newAI[0] = 0f;
+                        calamityGlobalNPC.newAI[3] = 0f;
                         calamityGlobalNPC.newAI[1] = 0f;
                         calamityGlobalNPC.newAI[2] = 0f;
                         npc.SyncExtraAI();
@@ -1194,11 +1223,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
         public static bool VanillaEmpressofLightAI(NPC npc, Mod mod)
         {
+            CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
+
             Vector2 stopMovingLocation = new Vector2(-150f, -250f);
             Vector2 stopMovingLocation2 = new Vector2(150f, -250f);
             Vector2 stopMovingLocation3 = new Vector2(0f, -350f);
             Vector2 stopMovingLocation4 = new Vector2(0f, -350f);
-            Vector2 vector5 = new Vector2(-80f, -500f);
+            Vector2 stopMovingLocation5 = new Vector2(-80f, -500f);
             float moveSpeed = 0.5f;
             float desiredVelocity = 12f;
             float stopMovingDistance = 40f;
@@ -1270,6 +1301,30 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (expertMode)
                 reducedAttackCooldown += 5;
 
+            // Variables for dust visuals on spawn and in phase 3
+            float playSpawnSoundTime = 10f;
+            float stopSpawningDustTime = 150f;
+            float spawnTime = 180f;
+
+            // Do visual stuff in phase 3
+            float maxOpacity = phase3 ? 0.7f : 1f;
+            int minAlpha = 255 - (int)(255 * maxOpacity);
+            if (phase3)
+            {
+                if (calamityGlobalNPC.newAI[0] == playSpawnSoundTime)
+                    SoundEngine.PlaySound(SoundID.Item161, npc.Center);
+
+                if (calamityGlobalNPC.newAI[0] > playSpawnSoundTime && calamityGlobalNPC.newAI[0] < stopSpawningDustTime)
+                    CreateSpawnDust(npc, false);
+
+                calamityGlobalNPC.newAI[0] += 1f;
+                if (calamityGlobalNPC.newAI[0] >= stopSpawningDustTime)
+                {
+                    calamityGlobalNPC.newAI[0] = playSpawnSoundTime + 1f;
+                    npc.SyncExtraAI();
+                }
+            }
+
             switch ((int)npc.ai[0])
             {
                 case 0:
@@ -1284,39 +1339,18 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + new Vector2(0f, -80f), Vector2.Zero, ProjectileID.HallowBossDeathAurora, 0, 0f, Main.myPlayer);
                     }
 
-                    if (npc.ai[1] == 10f)
+                    if (npc.ai[1] == playSpawnSoundTime)
                         SoundEngine.PlaySound(SoundID.Item161, npc.Center);
 
                     npc.velocity *= 0.95f;
-                    if (npc.ai[1] > 10f && npc.ai[1] < 150f)
-                    {
-                        int num67 = 2;
-                        for (int m = 0; m < num67; m++)
-                        {
-                            float num68 = MathHelper.Lerp(1.3f, 0.7f, npc.Opacity) * Utils.GetLerpValue(0f, 120f, npc.ai[1], clamped: true);
-                            Color newColor2 = Main.hslToRgb(npc.ai[1] / 180f, 1f, 0.5f);
-                            int num69 = Dust.NewDust(npc.position, npc.width, npc.height, 267, 0f, 0f, 0, newColor2);
-                            Main.dust[num69].position = npc.Center + Main.rand.NextVector2Circular((float)npc.width * 3f, (float)npc.height * 3f) + new Vector2(0f, -150f);
-                            Main.dust[num69].velocity *= Main.rand.NextFloat() * 0.8f;
-                            Main.dust[num69].noGravity = true;
-                            Main.dust[num69].fadeIn = 0.6f + Main.rand.NextFloat() * 0.7f * num68;
-                            Main.dust[num69].velocity += Vector2.UnitY * 3f;
-                            Main.dust[num69].scale = 0.35f;
-                            if (num69 != 6000)
-                            {
-                                Dust dust2 = Dust.CloneDust(num69);
-                                dust2.scale /= 2f;
-                                dust2.fadeIn *= 0.85f;
-                                dust2.color = new Color(255, 255, 255, 255);
-                            }
-                        }
-                    }
+                    if (npc.ai[1] > playSpawnSoundTime && npc.ai[1] < stopSpawningDustTime)
+                        CreateSpawnDust(npc);
 
                     npc.ai[1] += 1f;
                     becomeVisible = false;
                     takeDamage = false;
-                    npc.Opacity = MathHelper.Clamp(npc.ai[1] / 180f, 0f, 1f);
-                    if (npc.ai[1] >= 180f)
+                    npc.Opacity = MathHelper.Clamp(npc.ai[1] / spawnTime, 0f, 1f);
+                    if (npc.ai[1] >= spawnTime)
                     {
                         if (enraged && !npc.AI_120_HallowBoss_IsGenuinelyEnraged())
                             npc.ai[3] += 2f;
@@ -1769,8 +1803,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         Vector2 sunDanceSpawnLocation = npc.Center + offset;
                         NPCAimedTarget targetData = npc.GetTargetData();
                         Vector2 targetLocation = (targetData.Invalid ? npc.Center : targetData.Center);
-                        if (npc.Distance(targetLocation + vector5) > stopMovingDistance)
-                            npc.SimpleFlyMovement(npc.DirectionTo(targetLocation + vector5).SafeNormalize(Vector2.Zero) * desiredVelocity * 0.3f, moveSpeed * 0.7f);
+                        if (npc.Distance(targetLocation + stopMovingLocation5) > stopMovingDistance)
+                            npc.SimpleFlyMovement(npc.DirectionTo(targetLocation + stopMovingLocation5).SafeNormalize(Vector2.Zero) * desiredVelocity * 0.3f, moveSpeed * 0.7f);
 
                         float phaseGateValue = phase3 ? (masterMode ? 60f : 120f) : 180f;
                         int sunDanceGateValue = 60;
@@ -2241,11 +2275,37 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.localAI[0] = 0f;
 
             if (becomeVisible)
-                npc.alpha = Utils.Clamp(npc.alpha - 5, 0, 255);
+                npc.alpha = Utils.Clamp(npc.alpha - 5, minAlpha, 255);
 
             Lighting.AddLight(npc.Center, Vector3.One * npc.Opacity);
 
             return false;
+        }
+
+        private static void CreateSpawnDust(NPC npc, bool useAI = true)
+        {
+            int spawnDustAmount = 2;
+            float timer = useAI ? npc.ai[1] : npc.Calamity().newAI[0];
+            float spawnTime = 180f;
+            for (int i = 0; i < spawnDustAmount; i++)
+            {
+                float fadeInScalar = MathHelper.Lerp(1.3f, 0.7f, npc.Opacity) * Utils.GetLerpValue(0f, 120f, timer, clamped: true);
+                Color newColor = Main.hslToRgb(timer / spawnTime, 1f, 0.5f);
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 267, 0f, 0f, 0, newColor);
+                Main.dust[dust].position = npc.Center + Main.rand.NextVector2Circular((float)npc.width * 3f, (float)npc.height * 3f) + new Vector2(0f, -150f);
+                Main.dust[dust].velocity *= Main.rand.NextFloat() * 0.8f;
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].fadeIn = 0.6f + Main.rand.NextFloat() * 0.7f * fadeInScalar;
+                Main.dust[dust].velocity += Vector2.UnitY * 3f;
+                Main.dust[dust].scale = 0.35f;
+                if (dust != Main.maxDust)
+                {
+                    Dust dust2 = Dust.CloneDust(dust);
+                    dust2.scale /= 2f;
+                    dust2.fadeIn *= 0.85f;
+                    dust2.color = new Color(255, 255, 255, 255);
+                }
+            }
         }
 
         private static void AI_120_HallowBoss_DoMagicEffect(Vector2 spot, int effectType, float progress, NPC npc)
