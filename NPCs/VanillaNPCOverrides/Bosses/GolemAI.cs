@@ -473,33 +473,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
         public static bool BuffedGolemFistAI(NPC npc, Mod mod)
         {
-            bool bossRush = BossRushEvent.BossRushActive;
-            bool masterMode = Main.masterMode || bossRush;
-            bool death = CalamityWorld.death || bossRush;
-
-            // Enrage if the target isn't inside the temple
-            // Turbo enrage if target isn't inside the temple and it's Boss Rush or For the Worthy
-            bool enrage = true;
-            bool turboEnrage = false;
-            if (Main.player[npc.target].Center.Y > Main.worldSurface * 16.0)
-            {
-                int targetTilePosX = (int)Main.player[npc.target].Center.X / 16;
-                int targetTilePosY = (int)Main.player[npc.target].Center.Y / 16;
-
-                Tile tile = Framing.GetTileSafely(targetTilePosX, targetTilePosY);
-                if (tile.WallType == WallID.LihzahrdBrickUnsafe)
-                    enrage = false;
-                else
-                    turboEnrage = bossRush || Main.getGoodWorld;
-            }
-            else
-                turboEnrage = bossRush || Main.getGoodWorld;
-
-            if (bossRush || Main.getGoodWorld)
-                enrage = true;
-
-            float aggression = turboEnrage ? (Main.getGoodWorld ? 4f : 3f) : enrage ? 2f : death ? (masterMode ? 1.7f : 1.5f) : (masterMode ? 1.4f : 1f);
-
             if (NPC.golemBoss < 0)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -515,7 +488,40 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.alpha = 0;
             }
 
+            // Get a target
+            if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
+                npc.TargetClosest();
+
             NPC golem = Main.npc[NPC.golemBoss];
+            Player player = Main.player[npc.target];
+
+            bool bossRush = BossRushEvent.BossRushActive;
+            bool masterMode = Main.masterMode || bossRush;
+            bool death = CalamityWorld.death || bossRush;
+
+            // Enrage if the target isn't inside the temple
+            // Turbo enrage if target isn't inside the temple and it's Boss Rush or For the Worthy
+            bool enrage = true;
+            bool turboEnrage = false;
+            if (player.Center.Y > Main.worldSurface * 16.0)
+            {
+                int targetTilePosX = (int)player.Center.X / 16;
+                int targetTilePosY = (int)player.Center.Y / 16;
+
+                Tile tile = Framing.GetTileSafely(targetTilePosX, targetTilePosY);
+                if (tile.WallType == WallID.LihzahrdBrickUnsafe)
+                    enrage = false;
+                else
+                    turboEnrage = bossRush || Main.getGoodWorld;
+            }
+            else
+                turboEnrage = bossRush || Main.getGoodWorld;
+
+            if (bossRush || Main.getGoodWorld)
+                enrage = true;
+
+            float aggression = turboEnrage ? (Main.getGoodWorld ? 4f : 3f) : enrage ? 2f : death ? (masterMode ? 1.7f : 1.5f) : (masterMode ? 1.4f : 1f);
+
             Vector2 fistCenter = golem.Center + golem.velocity + new Vector2(0f, -9f * npc.scale);
             fistCenter.X += (float)((npc.type == NPCID.GolemFistLeft) ? -84 : 78) * npc.scale;
             Vector2 distanceFromFistCenter = fistCenter - npc.Center;
@@ -539,7 +545,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.velocity.X = distanceFromFistCenter.X;
                     npc.velocity.Y = distanceFromFistCenter.Y;
 
-                    bool canPunch = npc.alpha == 0 && (npc.type == NPCID.GolemFistLeft && npc.Center.X + 100f > Main.player[npc.target].Center.X) || (npc.type == NPCID.GolemFistRight && npc.Center.X - 100f < Main.player[npc.target].Center.X);
+                    bool canPunch = npc.alpha == 0 && (npc.type == NPCID.GolemFistLeft && npc.Center.X + 100f > player.Center.X) || (npc.type == NPCID.GolemFistRight && npc.Center.X - 100f < player.Center.X);
                     if (canPunch)
                     {
                         float fistShootSpeed = aggression;
@@ -615,8 +621,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         fistReturnSpeed = 48f;
 
                     Vector2 fistCent = npc.Center;
-                    float fistTargetXDist = Main.player[npc.target].Center.X - fistCent.X;
-                    float fistTargetYDist = Main.player[npc.target].Center.Y - fistCent.Y;
+                    float fistTargetXDist = player.Center.X - fistCent.X;
+                    float fistTargetYDist = player.Center.Y - fistCent.Y;
                     float fistTargetDistance = (float)Math.Sqrt(fistTargetXDist * fistTargetXDist + fistTargetYDist * fistTargetYDist);
                     fistTargetDistance = fistReturnSpeed / fistTargetDistance;
                     npc.velocity.X = fistTargetXDist * fistTargetDistance;
@@ -663,18 +669,18 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                 if (Math.Abs(npc.velocity.X) > Math.Abs(npc.velocity.Y))
                 {
-                    if (npc.velocity.X > 0f && npc.Center.X > Main.player[npc.target].Center.X)
+                    if (npc.velocity.X > 0f && npc.Center.X > player.Center.X)
                         npc.noTileCollide = false;
 
-                    if (npc.velocity.X < 0f && npc.Center.X < Main.player[npc.target].Center.X)
+                    if (npc.velocity.X < 0f && npc.Center.X < player.Center.X)
                         npc.noTileCollide = false;
                 }
                 else
                 {
-                    if (npc.velocity.Y > 0f && npc.Center.Y > Main.player[npc.target].Center.Y)
+                    if (npc.velocity.Y > 0f && npc.Center.Y > player.Center.Y)
                         npc.noTileCollide = false;
 
-                    if (npc.velocity.Y < 0f && npc.Center.Y < Main.player[npc.target].Center.Y)
+                    if (npc.velocity.Y < 0f && npc.Center.Y < player.Center.Y)
                         npc.noTileCollide = false;
                 }
 
@@ -698,8 +704,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.noTileCollide = true;
                 float fistAcceleration = 0.4f;
                 Vector2 returningFistCenter = npc.Center;
-                float returningTargetX = Main.player[npc.target].Center.X - returningFistCenter.X;
-                float returningTargetY = Main.player[npc.target].Center.Y - returningFistCenter.Y;
+                float returningTargetX = player.Center.X - returningFistCenter.X;
+                float returningTargetY = player.Center.Y - returningFistCenter.Y;
                 float returningTargetDist = (float)Math.Sqrt(returningTargetX * returningTargetX + returningTargetY * returningTargetY);
                 returningTargetDist = 12f / returningTargetDist;
                 returningTargetX *= returningTargetDist;
