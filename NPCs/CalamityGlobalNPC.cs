@@ -3128,7 +3128,7 @@ namespace CalamityMod.NPCs
                     case NPCID.HallowBoss:
                         return EmpressofLightAI.VanillaEmpressofLightAI(npc, Mod);
 
-                    /*case NPCID.Golem:
+                    case NPCID.Golem:
                         return GolemAI.VanillaGolemAI(npc, Mod);
                     case NPCID.GolemFistLeft:
                     case NPCID.GolemFistRight:
@@ -3138,7 +3138,7 @@ namespace CalamityMod.NPCs
                     case NPCID.GolemHeadFree:
                         return GolemAI.VanillaGolemHeadFreeAI(npc, Mod);
 
-                    case NPCID.DukeFishron:
+                    /*case NPCID.DukeFishron:
                         return DukeFishronAI.VanillaDukeFishronAI(npc, Mod);
 
                     case NPCID.CultistBoss:

@@ -2361,6 +2361,7 @@ namespace CalamityMod
                 NPCID.MartianSaucerTurret,
                 NPCID.Probe,
                 NPCID.CultistBoss,
+                NPCID.GolemHead,
                 NPCID.GolemHeadFree,
                 NPCID.MoonLordFreeEye,
                 NPCID.BloodSquid,

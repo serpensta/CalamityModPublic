@@ -506,7 +506,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             if (calamityGlobalNPC.newAI[3] == 0f)
                                 lanceDirection.X += (lanceDirection.X > 0f) ? 0.5f : -0.5f;
 
-                            lanceDirection.Normalize();
+                            lanceDirection = lanceDirection.SafeNormalize(Vector2.UnitY);
                             float spawnDistance = 600f;
 
                             Vector2 playerCenter = targetData10.Center;
@@ -524,7 +524,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 if (lanceSpawnDirection == Vector2.Zero)
                                     lanceSpawnDirection = lanceDirection;
 
-                                spawnLocation = playerCenter - Vector2.Normalize(lanceSpawnDirection) * spawnDistance;
+                                spawnLocation = playerCenter - lanceSpawnDirection.SafeNormalize(Vector2.UnitY) * spawnDistance;
                             }
 
                             int projectileType = ProjectileID.FairyQueenLance;
@@ -556,7 +556,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     if (extraPlayerSpawnDirection == Vector2.Zero)
                                         extraPlayerSpawnDirection = lanceDirection;
 
-                                    spawnLocation = playerCenter - Vector2.Normalize(extraPlayerSpawnDirection) * spawnDistance;
+                                    spawnLocation = playerCenter - extraPlayerSpawnDirection.SafeNormalize(Vector2.UnitY) * spawnDistance;
                                 }
 
                                 v3 = extraPlayerSpawnLocation - spawnLocation;
@@ -1037,7 +1037,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 if (straightLanceSpawnLocation == Vector2.Zero)
                                     straightLanceSpawnLocation = inverseTargetVel;
 
-                                straightLanceSpawnDirection = targetCenter - Vector2.Normalize(straightLanceSpawnLocation) * spawnDistance;
+                                straightLanceSpawnDirection = targetCenter - straightLanceSpawnLocation.SafeNormalize(Vector2.UnitY) * spawnDistance;
                             }
 
                             int projectileType = ProjectileID.FairyQueenLance;
@@ -1068,7 +1068,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     if (extraPlayerLanceSpawnLocation == Vector2.Zero)
                                         extraPlayerLanceSpawnLocation = inverseTargetVel;
 
-                                    straightLanceSpawnDirection = targetCenter - Vector2.Normalize(extraPlayerLanceSpawnLocation) * spawnDistance;
+                                    straightLanceSpawnDirection = targetCenter - extraPlayerLanceSpawnLocation.SafeNormalize(Vector2.UnitY) * spawnDistance;
                                 }
 
                                 v = extraPlayerLancePredict - straightLanceSpawnDirection;
@@ -1716,7 +1716,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 else if (!expertMode)
                                     radialOffset.X += (radialOffset.X > 0f ? 0.5f : -0.5f);
 
-                                radialOffset.Normalize();
+                                radialOffset = radialOffset.SafeNormalize(Vector2.UnitY);
                                 float lanceSpawnDistance = 300f;
                                 if (expertMode)
                                     lanceSpawnDistance = 450f;
@@ -1737,7 +1737,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     if (vector33 == Vector2.Zero)
                                         vector33 = radialOffset;
 
-                                    vector32 = targetCenter - Vector2.Normalize(vector33) * lanceSpawnDistance;
+                                    vector32 = targetCenter - vector33.SafeNormalize(Vector2.UnitY) * lanceSpawnDistance;
                                 }
 
                                 Vector2 v3 = vector31 - vector32;
@@ -1766,7 +1766,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                         if (vector35 == Vector2.Zero)
                                             vector35 = radialOffset;
 
-                                        vector32 = targetCenter - Vector2.Normalize(vector35) * lanceSpawnDistance;
+                                        vector32 = targetCenter - vector35.SafeNormalize(Vector2.UnitY) * lanceSpawnDistance;
                                     }
 
                                     v3 = vector34 - vector32;
@@ -2124,7 +2124,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                     if (vector16 == Vector2.Zero)
                                         vector16 = vector13;
 
-                                    lanceSpawnLocation = targetCenter - Vector2.Normalize(vector16) * lanceSpawnOffset;
+                                    lanceSpawnLocation = targetCenter - vector16.SafeNormalize(Vector2.UnitY) * lanceSpawnOffset;
                                 }
 
                                 Vector2 rotationVector = vector14 - lanceSpawnLocation;
@@ -2154,7 +2154,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                         if (vector18 == Vector2.Zero)
                                             vector18 = vector13;
 
-                                        lanceSpawnLocation = targetCenter - Vector2.Normalize(vector18) * lanceSpawnOffset;
+                                        lanceSpawnLocation = targetCenter - vector18.SafeNormalize(Vector2.UnitY) * lanceSpawnOffset;
                                     }
 
                                     rotationVector = lanceDestination - lanceSpawnLocation;
