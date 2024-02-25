@@ -527,11 +527,11 @@ namespace CalamityMod.NPCs.DevourerofGods
                     }
 
                     // Phase 2 countdown
-                    NPC.localAI[2] = 600f;
+                    NPC.localAI[2] = 710f;
                 }
 
                 // Play music after the transiton BS
-                if (NPC.localAI[2] <= 530f)
+                if (NPC.localAI[2] <= 640f)
 					CalamityGlobalNPC.DoGP2 = NPC.whoAmI;
 
                 // Once before DoG spawns, set new size and become visible again.
