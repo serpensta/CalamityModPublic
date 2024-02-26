@@ -4692,7 +4692,7 @@ namespace CalamityMod.NPCs
                 {
                     float pointBlankShotDurationRatio = projectile.Calamity().pointBlankShotDuration / (float)CalamityGlobalProjectile.DefaultPointBlankDuration;
                     float pointBlankShotDistanceRatio = 1f - projectile.Calamity().pointBlankShotDistanceTravelled / CalamityGlobalProjectile.PointBlankShotDistanceLimit;
-                    float pointBlankDamageRatio = (pointBlankShotDurationRatio < pointBlankShotDistanceRatio ? pointBlankShotDurationRatio : pointBlankShotDistanceRatio) * 0.5f;
+                    float pointBlankDamageRatio = (pointBlankShotDurationRatio < pointBlankShotDistanceRatio ? pointBlankShotDurationRatio : pointBlankShotDistanceRatio) * 0.25f;
                     float pointBlankShotDamageMultiplier = 1f + pointBlankDamageRatio;
                     modifiers.SourceDamage *= pointBlankShotDamageMultiplier;
                     projectile.Calamity().pointBlankShotDuration = 0;
