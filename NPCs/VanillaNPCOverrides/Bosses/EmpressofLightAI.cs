@@ -1287,7 +1287,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             int rainbowStreakDamage = 45;
             int lastingRainbowDamage = 45;
             int sunDanceDamage = 50;
-            
+
+            // Rotation
+            npc.rotation = npc.velocity.X * 0.005f;
+
+            // Reset DR every frame
+            calamityGlobalNPC.DR = 0.15f;
+
             bool phase2 = npc.AI_120_HallowBoss_IsInPhase2();
             bool expertMode = Main.expertMode;
             bool masterMode = Main.masterMode;
@@ -1298,9 +1304,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             bool genuinePhase2 = npc.life / (float)npc.lifeMax <= phase2LifeRatio;
             bool phase3 = npc.life / (float)npc.lifeMax <= phase3LifeRatio && expertMode;
 
+            bool shouldBeInPhase2ButIsStillInPhase1 = npc.life / (float)npc.lifeMax <= phase2LifeRatio && !phase2;
+            if (shouldBeInPhase2ButIsStillInPhase1)
+                calamityGlobalNPC.DR = 0.99f;
+
+            calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = shouldBeInPhase2ButIsStillInPhase1 || npc.ai[0] == 6f;
+
             bool enraged = NPC.ShouldEmpressBeEnraged();
             if (npc.life == npc.lifeMax && enraged && !npc.AI_120_HallowBoss_IsGenuinelyEnraged())
                 npc.ai[3] += 2f;
+
+            calamityGlobalNPC.CurrentlyEnraged = !BossRushEvent.BossRushActive && enraged;
 
             int projectileDamageMultiplier = enraged ? 2 : 1;
 
@@ -1844,6 +1858,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     {
                         // Avoid cheap bullshit.
                         npc.damage = 0;
+
+                        // Increase durability.
+                        calamityGlobalNPC.DR = shouldBeInPhase2ButIsStillInPhase1 ? 0.99f : (BossRushEvent.BossRushActive ? 0.99f : 0.575f);
 
                         float extraPhaseTime = (masterMode ? 30 : expertMode ? 75 : 120) - reducedAttackCooldown;
                         Vector2 offset = new Vector2(0f, -100f);

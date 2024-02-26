@@ -756,6 +756,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 npc.damage = 1000;
                 calamityGlobalNPC.DR = 0.9999f;
                 calamityGlobalNPC.unbreakableDR = true;
+
+                calamityGlobalNPC.CurrentlyEnraged = true;
+                calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
+
                 npc.rotation += npc.direction * 0.3f;
                 Vector2 enrageSpinPos = npc.Center;
                 float enrageSpinTargetX = Main.player[npc.target].Center.X - enrageSpinPos.X;
@@ -1236,6 +1240,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
 
                 npc.defense += numHands * (Main.masterMode ? 50 : 25);
+                npc.Calamity().CurrentlyIncreasingDefenseOrDR = numHands > 0;
+                npc.chaseable = numHands == 0;
                 if ((numHands < maxHands || (double)npc.life < (double)npc.lifeMax * 0.75 || Main.masterMode) && npc.ai[1] == 0f)
                 {
                     float num151 = 80f;
@@ -1449,6 +1455,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.damage = 1000;
                 npc.defense = 9999;
+
+                npc.Calamity().CurrentlyEnraged = true;
+                npc.Calamity().CurrentlyIncreasingDefenseOrDR = true;
+
                 npc.rotation += (float)npc.direction * 0.3f;
                 Vector2 vector21 = npc.Center;
                 float num176 = Main.player[npc.target].Center.X - vector21.X;

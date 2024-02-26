@@ -1231,6 +1231,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 num780 = 0.15f;
             }
 
+            npc.Calamity().CurrentlyEnraged = !BossRushEvent.BossRushActive && flag39;
+
             if (Main.expertMode)
             {
                 num779 += (Main.masterMode ? 2f : 1f);

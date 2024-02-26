@@ -274,6 +274,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
             }
 
+            calamityGlobalNPC.CurrentlyEnraged = distanceFromTarget > halfAverageScreenWidth || npc.ai[3] == 1f;
+
             if (bossRush)
                 speedMult += 0.2f;
 

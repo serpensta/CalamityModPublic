@@ -352,6 +352,8 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.defense *= 2;
                     NPC.damage = NPC.defDamage * 2;
 
+                    calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
+
                     if (phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         NPC.localAI[0] += 1f;
@@ -454,6 +456,9 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.damage = 1000;
                     calamityGlobalNPC.DR = 0.9999f;
                     calamityGlobalNPC.unbreakableDR = true;
+
+                    calamityGlobalNPC.CurrentlyEnraged = true;
+                    calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
 
                     if (NPC.IsMechQueenUp)
                         NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.X / 15f * 0.5f, 0.75f);

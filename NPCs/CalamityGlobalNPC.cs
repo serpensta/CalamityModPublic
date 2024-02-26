@@ -2630,14 +2630,13 @@ namespace CalamityMod.NPCs
             ApplyDR(npc, ref modifiers);
 
             // Damage reduction on spawn for certain worm bosses.
-            bool destroyerResist = CalamityLists.DestroyerIDs.Contains(npc.type) && (CalamityWorld.revenge || BossRushEvent.BossRushActive);
             bool eaterofWorldsResist = CalamityLists.EaterofWorldsIDs.Contains(npc.type) && BossRushEvent.BossRushActive;
-            if (destroyerResist || eaterofWorldsResist || CalamityLists.AstrumDeusIDs.Contains(npc.type))
-            {
-                float resistanceGateValue = (CalamityLists.AstrumDeusIDs.Contains(npc.type) && newAI[0] != 0f) ? 300f : 600f;
-                if (newAI[1] < resistanceGateValue || (newAI[2] > 0f && CalamityLists.DestroyerIDs.Contains(npc.type)))
-                    modifiers.FinalDamage *= 0.01f;
-            }
+            if (CalamityLists.DestroyerIDs.Contains(npc.type))
+                modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / DestroyerAI.DRIncraeseTime, 0f, 1f));
+            if (CalamityLists.AstrumDeusIDs.Contains(npc.type))
+                modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
+            if (eaterofWorldsResist)
+                modifiers.FinalDamage *= 0.01f;
 
             // Large Deus worm takes reduced damage in order to last a long enough time.
             // TODO -- WHY DOES DEUS HAVE THIS UNDOCUMENTED MULTIPLIER HERE??
@@ -3138,10 +3137,10 @@ namespace CalamityMod.NPCs
                     case NPCID.GolemHeadFree:
                         return GolemAI.VanillaGolemHeadFreeAI(npc, Mod);
 
-                    /*case NPCID.DukeFishron:
+                    case NPCID.DukeFishron:
                         return DukeFishronAI.VanillaDukeFishronAI(npc, Mod);
 
-                    case NPCID.CultistBoss:
+                    /*case NPCID.CultistBoss:
                     case NPCID.CultistBossClone:
                         return CultistAI.VanillaCultistAI(npc, Mod);
                     case NPCID.AncientLight:

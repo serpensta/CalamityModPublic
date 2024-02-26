@@ -324,6 +324,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.defense *= 2;
                     npc.damage = npc.defDamage * 2;
 
+                    calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
+
                     if (phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         npc.localAI[0] += 1f;
@@ -426,6 +428,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     npc.damage = 1000;
                     calamityGlobalNPC.DR = 0.9999f;
                     calamityGlobalNPC.unbreakableDR = true;
+
+                    calamityGlobalNPC.CurrentlyEnraged = true;
+                    calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
 
                     if (NPC.IsMechQueenUp)
                         npc.rotation = npc.rotation.AngleLerp(npc.velocity.X / 15f * 0.5f, 0.75f);
@@ -2079,6 +2084,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.defense *= 2;
                 npc.damage = npc.defDamage * 2;
+
+                npc.Calamity().CurrentlyIncreasingDefenseOrDR = true;
+
                 npc.ai[2] += 1f;
                 if (npc.ai[2] == 2f)
                     SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
@@ -2157,6 +2165,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             {
                 npc.damage = 1000;
                 npc.defense = 9999;
+
+                npc.Calamity().CurrentlyEnraged = true;
+                npc.Calamity().CurrentlyIncreasingDefenseOrDR = true;
+
                 if (NPC.IsMechQueenUp)
                     npc.rotation = npc.rotation.AngleLerp(npc.velocity.X / 15f * 0.5f, 0.75f);
                 else

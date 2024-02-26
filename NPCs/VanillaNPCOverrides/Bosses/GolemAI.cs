@@ -1311,6 +1311,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if ((!Main.player[npc.target].ZoneLihzhardTemple && !Main.player[npc.target].ZoneJungle) || (double)Main.player[npc.target].Center.Y < Main.worldSurface * 16.0)
                 enrageScale *= 2f;
 
+            npc.Calamity().CurrentlyEnraged = !BossRushEvent.BossRushActive && enrageScale > 1f;
+
             if (npc.localAI[0] == 0f && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 npc.localAI[0] = 1f;

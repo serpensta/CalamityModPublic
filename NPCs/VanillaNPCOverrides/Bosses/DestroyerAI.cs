@@ -14,6 +14,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 {
     public static class DestroyerAI
     {
+        public const float DRIncraeseTime = 600f;
+
         public static bool BuffedDestroyerAI(NPC npc, Mod mod)
         {
             int mechdusaCurvedSpineSegmentIndex = 0;
@@ -51,10 +53,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             bool death = CalamityWorld.death || bossRush;
 
             // 10 seconds of resistance to prevent spawn killing
-            if (calamityGlobalNPC.newAI[1] < 600f)
+            if (calamityGlobalNPC.newAI[1] < DRIncraeseTime)
                 calamityGlobalNPC.newAI[1] += 1f;
 
-            calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = calamityGlobalNPC.newAI[1] < 600f;
+            calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = calamityGlobalNPC.newAI[1] < DRIncraeseTime;
 
             // Percent life remaining
             float lifeRatio = npc.life / (float)npc.lifeMax;
@@ -129,7 +131,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Phase for flying at the player
-            bool flyAtTarget = (calamityGlobalNPC.newAI[3] >= 900f && startFlightPhase) || (calamityGlobalNPC.newAI[1] < 600f && calamityGlobalNPC.newAI[1] > 60f);
+            bool flyAtTarget = (calamityGlobalNPC.newAI[3] >= 900f && startFlightPhase) || (calamityGlobalNPC.newAI[1] < DRIncraeseTime && calamityGlobalNPC.newAI[1] > 60f);
 
             // Dust on spawn and alpha effects
             if (npc.type == NPCID.TheDestroyer || (npc.type != NPCID.TheDestroyer && Main.npc[(int)npc.ai[1]].alpha < 128))
@@ -774,6 +776,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     break;
                 }
             }
+
+            // 10 seconds of resistance to prevent spawn killing
+            if (npc.Calamity().newAI[1] < DRIncraeseTime)
+                npc.Calamity().newAI[1] += 1f;
+
+            npc.Calamity().CurrentlyIncreasingDefenseOrDR = npc.Calamity().newAI[1] < DRIncraeseTime;
 
             if (npc.ai[3] > 0f)
                 npc.realLife = (int)npc.ai[3];

@@ -43,12 +43,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             float enrageScale = death ? 0.5f : 0f;
             if (((npc.position.Y / 16f) < Main.worldSurface && enrage) || bossRush)
             {
-                npc.Calamity().CurrentlyEnraged = !bossRush;
+                calamityGlobalNPC.CurrentlyEnraged = !bossRush;
                 enrageScale += 0.5f;
             }
             if (!Main.player[npc.target].ZoneJungle || bossRush)
             {
-                npc.Calamity().CurrentlyEnraged = !bossRush;
+                calamityGlobalNPC.CurrentlyEnraged = !bossRush;
                 enrageScale += 0.5f;
             }
 
@@ -842,6 +842,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (!Main.player[npc.target].ZoneJungle)
                 num644 += 1f;
+
+            npc.Calamity().CurrentlyEnraged = num644 > 0f;
 
             if (Main.getGoodWorld)
                 num644 += 0.5f;
