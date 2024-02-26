@@ -29,6 +29,8 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.penetrate = -1;
             Projectile.extraUpdates = 3;
             Projectile.DamageType = DamageClass.MeleeNoSpeed;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

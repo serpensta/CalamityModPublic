@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
@@ -23,6 +23,8 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = false;
             Projectile.penetrate = 2;
             Projectile.DamageType = DamageClass.Ranged;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

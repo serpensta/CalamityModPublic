@@ -23,6 +23,8 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.timeLeft = 240;
             Projectile.ignoreWater = true;
             Projectile.DamageType = RogueDamageClass.Instance;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

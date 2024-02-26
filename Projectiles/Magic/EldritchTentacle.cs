@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -17,6 +17,8 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.penetrate = 2;
             Projectile.MaxUpdates = 3;
             Projectile.DamageType = DamageClass.Magic;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

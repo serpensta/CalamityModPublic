@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -25,6 +25,8 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.penetrate = 3;
             Projectile.timeLeft = 600;
             AIType = ProjectileID.LightBeam;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

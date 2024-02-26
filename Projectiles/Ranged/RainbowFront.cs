@@ -16,6 +16,8 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.alpha = 255;
             Projectile.ignoreWater = true;
             Projectile.scale = 1.25f;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

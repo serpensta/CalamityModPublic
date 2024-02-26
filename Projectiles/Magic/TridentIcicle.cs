@@ -22,6 +22,8 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.penetrate = 2;
             Projectile.ignoreWater = true;
             Projectile.coldDamage = true;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()
