@@ -24,6 +24,8 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.timeLeft = 240;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.ignoreWater = true;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
 
         public override void AI()

@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,6 +28,8 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.timeLeft = 300;
             Projectile.penetrate = 2;
             Projectile.DamageType = RogueDamageClass.Instance;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

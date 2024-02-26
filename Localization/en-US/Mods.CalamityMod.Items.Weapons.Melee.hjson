@@ -491,7 +491,7 @@ FaultLine: {
 
 FeralthornClaymore: {
 	DisplayName: Feralthorn Claymore
-	Tooltip: Summons thorns on enemy hits
+	Tooltip: Sprouts thorns from enemies on hit
 }
 
 FlarefrostBlade: {

@@ -1196,10 +1196,13 @@ namespace CalamityMod.Items
                 modPlayer.fairyBoots = true;
 
             // Arcane and Magnet Flower buffs
-            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
-                player.manaCost -= 0.04f;
+            if (item.type == ItemID.MagnetFlower)
+                player.manaCost -= 0.02f;
             if (item.type == ItemID.ArcaneFlower)
+            {
+                player.manaCost -= 0.04f;
                 player.GetDamage<MagicDamageClass>() += 0.05f;
+            }
 
             if (item.type == ItemID.SniperScope)
             {

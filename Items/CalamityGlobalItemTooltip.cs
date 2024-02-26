@@ -609,10 +609,13 @@ namespace CalamityMod.Items
             }
 
             // Arcane and Magnet Flower buffs.
-            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
-                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
+            if (item.type == ItemID.MagnetFlower)
+                EditTooltipByNum(0, (line) => line.Text = "10% reduced mana usage");
             if (item.type == ItemID.ArcaneFlower)
+            {
+                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
                 EditTooltipByNum(2, (line) => line.Text += "\n5% increased magic damage");
+            }
 
             // Magiluminescence nerf and clear explanation of what it actually does.
             if (item.type == ItemID.Magiluminescence)

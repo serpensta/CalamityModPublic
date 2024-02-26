@@ -153,7 +153,7 @@ namespace CalamityMod.NPCs.Leviathan
             {
                 if (Main.npc[CalamityGlobalNPC.siren].active)
                 {
-                    if (Main.npc[CalamityGlobalNPC.siren].damage == 0)
+                    if (!phase3 && Main.npc[CalamityGlobalNPC.siren].damage == 0)
                         sirenAlive = false;
                 }
             }
