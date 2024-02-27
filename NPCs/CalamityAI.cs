@@ -4135,6 +4135,8 @@ namespace CalamityMod.NPCs
                     if (npc.velocity.Y > fallSpeed)
                         npc.velocity.Y = fallSpeed;
 
+                    // This bool exists to stop the strange wiggle behavior when worms are falling down
+                    bool slowXVelocity = Math.Abs(npc.velocity.X) > fallSpeed;
                     if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.4)
                     {
                         if (npc.velocity.X < 0f)
@@ -4144,17 +4146,27 @@ namespace CalamityMod.NPCs
                     }
                     else if (npc.velocity.Y == fallSpeed)
                     {
-                        if (npc.velocity.X < deusTargetX)
-                            npc.velocity.X += speed;
-                        else if (npc.velocity.X > deusTargetX)
-                            npc.velocity.X -= speed;
+                        if (slowXVelocity)
+                        {
+                            if (npc.velocity.X < deusTargetX)
+                                npc.velocity.X += speed;
+                            else if (npc.velocity.X > deusTargetX)
+                                npc.velocity.X -= speed;
+                        }
+                        else
+                            npc.velocity.X = 0f;
                     }
                     else if (npc.velocity.Y > 4f)
                     {
-                        if (npc.velocity.X < 0f)
-                            npc.velocity.X += speed * 0.9f;
+                        if (slowXVelocity)
+                        {
+                            if (npc.velocity.X < 0f)
+                                npc.velocity.X += speed * 0.9f;
+                            else
+                                npc.velocity.X -= speed * 0.9f;
+                        }
                         else
-                            npc.velocity.X -= speed * 0.9f;
+                            npc.velocity.X = 0f;
                     }
                 }
                 else
