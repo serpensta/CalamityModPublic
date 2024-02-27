@@ -8,7 +8,7 @@ using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
+namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
     // This is the most horrible abomination of code I have ever seen in my life, by a fucking landslide.
     // This took hours of my time to attempt to clean up, and quite frankly I'd be surprised if even half of it is accurate.

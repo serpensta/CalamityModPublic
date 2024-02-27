@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Events;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -101,7 +102,7 @@ namespace CalamityMod.NPCs.Signus
             float playerDistNormMult = revenge ? 24f : 22f;
             if (BossRushEvent.BossRushActive)
                 playerDistNormMult = 30f;
-            CalamityAI.DungeonSpiritAI(NPC, Mod, playerDistNormMult, 0f, true);
+            CalamityRegularEnemyAI.DungeonSpiritAI(NPC, Mod, playerDistNormMult, 0f, true);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

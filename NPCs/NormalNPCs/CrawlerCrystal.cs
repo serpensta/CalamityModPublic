@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -88,7 +89,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 detected = true;
             if (!detected)
                 return;
-            CalamityAI.GemCrawlerAI(NPC, Mod, 7f, 0.07f);
+            CalamityRegularEnemyAI.GemCrawlerAI(NPC, Mod, 7f, 0.07f);
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

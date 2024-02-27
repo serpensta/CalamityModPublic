@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using CalamityMod.World;
 
-namespace CalamityMod.NPCs.VanillaNPCOverrides.RegularEnemies
+namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 {
     public static class DemonEyeAI
     {

@@ -10,7 +10,7 @@ using Terraria.Audio;
 using CalamityMod.World;
 using CalamityMod.Events;
 
-namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
+namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
     public static class DeerclopsAI
     {

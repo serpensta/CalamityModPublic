@@ -15,6 +15,7 @@ using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.Items.Weapons.Rogue;
+using CalamityMod.NPCs.CalamityAIs.CalamityBossAIs;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -51,7 +52,7 @@ namespace CalamityMod.NPCs.AstrumAureus
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.27f,
                 PortraitScale = 0.45f,
@@ -127,7 +128,7 @@ namespace CalamityMod.NPCs.AstrumAureus
 
         public override void AI()
         {
-            CalamityAI.AstrumAureusAI(NPC, Mod);
+            AstrumAureusAI.VanillaAstrumAureusAI(NPC, Mod);
         }
 
         public override void FindFrame(int frameHeight)

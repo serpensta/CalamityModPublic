@@ -66,7 +66,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0);
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers();
             value.Rotation = MathHelper.ToRadians(135);
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.TrailingMode[NPC.type] = 0;

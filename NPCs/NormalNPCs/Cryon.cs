@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -49,7 +50,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void AI()
         {
-            CalamityAI.UnicornAI(NPC, Mod, false, CalamityWorld.death ? 8f : CalamityWorld.revenge ? 6f : 4f, 5f, CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f);
+            CalamityRegularEnemyAI.UnicornAI(NPC, Mod, false, CalamityWorld.death ? 8f : CalamityWorld.revenge ? 6f : 4f, 5f, CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f);
         }
 
         public override void FindFrame(int frameHeight)

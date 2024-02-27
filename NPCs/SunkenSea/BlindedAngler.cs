@@ -2,6 +2,7 @@
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
@@ -66,7 +67,7 @@ namespace CalamityMod.NPCs.SunkenSea
         public override void AI()
         {
             Lighting.AddLight(NPC.Center, (255 - NPC.alpha) * 0f / 255f, (255 - NPC.alpha) * 0.75f / 255f, (255 - NPC.alpha) * 0.75f / 255f);
-            CalamityAI.PassiveSwimmingAI(NPC, Mod, 1, 100f, 0.1f, 0.1f, 3f, 3f, 0.1f);
+            CalamityRegularEnemyAI.PassiveSwimmingAI(NPC, Mod, 1, 100f, 0.1f, 0.1f, 3f, 3f, 0.1f);
         }
 
         public override void FindFrame(int frameHeight)

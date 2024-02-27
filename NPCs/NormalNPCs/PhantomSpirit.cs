@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -49,7 +50,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void AI()
         {
             float speed = CalamityWorld.death ? 22f : CalamityWorld.revenge ? 19.5f : 17f;
-            CalamityAI.DungeonSpiritAI(NPC, Mod, speed, -MathHelper.PiOver2);
+            CalamityRegularEnemyAI.DungeonSpiritAI(NPC, Mod, speed, -MathHelper.PiOver2);
             int polterDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Polterplasm, 0f, 0f, 0, default, 1f);
             Dust dust = Main.dust[polterDust];
             dust.velocity *= 0.1f;

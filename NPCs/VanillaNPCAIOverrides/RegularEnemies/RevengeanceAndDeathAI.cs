@@ -2,7 +2,7 @@
 using CalamityMod.NPCs.Crags;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.PlagueEnemies;
-using CalamityMod.NPCs.VanillaNPCOverrides.RegularEnemies;
+using CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
@@ -18,11 +18,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace CalamityMod.NPCs
+namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 {
-    public partial class CalamityGlobalAI
+    public static class RevengeanceAndDeathAI
     {
-        #region Death Mode NPC AI
+        #region Revengeance and Death Mode non-boss NPC AIs
 
         #region Fighter AI
 

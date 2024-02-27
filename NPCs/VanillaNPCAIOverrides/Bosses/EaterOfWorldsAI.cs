@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using CalamityMod.Projectiles.Boss;
 
-namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
+namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
     public static class EaterOfWorldsAI
     {

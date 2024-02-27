@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Rogue;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -43,7 +44,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void AI()
         {
-            CalamityAI.UnicornAI(NPC, Mod, true, NPC.wet ? 9f : 4f, NPC.wet ? 5.5f : 2.2f, NPC.wet ? 0.09f : 0.04f, NPC.wet ? -14f : -6.5f, NPC.wet ? -12f : -6f, NPC.wet ? -11f : -5f, NPC.wet ? -10f : -4f, NPC.wet ? -13f : -6f);
+            CalamityRegularEnemyAI.UnicornAI(NPC, Mod, true, NPC.wet ? 9f : 4f, NPC.wet ? 5.5f : 2.2f, NPC.wet ? 0.09f : 0.04f, NPC.wet ? -14f : -6.5f, NPC.wet ? -12f : -6f, NPC.wet ? -11f : -5f, NPC.wet ? -10f : -4f, NPC.wet ? -13f : -6f);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)

@@ -2,6 +2,7 @@
 using CalamityMod.Events;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -63,7 +64,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void AI()
         {
             float speed = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 16f : CalamityWorld.revenge ? 14f : 12f;
-            CalamityAI.DungeonSpiritAI(NPC, Mod, speed, -MathHelper.PiOver2);
+            CalamityRegularEnemyAI.DungeonSpiritAI(NPC, Mod, speed, -MathHelper.PiOver2);
             int polterDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Polterplasm, 0f, 0f, 0, default, 1f);
             Dust dust = Main.dust[polterDust];
             dust.velocity *= 0.1f;

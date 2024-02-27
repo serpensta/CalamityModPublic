@@ -16,6 +16,7 @@ using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.NPCs.CalamityAIs.CalamityBossAIs;
 using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -46,7 +47,7 @@ namespace CalamityMod.NPCs.AstrumDeus
         {
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.70f,
                 PortraitScale = 0.75f,
@@ -130,7 +131,7 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override void AI()
         {
-            CalamityAI.AstrumDeusAI(NPC, Mod, true);
+            AstrumDeusAI.VanillaAstrumDeusAI(NPC, Mod, true);
         }
 
         public override bool CheckActive()

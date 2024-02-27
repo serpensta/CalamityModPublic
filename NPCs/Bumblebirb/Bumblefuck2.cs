@@ -1,4 +1,5 @@
-﻿using CalamityMod.Projectiles.Boss;
+﻿using CalamityMod.NPCs.CalamityAIs.CalamityBossAIs;
+using CalamityMod.Projectiles.Boss;
 using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -48,7 +49,7 @@ namespace CalamityMod.NPCs.Bumblebirb
 
         public override void AI()
         {
-            CalamityAI.Bumblebirb2AI(NPC, Mod, true);
+            BumblebirbAI.VanillaBumblebirb2AI(NPC, Mod, true);
         }
 
         public override void OnKill()

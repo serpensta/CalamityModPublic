@@ -15,6 +15,7 @@ using Terraria.ModLoader;
 using ReLogic.Utilities;
 using System;
 using CalamityMod.Items.Placeables;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 
 namespace CalamityMod.NPCs.Crags
 {
@@ -82,7 +83,7 @@ namespace CalamityMod.NPCs.Crags
             else //run regular ai if buzzsaw mode isn't available
             {
                 NPC.ai[2] = 0f;
-                CalamityAI.UnicornAI(NPC, Mod, true, CalamityWorld.death ? 8f : CalamityWorld.revenge ? 6f : 4f, 5f, 0.2f);
+                CalamityRegularEnemyAI.UnicornAI(NPC, Mod, true, CalamityWorld.death ? 8f : CalamityWorld.revenge ? 6f : 4f, 5f, 0.2f);
             }
             if (NPC.lavaWet) //float on lava 
                 NPC.velocity.Y += -0.8f;
