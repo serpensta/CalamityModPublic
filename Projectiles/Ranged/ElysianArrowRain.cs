@@ -55,13 +55,13 @@ namespace CalamityMod.Projectiles.Ranged
                 altSpawn = Projectile.Center;
             if (Projectile.timeLeft <= 5)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(9, 9) - Projectile.velocity * 2, Main.rand.NextBool() ? 262 : 87, Projectile.velocity * Main.rand.NextFloat(0.1f, 0.95f));
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(9, 9) - Projectile.velocity * 5, Main.rand.NextBool() ? 262 : 87, (Projectile.velocity * 30) * Main.rand.NextFloat(0.1f, 0.95f));
                 dust.noGravity = true;
                 dust.scale = Main.rand.NextFloat(0.9f, 1.45f);
                 dust.alpha = 235;
             }
-            if (Projectile.timeLeft <= 13)
-                Projectile.velocity *= 0.985f;
+            if (Projectile.timeLeft <= 80)
+                Projectile.velocity *= 0.96f;
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
@@ -71,13 +71,13 @@ namespace CalamityMod.Projectiles.Ranged
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 90);
-            Projectile.timeLeft = 13;
+            Projectile.timeLeft = 80;
         }
 
         private float PrimitiveWidthFunction(float completionRatio)
         {
             float arrowheadCutoff = 0.36f;
-            float width = 34f;
+            float width = 24f;
             float minHeadWidth = 0.03f;
             float maxHeadWidth = width;
             if (completionRatio <= arrowheadCutoff)
@@ -111,7 +111,7 @@ namespace CalamityMod.Projectiles.Ranged
             GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/FabstaffStreak"));
             Vector2 overallOffset = Projectile.Size * 0.5f - Main.screenPosition;
             overallOffset += Projectile.velocity * 1.4f;
-            TrailDrawer.Draw(Projectile.oldPos, overallOffset, 92); // 58
+            TrailDrawer.Draw(Projectile.oldPos, overallOffset, 10); // 58
             return false;
         }
 

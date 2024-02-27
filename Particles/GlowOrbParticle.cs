@@ -13,6 +13,7 @@ namespace CalamityMod.Particles
         public bool UseAltVisual = true;
         public float fadeOut = 1;
         public bool imporant;
+        public bool glowCenter;
         public override bool SetLifetime => true;
         public override bool UseCustomDraw => true;
         public override bool UseAdditiveBlend => UseAltVisual;
@@ -20,7 +21,7 @@ namespace CalamityMod.Particles
 
         public override string Texture => "CalamityMod/Particles/GlowOrbParticle";
 
-        public GlowOrbParticle(Vector2 relativePosition, Vector2 velocity, bool affectedByGravity, int lifetime, float scale, Color color, bool AddativeBlend = true, bool needed = false)
+        public GlowOrbParticle(Vector2 relativePosition, Vector2 velocity, bool affectedByGravity, int lifetime, float scale, Color color, bool AddativeBlend = true, bool needed = false, bool GlowCenter = true)
         {
             Position = relativePosition;
             Velocity = velocity;
@@ -30,6 +31,7 @@ namespace CalamityMod.Particles
             Color = InitialColor = color;
             UseAltVisual = AddativeBlend;
             imporant = needed;
+            glowCenter = GlowCenter;
         }
 
         public override void Update()
@@ -52,7 +54,8 @@ namespace CalamityMod.Particles
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
             spriteBatch.Draw(texture, Position - Main.screenPosition, null, Color, Rotation, texture.Size() * 0.5f, scale, 0, 0f);
-            spriteBatch.Draw(texture, Position - Main.screenPosition, null, Color.White * fadeOut, Rotation, texture.Size() * 0.5f, scale * new Vector2(0.5f, 0.5f), 0, 0f);
+            if (glowCenter)
+                spriteBatch.Draw(texture, Position - Main.screenPosition, null, Color.White * fadeOut, Rotation, texture.Size() * 0.5f, scale * new Vector2(0.5f, 0.5f), 0, 0f);
         }
     }
 }

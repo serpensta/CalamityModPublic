@@ -157,15 +157,16 @@ TerraArrow: {
 
 TerraBullet: {
 	DisplayName: Terra Bullet
-	Tooltip: Explodes and splits into homing terra shards on death
+	Tooltip: Explodes and splits into homing terra shards on impact
 }
 
 VanquisherArrow: {
 	DisplayName: Vanquisher Arrow
 	Tooltip:
 		'''
-		Pierces through tiles
-		Spawns extra homing arrows as it travels
+		Powerful arrows forged with cosmic steel
+		Pierces through tiles and homes in on enemies
+		Creates a large explosion upon experation
 		'''
 }
 
