@@ -30,35 +30,6 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (CalamityWorld.LegendaryMode && npc.type == NPCID.EaterofWorldsHead)
                 npc.reflectsProjectiles = true;
 
-            // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 3f;
-            float minimalDamageVelocity = 6f;
-            if (npc.type == NPCID.EaterofWorldsHead)
-            {
-                if (npc.velocity.Length() <= minimalContactDamageVelocity)
-                {
-                    npc.damage = (int)(npc.defDamage * 0.5f);
-                }
-                else
-                {
-                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
-                }
-            }
-            else
-            {
-                float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
-                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-                {
-                    npc.damage = 0;
-                }
-                else
-                {
-                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                    npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
-                }
-            }
-
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
                 npc.TargetClosest();
@@ -661,6 +632,35 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 }
             }
 
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = 3f;
+            float minimalDamageVelocity = 6f;
+            if (npc.type == NPCID.EaterofWorldsHead)
+            {
+                if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                {
+                    npc.damage = (int)(npc.defDamage * 0.5f);
+                }
+                else
+                {
+                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                }
+            }
+            else
+            {
+                float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
+                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                {
+                    npc.damage = 0;
+                }
+                else
+                {
+                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
+                }
+            }
+
             if (npc.type == NPCID.EaterofWorldsHead || (npc.type != NPCID.EaterofWorldsHead && Main.npc[(int)npc.ai[1]].alpha >= 85))
             {
                 if (npc.alpha > 0 && npc.life > 0)
@@ -693,40 +693,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 packet.Write(calamityGlobalNPC.newAI[3]);
                 packet.Send(-1, -1);
             }
+
             return false;
         }
 
         public static bool VanillaEaterofWorldsAI(NPC npc, Mod mod)
         {
-            // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 2.5f;
-            float minimalDamageVelocity = 5f;
-            if (npc.type == NPCID.EaterofWorldsHead)
-            {
-                if (npc.velocity.Length() <= minimalContactDamageVelocity)
-                {
-                    npc.damage = (int)(npc.defDamage * 0.5f);
-                }
-                else
-                {
-                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
-                }
-            }
-            else
-            {
-                float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
-                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-                {
-                    npc.damage = 0;
-                }
-                else
-                {
-                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                    npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
-                }
-            }
-
             if (Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
             {
                 if (npc.type == NPCID.EaterofWorldsBody && ((double)(npc.position.Y / 16f) < Main.worldSurface || Main.getGoodWorld))
@@ -1157,6 +1129,35 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (((npc.velocity.X > 0f && npc.oldVelocity.X < 0f) || (npc.velocity.X < 0f && npc.oldVelocity.X > 0f) || (npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f) || (npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f)) && !npc.justHit)
                         npc.netUpdate = true;
+                }
+            }
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = 2.5f;
+            float minimalDamageVelocity = 5f;
+            if (npc.type == NPCID.EaterofWorldsHead)
+            {
+                if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                {
+                    npc.damage = (int)(npc.defDamage * 0.5f);
+                }
+                else
+                {
+                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                }
+            }
+            else
+            {
+                float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
+                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                {
+                    npc.damage = 0;
+                }
+                else
+                {
+                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
                 }
             }
 

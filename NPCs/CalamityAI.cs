@@ -62,35 +62,6 @@ namespace CalamityMod.NPCs
                     npc.chaseable = true;
                     npc.netUpdate = true;
                 }
-
-                // Calculate contact damage based on velocity
-                float minimalContactDamageVelocity = 3f;
-                float minimalDamageVelocity = 6f;
-                if (head)
-                {
-                    if (npc.velocity.Length() <= minimalContactDamageVelocity)
-                    {
-                        npc.damage = (int)(npc.defDamage * 0.5f);
-                    }
-                    else
-                    {
-                        float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                        npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
-                    }
-                }
-                else
-                {
-                    float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
-                    if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-                    {
-                        npc.damage = 0;
-                    }
-                    else
-                    {
-                        float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                        npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
-                    }
-                }
             }
             else
                 npc.damage = 0;
@@ -270,21 +241,22 @@ namespace CalamityMod.NPCs
                             if (segments >= 0 && segments < maxLength - 1)
                             {
                                 if (segments % 2 == 0)
-                                    lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.position.X + (npc.width / 2), (int)npc.position.Y + (npc.height / 2), ModContent.NPCType<AquaticScourgeBodyAlt>(), npc.whoAmI);
+                                    lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<AquaticScourgeBodyAlt>(), npc.whoAmI);
                                 else
-                                    lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.position.X + (npc.width / 2), (int)npc.position.Y + (npc.height / 2), ModContent.NPCType<AquaticScourgeBody>(), npc.whoAmI);
+                                    lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<AquaticScourgeBody>(), npc.whoAmI);
                             }
                             else
-                                lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.position.X + (npc.width / 2), (int)npc.position.Y + (npc.height / 2), ModContent.NPCType<AquaticScourgeTail>(), npc.whoAmI);
+                                lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<AquaticScourgeTail>(), npc.whoAmI);
 
                             Main.npc[lol].realLife = npc.whoAmI;
                             Main.npc[lol].ai[2] = npc.whoAmI;
                             Main.npc[lol].ai[1] = Previous;
                             Main.npc[Previous].ai[0] = lol;
-                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, lol, 0f, 0f, 0f, 0);
+                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, lol);
                             Previous = lol;
                         }
                     }
+
                     calamityGlobalNPC.newAI[2] = 1f;
                 }
 
@@ -344,6 +316,7 @@ namespace CalamityMod.NPCs
                             if (Collision.CanHit(npc.position, npc.width, npc.height, player.position, player.width, player.height))
                             {
                                 SoundEngine.PlaySound(SoundID.Item17, npc.Center);
+
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     float toothVelocity = death ? 9f : 8f;
@@ -353,6 +326,7 @@ namespace CalamityMod.NPCs
                                     float accelerate = phase4 ? 1f : 0f;
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity * 5f, projectileVelocity * toothVelocity, type, damage, 0f, Main.myPlayer, accelerate, 0f);
                                 }
+
                                 npc.netUpdate = true;
                             }
                         }
@@ -400,19 +374,16 @@ namespace CalamityMod.NPCs
                 npc.TargetClosest(false);
                 npc.velocity.Y += 2f;
 
-                if (npc.position.Y > Main.worldSurface * 16.0)
+                if (npc.position.Y > Main.worldSurface * 16D)
                     npc.velocity.Y += 2f;
 
-                if (npc.position.Y > Main.worldSurface * 16.0)
+                if (npc.position.Y > Main.worldSurface * 16D)
                 {
                     for (int a = 0; a < Main.npc.Length; a++)
                     {
                         int type = Main.npc[a].type;
-                        if (type == ModContent.NPCType<AquaticScourgeHead>() || type == ModContent.NPCType<AquaticScourgeBody>() ||
-                            type == ModContent.NPCType<AquaticScourgeBodyAlt>() || type == ModContent.NPCType<AquaticScourgeTail>())
-                        {
+                        if (type == ModContent.NPCType<AquaticScourgeHead>() || type == ModContent.NPCType<AquaticScourgeBody>() || type == ModContent.NPCType<AquaticScourgeBodyAlt>() || type == ModContent.NPCType<AquaticScourgeTail>())
                             Main.npc[a].active = false;
-                        }
                     }
                 }
             }
@@ -436,10 +407,10 @@ namespace CalamityMod.NPCs
             // Velocity and movement
             float scourgeMaxSpeed = 5f;
             float scourgeAcceleration = 0.08f;
-            Vector2 scourgePosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
+            Vector2 scourgePosition = npc.Center;
             Vector2 predictionVector = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? Main.player[npc.target].velocity * 20f : Vector2.Zero;
-            float scourgeTargetX = player.position.X + (player.width / 2) + predictionVector.X;
-            float scourgeTargetY = player.position.Y + (player.height / 2) + predictionVector.Y;
+            float scourgeTargetX = player.Center.X + predictionVector.X;
+            float scourgeTargetY = player.Center.Y + predictionVector.Y;
 
             if (head && !doSpiral)
             {
@@ -520,13 +491,14 @@ namespace CalamityMod.NPCs
                 {
                     try
                     {
-                        scourgePosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
-                        scourgeTargetX = Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) - scourgePosition.X;
-                        scourgeTargetY = Main.npc[(int)npc.ai[1]].position.Y + (Main.npc[(int)npc.ai[1]].height / 2) - scourgePosition.Y;
+                        scourgePosition = npc.Center;
+                        scourgeTargetX = Main.npc[(int)npc.ai[1]].Center.X - scourgePosition.X;
+                        scourgeTargetY = Main.npc[(int)npc.ai[1]].Center.Y - scourgePosition.Y;
                     }
                     catch
                     {
                     }
+
                     npc.rotation = (float)Math.Atan2(scourgeTargetY, scourgeTargetX) + MathHelper.PiOver2;
                     scourgeTargetDist = (float)Math.Sqrt(scourgeTargetX * scourgeTargetX + scourgeTargetY * scourgeTargetY);
                     int scourgeWidth = npc.width;
@@ -536,14 +508,11 @@ namespace CalamityMod.NPCs
                     npc.velocity = Vector2.Zero;
                     npc.position.X = npc.position.X + scourgeTargetX;
                     npc.position.Y = npc.position.Y + scourgeTargetY;
+
                     if (scourgeTargetX < 0f)
-                    {
                         npc.spriteDirection = -1;
-                    }
                     else if (scourgeTargetX > 0f)
-                    {
                         npc.spriteDirection = 1;
-                    }
                 }
             }
             else if (!doSpiral)
@@ -565,6 +534,7 @@ namespace CalamityMod.NPCs
                         if (npc.velocity.X > scourgeTargetX)
                             npc.velocity.X -= scourgeAcceleration;
                     }
+
                     if (npc.velocity.Y < scourgeTargetY)
                     {
                         npc.velocity.Y += scourgeAcceleration;
@@ -574,6 +544,7 @@ namespace CalamityMod.NPCs
                         if (npc.velocity.Y > scourgeTargetY)
                             npc.velocity.Y -= scourgeAcceleration;
                     }
+
                     if (Math.Abs(scourgeTargetY) < scourgeMaxSpeed * 0.2 && ((npc.velocity.X > 0f && scourgeTargetX < 0f) || (npc.velocity.X < 0f && scourgeTargetX > 0f)))
                     {
                         if (npc.velocity.Y > 0f)
@@ -581,6 +552,7 @@ namespace CalamityMod.NPCs
                         else
                             npc.velocity.Y -= scourgeAcceleration * 2f;
                     }
+
                     if (Math.Abs(scourgeTargetX) < scourgeMaxSpeed * 0.2 && ((npc.velocity.Y > 0f && scourgeTargetY < 0f) || (npc.velocity.Y < 0f && scourgeTargetY > 0f)))
                     {
                         if (npc.velocity.X > 0f)
@@ -622,7 +594,40 @@ namespace CalamityMod.NPCs
                         }
                     }
                 }
+
                 npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) + MathHelper.PiOver2;
+            }
+
+            // Calculate contact damage based on velocity
+            if (!nonHostile)
+            {
+                float minimalContactDamageVelocity = 3f;
+                float minimalDamageVelocity = 6f;
+                if (head)
+                {
+                    if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                    {
+                        npc.damage = (int)(npc.defDamage * 0.5f);
+                    }
+                    else
+                    {
+                        float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                        npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                    }
+                }
+                else
+                {
+                    float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
+                    if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                    {
+                        npc.damage = 0;
+                    }
+                    else
+                    {
+                        float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                        npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
+                    }
+                }
             }
         }
         #endregion
@@ -3618,41 +3623,9 @@ namespace CalamityMod.NPCs
             }
 
             // Deus cannot hit for 3 seconds or while invulnerable
-            if (calamityGlobalNPC.newAI[1] < 180f || npc.dontTakeDamage)
-            {
+            bool doNotDealDamage = calamityGlobalNPC.newAI[1] < 180f || npc.dontTakeDamage;
+            if (doNotDealDamage)
                 npc.damage = 0;
-            }
-            else
-            {
-                // Calculate contact damage based on velocity
-                float minimalContactDamageVelocity = 4f;
-                float minimalDamageVelocity = 8f;
-                if (head)
-                {
-                    if (npc.velocity.Length() <= minimalContactDamageVelocity)
-                    {
-                        npc.damage = (int)(npc.defDamage * 0.5f);
-                    }
-                    else
-                    {
-                        float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                        npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
-                    }
-                }
-                else
-                {
-                    float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
-                    if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-                    {
-                        npc.damage = 0;
-                    }
-                    else
-                    {
-                        float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                        npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
-                    }
-                }
-            }
 
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
@@ -3972,9 +3945,9 @@ namespace CalamityMod.NPCs
                         {
                             int lol;
                             if (segments >= 0 && segments < maxLength - 1)
-                                lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.position.X + (npc.width / 2), (int)npc.position.Y + (npc.height / 2), bodyType, npc.whoAmI);
+                                lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, bodyType, npc.whoAmI);
                             else
-                                lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.position.X + (npc.width / 2), (int)npc.position.Y + (npc.height / 2), tailType, npc.whoAmI);
+                                lol = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, tailType, npc.whoAmI);
 
                             if (segments % 2 == 0)
                                 Main.npc[lol].localAI[3] = 1f;
@@ -3982,6 +3955,7 @@ namespace CalamityMod.NPCs
                             Main.npc[lol].realLife = npc.whoAmI;
                             Main.npc[lol].Calamity().newAI[0] = Main.npc[Previous].Calamity().newAI[0];
                             Main.npc[lol].Calamity().newAI[3] = Main.npc[Previous].Calamity().newAI[3];
+
                             if (Main.netMode == NetmodeID.Server)
                             {
                                 var netMessage = mod.GetPacket();
@@ -3993,10 +3967,11 @@ namespace CalamityMod.NPCs
                                 netMessage.Write(Main.npc[lol].Calamity().newAI[3]);
                                 netMessage.Send();
                             }
+
                             Main.npc[lol].ai[2] = npc.whoAmI;
                             Main.npc[lol].ai[1] = Previous;
                             Main.npc[Previous].ai[0] = lol;
-                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, lol, 0f, 0f, 0f, 0);
+                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, lol);
                             Previous = lol;
                         }
                     }
@@ -4067,6 +4042,7 @@ namespace CalamityMod.NPCs
                                 }
                             }
                         }
+
                         if (outsideNoFlyZone)
                             shouldFly = true;
                     }
@@ -4144,8 +4120,8 @@ namespace CalamityMod.NPCs
                 }
 
                 Vector2 deusCenter = npc.Center;
-                float deusTargetX = player.position.X + (player.width / 2);
-                float deusTargetY = player.position.Y + (player.height / 2);
+                float deusTargetX = player.Center.X;
+                float deusTargetY = player.Center.Y;
                 deusTargetX = (int)(deusTargetX / 16f) * 16;
                 deusTargetY = (int)(deusTargetY / 16f) * 16;
                 deusCenter.X = (int)(deusCenter.X / 16f) * 16;
@@ -4227,6 +4203,7 @@ namespace CalamityMod.NPCs
                                     npc.velocity.X += turnSpeed;
                                 else if (npc.velocity.X > deusTargetX)
                                     npc.velocity.X -= turnSpeed;
+
                                 if (npc.velocity.Y < deusTargetY)
                                     npc.velocity.Y += turnSpeed;
                                 else if (npc.velocity.Y > deusTargetY)
@@ -4240,6 +4217,7 @@ namespace CalamityMod.NPCs
                                 npc.velocity.X += speed;
                             else if (npc.velocity.X > deusTargetX)
                                 npc.velocity.X -= speed;
+
                             if (npc.velocity.Y < deusTargetY)
                                 npc.velocity.Y += speed;
                             else if (npc.velocity.Y > deusTargetY)
@@ -4252,6 +4230,7 @@ namespace CalamityMod.NPCs
                                 else
                                     npc.velocity.Y -= speed * 2f;
                             }
+
                             if (Math.Abs(deusTargetX) < fallSpeed * 0.2 && ((npc.velocity.Y > 0f && deusTargetY < 0f) || (npc.velocity.Y < 0f && deusTargetY > 0f)))
                             {
                                 if (npc.velocity.X > 0f)
@@ -4345,6 +4324,7 @@ namespace CalamityMod.NPCs
                     float timer = npc.ai[0] + 15f;
                     float divisor = timer + shootProjectile;
                     bool shootGodRays = phase2 || deathModeEnragePhase_BodyAndTail;
+
                     if (!flyAtTarget || deathModeEnragePhase_BodyAndTail)
                     {
                         float laserDivisor = (phase2 && !deathModeEnragePhase_BodyAndTail) ? 4f : 2f;
@@ -4377,17 +4357,20 @@ namespace CalamityMod.NPCs
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     float deusLaserSpeed = (death ? 16f : revenge ? 14f : 13f) + enrageScale * 4f;
+
                                     Vector2 deusLaserCenter = npc.Center;
-                                    float deusLaserTargetX = player.position.X + player.width * 0.5f - deusLaserCenter.X;
-                                    float deusLaserTargetY = player.position.Y + player.height * 0.5f - deusLaserCenter.Y;
+                                    float deusLaserTargetX = player.Center.X - deusLaserCenter.X;
+                                    float deusLaserTargetY = player.Center.Y - deusLaserCenter.Y;
                                     float deusLaserTargetDist = (float)Math.Sqrt(deusLaserTargetX * deusLaserTargetX + deusLaserTargetY * deusLaserTargetY);
                                     deusLaserTargetDist = deusLaserSpeed / deusLaserTargetDist;
                                     deusLaserTargetX *= deusLaserTargetDist;
                                     deusLaserTargetY *= deusLaserTargetDist;
                                     deusLaserCenter.X += deusLaserTargetX * 5f;
                                     deusLaserCenter.Y += deusLaserTargetY * 5f;
+
                                     Vector2 shootDirection = new Vector2(deusLaserTargetX, deusLaserTargetY).SafeNormalize(Vector2.UnitY);
                                     Vector2 laserVelocity = shootDirection * deusLaserSpeed;
+
                                     int type = shootGodRays ? ModContent.ProjectileType<AstralGodRay>() : ModContent.ProjectileType<AstralShot2>();
                                     int damage = npc.GetProjectileDamage(type);
                                     if (shootGodRays)
@@ -4427,6 +4410,7 @@ namespace CalamityMod.NPCs
                                 randomMineMovement *= Main.rand.Next(30, 121) * 0.01f;
                                 velocity = randomMineMovement;
                             }
+
                             int type = ModContent.ProjectileType<DeusMine>();
                             int damage = npc.GetProjectileDamage(type);
                             float split = (splittingMines && npc.ai[0] % 3f == 0f) ? 1f : 0f;
@@ -4437,8 +4421,8 @@ namespace CalamityMod.NPCs
 
                 // Follow the head
                 Vector2 segmentCenter = npc.Center;
-                float segmentTargetX = player.position.X + (player.width / 2);
-                float segmentTargetY = player.position.Y + (player.height / 2);
+                float segmentTargetX = player.Center.X;
+                float segmentTargetY = player.Center.Y;
                 segmentTargetX = (int)(segmentTargetX / 16f) * 16;
                 segmentTargetY = (int)(segmentTargetY / 16f) * 16;
                 segmentCenter.X = (int)(segmentCenter.X / 16f) * 16;
@@ -4451,8 +4435,8 @@ namespace CalamityMod.NPCs
                     try
                     {
                         segmentCenter = npc.Center;
-                        segmentTargetX = Main.npc[(int)npc.ai[1]].position.X + (Main.npc[(int)npc.ai[1]].width / 2) - segmentCenter.X;
-                        segmentTargetY = Main.npc[(int)npc.ai[1]].position.Y + (Main.npc[(int)npc.ai[1]].height / 2) - segmentCenter.Y;
+                        segmentTargetX = Main.npc[(int)npc.ai[1]].Center.X - segmentCenter.X;
+                        segmentTargetY = Main.npc[(int)npc.ai[1]].Center.Y - segmentCenter.Y;
                     }
                     catch
                     {
@@ -4472,6 +4456,38 @@ namespace CalamityMod.NPCs
                         npc.spriteDirection = -1;
                     else if (segmentTargetX > 0f)
                         npc.spriteDirection = 1;
+                }
+            }
+
+            // Calculate contact damage based on velocity
+            if (!doNotDealDamage)
+            {
+                float minimalContactDamageVelocity = 4f;
+                float minimalDamageVelocity = 8f;
+                if (head)
+                {
+                    if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                    {
+                        npc.damage = (int)(npc.defDamage * 0.5f);
+                    }
+                    else
+                    {
+                        float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                        npc.damage = (int)MathHelper.Lerp(npc.defDamage * 0.5f, npc.defDamage, velocityDamageScalar);
+                    }
+                }
+                else
+                {
+                    float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
+                    if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                    {
+                        npc.damage = 0;
+                    }
+                    else
+                    {
+                        float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                        npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
+                    }
                 }
             }
         }
