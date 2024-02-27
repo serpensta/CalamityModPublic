@@ -656,6 +656,12 @@ LanternCenter: {
 	Tooltip: Lights up the night sky with celebratory lanterns
 }
 
+BossRushMonolith: {
+	DisplayName: Boss Rush Monolith
+	Tooltip: ""
+}
+
+
 NavyPrismTorch: {
 	DisplayName: Navy Prism Torch
 	Tooltip: Can be placed in water

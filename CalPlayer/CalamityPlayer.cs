@@ -1173,6 +1173,22 @@ namespace CalamityMod.CalPlayer
         public Vector2 FireDrawerPosition;
 
         public int monolithAccursedShader = 0;
+
+        public int monolithBossRushShader = 0;
+
+        public int monolithExoShader = 0;
+
+        public int monolithLeviathanShader = 0;
+
+        public int monolithPlagueShader = 0;
+
+        public int monolithCryogenShader = 0;
+
+        public int monolithAstralShader = 0;
+
+        public int monolithDevourerShader = 0;
+
+        public int monolithYharonShader = 0;
         #endregion Draw Effects
 
         #region Draedon Summoning
