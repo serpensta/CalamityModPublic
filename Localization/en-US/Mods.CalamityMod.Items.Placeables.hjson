@@ -661,7 +661,6 @@ BossRushMonolith: {
 	Tooltip: ""
 }
 
-
 NavyPrismTorch: {
 	DisplayName: Navy Prism Torch
 	Tooltip: Can be placed in water
@@ -3523,4 +3522,34 @@ WaterTurret: {
 		Shoots high-speed water blasts at nearby enemies
 		Cannot attack while a boss is alive
 		'''
+}
+
+AstralProjector: {
+	DisplayName: Astral Projector
+	Tooltip: ""
+}
+
+DeepSeaAnchor: {
+	DisplayName: Deep Sea Anchor
+	Tooltip: ""
+}
+
+DraconicIncense: {
+	DisplayName: Draconic Incense
+	Tooltip: ""
+}
+
+ExoObelisk: {
+	DisplayName: Exo Obelisk
+	Tooltip: ""
+}
+
+FrigidMonolith: {
+	DisplayName: Frigid Monolith
+	Tooltip: ""
+}
+
+PlagueHumidifier: {
+	DisplayName: Plague Humidifier
+	Tooltip: ""
 }
