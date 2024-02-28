@@ -310,6 +310,12 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             if (npc.ai[2] > 0f)
                 npc.realLife = (int)npc.ai[2];
 
+            if (!head)
+            {
+                if (npc.life > Main.npc[(int)npc.ai[1]].life)
+                    npc.life = Main.npc[(int)npc.ai[1]].life;
+            }
+
             // Alpha effects
             if ((head || Main.npc[(int)npc.ai[1]].alpha < 128) && !npc.dontTakeDamage)
             {
@@ -320,7 +326,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             }
 
             // Check if other segments are still alive, if not, die
-            if (npc.type != ModContent.NPCType<AstrumDeusHead>())
+            if (!head)
             {
                 bool shouldDespawn = true;
                 int headType = ModContent.NPCType<AstrumDeusHead>();
@@ -349,6 +355,11 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     if (npc.netSpam >= 10)
                         npc.netSpam = 9;
                 }
+            }
+            else
+            {
+                if (npc.life > Main.npc[(int)npc.ai[0]].life)
+                    npc.life = Main.npc[(int)npc.ai[0]].life;
             }
 
             // Direction
@@ -402,6 +413,18 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         }
                     }
                 }
+            }
+
+            float segmentVelocity = deathModeEnragePhase_Head ? 19f : death ? 17.5f : 16f;
+
+            float segmentVelocityBoost = 5f * (1f - lifeRatio);
+            segmentVelocity += segmentVelocityBoost;
+            segmentVelocity += 4f * enrageScale;
+
+            if (revenge)
+            {
+                float revMultiplier = 1.1f;
+                segmentVelocity *= revMultiplier;
             }
 
             if (head)
@@ -477,7 +500,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     npc.localAI[1] = 0f;
 
                 // Despawn
-                float fallSpeed = deathModeEnragePhase_Head ? 19f : death ? 17.5f : 16f;
                 if (player.dead)
                 {
                     shouldFly = false;
@@ -485,7 +507,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     npc.velocity.Y -= velocity;
                     if ((double)npc.position.Y < Main.topWorld + 16f)
                     {
-                        fallSpeed = deathModeEnragePhase_Head ? 38f : death ? 35f : 32f;
+                        segmentVelocity *= 2f;
                         npc.velocity.Y -= velocity;
                     }
 
@@ -510,10 +532,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     }
                 }
 
-                float fallSpeedBoost = 5f * (1f - lifeRatio);
-                fallSpeed += fallSpeedBoost;
-                fallSpeed += 4f * enrageScale;
-
                 // Speed and movement
                 float speedBoost = death ? (0.1f * (1f - lifeRatio)) : (0.13f * (1f - lifeRatio));
                 float turnSpeedBoost = death ? (0.18f * (1f - lifeRatio)) : (0.2f * (1f - lifeRatio));
@@ -533,7 +551,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     float revMultiplier = 1.1f;
                     speed *= revMultiplier;
                     turnSpeed *= revMultiplier;
-                    fallSpeed *= revMultiplier;
                 }
 
                 speed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
@@ -558,19 +575,19 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 if (!shouldFly)
                 {
                     npc.velocity.Y += 0.15f;
-                    if (npc.velocity.Y > fallSpeed)
-                        npc.velocity.Y = fallSpeed;
+                    if (npc.velocity.Y > segmentVelocity)
+                        npc.velocity.Y = segmentVelocity;
 
                     // This bool exists to stop the strange wiggle behavior when worms are falling down
-                    bool slowXVelocity = Math.Abs(npc.velocity.X) > fallSpeed;
-                    if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.4)
+                    bool slowXVelocity = Math.Abs(npc.velocity.X) > segmentVelocity;
+                    if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.4)
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X -= speed * 1.1f;
                         else
                             npc.velocity.X += speed * 1.1f;
                     }
-                    else if (npc.velocity.Y == fallSpeed)
+                    else if (npc.velocity.Y == segmentVelocity)
                     {
                         if (slowXVelocity)
                         {
@@ -600,7 +617,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     float deusTargetDist = (float)Math.Sqrt(deusTargetX * deusTargetX + deusTargetY * deusTargetY);
                     float deusAbsoluteTargetX = Math.Abs(deusTargetX);
                     float deusAbsoluteTargetY = Math.Abs(deusTargetY);
-                    float deusTimeToReachTarget = fallSpeed / deusTargetDist;
+                    float deusTimeToReachTarget = segmentVelocity / deusTargetDist;
                     deusTargetX *= deusTimeToReachTarget;
                     deusTargetY *= deusTimeToReachTarget;
 
@@ -611,7 +628,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         {
                             speedUpWhileFlying = true;
 
-                            if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < fallSpeed)
+                            if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < segmentVelocity)
                                 npc.velocity *= 1.1f;
                         }
 
@@ -619,14 +636,14 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         {
                             speedUpWhileFlying = true;
 
-                            if (Math.Abs(npc.velocity.X) < fallSpeed / 2f)
+                            if (Math.Abs(npc.velocity.X) < segmentVelocity / 2f)
                             {
                                 if (npc.velocity.X == 0f)
                                     npc.velocity.X -= npc.direction;
 
                                 npc.velocity.X *= 1.1f;
                             }
-                            else if (npc.velocity.Y > -fallSpeed)
+                            else if (npc.velocity.Y > -segmentVelocity)
                                 npc.velocity.Y -= speed;
                         }
                     }
@@ -661,7 +678,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             else if (npc.velocity.Y > deusTargetY)
                                 npc.velocity.Y -= speed;
 
-                            if (Math.Abs(deusTargetY) < fallSpeed * 0.2 && ((npc.velocity.X > 0f && deusTargetX < 0f) || (npc.velocity.X < 0f && deusTargetX > 0f)))
+                            if (Math.Abs(deusTargetY) < segmentVelocity * 0.2 && ((npc.velocity.X > 0f && deusTargetX < 0f) || (npc.velocity.X < 0f && deusTargetX > 0f)))
                             {
                                 if (npc.velocity.Y > 0f)
                                     npc.velocity.Y += speed * 2f;
@@ -669,7 +686,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                                     npc.velocity.Y -= speed * 2f;
                             }
 
-                            if (Math.Abs(deusTargetX) < fallSpeed * 0.2 && ((npc.velocity.Y > 0f && deusTargetY < 0f) || (npc.velocity.Y < 0f && deusTargetY > 0f)))
+                            if (Math.Abs(deusTargetX) < segmentVelocity * 0.2 && ((npc.velocity.Y > 0f && deusTargetY < 0f) || (npc.velocity.Y < 0f && deusTargetY > 0f)))
                             {
                                 if (npc.velocity.X > 0f)
                                     npc.velocity.X += speed * 2f;
@@ -684,7 +701,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             else if (npc.velocity.X > deusTargetX)
                                 npc.velocity.X -= speed * 1.1f;
 
-                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.5)
+                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.5)
                             {
                                 if (npc.velocity.Y > 0f)
                                     npc.velocity.Y += speed;
@@ -699,7 +716,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             else if (npc.velocity.Y > deusTargetY)
                                 npc.velocity.Y -= speed * 1.1f;
 
-                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.5)
+                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.5)
                             {
                                 if (npc.velocity.X > 0f)
                                     npc.velocity.X += speed;
@@ -900,8 +917,8 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Calculate contact damage based on velocity
             if (!doNotDealDamage)
             {
-                float minimalContactDamageVelocity = 4f;
-                float minimalDamageVelocity = 8f;
+                float minimalContactDamageVelocity = segmentVelocity * 0.25f;
+                float minimalDamageVelocity = segmentVelocity * 0.5f;
                 if (head)
                 {
                     if (npc.velocity.Length() <= minimalContactDamageVelocity)

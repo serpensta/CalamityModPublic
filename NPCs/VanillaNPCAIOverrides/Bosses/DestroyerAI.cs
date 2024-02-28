@@ -338,6 +338,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
+            if (npc.type == NPCID.TheDestroyer)
+            {
+                if (npc.life > Main.npc[(int)npc.ai[0]].life)
+                    npc.life = Main.npc[(int)npc.ai[0]].life;
+            }
+            else
+            {
+                if (npc.life > Main.npc[(int)npc.ai[1]].life)
+                    npc.life = Main.npc[(int)npc.ai[1]].life;
+            }
+
             int tilePosX = (int)(npc.position.X / 16f) - 1;
             int tileWidthPosX = (int)((npc.position.X + npc.width) / 16f) + 2;
             int tilePosY = (int)(npc.position.Y / 16f) - 1;
@@ -411,7 +422,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.localAI[1] = 0f;
 
             // Despawn
-            float fallSpeed = masterMode ? 20f : 16f;
+            float segmentVelocity = masterMode ? 20f : 16f;
             if (player.dead)
             {
                 shouldFly = false;
@@ -420,7 +431,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.position.Y > Main.worldSurface * 16.0)
                 {
                     npc.velocity.Y += 2f;
-                    fallSpeed *= 2f;
+                    segmentVelocity *= 2f;
                 }
 
                 if (npc.position.Y > Main.rockLayer * 16.0)
@@ -433,9 +444,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
-            float fallSpeedBoost = death ? 6.5f * (1f - lifeRatio) : 5f * (1f - lifeRatio);
-            fallSpeed += fallSpeedBoost;
-            fallSpeed += 4f * enrageScale;
+            float segmentVelocityBoost = death ? 6.5f * (1f - lifeRatio) : 5f * (1f - lifeRatio);
+            segmentVelocity += segmentVelocityBoost;
+            segmentVelocity += 4f * enrageScale;
 
             // Speed and movement
             float speedBoost = death ? (0.14f * (1f - lifeRatio)) : (0.1f * (1f - lifeRatio));
@@ -516,19 +527,19 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (masterMode && npc.velocity.Y > 0f)
                         npc.velocity.Y += 0.05f;
 
-                    if (npc.velocity.Y > fallSpeed)
-                        npc.velocity.Y = fallSpeed;
+                    if (npc.velocity.Y > segmentVelocity)
+                        npc.velocity.Y = segmentVelocity;
 
                     // This bool exists to stop the strange wiggle behavior when worms are falling down
                     bool slowXVelocity = Math.Abs(npc.velocity.X) > speed;
-                    if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.4)
+                    if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.4)
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X -= speed * 1.1f;
                         else
                             npc.velocity.X += speed * 1.1f;
                     }
-                    else if (npc.velocity.Y == fallSpeed)
+                    else if (npc.velocity.Y == segmentVelocity)
                     {
                         if (slowXVelocity)
                         {
@@ -570,7 +581,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     targetTileDist = (float)Math.Sqrt(targetTilePosX * targetTilePosX + targetTilePosY * targetTilePosY);
                     float absoluteTilePosX = Math.Abs(targetTilePosX);
                     float absoluteTilePosY = Math.Abs(targetTilePosY);
-                    float tileToReachTarget = fallSpeed / targetTileDist;
+                    float tileToReachTarget = segmentVelocity / targetTileDist;
                     targetTilePosX *= tileToReachTarget;
                     targetTilePosY *= tileToReachTarget;
 
@@ -581,7 +592,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             flyWyvernMovement = true;
 
-                            if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < fallSpeed)
+                            if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < segmentVelocity)
                                 npc.velocity *= 1.1f;
                         }
 
@@ -589,14 +600,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             flyWyvernMovement = true;
 
-                            if (Math.Abs(npc.velocity.X) < fallSpeed / 2f)
+                            if (Math.Abs(npc.velocity.X) < segmentVelocity / 2f)
                             {
                                 if (npc.velocity.X == 0f)
                                     npc.velocity.X -= npc.direction;
 
                                 npc.velocity.X *= 1.1f;
                             }
-                            else if (npc.velocity.Y > -fallSpeed)
+                            else if (npc.velocity.Y > -segmentVelocity)
                                 npc.velocity.Y -= speed;
                         }
                     }
@@ -629,14 +640,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             else if (npc.velocity.Y > targetTilePosY)
                                 npc.velocity.Y -= speed;
 
-                            if (Math.Abs(targetTilePosY) < fallSpeed * 0.2 && ((npc.velocity.X > 0f && targetTilePosX < 0f) || (npc.velocity.X < 0f && targetTilePosX > 0f)))
+                            if (Math.Abs(targetTilePosY) < segmentVelocity * 0.2 && ((npc.velocity.X > 0f && targetTilePosX < 0f) || (npc.velocity.X < 0f && targetTilePosX > 0f)))
                             {
                                 if (npc.velocity.Y > 0f)
                                     npc.velocity.Y += speed * 2f;
                                 else
                                     npc.velocity.Y -= speed * 2f;
                             }
-                            if (Math.Abs(targetTilePosX) < fallSpeed * 0.2 && ((npc.velocity.Y > 0f && targetTilePosY < 0f) || (npc.velocity.Y < 0f && targetTilePosY > 0f)))
+                            if (Math.Abs(targetTilePosX) < segmentVelocity * 0.2 && ((npc.velocity.Y > 0f && targetTilePosY < 0f) || (npc.velocity.Y < 0f && targetTilePosY > 0f)))
                             {
                                 if (npc.velocity.X > 0f)
                                     npc.velocity.X += speed * 2f;
@@ -651,7 +662,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             else if (npc.velocity.X > targetTilePosX)
                                 npc.velocity.X -= speed * 1.1f;
 
-                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.5)
+                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.5)
                             {
                                 if (npc.velocity.Y > 0f)
                                     npc.velocity.Y += speed;
@@ -666,7 +677,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             else if (npc.velocity.Y > targetTilePosY)
                                 npc.velocity.Y -= speed * 1.1f;
 
-                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < fallSpeed * 0.5)
+                            if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.5)
                             {
                                 if (npc.velocity.X > 0f)
                                     npc.velocity.X += speed;
@@ -716,8 +727,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
+            float minimalContactDamageVelocity = segmentVelocity * 0.25f;
+            float minimalDamageVelocity = segmentVelocity * 0.5f;
             if (npc.type == NPCID.TheDestroyer)
             {
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)
@@ -893,6 +904,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
                     }
                 }
+            }
+
+            if (npc.type == NPCID.TheDestroyer)
+            {
+                if (npc.life > Main.npc[(int)npc.ai[0]].life)
+                    npc.life = Main.npc[(int)npc.ai[0]].life;
+            }
+            else
+            {
+                if (npc.life > Main.npc[(int)npc.ai[1]].life)
+                    npc.life = Main.npc[(int)npc.ai[1]].life;
             }
 
             int num13 = (int)(npc.position.X / 16f) - 1;
@@ -1231,8 +1253,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
+            float minimalContactDamageVelocity = num18 * 0.25f;
+            float minimalDamageVelocity = num18 * 0.5f;
             if (npc.type == NPCID.TheDestroyer)
             {
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)

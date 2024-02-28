@@ -633,8 +633,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 3f;
-            float minimalDamageVelocity = 6f;
+            float minimalContactDamageVelocity = segmentVelocity * 0.25f;
+            float minimalDamageVelocity = segmentVelocity * 0.5f;
             if (npc.type == NPCID.EaterofWorldsHead)
             {
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)
@@ -1133,8 +1133,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 2.5f;
-            float minimalDamageVelocity = 5f;
+            float minimalContactDamageVelocity = num52 * 0.25f;
+            float minimalDamageVelocity = num52 * 0.5f;
             if (npc.type == NPCID.EaterofWorldsHead)
             {
                 if (npc.velocity.Length() <= minimalContactDamageVelocity)

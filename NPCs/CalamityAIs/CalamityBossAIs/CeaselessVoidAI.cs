@@ -139,6 +139,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 // Move closer to the target before trying to succ
                 if (movingDuringSuccPhase)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     if (Vector2.Distance(npc.Center, player.Center) > 320f || !Collision.CanHit(npc.Center, 1, 1, player.Center, 1, 1))
                         Movement(true);
                     else
@@ -146,6 +149,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 }
                 else
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     // Use this to generate more and more dust in final phase
                     float finalPhaseDustRatio = 1f;
                     if (succSoHardThatYouDie)
@@ -368,6 +374,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             }
             else
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 Movement(false);
 
                 // Count up all Dark Energy HP values

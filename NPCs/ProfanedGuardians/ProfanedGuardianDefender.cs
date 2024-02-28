@@ -406,6 +406,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
 
             if (NPC.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Face the target
                 if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
                 {
@@ -475,6 +478,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             // Throw rocks, charge, summon holy bombs and shoot molten blasts
             else if (NPC.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Face the target
                 if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
                 {
@@ -569,6 +575,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
                 // Charge at target
                 if (NPC.ai[1] >= 0f)
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     NPC.ai[0] = 2f;
                     NPC.ai[1] = 0f;
                     NPC.netUpdate = true;
@@ -599,6 +608,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             // Charge at the target and spawn holy bombs
             else if (NPC.ai[0] == 2f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 if (Math.Sign(NPC.velocity.X) != 0)
                     NPC.spriteDirection = -Math.Sign(NPC.velocity.X);
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);
@@ -664,6 +676,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             // Slow down and pause for a bit
             else if (NPC.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (Math.Sign(NPC.velocity.X) != 0)
                     NPC.spriteDirection = -Math.Sign(NPC.velocity.X);
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);

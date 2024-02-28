@@ -252,6 +252,9 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
             }
 
+            if (NPC.life > Main.npc[(int)NPC.ai[0]].life)
+                NPC.life = Main.npc[(int)NPC.ai[0]].life;
+
             if (expertMode)
             {
                 if (NPC.Calamity().newAI[2] < 180f)
@@ -604,8 +607,8 @@ namespace CalamityMod.NPCs.DesertScourge
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
             if (NPC.velocity.Length() <= minimalContactDamageVelocity)
             {
                 NPC.damage = (int)(NPC.defDamage * 0.5f);

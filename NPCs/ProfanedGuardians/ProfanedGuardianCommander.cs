@@ -392,6 +392,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
 
             if (NPC.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Face the target
                 if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
                 {
@@ -623,6 +626,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             }
             else if (NPC.ai[0] == 1f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 // Face the target
                 if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
                 {
@@ -657,6 +663,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             }
             else if (NPC.ai[0] == 2f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 // Face the direction of the charge
                 if (Math.Sign(NPC.velocity.X) != 0)
                     NPC.spriteDirection = -Math.Sign(NPC.velocity.X);
@@ -722,6 +731,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             }
             else if (NPC.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Face the direction of the charge
                 if (Math.Sign(NPC.velocity.X) != 0)
                     NPC.spriteDirection = -Math.Sign(NPC.velocity.X);
@@ -751,6 +763,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             }
             else if (NPC.ai[0] == 4f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Face the target
                 if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
                 {
@@ -866,6 +881,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             }
             else if (NPC.ai[0] == 5f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Face the target
                 if (Math.Abs(NPC.Center.X - player.Center.X) > 10f)
                 {

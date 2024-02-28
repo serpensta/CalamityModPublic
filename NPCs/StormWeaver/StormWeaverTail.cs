@@ -105,6 +105,8 @@ namespace CalamityMod.NPCs.StormWeaver
                 NPC.life = Main.npc[(int)NPC.ai[1]].life;
 
             bool bossRush = BossRushEvent.BossRushActive;
+            bool expertMode = Main.expertMode || bossRush;
+            bool revenge = CalamityWorld.revenge || bossRush;
 
             // Shed armor
             bool phase2 = NPC.life / (float)NPC.lifeMax < 0.8f;
@@ -227,6 +229,21 @@ namespace CalamityMod.NPCs.StormWeaver
                     NPC.spriteDirection = -1;
                 else if (targetX > 0f)
                     NPC.spriteDirection = 1;
+            }
+
+            // Calculate contact damage based on velocity
+            float velocity = (phase2 ? 12f : 10f) + (bossRush ? 3f : revenge ? 1.5f : expertMode ? 1f : 0f);
+            float minimalContactDamageVelocity = velocity * 0.25f;
+            float minimalDamageVelocity = velocity * 0.5f;
+            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
+            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+            {
+                NPC.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
             }
         }
 

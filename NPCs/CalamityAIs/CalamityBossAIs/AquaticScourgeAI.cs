@@ -403,13 +403,46 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     npc.alpha = 0;
             }
 
-            // Velocity and movement
-            float scourgeMaxSpeed = 5f;
-            float scourgeAcceleration = 0.08f;
             Vector2 scourgePosition = npc.Center;
             Vector2 predictionVector = (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? Main.player[npc.target].velocity * 20f : Vector2.Zero;
             float scourgeTargetX = player.Center.X + predictionVector.X;
             float scourgeTargetY = player.Center.Y + predictionVector.Y;
+
+            // Velocity and movement
+            float scourgeMaxSpeed = 5f;
+            float scourgeAcceleration = 0.08f;
+            if (calamityGlobalNPC.newAI[0] == 1f)
+            {
+                scourgeMaxSpeed = revenge ? 14.4f : 12f;
+                scourgeAcceleration = revenge ? 0.18f : 0.15f;
+                if (expertMode)
+                {
+                    scourgeMaxSpeed += 2.4f * (1f - lifeRatio);
+                    scourgeAcceleration += 0.03f * (1f - lifeRatio);
+                }
+                scourgeMaxSpeed += 3f * enrageScale;
+                scourgeAcceleration += 0.06f * enrageScale;
+                if (death || getFuckedAI)
+                {
+                    scourgeMaxSpeed += 5f;
+                    scourgeAcceleration -= getFuckedAI ? 0f : 0.03f;
+                    scourgeMaxSpeed += Vector2.Distance(player.Center, npc.Center) * 0.001f;
+                    scourgeAcceleration += Vector2.Distance(player.Center, npc.Center) * 0.000045f;
+                }
+
+                // Increase acceleration after spiral attack
+                if (npc.localAI[3] > 0f)
+                {
+                    float accelerationMultiplier = MathHelper.Lerp(1f, 2f, npc.localAI[3] / colorFadeTimeAfterSpiral);
+                    scourgeAcceleration *= accelerationMultiplier;
+                }
+
+                if (Main.getGoodWorld)
+                {
+                    scourgeMaxSpeed *= 1.15f;
+                    scourgeAcceleration *= 1.15f;
+                }
+            }
 
             if (head && !doSpiral)
             {
@@ -422,39 +455,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             scourgeTargetX = player.Center.X + 600f;
                         else
                             scourgeTargetX = player.Center.X - 600f;
-                    }
-                }
-
-                if (calamityGlobalNPC.newAI[0] == 1f)
-                {
-                    scourgeMaxSpeed = revenge ? 14.4f : 12f;
-                    scourgeAcceleration = revenge ? 0.18f : 0.15f;
-                    if (expertMode)
-                    {
-                        scourgeMaxSpeed += 2.4f * (1f - lifeRatio);
-                        scourgeAcceleration += 0.03f * (1f - lifeRatio);
-                    }
-                    scourgeMaxSpeed += 3f * enrageScale;
-                    scourgeAcceleration += 0.06f * enrageScale;
-                    if (death || getFuckedAI)
-                    {
-                        scourgeMaxSpeed += 5f;
-                        scourgeAcceleration -= getFuckedAI ? 0f : 0.03f;
-                        scourgeMaxSpeed += Vector2.Distance(player.Center, npc.Center) * 0.001f;
-                        scourgeAcceleration += Vector2.Distance(player.Center, npc.Center) * 0.000045f;
-                    }
-
-                    // Increase acceleration after spiral attack
-                    if (npc.localAI[3] > 0f)
-                    {
-                        float accelerationMultiplier = MathHelper.Lerp(1f, 2f, npc.localAI[3] / colorFadeTimeAfterSpiral);
-                        scourgeAcceleration *= accelerationMultiplier;
-                    }
-
-                    if (Main.getGoodWorld)
-                    {
-                        scourgeMaxSpeed *= 1.15f;
-                        scourgeAcceleration *= 1.15f;
                     }
                 }
 
@@ -600,8 +600,8 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Calculate contact damage based on velocity
             if (!nonHostile)
             {
-                float minimalContactDamageVelocity = 3f;
-                float minimalDamageVelocity = 6f;
+                float minimalContactDamageVelocity = scourgeMaxSpeed * 0.25f;
+                float minimalDamageVelocity = scourgeMaxSpeed * 0.5f;
                 if (head)
                 {
                     if (npc.velocity.Length() <= minimalContactDamageVelocity)

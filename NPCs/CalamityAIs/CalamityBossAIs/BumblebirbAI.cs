@@ -148,8 +148,13 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             calamityGlobalNPC.DR = (phaseSwitchPhase || npc.ai[0] == 5f || (enrageScale == 3f && !bossRush)) ? (bossRush ? 0.99f : 0.55f) : 0.1f;
             calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = phaseSwitchPhase || npc.ai[0] == 5f || (enrageScale == 3f && !bossRush);
 
+            int reducedSetDamage = (int)(npc.defDamage * 0.5f);
+
             if (phaseSwitchPhase)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (npc.velocity.X < 0f)
                     npc.direction = -1;
                 else if (npc.velocity.X > 0f)
@@ -182,7 +187,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                                     Vector2 ai0 = npc.Center - fireFrom;
                                     float ai = Main.rand.Next(100);
                                     Vector2 velocity = Vector2.Normalize(ai0.RotatedByRandom(MathHelper.PiOver4)) * 7f;
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), npc.damage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), npc.defDamage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
                                 }
                             }
                         }
@@ -229,7 +234,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                                     Vector2 ai0 = npc.Center - fireFrom;
                                     float ai = Main.rand.Next(100);
                                     Vector2 velocity = Vector2.Normalize(ai0.RotatedByRandom(MathHelper.PiOver4)) * 7f;
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), npc.damage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), fireFrom.X, fireFrom.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RedLightning>(), npc.defDamage, 0f, Main.myPlayer, ai0.ToRotation(), ai);
                                 }
                             }
                         }
@@ -275,6 +280,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Phase switch
             if (npc.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (npc.Center.X < player.Center.X - 2f)
                     npc.direction = 1;
                 if (npc.Center.X > player.Center.X + 2f)
@@ -512,6 +520,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Fly to target
             else if (npc.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (npc.velocity.X < 0f)
                     npc.direction = -1;
                 else if (npc.velocity.X > 0f)
@@ -548,6 +559,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Fly towards target quickly
             else if (npc.ai[0] == 2f)
             {
+                // Set reduced damage
+                npc.damage = reducedSetDamage;
+
                 if (npc.target < 0 || !player.active || player.dead)
                 {
                     npc.TargetClosest();
@@ -609,6 +623,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Line up charge
             else if (npc.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (npc.velocity.X < 0f)
                     npc.direction = -1;
                 else
@@ -651,6 +668,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Prepare to charge
             else if (npc.ai[0] == 3.1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.rotation = (npc.rotation * rotationMult * 0.5f + npc.velocity.X * rotationAmt * 0.85f) / 5f;
 
                 Vector2 follyChargePrepareTargetDirection = player.Center - npc.Center;
@@ -671,6 +691,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 npc.ai[1] += 1f;
                 if (npc.ai[1] > 10f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     npc.velocity = follyChargePrepareTargetDirection;
 
                     if (npc.velocity.X < 0f)
@@ -694,6 +717,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Charge
             else if (npc.ai[0] == 3.2f)
             {
+                // Set damage
+                npc.damage = npc.defDamage;
+
                 npc.ai[2] += 0.0333333351f;
                 float velocity = 28f + (enrageScale - 1f) * 4f;
                 npc.velocity.X = (velocity + npc.ai[2]) * npc.ai[1];
@@ -734,6 +760,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Birb spawn
             else if (npc.ai[0] == 4f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 if (npc.ai[1] == 0f)
                 {
                     Vector2 destination2 = player.Center + new Vector2(0f, -200f);
@@ -839,6 +868,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Spit homing aura sphere
             else if (npc.ai[0] == 5f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 npc.velocity *= 0.98f;
                 npc.rotation = (npc.rotation * rotationMult + npc.velocity.X * rotationAmt) / 10f;
@@ -950,6 +982,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
 
             if (npc.ai[0] == -1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 Vector2 swarmerDespawnVelMult = new Vector2(0f, -8f);
                 npc.velocity = (npc.velocity * 21f + swarmerDespawnVelMult) / 10f;
                 return;
@@ -957,6 +992,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
 
             if (npc.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.TargetClosest(true);
                 npc.spriteDirection = npc.direction;
 
@@ -973,7 +1011,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     float swarmerIdleSpeed = (bossMinion ? 9f : 7f) + swarmerIdleTargetDist.Length() / 100f + npc.ai[1] / 15f;
                     swarmerIdleTargetDist.Normalize();
                     swarmerIdleTargetDist *= swarmerIdleSpeed;
-                    npc.velocity = (npc.velocity * 29F + swarmerIdleTargetDist) / 30F;
+                    npc.velocity = (npc.velocity * 29f + swarmerIdleTargetDist) / 30f;
                     if (Main.getGoodWorld && !Main.zenithWorld)
                         npc.velocity *= 1.15f;
                 }
@@ -993,6 +1031,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             {
                 if (npc.ai[0] == 1f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     if (npc.target < 0 || !Main.player[npc.target].active || Main.player[npc.target].dead)
                         npc.TargetClosest(true);
 
@@ -1028,8 +1069,12 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
 
                     return;
                 }
+
                 if (npc.ai[0] == 2f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     if (npc.velocity.X < 0f)
                         npc.direction = -1;
                     else if (npc.velocity.X > 0f)
@@ -1058,6 +1103,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     npc.ai[1] += 1f;
                     if (npc.ai[1] > 10f)
                     {
+                        // Set damage
+                        npc.damage = npc.defDamage;
+
                         npc.velocity = swarmerDecelerateTargetDist;
                         if (Main.getGoodWorld && !Main.zenithWorld)
                             npc.velocity *= 1.15f;
@@ -1073,6 +1121,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 }
                 else if (npc.ai[0] == 2.1f)
                 {
+                    // Set damage
+                    npc.damage = npc.defDamage;
+
                     if (npc.velocity.X < 0f)
                         npc.direction = -1;
                     else if (npc.velocity.X > 0f)
@@ -1083,7 +1134,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     npc.velocity *= 1.01f;
 
                     npc.ai[1] += 1f;
-                    if (npc.ai[1] > 30)
+                    if (npc.ai[1] > 30f)
                     {
                         if (!Collision.SolidCollision(npc.position, npc.width, npc.height))
                         {
@@ -1093,7 +1144,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             return;
                         }
 
-                        if (npc.ai[1] > 60)
+                        if (npc.ai[1] > 60f)
                         {
                             npc.ai[0] = 1f;
                             npc.ai[1] = 0f;

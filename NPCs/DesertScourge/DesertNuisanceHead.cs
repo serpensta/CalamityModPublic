@@ -119,6 +119,9 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
             }
 
+            if (NPC.life > Main.npc[(int)NPC.ai[0]].life)
+                NPC.life = Main.npc[(int)NPC.ai[0]].life;
+
             int tilePositionX = (int)(NPC.position.X / 16f) - 1;
             int tileWidthPosX = (int)((NPC.position.X + (float)NPC.width) / 16f) + 2;
             int tilePositionY = (int)(NPC.position.Y / 16f) - 1;
@@ -358,8 +361,8 @@ namespace CalamityMod.NPCs.DesertScourge
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
             if (NPC.velocity.Length() <= minimalContactDamageVelocity)
             {
                 NPC.damage = (int)(NPC.defDamage * 0.5f);

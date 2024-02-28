@@ -245,10 +245,9 @@ namespace CalamityMod.NPCs.StormWeaver
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             if (!Main.npc[i].active)
-                            {
                                 npcCounts++;
-                            }
                         }
+
                         totalLength = npcCounts - 20;
                     }
 
@@ -765,6 +764,19 @@ namespace CalamityMod.NPCs.StormWeaver
                             NPC.velocity.X = NPC.velocity.X - acceleration;
                     }
                 }
+            }
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = velocity * 0.25f;
+            float minimalDamageVelocity = velocity * 0.5f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)(NPC.defDamage * 0.5f);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
             }
 
             NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;

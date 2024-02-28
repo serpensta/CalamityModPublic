@@ -90,12 +90,20 @@ namespace CalamityMod.NPCs.Signus
             Lighting.AddLight((int)((NPC.position.X + (float)(NPC.width / 2)) / 16f), (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f), 0.3f, 0.3f, 0.3f);
 
             NPC.alpha -= 3;
-            if (NPC.alpha < 0)
+            if (NPC.alpha <= 0)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 NPC.alpha = 0;
                 int lightDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 204, 0f, 0f, 0, default, 0.25f);
                 Main.dust[lightDust].velocity *= 0.1f;
                 Main.dust[lightDust].noGravity = true;
+            }
+            else
+            {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
             }
 
             bool revenge = CalamityWorld.revenge;
