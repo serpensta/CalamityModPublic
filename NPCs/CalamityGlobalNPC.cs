@@ -2379,6 +2379,17 @@ namespace CalamityMod.NPCs
                 }
             }
 
+            // Prehardmode mushroom enemy nerfs
+            if (!Main.hardMode)
+            {
+                if (npc.type == NPCID.ZombieMushroom || npc.type == NPCID.ZombieMushroomHat || npc.type == NPCID.AnomuraFungus || npc.type == NPCID.FungiBulb || npc.type == NPCID.MushiLadybug)
+                {
+                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
+                    npc.damage = (int)(npc.damage * 0.5);
+                    npc.defDamage = npc.damage;
+                }
+            }
+
             if (Main.hardMode && CalamityLists.HardmodeNPCNerfList.Contains(npc.type))
             {
                 npc.damage = (int)(npc.damage * 0.75);
