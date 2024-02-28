@@ -183,10 +183,12 @@ namespace CalamityMod.NPCs.Polterghast
             else
                 NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2;
 
-            NPC.damage = NPC.defDamage;
+            int reducedSetDamage = (int)(NPC.defDamage * 0.5f);
 
             if (!chargePhase)
             {
+                NPC.damage = reducedSetDamage;
+
                 // Set this here to avoid despawn issues
                 reachedChargingPoint = false;
 
@@ -302,18 +304,26 @@ namespace CalamityMod.NPCs.Polterghast
 
                     if (NPC.Calamity().newAI[1] == 0f)
                     {
+                        NPC.damage = NPC.defDamage;
+
                         NPC.velocity = Vector2.Normalize(rotationVector) * chargeVelocity;
                         NPC.Calamity().newAI[1] = 1f;
                     }
                     else
                     {
+                        NPC.damage = NPC.defDamage;
+
                         NPC.Calamity().newAI[2] += 1f;
 
                         // Slow down for a few frames
                         float totalChargeTime = chargeDistance * 4f / chargeVelocity;
                         float slowDownTime = chargeVelocity;
-                        if (NPC.Calamity().newAI[2] >= totalChargeTime - slowDownTime)
-                            NPC.velocity *= 0.9f;
+                        {
+                            NPC.damage = reducedSetDamage;
+
+                            if (NPC.Calamity().newAI[2] >= totalChargeTime - slowDownTime)
+                                NPC.velocity *= 0.9f;
+                        }
 
                         // Reset and either go back to normal or charge again
                         if (NPC.Calamity().newAI[2] >= totalChargeTime)
@@ -335,6 +345,9 @@ namespace CalamityMod.NPCs.Polterghast
                 }
                 else
                 {
+                    // Do not deal damage during movement to avoid cheap bullshit hits
+                    NPC.damage = 0;
+
                     // Random location choice
                     if (NPC.ai[0] == 0f)
                     {
@@ -355,9 +368,6 @@ namespace CalamityMod.NPCs.Polterghast
                         NPC.Calamity().newAI[2] = NPC.ai[0] == 2f ? player.Center.Y - chargeDistance : Main.npc[CalamityGlobalNPC.ghostBoss].Calamity().newAI[2];
                     else
                         NPC.Calamity().newAI[2] = NPC.ai[0] == 2f ? player.Center.Y + chargeDistance : Main.npc[CalamityGlobalNPC.ghostBoss].Calamity().newAI[2];
-
-                    // Do not deal damage during movement to avoid cheap bullshit hits
-                    NPC.damage = 0;
 
                     // Charge location
                     Vector2 chargeVector = new Vector2(NPC.Calamity().newAI[1], NPC.Calamity().newAI[2]);

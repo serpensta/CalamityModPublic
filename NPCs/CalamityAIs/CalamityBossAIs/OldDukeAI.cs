@@ -74,21 +74,18 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 CalamityUtils.StartRain();
 
             // Adjust stats
+            int setDamage = npc.defDamage;
             calamityGlobalNPC.DR = exhausted ? 0f : 0.5f;
             npc.defense = exhausted ? 0 : npc.defDefense;
             if (phase3AI)
             {
-                npc.damage = (int)(npc.defDamage * 1.2f);
+                setDamage = (int)(setDamage * 1.2f);
                 npc.defense = exhausted ? 0 : npc.defDefense - 40;
             }
             else if (phase2AI)
             {
-                npc.damage = (int)(npc.defDamage * 1.1f);
+                setDamage = (int)(setDamage * 1.1f);
                 npc.defense = exhausted ? 0 : npc.defDefense - 20;
-            }
-            else
-            {
-                npc.damage = npc.defDamage;
             }
 
             int idlePhaseTimer = expertMode ? 55 : 60;
@@ -214,8 +211,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             {
                 npc.Calamity().canBreakPlayerDefense = false;
 
-                npc.damage /= 4;
-
                 // Play exhausted sound
                 if (calamityGlobalNPC.newAI[0] % 60f == 0f && Main.player[Main.myPlayer].active && !Main.player[Main.myPlayer].dead && Vector2.Distance(Main.player[Main.myPlayer].Center, npc.Center) < 2800f)
                     SoundEngine.PlaySound(OldDuke.OldDuke.HuffSound, Main.LocalPlayer.Center);
@@ -299,7 +294,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 chargeVelocity += 8f;
                 toothBallSpinPhaseDivisor = 24;
                 toothBallSpinToothBallVelocity = 15f;
-                npc.damage = npc.defDamage * 2;
+                setDamage *= 2;
                 npc.defense = npc.defDefense * 3;
             }
 
@@ -415,6 +410,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Spawn effects
             if (npc.ai[0] == -1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 if (npc.Calamity().newAI[3] == 0f)
                     npc.velocity *= 0.98f;
@@ -472,6 +470,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Phase 1
             else if (npc.ai[0] == 0f && !player.dead)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 if (npc.ai[1] == 0f)
                     npc.ai[1] = 500 * Math.Sign((npc.Center - player.Center).X);
@@ -527,6 +528,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for charge
                         if (oldDukeAttackPicker == 1)
                         {
+                            // Set damage
+                            npc.damage = setDamage;
+
                             npc.ai[0] = 1f;
                             npc.ai[1] = 0f;
                             npc.ai[2] = 0f;
@@ -580,6 +584,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Charge
             else if (npc.ai[0] == 1f)
             {
+                // Set damage
+                npc.damage = setDamage;
+
                 // The dumbest thing to ever exist
                 if (CalamityWorld.LegendaryMode && revenge && npc.ai[2] % 10f == 0f)
                 {
@@ -648,6 +655,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Tooth Ball belch
             else if (npc.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 if (npc.ai[1] == 0f)
                     npc.ai[1] = 500 * Math.Sign((npc.Center - player.Center).X);
@@ -731,6 +741,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Call sharks from the sides of the screen
             else if (npc.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 npc.velocity *= 0.98f;
                 npc.velocity.Y = MathHelper.Lerp(npc.velocity.Y, 0f, 0.02f);
@@ -775,6 +788,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Transition to phase 2 and call sharks from below
             else if (npc.ai[0] == 4f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 npc.velocity *= 0.98f;
                 npc.velocity.Y = MathHelper.Lerp(npc.velocity.Y, 0f, 0.02f);
@@ -821,6 +837,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Phase 2
             else if (npc.ai[0] == 5f && !player.dead)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 if (npc.ai[1] == 0f)
                     npc.ai[1] = 500 * Math.Sign((npc.Center - player.Center).X);
@@ -874,6 +893,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for charge
                         if (phase2AttackPicker == 1)
                         {
+                            // Set damage
+                            npc.damage = setDamage;
+
                             npc.ai[0] = 6f;
                             npc.ai[1] = 0f;
                             npc.ai[2] = 0f;
@@ -898,6 +920,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for spin
                         else if (phase2AttackPicker == 2)
                         {
+                            // Set damage
+                            npc.damage = setDamage;
+
                             // Velocity and rotation
                             npc.velocity = Vector2.Normalize(player.Center - npc.Center) * spinAttackSpeed;
                             npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
@@ -941,6 +966,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Charge
             else if (npc.ai[0] == 6f)
             {
+                // Set damage
+                npc.damage = setDamage;
+
                 // The dumbest thing to ever exist
                 if (CalamityWorld.LegendaryMode && revenge && npc.ai[2] % 8f == 0f)
                 {
@@ -1009,6 +1037,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Tooth Ball and Vortex spin
             else if (npc.ai[0] == 7f)
             {
+                // Set damage
+                npc.damage = setDamage;
+
                 // Play sounds and spawn Tooth Balls and a Vortex
                 if (npc.ai[2] == 0f)
                 {
@@ -1089,6 +1120,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Vomit a huge amount of gore into the sky and call sharks from the sides of the screen
             else if (npc.ai[0] == 8f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 npc.velocity *= 0.98f;
                 npc.velocity.Y = MathHelper.Lerp(npc.velocity.Y, 0f, 0.02f);
@@ -1151,6 +1185,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Transition to phase 3 and summon sharks from above
             else if (npc.ai[0] == 9f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 npc.velocity *= 0.98f;
                 npc.velocity.Y = MathHelper.Lerp(npc.velocity.Y, 0f, 0.02f);
@@ -1197,6 +1234,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Phase 3
             else if (npc.ai[0] == 10f && !player.dead)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Alpha
                 npc.alpha -= 25;
                 if (npc.alpha < 0)
@@ -1231,9 +1271,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 // Phase switch
                 if (calamityGlobalNPC.newAI[1] != 1f)
                 {
-                    // Avoid cheap bullshit
-                    npc.damage = 0;
-
                     npc.ai[2] += 1f;
                     if (npc.ai[2] >= idlePhaseTimer)
                     {
@@ -1265,6 +1302,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for charge
                         if (phase3AttackPicker == 1)
                         {
+                            // Set damage
+                            npc.damage = setDamage;
+
                             npc.ai[0] = 11f;
                             npc.ai[1] = 0f;
                             npc.ai[2] = 0f;
@@ -1304,6 +1344,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for spin
                         else if (phase3AttackPicker == 4)
                         {
+                            // Set damage
+                            npc.damage = setDamage;
+
                             // Velocity and rotation
                             npc.velocity = Vector2.Normalize(player.Center - npc.Center) * spinAttackSpeed;
                             npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
@@ -1332,6 +1375,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Charge
             else if (npc.ai[0] == 11f)
             {
+                // Set damage
+                npc.damage = setDamage;
+
                 // The dumbest thing to ever exist
                 if (CalamityWorld.LegendaryMode && revenge && npc.ai[2] % 6f == 0f)
                 {
@@ -1465,6 +1511,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Vomit a huge amount of gore into the sky and call sharks from the sides of the screen
             else if (npc.ai[0] == 13f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 // Velocity
                 npc.velocity *= 0.98f;
                 npc.velocity.Y = MathHelper.Lerp(npc.velocity.Y, 0f, 0.02f);
@@ -1533,6 +1582,9 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Tooth Ball and Vortex spin
             else if (npc.ai[0] == 14f)
             {
+                // Set damage
+                npc.damage = setDamage;
+
                 // Play sounds and spawn Tooth Balls and a Vortex
                 if (npc.ai[2] == 0f)
                 {
