@@ -392,9 +392,9 @@ namespace CalamityMod.NPCs.DevourerofGods
             extrapitch = Main.zenithWorld ? 0.3f : 0f;
 
             // Velocity variables
-            float fallSpeed = bossRush ? 19f : death ? 17.5f : 16f;
+            float segmentVelocity = bossRush ? 19f : death ? 17.5f : 16f;
             if (expertMode)
-                fallSpeed += 4f * (1f - lifeRatio);
+                segmentVelocity += 4f * (1f - lifeRatio);
 
             float speed = bossRush ? 18f : death ? 16.5f : 15f;
             float turnSpeed = bossRush ? 0.36f : death ? 0.33f : 0.3f;
@@ -418,7 +418,7 @@ namespace CalamityMod.NPCs.DevourerofGods
 
             if (Main.getGoodWorld)
             {
-                fallSpeed *= 1.1f;
+                segmentVelocity *= 1.1f;
                 speed *= 1.1f;
                 turnSpeed *= 1.1f;
                 homingSpeed *= 1.1f;
@@ -1054,6 +1054,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                         // Charge in a direction for a second until the timer is back at 0
                         if (postTeleportTimer > 0)
                         {
+                            NPC.damage = NPC.defDamage;
+
                             NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;
                             return;
                         }
@@ -1271,6 +1273,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                         // Charge in a direction for a second until the timer is back at 0
                         if (postTeleportTimer > 0)
                         {
+                            NPC.damage = NPC.defDamage;
+
                             NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;
                             return;
                         }
@@ -1291,7 +1295,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                         if (CalamityWorld.LegendaryMode && revenge)
                         {
                             if (NPC.SafeDirectionTo(player.Center).AngleBetween((NPC.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(10f))
-                                fallSpeed *= 2f;
+                                segmentVelocity *= 2f;
                         }
 
                         if (!flies)
@@ -1365,17 +1369,17 @@ namespace CalamityMod.NPCs.DevourerofGods
                         if (!flies)
                         {
                             NPC.velocity.Y += groundPhaseTurnSpeed;
-                            if (NPC.velocity.Y > fallSpeed)
-                                NPC.velocity.Y = fallSpeed;
+                            if (NPC.velocity.Y > segmentVelocity)
+                                NPC.velocity.Y = segmentVelocity;
 
-                            if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < fallSpeed * 2.2)
+                            if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 2.2)
                             {
                                 if (NPC.velocity.X < 0f)
                                     NPC.velocity.X -= turnSpeedCopy * 1.1f;
                                 else
                                     NPC.velocity.X += turnSpeedCopy * 1.1f;
                             }
-                            else if (NPC.velocity.Y == fallSpeed)
+                            else if (NPC.velocity.Y == segmentVelocity)
                             {
                                 if (NPC.velocity.X < targetX)
                                     NPC.velocity.X += turnSpeedCopy;
@@ -1404,7 +1408,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                             float targetDistance = (float)Math.Sqrt(targetX * targetX + targetY * targetY);
                             float absoluteTargetX2 = Math.Abs(targetX);
                             float absoluteTargetY2 = Math.Abs(targetY);
-                            float timeToReachTarget2 = fallSpeed / targetDistance;
+                            float timeToReachTarget2 = segmentVelocity / targetDistance;
                             targetX *= timeToReachTarget2;
                             targetY *= timeToReachTarget2;
 
@@ -1433,7 +1437,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                                 else if (NPC.velocity.Y > targetY)
                                     NPC.velocity.Y -= groundPhaseTurnSpeed;
 
-                                if (Math.Abs(targetY) < fallSpeed * maximumSpeed1 && ((NPC.velocity.X > 0f && targetX < 0f) || (NPC.velocity.X < 0f && targetX > 0f)))
+                                if (Math.Abs(targetY) < segmentVelocity * maximumSpeed1 && ((NPC.velocity.X > 0f && targetX < 0f) || (NPC.velocity.X < 0f && targetX > 0f)))
                                 {
                                     if (NPC.velocity.Y > 0f)
                                         NPC.velocity.Y += groundPhaseTurnSpeed * 2f;
@@ -1441,7 +1445,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                                         NPC.velocity.Y -= groundPhaseTurnSpeed * 2f;
                                 }
 
-                                if (Math.Abs(targetX) < fallSpeed * maximumSpeed1 && ((NPC.velocity.Y > 0f && targetY < 0f) || (NPC.velocity.Y < 0f && targetY > 0f)))
+                                if (Math.Abs(targetX) < segmentVelocity * maximumSpeed1 && ((NPC.velocity.Y > 0f && targetY < 0f) || (NPC.velocity.Y < 0f && targetY > 0f)))
                                 {
                                     if (NPC.velocity.X > 0f)
                                         NPC.velocity.X += groundPhaseTurnSpeed * 2f;
@@ -1456,7 +1460,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                                 else if (NPC.velocity.X > targetX)
                                     NPC.velocity.X -= groundPhaseTurnSpeed * 1.1f;
 
-                                if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < fallSpeed * maximumSpeed2)
+                                if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * maximumSpeed2)
                                 {
                                     if (NPC.velocity.Y > 0f)
                                         NPC.velocity.Y += groundPhaseTurnSpeed;
@@ -1471,7 +1475,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                                 else if (NPC.velocity.Y > targetY)
                                     NPC.velocity.Y -= groundPhaseTurnSpeed * 1.1f;
 
-                                if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < fallSpeed * maximumSpeed2)
+                                if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * maximumSpeed2)
                                 {
                                     if (NPC.velocity.X > 0f)
                                         NPC.velocity.X += groundPhaseTurnSpeed;
@@ -2055,7 +2059,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                     if (CalamityWorld.LegendaryMode && revenge)
                     {
                         if (NPC.SafeDirectionTo(player.Center).AngleBetween((NPC.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(10f))
-                            fallSpeed *= 2f;
+                            segmentVelocity *= 2f;
                     }
 
                     if (!flies)
@@ -2096,7 +2100,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                         bool canDirectlyCharge = true;
                         if (NPC.position.Y > player.position.Y)
                         {
-                            for (int k = 0; k < 255; k++)
+                            for (int k = 0; k < Main.maxPlayers; k++)
                             {
                                 if (Main.player[k].active)
                                 {
@@ -2129,17 +2133,17 @@ namespace CalamityMod.NPCs.DevourerofGods
                     if (!flies)
                     {
                         NPC.velocity.Y += groundPhaseTurnSpeed;
-                        if (NPC.velocity.Y > fallSpeed)
-                            NPC.velocity.Y = fallSpeed;
+                        if (NPC.velocity.Y > segmentVelocity)
+                            NPC.velocity.Y = segmentVelocity;
 
-                        if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < fallSpeed * 2.2)
+                        if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 2.2)
                         {
                             if (NPC.velocity.X < 0f)
                                 NPC.velocity.X -= turnSpeedCopy * 1.1f;
                             else
                                 NPC.velocity.X += turnSpeedCopy * 1.1f;
                         }
-                        else if (NPC.velocity.Y == fallSpeed)
+                        else if (NPC.velocity.Y == segmentVelocity)
                         {
                             if (NPC.velocity.X < targetX)
                                 NPC.velocity.X += turnSpeedCopy;
@@ -2168,7 +2172,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                         float targetDistance = (float)Math.Sqrt(targetX * targetX + targetY * targetY);
                         float absoluteTargetX2 = Math.Abs(targetX);
                         float absoluteTargetY2 = Math.Abs(targetY);
-                        float timeToReachTarget2 = fallSpeed / targetDistance;
+                        float timeToReachTarget2 = segmentVelocity / targetDistance;
                         targetX *= timeToReachTarget2;
                         targetY *= timeToReachTarget2;
 
@@ -2197,7 +2201,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                             else if (NPC.velocity.Y > targetY)
                                 NPC.velocity.Y -= groundPhaseTurnSpeed;
 
-                            if (Math.Abs(targetY) < fallSpeed * maximumSpeed1 && ((NPC.velocity.X > 0f && targetX < 0f) || (NPC.velocity.X < 0f && targetX > 0f)))
+                            if (Math.Abs(targetY) < segmentVelocity * maximumSpeed1 && ((NPC.velocity.X > 0f && targetX < 0f) || (NPC.velocity.X < 0f && targetX > 0f)))
                             {
                                 if (NPC.velocity.Y > 0f)
                                     NPC.velocity.Y += groundPhaseTurnSpeed * 2f;
@@ -2205,7 +2209,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                                     NPC.velocity.Y -= groundPhaseTurnSpeed * 2f;
                             }
 
-                            if (Math.Abs(targetX) < fallSpeed * maximumSpeed1 && ((NPC.velocity.Y > 0f && targetY < 0f) || (NPC.velocity.Y < 0f && targetY > 0f)))
+                            if (Math.Abs(targetX) < segmentVelocity * maximumSpeed1 && ((NPC.velocity.Y > 0f && targetY < 0f) || (NPC.velocity.Y < 0f && targetY > 0f)))
                             {
                                 if (NPC.velocity.X > 0f)
                                     NPC.velocity.X += groundPhaseTurnSpeed * 2f;
@@ -2220,7 +2224,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                             else if (NPC.velocity.X > targetX)
                                 NPC.velocity.X -= groundPhaseTurnSpeed * 1.1f;
 
-                            if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < fallSpeed * maximumSpeed2)
+                            if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * maximumSpeed2)
                             {
                                 if (NPC.velocity.Y > 0f)
                                     NPC.velocity.Y += groundPhaseTurnSpeed;
@@ -2235,7 +2239,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                             else if (NPC.velocity.Y > targetY)
                                 NPC.velocity.Y -= groundPhaseTurnSpeed * 1.1f;
 
-                            if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < fallSpeed * maximumSpeed2)
+                            if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * maximumSpeed2)
                             {
                                 if (NPC.velocity.X > 0f)
                                     NPC.velocity.X += groundPhaseTurnSpeed;
@@ -2303,6 +2307,19 @@ namespace CalamityMod.NPCs.DevourerofGods
                         NPC.netUpdate = true;
                     }
                 }
+            }
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = segmentVelocity * 0.25f;
+            float minimalDamageVelocity = segmentVelocity * 0.5f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)(NPC.defDamage * 0.5f);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
             }
 
             if (NPC.life > Main.npc[(int)NPC.ai[0]].life)

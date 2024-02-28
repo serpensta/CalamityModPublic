@@ -667,9 +667,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Set velocity for spin
                     else if (phase2AttackPicker == 2)
                     {
-                        // Set damage
-                        npc.damage = setDamage;
-
                         // Velocity and rotation
                         npc.velocity = Vector2.Normalize(player.Center - npc.Center) * bubbleSpinPhaseVelocity;
                         npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
@@ -748,7 +745,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else if (npc.ai[0] == 7f)
             {
                 // Set damage
-                npc.damage = setDamage;
+                npc.damage = 0;
 
                 // Play sounds and spawn bubbles
                 if (npc.ai[2] == 0f)
@@ -1729,10 +1726,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             break;
 
                         case 2:
-
-                            // Set damage
-                            npc.damage = setDamage;
-
                             npc.velocity = Vector2.Normalize(player.Center - center) * num18;
                             npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
                             if (num31 != 0)
@@ -1794,7 +1787,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else if (npc.ai[0] == 7f)
             {
                 // Set damage
-                npc.damage = setDamage;
+                npc.damage = 0;
 
                 if (npc.ai[2] == 0f)
                     SoundEngine.PlaySound(SoundID.Zombie20, npc.Center);

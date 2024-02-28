@@ -920,9 +920,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for spin
                         else if (phase2AttackPicker == 2)
                         {
-                            // Set damage
-                            npc.damage = setDamage;
-
                             // Velocity and rotation
                             npc.velocity = Vector2.Normalize(player.Center - npc.Center) * spinAttackSpeed;
                             npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
@@ -1038,7 +1035,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             else if (npc.ai[0] == 7f)
             {
                 // Set damage
-                npc.damage = setDamage;
+                npc.damage = 0;
 
                 // Play sounds and spawn Tooth Balls and a Vortex
                 if (npc.ai[2] == 0f)
@@ -1344,9 +1341,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         // Set velocity for spin
                         else if (phase3AttackPicker == 4)
                         {
-                            // Set damage
-                            npc.damage = setDamage;
-
                             // Velocity and rotation
                             npc.velocity = Vector2.Normalize(player.Center - npc.Center) * spinAttackSpeed;
                             npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
@@ -1583,7 +1577,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             else if (npc.ai[0] == 14f)
             {
                 // Set damage
-                npc.damage = setDamage;
+                npc.damage = 0;
 
                 // Play sounds and spawn Tooth Balls and a Vortex
                 if (npc.ai[2] == 0f)
