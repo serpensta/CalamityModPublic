@@ -464,6 +464,9 @@ namespace CalamityMod.NPCs.Ravager
             {
                 if (NPC.velocity.Y == 0f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.velocity.X *= 0.8f;
                     NPC.ai[1] += 1f;
                     if (NPC.ai[1] > 0f)
@@ -491,6 +494,10 @@ namespace CalamityMod.NPCs.Ravager
                     }
                     else if (NPC.ai[1] == -1f)
                     {
+                        // Set damage
+                        if (!finalPhase)
+                            NPC.damage = NPC.defDamage;
+
                         NPC.noTileCollide = true;
 
                         NPC.TargetClosest();
@@ -501,9 +508,8 @@ namespace CalamityMod.NPCs.Ravager
                         float velocityX = 4f + velocityXBoost;
 
                         if (velocityY != 16)
-                        {
                             SoundEngine.PlaySound(JumpSound, NPC.Center);
-                        }
+
                         velocityY = -16f;
 
                         float distanceBelowTarget = NPC.position.Y - (player.position.Y + 80f);
@@ -558,14 +564,15 @@ namespace CalamityMod.NPCs.Ravager
 
                 // Don't run custom gravity when starting a jump
                 if (NPC.ai[0] != 1f)
-                {
                     CustomGravity();
-                }
             }
             else if (NPC.ai[0] >= 1f)
             {
                 if (NPC.velocity.Y == 0f && (NPC.ai[1] == 31f || NPC.ai[0] == 1f))
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     SoundEngine.PlaySound(StompSound, NPC.Center);
 
                     NPC.ai[0] = 0f;
@@ -658,6 +665,10 @@ namespace CalamityMod.NPCs.Ravager
                 }
                 else
                 {
+                    // Set damage
+                    if (!phase2)
+                        NPC.damage = NPC.defDamage;
+
                     Vector2 targetVector = player.position;
                     float aimY = targetVector.Y - 640f;
                     float distanceFromTargetPos = Math.Abs(NPC.Top.Y - aimY);
@@ -666,9 +677,8 @@ namespace CalamityMod.NPCs.Ravager
                     if (phase2 && NPC.ai[1] == 0f)
                     {
                         if (calamityGlobalNPC.newAI[3] == 0)
-                        {
                             SoundEngine.PlaySound(JumpSound, NPC.Center);
-                        }
+
                         NPC.noTileCollide = true;
 
                         calamityGlobalNPC.newAI[3] += 1f;
@@ -699,8 +709,6 @@ namespace CalamityMod.NPCs.Ravager
 
                     if ((NPC.position.X + quarterWidth < targetVector.X + offset && NPC.position.X + NPC.width - quarterWidth > targetVector.X + player.width + offset && (inRange || NPC.ai[0] != 2f)) || NPC.ai[1] > 0f || calamityGlobalNPC.newAI[3] >= 90f)
                     {
-                        NPC.damage = NPC.defDamage;
-
                         if (phase2)
                         {
                             float stopBeforeFallTime = bossRush ? 25f : 30f;
@@ -716,6 +724,9 @@ namespace CalamityMod.NPCs.Ravager
                             }
                             else
                             {
+                                // Set damage
+                                NPC.damage = NPC.defDamage;
+
                                 float fallSpeedBoost = !anyHeadActive ? 1.8f : death ? 1.8f * (1f - lifeRatio) : 1.2f * (1f - lifeRatio);
                                 float fallSpeed = (bossRush ? 1.8f : 1.2f) + fallSpeedBoost;
 
@@ -764,7 +775,6 @@ namespace CalamityMod.NPCs.Ravager
 
                         if (phase2)
                         {
-                            NPC.damage = 0;
                             velocityXChange *= velocityMult;
                             velocityXCap *= velocityMult;
                         }

@@ -80,6 +80,9 @@ namespace CalamityMod.NPCs.Ravager
             }
             if (NPC.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.noTileCollide = true;
                 Vector2 npcCenter = new Vector2(NPC.Center.X, NPC.Center.Y);
                 float ravBodyXDist = Main.npc[CalamityGlobalNPC.scavenger].Center.X - npcCenter.X;
@@ -134,6 +137,9 @@ namespace CalamityMod.NPCs.Ravager
             }
             else if (NPC.ai[0] == 1f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 SoundEngine.PlaySound(RavagerBody.FistSound, NPC.Center);
                 NPC.noTileCollide = true;
                 NPC.collideX = false;
@@ -163,6 +169,9 @@ namespace CalamityMod.NPCs.Ravager
             }
             else if (NPC.ai[0] == 2f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 if (Math.Abs(NPC.velocity.X) > Math.Abs(NPC.velocity.Y))
                 {
                     if (NPC.velocity.X > 0f && NPC.Center.X > Main.player[NPC.target].Center.X)
@@ -195,12 +204,18 @@ namespace CalamityMod.NPCs.Ravager
                 float bodyReturnDistance = (float)Math.Sqrt(bodyReturnXDist * bodyReturnXDist + bodyReturnYDist * bodyReturnYDist);
                 if ((bodyReturnDistance > (death ? 900f : 700f) || NPC.collideX || NPC.collideY) | NPC.justHit)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.noTileCollide = true;
                     NPC.ai[0] = 0f;
                 }
             }
             else if (NPC.ai[0] == 3f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 NPC.noTileCollide = true;
                 float velocityMult = 0.4f;
                 Vector2 clawCenter = new Vector2(NPC.Center.X, NPC.Center.Y);

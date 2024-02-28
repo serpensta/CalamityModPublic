@@ -423,6 +423,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         return false;
                     }
 
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
                     npc.direction = playerLocation < 0 ? 1 : -1;
                     npc.spriteDirection = npc.direction;

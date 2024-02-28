@@ -52,6 +52,9 @@ namespace CalamityMod.NPCs.Ravager
 
         public override void AI()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             bool provy = DownedBossSystem.downedProvidence;
             bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
 
@@ -70,18 +73,9 @@ namespace CalamityMod.NPCs.Ravager
 
             if (NPC.alpha > 0)
             {
-                NPC.damage = 0;
-
                 NPC.alpha -= 5;
                 if (NPC.alpha < 0)
                     NPC.alpha = 0;
-            }
-            else
-            {
-                if (DownedBossSystem.downedProvidence && !BossRushEvent.BossRushActive)
-                    NPC.damage = (int)(NPC.defDamage * 1.5);
-                else
-                    NPC.damage = NPC.defDamage;
             }
 
             if (NPC.ai[0] == 0f)
