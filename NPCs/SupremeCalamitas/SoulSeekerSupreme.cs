@@ -171,12 +171,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart);
         }
 
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
-        {
-            cooldownSlot = ImmunityCooldownID.Bosses;
-            return true;
-        }
-
         public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life <= 0)

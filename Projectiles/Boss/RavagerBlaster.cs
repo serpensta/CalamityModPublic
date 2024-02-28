@@ -22,7 +22,6 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.timeLeft = 180;
-            CooldownSlot = ImmunityCooldownID.Bosses;
         }
 
         public override void AI()

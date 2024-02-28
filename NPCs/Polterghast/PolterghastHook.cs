@@ -466,12 +466,6 @@ namespace CalamityMod.NPCs.Polterghast
             return false;
         }
 
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
-        {
-            cooldownSlot = ImmunityCooldownID.Bosses;
-            return true;
-        }
-
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 5; k++)
