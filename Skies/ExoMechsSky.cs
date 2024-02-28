@@ -190,6 +190,9 @@ namespace CalamityMod.Skies
 
         public override void Deactivate(params object[] args) { }
 
-        public override bool IsActive() => (CanSkyBeActive || Main.LocalPlayer?.Calamity()?.monolithExoShader > 0) && !Main.gameMenu;
+        public override bool IsActive()
+        {
+            return !Main.gameMenu && (CanSkyBeActive || Main.LocalPlayer?.Calamity()?.monolithExoShader > 0);
+        }
     }
 }
