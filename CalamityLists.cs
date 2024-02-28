@@ -1163,7 +1163,11 @@ namespace CalamityMod
                 ProjectileID.BloodShot,
                 ProjectileID.BloodNautilusTears,
                 ProjectileID.BloodNautilusShot,
-                ProjectileID.RockGolemRock
+                ProjectileID.RockGolemRock,
+                ProjectileID.IcewaterSpit,
+                ProjectileID.RocketSkeleton,
+                ProjectileID.SniperBullet,
+                ProjectileID.DrManFlyFlask
             };
 
             debuffList = new List<int>()
@@ -2348,12 +2352,22 @@ namespace CalamityMod
                 NPCID.DrManFly,
                 NPCID.Eyezor,
                 NPCID.Nailhead,
+                NPCID.BrainScrambler,
+                NPCID.GigaZapper,
+                NPCID.RayGunner,
+                NPCID.ScutlixRider,
                 NPCID.MartianWalker,
                 NPCID.MartianTurret,
                 NPCID.ElfCopter,
                 NPCID.ElfArcher,
                 NPCID.NebulaBrain,
+                NPCID.NebulaSoldier,
                 NPCID.StardustJellyfishBig,
+                NPCID.StardustSoldier,
+                NPCID.StardustSpiderBig,
+                NPCID.VortexHornetQueen,
+                NPCID.VortexRifleman,
+                NPCID.VortexSoldier,
                 NPCID.PirateShipCannon,
                 NPCID.MartianSaucer,
                 NPCID.MartianSaucerCannon,
@@ -2366,7 +2380,16 @@ namespace CalamityMod
                 NPCID.MoonLordFreeEye,
                 NPCID.BloodSquid,
                 NPCID.PlanterasHook,
-                NPCID.Dandelion
+                NPCID.Dandelion,
+                NPCID.DD2DarkMageT1,
+                NPCID.DD2DarkMageT3,
+                NPCID.DD2OgreT2,
+                NPCID.DD2OgreT3,
+                NPCID.MourningWood,
+                NPCID.Pumpking,
+                NPCID.Everscream,
+                NPCID.IceQueen,
+                NPCID.SantaNK1
             };
 
             // Reduce contact damage by 25%
