@@ -3,8 +3,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.FurnitureStratus
 {

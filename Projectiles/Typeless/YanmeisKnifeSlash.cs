@@ -5,8 +5,8 @@ using CalamityMod.Items.Weapons.Typeless;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Typeless
 {

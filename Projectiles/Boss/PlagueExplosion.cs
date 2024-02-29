@@ -1,8 +1,8 @@
 ﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Boss
 {

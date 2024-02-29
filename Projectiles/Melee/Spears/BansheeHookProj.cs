@@ -4,9 +4,9 @@ using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Melee.Spears
 {

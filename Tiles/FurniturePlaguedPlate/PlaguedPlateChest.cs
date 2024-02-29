@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ID;
 
 namespace CalamityMod.Tiles.FurniturePlaguedPlate
 {

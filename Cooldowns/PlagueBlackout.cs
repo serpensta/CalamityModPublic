@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
-using Terraria.ID;
 
 namespace CalamityMod.Cooldowns
 {

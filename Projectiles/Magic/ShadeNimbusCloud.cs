@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Magic;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Magic
 {
