@@ -6,9 +6,11 @@ name: .NET Linter
 
 on:
   push:
-    branches: ["1.4.4"]
-  pull_request_target:
-    branches: ["1.4.4"]
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
 
 jobs:
   lint:
