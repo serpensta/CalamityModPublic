@@ -29,13 +29,14 @@ namespace CalamityMod.Skies
                 opacity += 0.02f;
             else if (!skyActive && opacity > 0f)
                 opacity -= 0.02f;
+
+            Opacity = opacity;
         }
 
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
             if (Main.LocalPlayer.Calamity().monolithAstralShader <= 0)
                 return;
-
             float whateverTheFuckThisVariableIsSupposedToBe = 3.40282347E+38f;
             if (maxDepth >= whateverTheFuckThisVariableIsSupposedToBe && minDepth < whateverTheFuckThisVariableIsSupposedToBe)
             {

@@ -23,7 +23,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Origin = new Point16(0, 1);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16 };
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 3, 0);
@@ -66,11 +66,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
                     frame = 0;
                 }
             }
-        }
-
-
-        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
-        {
         }
 
         public override void MouseOver(int i, int j)
@@ -131,7 +126,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 zero = Vector2.Zero;
             }
-            int height = 16;
+            int height = 18;
             int animate = 0;
             if (tile.TileFrameY >= 72)
             {

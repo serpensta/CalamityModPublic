@@ -21,25 +21,24 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         {
             RegisterItemDrop(ModContent.ItemType<FrigidMonolith>());
             Main.tileFrameImportant[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
-            TileObjectData.newTile.Height = 3;
-            TileObjectData.newTile.Origin = new Point16(0, 1);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
+            TileObjectData.newTile.Origin = new Point16(0, 2);
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 2, 0);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 3, 0);
             TileObjectData.addTile(Type);
 
             TileID.Sets.HasOutlines[Type] = true;
             AddMapEntry(new Color(55, 212, 230));
 
-            DustType = ModContent.DustType<AstralOrange>();
-            AnimationFrameHeight = 52;
+            DustType = DustID.Ice;
+            AnimationFrameHeight = 74;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main.tile[i, j].TileFrameY < 52)
+            if (Main.tile[i, j].TileFrameY < 74)
             {
                 return;
             }
@@ -62,16 +61,11 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             if (frameCounter >= 7.2)
             {
                 frameCounter = 0;
-                if (++frame >= 9)
+                if (++frame >= 6)
                 {
                     frame = 0;
                 }
             }
-        }
-
-
-        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
-        {
         }
 
         public override void MouseOver(int i, int j)
@@ -93,12 +87,12 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
 
         public override void HitWire(int i, int j)
         {
-            int x = i - Main.tile[i, j].TileFrameX / 18 % 2;
-            int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
-            int tileXX18 = 18 * 3;
-            for (int l = x; l < x + 2; l++)
+            int x = i - Main.tile[i, j].TileFrameX / 18 % 3;
+            int y = j - Main.tile[i, j].TileFrameY / 18 % 4;
+            int tileXX18 = 74;
+            for (int l = x; l < x + 3; l++)
             {
-                for (int m = y; m < y + 3; m++)
+                for (int m = y; m < y + 4; m++)
                 {
                     if (Main.tile[l, m].HasTile && Main.tile[l, m].TileType == Type)
                     {
@@ -111,9 +105,9 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             if (Wiring.running)
             {
-                for (int o = 0; o < 2; o++)
+                for (int o = 0; o < 3; o++)
                 {
-                    for (int p = 0; p < 3; p++)
+                    for (int p = 0; p < 4; p++)
                     {
                         Wiring.SkipWire(x + 0, x + p);
                     }
@@ -132,9 +126,9 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 zero = Vector2.Zero;
             }
-            int height = 16;
+            int height = 18;
             int animate = 0;
-            if (tile.TileFrameY >= 52)
+            if (tile.TileFrameY >= 74)
             {
                 animate = Main.tileFrame[Type] * AnimationFrameHeight;
             }

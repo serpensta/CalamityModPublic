@@ -3,6 +3,7 @@ using CalamityMod.Items.Placeables.Furniture.Monoliths;
 using CalamityMod.NPCs.Yharon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -17,14 +18,19 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
 {
     public class BossRushMonolithTile : ModTile
     {
+        public static Texture2D Glow;
         public override void SetStaticDefaults()
         {
+            if (!Main.dedServ)
+            {
+                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/BossRushMonolithTile_Glow", AssetRequestMode.ImmediateLoad).Value;
+            }
             RegisterItemDrop(ModContent.ItemType<BossRushMonolith>());
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Width = 4;
             TileObjectData.newTile.Origin = new Point16(2, 2);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16 };
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 4, 0);
@@ -67,11 +73,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
                     frame = 0;
                 }
             }
-        }
-
-
-        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
-        {
         }
 
         public override void MouseOver(int i, int j)
@@ -132,13 +133,15 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 zero = Vector2.Zero;
             }
-            int height = 16;
+            int height = 18;
             int animate = 0;
             if (tile.TileFrameY >= 72)
             {
                 animate = Main.tileFrame[Type] * AnimationFrameHeight;
             }
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            if (Glow != null)
+                Main.spriteBatch.Draw(Glow, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             return false;
         }
     }

@@ -3,6 +3,7 @@ using CalamityMod.Items.Placeables.Furniture.Monoliths;
 using CalamityMod.NPCs.Yharon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -18,11 +19,13 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
     public class ExoObeliskTile : ModTile
     {
         public static Texture2D Glow;
+        public static Texture2D Numbers;
         public override void SetStaticDefaults()
         {
             if (!Main.dedServ)
             {
-                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/ExoObeliskTile_Glow").Value;
+                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/ExoObeliskTile_Glow", AssetRequestMode.ImmediateLoad).Value;
+                Numbers = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/ExoObeliskText", AssetRequestMode.ImmediateLoad).Value;
             }
             RegisterItemDrop(ModContent.ItemType<ExoObelisk>());
             Main.tileFrameImportant[Type] = true;
@@ -73,7 +76,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
                 }
             }
         }
-
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
         {
@@ -137,14 +139,20 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 zero = Vector2.Zero;
             }
-            int height = 16;
+            int height = 18;
             int animate = 0;
             if (tile.TileFrameY >= 92)
             {
                 animate = Main.tileFrame[Type] * 92;
             }
+            // text has 13 frames
+            int textY = (int)Main.GlobalTimeWrappedHourly;
+            Rectangle textFrame = Numbers.Frame(1, 13, 0, 4);
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(Glow, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            if (Glow != null)
+                Main.spriteBatch.Draw(Glow, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            if (Glow != null && tile.TileFrameX == 0)
+                Main.spriteBatch.Draw(Numbers, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, textFrame, Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             return false;
         }
     }

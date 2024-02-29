@@ -117,6 +117,8 @@ namespace CalamityMod.Skies
                 opacity += 0.02f;
             else if (!skyActive && opacity > 0f)
                 opacity -= 0.02f;
+
+            Opacity = opacity;
         }
 
         public override float GetCloudAlpha()

@@ -69,11 +69,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
         }
 
-
-        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
-        {
-        }
-
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
@@ -132,7 +127,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 zero = Vector2.Zero;
             }
-            int height = 16;
+            int height = 18;
             int animate = 0;
             if (tile.TileFrameY >= 74)
             {
