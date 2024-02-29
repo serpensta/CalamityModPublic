@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.value = Main.hardMode ? Item.buyPrice(0, 0, 50, 0) : Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath55;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             Banner = NPC.type;
             BannerItem = ModContent.ItemType<EutrophicRayBanner>();
             NPC.Calamity().VulnerableToHeat = false;

@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.Crags
             NPC.defense = 38;
             NPC.DR_NERD(0.35f);
             NPC.lifeMax = 120;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.1f;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit41;
             NPC.DeathSound = SoundID.NPCDeath14;

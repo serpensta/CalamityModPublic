@@ -40,7 +40,7 @@ namespace CalamityMod.NPCs.AcidRain
                 NPC.defense = 10;
             }
 
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.8f;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.lavaImmune = false;
             NPC.noGravity = false;

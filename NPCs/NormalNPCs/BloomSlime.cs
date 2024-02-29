@@ -24,7 +24,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 30;
             NPC.defense = 25;
             NPC.lifeMax = 1000;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.3f;
             AnimationType = NPCID.CorruptSlime;
             NPC.value = Item.buyPrice(0, 0, 25, 0);
             NPC.alpha = 50;

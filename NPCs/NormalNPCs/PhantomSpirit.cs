@@ -25,7 +25,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 16;
             NPC.defense = 10;
             NPC.lifeMax = 1000;
-            NPC.knockBackResist = 0.1f;
+            NPC.knockBackResist = 0.2f;
             AnimationType = NPCID.DungeonSpirit;
             AIType = -1;
             NPC.value = Item.buyPrice(0, 0, 20, 0);

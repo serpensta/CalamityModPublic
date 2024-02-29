@@ -42,7 +42,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.defense = 38;
             NPC.DR_NERD(0.05f);
             NPC.lifeMax = 9000;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.1f;
             AIType = -1;
             NPC.lavaImmune = true;
             NPC.value = Item.buyPrice(0, 0, 50, 0);

@@ -40,7 +40,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 80;
             NPC.defense = 20;
             NPC.LifeMaxNERB(9375, 11250, 5000); // Old HP - 12000, 15000
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.15f;
             NPC.lavaImmune = true;
             NPC.noTileCollide = true;
             NPC.noGravity = true;

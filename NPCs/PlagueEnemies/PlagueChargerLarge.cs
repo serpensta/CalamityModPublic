@@ -36,7 +36,7 @@ namespace CalamityMod.NPCs.PlagueEnemies
             NPC.lifeMax = 300;
             NPC.aiStyle = NPCAIStyleID.Flying;
             AIType = NPCID.Bee;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.3f;
             AnimationType = NPCID.Bee;
             NPC.value = Item.buyPrice(0, 0, 10, 0);
             NPC.HitSound = SoundID.NPCHit4;

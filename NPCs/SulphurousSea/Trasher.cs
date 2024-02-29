@@ -44,7 +44,7 @@ namespace CalamityMod.NPCs.SulphurousSea
             NPC.value = Item.buyPrice(0, 0, 3, 0);
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath5;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.15f;
             Banner = NPC.type;
             BannerItem = ModContent.ItemType<TrasherBanner>();
             NPC.Calamity().VulnerableToHeat = false;

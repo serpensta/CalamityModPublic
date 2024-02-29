@@ -44,7 +44,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.lifeMax = 3800;
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.05f;
             NPC.value = Item.buyPrice(0, 1, 50, 0);
             NPC.dontTakeDamage = true;
             NPC.noGravity = true;
