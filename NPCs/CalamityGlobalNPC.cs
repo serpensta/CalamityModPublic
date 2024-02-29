@@ -2802,7 +2802,42 @@ namespace CalamityMod.NPCs
                     case NPCID.Moth:
                     case NPCID.Necromancer:
                     case NPCID.NecromancerArmored:
-
+                    case NPCID.Paladin:
+                    case NPCID.PigronCorruption:
+                    case NPCID.PigronCrimson:
+                    case NPCID.PigronHallow:
+                    case NPCID.Pixie:
+                    case NPCID.PossessedArmor:
+                    case NPCID.RaggedCaster:
+                    case NPCID.RaggedCasterOpenCoat:
+                    case NPCID.RedDevil:
+                    case NPCID.RockGolem:
+                    case NPCID.RuneWizard:
+                    case NPCID.RustyArmoredBonesAxe:
+                    case NPCID.RustyArmoredBonesFlail:
+                    case NPCID.RustyArmoredBonesSword:
+                    case NPCID.RustyArmoredBonesSwordNoArmor:
+                    case NPCID.DesertScorpionWalk:
+                    case NPCID.DesertScorpionWall:
+                    case NPCID.SkeletonArcher:
+                    case NPCID.Slimeling:
+                    case NPCID.Slimer:
+                    case NPCID.Slimer2:
+                    case NPCID.ToxicSludge:
+                    case NPCID.Unicorn:
+                    case NPCID.WanderingEye:
+                    case NPCID.Werewolf:
+                    case NPCID.Wolf:
+                    case NPCID.SeekerBody:
+                    case NPCID.SeekerHead:
+                    case NPCID.SeekerTail:
+                    case NPCID.Wraith:
+                    case NPCID.WyvernBody:
+                    case NPCID.WyvernBody2:
+                    case NPCID.WyvernBody3:
+                    case NPCID.WyvernHead:
+                    case NPCID.WyvernLegs:
+                    case NPCID.WyvernTail:
                         npc.lifeMax = (int)(npc.lifeMax * 0.75);
                         npc.damage = (int)(npc.damage * 0.85);
                         npc.defDamage = npc.damage;
