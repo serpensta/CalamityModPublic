@@ -818,10 +818,8 @@ namespace CalamityMod.Items
             if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
             {
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
             }
-            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "5%"));
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 

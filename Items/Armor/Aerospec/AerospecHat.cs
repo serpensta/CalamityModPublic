@@ -36,6 +36,7 @@ namespace CalamityMod.Items.Armor.Aerospec
             modPlayer.aeroSet = true;
             player.noFallDmg = true;
             player.moveSpeed += 0.05f;
+            player.manaCost -= 0.08f;
             player.GetCritChance<MagicDamageClass>() += 5;
         }
 
