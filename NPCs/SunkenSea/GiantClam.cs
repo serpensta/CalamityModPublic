@@ -55,7 +55,7 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.Calamity().canBreakPlayerDefense = true;
             NPC.lavaImmune = true;
             NPC.npcSlots = 5f;
-            NPC.damage = 50;
+            NPC.damage = Main.hardMode ? 100 : 50;
             NPC.width = 160;
             NPC.height = 120;
             NPC.defense = 9999;
@@ -72,6 +72,10 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<SunkenSeaBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -136,13 +140,8 @@ namespace CalamityMod.NPCs.SunkenSea
 
                 if (!statChange)
                 {
-                    NPC.defense = 10;
-                    NPC.damage = Main.expertMode ? 100 : 50;
-                    if (Main.hardMode)
-                    {
-                        NPC.defense = 35;
-                        NPC.damage = Main.expertMode ? 200 : 100;
-                    }
+                    NPC.defense = Main.hardMode ? 35 : 10;
+                    NPC.damage = NPC.defDamage;
                     statChange = true;
                 }
 
@@ -227,11 +226,7 @@ namespace CalamityMod.NPCs.SunkenSea
                             NPC.alpha -= Main.hardMode ? 7 : 4;
                             if (NPC.alpha <= 0)
                             {
-                                NPC.damage = Main.expertMode ? 100 : 50;
-                                if (Main.hardMode)
-                                {
-                                    NPC.damage = Main.expertMode ? 200 : 100;
-                                }
+                                NPC.damage = NPC.defDamage;
                                 NPC.chaseable = true;
                                 NPC.dontTakeDamage = false;
                                 NPC.alpha = 0;

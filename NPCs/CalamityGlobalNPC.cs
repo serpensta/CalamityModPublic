@@ -158,6 +158,14 @@ namespace CalamityMod.NPCs
         // Used to nerf desert prehardmode enemies pre-Desert Scourge
         private const double DesertEnemyStatMultiplier = 0.75;
 
+        // Used to nerf Master Mode enemies
+        public const double MasterModeEnemyHPMultiplier = 0.75;
+        public const double MasterModeEnemyDamageMultiplier = 0.85;
+
+        // Used to nerf Expert and Master Mode enemies
+        public const float ExpertModeEnemyKnockbackMultiplier = 0.05f;
+        public const float MasterModeEnemyKnockbackMultiplier = 0.1f;
+
         // Used to increase coin drops in Normal Mode
         private const double NPCValueMultiplier_NormalCalamity = 1.5;
 
@@ -812,7 +820,7 @@ namespace CalamityMod.NPCs
                 heatDamageMult += 0.5;
             if (IncreasedHeatEffects_HellfireTreads)
                 heatDamageMult += 0.5;
-            
+
             if (IncreasedSicknessEffects_ToxicHeart)
                 sicknessDamageMult += 0.5;
 
@@ -1050,7 +1058,7 @@ namespace CalamityMod.NPCs
                 int baseCrushDepthDoTValue = (int)(100 * waterDamageMult);
                 ApplyDPSDebuff(baseCrushDepthDoTValue, baseCrushDepthDoTValue / 2, ref npc.lifeRegen, ref damage);
             }
-            
+
             //Riptide
             if (rTide > 0)
             {
@@ -2485,14 +2493,7 @@ namespace CalamityMod.NPCs
 
             // Nerf KB resist in Expert and Master using this roundabout method
             if (Main.expertMode)
-            {
-                if (npc.knockBackResist > 0f && npc.knockBackResist < 1f)
-                {
-                    float knockBackResistMult = Main.masterMode ? 0.1f : 0.05f;
-                    float knockBackResistReduction = MathHelper.Clamp((1f - npc.knockBackResist) * knockBackResistMult, 0f, npc.knockBackResist - 0.01f);
-                    npc.knockBackResist -= knockBackResistReduction;
-                }
-            }
+                AdjustExpertModeStatScaling(npc);
 
             // Nerf a shitload of Master Mode enemies
             // HP is nerfed by 25% (this nerf is higher due to the player not dealing any more damage in Master)
@@ -2991,8 +2992,9 @@ namespace CalamityMod.NPCs
                     case NPCID.DD2WyvernT1:
                     case NPCID.DD2WyvernT2:
                     case NPCID.DD2WyvernT3:
-                        npc.lifeMax = (int)(npc.lifeMax * 0.75);
-                        npc.damage = (int)(npc.damage * 0.85);
+                    case NPCID.AncientCultistSquidhead:
+                    case NPCID.SlimeSpiked:
+                        AdjustMasterModeStatScaling(npc);
                         npc.defDamage = npc.damage;
                         break;
                 }
@@ -3181,7 +3183,7 @@ namespace CalamityMod.NPCs
         {
             if (DR <= 0f && KillTime == 0)
                 return;
-            
+
             float finalMultiplier = 1f;
 
             // If the NPC currently has unbreakable DR, it cannot be reduced by any means.
@@ -3653,7 +3655,7 @@ namespace CalamityMod.NPCs
 
                     case NPCID.Plantera:
                         return PlanteraAI.VanillaPlanteraAI(npc, Mod);
-                    
+
                     case NPCID.HallowBoss:
                         return EmpressofLightAI.VanillaEmpressofLightAI(npc, Mod);
 
@@ -6723,7 +6725,7 @@ namespace CalamityMod.NPCs
                                 segmentDrawColor = Color.Black;
                         }
                     }
-                    
+
                     // Draw segments
                     spriteBatch.Draw(npcTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY),
                         npc.frame, segmentDrawColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
@@ -7712,6 +7714,32 @@ namespace CalamityMod.NPCs
                 return d;
             }
             return null;
+        }
+        #endregion
+
+        #region Adjust Difficulty Stat Scaling
+        // Adjust HP and damage in Master Mode
+        public static void AdjustMasterModeStatScaling(NPC npc)
+        {
+            if (!Main.masterMode)
+                return;
+
+            npc.lifeMax = (int)(npc.lifeMax * MasterModeEnemyHPMultiplier);
+            npc.damage = (int)(npc.damage * MasterModeEnemyDamageMultiplier);
+        }
+
+        // Adjust only knockback resist in Expert Mode (this is also adjusted in Master Mode because Expert has to be enabled if Master is enabled)
+        public static void AdjustExpertModeStatScaling(NPC npc)
+        {
+            if (!Main.expertMode)
+                return;
+
+            if (npc.knockBackResist <= 0f || npc.knockBackResist >= 1f)
+                return;
+
+            float knockBackResistMult = Main.masterMode ? MasterModeEnemyKnockbackMultiplier : ExpertModeEnemyKnockbackMultiplier;
+            float knockBackResistReduction = MathHelper.Clamp((1f - npc.knockBackResist) * knockBackResistMult, 0f, npc.knockBackResist - 0.01f);
+            npc.knockBackResist -= knockBackResistReduction;
         }
         #endregion
     }
