@@ -40,7 +40,7 @@ namespace CalamityMod.NPCs.AcidRain
                 NPC.defense = 10;
             }
 
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.8f;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.lavaImmune = false;
             NPC.noGravity = false;
@@ -56,6 +56,10 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AcidRainBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

@@ -41,7 +41,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.width = 60;
             NPC.height = 80;
             NPC.lifeMax = 5000;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             NPC.value = Item.buyPrice(0, 1, 0, 0);
             NPC.Opacity = 0f;
             NPC.noGravity = true;
@@ -56,6 +56,10 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[2] { ModContent.GetInstance<AbyssLayer3Biome>().Type, ModContent.GetInstance<AbyssLayer4Biome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

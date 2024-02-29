@@ -32,7 +32,7 @@ namespace CalamityMod.NPCs.SlimeGod
             NPC.lifeMax = BossRushEvent.BossRushActive ? 5000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 180 : 90;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.9f;
             AnimationType = NPCID.CorruptSlime;
             NPC.Opacity = 0.8f;
             NPC.lavaImmune = false;
@@ -43,6 +43,10 @@ namespace CalamityMod.NPCs.SlimeGod
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void HitEffect(NPC.HitInfo hit)

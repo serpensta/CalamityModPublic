@@ -38,7 +38,7 @@ namespace CalamityMod.NPCs.HiveMind
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
 
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.9f;
             AIType = -1;
             NPC.noGravity = true;
             NPC.noTileCollide = true;

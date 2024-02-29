@@ -32,13 +32,17 @@ namespace CalamityMod.NPCs.Signus
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.dontTakeDamage = true;
             NPC.HitSound = SoundID.NPCHit53;
             NPC.DeathSound = SoundID.NPCDeath44;
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SendExtraAI(BinaryWriter writer)

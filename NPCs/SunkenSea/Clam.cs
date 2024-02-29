@@ -28,7 +28,7 @@ namespace CalamityMod.NPCs.SunkenSea
 
         public override void SetDefaults()
         {
-            NPC.damage = 30;
+            NPC.damage = Main.hardMode ? 60 : 30;
             NPC.width = 56;
             NPC.height = 38;
             NPC.defense = 9999;
@@ -50,6 +50,10 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<SunkenSeaBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -94,13 +98,8 @@ namespace CalamityMod.NPCs.SunkenSea
             {
                 if (!statChange)
                 {
-                    NPC.defense = 6;
-                    NPC.damage = Main.expertMode ? 60 : 30;
-                    if (Main.hardMode)
-                    {
-                        NPC.defense = 15;
-                        NPC.damage = Main.expertMode ? 120 : 60;
-                    }
+                    NPC.defense = Main.hardMode ? 15 : 6;
+                    NPC.damage = NPC.defDamage;
                     statChange = true;
                 }
                 if (NPC.ai[0] == 0f)
@@ -175,9 +174,7 @@ namespace CalamityMod.NPCs.SunkenSea
                 }
             }
             else
-            {
                 NPC.damage = 0;
-            }
         }
 
         public override bool? CanBeHitByProjectile(Projectile projectile)

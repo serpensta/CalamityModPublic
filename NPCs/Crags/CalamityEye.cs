@@ -30,7 +30,7 @@ namespace CalamityMod.NPCs.Crags
             NPC.height = 30;
             NPC.defense = 12;
             NPC.lifeMax = 140;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.75f;
             AnimationType = NPCID.DemonEye;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit1;
@@ -47,6 +47,10 @@ namespace CalamityMod.NPCs.Crags
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToWater = true;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<BrimstoneCragsBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

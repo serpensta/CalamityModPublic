@@ -26,7 +26,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.defense = 10;
             NPC.DR_NERD(0.1f);
             NPC.lifeMax = 300;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.4f;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit5;
             NPC.DeathSound = SoundID.NPCDeath7;
@@ -36,6 +36,10 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToCold = false;
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

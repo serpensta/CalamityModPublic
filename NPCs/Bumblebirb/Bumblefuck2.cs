@@ -35,7 +35,7 @@ namespace CalamityMod.NPCs.Bumblebirb
             NPC.LifeMaxNERB(9375, 11250, 5000); // Old HP - 12000, 15000
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.15f;
             NPC.lavaImmune = true;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
@@ -45,6 +45,10 @@ namespace CalamityMod.NPCs.Bumblebirb
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void AI()

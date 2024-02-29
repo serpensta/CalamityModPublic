@@ -36,7 +36,7 @@ namespace CalamityMod.NPCs.BrimstoneElemental
             NPC.defense = 0;
             NPC.DR_NERD(normalDR);
             NPC.lifeMax = 1000;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.canGhostHeal = false;

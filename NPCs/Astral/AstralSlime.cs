@@ -28,7 +28,7 @@ namespace CalamityMod.NPCs.Astral
             NPC.aiStyle = NPCAIStyleID.Slime;
             NPC.defense = 8;
             NPC.lifeMax = 200;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.6f;
             NPC.value = Item.buyPrice(0, 0, 10, 0);
             NPC.alpha = 60;
             NPC.HitSound = SoundID.NPCHit1;
@@ -45,6 +45,10 @@ namespace CalamityMod.NPCs.Astral
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToSickness = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbovegroundAstralBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

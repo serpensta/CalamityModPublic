@@ -33,7 +33,7 @@ namespace CalamityMod.NPCs.PlagueEnemies
             NPC.height = 30;
             NPC.defense = 12;
             NPC.lifeMax = 350;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             AnimationType = NPCID.CorruptSlime;
             NPC.value = Item.buyPrice(0, 0, 10, 0);
             NPC.alpha = 60;
@@ -45,6 +45,10 @@ namespace CalamityMod.NPCs.PlagueEnemies
             BannerItem = ModContent.ItemType<PestilentSlimeBanner>();
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

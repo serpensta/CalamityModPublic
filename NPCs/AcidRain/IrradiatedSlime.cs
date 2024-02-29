@@ -29,7 +29,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.lifeMax = 220;
             NPC.defense = 5;
 
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             AnimationType = NPCID.CorruptSlime;
             AIType = NPCID.ToxicSludge;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
@@ -46,6 +46,10 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AcidRainBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

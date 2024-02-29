@@ -34,7 +34,7 @@ namespace CalamityMod.NPCs.OldDuke
             }
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.2f;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath11;
             NPC.chaseable = false;
@@ -44,6 +44,10 @@ namespace CalamityMod.NPCs.OldDuke
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void AI()

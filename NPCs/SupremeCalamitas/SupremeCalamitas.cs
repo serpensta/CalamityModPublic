@@ -1669,7 +1669,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             #region FirstStage
             if (NPC.ai[0] == 0f)
             {
-                NPC.damage = NPC.defDamage;
                 if (wormAlive)
                 {
                     NPC.dontTakeDamage = true;
@@ -1794,6 +1793,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 {
                     if (NPC.ai[1] == 0f)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // How fast SCal moves to the destination
                         float velocity = 12f;
                         float acceleration = 0.12f;
@@ -1918,6 +1920,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 1f)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         float chargeVelocity = (wormAlive ? 26f : 30f) + (1f - lifeRatio) * 8f;
 
                         if (Main.getGoodWorld)
@@ -1962,6 +1967,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 2f)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         NPC.ai[2] += 1f;
 
                         if (Math.Abs(NPC.velocity.X) > 0.15f)
@@ -1969,6 +1977,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         if (NPC.ai[2] >= 25f)
                         {
+                            // Avoid cheap bullshit
+                            NPC.damage = 0;
+
                             if (!canDespawn)
                             {
                                 NPC.velocity *= 0.96f;
@@ -1984,6 +1995,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         if (NPC.ai[2] >= 70f)
                         {
+                            // Avoid cheap bullshit
+                            NPC.damage = 0;
+
                             NPC.ai[3] += 1f;
                             NPC.ai[2] = 0f;
                             NPC.TargetClosest();
@@ -2005,6 +2019,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 3f)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // How fast SCal moves to the destination
                         float velocity = 32f;
                         float acceleration = 1.2f;
@@ -2016,7 +2033,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         }
 
                         int posX = 1;
-                        if (NPC.position.X + (NPC.width / 2) < player.position.X + player.width)
+                        if (NPC.Center.X < player.position.X + player.width)
                             posX = -1;
 
                         // This is where SCal should be
@@ -2087,6 +2104,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 4f)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // How fast SCal moves to the destination
                         float velocity = 32f;
                         float acceleration = 1.2f;
@@ -2098,7 +2118,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         }
 
                         int posX = 1;
-                        if (NPC.position.X + (NPC.width / 2) < player.position.X + player.width)
+                        if (NPC.Center.X < player.position.X + player.width)
                             posX = -1;
 
                         // This is where SCal should be
@@ -2169,9 +2189,11 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             }
             #endregion
             #region Transition
-
             else if (NPC.ai[0] == 1f || NPC.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.dontTakeDamage = true;
                 NPC.chaseable = false;
 
@@ -2226,7 +2248,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             #region LastStage
             else
             {
-                NPC.damage = NPC.defDamage;
                 if (wormAlive)
                 {
                     NPC.dontTakeDamage = true;
@@ -2345,6 +2366,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 {
                     if (NPC.ai[1] == 0f)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // How fast SCal moves to the destination
                         float velocity = 12f;
                         float acceleration = 0.12f;
@@ -2467,6 +2491,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 1f)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         float chargeVelocity = (wormAlive ? 26f : 30f) + (1f - lifeRatio) * 8f;
 
                         if (Main.getGoodWorld)
@@ -2487,9 +2514,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 2f)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         NPC.ai[2] += 1f;
                         if (NPC.ai[2] >= 25f)
                         {
+                            // Avoid cheap bullshit
+                            NPC.damage = 0;
+
                             if (!canDespawn)
                             {
                                 NPC.velocity *= 0.96f;
@@ -2506,6 +2539,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         if (NPC.ai[2] >= 70f)
                         {
+                            // Avoid cheap bullshit
+                            NPC.damage = 0;
+
                             NPC.ai[3] += 1f;
                             NPC.ai[2] = 0f;
                             NPC.TargetClosest();
@@ -2527,6 +2563,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 3f)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // How fast SCal moves to the destination
                         float velocity = 32f;
                         float acceleration = 1.2f;
@@ -2538,7 +2577,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         }
 
                         int posX = 1;
-                        if (NPC.position.X + (NPC.width / 2) < player.position.X + player.width)
+                        if (NPC.Center.X < player.position.X + player.width)
                             posX = -1;
 
                         // This is where SCal should be
@@ -2610,6 +2649,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else if (NPC.ai[1] == 4f)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // How fast SCal moves to the destination
                         float velocity = 32f;
                         float acceleration = 1.2f;
@@ -2621,7 +2663,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         }
 
                         int posX = 1;
-                        if (NPC.position.X + (NPC.width / 2) < player.position.X + player.width)
+                        if (NPC.Center.X < player.position.X + player.width)
                             posX = -1;
 
                         // This is where SCal should be
@@ -3331,10 +3373,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             }
             if (NPC.life <= 0)
             {
-                NPC.position.X = NPC.position.X + (NPC.width / 2);
-                NPC.position.Y = NPC.position.Y + (NPC.height / 2);
-                NPC.width = 100;
-                NPC.height = 100;
+                NPC.position = NPC.Center;
+                NPC.width = NPC.height = 100;
                 NPC.position.X = NPC.position.X - (NPC.width / 2);
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)

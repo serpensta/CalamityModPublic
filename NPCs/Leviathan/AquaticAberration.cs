@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.Leviathan
             }
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.2f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.canGhostHeal = false;
@@ -51,6 +51,10 @@ namespace CalamityMod.NPCs.Leviathan
 
             if (Main.getGoodWorld)
                 NPC.scale *= 1.3f;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

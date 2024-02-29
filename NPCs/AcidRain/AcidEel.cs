@@ -74,6 +74,10 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AcidRainBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -230,7 +234,7 @@ namespace CalamityMod.NPCs.AcidRain
                 Vector2 tailDrawPosition = segmentPositions[^1] - tailRotation.ToRotationVector2() * 4f;
                 SpriteEffects tailDirection = NPC.velocity.X < 0f ? SpriteEffects.None : SpriteEffects.FlipVertically;
                 Main.EntitySpriteDraw(tailTexture, tailDrawPosition, tailArea, NPC.GetAlpha(Color.White), tailRotation, tailArea.Size() * new Vector2(0f, 0.5f), NPC.scale, tailDirection, 0);
-                PrimitiveSet.Prepare(segmentPositions, new(SegmentWidthFunction, _ => NPC.GetAlpha(Color.White), pixelate: false, shader: GameShaders.Misc["CalamityMod:PrimitiveTexture"]), 36);
+                PrimitiveRenderer.RenderTrail(segmentPositions, new(SegmentWidthFunction, _ => NPC.GetAlpha(Color.White), pixelate: false, shader: GameShaders.Misc["CalamityMod:PrimitiveTexture"]), 36);
             }
 
             return false;

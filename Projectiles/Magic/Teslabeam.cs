@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -130,9 +131,6 @@ namespace CalamityMod.Projectiles.Magic
             return true;
         }
 
-        public PrimitiveTrail LightningDrawer;
-
-        public PrimitiveTrail LightningBackgroundDrawer;
         internal float WidthFunction(float completionRatio)
         {
             return MathHelper.Clamp(completionRatio * 15, 1, 1.5f);
@@ -152,10 +150,6 @@ namespace CalamityMod.Projectiles.Magic
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.EnterShaderRegion();
-            if (LightningDrawer is null)
-                LightningDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, PrimitiveTrail.RigidPointRetreivalFunction, GameShaders.Misc["CalamityMod:TeslaTrail"]);
-            if (LightningBackgroundDrawer is null)
-                LightningBackgroundDrawer = new PrimitiveTrail(BackgroundWidthFunction, BackgroundColorFunction, PrimitiveTrail.RigidPointRetreivalFunction, GameShaders.Misc["CalamityMod:TeslaTrail"]);
             GameShaders.Misc["CalamityMod:TeslaTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ZapTrail"));
 
             // every 2 frames update the offsets are randomized. This is effectively control for the lightning's fps
@@ -190,8 +184,9 @@ namespace CalamityMod.Projectiles.Magic
                 finalPoints.Add(baseVec);
             }
 
-            LightningBackgroundDrawer.Draw(finalPoints, -Main.screenPosition, 75);
-            LightningDrawer.Draw(finalPoints, -Main.screenPosition, 75);
+            // 29FEB2024: Ozzatron: hopefully ported this correctly to the new prim system by Toasty
+            PrimitiveRenderer.RenderTrail(finalPoints, new(BackgroundWidthFunction, BackgroundColorFunction, smoothen: false, shader: GameShaders.Misc["CalamityMod:TeslaTrail"]), 75);
+            PrimitiveRenderer.RenderTrail(finalPoints, new(WidthFunction, ColorFunction, smoothen: false, shader: GameShaders.Misc["CalamityMod:TeslaTrail"]), 75);
 
             Main.spriteBatch.ExitShaderRegion();
             return false;

@@ -33,7 +33,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.2f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.canGhostHeal = false;
@@ -41,6 +41,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPC.DeathSound = SoundID.NPCDeath14;
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToElectricity = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void AI()

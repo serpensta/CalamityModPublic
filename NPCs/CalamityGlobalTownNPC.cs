@@ -242,6 +242,7 @@ namespace CalamityMod.NPCs
             "Kiriku", // <@!395312478160027668> (rulosss#6814)
             "Lacuna", // <@!790746689211203604> (_lacuna_)
             "Mae Borowski", //<@!219158690433990656> (justakkolite)
+            "Jackie", // <@!353241811717718016> (jackalchan)
         };
 
         // The following sets are for the 1.4 Town Pets: Town Dogs, Cats and Bunnies.
