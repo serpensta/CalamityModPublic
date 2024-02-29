@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
@@ -30,7 +31,6 @@ namespace CalamityMod.Projectiles.Melee
         public ref float DashTime => ref Projectile.ai[1];
         public Vector2 DashDestination = Vector2.Zero;
 
-        internal PrimitiveTrail TrailDrawer;
         // Rawest placeholder sound
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/ExoMechs/ApolloMissileLaunch") { Volume = 0.6f };
 
@@ -56,11 +56,11 @@ namespace CalamityMod.Projectiles.Melee
         {
             if (Owner is null || Owner.dead || Owner.ActiveItem().type != ModContent.ItemType<StygianShield>())
                 Projectile.Kill();
-
+            
             Owner.heldProj = Projectile.whoAmI;
 
             // TODO -- Windup sound (definitely requires a custom looping sound)
-
+            
             // Dashing behavior
             Projectile.Opacity = Utils.GetLerpValue(0f, DashDuration * 0.7f, DashTime, true);
             if (DashDestination != Vector2.Zero)
@@ -150,7 +150,7 @@ namespace CalamityMod.Projectiles.Melee
                     Projectile.ExpandHitboxBy(100);
                     Projectile.tileCollide = true;
                     return;
-                }
+                }            
             }
             // Otherwise, kill the projectile
             Projectile.Kill();
@@ -220,11 +220,9 @@ namespace CalamityMod.Projectiles.Melee
                 Color shieldColor = Color.LightSalmon;
 
                 // Main trail
-                if (TrailDrawer is null)
-                    TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
-
                 GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
-                TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f + extraOffset - (direction * 80f), 10);
+                PrimitiveSet.Prepare(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f + extraOffset + Main.screenPosition - direction * 80f,
+                    shader: GameShaders.Misc["CalamityMod:TrailStreak"]), 10);
 
                 ArrowEffect.Parameters["halfSpreadAngle"].SetValue(MathHelper.ToRadians(7.5f));
                 ArrowEffect.Parameters["edgeColor"].SetValue(headColor.ToVector3());
@@ -237,7 +235,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 // Blooming shield and rings
                 Main.spriteBatch.EnterShaderRegion(BlendState.Additive);
-
+                
                 float shieldRot = arrowFace - MathHelper.Pi;
                 Main.EntitySpriteDraw(shieldTex, Projectile.Center + extraOffset, null, shieldColor, shieldRot, shieldTex.Size() / 2f, 1.25f * scaleMult, SpriteEffects.None);
                 Main.EntitySpriteDraw(bloomTex, Projectile.Center + extraOffset, null, shieldColor * 0.75f, 0f, bloomTex.Size() / 2f, 0.5f * scaleMult, SpriteEffects.None);

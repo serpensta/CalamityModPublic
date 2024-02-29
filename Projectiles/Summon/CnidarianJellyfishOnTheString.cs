@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CalamityMod.DataStructures;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,8 +28,6 @@ namespace CalamityMod.Projectiles.Summon
         //Sounds
         public static readonly SoundStyle ZapSound = SoundID.Item94 with { Volume = SoundID.Item94.Volume * 0.5f };
         public static readonly SoundStyle SlapSound = new("CalamityMod/Sounds/Custom/WetSlap", 4);
-
-        internal PrimitiveTrail TrailRenderer;
 
         public List<VerletSimulatedSegment> Segments;
         public Player Owner => Main.player[Projectile.owner];
@@ -238,13 +237,9 @@ namespace CalamityMod.Projectiles.Summon
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (TrailRenderer is null)
-                TrailRenderer = new PrimitiveTrail(PrimWidthFunction, PrimColorFunction);
-
             Vector2[] segmentPositions = Segments.Select(x => x.position).ToArray();
 
-            TrailRenderer.Draw(segmentPositions, -Main.screenPosition, 66);
-
+            PrimitiveSet.Prepare(segmentPositions, new(PrimWidthFunction, PrimColorFunction), 66);
 
             Texture2D tex = Request<Texture2D>(Texture).Value;
 

@@ -3,6 +3,7 @@ using System.Linq;
 using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Magic;
@@ -21,8 +22,6 @@ namespace CalamityMod.NPCs.AcidRain
     public class AcidEel : ModNPC
     {
         public Player Target => Main.player[NPC.target];
-
-        public PrimitiveTrail SegmentDrawer = null;
 
         public override void SetStaticDefaults()
         {
@@ -79,7 +78,7 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.AcidEel")
             });
@@ -187,9 +186,6 @@ namespace CalamityMod.NPCs.AcidRain
                 return false;
             }
 
-            // Initialize the segment drawer.
-            SegmentDrawer ??= new(SegmentWidthFunction, _ => NPC.GetAlpha(Color.White), null, GameShaders.Misc["CalamityMod:PrimitiveTexture"]);
-
             Texture2D headTexture = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D tailTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/AcidRain/AcidEelTail").Value;
             Vector2[] segmentPositions = (Vector2[])NPC.oldPos.Clone();
@@ -205,7 +201,7 @@ namespace CalamityMod.NPCs.AcidRain
 
             for (int i = 0; i < segmentPositions.Length; i++)
             {
-                segmentPositions[i] += NPC.Size * 0.5f - screenPos - NPC.rotation.ToRotationVector2() * Math.Sign(NPC.velocity.X) * 8f;
+                segmentPositions[i] += NPC.Size * 0.5f - NPC.rotation.ToRotationVector2() * Math.Sign(NPC.velocity.X) * 8f;
                 if (segmentAreaTopLeft.X > segmentPositions[i].X)
                     segmentAreaTopLeft.X = segmentPositions[i].X;
                 if (segmentAreaTopLeft.Y > segmentPositions[i].Y)
@@ -234,7 +230,7 @@ namespace CalamityMod.NPCs.AcidRain
                 Vector2 tailDrawPosition = segmentPositions[^1] - tailRotation.ToRotationVector2() * 4f;
                 SpriteEffects tailDirection = NPC.velocity.X < 0f ? SpriteEffects.None : SpriteEffects.FlipVertically;
                 Main.EntitySpriteDraw(tailTexture, tailDrawPosition, tailArea, NPC.GetAlpha(Color.White), tailRotation, tailArea.Size() * new Vector2(0f, 0.5f), NPC.scale, tailDirection, 0);
-                SegmentDrawer.Draw(segmentPositions, Vector2.Zero, 36);
+                PrimitiveSet.Prepare(segmentPositions, new(SegmentWidthFunction, _ => NPC.GetAlpha(Color.White), pixelate: false, shader: GameShaders.Misc["CalamityMod:PrimitiveTexture"]), 36);
             }
 
             return false;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,9 +16,6 @@ namespace CalamityMod.Projectiles.Ranged
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override string Texture => "CalamityMod/Particles/MediumMist";
-
-        // Helix trail thing
-        public PrimitiveTrail HelixTrail = null;
 
         public override void SetStaticDefaults()
         {
@@ -69,7 +67,7 @@ namespace CalamityMod.Projectiles.Ranged
             GeneralParticleHandler.SpawnParticle(spark);
             LineParticle spark2 = new LineParticle(Projectile.Center, -Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.23f, -0.56f)) * Main.rand.NextFloat(0.4f, 2.5f), false, 8, 1.2f, Main.rand.NextBool() ? Color.Orange : Color.DarkOrange);
             GeneralParticleHandler.SpawnParticle(spark2);
-
+            
             for (int i = 0; i <= 3; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool() ? 169 : 158, new Vector2(5, 5).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1.5f), 0, default, Main.rand.NextFloat(1.6f, 2.2f));
@@ -92,9 +90,6 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (HelixTrail is null)
-                HelixTrail = new PrimitiveTrail(HelixTrailWidthFunction, HelixTrailColorFunction);
-
             // Draw a double helix trail
             for (int direction = -1; direction <= 1; direction += 2)
             {
@@ -109,7 +104,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Vector2 sinOffset = (Vector2.UnitY * direction * MathF.Sin(i * MathHelper.Pi * 0.125f) * 24f).RotatedBy(Projectile.oldRot[i]);
                     trailPositions.Add(Projectile.oldPos[i] + sinOffset);
                 }
-                HelixTrail.Draw(trailPositions, Projectile.Size * 0.5f - Main.screenPosition, 60);
+                PrimitiveSet.Prepare(trailPositions, new(HelixTrailWidthFunction, HelixTrailColorFunction, (_) => Projectile.Size * 0.5f), 60);
             }
             return false;
         }

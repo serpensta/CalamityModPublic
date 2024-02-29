@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +18,6 @@ namespace CalamityMod.Projectiles.Melee
     public class TerratomereHoldoutProj : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Melee";
-        public PrimitiveTrail SlashDrawer = null;
 
         public Player Owner => Main.player[Projectile.owner];
 
@@ -153,7 +153,7 @@ namespace CalamityMod.Projectiles.Melee
             // Create the slash.
             if (Time == (int)(Terratomere.SwingTime * (SwingCompletionRatio + 0.15f)))
                 SoundEngine.PlaySound(Terratomere.SwingSound, Projectile.Center);
-
+            
             if (Main.myPlayer == Projectile.owner && Time == (int)(Terratomere.SwingTime * (SwingCompletionRatio + 0.34f)))
             {
                 Vector2 bigSlashVelocity = Projectile.SafeDirectionTo(Main.MouseWorld) * Owner.ActiveItem().shootSpeed;
@@ -230,9 +230,6 @@ namespace CalamityMod.Projectiles.Melee
 
         public void DrawSlash()
         {
-            // Initialize the primitive drawer.
-            SlashDrawer ??= new(SlashWidthFunction, SlashColorFunction, null, GameShaders.Misc["CalamityMod:ExobladeSlash"]);
-
             // Draw the slash effect.
             Main.spriteBatch.EnterShaderRegion();
 
@@ -240,7 +237,7 @@ namespace CalamityMod.Projectiles.Melee
             PrepareSlashShader(Direction == 1);
 
             if (SwingCompletionAtStartOfTrail > SwingCompletionRatio)
-                SlashDrawer.Draw(GenerateSlashPoints(), Projectile.Center - Main.screenPosition, 95);
+                PrimitiveSet.Prepare(GenerateSlashPoints(), new(SlashWidthFunction, SlashColorFunction, (_) => Projectile.Center, shader: GameShaders.Misc["CalamityMod:ExobladeSlash"]), 95);
 
             Main.spriteBatch.ExitShaderRegion();
         }
@@ -274,7 +271,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             if (Owner.moonLeech)
                 return;
-
+            
             Owner.statLife += Terratomere.TrueMeleeHitHeal;
             Owner.HealEffect(Terratomere.TrueMeleeHitHeal);
         }

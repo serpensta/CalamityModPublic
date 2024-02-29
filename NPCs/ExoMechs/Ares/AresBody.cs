@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using CalamityMod.Events;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Vanity;
@@ -93,10 +94,6 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
         }
 
         public ThanatosSmokeParticleSet SmokeDrawer = new ThanatosSmokeParticleSet(-1, 3, 0f, 16f, 1.5f);
-
-        // Drawers for arm segments.
-        public PrimitiveTrail LightningDrawer;
-        public PrimitiveTrail LightningBackgroundDrawer;
 
         // This stores the sound slot of the deathray sound Ares makes, so it may be properly updated in terms of position and looped.
         public SlotId DeathraySoundSlot;
@@ -199,7 +196,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Ares")
             });
@@ -316,7 +313,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                 Vector2 NeuronLeft = new Vector2(NPC.Center.X - xoffset, NPC.Center.Y + yoffset);
                 NPC.alpha = 0;
                 NPC.dontTakeDamage = true;
-                neurontimer++;
+                neurontimer++; 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     if (neurontimer >= 180)
@@ -330,7 +327,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
                             Vector2 betweenR = NeuronRight + velocity * 650;
                             Vector2 betweenL = NeuronLeft + velocity * 650;
-
+                        
                             Terraria.Audio.SoundEngine.PlaySound(CommonCalamitySounds.LaserCannonSound with { Volume = CommonCalamitySounds.LaserCannonSound.Volume - 0.2f, Pitch = CommonCalamitySounds.LaserCannonSound.Pitch + 0.2f }, NeuronRight);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), betweenL, betweenL + velocity, ModContent.ProjectileType<ArtemisLaser>(), 111, 0f, Main.myPlayer, 7, NPC.whoAmI);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), betweenR, betweenR + velocity, ModContent.ProjectileType<ArtemisLaser>(), 111, 0f, Main.myPlayer, 7, NPC.whoAmI);
@@ -922,7 +919,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                             if (calamityGlobalNPC.newAI[2] == deathrayTelegraphDuration)
                             {
                                 DeathraySoundSlot = SoundEngine.PlaySound(LaserStartSound, NPC.Center);
-
+                                
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     int type = ModContent.ProjectileType<AresDeathBeamStart>();
@@ -1279,11 +1276,6 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
         public void DrawArm(SpriteBatch spriteBatch, Vector2 handPosition, Vector2 screenOffset, Color glowmaskColor, int direction, bool backArm)
         {
-            if (LightningDrawer is null)
-                LightningDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, PrimitiveTrail.RigidPointRetreivalFunction);
-            if (LightningBackgroundDrawer is null)
-                LightningBackgroundDrawer = new PrimitiveTrail(BackgroundWidthFunction, BackgroundColorFunction, PrimitiveTrail.RigidPointRetreivalFunction);
-
             SpriteEffects spriteDirection = direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             float distanceFromHand = NPC.Distance(handPosition);
             float frameTime = Main.GlobalTimeWrappedHourly * 0.9f % 1f;
@@ -1336,13 +1328,13 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                 if (NPC.Opacity > 0f && !NPC.IsABestiaryIconDummy)
                 {
                     List<Vector2> arm2ElectricArcPoints = AresTeslaOrb.DetermineElectricArcPoints(armSegmentDrawPosition, arm2DrawPosition + arm2Rotation.ToRotationVector2() * -direction * 20f, 250290787);
-                    LightningBackgroundDrawer.Draw(arm2ElectricArcPoints, -Main.screenPosition, 90);
-                    LightningDrawer.Draw(arm2ElectricArcPoints, -Main.screenPosition, 90);
+                    PrimitiveSet.Prepare(arm2ElectricArcPoints, new(BackgroundWidthFunction, BackgroundColorFunction, smoothen: false), 90);
+                    PrimitiveSet.Prepare(arm2ElectricArcPoints, new(WidthFunction, ColorFunction, smoothen: false), 90);
 
                     // Draw electricity between the final arm and the hand.
                     List<Vector2> handElectricArcPoints = AresTeslaOrb.DetermineElectricArcPoints(arm2DrawPosition - arm2Rotation.ToRotationVector2() * direction * 100f, handPosition, 27182);
-                    LightningBackgroundDrawer.Draw(handElectricArcPoints, -Main.screenPosition, 90);
-                    LightningDrawer.Draw(handElectricArcPoints, -Main.screenPosition, 90);
+                    PrimitiveSet.Prepare(handElectricArcPoints, new(BackgroundWidthFunction, BackgroundColorFunction, smoothen: false), 90);
+                    PrimitiveSet.Prepare(handElectricArcPoints, new(WidthFunction, ColorFunction, smoothen: false), 90);
                 }
 
                 shoulderDrawPosition += Vector2.UnitY * NPC.gfxOffY - screenOffset;
@@ -1398,13 +1390,13 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
                 if (NPC.Opacity > 0f && !NPC.IsABestiaryIconDummy)
                 {
                     List<Vector2> arm2ElectricArcPoints = AresTeslaOrb.DetermineElectricArcPoints(arm1DrawPosition - arm2Rotation.ToRotationVector2() * direction * 10f, arm1DrawPosition + arm2Rotation.ToRotationVector2() * direction * 20f, 31416);
-                    LightningBackgroundDrawer.Draw(arm2ElectricArcPoints, -Main.screenPosition, 90);
-                    LightningDrawer.Draw(arm2ElectricArcPoints, -Main.screenPosition, 90);
+                    PrimitiveSet.Prepare(arm2ElectricArcPoints, new(BackgroundWidthFunction, BackgroundColorFunction, smoothen: false), 90);
+                    PrimitiveSet.Prepare(arm2ElectricArcPoints, new(WidthFunction, ColorFunction, smoothen: false), 90);
 
                     // Draw electricity between the final arm and the hand.
                     List<Vector2> handElectricArcPoints = AresTeslaOrb.DetermineElectricArcPoints(arm2DrawPosition - arm2Rotation.ToRotationVector2() * direction * 20f, handPosition, 27182);
-                    LightningBackgroundDrawer.Draw(handElectricArcPoints, -Main.screenPosition, 90);
-                    LightningDrawer.Draw(handElectricArcPoints, -Main.screenPosition, 90);
+                    PrimitiveSet.Prepare(handElectricArcPoints, new(BackgroundWidthFunction, BackgroundColorFunction, smoothen: false), 90);
+                    PrimitiveSet.Prepare(handElectricArcPoints, new(WidthFunction, ColorFunction, smoothen: false), 90);
                 }
 
                 shoulderDrawPosition += Vector2.UnitY * NPC.gfxOffY - screenOffset;
@@ -1597,7 +1589,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 3; k++)
-                Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TerraBlade, 0f, 0f, 100, new Color(0, 255, 255), 1f);
+                Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1f);
 
             if (NPC.soundDelay == 0)
             {
@@ -1609,14 +1601,14 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TerraBlade, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
+                    Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
                 }
                 for (int j = 0; j < 20; j++)
                 {
-                    int plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TerraBlade, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
+                    int plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
                     Main.dust[plasmaDust].noGravity = true;
                     Main.dust[plasmaDust].velocity *= 3f;
-                    plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TerraBlade, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
+                    plasmaDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 107, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
                     Main.dust[plasmaDust].velocity *= 2f;
                     Main.dust[plasmaDust].noGravity = true;
                 }

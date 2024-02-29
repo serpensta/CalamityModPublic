@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
@@ -38,7 +39,6 @@ namespace CalamityMod.Projectiles.Magic
         public static float HomingRange = 250;
         public static float HomingAngle = MathHelper.PiOver4 * 1.65f;
 
-        internal PrimitiveTrail TrailDrawer;
         internal Color PrimColorMult = Color.White;
 
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
@@ -127,7 +127,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 float distanceFromTarget = (Target.Center - Projectile.Center).Length();
 
-                Projectile.rotation = Projectile.rotation.AngleTowards((Target.Center - Projectile.Center).ToRotation(), 0.07f * (float)Math.Pow((1 - distanceFromTarget / HomingRange), 2));
+                Projectile.rotation = Projectile.rotation.AngleTowards((Target.Center - Projectile.Center).ToRotation(), 0.07f * (float)Math.Pow(( 1 - distanceFromTarget / HomingRange), 2));
             }
 
             Projectile.velocity *= 0.983f;
@@ -170,7 +170,7 @@ namespace CalamityMod.Projectiles.Magic
 
                     Vector2 velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedByRandom(MathHelper.Pi / 6f) * Main.rand.NextFloat(4, 10);
                     GeneralParticleHandler.SpawnParticle(new TechyHoloysquareParticle(center, velocity, Main.rand.NextFloat(1f, 2f), Main.rand.NextBool() ? new Color(99, 255, 229) : new Color(25, 132, 247), 25));
-
+                    
                 }
             }
         }
@@ -183,7 +183,7 @@ namespace CalamityMod.Projectiles.Magic
 
         internal float WidthFunction(float completionRatio)
         {
-            return 9.4f;
+            return  9.4f;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -191,19 +191,14 @@ namespace CalamityMod.Projectiles.Magic
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
-            if (TrailDrawer is null)
-                TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
-
             GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(Request<Texture2D>("CalamityMod/ExtraTextures/Trails/BasicTrail"));
 
             CalamityUtils.DrawChromaticAberration(Vector2.UnitX, 3.5f, delegate (Vector2 offset, Color colorMod)
             {
                 PrimColorMult = colorMod;
 
-                TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition + offset, 30);
+                PrimitiveSet.Prepare(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f + offset, shader: GameShaders.Misc["CalamityMod:TrailStreak"]), 30);
             });
-
-
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);

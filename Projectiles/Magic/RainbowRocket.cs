@@ -1,5 +1,6 @@
 ﻿using System;
 using CalamityMod.DataStructures;
+using CalamityMod.Graphics.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -24,7 +25,6 @@ namespace CalamityMod.Projectiles.Magic
             Count = 7
         }
 
-        internal PrimitiveTrail TrailDrawer = null;
         public ref float Time => ref Projectile.ai[0];
         public PartyCannonExplosionType RocketType
         {
@@ -135,11 +135,8 @@ namespace CalamityMod.Projectiles.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (TrailDrawer is null)
-                TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction);
-
             Projectile.oldPos[0] = Projectile.position + Projectile.velocity.SafeNormalize(Vector2.Zero) * 50f;
-            TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition + Projectile.velocity, 80);
+            PrimitiveSet.Prepare(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f + Projectile.velocity), 80);
 
             Texture2D rocketTexture = ModContent.Request<Texture2D>(Texture).Value;
             Main.EntitySpriteDraw(rocketTexture,

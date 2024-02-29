@@ -2,6 +2,7 @@
 using System.IO;
 using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.Particles;
@@ -44,7 +45,6 @@ namespace CalamityMod.Projectiles.Summon
             }
         }
 
-        internal PrimitiveTrail TrailDrawer;
         internal Color PrimColorMult;
         public Player healedPlayer;
 
@@ -150,7 +150,7 @@ namespace CalamityMod.Projectiles.Summon
                 {
                     Vector2 direction = Main.rand.NextVector2CircularEdge(1f, 1f);
 
-                    Dust wishyDust = Dust.NewDustPerfect(Projectile.Center + direction * Main.rand.NextFloat(1f, 8f), 229, Alpha: 100, Scale: Main.rand.NextFloat(1f, 1.4f));
+                    Dust wishyDust = Dust.NewDustPerfect(Projectile.Center + direction * Main.rand.NextFloat(1f, 8f), 229, Alpha : 100, Scale: Main.rand.NextFloat(1f, 1.4f));
                     wishyDust.noGravity = true;
                     wishyDust.noLight = true;
                     wishyDust.velocity = direction * Main.rand.NextFloat(2f, 4);
@@ -160,7 +160,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.soundDelay = NewSoundDelay;
                 ShootTimer = ShootDelay;
 
-                Initialized++;
+                Initialized ++;
             }
 
             if (Owner.Calamity().mouseRight && Owner.HeldItem.type == ModContent.ItemType<WulfrumController>())
@@ -464,8 +464,6 @@ namespace CalamityMod.Projectiles.Summon
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
-                if (TrailDrawer is null)
-                    TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
                 GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ZapTrail"));
 
                 Vector2[] drawPos = new Vector2[] { Projectile.Center, Projectile.Center, healedPlayer.Center + (Projectile.Center - healedPlayer.Center) * 0.5f + Vector2.UnitY * 40f, healedPlayer.Center, healedPlayer.Center };
@@ -473,7 +471,7 @@ namespace CalamityMod.Projectiles.Summon
                 CalamityUtils.DrawChromaticAberration(Vector2.UnitX, 1.8f, delegate (Vector2 offset, Color colorMod)
                 {
                     PrimColorMult = colorMod;
-                    TrailDrawer.Draw(drawPos, -Main.screenPosition + offset, 30);
+                    PrimitiveSet.Prepare(drawPos, new(WidthFunction, ColorFunction, (_) => offset, shader: GameShaders.Misc["CalamityMod:TrailStreak"]), 30);
                 });
 
                 Main.spriteBatch.End();

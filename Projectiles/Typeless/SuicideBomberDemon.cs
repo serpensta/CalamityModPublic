@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using CalamityMod.Graphics.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -20,7 +21,6 @@ namespace CalamityMod.Projectiles.Typeless
         }
         public ref float Time => ref Projectile.ai[1];
         public Player Owner => Main.player[Projectile.owner];
-        public PrimitiveTrail FlameTrailDrawer = null;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 12;
@@ -186,7 +186,7 @@ namespace CalamityMod.Projectiles.Typeless
             SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion, Projectile.Center);
             for (int i = 0; i < 40; i++)
             {
-                Dust explosion = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowMk2);
+                Dust explosion = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 267);
                 explosion.velocity = Main.rand.NextVector2Circular(4f, 4f);
                 explosion.color = Color.Red;
                 explosion.scale = 1.35f;
@@ -229,10 +229,6 @@ namespace CalamityMod.Projectiles.Typeless
         {
             Main.spriteBatch.EnterShaderRegion();
 
-            // Initialize the flame trail drawer.
-            if (FlameTrailDrawer is null)
-                FlameTrailDrawer = new PrimitiveTrail(FlameTrailWidthFunction, FlameTrailColorFunction, null, GameShaders.Misc["CalamityMod:ImpFlameTrail"]);
-
             // Prepare the flame trail shader with its map texture.
             GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
 
@@ -268,7 +264,7 @@ namespace CalamityMod.Projectiles.Typeless
 
                 Vector2 trailOffset = Projectile.Size * 0.5f;
                 trailOffset += (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2() * 20f;
-                FlameTrailDrawer.Draw(Projectile.oldPos, trailOffset - Main.screenPosition, 61);
+                PrimitiveSet.Prepare(Projectile.oldPos, new(FlameTrailWidthFunction, FlameTrailColorFunction, (_) => trailOffset, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 61);
             }
 
             Main.spriteBatch.ExitShaderRegion();
