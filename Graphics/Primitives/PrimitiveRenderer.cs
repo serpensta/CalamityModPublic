@@ -162,7 +162,13 @@ namespace CalamityMod.Graphics.Primitives
                     int currentIndex = (int)(completionRatio * (positions.Length - 1));
                     Vector2 currentPoint = positions[currentIndex];
                     Vector2 nextPoint = positions[(currentIndex + 1) % positions.Length];
-                    MainPositions[PositionsIndex] = Vector2.Lerp(currentPoint, nextPoint, completionRatio * (positions.Length - 1) % 0.99999f) - Main.screenPosition;
+
+                    // 29FEB2024: Ozzatron: offset function needs to apply even in cases where smoothing is off.
+                    Vector2 finalPos = Vector2.Lerp(currentPoint, nextPoint, completionRatio * (positions.Length - 1) % 0.99999f) - Main.screenPosition;
+                    if (settings.OffsetFunction != null)
+                        finalPos += settings.OffsetFunction(completionRatio);
+
+                    MainPositions[PositionsIndex] = finalPos;
                     PositionsIndex++;
                 }
                 return true;
