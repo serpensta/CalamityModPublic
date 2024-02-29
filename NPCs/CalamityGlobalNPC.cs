@@ -2855,6 +2855,52 @@ namespace CalamityMod.NPCs
                     case NPCID.CrimsonGoldfish:
                     case NPCID.CrimsonPenguin:
                     case NPCID.EyeballFlyingFish:
+                    case NPCID.Dandelion:
+                    case NPCID.AngryNimbus:
+                    case NPCID.FlyingFish:
+                    case NPCID.IceGolem:
+                    case NPCID.RainbowSlime:
+                    case NPCID.UmbrellaSlime:
+                    case NPCID.Tumbleweed:
+                    case NPCID.SandShark:
+                    case NPCID.SandsharkCorrupt:
+                    case NPCID.SandsharkCrimson:
+                    case NPCID.SandsharkHallow:
+                    case NPCID.SandElemental:
+                    case NPCID.BloodNautilus:
+                    case NPCID.GoblinArcher:
+                    case NPCID.GoblinPeon:
+                    case NPCID.GoblinSorcerer:
+                    case NPCID.GoblinSummoner:
+                    case NPCID.GoblinThief:
+                    case NPCID.GoblinWarrior:
+                    case NPCID.MisterStabby:
+                    case NPCID.SnowBalla:
+                    case NPCID.SnowmanGangsta:
+                    case NPCID.Parrot:
+                    case NPCID.PirateCaptain:
+                    case NPCID.PirateCorsair:
+                    case NPCID.PirateCrossbower:
+                    case NPCID.PirateDeadeye:
+                    case NPCID.PirateDeckhand:
+                    case NPCID.PirateGhost:
+                    case NPCID.PirateShipCannon:
+                    case NPCID.MothronSpawn:
+                    case NPCID.Mothron:
+                    case NPCID.Butcher:
+                    case NPCID.CreatureFromTheDeep:
+                    case NPCID.DeadlySphere:
+                    case NPCID.DrManFly:
+                    case NPCID.Eyezor:
+                    case NPCID.Frankenstein:
+                    case NPCID.Fritz:
+                    case NPCID.Nailhead:
+                    case NPCID.Psycho:
+                    case NPCID.Reaper:
+                    case NPCID.ThePossessed:
+                    case NPCID.SwampThing:
+                    case NPCID.Vampire:
+                    case NPCID.VampireBat:
 
                         npc.lifeMax = (int)(npc.lifeMax * 0.75);
                         npc.damage = (int)(npc.damage * 0.85);
