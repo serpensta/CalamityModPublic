@@ -2838,6 +2838,24 @@ namespace CalamityMod.NPCs
                     case NPCID.WyvernHead:
                     case NPCID.WyvernLegs:
                     case NPCID.WyvernTail:
+                    case NPCID.BloodEelBody:
+                    case NPCID.BloodEelHead:
+                    case NPCID.BloodEelTail:
+                    case NPCID.BloodSquid:
+                    case NPCID.ChatteringTeethBomb:
+                    case NPCID.Clown:
+                    case NPCID.CorruptBunny:
+                    case NPCID.CorruptGoldfish:
+                    case NPCID.CorruptPenguin:
+                    case NPCID.Drippler:
+                    case NPCID.GoblinShark:
+                    case NPCID.TheGroom:
+                    case NPCID.TheBride:
+                    case NPCID.CrimsonBunny:
+                    case NPCID.CrimsonGoldfish:
+                    case NPCID.CrimsonPenguin:
+                    case NPCID.EyeballFlyingFish:
+
                         npc.lifeMax = (int)(npc.lifeMax * 0.75);
                         npc.damage = (int)(npc.damage * 0.85);
                         npc.defDamage = npc.damage;
