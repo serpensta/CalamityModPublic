@@ -658,7 +658,37 @@ LanternCenter: {
 
 BossRushMonolith: {
 	DisplayName: Boss Rush Monolith
-	Tooltip: ""
+	Tooltip: "'Bring forth the end.'"
+}
+
+AstralProjector: {
+	DisplayName: Astral Projector
+	Tooltip: "'Control a small portion of the Astral Infection's influence.'"
+}
+
+DeepSeaAnchor: {
+	DisplayName: Deep Sea Anchor
+	Tooltip: "'Dampen the air with heavy amounts of brine.'"
+}
+
+DraconicIncense: {
+	DisplayName: Draconic Incense
+	Tooltip: "'Ignite the air with dragonfire.'"
+}
+
+ExoObelisk: {
+	DisplayName: Exo Obelisk
+	Tooltip: "'Energize the atmosphere with exo energy.'"
+}
+
+FrigidMonolith: {
+	DisplayName: Frigid Monolith
+	Tooltip: "'Enchant the sky with frosty auroras.'"
+}
+
+PlagueHumidifier: {
+	DisplayName: Plague Humidifier
+	Tooltip: "'Spread light amounts of the plague through the air.'"
 }
 
 NavyPrismTorch: {
@@ -3522,34 +3552,4 @@ WaterTurret: {
 		Shoots high-speed water blasts at nearby enemies
 		Cannot attack while a boss is alive
 		'''
-}
-
-AstralProjector: {
-	DisplayName: Astral Projector
-	Tooltip: ""
-}
-
-DeepSeaAnchor: {
-	DisplayName: Deep Sea Anchor
-	Tooltip: ""
-}
-
-DraconicIncense: {
-	DisplayName: Draconic Incense
-	Tooltip: ""
-}
-
-ExoObelisk: {
-	DisplayName: Exo Obelisk
-	Tooltip: ""
-}
-
-FrigidMonolith: {
-	DisplayName: Frigid Monolith
-	Tooltip: ""
-}
-
-PlagueHumidifier: {
-	DisplayName: Plague Humidifier
-	Tooltip: ""
 }

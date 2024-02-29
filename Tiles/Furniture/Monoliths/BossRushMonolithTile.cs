@@ -31,7 +31,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.addTile(Type);
 
             TileID.Sets.HasOutlines[Type] = true;
-            AddMapEntry(new Color(92, 24, 31));
+            AddMapEntry(new Color(64, 8, 12));
 
             DustType = (int)CalamityDusts.Brimstone;
             AnimationFrameHeight = 72;

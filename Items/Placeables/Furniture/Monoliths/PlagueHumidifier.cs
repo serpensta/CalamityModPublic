@@ -1,4 +1,6 @@
-﻿using CalamityMod.Rarities;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Rarities;
+using CalamityMod.Tiles.Furniture.CraftingStations;
 using CalamityMod.Tiles.Furniture.Monoliths;
 using Terraria;
 using Terraria.ID;
@@ -20,7 +22,7 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.createTile = ModContent.TileType<PlagueHumidifierTile>();
-            Item.rare = ItemRarityID.LightRed;
+            Item.rare = ItemRarityID.Yellow;
             Item.accessory = true;
             Item.vanity = true;
         }
@@ -38,6 +40,13 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             {
                 player.Calamity().monolithPlagueShader = 30;
             }
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe().
+                AddIngredient<InfectedArmorPlating>(15).
+                AddTile(TileID.MythrilAnvil).
+                Register();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using CalamityMod.Dusts;
-using CalamityMod.Items.Placeables.Furniture.Monoliths;
-using CalamityMod.NPCs.Yharon;
+﻿using CalamityMod.Items.Placeables.Furniture.Monoliths;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -15,31 +13,31 @@ using Terraria.ObjectData;
 
 namespace CalamityMod.Tiles.Furniture.Monoliths
 {
-    public class AstralProjectorTile : ModTile
+    public class DraconicIncenseTile : ModTile
     {
         public override void SetStaticDefaults()
         {
-            RegisterItemDrop(ModContent.ItemType<AstralProjector>());
+            RegisterItemDrop(ModContent.ItemType<DraconicIncense>());
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
-            TileObjectData.newTile.Height = 3;
-            TileObjectData.newTile.Origin = new Point16(0, 1);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
+            TileObjectData.newTile.Height = 6;
+            TileObjectData.newTile.Origin = new Point16(0, 5);
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 2, 0);
             TileObjectData.addTile(Type);
 
             TileID.Sets.HasOutlines[Type] = true;
-            AddMapEntry(new Color(16, 50, 64));
+            AddMapEntry(new Color(143, 106, 41));
 
-            DustType = ModContent.DustType<AstralOrange>();
-            AnimationFrameHeight = 54;
+            DustType = DustID.Flare;
+            AnimationFrameHeight = 110;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main.tile[i, j].TileFrameY < 54)
+            if (Main.tile[i, j].TileFrameY < 110)
             {
                 return;
             }
@@ -52,7 +50,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
 
             if (player.active)
             {
-                Main.LocalPlayer.Calamity().monolithAstralShader = 30;
+                Main.LocalPlayer.Calamity().monolithYharonShader = 30;
             }
         }
 
@@ -62,16 +60,11 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             if (frameCounter >= 7.2)
             {
                 frameCounter = 0;
-                if (++frame >= 9)
+                if (++frame >= 6)
                 {
                     frame = 0;
                 }
             }
-        }
-
-
-        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
-        {
         }
 
         public override void MouseOver(int i, int j)
@@ -79,7 +72,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<AstralProjector>();
+            player.cursorItemIconID = ModContent.ItemType<DraconicIncense>();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -94,11 +87,11 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         public override void HitWire(int i, int j)
         {
             int x = i - Main.tile[i, j].TileFrameX / 18 % 2;
-            int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
-            int tileXX18 = 54;
+            int y = j - Main.tile[i, j].TileFrameY / 18 % 6;
+            int tileXX18 = 110;
             for (int l = x; l < x + 2; l++)
             {
-                for (int m = y; m < y + 3; m++)
+                for (int m = y; m < y + 6; m++)
                 {
                     if (Main.tile[l, m].HasTile && Main.tile[l, m].TileType == Type)
                     {
@@ -113,7 +106,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 for (int o = 0; o < 2; o++)
                 {
-                    for (int p = 0; p < 3; p++)
+                    for (int p = 0; p < 6; p++)
                     {
                         Wiring.SkipWire(x + 0, x + p);
                     }
@@ -134,7 +127,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             int height = 16;
             int animate = 0;
-            if (tile.TileFrameY >= 54)
+            if (tile.TileFrameY >= 110)
             {
                 animate = Main.tileFrame[Type] * AnimationFrameHeight;
             }

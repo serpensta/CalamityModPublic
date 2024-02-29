@@ -36,7 +36,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.addTile(Type);
 
             TileID.Sets.HasOutlines[Type] = true;
-            AddMapEntry(new Color(92, 24, 31));
+            AddMapEntry(new Color(54, 54, 54));
 
             DustType = DustID.TerraBlade;
             AnimationFrameHeight = 90;

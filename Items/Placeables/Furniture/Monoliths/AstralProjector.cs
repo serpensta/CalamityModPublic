@@ -1,5 +1,4 @@
-﻿using CalamityMod.Rarities;
-using CalamityMod.Tiles.Furniture.Monoliths;
+﻿using CalamityMod.Tiles.Furniture.Monoliths;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -38,6 +37,13 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             {
                 player.Calamity().monolithAstralShader = 30;
             }
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe().
+                AddIngredient<AstralMonolith>(15).
+                AddTile(TileID.Anvils).
+                Register();
         }
     }
 }

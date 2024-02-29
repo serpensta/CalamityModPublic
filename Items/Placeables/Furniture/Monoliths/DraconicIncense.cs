@@ -1,4 +1,6 @@
-﻿using CalamityMod.Rarities;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Rarities;
+using CalamityMod.Tiles.Furniture.CraftingStations;
 using CalamityMod.Tiles.Furniture.Monoliths;
 using Terraria;
 using Terraria.ID;
@@ -19,7 +21,7 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             Item.useTime = 10;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            //Item.createTile = ModContent.TileType<DraconicIncenseTile>();
+            Item.createTile = ModContent.TileType<DraconicIncenseTile>();
             Item.rare = ModContent.RarityType<Violet>();
             Item.accessory = true;
             Item.vanity = true;
@@ -38,6 +40,13 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             {
                 player.Calamity().monolithYharonShader = 30;
             }
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe().
+                AddIngredient<YharonSoulFragment>(15).
+                AddTile<CosmicAnvil>().
+                Register();
         }
     }
 }

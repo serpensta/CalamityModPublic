@@ -20,7 +20,7 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.createTile = ModContent.TileType<DeepSeaAnchorTile>();
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Lime;
             Item.accessory = true;
             Item.vanity = true;
         }

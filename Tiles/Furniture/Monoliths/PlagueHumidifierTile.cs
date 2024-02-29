@@ -31,15 +31,15 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.addTile(Type);
 
             TileID.Sets.HasOutlines[Type] = true;
-            AddMapEntry(new Color(92, 24, 31));
+            AddMapEntry(new Color(44, 150, 54));
 
             DustType = (int)CalamityDusts.Plague;
-            AnimationFrameHeight = 72;
+            AnimationFrameHeight = 74;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main.tile[i, j].TileFrameY < 72)
+            if (Main.tile[i, j].TileFrameY < 74)
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         {
             int x = i - Main.tile[i, j].TileFrameX / 18 % 2;
             int y = j - Main.tile[i, j].TileFrameY / 18 % 4;
-            int tileXX18 = 18 * 4;
+            int tileXX18 = 74;
             for (int l = x; l < x + 2; l++)
             {
                 for (int m = y; m < y + 4; m++)
@@ -134,7 +134,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             int height = 16;
             int animate = 0;
-            if (tile.TileFrameY >= 72)
+            if (tile.TileFrameY >= 74)
             {
                 animate = Main.tileFrame[Type] * AnimationFrameHeight;
             }

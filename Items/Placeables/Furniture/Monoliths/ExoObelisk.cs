@@ -1,4 +1,6 @@
-﻿using CalamityMod.Rarities;
+﻿using CalamityMod.Items.Placeables.FurnitureExo;
+using CalamityMod.Rarities;
+using CalamityMod.Tiles.Furniture.CraftingStations;
 using CalamityMod.Tiles.Furniture.Monoliths;
 using Terraria;
 using Terraria.ID;
@@ -38,6 +40,13 @@ namespace CalamityMod.Items.Placeables.Furniture.Monoliths
             {
                 player.Calamity().monolithExoShader = 30;
             }
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe().
+                AddIngredient<ExoPlating>(15).
+                AddTile<DraedonsForge>().
+                Register();
         }
     }
 }
