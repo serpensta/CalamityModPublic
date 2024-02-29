@@ -25,7 +25,23 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+          touch CalamityMod.csproj
+          echo '<?xml version="1.0" encoding="utf-8"?>
+          <Project Sdk="Microsoft.NET.Sdk">
+            <Import Project="..\tModLoader.targets" />
+            <PropertyGroup>
+              <AssemblyName>CalamityMod</AssemblyName>
+              <TargetFramework>net6.0</TargetFramework>
+              <PlatformTarget>AnyCPU</PlatformTarget>
+              <LangVersion>latest</LangVersion>
+            </PropertyGroup>
+            <ItemGroup>
+              <PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
+            </ItemGroup>
+          </Project>' > CalamityMod.csproj
+          
+        dotnet restore
 
       - name: Pull TML
         run: |
@@ -45,19 +61,4 @@ jobs:
 
       - name: Lint
         run: |
-          touch CalamityMod.csproj
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <Project Sdk="Microsoft.NET.Sdk">
-            <Import Project="..\tModLoader.targets" />
-            <PropertyGroup>
-              <AssemblyName>CalamityMod</AssemblyName>
-              <TargetFramework>net6.0</TargetFramework>
-              <PlatformTarget>AnyCPU</PlatformTarget>
-              <LangVersion>latest</LangVersion>
-            </PropertyGroup>
-            <ItemGroup>
-              <PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
-            </ItemGroup>
-          </Project>' > CalamityMod.csproj
-
           dotnet format style CalamityMod.csproj --verify-no-changes
