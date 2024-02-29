@@ -2961,6 +2961,36 @@ namespace CalamityMod.NPCs
                     case NPCID.VortexLarva:
                     case NPCID.VortexRifleman:
                     case NPCID.VortexSoldier:
+                    case NPCID.DD2DarkMageT1:
+                    case NPCID.DD2DarkMageT3:
+                    case NPCID.DD2OgreT2:
+                    case NPCID.DD2OgreT3:
+                    case NPCID.MartianSaucerCore:
+                    case NPCID.MartianSaucerCannon:
+                    case NPCID.MartianSaucerTurret:
+                    case NPCID.DD2SkeletonT1:
+                    case NPCID.DD2SkeletonT3:
+                    case NPCID.DD2DrakinT2:
+                    case NPCID.DD2DrakinT3:
+                    case NPCID.DD2GoblinBomberT1:
+                    case NPCID.DD2GoblinBomberT2:
+                    case NPCID.DD2GoblinBomberT3:
+                    case NPCID.DD2GoblinT1:
+                    case NPCID.DD2GoblinT2:
+                    case NPCID.DD2GoblinT3:
+                    case NPCID.DD2JavelinstT1:
+                    case NPCID.DD2JavelinstT2:
+                    case NPCID.DD2JavelinstT3:
+                    case NPCID.DD2KoboldFlyerT2:
+                    case NPCID.DD2KoboldFlyerT3:
+                    case NPCID.DD2KoboldWalkerT2:
+                    case NPCID.DD2KoboldWalkerT3:
+                    case NPCID.DD2LightningBugT3:
+                    case NPCID.DD2WitherBeastT2:
+                    case NPCID.DD2WitherBeastT3:
+                    case NPCID.DD2WyvernT1:
+                    case NPCID.DD2WyvernT2:
+                    case NPCID.DD2WyvernT3:
                         npc.lifeMax = (int)(npc.lifeMax * 0.75);
                         npc.damage = (int)(npc.damage * 0.85);
                         npc.defDamage = npc.damage;
