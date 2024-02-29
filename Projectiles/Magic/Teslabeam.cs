@@ -185,8 +185,8 @@ namespace CalamityMod.Projectiles.Magic
             }
 
             // 29FEB2024: Ozzatron: hopefully ported this correctly to the new prim system by Toasty
-            PrimitiveRenderer.RenderTrail(finalPoints, new(BackgroundWidthFunction, BackgroundColorFunction, shader: GameShaders.Misc["CalamityMod:TeslaTrail"]), 75);
-            PrimitiveRenderer.RenderTrail(finalPoints, new(WidthFunction, ColorFunction, shader: GameShaders.Misc["CalamityMod:TeslaTrail"]), 75);
+            PrimitiveRenderer.RenderTrail(finalPoints, new(BackgroundWidthFunction, BackgroundColorFunction, smoothen: false, shader: GameShaders.Misc["CalamityMod:TeslaTrail"]), 75);
+            PrimitiveRenderer.RenderTrail(finalPoints, new(WidthFunction, ColorFunction, smoothen: false, shader: GameShaders.Misc["CalamityMod:TeslaTrail"]), 75);
 
             Main.spriteBatch.ExitShaderRegion();
             return false;
