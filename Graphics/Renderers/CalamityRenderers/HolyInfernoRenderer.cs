@@ -20,11 +20,11 @@ namespace CalamityMod.Graphics.Renderers.CalamityRenderers
             get
             {
                 if (!Main.npc.IndexInRange(CalamityGlobalNPC.holyBoss))
-                  return null;
+                    return null;
                 if (Main.npc[CalamityGlobalNPC.holyBoss].type != ModContent.NPCType<Providence>())
                     return null;
 
-                if (Main.npc[CalamityGlobalNPC.holyBoss].ModNPC is not null && 
+                if (Main.npc[CalamityGlobalNPC.holyBoss].ModNPC is not null &&
                     Main.npc[CalamityGlobalNPC.holyBoss].ModNPC is Providence provi)
                     return provi;
 

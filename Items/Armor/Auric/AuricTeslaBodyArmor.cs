@@ -1,14 +1,14 @@
 ﻿using CalamityMod.CalPlayer;
-using CalamityMod.Items.Materials;
-using CalamityMod.Rarities;
-using CalamityMod.Tiles.Furniture.CraftingStations;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
 using CalamityMod.Items.Armor.Bloodflare;
 using CalamityMod.Items.Armor.GodSlayer;
 using CalamityMod.Items.Armor.Silva;
 using CalamityMod.Items.Armor.Tarragon;
+using CalamityMod.Items.Materials;
+using CalamityMod.Rarities;
+using CalamityMod.Tiles.Furniture.CraftingStations;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Armor.Auric
 {

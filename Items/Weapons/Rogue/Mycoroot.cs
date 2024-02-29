@@ -36,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Rogue
             if (player.Calamity().StealthStrikeAvailable() && player.ownedProjectileCounts[ModContent.ProjectileType<ShroomerangSpore>()] < 20 && stealth.WithinBounds(Main.maxProjectiles))
             {
                 Main.projectile[stealth].Calamity().stealthStrike = true;
-				int projAmt = Main.rand.Next(7,11);
+                int projAmt = Main.rand.Next(7, 11);
                 for (int i = 0; i < projAmt; i++)
                 {
                     int spore = Projectile.NewProjectile(source, player.Center, velocity, ModContent.ProjectileType<ShroomerangSpore>(), (int)(damage * 0.5f), knockback, player.whoAmI);
@@ -45,15 +45,15 @@ namespace CalamityMod.Items.Weapons.Rogue
                 }
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {
-					Player other = Main.player[i];
-					if (other is null || !other.active || other.dead)
-						continue;
-					if ((other.team == player.team && player.team != 0) || player.whoAmI == i)
+                    Player other = Main.player[i];
+                    if (other is null || !other.active || other.dead)
+                        continue;
+                    if ((other.team == player.team && player.team != 0) || player.whoAmI == i)
                     {
                         if (player.Distance(other.Center) <= 800f)
                             other.AddBuff(ModContent.BuffType<Mushy>(), 900);
                     }
-				}
+                }
             }
             return false;
         }

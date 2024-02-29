@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Magic
             //dust effects
             if (Main.rand.NextBool(10))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 262, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.75f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.AmberBolt, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.75f);
             }
 
             Projectile.localAI[0]++;

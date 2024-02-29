@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Typeless
 {
     public class GodKiller : ModProjectile, ILocalizedModType
@@ -61,11 +61,11 @@ namespace CalamityMod.Projectiles.Typeless
                             shortXVel = Projectile.velocity.X * 0.5f;
                             shortYVel = Projectile.velocity.Y * 0.5f;
                         }
-                        int dusting = Dust.NewDust(new Vector2(Projectile.position.X + 3f + shortXVel, Projectile.position.Y + 3f + shortYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 173, 0f, 0f, 100, default, 1f);
+                        int dusting = Dust.NewDust(new Vector2(Projectile.position.X + 3f + shortXVel, Projectile.position.Y + 3f + shortYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 1f);
                         Main.dust[dusting].scale *= 1f + (float)Main.rand.Next(5) * 0.1f;
                         Main.dust[dusting].velocity *= 0.2f;
                         Main.dust[dusting].noGravity = true;
-                        dusting = Dust.NewDust(new Vector2(Projectile.position.X + 3f + shortXVel, Projectile.position.Y + 3f + shortYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 199, 0f, 0f, 100, default, 0.1f);
+                        dusting = Dust.NewDust(new Vector2(Projectile.position.X + 3f + shortXVel, Projectile.position.Y + 3f + shortYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Butterfly, 0f, 0f, 100, default, 0.1f);
                         Main.dust[dusting].fadeIn = 1f + (float)Main.rand.Next(5) * 0.1f;
                         Main.dust[dusting].velocity *= 0.05f;
                     }
@@ -85,7 +85,7 @@ namespace CalamityMod.Projectiles.Typeless
             SoundEngine.PlaySound(SoundID.Item89, Projectile.position);
             for (int j = 0; j < 5; j++)
             {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 199, 0f, 0f, 100, default, 1.5f);
+                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Butterfly, 0f, 0f, 100, default, 1.5f);
                 Main.dust[dust].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -95,10 +95,10 @@ namespace CalamityMod.Projectiles.Typeless
             }
             for (int k = 0; k < 10; k++)
             {
-                int dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 173, 0f, 0f, 100, default, 2f);
+                int dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 2f);
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].velocity *= 5f;
-                dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 173, 0f, 0f, 100, default, 1.5f);
+                dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 1.5f);
                 Main.dust[dust2].velocity *= 2f;
             }
         }

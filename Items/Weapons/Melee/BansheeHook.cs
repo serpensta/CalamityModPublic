@@ -1,8 +1,8 @@
-﻿using CalamityMod.Projectiles.Melee.Spears;
+﻿using System;
+using CalamityMod.Projectiles.Melee.Spears;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

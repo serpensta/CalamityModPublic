@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Items.Weapons.Ranged;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Items.Weapons.Ranged;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;
@@ -78,7 +78,7 @@ namespace CalamityMod.Projectiles.Ranged
             float adjustedTimeLife = Projectile.timeLeft / Projectile.MaxUpdates;
             Projectile.Opacity = Utils.GetLerpValue(0f, 9f, adjustedTimeLife, true) * Utils.GetLerpValue(Lifetime, Lifetime - 3f, adjustedTimeLife, true);
             Projectile.scale = Projectile.Opacity;
-            
+
             // Play a strike sound on the first frame.
             if (!HasPlayedSound)
             {

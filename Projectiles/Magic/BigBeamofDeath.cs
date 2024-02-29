@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Magic
 {
     public class BigBeamofDeath : ModProjectile, ILocalizedModType
@@ -43,7 +45,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 Vector2 projPos = Projectile.position;
                 projPos -= Projectile.velocity * 0.25f;
-                int beamDust = Dust.NewDust(projPos, 1, 1, 206, 0f, 0f, 0, default, 3f);
+                int beamDust = Dust.NewDust(projPos, 1, 1, DustID.UnusedWhiteBluePurple, 0f, 0f, 0, default, 3f);
                 Main.dust[beamDust].position = projPos;
                 Main.dust[beamDust].velocity *= 0.1f;
             }

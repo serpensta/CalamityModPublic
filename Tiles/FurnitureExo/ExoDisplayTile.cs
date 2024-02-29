@@ -7,6 +7,7 @@ using Terraria.Enums;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Terraria.ID;
 
 namespace CalamityMod.Tiles.FurnitureExo
 {
@@ -44,7 +45,7 @@ namespace CalamityMod.Tiles.FurnitureExo
 
         public override bool CreateDust(int i, int j, ref int type)
         {
-            Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, 107);
+            Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.TerraBlade);
             return false;
         }
 

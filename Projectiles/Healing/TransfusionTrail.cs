@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Healing
 {
     public class TransfusionTrail : ModProjectile, ILocalizedModType
@@ -22,7 +24,7 @@ namespace CalamityMod.Projectiles.Healing
             Projectile.HealingProjectile((int)Projectile.ai[1], (int)Projectile.ai[0], 6.5f, 15f);
             float dustX = Projectile.velocity.X * 0.334f;
             float dustY = -(Projectile.velocity.Y * 0.334f);
-            int healRed = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 183, 0f, 0f, 100, default, 0.7f);
+            int healRed = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.VampireHeal, 0f, 0f, 100, default, 0.7f);
             Dust dust = Main.dust[healRed];
             dust.noGravity = true;
             dust.position.X -= dustX;
@@ -31,7 +33,7 @@ namespace CalamityMod.Projectiles.Healing
             {
                 float dustyX = Projectile.velocity.X * 0.2f * (float)i;
                 float dustyY = -(Projectile.velocity.Y * 0.2f) * (float)i;
-                int healRedMore = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 183, 0f, 0f, 100, default, 0.9f);
+                int healRedMore = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.VampireHeal, 0f, 0f, 100, default, 0.9f);
                 Dust dust2 = Main.dust[healRedMore];
                 dust2.noGravity = true;
                 dust2.position.X -= dustyX;

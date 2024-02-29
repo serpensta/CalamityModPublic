@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Typeless
 {
     public class SandCloakVeil : ModProjectile, ILocalizedModType
@@ -70,7 +72,7 @@ namespace CalamityMod.Projectiles.Typeless
                 Vector2 dustPos = dustCircle.RandomPointInCircle();
                 if ((dustPos - Projectile.Center).Length() > 48)
                 {
-                    int dustIndex = Dust.NewDust(dustPos, 1, 1, 32);
+                    int dustIndex = Dust.NewDust(dustPos, 1, 1, DustID.Sand);
                     Main.dust[dustIndex].noGravity = true;
                     Main.dust[dustIndex].fadeIn = 1f;
                     Vector2 dustVelocity = Projectile.Center - Main.dust[dustIndex].position;

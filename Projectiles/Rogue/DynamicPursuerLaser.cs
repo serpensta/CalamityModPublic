@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -30,7 +31,7 @@ namespace CalamityMod.Projectiles.Rogue
             Lighting.AddLight(Projectile.Center, 0.2f, 0.1f, 0f);
             for (int i = 0; i < 2; i++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, 182, 0f, 0f, 160, default, 2f);
+                Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.TheDestroyer, 0f, 0f, 160, default, 2f);
                 dust.position = Projectile.Center;
                 dust.velocity = Projectile.velocity;
                 dust.scale = Projectile.scale;

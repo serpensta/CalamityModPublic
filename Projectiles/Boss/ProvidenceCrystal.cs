@@ -1,15 +1,15 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.IO;
+using CalamityMod.Events;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.Providence;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -74,7 +74,7 @@ namespace CalamityMod.Projectiles.Boss
                 Color BaseColor = ProvUtils.GetProjectileColor(Projectile.maxPenetrate, 0);
                 float Brightness = 0.8f;
                 Color DustColor = Color.Lerp(BaseColor, Color.White, Brightness);
-                Dust crystalDust = Main.dust[Dust.NewDust(Projectile.Top, 0, 0, 267, 0f, 0f, 100, DustColor, 1f)];
+                Dust crystalDust = Main.dust[Dust.NewDust(Projectile.Top, 0, 0, DustID.RainbowMk2, 0f, 0f, 100, DustColor, 1f)];
                 crystalDust.velocity.X = 0f;
                 crystalDust.noGravity = true;
                 crystalDust.fadeIn = 1f;

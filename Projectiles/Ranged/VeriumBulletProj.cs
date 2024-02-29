@@ -47,7 +47,7 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 if (Main.rand.NextBool())
                 {
-                    int purple = Dust.NewDust(Projectile.position, 1, 1, 70, 0f, 0f, 0, default, 0.5f);
+                    int purple = Dust.NewDust(Projectile.position, 1, 1, DustID.PurpleCrystalShard, 0f, 0f, 0, default, 0.5f);
                     Main.dust[purple].alpha = Projectile.alpha;
                     Main.dust[purple].velocity *= 0f;
                     Main.dust[purple].noGravity = true;

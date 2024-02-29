@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Tools;
+﻿using System;
+using CalamityMod.Items.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -63,8 +63,8 @@ namespace CalamityMod.Projectiles.Melee
                 Lighting.AddLight(Projectile.Center, Color.Blue.ToVector3() * 0.7f);
             }
 
-                if (MoveInIntervals > 0f)
-                    MoveInIntervals -= 1f;
+            if (MoveInIntervals > 0f)
+                MoveInIntervals -= 1f;
 
             if (Owner.CantUseHoldout())
                 Projectile.Kill();
@@ -179,7 +179,7 @@ namespace CalamityMod.Projectiles.Melee
                 TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
 
             GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/DoubleTrail"));
-            TrailDrawer.Draw(new Vector2[] { Projectile.Center , Owner.MountedCenter - normalizedVelocity * 13f}, - Main.screenPosition, 30);
+            TrailDrawer.Draw(new Vector2[] { Projectile.Center, Owner.MountedCenter - normalizedVelocity * 13f }, -Main.screenPosition, 30);
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);

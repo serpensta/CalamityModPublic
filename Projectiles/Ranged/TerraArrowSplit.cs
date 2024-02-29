@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Ranged
 {
     public class TerraArrowSplit : ModProjectile, ILocalizedModType
@@ -30,7 +30,8 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.alpha -= 5;
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
-            if (Projectile.timeLeft < 90) {
+            if (Projectile.timeLeft < 90)
+            {
                 CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 450f, 12f, 20f);
             }
         }
@@ -46,7 +47,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
             for (int i = 0; i < 2; i++)
             {
-                int terraDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 107, 0f, 0f, 100, default, 2f);
+                int terraDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TerraBlade, 0f, 0f, 100, default, 2f);
                 if (Main.rand.NextBool())
                 {
                     Main.dust[terraDust].scale = 0.5f;

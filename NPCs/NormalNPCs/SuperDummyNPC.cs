@@ -98,7 +98,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 if ((NPC.justHit || deathCounter > 6000) && NPC.frame.Y > frameHeight * 2)
                 {
                     NPC.frame.Y = frameHeight;
-                }    
+                }
                 else if (NPC.frame.Y > frameHeight * 3)
                 {
                     NPC.frame.Y = 0;

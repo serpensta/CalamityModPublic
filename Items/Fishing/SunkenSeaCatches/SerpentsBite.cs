@@ -1,7 +1,7 @@
-﻿using Terraria.ID;
+﻿using CalamityMod.Projectiles.Typeless;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using CalamityMod.Projectiles.Typeless;
 
 namespace CalamityMod.Items.Fishing.SunkenSeaCatches
 {

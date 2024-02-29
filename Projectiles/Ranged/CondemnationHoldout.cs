@@ -113,7 +113,7 @@ namespace CalamityMod.Projectiles.Ranged
         {
             if (Main.dedServ)
                 return;
-            
+
             //Special visuals for the final loaded arrow
             if (ArrowsLoaded >= Condemnation.MaxLoadedArrows - 1f)
             {

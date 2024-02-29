@@ -1,15 +1,15 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using System.IO;
+using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Polterghast
 {
@@ -546,7 +546,7 @@ namespace CalamityMod.NPCs.Polterghast
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-            Dust.NewDust(NPC.position, NPC.width, NPC.height, 180, hit.HitDirection, -1f, 0, default, 1f);
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.DungeonSpirit, hit.HitDirection, -1f, 0, default, 1f);
             if (NPC.life <= 0)
             {
                 NPC.position.X = NPC.position.X + (NPC.width / 2);
@@ -567,10 +567,10 @@ namespace CalamityMod.NPCs.Polterghast
                 }
                 for (int j = 0; j < 60; j++)
                 {
-                    int ghostDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 180, 0f, 0f, 100, default, 3f);
+                    int ghostDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.DungeonSpirit, 0f, 0f, 100, default, 3f);
                     Main.dust[ghostDust2].noGravity = true;
                     Main.dust[ghostDust2].velocity *= 5f;
-                    ghostDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 180, 0f, 0f, 100, default, 2f);
+                    ghostDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.DungeonSpirit, 0f, 0f, 100, default, 2f);
                     Main.dust[ghostDust2].velocity *= 2f;
                 }
             }

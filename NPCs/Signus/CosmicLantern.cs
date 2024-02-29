@@ -1,9 +1,9 @@
-﻿using CalamityMod.Events;
+﻿using System.IO;
+using CalamityMod.Events;
 using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -48,10 +48,10 @@ namespace CalamityMod.NPCs.Signus
             int associatedNPCType = ModContent.NPCType<Signus>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicLantern")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicLantern")
             });
         }
 
@@ -96,7 +96,7 @@ namespace CalamityMod.NPCs.Signus
                 NPC.damage = NPC.defDamage;
 
                 NPC.alpha = 0;
-                int lightDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 204, 0f, 0f, 0, default, 0.25f);
+                int lightDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TreasureSparkle, 0f, 0f, 0, default, 0.25f);
                 Main.dust[lightDust].velocity *= 0.1f;
                 Main.dust[lightDust].noGravity = true;
             }
@@ -177,7 +177,7 @@ namespace CalamityMod.NPCs.Signus
             {
                 for (int k = 0; k < 10; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 204, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TreasureSparkle, hit.HitDirection, -1f, 0, default, 1f);
                 }
             }
         }

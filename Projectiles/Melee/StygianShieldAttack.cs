@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Effects;
@@ -56,11 +56,11 @@ namespace CalamityMod.Projectiles.Melee
         {
             if (Owner is null || Owner.dead || Owner.ActiveItem().type != ModContent.ItemType<StygianShield>())
                 Projectile.Kill();
-            
+
             Owner.heldProj = Projectile.whoAmI;
 
             // TODO -- Windup sound (definitely requires a custom looping sound)
-            
+
             // Dashing behavior
             Projectile.Opacity = Utils.GetLerpValue(0f, DashDuration * 0.7f, DashTime, true);
             if (DashDestination != Vector2.Zero)
@@ -150,7 +150,7 @@ namespace CalamityMod.Projectiles.Melee
                     Projectile.ExpandHitboxBy(100);
                     Projectile.tileCollide = true;
                     return;
-                }            
+                }
             }
             // Otherwise, kill the projectile
             Projectile.Kill();
@@ -221,7 +221,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 // Main trail
                 if (TrailDrawer is null)
-                TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
+                    TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
 
                 GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
                 TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f + extraOffset - (direction * 80f), 10);
@@ -237,7 +237,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 // Blooming shield and rings
                 Main.spriteBatch.EnterShaderRegion(BlendState.Additive);
-                
+
                 float shieldRot = arrowFace - MathHelper.Pi;
                 Main.EntitySpriteDraw(shieldTex, Projectile.Center + extraOffset, null, shieldColor, shieldRot, shieldTex.Size() / 2f, 1.25f * scaleMult, SpriteEffects.None);
                 Main.EntitySpriteDraw(bloomTex, Projectile.Center + extraOffset, null, shieldColor * 0.75f, 0f, bloomTex.Size() / 2f, 0.5f * scaleMult, SpriteEffects.None);

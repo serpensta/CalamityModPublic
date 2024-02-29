@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using CalamityMod.Items.Weapons.Melee;
-using CalamityMod.Particles;
 
 namespace CalamityMod.Projectiles.Melee
 {

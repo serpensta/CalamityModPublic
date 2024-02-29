@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -79,7 +80,7 @@ namespace CalamityMod.Projectiles.Magic
                 int scaleLoopCheck = 0;
                 while ((float)scaleLoopCheck < Projectile.scale * 10f)
                 {
-                    int purpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 62, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1.1f);
+                    int purpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurpleTorch, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1.1f);
                     Main.dust[purpleDust].position = (Main.dust[purpleDust].position + Projectile.Center) / 2f;
                     Main.dust[purpleDust].noGravity = true;
                     Main.dust[purpleDust].velocity *= 0.1f;

@@ -11,7 +11,7 @@ namespace CalamityMod.Projectiles.Melee
     {
         public new string LocalizationCategory => "Projectiles.Melee";
         public NPC Target => Main.npc[(int)Projectile.ai[0]];
-        
+
         public float SlashDirection
         {
             get

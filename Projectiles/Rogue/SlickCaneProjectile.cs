@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Rogue;
+﻿using System;
+using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -88,11 +88,11 @@ namespace CalamityMod.Projectiles.Rogue
                 while (moneyValueToDrop > 10000f)
                 {
                     int modifiedMoneyValue = (int)(moneyValueToDrop / 10000f);
-                    if (modifiedMoneyValue > 50 && Main.rand.Next(5) == 0)
+                    if (modifiedMoneyValue > 50 && Main.rand.NextBool(5))
                     {
                         modifiedMoneyValue /= Main.rand.Next(3) + 1;
                     }
-                    if (Main.rand.Next(5) == 0)
+                    if (Main.rand.NextBool(5))
                     {
                         modifiedMoneyValue /= Main.rand.Next(3) + 1;
                     }
@@ -102,11 +102,11 @@ namespace CalamityMod.Projectiles.Rogue
                 while (moneyValueToDrop > 100f)
                 {
                     int modifiedMoneyValue = (int)(moneyValueToDrop / 100f);
-                    if (modifiedMoneyValue > 50 && Main.rand.Next(5) == 0)
+                    if (modifiedMoneyValue > 50 && Main.rand.NextBool(5))
                     {
                         modifiedMoneyValue /= Main.rand.Next(3) + 1;
                     }
-                    if (Main.rand.Next(5) == 0)
+                    if (Main.rand.NextBool(5))
                     {
                         modifiedMoneyValue /= Main.rand.Next(3) + 1;
                     }
@@ -116,11 +116,11 @@ namespace CalamityMod.Projectiles.Rogue
                 while (moneyValueToDrop > 0f)
                 {
                     int modifiedMoneyValue = (int)moneyValueToDrop;
-                    if (modifiedMoneyValue > 50 && Main.rand.Next(5) == 0)
+                    if (modifiedMoneyValue > 50 && Main.rand.NextBool(5))
                     {
                         modifiedMoneyValue /= Main.rand.Next(3) + 1;
                     }
-                    if (Main.rand.Next(5) == 0)
+                    if (Main.rand.NextBool(5))
                     {
                         modifiedMoneyValue /= Main.rand.Next(4) + 1;
                     }

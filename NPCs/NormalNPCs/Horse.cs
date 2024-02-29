@@ -59,10 +59,10 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Horse")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Horse")
             });
         }
 
@@ -116,7 +116,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Smoke, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
@@ -129,7 +129,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int earthDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 31, 0f, 0f, 100, default, 2f);
+                    int earthDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                     Main.dust[earthDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {

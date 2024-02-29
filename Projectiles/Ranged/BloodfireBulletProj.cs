@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -91,7 +91,7 @@ namespace CalamityMod.Projectiles.Ranged
             int dustID = 90;
             int dustCount = 3;
             for (int i = 0; i < dustCount; ++i)
-               Dust.NewDust(Projectile.Center, 0, 0, dustID, Scale: 1.2f);
+                Dust.NewDust(Projectile.Center, 0, 0, dustID, Scale: 1.2f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

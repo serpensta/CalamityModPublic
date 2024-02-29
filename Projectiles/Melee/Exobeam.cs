@@ -1,16 +1,16 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Melee;
-using Terraria.Graphics.Shaders;
-using static CalamityMod.CalamityUtils;
-using static Terraria.ModLoader.ModContent;
-using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static CalamityMod.CalamityUtils;
+using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -179,7 +179,7 @@ namespace CalamityMod.Projectiles.Melee
             GameShaders.Misc["CalamityMod:ExobladePierce"].Apply();
 
             GameShaders.Misc["CalamityMod:ExobladePierce"].Apply();
-            
+
             TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition, 30, Projectile.oldRot);
 
             GameShaders.Misc["CalamityMod:ExobladePierce"].UseColor(Color.White);
@@ -192,9 +192,9 @@ namespace CalamityMod.Projectiles.Melee
             //Draw the bloom above the trail
             Main.EntitySpriteDraw(bloomTex, Projectile.oldPos[2] + Projectile.Size / 2f - Main.screenPosition, null, (Color.White * 0.2f) with { A = 0 }, 0, bloomTex.Size() / 2f, 0.78f * Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(bloomTex, Projectile.oldPos[1] + Projectile.Size / 2f - Main.screenPosition, null, (Color.White * 0.5f) with { A = 0 }, 0, bloomTex.Size() / 2f, 0.2f * Projectile.scale, 0, 0);
-            
-            
-            
+
+
+
             return false;
         }
     }

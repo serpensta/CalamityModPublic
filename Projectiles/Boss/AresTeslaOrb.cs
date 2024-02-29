@@ -1,11 +1,11 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CalamityMod.Events;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.ExoMechs.Ares;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -95,7 +95,7 @@ namespace CalamityMod.Projectiles.Boss
                     Vector2 dustVel = new Vector2(dustSpeed, 0.0f).RotatedBy(Projectile.velocity.ToRotation());
                     dustVel = dustVel.RotatedBy(-angleRandom);
                     dustVel = dustVel.RotatedByRandom(2f * angleRandom);
-                    int randomDustType = Main.rand.Next(2) == 0 ? 206 : 229;
+                    int randomDustType = Main.rand.NextBool(2)? 206 : 229;
                     float scale = randomDustType == 206 ? 1.5f : 1f;
 
                     int teslaDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 200, default, 2.5f * scale);
@@ -121,7 +121,7 @@ namespace CalamityMod.Projectiles.Boss
                     Vector2 dustVel = new Vector2(dustSpeed, 0f).RotatedBy(Projectile.velocity.ToRotation());
                     dustVel = dustVel.RotatedBy(-angleRandom);
                     dustVel = dustVel.RotatedByRandom(2f * angleRandom);
-                    int randomDustType = Main.rand.Next(2) == 0 ? 206 : 229;
+                    int randomDustType = Main.rand.NextBool(2)? 206 : 229;
                     float scale = randomDustType == 206 ? 1.5f : 1f;
 
                     int teslaDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 0, default, 3f * scale);

@@ -1,15 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System;
-using CalamityMod.Particles;
 using static CalamityMod.CalamityUtils;
 using static Terraria.ModLoader.ModContent;
-using Terraria.Graphics.Shaders;
-using Terraria.Graphics.Effects;
-using ReLogic.Content;
 
 namespace CalamityMod.Projectiles.Summon
 {

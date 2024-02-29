@@ -1,7 +1,9 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Environment
 {
     public class LavaChunk : ModProjectile, ILocalizedModType
@@ -53,11 +55,11 @@ namespace CalamityMod.Projectiles.Environment
                     {
                         dustYOffset = Projectile.velocity.Y * 0.5f;
                     }
-                    int lavaDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 3f + dustYOffset) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 6, 0f, 0f, 100, default, Projectile.scale);
+                    int lavaDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 3f + dustYOffset) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Torch, 0f, 0f, 100, default, Projectile.scale);
                     Main.dust[lavaDust].scale *= 2f + (float)Main.rand.Next(10) * 0.1f;
                     Main.dust[lavaDust].velocity *= 0.2f;
                     Main.dust[lavaDust].noGravity = true;
-                    lavaDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 3f + dustYOffset) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 31, 0f, 0f, 100, default, Projectile.scale * 0.5f);
+                    lavaDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 3f + dustYOffset) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Smoke, 0f, 0f, 100, default, Projectile.scale * 0.5f);
                     Main.dust[lavaDust].fadeIn = 1f + (float)Main.rand.Next(5) * 0.1f;
                     Main.dust[lavaDust].velocity *= 0.05f;
                 }

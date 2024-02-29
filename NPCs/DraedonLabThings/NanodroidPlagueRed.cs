@@ -68,7 +68,7 @@ namespace CalamityMod.NPCs.DraedonLabThings
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int i = 0; i < 6; i++)
-                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 226);
+                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Electric);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

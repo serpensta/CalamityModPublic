@@ -2,9 +2,9 @@
 using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Summon
 {
     public class BrimstoneFireballMinion : ModProjectile, ILocalizedModType
@@ -73,10 +73,10 @@ namespace CalamityMod.Projectiles.Summon
 
         //public override void OnKill(int timeLeft)
         //{
-            //if (Projectile.owner == Main.myPlayer)
-            //{
-                //Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BrimstoneExplosionMinion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-            //}
+        //if (Projectile.owner == Main.myPlayer)
+        //{
+        //Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BrimstoneExplosionMinion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+        //}
         //}
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

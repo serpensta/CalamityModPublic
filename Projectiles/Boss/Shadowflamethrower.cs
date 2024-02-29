@@ -26,7 +26,7 @@ namespace CalamityMod.Projectiles.Boss
             if (Projectile.ai[0] > 7f)
             {
                 int[] dustTypes = new int[] { 27, 27, 112, 173 };
-                if(true)
+                if (true)
                 {
                     int dustType = dustTypes[Main.rand.Next(4)];
                     int dustID;

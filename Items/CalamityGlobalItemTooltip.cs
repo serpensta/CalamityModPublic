@@ -1,4 +1,8 @@
-﻿using CalamityMod.Balancing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using CalamityMod.Balancing;
 using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Demonshade;
@@ -12,10 +16,6 @@ using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -742,7 +742,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(3, (line) => line.Text += "\nImmunity to the On Fire! debuff");
 
             // Ozzatron 23NOV2023: Removed tooltip edits for Magma Skull and Molten Skull Rose, as they were invalid after vanilla tooltip changes.
-            
+
             // Yoyo Glove/Bag apply a 0.5x damage multiplier on the second yoyo
             if (item.type == ItemID.YoyoBag || item.type == ItemID.YoYoGlove)
                 EditTooltipByNum(0, (line) => line.Text += "\nSecondary yoyos will do 50% less damage");
@@ -830,7 +830,8 @@ namespace CalamityMod.Items
             // Crimson
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
-                EditTooltipByNum(0, (line) => {
+                EditTooltipByNum(0, (line) =>
+                {
                     string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
@@ -1350,7 +1351,7 @@ namespace CalamityMod.Items
         #endregion
 
         #region Speed Tooltips
-        
+
         // TODO: Investigate using a SortedDictionary instead? May be slower, but removes the need for carefully adding KVPs.
         /// <summary>
         /// This dictionary handles easily retrieving tooltip text based on a numerical threshold. <br />

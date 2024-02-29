@@ -143,7 +143,7 @@ namespace CalamityMod.Projectiles.Boss
 
             for (int j = 0; j < 2; j++)
             {
-                float dustRotation = Projectile.velocity.ToRotation() + ((Main.rand.Next(2) == 1) ? -1f : 1f) * MathHelper.PiOver2;
+                float dustRotation = Projectile.velocity.ToRotation() + ((Main.rand.NextBool(2)) ? -1f : 1f) * MathHelper.PiOver2;
                 float randomFloatOffset = (float)Main.rand.NextDouble() * 2f + 2f;
                 Vector2 dustDirection = new Vector2((float)Math.Cos(dustRotation) * randomFloatOffset, (float)Math.Sin(dustRotation) * randomFloatOffset);
                 int brimDust = Dust.NewDust(dustSpawnPos, 0, 0, (int)CalamityDusts.Brimstone, dustDirection.X, dustDirection.Y, 0, default, 1f);
@@ -220,7 +220,7 @@ namespace CalamityMod.Projectiles.Boss
             {
                 return true;
             }
-	        float useless = 0f;
+            float useless = 0f;
             if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity * Projectile.localAI[1], 22f * Projectile.scale, ref useless))
             {
                 return true;

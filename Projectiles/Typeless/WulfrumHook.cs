@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Materials;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using CalamityMod.Items.Materials;
-using Terraria.DataStructures;
-using ReLogic.Utilities;
-using CalamityMod.Items.Accessories;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CalamityMod.Projectiles.Typeless
 {
@@ -164,7 +164,7 @@ namespace CalamityMod.Projectiles.Typeless
                         continue;
 
                     OnGrapple(worldPos, x, y);
-                    
+
                     break;
                 }
 
@@ -234,7 +234,7 @@ namespace CalamityMod.Projectiles.Typeless
             if (TrailRenderer is null)
                 TrailRenderer = new PrimitiveTrail(PrimWidthFunction, PrimColorFunction);
 
-            Vector2[] segmentPositions = new Vector2[] {Projectile.Center, Owner.Center };
+            Vector2[] segmentPositions = new Vector2[] { Projectile.Center, Owner.Center };
 
             if (State == HookState.Grappling)
                 segmentPositions = Owner.GetModPlayer<WulfrumPackPlayer>().Segments.Select(x => x.position).ToArray();

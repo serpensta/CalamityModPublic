@@ -1,12 +1,12 @@
-﻿using CalamityMod.World;
+﻿using System.Collections.Generic;
+using CalamityMod.Items.Weapons.DraedonsArsenal;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Items.Weapons.DraedonsArsenal;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -20,7 +20,7 @@ namespace CalamityMod.Projectiles.Boss
         public PrimitiveTrail RayDrawer = null;
         private const int Lifetime = CalamityWorld.DraedonSummonCountdownMax - 60;
 
-        public override void SetStaticDefaults() 
+        public override void SetStaticDefaults()
         {
             ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 10000;
         }

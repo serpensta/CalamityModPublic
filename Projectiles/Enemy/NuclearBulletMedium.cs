@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
-using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 namespace CalamityMod.Projectiles.Enemy

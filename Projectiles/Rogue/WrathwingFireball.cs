@@ -87,14 +87,14 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.Damage();
 
             for (int i = 0; i < 2; i++)
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 50, default, 1.5f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 50, default, 1.5f);
 
             for (int i = 0; i < 20; i++)
             {
-                int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 0, default, 2.5f);
+                int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 0, default, 2.5f);
                 Main.dust[d].noGravity = true;
                 Main.dust[d].velocity *= 3f;
-                d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 50, default, 1.5f);
+                d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 50, default, 1.5f);
                 Main.dust[d].velocity *= 2f;
                 Main.dust[d].noGravity = true;
             }

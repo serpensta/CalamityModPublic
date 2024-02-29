@@ -1,10 +1,10 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -61,11 +61,11 @@ namespace CalamityMod.Projectiles.Summon
                 }
                 for (int j = 0; j < 10; j++)
                 {
-                    int fire = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 246, 0f, 0f, 100, default, 3f);
+                    int fire = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.GoldCoin, 0f, 0f, 100, default, 3f);
                     Main.dust[fire].noGravity = true;
                     Main.dust[fire].velocity *= 5f;
                     Main.dust[fire].position = Projectile.Center;
-                    fire = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 246, 0f, 0f, 100, default, 2f);
+                    fire = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.GoldCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fire].velocity *= 2f;
                     Main.dust[fire].position = Projectile.Center;
                 }

@@ -1,13 +1,13 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using System.IO;
+using System.Linq;
+using CalamityMod.Dusts;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;
@@ -137,7 +137,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
                     // This formula ensures that the sword has a sudden and extremely harsh responsiveness penalty when the mouse is close to the player.
                     // Otherwise it controls perfectly fine.
-                    float aimResponsiveness = 0.035f + 0.3f * (float)Math.Pow(distRatio, 1D/3);
+                    float aimResponsiveness = 0.035f + 0.3f * (float)Math.Pow(distRatio, 1D / 3);
 
                     // Update the sword's angle with the responsiveness determined by mouse position.
                     // Also flag for netcode sync if applicable (this is the only way the sword can rotate in multiplayer).

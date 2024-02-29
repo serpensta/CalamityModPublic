@@ -1,9 +1,9 @@
-﻿using CalamityMod.Items.Weapons.Summon;
-using CalamityMod.Projectiles.Boss;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.Projectiles.Boss;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,7 +18,7 @@ namespace CalamityMod.Projectiles.Summon.SmallAresArms
         public ref float Time => ref Projectile.ai[1];
 
         public PrimitiveTrail LightningDrawer;
-        
+
         public PrimitiveTrail LightningBackgroundDrawer;
 
         public override string Texture => "CalamityMod/Projectiles/Boss/AresTeslaOrb";

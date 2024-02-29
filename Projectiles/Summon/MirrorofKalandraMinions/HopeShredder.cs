@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles.Summon.MirrorofKalandraMinions
             Main.EntitySpriteDraw(texture, drawPosition + Projectile.rotation.ToRotationVector2() * 5f, frame, Color.DarkBlue with { A = 100 }, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
 
             Main.EntitySpriteDraw(texture, drawPosition, frame, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-            
+
 
             return false;
         }

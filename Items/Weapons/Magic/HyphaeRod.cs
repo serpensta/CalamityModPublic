@@ -34,7 +34,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.shootSpeed = 1f;
         }
 
-        
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo projSource, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float speed = Item.shootSpeed;

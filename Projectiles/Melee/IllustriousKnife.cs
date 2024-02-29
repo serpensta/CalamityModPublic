@@ -1,7 +1,7 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -45,7 +45,7 @@ namespace CalamityMod.Projectiles.Melee
             }
             CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 300f, 12f, 20f);
             if (Main.rand.NextBool(6))
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 20, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.PurificationPowder, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
         }
 
         //Give it a custom hitbox shape so it may remain rectangular and elongated
@@ -64,7 +64,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             for (int i = 0; i < 3; i++)
             {
-                int illustrious = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 20, 0f, 0f, 100, default, 0.8f);
+                int illustrious = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurificationPowder, 0f, 0f, 100, default, 0.8f);
                 Main.dust[illustrious].noGravity = true;
                 Main.dust[illustrious].velocity *= 1.2f;
                 Main.dust[illustrious].velocity -= Projectile.oldVelocity * 0.3f;

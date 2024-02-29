@@ -3,6 +3,7 @@ using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -30,7 +31,7 @@ namespace CalamityMod.Projectiles.Ranged
             Player player = Main.player[Projectile.owner];
             if (Main.rand.NextBool(5))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 171, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Venom, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
             Vector2 playerDist = player.Center - Projectile.Center;
             Projectile.ai[1] += 1f;

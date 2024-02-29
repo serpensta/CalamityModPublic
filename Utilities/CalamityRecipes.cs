@@ -344,7 +344,7 @@ namespace CalamityMod
             });
             AnyGoodBlock = RecipeGroup.RegisterGroup("AnyGoodBlock", group);
         }
-        
+
         private static void AddEquipmentRecipeGroups()
         {
             // Wooden Swords for Broken Biome Blade
@@ -426,7 +426,7 @@ namespace CalamityMod
                 ItemID.ArcaneFlower,
                 ItemID.MagnetFlower,
                 ItemID.ManaCloak
-            }); 
+            });
             AnyManaFlower = RecipeGroup.RegisterGroup("AnyManaFlower", group);
 
             // Magic Quiver+ for Elemental Quiver
@@ -519,7 +519,7 @@ namespace CalamityMod
         public static void AddRecipes()
         {
             EditVanillaRecipes();
-            
+
             // Leather from Vertebrae
             Recipe.Create(ItemID.Leather).
                 AddIngredient(ItemID.Vertebrae, 2).
@@ -594,7 +594,7 @@ namespace CalamityMod
                 AddIngredient(ItemID.HellstoneBar, 4).
                 AddTile(TileID.Hellforge).
                 Register();
-            
+
             // Magic Conch
             Recipe.Create(ItemID.MagicConch).
                 AddIngredient(ItemID.ShellPileBlock, 20).
@@ -768,7 +768,7 @@ namespace CalamityMod
         internal static void EditVanillaRecipes()
         {
             // Disable warnings for unused stuff as they can continue to be used freely
-            #pragma warning disable CS8321
+#pragma warning disable CS8321
 
             // Predicates for specifying which recipes to edit
             static Func<Recipe, bool> Vanilla(int itemID) => r => r.Mod is null && r.HasResult(itemID);
@@ -812,7 +812,7 @@ namespace CalamityMod
                     return;
                 r.requiredTile[idx] = newTileID;
             };
-            #pragma warning restore CS8321
+#pragma warning restore CS8321
 
             var edits = new Dictionary<Func<Recipe, bool>, Action<Recipe>>(128)
             {

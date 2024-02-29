@@ -1,10 +1,10 @@
-﻿using CalamityMod.Projectiles.Rogue;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CalamityMod.Projectiles.Rogue;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

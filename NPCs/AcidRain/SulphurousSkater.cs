@@ -1,4 +1,6 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
@@ -7,8 +9,6 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Projectiles.Enemy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -20,7 +20,7 @@ namespace CalamityMod.NPCs.AcidRain
     public class SulphurousSkater : ModNPC
     {
         public bool Flying = false;
-        
+
         public Player Target => Main.player[NPC.target];
 
         public ref float JumpTimer => ref NPC.ai[0];
@@ -74,9 +74,9 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SulphurousSkater")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SulphurousSkater")
             });
         }
 

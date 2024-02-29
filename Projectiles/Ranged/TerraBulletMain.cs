@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Ranged
 
                 // Dust type 74, scale 0.8, no gravity, no light, no velocity
                 Vector2 pos = Projectile.Center - Projectile.velocity * 0.1f;
-                Dust d = Dust.NewDustDirect(pos, 0, 0, 74, Scale: 0.8f);
+                Dust d = Dust.NewDustDirect(pos, 0, 0, DustID.GreenFairy, Scale: 0.8f);
                 d.position = pos;
                 d.velocity = Vector2.Zero;
                 d.noGravity = true;

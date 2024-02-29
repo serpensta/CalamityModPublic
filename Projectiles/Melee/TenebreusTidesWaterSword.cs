@@ -1,10 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Melee
 {
     public class TenebreusTidesWaterSword : ModProjectile, ILocalizedModType
@@ -49,7 +51,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.localAI[0] += 1f;
                 if (Projectile.localAI[0] > 7f)
                 {
-                    int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 33, 0f, 0f, 100, default, 0.4f);
+                    int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.4f);
                     Main.dust[water].noGravity = true;
                     Main.dust[water].velocity *= 0.5f;
                     Main.dust[water].velocity += Projectile.velocity * 0.1f;
@@ -132,7 +134,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 if (Main.rand.NextBool(3))
                 {
-                    int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 33, 0f, 0f, 100, default, 0.4f);
+                    int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.4f);
                     Main.dust[water].noGravity = true;
                     Main.dust[water].velocity *= 0.5f;
                     Main.dust[water].velocity += Projectile.velocity * 0.1f;

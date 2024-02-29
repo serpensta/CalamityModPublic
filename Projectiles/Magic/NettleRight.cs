@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Magic
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        Dust thorn = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 7, Projectile.velocity.X * 0.025f, Projectile.velocity.Y * 0.025f, 200, default, 1.3f);
+                        Dust thorn = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.WoodFurniture, Projectile.velocity.X * 0.025f, Projectile.velocity.Y * 0.025f, 200, default, 1.3f);
                         thorn.noGravity = true;
                         thorn.velocity *= 0.5f;
                     }

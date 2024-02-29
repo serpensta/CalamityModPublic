@@ -1,8 +1,8 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
-using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -53,7 +53,7 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.MorayEel")

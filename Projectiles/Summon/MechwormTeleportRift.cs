@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -42,7 +42,7 @@ namespace CalamityMod.Projectiles.Summon
 
             if (Projectile.Opacity == 1f && Main.rand.NextBool(15))
             {
-                Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, 267, 0f, 0f, 100, new Color(150, 100, 255, 255), 1f);
+                Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.RainbowMk2, 0f, 0f, 100, new Color(150, 100, 255, 255), 1f);
                 dust.velocity.X = 0f;
                 dust.noGravity = true;
                 dust.position = Projectile.Center + Main.rand.NextVector2Unit() * Main.rand.NextFloat(4f, 20f);

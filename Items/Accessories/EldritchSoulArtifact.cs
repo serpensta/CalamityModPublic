@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.CalPlayer;
 using CalamityMod.Items.Materials;
-using CalamityMod.Items.Placeables.Plates;
 using CalamityMod.Items.Placeables.Ores;
+using CalamityMod.Items.Placeables.Plates;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

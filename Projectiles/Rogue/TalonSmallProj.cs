@@ -1,7 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -52,9 +53,9 @@ namespace CalamityMod.Projectiles.Rogue
                 Projectile.velocity *= maxSpeed / currentSpeed;
 
             // spawn dust
-            if (Main.rand.Next(5) == 0)
+            if (Main.rand.NextBool(5))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 85, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.UnusedBrown, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
 
             // freely spins instead of facing forwards
@@ -73,7 +74,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             for (int i = 0; i <= 5; i++)
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 85, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.UnusedBrown, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
             }
         }
 

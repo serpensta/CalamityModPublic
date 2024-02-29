@@ -1,11 +1,11 @@
-﻿using CalamityMod.CalPlayer;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.IO;
+using CalamityMod.CalPlayer;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -195,7 +195,7 @@ namespace CalamityMod.Projectiles.Summon
                 }
                 if (circlingPlayer)
                 {
-                    float math = recharging == 0 ? 90f :(300 - recharging) / 3;
+                    float math = recharging == 0 ? 90f : (300 - recharging) / 3;
                     float regularDistance = math > 90f ? 90f : math;
                     Projectile.Center = player.Center + Projectile.ai[0].ToRotationVector2() * regularDistance;
                     Projectile.rotation = Projectile.ai[0] + (float)Math.Atan(90);

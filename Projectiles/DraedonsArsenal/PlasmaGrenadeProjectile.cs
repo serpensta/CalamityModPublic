@@ -1,10 +1,10 @@
 ﻿using CalamityMod.Dusts;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.Audio;
 using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.DraedonsArsenal
 {
@@ -44,8 +44,8 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             if (!Main.dedServ && Main.rand.NextBool()) // 50% chance to spawn smoke
             {
                 Color plasmaLime = Color.Lerp(Color.Lime, Color.LimeGreen, Main.rand.NextFloat(1f));
-                Color fadeColor = Color.Lerp(Color.LightGreen, plasmaLime, Main.rand.NextFloat(0.5f,1f));
-                Particle plasma = new SmallSmokeParticle(projectileTop, Projectile.oldVelocity*0.7f, Color.LightGreen, fadeColor, Main.rand.NextFloat(0.4f,0.9f), 100f);
+                Color fadeColor = Color.Lerp(Color.LightGreen, plasmaLime, Main.rand.NextFloat(0.5f, 1f));
+                Particle plasma = new SmallSmokeParticle(projectileTop, Projectile.oldVelocity * 0.7f, Color.LightGreen, fadeColor, Main.rand.NextFloat(0.4f, 0.9f), 100f);
                 GeneralParticleHandler.SpawnParticle(plasma);
             }
             Time++;

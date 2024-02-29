@@ -1,4 +1,5 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
@@ -12,7 +13,6 @@ using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
 
 namespace CalamityMod.NPCs.CalClone
 {
@@ -67,11 +67,11 @@ namespace CalamityMod.NPCs.CalClone
             int associatedNPCType = ModContent.NPCType<CalamitasClone>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cataclysm")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cataclysm")
             });
         }
 

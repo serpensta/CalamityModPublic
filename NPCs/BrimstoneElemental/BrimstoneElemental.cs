@@ -1,4 +1,5 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -20,7 +21,6 @@ using CalamityMod.NPCs.CalamityAIs.CalamityBossAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -87,7 +87,7 @@ namespace CalamityMod.NPCs.BrimstoneElemental
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.BrimstoneElemental")
             });
@@ -191,7 +191,7 @@ namespace CalamityMod.NPCs.BrimstoneElemental
 
             // Normal drops: Everything that would otherwise be in the bag
             var normalOnly = npcLoot.DefineNormalOnlyDropSet();
-            {                
+            {
                 // Weapons
                 int[] weapons = new int[]
                 {
@@ -254,7 +254,7 @@ namespace CalamityMod.NPCs.BrimstoneElemental
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 235, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.LifeDrain, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {

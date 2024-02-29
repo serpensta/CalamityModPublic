@@ -1,6 +1,6 @@
-﻿using CalamityMod.Items.Placeables.Banners;
+﻿using System;
 using CalamityMod.Items.Critters;
-using System;
+using CalamityMod.Items.Placeables.Banners;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -65,7 +65,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,

@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.World;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -43,10 +43,10 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.OverloadedSoldier")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.OverloadedSoldier")
             });
         }
 
@@ -98,7 +98,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     if (NPC.frame.Y > frameHeight * 13)
                         NPC.frame.Y = frameHeight;
                 }
-            }            
+            }
         }
 
         public override void AI()
@@ -178,7 +178,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) < 400f)
             {
                 maxVelocity += (CalamityWorld.death ? 8f : CalamityWorld.revenge ? 6f : 4f) - ((Main.player[NPC.target].Center - NPC.Center).Length() * 0.01f);
-             }
+            }
             if (NPC.velocity.X < -maxVelocity || NPC.velocity.X > maxVelocity)
             {
                 if (NPC.velocity.Y == 0f)

@@ -1,9 +1,9 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -40,7 +40,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.alpha = 0;
 
             int dustType = 171;
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.NextBool(3))
             {
                 dustType = 46;
             }
@@ -74,7 +74,7 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnKill(int timeLeft)
         {
             int dustType = 171;
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.NextBool(3))
             {
                 dustType = 46;
             }

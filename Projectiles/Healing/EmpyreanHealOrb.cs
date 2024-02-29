@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Healing
 {
     public class EmpyreanHealOrb : ModProjectile, ILocalizedModType
@@ -24,7 +26,7 @@ namespace CalamityMod.Projectiles.Healing
             float dustY = -(Projectile.velocity.Y * 0.2f);
             if (Projectile.timeLeft % 2 == 0)
             {
-                int healDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 62, 0f, 0f, 100, default, 2f);
+                int healDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurpleTorch, 0f, 0f, 100, default, 2f);
                 Dust dust = Main.dust[healDust];
                 dust.noGravity = true;
                 dust.position.X -= dustX;

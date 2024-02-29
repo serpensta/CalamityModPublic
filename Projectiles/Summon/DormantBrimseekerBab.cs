@@ -1,13 +1,13 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -167,7 +167,7 @@ namespace CalamityMod.Projectiles.Summon
                 if (Projectile.ai[0] > 30f)
                     completionRatio = 1f - (30f - Projectile.ai[0]) / 30f;
 
-                Vector2 modifiedProjectileTexture = new Vector2(projectileTexture.Width / 2,projectileTexture.Height / Main.projFrames[Projectile.type] / 2);
+                Vector2 modifiedProjectileTexture = new Vector2(projectileTexture.Width / 2, projectileTexture.Height / Main.projFrames[Projectile.type] / 2);
                 for (int oldPositionDrawIndex = 6; oldPositionDrawIndex >= 0; oldPositionDrawIndex--)
                 {
                     Color drawColor = Color.Lerp(Color.LightGoldenrodYellow, new Color(142, 24, 67), completionRatio);

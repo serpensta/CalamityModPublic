@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Melee
 {
     public class BansheeHookBoom : ModProjectile, ILocalizedModType
@@ -42,12 +44,12 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.Damage();
                 for (int i = 0; i < 2; i++)
                 {
-                    int bansheeDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 60, 0f, 0f, 100, default, 1.5f);
+                    int bansheeDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.RedTorch, 0f, 0f, 100, default, 1.5f);
                     Main.dust[bansheeDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * (float)Projectile.width / 2f;
                 }
                 for (int j = 0; j < 5; j++)
                 {
-                    int bansheeDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 60, 0f, 0f, 200, default, 2.7f);
+                    int bansheeDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.RedTorch, 0f, 0f, 200, default, 2.7f);
                     Main.dust[bansheeDust2].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * (float)Projectile.width / 2f;
                     Main.dust[bansheeDust2].noGravity = true;
                     Main.dust[bansheeDust2].velocity *= 3f;

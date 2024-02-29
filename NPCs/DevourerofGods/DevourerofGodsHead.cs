@@ -1,4 +1,7 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -23,23 +26,20 @@ using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Melee.Yoyos;
-using CalamityMod.World;
 using CalamityMod.Sounds;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityMod.NPCs.DevourerofGods
 {
@@ -167,14 +167,14 @@ namespace CalamityMod.NPCs.DevourerofGods
             value.Position.X += 82f;
             value.Position.Y += 38f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DevourerofGods")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DevourerofGods")
             });
         }
 
@@ -532,7 +532,7 @@ namespace CalamityMod.NPCs.DevourerofGods
 
                 // Play music after the transiton BS
                 if (NPC.localAI[2] <= 635f)
-					CalamityGlobalNPC.DoGP2 = NPC.whoAmI;
+                    CalamityGlobalNPC.DoGP2 = NPC.whoAmI;
 
                 // Once before DoG spawns, set new size and become visible again.
                 if (NPC.localAI[2] == 60f)
@@ -784,7 +784,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                             {
                                 for (int l = 0; l < 8; l++)
                                 {
-                                    int dust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 170, 0f, 0f, 100, default, 1f);
+                                    int dust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Ichor, 0f, 0f, 100, default, 1f);
                                     float dustVelocityYAdd = Math.Abs(Main.dust[dust].velocity.Y) * 0.5f;
                                     if (Main.dust[dust].velocity.Y < 0f)
                                         Main.dust[dust].velocity.Y = 2f + dustVelocityYAdd;
@@ -2657,7 +2657,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<DevourerofGodsBag>()));
 
             // Extraneous potions
-			npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ModContent.ItemType<OmegaHealingPotion>(), 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
+            npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ModContent.ItemType<OmegaHealingPotion>(), 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
 
             // Fabsol Mount
             npcLoot.AddIf((info) => info.player.Calamity().fabsolVodka, ModContent.ItemType<Fabsol>());
@@ -2855,7 +2855,7 @@ namespace CalamityMod.NPCs.DevourerofGods
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (hurtInfo.Damage <= 0)
-				return;
+                return;
 
             target.AddBuff(ModContent.BuffType<GodSlayerInferno>(), 200, true);
             target.AddBuff(ModContent.BuffType<WhisperingDeath>(), 600, true);

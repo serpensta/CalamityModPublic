@@ -1,6 +1,6 @@
-﻿using CalamityMod.World;
+﻿using System;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 

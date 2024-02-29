@@ -1,9 +1,9 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -39,7 +39,7 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 if (Main.rand.NextBool())
                 {
-                    int greenDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, 107, 0f, 0f, 0, default, 0.5f);
+                    int greenDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, DustID.TerraBlade, 0f, 0f, 0, default, 0.5f);
                     Main.dust[greenDust].alpha = Projectile.alpha;
                     Main.dust[greenDust].velocity *= 0f;
                     Main.dust[greenDust].noGravity = true;
@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Ranged
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 107, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.TerraBlade, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
             }
         }
     }

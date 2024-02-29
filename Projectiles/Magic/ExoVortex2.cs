@@ -1,5 +1,5 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Magic
         public override void AI()
         {
             Time++;
-            
+
             // Move sharply towards nearby targets.
             // This is the same movement code that the old Subsuming Vortices used.
             NPC potentialTarget = Projectile.Center.ClosestNPCAt(SubsumingVortex.SmallVortexTargetRange);
@@ -123,7 +123,7 @@ namespace CalamityMod.Projectiles.Magic
             GameShaders.Misc["CalamityMod:SideStreakTrail"].UseImage1("Images/Misc/Perlin");
             EnergyTrail.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition + Projectile.velocity.SafeNormalize(Vector2.Zero) * Projectile.scale * 2f, 51);
             Main.spriteBatch.EnterShaderRegion(BlendState.Additive);
-            
+
             GameShaders.Misc["CalamityMod:ExoVortex"].Apply();
 
             // Draw the vortex, along with some afterimages.

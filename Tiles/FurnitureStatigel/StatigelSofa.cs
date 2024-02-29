@@ -4,6 +4,8 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Tiles.FurnitureStatigel
 {
     public class StatigelSofa : ModTile
@@ -12,7 +14,7 @@ namespace CalamityMod.Tiles.FurnitureStatigel
 
         public override bool CreateDust(int i, int j, ref int type)
         {
-            Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, 243, 0f, 0f, 1, new Color(255, 255, 255), 1f);
+            Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.PinkSlime, 0f, 0f, 1, new Color(255, 255, 255), 1f);
             return false;
         }
 

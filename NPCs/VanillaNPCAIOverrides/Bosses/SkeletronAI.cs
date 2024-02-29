@@ -797,14 +797,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Emit dust
             if (npc.ai[1] != 2f && npc.ai[1] != 3f && numHandsAlive != 0)
             {
-                int idleDust = Dust.NewDust(new Vector2(npc.Center.X - 15f - npc.velocity.X * 5f, npc.position.Y + npc.height - 2f), 30, 10, 5, -npc.velocity.X * 0.2f, 3f, 0, default, 2f);
+                int idleDust = Dust.NewDust(new Vector2(npc.Center.X - 15f - npc.velocity.X * 5f, npc.position.Y + npc.height - 2f), 30, 10, DustID.Blood, -npc.velocity.X * 0.2f, 3f, 0, default, 2f);
                 Main.dust[idleDust].noGravity = true;
                 Main.dust[idleDust].velocity.X = Main.dust[idleDust].velocity.X * 1.3f;
                 Main.dust[idleDust].velocity.X = Main.dust[idleDust].velocity.X + npc.velocity.X * 0.4f;
                 Main.dust[idleDust].velocity.Y = Main.dust[idleDust].velocity.Y + (2f + npc.velocity.Y);
                 for (int j = 0; j < 2; j++)
                 {
-                    idleDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 120f), npc.width, 60, 5, npc.velocity.X, npc.velocity.Y, 0, default, 2f);
+                    idleDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 120f), npc.width, 60, DustID.Blood, npc.velocity.X, npc.velocity.Y, 0, default, 2f);
                     Main.dust[idleDust].noGravity = true;
                     Main.dust[idleDust].velocity -= npc.velocity;
                     Main.dust[idleDust].velocity.Y = Main.dust[idleDust].velocity.Y + 5f;
@@ -855,7 +855,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Teleport dust
                     for (int m = 0; m < 10; m++)
                     {
-                        int teleportDust = Dust.NewDust(npc.position, npc.width, npc.height, 91, 0f, 0f, 200, default, 3f);
+                        int teleportDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.GemDiamond, 0f, 0f, 200, default, 3f);
                         Main.dust[teleportDust].noGravity = true;
                         Main.dust[teleportDust].velocity.X = Main.dust[teleportDust].velocity.X * 2f;
                     }
@@ -1372,7 +1372,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 {
                                     int num171 = NPC.NewNPC(npc.GetSource_FromAI(), num169 * 16 + 8, num170 * 16, NPCID.DarkCaster);
                                     if (Main.netMode == NetmodeID.Server && num171 < Main.maxNPCs)
-                                        NetMessage.SendData(23, -1, -1, null, num171);
+                                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num171);
 
                                     break;
                                 }
@@ -1483,14 +1483,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (npc.ai[1] != 2f && npc.ai[1] != 3f && (numHands != 0 || !Main.expertMode))
             {
-                int num179 = Dust.NewDust(new Vector2(npc.Center.X - 15f - npc.velocity.X * 5f, npc.position.Y + (float)npc.height - 2f), 30, 10, 5, (0f - npc.velocity.X) * 0.2f, 3f, 0, default(Color), 2f);
+                int num179 = Dust.NewDust(new Vector2(npc.Center.X - 15f - npc.velocity.X * 5f, npc.position.Y + (float)npc.height - 2f), 30, 10, DustID.Blood, (0f - npc.velocity.X) * 0.2f, 3f, 0, default(Color), 2f);
                 Main.dust[num179].noGravity = true;
                 Main.dust[num179].velocity.X *= 1.3f;
                 Main.dust[num179].velocity.X += npc.velocity.X * 0.4f;
                 Main.dust[num179].velocity.Y += 2f + npc.velocity.Y;
                 for (int num180 = 0; num180 < 2; num180++)
                 {
-                    num179 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 120f), npc.width, 60, 5, npc.velocity.X, npc.velocity.Y, 0, default(Color), 2f);
+                    num179 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 120f), npc.width, 60, DustID.Blood, npc.velocity.X, npc.velocity.Y, 0, default(Color), 2f);
                     Main.dust[num179].noGravity = true;
                     Dust dust = Main.dust[num179];
                     dust.velocity -= npc.velocity;

@@ -1,6 +1,7 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -67,7 +68,7 @@ namespace CalamityMod.Projectiles.Magic
                 {
                     Vector2 projPos = Projectile.position;
                     projPos -= Projectile.velocity * ((float)i * 0.25f);
-                    int bloody = Dust.NewDust(projPos, 1, 1, 5, 0f, 0f, 0, default, 1f);
+                    int bloody = Dust.NewDust(projPos, 1, 1, DustID.Blood, 0f, 0f, 0, default, 1f);
                     Main.dust[bloody].position = projPos;
                     Main.dust[bloody].scale = (float)Main.rand.Next(70, 110) * 0.013f;
                     Main.dust[bloody].velocity *= 0.1f;

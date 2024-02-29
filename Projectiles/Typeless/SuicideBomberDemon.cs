@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Typeless
 {
@@ -186,7 +186,7 @@ namespace CalamityMod.Projectiles.Typeless
             SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion, Projectile.Center);
             for (int i = 0; i < 40; i++)
             {
-                Dust explosion = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 267);
+                Dust explosion = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowMk2);
                 explosion.velocity = Main.rand.NextVector2Circular(4f, 4f);
                 explosion.color = Color.Red;
                 explosion.scale = 1.35f;

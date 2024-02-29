@@ -1,11 +1,11 @@
-﻿using CalamityMod.Events;
+﻿using System.IO;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Boss
 
             if (Projectile.alpha < 40)
             {
-                int laserDust = Dust.NewDust(Projectile.Center - Vector2.One * 5f, 10, 10, 244, -Projectile.velocity.X / 3f, -Projectile.velocity.Y / 3f, 150, Color.Transparent, 0.6f);
+                int laserDust = Dust.NewDust(Projectile.Center - Vector2.One * 5f, 10, 10, DustID.CopperCoin, -Projectile.velocity.X / 3f, -Projectile.velocity.Y / 3f, 150, Color.Transparent, 0.6f);
                 Main.dust[laserDust].noGravity = true;
             }
 
@@ -191,14 +191,14 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.position.Y = Projectile.position.Y - (Projectile.height / 2);
             for (int i = 0; i < 2; i++)
             {
-                Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 31, 0f, 0f, 100, default, 1.5f);
+                Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
             }
             for (int j = 0; j < 20; j++)
             {
-                int killDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 244, 0f, 0f, 0, default, 2.5f);
+                int killDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.CopperCoin, 0f, 0f, 0, default, 2.5f);
                 Main.dust[killDust].noGravity = true;
                 Main.dust[killDust].velocity *= 3f;
-                killDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 244, 0f, 0f, 100, default, 1.5f);
+                killDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.CopperCoin, 0f, 0f, 100, default, 1.5f);
                 Main.dust[killDust].velocity *= 2f;
                 Main.dust[killDust].noGravity = true;
             }

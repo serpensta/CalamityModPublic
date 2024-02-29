@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Projectiles.Ranged;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using CalamityMod.Projectiles.Ranged;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Rogue
 {
     public class Prismalline3 : ModProjectile, ILocalizedModType
@@ -42,7 +44,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 154, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Rain, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f);
             }
             if (Projectile.ai[0] == 1f)
             {

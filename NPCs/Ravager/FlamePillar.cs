@@ -172,7 +172,7 @@ namespace CalamityMod.NPCs.Ravager
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 30; i++)
                 {
-                    int iceFlame = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 135, 0f, 0f, 100, default, 2f);
+                    int iceFlame = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
                     Main.dust[iceFlame].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {

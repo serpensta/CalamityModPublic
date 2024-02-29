@@ -1,19 +1,19 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using ReLogic.Content;
-using CalamityMod.Sounds;
 
 namespace CalamityMod.NPCs.Astral
 {
@@ -66,9 +66,9 @@ namespace CalamityMod.NPCs.Astral
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SightseerSpitter")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SightseerSpitter")
             });
         }
 
@@ -247,13 +247,13 @@ namespace CalamityMod.NPCs.Astral
         {
             if (modifiers.GetDamage(NPC.damage, 0f, 0f) > 0)
             {
-				if (target.HasNPCBannerBuff(ModContent.NPCType<SightseerSpitter>()))
-				{
-					if (Main.expertMode)
-						modifiers.IncomingDamageMultiplier *= 0.5f;
-					else
-						modifiers.IncomingDamageMultiplier *= 0.75f;
-				}
+                if (target.HasNPCBannerBuff(ModContent.NPCType<SightseerSpitter>()))
+                {
+                    if (Main.expertMode)
+                        modifiers.IncomingDamageMultiplier *= 0.5f;
+                    else
+                        modifiers.IncomingDamageMultiplier *= 0.75f;
+                }
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                     NPC.StrikeInstantKill();

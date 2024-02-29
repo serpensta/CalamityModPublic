@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Particles;
-using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Systems;
 using Microsoft.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -49,7 +49,7 @@ namespace CalamityMod.Projectiles.Ranged
                 SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity * 1.8f, -Projectile.velocity * 0.01f, false, 11, 1.6f, (Main.zenithWorld ? Color.MediumPurple : Color.Red) * 0.65f);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
-            
+
             for (int i = 0; i <= 2; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity * Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextBool(3) ? 90 : 60, -Projectile.velocity.RotatedBy(-0.5) * Main.rand.NextFloat(0.05f, 0.2f));
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Ranged
             }
         }
         public override void Kill(int timeLeft)
-        { 
+        {
             SoundEngine.PlaySound(SoundID.NPCDeath55 with { Pitch = -0.7f }, Projectile.Center);
             //DesertProwelerSkullParticle was a placeholder, but honestly it fits too well
             for (int i = 0; i <= 11; i++)
@@ -99,7 +99,7 @@ namespace CalamityMod.Projectiles.Ranged
                     NPC.NewNPC(target.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCID.Bunny);
                 }
             }
-            
+
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -119,7 +119,7 @@ namespace CalamityMod.Projectiles.Ranged
                 }
             }
         }
-    
+
         public override bool PreDraw(ref Color lightColor)
         {
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.Crimson * 0.45f, 1);

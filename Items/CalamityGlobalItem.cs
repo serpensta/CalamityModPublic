@@ -1057,7 +1057,7 @@ namespace CalamityMod.Items
 
                 case ItemID.TopazRobe:
                     player.statManaMax2 -= 20;
-                    player.manaCost += 0.02f ; // 7% to 5%
+                    player.manaCost += 0.02f; // 7% to 5%
                     break;
 
                 case ItemID.SapphireRobe:
@@ -1220,7 +1220,7 @@ namespace CalamityMod.Items
             {
                 player.GetDamage<MeleeDamageClass>() += 0.02f;
             }
-            
+
             // Feral Claws line melee speed adjustments and nonstacking
             // First removes all their melee speed so it can be given based on which you wear without stacking
             if (item.type == ItemID.FeralClaws)
@@ -1258,39 +1258,39 @@ namespace CalamityMod.Items
             if (item.type == ItemID.SunStone)
             {
                 if (Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.MoonStone)
             {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.CelestialStone)
             {
                 player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.CelestialShell)
             {
                 player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             //Moon Charm and Moon Shell melee speed removal
-            
+
             if (item.type == ItemID.MoonCharm)
-            {    
+            {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.MoonShell)
-            {    
+            {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.TerrasparkBoots)
@@ -1812,8 +1812,8 @@ namespace CalamityMod.Items
         #region On Create
         public override void OnCreated(Item item, ItemCreationContext context)
         {
-			// ChoosePrefix also happens on craft so go reset it here too
-			storedPrefix = -1;
+            // ChoosePrefix also happens on craft so go reset it here too
+            storedPrefix = -1;
         }
         #endregion
 
@@ -1831,14 +1831,14 @@ namespace CalamityMod.Items
         // removed data saved on items; reforging is now a coalescing flowchart that has no RNG
         public override int ChoosePrefix(Item item, UnifiedRandom rand)
         {
-			if (storedPrefix == -1 && item.CountsAsClass<RogueDamageClass>() && (item.maxStack == 1 || item.AllowReforgeForStackableItem))
-			{
-				// Crafting (or first reforge of) a rogue weapon has a 75% chance for a random modifier, this check is done by vanilla
-				// Negative modifiers have a 66.66% chance of being voided, Annoying modifier is intentionally ignored by vanilla
-				int prefix = CalamityUtils.RandomRoguePrefix();
-				bool keepPrefix = !CalamityUtils.NegativeRoguePrefix(prefix) || Main.rand.NextBool(3);
-				return keepPrefix ? prefix : 0;
-			}
+            if (storedPrefix == -1 && item.CountsAsClass<RogueDamageClass>() && (item.maxStack == 1 || item.AllowReforgeForStackableItem))
+            {
+                // Crafting (or first reforge of) a rogue weapon has a 75% chance for a random modifier, this check is done by vanilla
+                // Negative modifiers have a 66.66% chance of being voided, Annoying modifier is intentionally ignored by vanilla
+                int prefix = CalamityUtils.RandomRoguePrefix();
+                bool keepPrefix = !CalamityUtils.NegativeRoguePrefix(prefix) || Main.rand.NextBool(3);
+                return keepPrefix ? prefix : 0;
+            }
 
             if (!CalamityConfig.Instance.RemoveReforgeRNG || Main.gameMenu || storedPrefix == -1)
                 return -1;
@@ -1910,43 +1910,43 @@ namespace CalamityMod.Items
             switch (rarity)
             {
                 case 0:
-					return Rarity0BuyPrice;
+                    return Rarity0BuyPrice;
                 case 1:
-					return Rarity1BuyPrice;
+                    return Rarity1BuyPrice;
                 case 2:
-					return Rarity2BuyPrice;
+                    return Rarity2BuyPrice;
                 case 3:
-					return Rarity3BuyPrice;
+                    return Rarity3BuyPrice;
                 case 4:
-					return Rarity4BuyPrice;
+                    return Rarity4BuyPrice;
                 case 5:
-					return Rarity5BuyPrice;
+                    return Rarity5BuyPrice;
                 case 6:
-					return Rarity6BuyPrice;
+                    return Rarity6BuyPrice;
                 case 7:
-					return Rarity7BuyPrice;
+                    return Rarity7BuyPrice;
                 case 8:
-					return Rarity8BuyPrice;
+                    return Rarity8BuyPrice;
                 case 9:
-					return Rarity9BuyPrice;
+                    return Rarity9BuyPrice;
                 case 10:
-					return Rarity10BuyPrice;
+                    return Rarity10BuyPrice;
                 case 11:
-					return Rarity11BuyPrice;
+                    return Rarity11BuyPrice;
             }
-			if (rarity == ModContent.RarityType<Turquoise>())
-				return RarityTurquoiseBuyPrice;
-			if (rarity == ModContent.RarityType<PureGreen>())
-				return RarityPureGreenBuyPrice;
-			if (rarity == ModContent.RarityType<DarkBlue>())
-				return RarityDarkBlueBuyPrice;
-			if (rarity == ModContent.RarityType<Violet>())
-				return RarityVioletBuyPrice;
-			if (rarity == ModContent.RarityType<HotPink>())
-				return RarityHotPinkBuyPrice;
+            if (rarity == ModContent.RarityType<Turquoise>())
+                return RarityTurquoiseBuyPrice;
+            if (rarity == ModContent.RarityType<PureGreen>())
+                return RarityPureGreenBuyPrice;
+            if (rarity == ModContent.RarityType<DarkBlue>())
+                return RarityDarkBlueBuyPrice;
+            if (rarity == ModContent.RarityType<Violet>())
+                return RarityVioletBuyPrice;
+            if (rarity == ModContent.RarityType<HotPink>())
+                return RarityHotPinkBuyPrice;
 
-			// Return 0 if it's not a progression based or other mod's rarity
-			return 0;
+            // Return 0 if it's not a progression based or other mod's rarity
+            return 0;
         }
 
         public static int GetBuyPrice(Item item)

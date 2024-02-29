@@ -1,14 +1,14 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -111,7 +111,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        int spawnDust = Dust.NewDust(npc.position, npc.width, npc.height, 182, 0f, 0f, 100, default, 2f);
+                        int spawnDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.TheDestroyer, 0f, 0f, 100, default, 2f);
                         Main.dust[spawnDust].noGravity = true;
                         Main.dust[spawnDust].noLight = true;
                     }
@@ -808,7 +808,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            int num4 = Dust.NewDust(npc.position, npc.width, npc.height, 182, 0f, 0f, 100, default(Color), 2f);
+                            int num4 = Dust.NewDust(npc.position, npc.width, npc.height, DustID.TheDestroyer, 0f, 0f, 100, default(Color), 2f);
                             Main.dust[num4].noGravity = true;
                             Main.dust[num4].noLight = true;
                         }
@@ -856,7 +856,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         Main.npc[num5].realLife = npc.whoAmI;
                         Main.npc[num5].ai[1] = num6;
                         Main.npc[num6].ai[0] = num5;
-                        NetMessage.SendData(23, -1, -1, null, num5);
+                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num5);
                         num6 = num5;
                     }
                 }

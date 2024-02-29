@@ -1,17 +1,17 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.SummonItems;
+using CalamityMod.NPCs.PrimordialWyrm;
 using Microsoft.Xna.Framework;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.NPCs.PrimordialWyrm;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
@@ -60,9 +60,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Eidolist")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Eidolist")
             });
         }
 
@@ -228,7 +228,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
                 for (int i = 0; i < 20; i++)
                 {
-                    int eidolistDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 20, 0f, 0f, 100, Color.Transparent, 1f);
+                    int eidolistDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.PurificationPowder, 0f, 0f, 100, Color.Transparent, 1f);
                     Dust dust = Main.dust[eidolistDust];
                     dust.velocity *= 3f;
                     dust.noGravity = true;
@@ -241,7 +241,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
                 for (int j = 0; j < 20; j++)
                 {
-                    int eidolistDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 20, 0f, 0f, 100, Color.Transparent, 1f);
+                    int eidolistDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.PurificationPowder, 0f, 0f, 100, Color.Transparent, 1f);
                     Dust dust = Main.dust[eidolistDust2];
                     dust.velocity *= 3f;
                     dust.noGravity = true;
@@ -336,13 +336,13 @@ namespace CalamityMod.NPCs.NormalNPCs
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 20; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 4, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, hit.HitDirection, -1f, 0, default, 1f);
                 }
                 if (Main.netMode != NetmodeID.Server)
                 {

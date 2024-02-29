@@ -1,5 +1,6 @@
 ﻿using System;
 using CalamityMod.Items.Weapons.Magic;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +9,6 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using CalamityMod.Particles;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -111,7 +111,7 @@ namespace CalamityMod.Projectiles.Summon
             if (Projectile.timeLeft == 140)
             {
                 Projectile.rotation = Projectile.velocity.ToRotation();
-                
+
                 Target = null;
             }
             else
@@ -124,7 +124,7 @@ namespace CalamityMod.Projectiles.Summon
             if (Target != null)
             {
                 float distanceFromTarget = (Target.Center - Projectile.Center).Length();
-                Projectile.rotation = Projectile.rotation.AngleTowards((Target.Center - Projectile.Center).ToRotation(), 0.07f * (float)Math.Pow(( 1 - distanceFromTarget / HomingRange), 2));
+                Projectile.rotation = Projectile.rotation.AngleTowards((Target.Center - Projectile.Center).ToRotation(), 0.07f * (float)Math.Pow((1 - distanceFromTarget / HomingRange), 2));
             }
 
             Projectile.velocity *= 0.983f;
@@ -166,7 +166,7 @@ namespace CalamityMod.Projectiles.Summon
 
                     Vector2 velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY).RotatedByRandom(MathHelper.Pi / 6f) * Main.rand.NextFloat(4, 10);
                     GeneralParticleHandler.SpawnParticle(new TechyHoloysquareParticle(center, velocity, Main.rand.NextFloat(1f, 2f), Main.rand.NextBool() ? new Color(99, 255, 229) : new Color(25, 132, 247), 25));
-                    
+
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace CalamityMod.Projectiles.Summon
 
         internal float WidthFunction(float completionRatio)
         {
-            return  6.4f;
+            return 6.4f;
         }
 
         public override bool PreDraw(ref Color lightColor)

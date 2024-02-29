@@ -1,16 +1,16 @@
-﻿using CalamityMod.BiomeManagers;
-using CalamityMod.Items.Placeables.Banners;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Items.Critters;
+using CalamityMod.Items.Fishing.SunkenSeaCatches;
+using CalamityMod.Items.Placeables.Banners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using CalamityMod.Items.Fishing.SunkenSeaCatches;
 namespace CalamityMod.NPCs.SunkenSea
 {
     public class BabyGhostBell : ModNPC
@@ -48,7 +48,7 @@ namespace CalamityMod.NPCs.SunkenSea
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.BabyGhostBell")
             });
@@ -78,7 +78,7 @@ namespace CalamityMod.NPCs.SunkenSea
             }
             if (Main.rand.Next(8) < 1 && NPC.catchItem == (short)ModContent.ItemType<RustedJingleBell>())
             {
-                int dust = Dust.NewDust(NPC.position - new Vector2(2f, 2f), NPC.width + 4, NPC.height + 4, 68, NPC.velocity.X * 0.4f, NPC.velocity.Y * 0.4f, 200, default, 1f);
+                int dust = Dust.NewDust(NPC.position - new Vector2(2f, 2f), NPC.width + 4, NPC.height + 4, DustID.BlueCrystalShard, NPC.velocity.X * 0.4f, NPC.velocity.Y * 0.4f, 200, default, 1f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 1.1f;
                 Main.dust[dust].velocity.Y += 0.25f;
@@ -155,13 +155,13 @@ namespace CalamityMod.NPCs.SunkenSea
         {
             for (int k = 0; k < 2; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 68, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueCrystalShard, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 10; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 68, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueCrystalShard, hit.HitDirection, -1f, 0, default, 1f);
                 }
             }
         }

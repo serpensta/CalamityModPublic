@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -69,7 +69,7 @@ namespace CalamityMod.Projectiles.Ranged
             GeneralParticleHandler.SpawnParticle(spark);
             LineParticle spark2 = new LineParticle(Projectile.Center, -Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.23f, -0.56f)) * Main.rand.NextFloat(0.4f, 2.5f), false, 8, 1.2f, Main.rand.NextBool() ? Color.Orange : Color.DarkOrange);
             GeneralParticleHandler.SpawnParticle(spark2);
-            
+
             for (int i = 0; i <= 3; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool() ? 169 : 158, new Vector2(5, 5).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1.5f), 0, default, Main.rand.NextFloat(1.6f, 2.2f));
@@ -109,7 +109,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Vector2 sinOffset = (Vector2.UnitY * direction * MathF.Sin(i * MathHelper.Pi * 0.125f) * 24f).RotatedBy(Projectile.oldRot[i]);
                     trailPositions.Add(Projectile.oldPos[i] + sinOffset);
                 }
-                HelixTrail.Draw(trailPositions, Projectile.Size * 0.5f- Main.screenPosition, 60);
+                HelixTrail.Draw(trailPositions, Projectile.Size * 0.5f - Main.screenPosition, 60);
             }
             return false;
         }

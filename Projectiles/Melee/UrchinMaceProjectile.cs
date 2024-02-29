@@ -135,7 +135,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             // This would knock enemies away consistently, but i'm choosing to go with the other option
             //hitDirection = Math.Sign(target.Center.X - Owner.Center.X);
-            
+
             //Doing it this way lets the player choose if they want to knockback enemies towards them by pointing away from them
             modifiers.HitDirectionOverride = Owner.direction;
         }

@@ -11,7 +11,7 @@ namespace CalamityMod.BiomeManagers
         public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.Find<ModUndergroundBackgroundStyle>("CalamityMod/AstralUndergroundBGStyle");
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
         public override string BestiaryIcon => "CalamityMod/BiomeManagers/UndergroundAstralIcon";
-		// Could use its own unique background
+        // Could use its own unique background
         public override string BackgroundPath => "CalamityMod/Backgrounds/MapBackgrounds/AstralBG";
         public override string MapBackground => "CalamityMod/Backgrounds/MapBackgrounds/AstralBG";
 

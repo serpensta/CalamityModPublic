@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -121,7 +121,7 @@ namespace CalamityMod.Projectiles.Ranged
                         ShootRecoilTimer = 16f;
                         Projectile.netSpam = 0;
                         Projectile.netUpdate = true;
-                    } 
+                    }
                 }
                 // Retracting any remaining recoil
                 else if (ShootRecoilTimer > 0)
@@ -176,7 +176,7 @@ namespace CalamityMod.Projectiles.Ranged
                     float particleScale = MathHelper.Clamp(CurrentChargingFrames, 0f, ArcNovaDiffuser.Charge2Frames);
                     for (int i = 0; i < (ChargeLV2 ? 4 : ChargeLV1 ? 3 : 2); i++)
                     {
-                        SparkParticle spark2 = new SparkParticle((tipPosition -Projectile.velocity * 4) + Main.rand.NextVector2Circular(12, 12), -Projectile.velocity * Main.rand.NextFloat(16.1f, 30.8f), false, Main.rand.Next(2, 7), Main.rand.NextFloat(particleScale / 350f, particleScale / 270f), Main.rand.NextBool(4) ? Color.Chartreuse : Color.Lime);
+                        SparkParticle spark2 = new SparkParticle((tipPosition - Projectile.velocity * 4) + Main.rand.NextVector2Circular(12, 12), -Projectile.velocity * Main.rand.NextFloat(16.1f, 30.8f), false, Main.rand.Next(2, 7), Main.rand.NextFloat(particleScale / 350f, particleScale / 270f), Main.rand.NextBool(4) ? Color.Chartreuse : Color.Lime);
                         GeneralParticleHandler.SpawnParticle(spark2);
                     }
                     Particle orb = new GenericBloom(tipPosition, Projectile.velocity, Color.Lime, particleScale / 270f, 2, false);

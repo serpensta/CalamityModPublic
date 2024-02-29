@@ -1,12 +1,12 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
+using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Projectiles.Boss;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -667,7 +667,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     for (int dustIndex = 0; dustIndex < 2; dustIndex++)
                     {
-                        int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, 14, 0f, 0f, 100, default(Color), 2f);
+                        int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Demonite, 0f, 0f, 100, default(Color), 2f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].noLight = true;
                     }
@@ -772,7 +772,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.HitEffect();
                     npc.checkDead();
                     npc.active = false;
-                    NetMessage.SendData(28, -1, -1, null, npc.whoAmI, -1f);
+                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f);
                     return false;
                 }
 
@@ -782,7 +782,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.HitEffect();
                     npc.checkDead();
                     npc.active = false;
-                    NetMessage.SendData(28, -1, -1, null, npc.whoAmI, -1f);
+                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f);
                     return false;
                 }
 
@@ -792,7 +792,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.HitEffect();
                     npc.checkDead();
                     npc.active = false;
-                    NetMessage.SendData(28, -1, -1, null, npc.whoAmI, -1f);
+                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f);
                     return false;
                 }
 
@@ -827,7 +827,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 if (!npc.active && Main.netMode == NetmodeID.Server)
-                    NetMessage.SendData(28, -1, -1, null, npc.whoAmI, -1f);
+                    NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f);
             }
 
             int num44 = (int)(npc.position.X / 16f) - 1;
@@ -1035,13 +1035,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     Main.npc[num75].active = false;
                                     npc.life = 0;
                                     if (Main.netMode == NetmodeID.Server)
-                                        NetMessage.SendData(23, -1, -1, null, num75);
+                                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num75);
 
                                     num75 = num76;
                                 }
 
                                 if (Main.netMode == NetmodeID.Server)
-                                    NetMessage.SendData(23, -1, -1, null, npc.whoAmI);
+                                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc.whoAmI);
                             }
 
                             num55 = 0f;
@@ -1167,7 +1167,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     for (int num80 = 0; num80 < 2; num80++)
                     {
-                        int num81 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, 14, 0f, 0f, 100, default(Color), 2f);
+                        int num81 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Demonite, 0f, 0f, 100, default(Color), 2f);
                         Main.dust[num81].noGravity = true;
                         Main.dust[num81].noLight = true;
                     }

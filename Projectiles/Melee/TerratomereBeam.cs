@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+using Terraria;
+using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -11,7 +11,7 @@ namespace CalamityMod.Projectiles.Melee
     {
         public new string LocalizationCategory => "Projectiles.Melee";
         public Vector2[] ControlPoints;
-        
+
         public PrimitiveTrail SlashDrawer = null;
 
         public bool Flipped => Projectile.ai[0] == 1f;
@@ -43,7 +43,7 @@ namespace CalamityMod.Projectiles.Melee
         public float SlashWidthFunction(float completionRatio) => Projectile.scale * 22f;
 
         public Color SlashColorFunction(float completionRatio) => Color.Lime * Utils.GetLerpValue(0.04f, 0.27f, completionRatio, true) * Projectile.Opacity;
-        
+
         public override bool PreDraw(ref Color lightColor)
         {
             // Initialize the primitive drawer.
@@ -51,7 +51,7 @@ namespace CalamityMod.Projectiles.Melee
 
             // Draw the slash effect.
             Main.spriteBatch.EnterShaderRegion();
-            
+
             TerratomereHoldoutProj.PrepareSlashShader(Flipped);
 
             List<Vector2> points = new List<Vector2>();

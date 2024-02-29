@@ -1,14 +1,14 @@
-﻿using CalamityMod.Items.Placeables.Banners;
+﻿using System.IO;
 using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
@@ -61,11 +61,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundSnow,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Rimehound")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Rimehound")
             });
         }
 

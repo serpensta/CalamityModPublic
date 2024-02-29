@@ -1,10 +1,10 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using System.IO;
+using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -61,10 +61,10 @@ namespace CalamityMod.NPCs.CeaselessVoid
             int associatedNPCType = ModContent.NPCType<CeaselessVoid>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DarkEnergy")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DarkEnergy")
             });
         }
 
@@ -210,7 +210,7 @@ namespace CalamityMod.NPCs.CeaselessVoid
                 Main.EntitySpriteDraw(mainTexture, drawPos, NPC.frame, Color.White, NPC.rotation, drawOrigin, scale, spriteEffects, 0);
                 return false;
             }
-            
+
             if (NPC.spriteDirection == 1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
 

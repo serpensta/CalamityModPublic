@@ -1,7 +1,7 @@
+﻿using CalamityMod.Tiles.Furniture.Fountains;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Tiles.Furniture.Fountains;
 
 namespace CalamityMod.Items.Placeables.Furniture.Fountains
 {

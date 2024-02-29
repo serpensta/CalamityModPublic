@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Healing
 {
     public class SilvaOrb : ModProjectile, ILocalizedModType
@@ -15,7 +17,7 @@ namespace CalamityMod.Projectiles.Healing
             Projectile.penetrate = 1;
             Projectile.timeLeft = 300;
             Projectile.extraUpdates = 3;
-			Projectile.tileCollide = false;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
@@ -51,7 +53,7 @@ namespace CalamityMod.Projectiles.Healing
         {
             for (int i = 0; i < 5; i++)
             {
-                int silvaHeal = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 157, 0f, 0f, 0, new Color(Main.DiscoR, 203, 103), 1f);
+                int silvaHeal = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.ChlorophyteWeapon, 0f, 0f, 0, new Color(Main.DiscoR, 203, 103), 1f);
                 Main.dust[silvaHeal].noGravity = true;
                 Main.dust[silvaHeal].velocity *= 1.5f;
                 Main.dust[silvaHeal].scale = 1.5f;

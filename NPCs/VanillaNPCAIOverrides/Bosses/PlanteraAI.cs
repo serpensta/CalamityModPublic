@@ -1,13 +1,13 @@
-﻿using CalamityMod.Events;
-using CalamityMod.Projectiles.Boss;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -256,7 +256,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         int dustChance = (int)Math.Round(MathHelper.Lerp(dustInXChanceMin, dustInXChanceMax, 1f - dustEmitAmount / SeedGatlingColorChangeDuration));
                         if (Main.rand.NextBool(dustChance))
                         {
-                            int dust = Dust.NewDust(npc.position, npc.width, npc.height, 74, 0f, 0f, 0, default, 1.4f);
+                            int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.GreenFairy, 0f, 0f, 0, default, 1.4f);
                             Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101)).SafeNormalize(Vector2.UnitY);
                             vector *= Main.rand.Next(50, 100) * 0.04f;
                             Main.dust[dust].velocity = vector;
@@ -452,7 +452,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     int dustChance = (int)Math.Round(MathHelper.Lerp(dustInXChanceMin, dustInXChanceMax, 1f - dustEmitAmount / Math.Abs(BeginChargeGateValue)));
                     if (Main.rand.NextBool(dustChance))
                     {
-                        int dust = Dust.NewDust(npc.position, npc.width, npc.height, 74, 0f, 0f, 0, default, 1.4f);
+                        int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.GreenFairy, 0f, 0f, 0, default, 1.4f);
                         Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101)).SafeNormalize(Vector2.UnitY);
                         vector *= Main.rand.Next(50, 100) * 0.04f;
                         Main.dust[dust].velocity = vector;
@@ -480,7 +480,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         Vector2 dustVelocity = npc.velocity * -0.25f;
                         for (int k = 0; k < 30; k++)
                         {
-                            Dust dust = Dust.NewDustDirect(npc.Center, npc.width, npc.height, 44, dustVelocity.X, dustVelocity.Y, 250, default, 0.8f);
+                            Dust dust = Dust.NewDustDirect(npc.Center, npc.width, npc.height, DustID.JungleSpore, dustVelocity.X, dustVelocity.Y, 250, default, 0.8f);
                             dust.fadeIn = 0.7f;
                         }
 
@@ -652,7 +652,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Spore dust
                 if (Main.rand.NextBool(10))
                 {
-                    Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, 44, 0f, 0f, 250, default, 0.6f);
+                    Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.JungleSpore, 0f, 0f, 250, default, 0.6f);
                     dust.fadeIn = 0.7f;
                 }
 
@@ -792,7 +792,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 if (Main.rand.NextBool(Main.dayTime ? 3 : 6))
                 {
-                    int dust = Dust.NewDust(npc.position, npc.width, npc.height, 55, 0f, 0f, 200, default, 0.5f);
+                    int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Pixie, 0f, 0f, 200, default, 0.5f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 0.75f;
                     Main.dust[dust].fadeIn = 1.3f;
@@ -1027,7 +1027,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Spore dust
             if (Main.rand.NextBool(10))
             {
-                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, 44, 0f, 0f, 250, default, 0.4f);
+                Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.JungleSpore, 0f, 0f, 250, default, 0.4f);
                 dust.fadeIn = 0.7f;
             }
 

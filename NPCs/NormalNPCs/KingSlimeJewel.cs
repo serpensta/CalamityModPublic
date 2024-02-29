@@ -1,12 +1,12 @@
-﻿using CalamityMod.Events;
+﻿using CalamityMod.CalPlayer;
+using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.CalPlayer;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
@@ -19,7 +19,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true }; 
+            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
         }
 
@@ -136,7 +136,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 {
                     Vector2 dustVel = projVector;
                     dustVel.Normalize();
-                    int ruby = Dust.NewDust(NPC.Center, NPC.width, NPC.height, 90, dustVel.X, dustVel.Y, 100, default, 2f);
+                    int ruby = Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.GemRuby, dustVel.X, dustVel.Y, 100, default, 2f);
                     Main.dust[ruby].velocity *= 1.5f;
                     Main.dust[ruby].noGravity = true;
                     if (Main.rand.NextBool())
@@ -184,7 +184,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-            Dust.NewDust(NPC.position, NPC.width, NPC.height, 90, hit.HitDirection, -1f, 0, default, 1f);
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GemRuby, hit.HitDirection, -1f, 0, default, 1f);
             if (NPC.life <= 0)
             {
                 NPC.position.X = NPC.position.X + (NPC.width / 2);
@@ -195,7 +195,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 2; i++)
                 {
-                    int rubyDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 90, 0f, 0f, 100, default, 2f);
+                    int rubyDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemRuby, 0f, 0f, 100, default, 2f);
                     Main.dust[rubyDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -205,10 +205,10 @@ namespace CalamityMod.NPCs.NormalNPCs
                 }
                 for (int j = 0; j < 10; j++)
                 {
-                    int rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 90, 0f, 0f, 100, default, 3f);
+                    int rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemRuby, 0f, 0f, 100, default, 3f);
                     Main.dust[rubyDust2].noGravity = true;
                     Main.dust[rubyDust2].velocity *= 5f;
-                    rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 90, 0f, 0f, 100, default, 2f);
+                    rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemRuby, 0f, 0f, 100, default, 2f);
                     Main.dust[rubyDust2].velocity *= 2f;
                 }
             }

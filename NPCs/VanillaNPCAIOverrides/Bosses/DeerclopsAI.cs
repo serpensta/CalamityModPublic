@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using CalamityMod.Events;
+using CalamityMod.World;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.World;
-using CalamityMod.Events;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -75,7 +75,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 while (invincibleDustAmount > 0f)
                 {
                     invincibleDustAmount -= 1f;
-                    Dust.NewDustDirect(npc.position, npc.width, npc.height, 109, 0f, -3f, 0, default(Color), 1.4f).noGravity = true;
+                    Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Asphalt, 0f, -3f, 0, default(Color), 1.4f).noGravity = true;
                 }
             }
             else if (!hasTargetBeenInRange && npc.target.WithinBounds(Main.player.Length) && !Main.player[npc.target].dead)
@@ -138,7 +138,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 case -1:
 
                     npc.localAI[3] = -10f;
-                    
+
                     break;
 
                 // Choose an attack to use

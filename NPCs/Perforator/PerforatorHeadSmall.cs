@@ -1,16 +1,16 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Perforator
 {
@@ -81,11 +81,11 @@ namespace CalamityMod.NPCs.Perforator
             int associatedNPCType = ModContent.NPCType<PerforatorHive>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCrimson,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Perforator")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Perforator")
             });
         }
 
@@ -291,12 +291,12 @@ namespace CalamityMod.NPCs.Perforator
 
             if (Main.zenithWorld && CalamityGlobalNPC.perfHive >= 0)
                 NPC.ai[0]++;
-            
+
             //GFB movement
             if (NPC.ai[0] >= 300f && CalamityGlobalNPC.perfHive >= 0)
             {
                 shouldFly = false;
-                
+
                 NPC Hive = Main.npc[CalamityGlobalNPC.perfHive];
                 Vector2 targetDistance = Hive.Center - NPC.Center;
                 float velocity = 16f;

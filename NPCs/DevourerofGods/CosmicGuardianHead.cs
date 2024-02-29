@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -65,9 +65,9 @@ namespace CalamityMod.NPCs.DevourerofGods
             int associatedNPCType = ModContent.NPCType<DevourerofGodsHead>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicGuardian")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicGuardian")
             });
         }
 
@@ -136,7 +136,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             if (CalamityGlobalNPC.DoGHead < 0 || !Main.npc[CalamityGlobalNPC.DoGHead].active)
             {
                 NPC.velocity.Y -= 4f;
-                
+
                 if ((double)NPC.position.Y < Main.topWorld + 16f)
                 {
                     for (int a = 0; a < Main.maxNPCs; a++)

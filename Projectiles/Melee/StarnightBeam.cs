@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -56,11 +56,11 @@ namespace CalamityMod.Projectiles.Melee
             {
                 float projOldX = Projectile.oldVelocity.X * (30f / (float)i);
                 float projOldY = Projectile.oldVelocity.Y * (30f / (float)i);
-                int starnight = Dust.NewDust(new Vector2(Projectile.oldPosition.X - projOldX, Projectile.oldPosition.Y - projOldY), 8, 8, 73, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.8f);
+                int starnight = Dust.NewDust(new Vector2(Projectile.oldPosition.X - projOldX, Projectile.oldPosition.Y - projOldY), 8, 8, DustID.PinkFairy, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.8f);
                 Dust dust = Main.dust[starnight];
                 dust.noGravity = true;
                 dust.velocity *= 0.5f;
-                starnight = Dust.NewDust(new Vector2(Projectile.oldPosition.X - projOldX, Projectile.oldPosition.Y - projOldY), 8, 8, 73, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.4f);
+                starnight = Dust.NewDust(new Vector2(Projectile.oldPosition.X - projOldX, Projectile.oldPosition.Y - projOldY), 8, 8, DustID.PinkFairy, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.4f);
                 dust.velocity *= 0.05f;
                 inc = i;
             }

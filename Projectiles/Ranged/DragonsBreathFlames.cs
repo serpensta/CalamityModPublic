@@ -120,12 +120,12 @@ namespace CalamityMod.Projectiles.Ranged
                     for (int i = 0; i <= 4; i++)
                     {
                         Vector2 sparkVelocity = Projectile.velocity * 6;
-                        
+
                         float sparkScale1 = Main.rand.NextFloat(0.3f, 0.8f);
                         Vector2 sparkvelocity1 = sparkVelocity.RotatedByRandom(0.45f) * Main.rand.NextFloat(0.4f, 0.95f);
                         SparkParticle spark1 = new SparkParticle(Projectile.Center, sparkvelocity1, false, 6, sparkScale1, Main.rand.NextBool() ? Color.DarkOrange : Color.OrangeRed);
                         GeneralParticleHandler.SpawnParticle(spark1);
-                        
+
                         float sparkScale2 = Main.rand.NextFloat(0.4f, 1f);
                         Vector2 sparkvelocity2 = sparkVelocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(1.1f, 3.1f);
                         SparkParticle spark2 = new SparkParticle(Projectile.Center, sparkvelocity2, false, 6, sparkScale2, Main.rand.NextBool() ? Color.DarkOrange : Color.OrangeRed);

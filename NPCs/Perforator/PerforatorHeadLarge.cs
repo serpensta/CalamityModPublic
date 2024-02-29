@@ -1,17 +1,17 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Perforator
 {
@@ -82,11 +82,11 @@ namespace CalamityMod.NPCs.Perforator
             int associatedNPCType = ModContent.NPCType<PerforatorHive>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundCrimson,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Perforator")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Perforator")
             });
         }
 
@@ -340,7 +340,7 @@ namespace CalamityMod.NPCs.Perforator
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X + laserGap, player.Center.Y + laserOffset, 0f, laserVelocity, type, damage, 0f, Main.myPlayer);
                     }
                 }
-                    
+
                 if (NPC.Calamity().newAI[3] >= 300f)
                     NPC.Calamity().newAI[3] = -300f;
             }

@@ -1,16 +1,16 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Items.Weapons.Melee;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria.Graphics.Shaders;
+using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.ModLoader;
 using static CalamityMod.CalamityUtils;
-using System.Linq;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -153,7 +153,7 @@ namespace CalamityMod.Projectiles.Melee
             // Create the slash.
             if (Time == (int)(Terratomere.SwingTime * (SwingCompletionRatio + 0.15f)))
                 SoundEngine.PlaySound(Terratomere.SwingSound, Projectile.Center);
-            
+
             if (Main.myPlayer == Projectile.owner && Time == (int)(Terratomere.SwingTime * (SwingCompletionRatio + 0.34f)))
             {
                 Vector2 bigSlashVelocity = Projectile.SafeDirectionTo(Main.MouseWorld) * Owner.ActiveItem().shootSpeed;
@@ -274,7 +274,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             if (Owner.moonLeech)
                 return;
-            
+
             Owner.statLife += Terratomere.TrueMeleeHitHeal;
             Owner.HealEffect(Terratomere.TrueMeleeHitHeal);
         }

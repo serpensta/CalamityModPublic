@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Magic
 {
     public class ClimaxBeam : ModProjectile, ILocalizedModType
@@ -24,7 +26,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             Vector2 projPos = Projectile.position;
             projPos -= Projectile.velocity * 0.25f;
-            int boltDust = Dust.NewDust(projPos, 1, 1, 206, 0f, 0f, 0, default, 1.25f);
+            int boltDust = Dust.NewDust(projPos, 1, 1, DustID.UnusedWhiteBluePurple, 0f, 0f, 0, default, 1.25f);
             Main.dust[boltDust].position = projPos;
             Main.dust[boltDust].scale = (float)Main.rand.Next(70, 110) * 0.013f;
             Main.dust[boltDust].velocity *= 0.1f;

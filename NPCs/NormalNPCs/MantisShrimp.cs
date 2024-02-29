@@ -45,7 +45,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.MantisShrimp")
@@ -119,9 +119,9 @@ namespace CalamityMod.NPCs.NormalNPCs
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
-		{
-			npcLoot.AddIf(() => NPC.downedPlantBoss, ModContent.ItemType<MantisClaws>(), 5);
-		}
+        {
+            npcLoot.AddIf(() => NPC.downedPlantBoss, ModContent.ItemType<MantisClaws>(), 5);
+        }
 
         public override void HitEffect(NPC.HitInfo hit)
         {

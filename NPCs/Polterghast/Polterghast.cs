@@ -1,4 +1,7 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Vanity;
@@ -14,23 +17,20 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.NPCs.Abyss;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using CalamityMod.NPCs.Abyss;
 
 namespace CalamityMod.NPCs.Polterghast
 {
@@ -125,7 +125,7 @@ namespace CalamityMod.NPCs.Polterghast
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Polterghast")
@@ -303,7 +303,7 @@ namespace CalamityMod.NPCs.Polterghast
                 {
                     SoundStyle[] creepyArray = creepySounds.ToArray();
                     SoundStyle selectedSound = creepyArray[Main.rand.Next(0, creepyArray.Length - 1)];
-                    SoundEngine.PlaySound(selectedSound with { Pitch = selectedSound.Pitch - 0.8f, Volume = selectedSound.Volume - 0.2f}, NPC.Center);
+                    SoundEngine.PlaySound(selectedSound with { Pitch = selectedSound.Pitch - 0.8f, Volume = selectedSound.Volume - 0.2f }, NPC.Center);
                 }
             }
 

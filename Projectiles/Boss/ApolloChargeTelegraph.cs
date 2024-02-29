@@ -1,7 +1,7 @@
-﻿using CalamityMod.Events;
+﻿using System.IO;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;

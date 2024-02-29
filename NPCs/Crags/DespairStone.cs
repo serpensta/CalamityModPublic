@@ -1,21 +1,21 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
-using CalamityMod.Particles;
 using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
+using CalamityMod.Particles;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
+using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ReLogic.Utilities;
-using System;
-using CalamityMod.Items.Placeables;
-using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 
 namespace CalamityMod.NPCs.Crags
 {
@@ -59,7 +59,7 @@ namespace CalamityMod.NPCs.Crags
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DespairStone")
             });
@@ -100,7 +100,7 @@ namespace CalamityMod.NPCs.Crags
                 if (NPC.velocity.X < 0f) //left
                 {
                     NPC.ai[2] = -1f;
-                }   
+                }
                 else if (NPC.velocity.X > 0f) //right
                 {
                     NPC.ai[2] = 1f;
@@ -202,7 +202,7 @@ namespace CalamityMod.NPCs.Crags
             Vector2 splatterDirection;
             if (NPC.velocity.X == 0f)
             {
-                particleSpawnDisplacement = new Vector2 (24f * NPC.ai[2], 20f);
+                particleSpawnDisplacement = new Vector2(24f * NPC.ai[2], 20f);
                 splatterDirection = new Vector2(0f, 1f);
             }
             else
@@ -210,7 +210,7 @@ namespace CalamityMod.NPCs.Crags
                 particleSpawnDisplacement = new Vector2(20f * -NPC.ai[2], 24f);
                 splatterDirection = new Vector2(-NPC.ai[2], 0f);
             }
-            
+
             //Color impactColor = Color.Lerp(Color.Silver, Color.Gold, Main.rand.NextFloat(0.5f));
             Vector2 bloodSpawnPosition = NPC.Center + particleSpawnDisplacement;
 

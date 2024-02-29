@@ -46,7 +46,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.frame++;
             if (Projectile.frame >= 18)
                 Projectile.Kill();
-            
+
             // Exponentially accelerate.
             Projectile.scale *= Terratomere.ExplosionExpandFactor;
             Projectile.Opacity = Utils.GetLerpValue(5f, 36f, Projectile.timeLeft, true);

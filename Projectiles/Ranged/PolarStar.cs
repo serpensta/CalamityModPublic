@@ -1,21 +1,21 @@
-﻿using CalamityMod.Buffs.StatBuffs;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.IO;
 using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Buffs.StatBuffs;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
+using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
-using System.IO;
+using CalamityMod.Projectiles.Boss;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 using static CalamityMod.Items.Weapons.Ranged.PolarisParrotfish;
 using static Terraria.ModLoader.ModContent;
-using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.Projectiles.Boss;
 
 namespace CalamityMod.Projectiles.Ranged
 {

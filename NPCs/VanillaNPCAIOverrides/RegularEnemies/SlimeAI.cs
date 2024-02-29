@@ -1,9 +1,9 @@
-﻿using CalamityMod.NPCs.AcidRain;
+﻿using System;
+using CalamityMod.NPCs.AcidRain;
 using CalamityMod.NPCs.Crags;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -138,14 +138,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             // Have corrupt slimes emit demonite dust.
             if (npc.type == NPCID.CorruptSlime && Main.rand.NextBool(30))
             {
-                Dust demonite = Dust.NewDustDirect(npc.position, npc.width, npc.height, 14, 0f, 0f, npc.alpha, npc.color, 1f);
+                Dust demonite = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Demonite, 0f, 0f, npc.alpha, npc.color, 1f);
                 demonite.velocity *= 0.3f;
             }
 
             // Have ice slimes emit snow dust.
             if ((npc.type == NPCID.IceSlime || npc.type == NPCID.SpikedIceSlime) && Main.rand.NextBool(10))
             {
-                Dust snow = Dust.NewDustDirect(npc.position, npc.width, npc.height, 76, 0f, 0f, 0, default, 1f);
+                Dust snow = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Snow, 0f, 0f, 0, default, 1f);
                 snow.noGravity = true;
                 snow.velocity *= 0.1f;
             }
@@ -156,7 +156,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 Lighting.AddLight((int)(npc.Center.X / 16f), (int)(npc.Center.Y / 16f), 1f, 0.3f, 0.1f);
 
                 // And fire. dust.
-                int idx = Dust.NewDust(npc.position, npc.width, npc.height, 6, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default, 1.7f);
+                int idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default, 1.7f);
                 Main.dust[idx].noGravity = true;
             }
 

@@ -1,4 +1,4 @@
-using CalamityMod.Items.Fishing.FishingRods;
+﻿using CalamityMod.Items.Fishing.FishingRods;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;

@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Melee
                 SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                 Projectile.localAI[0] += 1f;
             }
-            int hitDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 5, 0f, 0f, 100, default, 1f);
+            int hitDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 100, default, 1f);
             Main.dust[hitDust].noGravity = true;
             Main.dust[hitDust].velocity *= 0.5f;
             Main.dust[hitDust].velocity += Projectile.velocity * 0.1f;
@@ -60,11 +60,11 @@ namespace CalamityMod.Projectiles.Melee
             {
                 float oldXPos = Projectile.oldVelocity.X * (30f / (float)i);
                 float oldYPos = Projectile.oldVelocity.Y * (30f / (float)i);
-                int killDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXPos, Projectile.oldPosition.Y - oldYPos), 8, 8, 5, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.8f);
+                int killDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXPos, Projectile.oldPosition.Y - oldYPos), 8, 8, DustID.Blood, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.8f);
                 Main.dust[killDust].noGravity = true;
                 Dust dust = Main.dust[killDust];
                 dust.velocity *= 0.5f;
-                killDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXPos, Projectile.oldPosition.Y - oldYPos), 8, 8, 5, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.4f);
+                killDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXPos, Projectile.oldPosition.Y - oldYPos), 8, 8, DustID.Blood, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.4f);
                 dust = Main.dust[killDust];
                 dust.velocity *= 0.05f;
                 inc = i;

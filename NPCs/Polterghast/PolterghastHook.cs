@@ -1,10 +1,10 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.IO;
+using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -261,7 +261,8 @@ namespace CalamityMod.NPCs.Polterghast
                                 NPC.localAI[1] = Vector2.Distance(NPC.Center, player.Center) * 0.01f;
                                 NPC.netUpdate = true;
                             }
-                        } catch
+                        }
+                        catch
                         {
                         }
                     }
@@ -470,13 +471,13 @@ namespace CalamityMod.NPCs.Polterghast
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 180, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.DungeonSpirit, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 20; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 180, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.DungeonSpirit, hit.HitDirection, -1f, 0, default, 1f);
                 }
             }
         }

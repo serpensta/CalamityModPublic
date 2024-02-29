@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -14,7 +14,7 @@ namespace CalamityMod.Projectiles.Melee
         public int TargetIndex = -1;
 
         public PrimitiveTrail SlashDrawer = null;
-        
+
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
 
         public override void SetStaticDefaults()

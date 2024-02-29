@@ -1,20 +1,20 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
+using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System;
-using Terraria.Audio;
-using CalamityMod.Particles;
-using CalamityMod.Items.Weapons.Summon;
-using CalamityMod.Items.Accessories;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Graphics.Shaders;
-using Terraria.Graphics.Effects;
 using static Terraria.ModLoader.ModContent;
-using ReLogic.Content;
-using System.IO;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -150,7 +150,7 @@ namespace CalamityMod.Projectiles.Summon
                 {
                     Vector2 direction = Main.rand.NextVector2CircularEdge(1f, 1f);
 
-                    Dust wishyDust = Dust.NewDustPerfect(Projectile.Center + direction * Main.rand.NextFloat(1f, 8f), 229, Alpha : 100, Scale: Main.rand.NextFloat(1f, 1.4f));
+                    Dust wishyDust = Dust.NewDustPerfect(Projectile.Center + direction * Main.rand.NextFloat(1f, 8f), 229, Alpha: 100, Scale: Main.rand.NextFloat(1f, 1.4f));
                     wishyDust.noGravity = true;
                     wishyDust.noLight = true;
                     wishyDust.velocity = direction * Main.rand.NextFloat(2f, 4);
@@ -160,7 +160,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.soundDelay = NewSoundDelay;
                 ShootTimer = ShootDelay;
 
-                Initialized ++;
+                Initialized++;
             }
 
             if (Owner.Calamity().mouseRight && Owner.HeldItem.type == ModContent.ItemType<WulfrumController>())
@@ -473,7 +473,7 @@ namespace CalamityMod.Projectiles.Summon
                 CalamityUtils.DrawChromaticAberration(Vector2.UnitX, 1.8f, delegate (Vector2 offset, Color colorMod)
                 {
                     PrimColorMult = colorMod;
-                    TrailDrawer.Draw(drawPos, - Main.screenPosition + offset, 30);
+                    TrailDrawer.Draw(drawPos, -Main.screenPosition + offset, 30);
                 });
 
                 Main.spriteBatch.End();

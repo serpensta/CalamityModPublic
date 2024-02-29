@@ -1,5 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
+
 namespace CalamityMod.Projectiles.Melee
 {
     public class AtaraxiaSplit : ModProjectile, ILocalizedModType
@@ -38,7 +40,7 @@ namespace CalamityMod.Projectiles.Melee
             // Spawn dust, with less dust as it fades away
             if (Main.rand.Next(256) > Projectile.alpha - 60)
             {
-                int idx = Dust.NewDust(Projectile.Center, 1, 1, 71);
+                int idx = Dust.NewDust(Projectile.Center, 1, 1, DustID.UndergroundHallowedEnemies);
                 Main.dust[idx].position = Projectile.Center - Projectile.velocity * 0.7f;
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 0.3f;

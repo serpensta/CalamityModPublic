@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Typeless
 {
@@ -23,7 +24,7 @@ namespace CalamityMod.Projectiles.Typeless
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > 4f)
             {
-                int ourpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 62, 0f, 0f, 100, default, 1f);
+                int ourpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurpleTorch, 0f, 0f, 100, default, 1f);
                 Main.dust[ourpleDust].noGravity = true;
                 Main.dust[ourpleDust].velocity *= 0f;
             }

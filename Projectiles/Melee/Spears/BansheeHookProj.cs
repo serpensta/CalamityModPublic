@@ -1,11 +1,12 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CalamityMod.Projectiles.Melee.Spears
 {
@@ -34,7 +35,7 @@ namespace CalamityMod.Projectiles.Melee.Spears
         public override float TravelSpeed => 22f;
         public override Action<Projectile> EffectBeforeReelback => (proj) =>
         {
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(),
                                      Projectile.Center + Projectile.velocity * 0.5f,
                                      Projectile.velocity * 0.8f, ModContent.ProjectileType<BansheeHookScythe>(),
                                      Projectile.damage, Projectile.knockBack * 0.85f, Projectile.owner, 0f, 0f);
@@ -65,7 +66,7 @@ namespace CalamityMod.Projectiles.Melee.Spears
             int i = 0;
             while (i < dustCount)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.Center, 14, 14, 60, 0f, 0f, 110, default, 1f);
+                Dust dust = Dust.NewDustDirect(Projectile.Center, 14, 14, DustID.RedTorch, 0f, 0f, 110, default, 1f);
                 dust.velocity = player.SafeDirectionTo(dust.position) * 2f;
                 dust.position = Projectile.Center +
                     initalVelocity.RotatedBy(completionAsAngle * 2f + i / dustCount * MathHelper.TwoPi) * 10f;
@@ -76,7 +77,7 @@ namespace CalamityMod.Projectiles.Melee.Spears
             }
             if (Main.rand.NextBool(3))
             {
-                Dust dust = Dust.NewDustDirect(Projectile.Center, 20, 20, 60, 0f, 0f, 110, default, 1f);
+                Dust dust = Dust.NewDustDirect(Projectile.Center, 20, 20, DustID.RedTorch, 0f, 0f, 110, default, 1f);
                 dust.velocity = player.SafeDirectionTo(dust.position) * 2f;
                 dust.position = Projectile.Center + directionTowardsEnd * -110f;
                 dust.scale = 0.45f + Main.rand.NextFloat(0.4f);
@@ -124,7 +125,7 @@ namespace CalamityMod.Projectiles.Melee.Spears
         {
             if (Projectile.owner == Main.myPlayer)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), 
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(),
                     target.Center, Vector2.Zero,
                     ModContent.ProjectileType<BansheeHookBoom>(), (int)(hit.Damage * 0.25),
                     10f, Projectile.owner, 0f, 0.85f + Main.rand.NextFloat() * 1.15f);
