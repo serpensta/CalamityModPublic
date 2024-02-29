@@ -275,21 +275,35 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.direction = playerLocation < 0 ? 1 : -1;
             NPC.spriteDirection = NPC.direction;
 
-            Vector2 direction = Main.player[NPC.target].Center - NPC.Center;
-            direction.Normalize();
-            NPC.ai[1] += Main.expertMode ? 2f : 1f;
-            if (NPC.ai[1] >= 600f)
+            Vector2 direction = (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitY);
+            float chargeGateValue = Main.expertMode ? 300f : 600f;
+            NPC.ai[1] += 1f;
+            if (NPC.ai[1] >= chargeGateValue)
             {
-                direction *= 6f;
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
+                float chargeVelocity = Main.expertMode ? 9f : 6f;
+                direction *= chargeVelocity;
                 NPC.velocity = direction;
-                NPC.ai[1] = 0f;
+                NPC.ai[1] = -30f;
             }
 
-            if (Math.Sqrt((NPC.velocity.X * NPC.velocity.X) + (NPC.velocity.Y * NPC.velocity.Y)) > 1)
-                NPC.velocity *= 0.985f;
+            if (Math.Sqrt((NPC.velocity.X * NPC.velocity.X) + (NPC.velocity.Y * NPC.velocity.Y)) > 1D && NPC.ai[1] >= 0f)
+            {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
 
-            if (Math.Sqrt((NPC.velocity.X * NPC.velocity.X) + (NPC.velocity.Y * NPC.velocity.Y)) <= 1 * 1.15)
-                NPC.velocity = direction * 1;
+                NPC.velocity *= 0.97f;
+            }
+
+            if (Math.Sqrt((NPC.velocity.X * NPC.velocity.X) + (NPC.velocity.Y * NPC.velocity.Y)) <= 1.15)
+            {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
+                NPC.velocity = direction;
+            }
 
             return false;
         }

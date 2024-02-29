@@ -79,37 +79,37 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (NPC.velocity.Y == 0f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.ai[2] += 1f;
-                int decelerationDelay = 20;
+
+                int decelerationDelay = CalamityWorld.death ? 6 : CalamityWorld.revenge ? 12 : 20;
                 if (NPC.ai[1] == 0f)
-                {
-                    decelerationDelay = 12;
-                }
-                if (CalamityWorld.revenge)
-                {
-                    decelerationDelay /= 2;
-                }
-                if (CalamityWorld.death)
-                {
-                    decelerationDelay /= 2;
-                }
+                    decelerationDelay = CalamityWorld.death ? 3 : CalamityWorld.revenge ? 6 : 12;
+
                 if (NPC.ai[2] < (float)decelerationDelay)
                 {
                     NPC.velocity.X = NPC.velocity.X * 0.9f;
                     return;
                 }
+
                 NPC.ai[2] = 0f;
                 if (NPC.direction == 0)
-                {
                     NPC.direction = -1;
-                }
+
                 NPC.spriteDirection = NPC.direction;
+
                 NPC.ai[1] += 1f;
                 NPC.ai[3] += 1f;
                 if (NPC.ai[3] >= 4f)
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     NPC.ai[3] = 0f;
                     NPC.noTileCollide = true;
+
                     if (NPC.ai[1] == 2f)
                     {
                         NPC.velocity.X = (float)NPC.direction * 15f;
@@ -130,9 +130,11 @@ namespace CalamityMod.NPCs.NormalNPCs
                         else
                             NPC.velocity.Y = 12f;
                     }
+
                     if (!Main.zenithWorld)
-                    SoundEngine.PlaySound(JumpSound, NPC.Center);
+                        SoundEngine.PlaySound(JumpSound, NPC.Center);
                 }
+
                 NPC.netUpdate = true;
             }
             else
@@ -142,10 +144,9 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.velocity.X = NPC.velocity.X + 0.1f;
                     return;
                 }
+
                 if (NPC.direction == -1 && NPC.velocity.X > -1f)
-                {
                     NPC.velocity.X = NPC.velocity.X - 0.1f;
-                }
             }
         }
 

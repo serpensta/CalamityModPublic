@@ -83,7 +83,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             if (NPC.AnyNPCs(NPC.type))
                 return 0f;
 
-            return 0.05f;
+            return 0.1f;
         }
 
         public override void FindFrame(int frameHeight)
@@ -96,6 +96,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             Player player = Main.player[NPC.target];
             bool expertMode = Main.expertMode;
             NPC.spriteDirection = (NPC.direction > 0) ? 1 : -1;

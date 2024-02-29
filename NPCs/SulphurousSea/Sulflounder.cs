@@ -60,6 +60,9 @@ namespace CalamityMod.NPCs.SulphurousSea
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             NPC.spriteDirection = (NPC.direction > 0) ? 1 : -1;
             int alphaControl = 200;
             if (NPC.ai[2] == 0f)
