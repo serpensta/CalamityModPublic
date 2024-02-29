@@ -46,7 +46,7 @@ namespace CalamityMod.Graphics.Primitives
 
         private static short IndicesIndex;
 
-        static PrimitiveRenderer()
+        internal static void Initialize()
         {
             Main.QueueMainThreadAction(() =>
             {
