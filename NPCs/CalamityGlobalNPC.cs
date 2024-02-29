@@ -2901,7 +2901,66 @@ namespace CalamityMod.NPCs
                     case NPCID.SwampThing:
                     case NPCID.Vampire:
                     case NPCID.VampireBat:
-
+                    case NPCID.BrainScrambler:
+                    case NPCID.GigaZapper:
+                    case NPCID.MartianWalker:
+                    case NPCID.GrayGrunt:
+                    case NPCID.MartianDrone:
+                    case NPCID.MartianEngineer:
+                    case NPCID.MartianOfficer:
+                    case NPCID.RayGunner:
+                    case NPCID.Scutlix:
+                    case NPCID.ScutlixRider:
+                    case NPCID.MartianTurret:
+                    case NPCID.HeadlessHorseman:
+                    case NPCID.Hellhound:
+                    case NPCID.Splinterling:
+                    case NPCID.Poltergeist:
+                    case NPCID.Scarecrow1:
+                    case NPCID.Scarecrow2:
+                    case NPCID.Scarecrow3:
+                    case NPCID.Scarecrow4:
+                    case NPCID.Scarecrow5:
+                    case NPCID.Scarecrow6:
+                    case NPCID.Scarecrow7:
+                    case NPCID.Scarecrow8:
+                    case NPCID.Scarecrow9:
+                    case NPCID.Scarecrow10:
+                    case NPCID.ElfArcher:
+                    case NPCID.ElfCopter:
+                    case NPCID.Flocko:
+                    case NPCID.GingerbreadMan:
+                    case NPCID.Krampus:
+                    case NPCID.Nutcracker:
+                    case NPCID.NutcrackerSpinning:
+                    case NPCID.Yeti:
+                    case NPCID.NebulaBeast:
+                    case NPCID.NebulaBrain:
+                    case NPCID.NebulaHeadcrab:
+                    case NPCID.NebulaSoldier:
+                    case NPCID.SolarCorite:
+                    case NPCID.SolarCrawltipedeBody:
+                    case NPCID.SolarCrawltipedeHead:
+                    case NPCID.SolarCrawltipedeTail:
+                    case NPCID.SolarDrakomire:
+                    case NPCID.SolarDrakomireRider:
+                    case NPCID.SolarSolenian:
+                    case NPCID.SolarSpearman:
+                    case NPCID.SolarSroller:
+                    case NPCID.StardustCellBig:
+                    case NPCID.StardustCellSmall:
+                    case NPCID.StardustJellyfishBig:
+                    case NPCID.StardustWormBody:
+                    case NPCID.StardustWormHead:
+                    case NPCID.StardustWormTail:
+                    case NPCID.StardustSoldier:
+                    case NPCID.StardustSpiderBig:
+                    case NPCID.StardustSpiderSmall:
+                    case NPCID.VortexHornet:
+                    case NPCID.VortexHornetQueen:
+                    case NPCID.VortexLarva:
+                    case NPCID.VortexRifleman:
+                    case NPCID.VortexSoldier:
                         npc.lifeMax = (int)(npc.lifeMax * 0.75);
                         npc.damage = (int)(npc.damage * 0.85);
                         npc.defDamage = npc.damage;
