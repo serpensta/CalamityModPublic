@@ -401,7 +401,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             if (hitboxBotRight < minDist)
                 minDist = hitboxBotRight;
 
-            return minDist <= (phase2Started ? 70f : 35f) * NPC.scale && NPC.Opacity >= 1f;
+            return minDist <= (phase2Started ? 70f : 35f) * NPC.scale && NPC.Opacity >= 1f && invinceTime <= 0;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
