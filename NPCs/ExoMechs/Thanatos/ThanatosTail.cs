@@ -167,7 +167,8 @@ namespace CalamityMod.NPCs.ExoMechs.Thanatos
             // Set vulnerable to false by default
             vulnerable = false;
 
-            CalamityGlobalNPC calamityGlobalNPC_Head = Main.npc[(int)NPC.ai[2]].Calamity();
+            NPC head = Main.npc[(int)NPC.ai[2]];
+            CalamityGlobalNPC calamityGlobalNPC_Head = head.Calamity();
 
             bool invisiblePhase = calamityGlobalNPC_Head.newAI[1] == (float)ThanatosHead.SecondaryPhase.PassiveAndImmune;
             NPC.dontTakeDamage = Main.npc[(int)NPC.ai[2]].dontTakeDamage;
@@ -468,7 +469,7 @@ namespace CalamityMod.NPCs.ExoMechs.Thanatos
 
             SmokeDrawer.Update();
 
-            Player player = Main.player[Main.npc[CalamityGlobalNPC.draedonExoMechWorm].target];
+            Player player = Main.player[head.target];
 
             Vector2 npcCenter = NPC.Center;
             float targetCenterX = player.Center.X;
@@ -480,32 +481,73 @@ namespace CalamityMod.NPCs.ExoMechs.Thanatos
             targetCenterX -= npcCenter.X;
             targetCenterY -= npcCenter.Y;
 
-            float distanceFromTarget = (float)Math.Sqrt(targetCenterX * targetCenterX + targetCenterY * targetCenterY);
+            float newPosition = (float)Math.Sqrt(targetCenterX * targetCenterX + targetCenterY * targetCenterY);
             if (NPC.ai[1] > 0f && NPC.ai[1] < Main.npc.Length)
             {
                 try
                 {
-                    npcCenter = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
-                    targetCenterX = Main.npc[(int)NPC.ai[1]].position.X + (Main.npc[(int)NPC.ai[1]].width / 2) - npcCenter.X;
-                    targetCenterY = Main.npc[(int)NPC.ai[1]].position.Y + (Main.npc[(int)NPC.ai[1]].height / 2) - npcCenter.Y;
+                    npcCenter = NPC.Center;
+                    targetCenterX = Main.npc[(int)NPC.ai[1]].Center.X - npcCenter.X;
+                    targetCenterY = Main.npc[(int)NPC.ai[1]].Center.Y - npcCenter.Y;
                 }
                 catch
                 {
                 }
 
                 NPC.rotation = (float)Math.Atan2(targetCenterY, targetCenterX) + MathHelper.PiOver2;
-                distanceFromTarget = (float)Math.Sqrt(targetCenterX * targetCenterX + targetCenterY * targetCenterY);
-                distanceFromTarget = (distanceFromTarget - NPC.width) / distanceFromTarget;
-                targetCenterX *= distanceFromTarget;
-                targetCenterY *= distanceFromTarget;
+                newPosition = (float)Math.Sqrt(targetCenterX * targetCenterX + targetCenterY * targetCenterY);
+                newPosition = (newPosition - NPC.width) / newPosition;
+                targetCenterX *= newPosition;
+                targetCenterY *= newPosition;
                 NPC.velocity = Vector2.Zero;
-                NPC.position.X = NPC.position.X + targetCenterX;
-                NPC.position.Y = NPC.position.Y + targetCenterY;
+                NPC.position.X += targetCenterX;
+                NPC.position.Y += targetCenterY;
 
                 if (targetCenterX < 0f)
                     NPC.spriteDirection = -1;
                 else if (targetCenterX > 0f)
                     NPC.spriteDirection = 1;
+            }
+
+            bool speedUp = head.localAI[3] < 180f;
+
+            // Distance from target
+            float distanceFromTarget = Vector2.Distance(head.Center, speedUp ? (player.Center + new Vector2(0f, 2400f)) : player.Center);
+
+            // Increase speed if too far from target
+            float increaseSpeedMult = 1f;
+            float increaseSpeedGateValue = 600f;
+            if (distanceFromTarget > increaseSpeedGateValue)
+            {
+                float distanceAmount = MathHelper.Clamp((distanceFromTarget - increaseSpeedGateValue) / (CalamityGlobalNPC.CatchUpDistance350Tiles - increaseSpeedGateValue), 0f, 1f);
+                increaseSpeedMult = MathHelper.Lerp(1f, 3.5f, distanceAmount);
+            }
+
+            // Velocity and turn speed values
+            float baseVelocityMult = (shouldGetBuffedByBerserkPhase ? 0.15f : 0f) + (bossRush ? 1.25f : death ? 1.2f : revenge ? 1.175f : expertMode ? 1.15f : 1.1f);
+            float baseVelocity = 10f * baseVelocityMult;
+
+            // Increase top velocity if target is dead or if Thanatos is uncoiling
+            if (player.dead || speedUp)
+                baseVelocity *= 4f;
+            else
+                baseVelocity *= increaseSpeedMult;
+
+            if (Main.getGoodWorld)
+                baseVelocity *= 1.15f;
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = baseVelocity * 0.25f;
+            float minimalDamageVelocity = baseVelocity * 0.5f;
+            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
+            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+            {
+                NPC.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
             }
         }
 

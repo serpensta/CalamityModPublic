@@ -730,6 +730,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                 // Fly to the left of the target
                 case (int)Phase.Normal:
 
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     if (!stopRotatingAndSlowDown)
                     {
                         // Set charge variable to default
@@ -865,6 +868,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                                     }
                                     else
                                     {
+                                        // Set damage
+                                        NPC.damage = NPC.defDamage;
+
                                         // Charge until a certain distance is reached and then return to normal phase
                                         SoundEngine.PlaySound(ChargeSound, NPC.Center);
                                         AIState = (float)Phase.Charge;
@@ -883,6 +889,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                 // Charge
                 case (int)Phase.Charge:
 
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     // Allow the charge flash to happen
                     shouldDoChargeFlash = true;
 
@@ -890,6 +899,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                     calamityGlobalNPC.newAI[2] += 1f;
                     if (calamityGlobalNPC.newAI[2] >= chargeDuration)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         // Decelerate
                         NPC.velocity *= decelerationVelocityMult;
 
@@ -906,6 +918,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
 
                 // Laser shotgun barrage
                 case (int)Phase.LaserShotgun:
+
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
 
                     // Smooth movement towards the location Artemis is meant to be at
                     CalamityUtils.SmoothMovement(NPC, movementDistanceGateValue, distanceFromDestination, baseVelocity, 0f, false);
@@ -966,6 +981,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
 
                 // Fly above target, fire deathray and move in a circle around the target
                 case (int)Phase.Deathray:
+
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
 
                     // Fly above, stop doing this if in the proper position
                     // Stop rotating and spin around a target point
@@ -1184,6 +1202,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                 // Phase transition animation, that's all this exists for
                 case (int)Phase.PhaseTransition:
 
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     // Smooth movement towards the location Artemis is meant to be at
                     CalamityUtils.SmoothMovement(NPC, movementDistanceGateValue, distanceFromDestination, baseVelocity, 0f, false);
 
@@ -1261,7 +1282,7 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
             if (hitboxBotRight < minDist)
                 minDist = hitboxBotRight;
 
-            return minDist <= 100f && NPC.Opacity == 1f && AIState == (float)Phase.Charge;
+            return minDist <= 100f && NPC.Opacity == 1f;
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)

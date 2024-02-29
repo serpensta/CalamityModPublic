@@ -956,6 +956,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                 // Fly to the right of the target
                 case (int)Phase.Normal:
 
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     // Smooth movement towards the location Apollo is meant to be at
                     CalamityUtils.SmoothMovement(NPC, movementDistanceGateValue, distanceFromDestination, baseVelocity, 0f, false);
 
@@ -1029,6 +1032,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                 // Charge
                 case (int)Phase.RocketBarrage:
 
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     // Smooth movement towards the location Apollo is meant to be at
                     CalamityUtils.SmoothMovement(NPC, movementDistanceGateValue, distanceFromDestination, baseVelocity, 0f, false);
 
@@ -1069,6 +1075,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                 // Fill up the charge location array with the positions Apollo will charge from
                 // Create telegraph beams between the charge location array positions
                 case (int)Phase.LineUpChargeCombo:
+
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
 
                     if (!readyToCharge)
                     {
@@ -1131,6 +1140,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                         calamityGlobalNPC.newAI[2] += 1f;
                         if (calamityGlobalNPC.newAI[2] >= timeToLineUpCharge)
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             ExoMechsSky.CreateLightningBolt(10);
 
                             AIState = (float)Phase.ChargeCombo;
@@ -1143,6 +1155,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
 
                 // Charge to several locations almost instantly (Apollo doesn't teleport here, he's just moving very fast :D)
                 case (int)Phase.ChargeCombo:
+
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
 
                     // Tell Artemis to not fire lasers for a short time
                     NPC.ai[3] = 61f;
@@ -1247,6 +1262,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
                     // Reset phase and variables
                     if (calamityGlobalNPC.newAI[2] >= maxCharges - 1)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         if (Main.zenithWorld && !exoMechdusa)
                         {
                             pickNewLocation = NPC.localAI[2] == 0f;
@@ -1283,6 +1301,9 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
 
                 // Phase transition animation, that's all this exists for
                 case (int)Phase.PhaseTransition:
+
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
 
                     // Smooth movement towards the location Apollo is meant to be at
                     CalamityUtils.SmoothMovement(NPC, movementDistanceGateValue, distanceFromDestination, baseVelocity, 0f, false);
@@ -1367,7 +1388,7 @@ namespace CalamityMod.NPCs.ExoMechs.Apollo
             if (hitboxBotRight < minDist)
                 minDist = hitboxBotRight;
 
-            return minDist <= 100f && NPC.Opacity == 1f && AIState == (float)Phase.ChargeCombo;
+            return minDist <= 100f && NPC.Opacity == 1f;
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
