@@ -96,11 +96,9 @@ namespace CalamityMod.Projectiles.Ranged
         }
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i <= 2; i++)
-            {
-                Particle pulse = new Particles.PlasmaExplosion(Projectile.Center + Main.rand.NextVector2Circular(60, 60), Vector2.Zero, Main.rand.NextBool() ? Color.Magenta : Color.Cyan, new Vector2(1f, 1f), Main.rand.NextFloat(-2f, 2f), 0f, Main.rand.NextFloat(0.05f, 0.065f), 15);
-                GeneralParticleHandler.SpawnParticle(pulse);
-            }
+            VoidSparkParticle spark2 = new VoidSparkParticle(Projectile.Center, new Vector2(0.1f, 0.1f).RotatedByRandom(100), false, 9, Main.rand.NextFloat(0.15f, 0.25f), Main.rand.NextBool() ? Color.Magenta : Color.Cyan);
+            GeneralParticleHandler.SpawnParticle(spark2);
+
             if (Projectile.owner == Main.myPlayer)
             {
                 Projectile.damage = (int)(Projectile.damage * 0.4f);
