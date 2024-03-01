@@ -608,14 +608,13 @@ namespace CalamityMod.Items
                 EditTooltipByNum(2, (line) => line.Text = line.Text.Replace(" melee speed,", ""));
             }
 
-            // Arcane and Magnet Flower buffs.
+            // Mana Flower tinker buffs.
             if (item.type == ItemID.MagnetFlower)
-                EditTooltipByNum(0, (line) => line.Text = "10% reduced mana usage");
+                EditTooltipByNum(0, (line) => line.Text = "10% reduced mana cost");
+            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.ManaCloak)
+                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana cost");
             if (item.type == ItemID.ArcaneFlower)
-            {
-                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
                 EditTooltipByNum(2, (line) => line.Text += "\n5% increased magic damage");
-            }
 
             // Magiluminescence nerf and clear explanation of what it actually does.
             if (item.type == ItemID.Magiluminescence)
