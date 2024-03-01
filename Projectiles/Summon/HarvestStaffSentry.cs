@@ -49,6 +49,8 @@ namespace CalamityMod.Projectiles.Summon
                     Main.rand.Next(3));
 
                 Timer = 0f;
+
+                Projectile.netUpdate = true;
             }
 
             float speed = Projectile.velocity.Y;

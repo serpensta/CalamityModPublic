@@ -181,7 +181,7 @@ namespace CalamityMod.Projectiles.Summon
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {
                     Player p = Main.player[i];
-                    if (p == null || !p.active || p.dead)
+                    if (p == null || !p.active || p.dead || !Projectile.Center.WithinRange(p.Center, 64f))
                         continue;
                     return p;
                 }
@@ -212,6 +212,8 @@ namespace CalamityMod.Projectiles.Summon
             }
         }
 
+        public int NetUpdateTimer { get; set; }
+
         #endregion
 
         #region AI and Collisions
@@ -239,6 +241,13 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.timeLeft = 2;
             DoGravity();
             DoAnimation();
+
+            NetUpdateTimer++;
+            if (NetUpdateTimer > 60)
+            {
+                NetUpdateTimer = 0;
+                NetUpdate();
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -291,6 +300,8 @@ namespace CalamityMod.Projectiles.Summon
                 Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center, velocity, Mod.Find<ModGore>($"PumpkinGore{Main.rand.Next(6) + 1}").Type, Utils.Remap(Variant, 0f, 2f, 1f, 0.5f));
                 gore.timeLeft = 15;
             }
+
+            NetUpdate();
 
             if (Main.dedServ)
                 return;
@@ -397,8 +408,8 @@ namespace CalamityMod.Projectiles.Summon
             }
             else
             {
-                State = AIState.Idle;
                 Projectile.velocity.X = 0f;
+                State = AIState.Idle;
             }
         }
 
@@ -546,6 +557,7 @@ namespace CalamityMod.Projectiles.Summon
             writer.Write(IdleJumpCount);
             writer.Write(IdleJumpCooldown);
             writer.Write(IdleWalkingDirection);
+            writer.Write(NetUpdateTimer);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -555,9 +567,12 @@ namespace CalamityMod.Projectiles.Summon
             IdleJumpCount = reader.ReadInt32();
             IdleJumpCooldown = reader.ReadInt32();
             IdleWalkingDirection = reader.ReadInt32();
+            NetUpdateTimer = reader.ReadInt32();
         }
 
         public override bool? CanDamage() => State == AIState.Attack ? null : false;
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => NetUpdate();
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.SourceDamage *= Utils.Remap(Variant, 0f, 2f, 1.5f, 0.5f);
 
