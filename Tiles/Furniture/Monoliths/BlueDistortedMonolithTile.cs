@@ -3,7 +3,6 @@ using CalamityMod.Items.Placeables.Furniture.Monoliths;
 using CalamityMod.NPCs.Yharon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -16,29 +15,24 @@ using Terraria.ObjectData;
 
 namespace CalamityMod.Tiles.Furniture.Monoliths
 {
-    public class AstralProjectorTile : ModTile
+    public class BlueDistortedMonolithTile : ModTile
     {
-        public static Texture2D Glow;
         public override void SetStaticDefaults()
         {
-            if (!Main.dedServ)
-            {
-                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/AstralProjectorTile_Glow", AssetRequestMode.ImmediateLoad).Value;
-            }
-            RegisterItemDrop(ModContent.ItemType<AstralProjector>());
+            RegisterItemDrop(ModContent.ItemType<BlueDistortedMonolith>());
             Main.tileFrameImportant[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
-            TileObjectData.newTile.Height = 3;
-            TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
+            TileObjectData.newTile.Width = 4;
+            TileObjectData.newTile.Origin = new Point16(0, 2);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 2, 0);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 4, 0);
             TileObjectData.addTile(Type);
 
-            AddMapEntry(new Color(16, 50, 64));
+            AddMapEntry(new Color(50, 127, 209));
 
-            DustType = ModContent.DustType<AstralOrange>();
+            DustType = (int)CalamityDusts.BlueCosmilite;
             AnimationFrameHeight = 54;
         }
 
@@ -57,7 +51,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
 
             if (player.active)
             {
-                Main.LocalPlayer.Calamity().monolithAstralShader = 30;
+                Main.LocalPlayer.Calamity().monolithDevourerBShader = 30;
             }
         }
 
@@ -67,7 +61,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             if (frameCounter >= 7.2)
             {
                 frameCounter = 0;
-                if (++frame >= 9)
+                if (++frame >= 7)
                 {
                     frame = 0;
                 }
@@ -79,7 +73,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<AstralProjector>();
+            player.cursorItemIconID = ModContent.ItemType<BlueDistortedMonolith>();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -93,10 +87,10 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
 
         public override void HitWire(int i, int j)
         {
-            int x = i - Main.tile[i, j].TileFrameX / 18 % 2;
+            int x = i - Main.tile[i, j].TileFrameX / 18 % 4;
             int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
             int tileXX18 = 54;
-            for (int l = x; l < x + 2; l++)
+            for (int l = x; l < x + 4; l++)
             {
                 for (int m = y; m < y + 3; m++)
                 {
@@ -111,7 +105,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             if (Wiring.running)
             {
-                for (int o = 0; o < 2; o++)
+                for (int o = 0; o < 4; o++)
                 {
                     for (int p = 0; p < 3; p++)
                     {
@@ -139,8 +133,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
                 animate = Main.tileFrame[Type] * AnimationFrameHeight;
             }
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            if (Glow != null)
-                Main.spriteBatch.Draw(Glow, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             return false;
         }
     }

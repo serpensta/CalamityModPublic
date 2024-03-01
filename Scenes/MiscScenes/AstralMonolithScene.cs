@@ -13,7 +13,5 @@ namespace CalamityMod.Systems
         {
             player.ManageSpecialBiomeVisuals("CalamityMod:Astral", isActive);
         }
-
-        //public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("CalamityMod/AstralSurfaceBGStyle");
     }
 }

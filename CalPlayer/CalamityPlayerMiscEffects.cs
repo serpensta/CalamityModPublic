@@ -1512,8 +1512,10 @@ namespace CalamityMod.CalPlayer
                 monolithLeviathanShader--;
             if (monolithCryogenShader > 0)
                 monolithCryogenShader--;
-            if (monolithDevourerShader > 0)
-                monolithDevourerShader--;
+            if (monolithDevourerBShader > 0)
+                monolithDevourerBShader--;
+            if (monolithDevourerPShader > 0)
+                monolithDevourerPShader--;
             if (monolithYharonShader > 0)
                 monolithYharonShader--;
             if (monolithPlagueShader > 0)

@@ -656,14 +656,19 @@ LanternCenter: {
 	Tooltip: Lights up the night sky with celebratory lanterns
 }
 
-BossRushMonolith: {
-	DisplayName: Boss Rush Monolith
-	Tooltip: "'Bring forth the end.'"
-}
-
 AstralProjector: {
 	DisplayName: Astral Projector
 	Tooltip: "'Control a small portion of the Astral Infection's influence.'"
+}
+
+BlueDistortedMonolith: {
+	DisplayName: Blue Distorted Monolith
+	Tooltip: "'Create a localized rupture in the fabric of reality.'"
+}
+
+BossRushMonolith: {
+	DisplayName: Boss Rush Monolith
+	Tooltip: "'Bring forth the end.'"
 }
 
 DeepSeaAnchor: {
@@ -689,6 +694,11 @@ FrigidMonolith: {
 PlagueHumidifier: {
 	DisplayName: Plague Humidifier
 	Tooltip: "'Spread light amounts of the plague through the air.'"
+}
+
+PurpleDistortedMonolith: {
+	DisplayName: Purple Distorted Monolith
+	Tooltip: "'Create a localized rupture in the fabric of reality.'"
 }
 
 NavyPrismTorch: {

@@ -1186,7 +1186,9 @@ namespace CalamityMod.CalPlayer
 
         public int monolithAstralShader = 0;
 
-        public int monolithDevourerShader = 0;
+        public int monolithDevourerBShader = 0;
+
+        public int monolithDevourerPShader = 0;
 
         public int monolithYharonShader = 0;
         #endregion Draw Effects

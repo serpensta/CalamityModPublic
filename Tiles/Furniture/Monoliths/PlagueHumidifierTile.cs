@@ -30,7 +30,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 2, 0);
             TileObjectData.addTile(Type);
 
-            TileID.Sets.HasOutlines[Type] = true;
             AddMapEntry(new Color(44, 150, 54));
 
             DustType = (int)CalamityDusts.Plague;

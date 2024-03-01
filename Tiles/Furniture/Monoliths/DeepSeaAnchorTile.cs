@@ -29,7 +29,6 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 3, 0);
             TileObjectData.addTile(Type);
 
-            TileID.Sets.HasOutlines[Type] = true;
             AddMapEntry(new Color(92, 24, 31));
 
             DustType = DustID.Water;
