@@ -7734,12 +7734,13 @@ namespace CalamityMod.NPCs
             if (!Main.expertMode)
                 return;
 
-            if (npc.knockBackResist <= 0f || npc.knockBackResist >= 1f)
+            if (npc.knockBackResist <= 0f)
                 return;
 
+            // Knockback resist is backasswards in this fucking game so we need to add to the knockBackResist variable here :^)
             float knockBackResistMult = Main.masterMode ? MasterModeEnemyKnockbackMultiplier : ExpertModeEnemyKnockbackMultiplier;
-            float knockBackResistReduction = MathHelper.Clamp((1f - npc.knockBackResist) * knockBackResistMult, 0f, npc.knockBackResist - 0.01f);
-            npc.knockBackResist -= knockBackResistReduction;
+            float knockBackResistReduction = npc.knockBackResist * knockBackResistMult;
+            npc.knockBackResist += knockBackResistReduction;
         }
         #endregion
     }
