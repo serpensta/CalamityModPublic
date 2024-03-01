@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Rogue;
+﻿using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -31,11 +31,11 @@ namespace CalamityMod.Items.Weapons.Rogue
         }
 
         public override void ModifyStatsExtra(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-		{
+        {
             // A vertical offset is added to ensure that the barrel does not immediately collide with tiles and explode.
-			position = position - Vector2.UnitY * 12f;
-			velocity.Y *= 0.85f;
-		}
+            position = position - Vector2.UnitY * 12f;
+            velocity.Y *= 0.85f;
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

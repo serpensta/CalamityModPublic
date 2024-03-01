@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Summon.MirrorofKalandraMinions
                     Main.rand.NextFloat(140f, 150f));
                 GeneralParticleHandler.SpawnParticle(mist);
 
-                int flavorDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 272, 0, 0, 0, default, .6f);
+                int flavorDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WitherLightning, 0, 0, 0, default, .6f);
                 Main.dust[flavorDust].noGravity = true;
             }
 

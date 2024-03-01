@@ -1,4 +1,8 @@
-﻿using CalamityMod.Balancing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using CalamityMod.Balancing;
 using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Demonshade;
@@ -12,10 +16,6 @@ using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -609,10 +609,13 @@ namespace CalamityMod.Items
             }
 
             // Arcane and Magnet Flower buffs.
-            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
-                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
+            if (item.type == ItemID.MagnetFlower)
+                EditTooltipByNum(0, (line) => line.Text = "10% reduced mana usage");
             if (item.type == ItemID.ArcaneFlower)
+            {
+                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
                 EditTooltipByNum(2, (line) => line.Text += "\n5% increased magic damage");
+            }
 
             // Magiluminescence nerf and clear explanation of what it actually does.
             if (item.type == ItemID.Magiluminescence)
@@ -739,7 +742,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(3, (line) => line.Text += "\nImmunity to the On Fire! debuff");
 
             // Ozzatron 23NOV2023: Removed tooltip edits for Magma Skull and Molten Skull Rose, as they were invalid after vanilla tooltip changes.
-            
+
             // Yoyo Glove/Bag apply a 0.5x damage multiplier on the second yoyo
             if (item.type == ItemID.YoyoBag || item.type == ItemID.YoYoGlove)
                 EditTooltipByNum(0, (line) => line.Text += "\nSecondary yoyos will do 50% less damage");
@@ -815,10 +818,8 @@ namespace CalamityMod.Items
             if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
             {
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
             }
-            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "5%"));
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
@@ -829,7 +830,8 @@ namespace CalamityMod.Items
             // Crimson
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
-                EditTooltipByNum(0, (line) => {
+                EditTooltipByNum(0, (line) =>
+                {
                     string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
@@ -1349,7 +1351,7 @@ namespace CalamityMod.Items
         #endregion
 
         #region Speed Tooltips
-        
+
         // TODO: Investigate using a SortedDictionary instead? May be slower, but removes the need for carefully adding KVPs.
         /// <summary>
         /// This dictionary handles easily retrieving tooltip text based on a numerical threshold. <br />

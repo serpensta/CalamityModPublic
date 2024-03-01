@@ -1,7 +1,7 @@
 ﻿using CalamityMod.CalPlayer;
 using CalamityMod.Items.Placeables.FurnitureAbyss;
-using CalamityMod.World;
 using CalamityMod.Systems;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

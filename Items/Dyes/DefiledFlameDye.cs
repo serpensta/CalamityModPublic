@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Graphics.Shaders;
-using Microsoft.Xna.Framework;
 using Terraria.ID;
-using ReLogic.Content;
 
 namespace CalamityMod.Items.Dyes
 {

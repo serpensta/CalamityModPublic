@@ -12,7 +12,7 @@ namespace CalamityMod.Items.Accessories
         {
             ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<Laudanum>();
         }
-        
+
         public override void SetDefaults()
         {
             Item.width = 26;

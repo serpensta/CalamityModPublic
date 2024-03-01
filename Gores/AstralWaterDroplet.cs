@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.GameContent.Shaders;
-using Terraria.Graphics.Effects;
-using Terraria.ModLoader;
-using Terraria.ID;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Shaders;
+using Terraria.Graphics.Effects;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Gores
 {

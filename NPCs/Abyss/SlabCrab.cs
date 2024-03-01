@@ -1,11 +1,11 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.Banners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -69,6 +69,10 @@ namespace CalamityMod.NPCs.Abyss
             NPC.Calamity().VulnerableToWater = false;
             NPC.GravityIgnoresLiquid = true;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbyssLayer1Biome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -265,7 +269,7 @@ namespace CalamityMod.NPCs.Abyss
         {
             CurrentPhase = ai0;
             AITimer = ai1 == -1 ? 0 : ai1;
-            HopTimer = ai2 == -1 ? 0 : ai2;    
+            HopTimer = ai2 == -1 ? 0 : ai2;
             CalmDownTimer = ai3 == -1 ? 0 : ai3;
             NPC.netUpdate = true;
             if (Main.netMode == NetmodeID.Server)
@@ -331,7 +335,7 @@ namespace CalamityMod.NPCs.Abyss
                 else
                 {
                     NPC.frame.Y = frameHeight * 19;
-                }    
+                }
                 return;
             }
             switch (CurrentPhase)

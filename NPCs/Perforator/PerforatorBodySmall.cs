@@ -4,11 +4,11 @@ using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Perforator
 {
@@ -29,7 +29,11 @@ namespace CalamityMod.NPCs.Perforator
             NPC.width = 42;
             NPC.height = 42;
             NPC.defense = 4;
+
             NPC.LifeMaxNERB(1200, 1440, 50000);
+            if (Main.zenithWorld)
+                NPC.lifeMax *= 4;
+
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
@@ -57,6 +61,10 @@ namespace CalamityMod.NPCs.Perforator
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
@@ -66,20 +74,6 @@ namespace CalamityMod.NPCs.Perforator
 
         public override void AI()
         {
-            // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
-            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
-            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-            {
-                NPC.damage = 0;
-            }
-            else
-            {
-                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
-            }
-
             if (NPC.ai[2] > 0f)
                 NPC.realLife = (int)NPC.ai[2];
 
@@ -120,9 +114,9 @@ namespace CalamityMod.NPCs.Perforator
             if (Main.player[NPC.target].dead)
                 NPC.TargetClosest(false);
 
-            Vector2 segmentPosition = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-            float targetX = Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2);
-            float targetY = Main.player[NPC.target].position.Y + (float)(Main.player[NPC.target].height / 2);
+            Vector2 segmentPosition = NPC.Center;
+            float targetX = Main.player[NPC.target].Center.X;
+            float targetY = Main.player[NPC.target].Center.Y;
             targetX = (float)((int)(targetX / 16f) * 16);
             targetY = (float)((int)(targetY / 16f) * 16);
             segmentPosition.X = (float)((int)(segmentPosition.X / 16f) * 16);
@@ -134,27 +128,42 @@ namespace CalamityMod.NPCs.Perforator
             {
                 try
                 {
-                    segmentPosition = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-                    targetX = Main.npc[(int)NPC.ai[1]].position.X + (float)(Main.npc[(int)NPC.ai[1]].width / 2) - segmentPosition.X;
-                    targetY = Main.npc[(int)NPC.ai[1]].position.Y + (float)(Main.npc[(int)NPC.ai[1]].height / 2) - segmentPosition.Y;
+                    segmentPosition = NPC.Center;
+                    targetX = Main.npc[(int)NPC.ai[1]].Center.X - segmentPosition.X;
+                    targetY = Main.npc[(int)NPC.ai[1]].Center.Y - segmentPosition.Y;
                 }
                 catch
                 {
                 }
-                NPC.rotation = (float)System.Math.Atan2((double)targetY, (double)targetX) + 1.57f;
+                NPC.rotation = (float)System.Math.Atan2((double)targetY, (double)targetX) + MathHelper.PiOver2;
                 targetDistance = (float)System.Math.Sqrt((double)(targetX * targetX + targetY * targetY));
                 int npcWidth = NPC.width;
                 targetDistance = (targetDistance - (float)npcWidth) / targetDistance;
                 targetX *= targetDistance;
                 targetY *= targetDistance;
                 NPC.velocity = Vector2.Zero;
-                NPC.position.X = NPC.position.X + targetX;
-                NPC.position.Y = NPC.position.Y + targetY;
+                NPC.position.X += targetX;
+                NPC.position.Y += targetY;
 
                 if (targetX < 0f)
                     NPC.spriteDirection = 1;
                 else if (targetX > 0f)
                     NPC.spriteDirection = -1;
+            }
+
+            // Calculate contact damage based on velocity
+            float maxChaseSpeed = 16f;
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
+            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
+            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+            {
+                NPC.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
             }
         }
 

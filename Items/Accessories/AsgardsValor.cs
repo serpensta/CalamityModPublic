@@ -1,10 +1,10 @@
-﻿using CalamityMod.CalPlayer;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.CalPlayer;
+using CalamityMod.CalPlayer.Dashes;
 using CalamityMod.Items.Materials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.CalPlayer.Dashes;
-using CalamityMod.Buffs.DamageOverTime;
 
 namespace CalamityMod.Items.Accessories
 {

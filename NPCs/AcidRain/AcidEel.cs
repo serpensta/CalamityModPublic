@@ -1,20 +1,21 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.Linq;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
-using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
-using System.Linq;
 
 namespace CalamityMod.NPCs.AcidRain
 {
@@ -22,14 +23,12 @@ namespace CalamityMod.NPCs.AcidRain
     {
         public Player Target => Main.player[NPC.target];
 
-        public PrimitiveTrail SegmentDrawer = null;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.TrailCacheLength[NPC.type] = 12;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 PortraitPositionXOverride = 0
             };
@@ -75,6 +74,10 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AcidRainBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -187,9 +190,6 @@ namespace CalamityMod.NPCs.AcidRain
                 return false;
             }
 
-            // Initialize the segment drawer.
-            SegmentDrawer ??= new(SegmentWidthFunction, _ => NPC.GetAlpha(Color.White), null, GameShaders.Misc["CalamityMod:PrimitiveTexture"]);
-
             Texture2D headTexture = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D tailTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/AcidRain/AcidEelTail").Value;
             Vector2[] segmentPositions = (Vector2[])NPC.oldPos.Clone();
@@ -205,7 +205,7 @@ namespace CalamityMod.NPCs.AcidRain
 
             for (int i = 0; i < segmentPositions.Length; i++)
             {
-                segmentPositions[i] += NPC.Size * 0.5f - screenPos - NPC.rotation.ToRotationVector2() * Math.Sign(NPC.velocity.X) * 8f;
+                segmentPositions[i] += NPC.Size * 0.5f - NPC.rotation.ToRotationVector2() * Math.Sign(NPC.velocity.X) * 8f;
                 if (segmentAreaTopLeft.X > segmentPositions[i].X)
                     segmentAreaTopLeft.X = segmentPositions[i].X;
                 if (segmentAreaTopLeft.Y > segmentPositions[i].Y)
@@ -234,7 +234,7 @@ namespace CalamityMod.NPCs.AcidRain
                 Vector2 tailDrawPosition = segmentPositions[^1] - tailRotation.ToRotationVector2() * 4f;
                 SpriteEffects tailDirection = NPC.velocity.X < 0f ? SpriteEffects.None : SpriteEffects.FlipVertically;
                 Main.EntitySpriteDraw(tailTexture, tailDrawPosition, tailArea, NPC.GetAlpha(Color.White), tailRotation, tailArea.Size() * new Vector2(0f, 0.5f), NPC.scale, tailDirection, 0);
-                SegmentDrawer.Draw(segmentPositions, Vector2.Zero, 36);
+                PrimitiveRenderer.RenderTrail(segmentPositions, new(SegmentWidthFunction, _ => NPC.GetAlpha(Color.White), pixelate: false, shader: GameShaders.Misc["CalamityMod:PrimitiveTexture"]), 36);
             }
 
             return false;

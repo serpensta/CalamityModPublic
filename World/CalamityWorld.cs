@@ -1,10 +1,10 @@
-﻿using CalamityMod.NPCs.ExoMechs;
+﻿using System.Reflection;
+using CalamityMod.NPCs.ExoMechs;
 using CalamityMod.NPCs.ExoMechs.Apollo;
 using CalamityMod.NPCs.ExoMechs.Ares;
 using CalamityMod.NPCs.ExoMechs.Artemis;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using Microsoft.Xna.Framework;
-using System.Reflection;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -27,7 +27,7 @@ namespace CalamityMod.World
         public static bool revenge = false; // Revengeance Mode
         public static bool death = false; // Death Mode
         public static bool armageddon = false; // Armageddon Mode
-        
+
         // Evaluates to whether vanilla's "Legendary Mode" is enabled (Master Mode on For the Worthy)
         public static bool LegendaryMode => Main.getGoodWorld && ReflectMasterMode();
 
@@ -35,7 +35,7 @@ namespace CalamityMod.World
         // Therefore gotta reflect!
         public static bool ReflectMasterMode()
         {
-            FieldInfo findInfo = typeof(Main).GetField("_currentGameModeInfo", BindingFlags.Static | BindingFlags.NonPublic);            
+            FieldInfo findInfo = typeof(Main).GetField("_currentGameModeInfo", BindingFlags.Static | BindingFlags.NonPublic);
             GameModeData data = (GameModeData)findInfo.GetValue(null);
             return data.IsMasterMode;
         }

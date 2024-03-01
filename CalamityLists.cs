@@ -928,6 +928,7 @@ namespace CalamityMod
                 NPCID.Retinazer,
                 NPCID.Spazmatism,
                 NPCID.SkeletronPrime,
+                NPCType<SkeletronPrime2>(),
                 NPCID.PrimeCannon,
                 NPCID.PrimeSaw,
                 NPCID.PrimeLaser,
@@ -1162,7 +1163,11 @@ namespace CalamityMod
                 ProjectileID.BloodShot,
                 ProjectileID.BloodNautilusTears,
                 ProjectileID.BloodNautilusShot,
-                ProjectileID.RockGolemRock
+                ProjectileID.RockGolemRock,
+                ProjectileID.IcewaterSpit,
+                ProjectileID.RocketSkeleton,
+                ProjectileID.SniperBullet,
+                ProjectileID.DrManFlyFlask
             };
 
             debuffList = new List<int>()
@@ -2258,6 +2263,7 @@ namespace CalamityMod
             SkeletronPrimeIDs = new List<int>
             {
                 NPCID.SkeletronPrime,
+                NPCType<SkeletronPrime2>(),
                 NPCID.PrimeCannon,
                 NPCID.PrimeLaser,
                 NPCID.PrimeSaw,
@@ -2346,12 +2352,22 @@ namespace CalamityMod
                 NPCID.DrManFly,
                 NPCID.Eyezor,
                 NPCID.Nailhead,
+                NPCID.BrainScrambler,
+                NPCID.GigaZapper,
+                NPCID.RayGunner,
+                NPCID.ScutlixRider,
                 NPCID.MartianWalker,
                 NPCID.MartianTurret,
                 NPCID.ElfCopter,
                 NPCID.ElfArcher,
                 NPCID.NebulaBrain,
+                NPCID.NebulaSoldier,
                 NPCID.StardustJellyfishBig,
+                NPCID.StardustSoldier,
+                NPCID.StardustSpiderBig,
+                NPCID.VortexHornetQueen,
+                NPCID.VortexRifleman,
+                NPCID.VortexSoldier,
                 NPCID.PirateShipCannon,
                 NPCID.MartianSaucer,
                 NPCID.MartianSaucerCannon,
@@ -2359,11 +2375,21 @@ namespace CalamityMod
                 NPCID.MartianSaucerTurret,
                 NPCID.Probe,
                 NPCID.CultistBoss,
+                NPCID.GolemHead,
                 NPCID.GolemHeadFree,
                 NPCID.MoonLordFreeEye,
                 NPCID.BloodSquid,
                 NPCID.PlanterasHook,
-                NPCID.Dandelion
+                NPCID.Dandelion,
+                NPCID.DD2DarkMageT1,
+                NPCID.DD2DarkMageT3,
+                NPCID.DD2OgreT2,
+                NPCID.DD2OgreT3,
+                NPCID.MourningWood,
+                NPCID.Pumpking,
+                NPCID.Everscream,
+                NPCID.IceQueen,
+                NPCID.SantaNK1
             };
 
             // Reduce contact damage by 25%
@@ -2580,6 +2606,7 @@ namespace CalamityMod
                 { NPCID.Probe, 10000 },
 
                 { NPCID.SkeletronPrime, 160000 }, // 30 seconds
+                { NPCType<SkeletronPrime2>(), 160000 },
                 { NPCID.PrimeVice, 54000 },
                 { NPCID.PrimeCannon, 45000 },
                 { NPCID.PrimeSaw, 45000 },

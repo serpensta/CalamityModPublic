@@ -3,9 +3,9 @@ using CalamityMod.Projectiles.Typeless;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
 
 namespace CalamityMod.Items.Tools
 {
@@ -14,7 +14,7 @@ namespace CalamityMod.Items.Tools
         public new string LocalizationCategory => "Items.Tools";
         public override void SetStaticDefaults()
         {
-                       Item.ResearchUnlockCount = 10;
+            Item.ResearchUnlockCount = 10;
         }
 
         public override void SetDefaults()
@@ -34,10 +34,10 @@ namespace CalamityMod.Items.Tools
             Item.rare = ItemRarityID.Blue;
         }
 
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ToolsOther;
-		}
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ToolsOther;
+        }
 
         public override bool AltFunctionUse(Player player) => true;
 

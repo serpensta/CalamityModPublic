@@ -1,4 +1,6 @@
-﻿using CalamityMod.NPCs.PrimordialWyrm;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.AcidRain;
 using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.AstrumAureus;
 using CalamityMod.NPCs.AstrumDeus;
@@ -11,8 +13,8 @@ using CalamityMod.NPCs.Cryogen;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.NPCs.DevourerofGods;
 using CalamityMod.NPCs.ExoMechs.Apollo;
-using CalamityMod.NPCs.ExoMechs.Artemis;
 using CalamityMod.NPCs.ExoMechs.Ares;
+using CalamityMod.NPCs.ExoMechs.Artemis;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.NPCs.Leviathan;
@@ -21,6 +23,7 @@ using CalamityMod.NPCs.OldDuke;
 using CalamityMod.NPCs.Perforator;
 using CalamityMod.NPCs.PlaguebringerGoliath;
 using CalamityMod.NPCs.Polterghast;
+using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.ProfanedGuardians;
 using CalamityMod.NPCs.Providence;
 using CalamityMod.NPCs.Ravager;
@@ -32,12 +35,9 @@ using CalamityMod.NPCs.Yharon;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.NPCs.AcidRain;
 
 namespace CalamityMod
 {
@@ -217,6 +217,7 @@ namespace CalamityMod
                 { ModContent.NPCType<BrimstoneElemental>(), 0.8 },
 
                 { NPCID.SkeletronPrime, 0.85 },
+                { ModContent.NPCType<SkeletronPrime2>(), 0.85 },
                 { NPCID.PrimeCannon, 0.85 },
                 { NPCID.PrimeLaser, 0.85 },
                 { NPCID.PrimeSaw, 0.85 },
@@ -412,6 +413,12 @@ namespace CalamityMod
                     102, // 204 while spinning
                     119, // 238 while spinning
                     153 } }, // 306 while spinning
+                { ModContent.NPCType<SkeletronPrime2>(), new int[] {
+                    50, // 100 while spinning
+                    85, // 170 while spinning
+                    102, // 204 while spinning
+                    119, // 238 while spinning
+                    153 } }, // 306 while spinning
                 { NPCID.PrimeVice, new int[] { 60, 102, 136, 153, 204 } },
                 { NPCID.PrimeSaw, new int[] { 60, 102, 136, 153, 204 } },
                 { NPCID.PrimeCannon, new int[] { 30, 51, 68, 85, 102 } },
@@ -500,7 +507,7 @@ namespace CalamityMod
                 { ModContent.NPCType<ProvSpawnDefense>(), new int[] { 100, 200, 220, 232, 270 } },
                 { ModContent.NPCType<ProfanedRocks>(), new int[] { 100, 200, 220, 232, 270 } },
 
-                { ModContent.NPCType<CeaselessVoid>(), new int[] { 150, 300, 330, 348, 450 } },
+                { ModContent.NPCType<CeaselessVoid>(), new int[] { 180, 360, 396, 418, 540 } },
                 { ModContent.NPCType<DarkEnergy>(), new int[] { 130, 260, 288, 304, 390 } },
 
                 { ModContent.NPCType<StormWeaverHead>(), new int[] { 180, 360, 396, 418, 540 } },
@@ -629,7 +636,7 @@ namespace CalamityMod
                     186 } }, // 139 in rapid fire; 138 in non-rev master mode, 102 in rapid fire in non-rev master mode
                 { new Tuple<int, int>(NPCID.Retinazer, ModContent.ProjectileType<ScavengerLaser>()), new int[] { 70, 120, 136, 152, 210 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.CursedFlameHostile), new int[] { 50, 88, 120, 132, 180 } }, // 132 in non-rev master mode
-                { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.EyeFire), new int[] { 60, 108, 0, 0, 162 } }, // Only used in non-rev modes
+                { new Tuple<int, int>(NPCID.Spazmatism, ProjectileID.EyeFire), new int[] { 60, 108, 128, 140, 192 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ModContent.ProjectileType<Shadowflamethrower>()), new int[] { 70, 120, 148, 160, 222 } },
                 { new Tuple<int, int>(NPCID.Spazmatism, ModContent.ProjectileType<ShadowflameFireball>()), new int[] { 60, 100, 128, 140, 192 } },
 
@@ -655,6 +662,9 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.SkeletronPrime, ProjectileID.Skull), new int[] { 50, 100, 124, 136, 186 } },
                 { new Tuple<int, int>(NPCID.SkeletronPrime, ProjectileID.DeathLaser), new int[] { 50, 100, 124, 136, 186 } },
                 { new Tuple<int, int>(NPCID.SkeletronPrime, ProjectileID.RocketSkeleton), new int[] { 60, 120, 148, 160, 222 } },
+                { new Tuple<int, int>(ModContent.NPCType<SkeletronPrime2>(), ProjectileID.Skull), new int[] { 50, 100, 124, 136, 186 } },
+                { new Tuple<int, int>(ModContent.NPCType<SkeletronPrime2>(), ProjectileID.BombSkeletronPrime), new int[] { 80, 160, 180, 200, 240 } },
+                { new Tuple<int, int>(ModContent.NPCType<SkeletronPrime2>(), ProjectileID.FrostBeam), new int[] { 50, 100, 124, 136, 186 } },
                 { new Tuple<int, int>(NPCID.PrimeCannon, ProjectileID.RocketSkeleton), new int[] { 60, 120, 148, 160, 222 } },
                 { new Tuple<int, int>(NPCID.PrimeCannon, ProjectileID.BombSkeletronPrime), new int[] { 80, 160, 0, 0, 240 } },
                 { new Tuple<int, int>(NPCID.PrimeLaser, ProjectileID.DeathLaser), new int[] { 50, 100, 124, 136, 186 } }, // 150 in non-rev master mode

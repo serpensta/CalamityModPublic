@@ -49,7 +49,7 @@ namespace CalamityMod.Items.Accessories
                 // Show the bar if the player doesn't have it.
                 if (!Player.HasCooldown(OldDukeScalesFatigue.ID))
                     Player.AddCooldown(OldDukeScalesFatigue.ID, OldDukeScales.MaxFatigue);
-                
+
                 if (!IsTired)
                 {
                     // +10% DR.

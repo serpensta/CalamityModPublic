@@ -1,6 +1,6 @@
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -29,7 +29,7 @@ namespace CalamityMod.Projectiles.Melee
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.3f / 255f, (255 - Projectile.alpha) * 0.4f / 255f, (255 - Projectile.alpha) * 1f / 255f);
             if (Projectile.localAI[1] > 7f)
             {
-                int purpleBoi = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 66, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 150, new Color(Main.DiscoR, 100, 255), 1.2f);
+                int purpleBoi = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowTorch, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 150, new Color(Main.DiscoR, 100, 255), 1.2f);
                 Main.dust[purpleBoi].velocity *= 0.1f;
                 Main.dust[purpleBoi].noGravity = true;
             }
@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             for (int k = 0; k < 7; k++)
             {
-                int purpleBoi = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 66, 0f, 0f, 150, new Color(Main.DiscoR, 100, 255), 1.2f);
+                int purpleBoi = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowTorch, 0f, 0f, 150, new Color(Main.DiscoR, 100, 255), 1.2f);
                 Main.dust[purpleBoi].noGravity = true;
             }
         }

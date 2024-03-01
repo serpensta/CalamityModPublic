@@ -387,7 +387,7 @@ DeepcoreGK2: {
 	DisplayName: Deepcore GK2
 	Tooltip:
 		'''
-		Bullets are twice as large and ignores 10 points of enemy defense
+		Bullets are twice as large and ignore 10 points of enemy defense
 		'For rock and stone!'
 		'''
 }
@@ -1020,10 +1020,10 @@ Scorpio: {
 	DisplayName: Scorpio
 	Tooltip:
 		'''
-		Hold <left> to fire streams of homing nano missiles and charge energy
-		Maximum charge is reached after firing 3 streams
+		Hold <left> to fire a barrage of homing nano missiles and charge energy
+		Maximum charge is reached after firing 3 barrages
 		<right> while holding <left> at max charge to launch a nano nuke
-		Nano nukes deal massive damage and reset the cooldown of missile streams
+		Nano nukes deal massive damage and reset the cooldown of missile barrages
 		'''
 }
 

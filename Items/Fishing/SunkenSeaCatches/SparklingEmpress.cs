@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Projectiles.Magic;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace CalamityMod.Items.Fishing.SunkenSeaCatches
 {
@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Fishing.SunkenSeaCatches
 
         public override void SetStaticDefaults()
         {
-                       Item.staff[Item.type] = true; //so it doesn't look weird af when holding it
+            Item.staff[Item.type] = true; //so it doesn't look weird af when holding it
         }
 
         public override void SetDefaults()

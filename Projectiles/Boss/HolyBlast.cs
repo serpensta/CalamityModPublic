@@ -1,14 +1,14 @@
-﻿using CalamityMod.NPCs;
+﻿using System;
+using System.IO;
+using CalamityMod.NPCs;
 using CalamityMod.NPCs.Providence;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using System.IO;
-using CalamityMod.World;
 
 namespace CalamityMod.Projectiles.Boss
 {

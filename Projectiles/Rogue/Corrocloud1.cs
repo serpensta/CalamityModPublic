@@ -40,7 +40,7 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff (BuffID.Poisoned, 120);
+            target.AddBuff(BuffID.Poisoned, 120);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

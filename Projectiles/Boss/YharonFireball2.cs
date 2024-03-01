@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -69,7 +69,7 @@ namespace CalamityMod.Projectiles.Boss
                         Vector2 dustSpawnPosition = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.5f;
                         dustSpawnPosition = dustSpawnPosition.RotatedBy((double)((float)(i - (dustAmount / 2 - 1)) * MathHelper.TwoPi / (float)dustAmount), default) + Projectile.Center;
                         Vector2 dustVelocity = dustSpawnPosition - Projectile.Center;
-                        int dust = Dust.NewDust(dustSpawnPosition + dustVelocity, 0, 0, 55, dustVelocity.X, dustVelocity.Y);
+                        int dust = Dust.NewDust(dustSpawnPosition + dustVelocity, 0, 0, DustID.Pixie, dustVelocity.X, dustVelocity.Y);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].noLight = true;
                         Main.dust[dust].velocity = dustVelocity;
@@ -109,7 +109,7 @@ namespace CalamityMod.Projectiles.Boss
 
             if (Main.rand.NextBool(16))
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 200, default, 1f);
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 200, default, 1f);
                 dust.scale *= 0.7f;
                 dust.velocity += Projectile.velocity * 0.25f;
             }
@@ -131,14 +131,14 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.ExpandHitboxBy(144);
             for (int d = 0; d < 2; d++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 100, default, 1.5f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 100, default, 1.5f);
             }
             for (int d = 0; d < 20; d++)
             {
-                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 0, default, 2.5f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 0, default, 2.5f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 3f;
-                idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 55, 0f, 0f, 100, default, 1.5f);
+                idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Pixie, 0f, 0f, 100, default, 1.5f);
                 Main.dust[idx].velocity *= 2f;
                 Main.dust[idx].noGravity = true;
             }

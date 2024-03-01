@@ -1,6 +1,6 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -52,14 +52,14 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.scale = 1.8f * Utils.GetLerpValue(6f, 30f, Time, true);
             else
                 return; // Helps position it at the tip
-            
+
             // Main smokes shifting between green to green-blue and back
             float smokeRot = MathHelper.ToRadians(3f); // *Rate of rotation per frame, not a constant rotation
             float colorValue = CalamityUtils.Convert01To010(Utils.GetLerpValue(30f, Lifetime, Time, true));
             Color smokeColor = Color.Lerp(Color.Lime, Color.Turquoise, colorValue);
             Particle smoke = new HeavySmokeParticle(Projectile.Center, Projectile.velocity * 0.5f, smokeColor, 18, Projectile.scale * Main.rand.NextFloat(0.6f, 1.2f), 0.4f, smokeRot, true, required: true);
             GeneralParticleHandler.SpawnParticle(smoke);
-            
+
             if (Time > 4)
             {
                 for (int i = 0; i < 2; i++)

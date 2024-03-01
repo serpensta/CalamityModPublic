@@ -53,7 +53,7 @@ namespace CalamityMod
                     else if (Main.hardMode)
                         return 12;
                     return 8;
-                
+
                 case PrefixID.Hard:
                     if (DownedBossSystem.downedDoG)
                         return 4;
@@ -331,7 +331,7 @@ namespace CalamityMod
         {
             if (Main.dedServ || mhk is null)
                 return;
-            
+
             string finalKey = mhk.TooltipHotkeyString();
             tooltips.FindAndReplace("[KEY]", finalKey);
         }

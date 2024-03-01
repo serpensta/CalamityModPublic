@@ -24,7 +24,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 30;
             NPC.defense = 25;
             NPC.lifeMax = 1000;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.3f;
             AnimationType = NPCID.CorruptSlime;
             NPC.value = Item.buyPrice(0, 0, 25, 0);
             NPC.alpha = 50;
@@ -37,14 +37,18 @@ namespace CalamityMod.NPCs.NormalNPCs
             BannerItem = ModContent.ItemType<BloomSlimeBanner>();
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.BloomSlime")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.BloomSlime")
             });
         }
 

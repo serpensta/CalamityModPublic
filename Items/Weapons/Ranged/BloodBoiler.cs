@@ -13,9 +13,9 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class BloodBoiler : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
-        
+
         public static readonly SoundStyle Heartbeat = new("CalamityMod/Sounds/Item/Heartbeat") { PitchVariance = 0.2f, Volume = 0.55f };
-        
+
         public bool shotReturn = false;
 
         public override void SetStaticDefaults()

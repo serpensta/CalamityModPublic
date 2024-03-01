@@ -1,7 +1,7 @@
-﻿using CalamityMod.Projectiles.Melee;
+﻿using System;
+using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -126,7 +126,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 //Giant, slow, fading skull
                 case 1:
                     int largeSkullDmg = (int)(damage * GiantSkullDamageMultiplier);
-                    int projectileIndex = Projectile.NewProjectile(source, position, velocity * 0.6f, type, largeSkullDmg, knockback, player.whoAmI, ai1:1f);
+                    int projectileIndex = Projectile.NewProjectile(source, position, velocity * 0.6f, type, largeSkullDmg, knockback, player.whoAmI, ai1: 1f);
                     Main.projectile[projectileIndex].scale = 1.75f;
                     break;
             }

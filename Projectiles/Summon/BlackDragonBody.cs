@@ -85,7 +85,7 @@ namespace CalamityMod.Projectiles.Summon
                 }
             }
             if (!live) Projectile.Kill();
-            Vector2 destinationOffset = nextSegment.Center+nextSegment.velocity - Projectile.Center;
+            Vector2 destinationOffset = nextSegment.Center + nextSegment.velocity - Projectile.Center;
             if (nextSegment.rotation != Projectile.rotation)
             {
                 float angle = MathHelper.WrapAngle(nextSegment.rotation - Projectile.rotation);
@@ -95,7 +95,7 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.rotation = destinationOffset.ToRotation();
             if (destinationOffset != Vector2.Zero)
             {
-                Projectile.Center = nextSegment.Center+nextSegment.velocity - destinationOffset.SafeNormalize(Vector2.Zero) * 20f;
+                Projectile.Center = nextSegment.Center + nextSegment.velocity - destinationOffset.SafeNormalize(Vector2.Zero) * 20f;
             }
         }
 

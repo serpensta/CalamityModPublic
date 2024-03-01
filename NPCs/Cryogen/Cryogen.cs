@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Effects;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
@@ -24,16 +26,14 @@ using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.NPCs.Cryogen
 {
@@ -73,7 +73,7 @@ namespace CalamityMod.NPCs.Cryogen
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
         public override void SetDefaults()
@@ -127,10 +127,10 @@ namespace CalamityMod.NPCs.Cryogen
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cryogen")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cryogen")
             });
         }
 
@@ -212,7 +212,7 @@ namespace CalamityMod.NPCs.Cryogen
             bool phase7 = lifeRatio < (death ? 0.25f : 0.15f) && revenge;
 
             // Projectile and sound variables
-            int iceBlast = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneBarrage>() :  ModContent.ProjectileType<IceBlast>();
+            int iceBlast = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneBarrage>() : ModContent.ProjectileType<IceBlast>();
             int iceBomb = Main.zenithWorld ? ModContent.ProjectileType<SCalBrimstoneFireblast>() : ModContent.ProjectileType<IceBomb>();
             int iceRain = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneBarrage>() : ModContent.ProjectileType<IceRain>();
             int dustType = Main.zenithWorld ? 235 : 67;
@@ -850,7 +850,7 @@ namespace CalamityMod.NPCs.Cryogen
                             teleportLocationX = playerTileX;
                             calamityGlobalNPC.newAI[2] = playerTileY;
                             NPC.netUpdate = true;
-                            Block:
+Block:
                             ;
                         }
                     }
@@ -1251,7 +1251,7 @@ namespace CalamityMod.NPCs.Cryogen
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
             NPC.damage = (int)(NPC.damage * NPC.GetExpertDamageMultiplier());
         }
 

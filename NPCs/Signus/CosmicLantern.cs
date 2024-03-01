@@ -1,8 +1,9 @@
-﻿using CalamityMod.Events;
+﻿using System.IO;
+using CalamityMod.Events;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -40,6 +41,10 @@ namespace CalamityMod.NPCs.Signus
             NPC.HitSound = SoundID.NPCHit53;
             NPC.DeathSound = SoundID.NPCDeath44;
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -47,10 +52,10 @@ namespace CalamityMod.NPCs.Signus
             int associatedNPCType = ModContent.NPCType<Signus>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicLantern")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicLantern")
             });
         }
 
@@ -89,19 +94,27 @@ namespace CalamityMod.NPCs.Signus
             Lighting.AddLight((int)((NPC.position.X + (float)(NPC.width / 2)) / 16f), (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f), 0.3f, 0.3f, 0.3f);
 
             NPC.alpha -= 3;
-            if (NPC.alpha < 0)
+            if (NPC.alpha <= 0)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 NPC.alpha = 0;
-                int lightDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 204, 0f, 0f, 0, default, 0.25f);
+                int lightDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TreasureSparkle, 0f, 0f, 0, default, 0.25f);
                 Main.dust[lightDust].velocity *= 0.1f;
                 Main.dust[lightDust].noGravity = true;
+            }
+            else
+            {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
             }
 
             bool revenge = CalamityWorld.revenge;
             float playerDistNormMult = revenge ? 24f : 22f;
             if (BossRushEvent.BossRushActive)
                 playerDistNormMult = 30f;
-            CalamityAI.DungeonSpiritAI(NPC, Mod, playerDistNormMult, 0f, true);
+            CalamityRegularEnemyAI.DungeonSpiritAI(NPC, Mod, playerDistNormMult, 0f, true);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -168,7 +181,7 @@ namespace CalamityMod.NPCs.Signus
             {
                 for (int k = 0; k < 10; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 204, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TreasureSparkle, hit.HitDirection, -1f, 0, default, 1f);
                 }
             }
         }

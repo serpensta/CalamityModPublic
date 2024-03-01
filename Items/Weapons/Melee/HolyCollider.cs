@@ -1,6 +1,6 @@
-﻿using CalamityMod.Projectiles.Melee;
+﻿using System;
+using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;

@@ -1,6 +1,6 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Projectiles.BaseProjectiles;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -36,7 +36,7 @@ namespace CalamityMod.Projectiles.Melee.Spears
         public override void ExtraBehavior()
         {
             if (Main.rand.NextBool(5))
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 107, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.TerraBlade, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
         }
     }
 }

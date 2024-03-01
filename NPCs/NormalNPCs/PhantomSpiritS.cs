@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -26,7 +27,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 80;
             NPC.defense = 20;
             NPC.lifeMax = 1500;
-            NPC.knockBackResist = 0.1f;
+            NPC.knockBackResist = 0.2f;
             AIType = -1;
             NPC.value = Item.buyPrice(0, 0, 30, 0);
             NPC.HitSound = SoundID.NPCHit36;
@@ -36,14 +37,18 @@ namespace CalamityMod.NPCs.NormalNPCs
             Banner = ModContent.NPCType<PhantomSpirit>();
             BannerItem = ModContent.ItemType<PhantomSpiritBanner>();
             NPC.Calamity().VulnerableToSickness = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheDungeon,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.PhantomSpirit")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.PhantomSpirit")
             });
         }
 
@@ -58,7 +63,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void AI()
         {
             float speed = CalamityWorld.death ? 20f : CalamityWorld.revenge ? 17.5f : 15f;
-            CalamityAI.DungeonSpiritAI(NPC, Mod, speed, -MathHelper.PiOver2);
+            CalamityRegularEnemyAI.DungeonSpiritAI(NPC, Mod, speed, -MathHelper.PiOver2);
             int polterDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Polterplasm, 0f, 0f, 0, default, 1f);
             Dust dust = Main.dust[polterDust];
             dust.velocity *= 0.1f;

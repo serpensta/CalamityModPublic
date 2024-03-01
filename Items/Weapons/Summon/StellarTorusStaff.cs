@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Summon
 
             if (Main.projectile.IndexInRange(minion))
                 Main.projectile[minion].originalDamage = Item.OriginalDamage;
-            
+
             return false;
         }
 

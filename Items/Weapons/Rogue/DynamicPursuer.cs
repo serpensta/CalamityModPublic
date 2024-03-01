@@ -1,13 +1,13 @@
-﻿using CalamityMod.CustomRecipes;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Weapons.DraedonsArsenal;
-using CalamityMod.Tiles.Furniture.CraftingStations;
 using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Rarities;
+using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Rogue
             modItem.ChargePerUse = 0.4f; // Tesla Cannon = 0.9f
         }
         public static float StealthDmgMult = 0.3f; //So I can edit it directly via DragonLens instead of having to do math with CalTestHelpers
-		public override float StealthDamageMultiplier => StealthDmgMult;
+        public override float StealthDamageMultiplier => StealthDmgMult;
         public override float StealthVelocityMultiplier => 0.8f;
 
         //Stuff to be used on the projectile, but here for ease of access ingame via DragonLens

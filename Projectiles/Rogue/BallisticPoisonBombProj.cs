@@ -1,10 +1,10 @@
-﻿using CalamityMod.Projectiles.Typeless;
+﻿using System;
+using CalamityMod.Projectiles.Typeless;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             if (Main.rand.NextBool(6))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 14, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Demonite, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
             Projectile.StickToTiles(true, false);
             if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3)
@@ -76,7 +76,7 @@ namespace CalamityMod.Projectiles.Rogue
             }
             for (int d = 0; d < 5; d++)
             {
-                int boom = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 14, 0f, 0f, 100, default, 2f);
+                int boom = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Demonite, 0f, 0f, 100, default, 2f);
                 Main.dust[boom].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -86,10 +86,10 @@ namespace CalamityMod.Projectiles.Rogue
             }
             for (int d = 0; d < 9; d++)
             {
-                int fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 3f);
+                int fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
                 Main.dust[fire].noGravity = true;
                 Main.dust[fire].velocity *= 5f;
-                fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
+                fire = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
                 Main.dust[fire].velocity *= 2f;
             }
 

@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
@@ -18,16 +20,14 @@ using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
+using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using ReLogic.Content;
 
 namespace CalamityMod.NPCs.Leviathan
 {
@@ -87,15 +87,15 @@ namespace CalamityMod.NPCs.Leviathan
                 NPC.scale *= 1.3f;
 
             if (Main.zenithWorld)
-                NPC.scale *= 0.3f; 
+                NPC.scale *= 0.3f;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Leviathan")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Leviathan")
             });
         }
 
@@ -153,7 +153,7 @@ namespace CalamityMod.NPCs.Leviathan
             {
                 if (Main.npc[CalamityGlobalNPC.siren].active)
                 {
-                    if (Main.npc[CalamityGlobalNPC.siren].damage == 0)
+                    if (!phase3 && Main.npc[CalamityGlobalNPC.siren].damage == 0)
                         sirenAlive = false;
                 }
             }
@@ -548,7 +548,7 @@ namespace CalamityMod.NPCs.Leviathan
                         {
                             Vector2 arg_E1C_0 = (Vector2.Normalize(NPC.velocity) * new Vector2((NPC.width + 50) / 2f, NPC.height) * 0.75f).RotatedBy((j - (dustAmt / 2 - 1)) * MathHelper.Pi / dustAmt) + npcCenter;
                             Vector2 dustRotation = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                            int waterDust = Dust.NewDust(arg_E1C_0 + dustRotation, 0, 0, 172, dustRotation.X * 2f, dustRotation.Y * 2f, 100, default, 1.4f);
+                            int waterDust = Dust.NewDust(arg_E1C_0 + dustRotation, 0, 0, DustID.DungeonWater, dustRotation.X * 2f, dustRotation.Y * 2f, 100, default, 1.4f);
                             Main.dust[waterDust].noGravity = true;
                             Main.dust[waterDust].noLight = true;
                             Main.dust[waterDust].velocity /= 4f;
@@ -905,7 +905,7 @@ namespace CalamityMod.NPCs.Leviathan
         {
             int width = 1011;
             int height = 486;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.2f,
                 PortraitScale = 0.3f,
@@ -945,7 +945,7 @@ namespace CalamityMod.NPCs.Leviathan
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
             NPC.damage = (int)(NPC.damage * NPC.GetExpertDamageMultiplier());
         }
     }

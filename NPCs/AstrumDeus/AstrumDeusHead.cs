@@ -1,4 +1,5 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -11,23 +12,23 @@ using CalamityMod.Items.Placeables.Furniture.BossRelics;
 using CalamityMod.Items.Placeables.Furniture.DevPaintings;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.TreasureBags;
+using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.NPCs.CalamityAIs.CalamityBossAIs;
 using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.AstrumDeus
 {
@@ -46,7 +47,7 @@ namespace CalamityMod.NPCs.AstrumDeus
         {
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.70f,
                 PortraitScale = 0.75f,
@@ -107,7 +108,7 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.AstrumDeus")
@@ -130,7 +131,7 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override void AI()
         {
-            CalamityAI.AstrumDeusAI(NPC, Mod, true);
+            AstrumDeusAI.VanillaAstrumDeusAI(NPC, Mod, true);
         }
 
         public override bool CheckActive()
@@ -291,7 +292,7 @@ namespace CalamityMod.NPCs.AstrumDeus
                 normalOnly.Add(ModContent.ItemType<AstrumDeusMask>(), 7);
                 normalOnly.Add(ModContent.ItemType<ThankYouPainting>(), ThankYouPainting.DropInt);
 
-				// Equipment
+                // Equipment
                 normalOnly.Add(DropHelper.PerPlayer(ModContent.ItemType<HideofAstrumDeus>()));
                 normalOnly.Add(ModContent.ItemType<ChromaticOrb>(), 5);
 
@@ -300,7 +301,7 @@ namespace CalamityMod.NPCs.AstrumDeus
                 normalOnly.Add(ModContent.ItemType<Stardust>(), 1, 50, 80);
             }
 
-			npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.SuperHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
+            npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.SuperHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
             lastWorm.Add(ModContent.ItemType<AstrumDeusTrophy>(), 10);
 
             // Relic
@@ -338,7 +339,7 @@ namespace CalamityMod.NPCs.AstrumDeus
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
         }
     }
 }

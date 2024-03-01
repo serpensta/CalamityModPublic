@@ -151,7 +151,7 @@ namespace CalamityMod.Projectiles.Melee
                 {
                     Empowerment++; //Charge faster when near the end
 
-                    if (Main.rand.Next(2) == 0)
+                    if (Main.rand.NextBool(2))
 
                     {
 
@@ -166,7 +166,7 @@ namespace CalamityMod.Projectiles.Melee
                             Particle smoke = new HeavySmokeParticle(smokepos, direction.RotatedBy(-MathHelper.PiOver2) * 20f * scaleFactor + Owner.velocity, Color.Lerp(Color.MidnightBlue, Color.Indigo, i), 10 + Main.rand.Next(5), scaleFactor * Main.rand.NextFloat(2.8f, 3.1f), Opacity + Main.rand.NextFloat(0f, 0.2f), 0f, false, 0, true);
                             GeneralParticleHandler.SpawnParticle(smoke);
 
-                            if (Main.rand.Next(3) == 0)
+                            if (Main.rand.NextBool(3))
                             {
                                 Particle smokeGlow = new HeavySmokeParticle(smokepos, direction.RotatedBy(-MathHelper.PiOver2) * 20f * scaleFactor + Owner.velocity, Color.OrangeRed, 7, scaleFactor * Main.rand.NextFloat(2f, 2.4f), Opacity * 2, 0f, true, 0.001f, true);
                                 GeneralParticleHandler.SpawnParticle(smokeGlow);
@@ -220,7 +220,7 @@ namespace CalamityMod.Projectiles.Melee
                         float maxDistance = Projectile.scale * 1.9f * 78f;
                         Vector2 distance = Main.rand.NextVector2Circular(maxDistance, maxDistance);
                         Vector2 angularVelocity = Utils.SafeNormalize(distance.RotatedBy(MathHelper.PiOver2), Vector2.Zero) * 2f * (1f + distance.Length() / 15f);
-                        Particle glitter = new CritSpark(Owner.Center + distance, Owner.velocity + angularVelocity, Main.rand.Next(3) == 0 ? Color.Turquoise : Color.Coral, currentColor, 1f + 1 * (distance.Length() / maxDistance), 10, 0.05f, 3f);
+                        Particle glitter = new CritSpark(Owner.Center + distance, Owner.velocity + angularVelocity, Main.rand.NextBool(3)? Color.Turquoise : Color.Coral, currentColor, 1f + 1 * (distance.Length() / maxDistance), 10, 0.05f, 3f);
                         GeneralParticleHandler.SpawnParticle(glitter);
                     }
                 }

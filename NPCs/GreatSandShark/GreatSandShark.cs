@@ -1,4 +1,6 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Furniture.BossRelics;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.NPCs.Astral;
@@ -7,14 +9,12 @@ using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.GreatSandShark
 {
@@ -24,21 +24,21 @@ namespace CalamityMod.NPCs.GreatSandShark
         private bool resetAI = false;
 
         public static readonly SoundStyle RoarSound = new("CalamityMod/Sounds/Custom/GreatSandSharkRoar");
-	public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/GreatSandSharkHit");
-	public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/GreatSandSharkDeath");
+        public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/GreatSandSharkHit");
+        public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/GreatSandSharkDeath");
 
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.6f,
                 PortraitPositionXOverride = 70f
             };
             value.Position.X += 60f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
         public override void SetDefaults()
@@ -79,11 +79,11 @@ namespace CalamityMod.NPCs.GreatSandShark
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Sandstorm,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.GreatSandShark")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.GreatSandShark")
             });
         }
 
@@ -428,7 +428,7 @@ namespace CalamityMod.NPCs.GreatSandShark
                                 NPC.localAI[0] = -1f;
                                 for (int i = 0; i < 25; i++)
                                 {
-                                    int burrowDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 32, 0f, 0f, 100, default, 2f);
+                                    int burrowDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Sand, 0f, 0f, 100, default, 2f);
                                     Main.dust[burrowDust].velocity.Y *= 6f;
                                     Main.dust[burrowDust].velocity.X *= 3f;
                                     if (Main.rand.NextBool())
@@ -439,10 +439,10 @@ namespace CalamityMod.NPCs.GreatSandShark
                                 }
                                 for (int j = 0; j < 50; j++)
                                 {
-                                    int burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 85, 0f, 0f, 100, default, 3f);
+                                    int burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.UnusedBrown, 0f, 0f, 100, default, 3f);
                                     Main.dust[burrowDust2].noGravity = true;
                                     Main.dust[burrowDust2].velocity.Y *= 10f;
-                                    burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 268, 0f, 0f, 100, default, 2f);
+                                    burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Sandstorm, 0f, 0f, 100, default, 2f);
                                     Main.dust[burrowDust2].velocity.X *= 2f;
                                 }
                                 int spawnX = (int)(NPC.width / 2);
@@ -607,10 +607,10 @@ namespace CalamityMod.NPCs.GreatSandShark
                 {
                     goto IL_6899;
                 }
-                IL_6881:
+IL_6881:
                 afterimageCounter += afterimageInc;
                 continue;
-                IL_6899:
+IL_6899:
                 float afterimagesRemaining = (float)(eightConst - afterimageCounter);
                 if (afterimageInc < 0)
                 {
@@ -630,7 +630,7 @@ namespace CalamityMod.NPCs.GreatSandShark
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-	    // Hit sound
+            // Hit sound
             if (NPC.soundDelay == 0)
             {
                 NPC.soundDelay = 15;
@@ -645,7 +645,7 @@ namespace CalamityMod.NPCs.GreatSandShark
             {
                 for (int i = 0; i < 50; i++)
                 {
-                    int burrowDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 5, 0f, 0f, 100, default, 2f);
+                    int burrowDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                     Main.dust[burrowDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -655,10 +655,10 @@ namespace CalamityMod.NPCs.GreatSandShark
                 }
                 for (int j = 0; j < 100; j++)
                 {
-                    int burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 5, 0f, 0f, 100, default, 3f);
+                    int burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 3f);
                     Main.dust[burrowDust2].noGravity = true;
                     Main.dust[burrowDust2].velocity *= 5f;
-                    burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 5, 0f, 0f, 100, default, 2f);
+                    burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                     Main.dust[burrowDust2].velocity *= 2f;
                 }
             }

@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.alpha += 8;
             Projectile.scale *= 0.98f;
             Projectile.ai[1] *= 1.01f;
-            if(Projectile.alpha >= 255)
+            if (Projectile.alpha >= 255)
                 Projectile.Kill();
         }
         public override bool PreDraw(ref Color lightColor)

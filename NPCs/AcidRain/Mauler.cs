@@ -1,4 +1,5 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Items.Placeables.Furniture.BossRelics;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
@@ -7,15 +8,14 @@ using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.AcidRain
 {
@@ -50,7 +50,7 @@ namespace CalamityMod.NPCs.AcidRain
         {
             Main.npcFrameCount[NPC.type] = 8;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.425f,
                 PortraitScale = 0.9f,
@@ -86,7 +86,7 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Mauler")
             });
@@ -496,13 +496,13 @@ namespace CalamityMod.NPCs.AcidRain
                     offsetAngleBoom = startAngleBoom + deltaAngleBoom * (iBoom + iBoom * iBoom) / 2f + 32f * iBoom;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                    int boom1 = Projectile.NewProjectile(NPC.GetSource_Death(), valueBoom.X, valueBoom.Y, (float)(Math.Sin(offsetAngleBoom) * 6f), (float)(Math.Cos(offsetAngleBoom) * 6f), projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
-                    int boom2 = Projectile.NewProjectile(NPC.GetSource_Death(), valueBoom.X, valueBoom.Y, (float)(-Math.Sin(offsetAngleBoom) * 6f), (float)(-Math.Cos(offsetAngleBoom) * 6f), projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
+                        int boom1 = Projectile.NewProjectile(NPC.GetSource_Death(), valueBoom.X, valueBoom.Y, (float)(Math.Sin(offsetAngleBoom) * 6f), (float)(Math.Cos(offsetAngleBoom) * 6f), projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
+                        int boom2 = Projectile.NewProjectile(NPC.GetSource_Death(), valueBoom.X, valueBoom.Y, (float)(-Math.Sin(offsetAngleBoom) * 6f), (float)(-Math.Cos(offsetAngleBoom) * 6f), projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
                     }
                 }
                 for (int i = 0; i < 25; i++)
                 {
-                    int deathDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 100, default, 2f);
+                    int deathDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                     Main.dust[deathDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -513,10 +513,10 @@ namespace CalamityMod.NPCs.AcidRain
                 }
                 for (int j = 0; j < 50; j++)
                 {
-                    int deathDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 0f, 0f, 100, default, 3f);
+                    int deathDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 3f);
                     Main.dust[deathDust2].noGravity = true;
                     Main.dust[deathDust2].velocity *= 5f;
-                    deathDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 0f, 0f, 100, default, 2f);
+                    deathDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                     Main.dust[deathDust2].velocity *= 2f;
                     Main.dust[deathDust2].noGravity = true;
                 }

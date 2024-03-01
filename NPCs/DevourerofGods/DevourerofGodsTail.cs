@@ -2,6 +2,7 @@
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
+using CalamityMod.Events;
 using CalamityMod.Projectiles.Melee.Yoyos;
 using CalamityMod.Sounds;
 using CalamityMod.World;
@@ -145,7 +146,15 @@ namespace CalamityMod.NPCs.DevourerofGods
             if (NPC.life > Main.npc[(int)NPC.ai[1]].life)
                 NPC.life = Main.npc[(int)NPC.ai[1]].life;
 
-            if (NPC.life / (float)NPC.lifeMax < 0.6f)
+            // Percent life remaining
+            float lifeRatio = NPC.life / (float)NPC.lifeMax;
+
+            bool phase2 = lifeRatio < 0.6f;
+            bool bossRush = BossRushEvent.BossRushActive;
+            bool expertMode = Main.expertMode || bossRush;
+            bool death = CalamityWorld.death || bossRush;
+
+            if (phase2)
             {
                 phase2Started = true;
 
@@ -283,7 +292,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                     segmentDirection = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
                     playerXDist = Main.npc[(int)NPC.ai[1]].position.X + (Main.npc[(int)NPC.ai[1]].width / 2) - segmentDirection.X;
                     playerYDist = Main.npc[(int)NPC.ai[1]].position.Y + (Main.npc[(int)NPC.ai[1]].height / 2) - segmentDirection.Y;
-                } catch
+                }
+                catch
                 {
                 }
                 NPC.rotation = (float)System.Math.Atan2(playerYDist, playerXDist) + MathHelper.PiOver2;
@@ -300,6 +310,27 @@ namespace CalamityMod.NPCs.DevourerofGods
                     NPC.spriteDirection = -1;
                 else if (playerXDist > 0f)
                     NPC.spriteDirection = 1;
+            }
+
+            // Velocity variables
+            float segmentVelocity = bossRush ? 19f : death ? 17.5f : 16f;
+            if (expertMode)
+                segmentVelocity += 4f * (1f - lifeRatio);
+            if (Main.getGoodWorld)
+                segmentVelocity *= 1.1f;
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = segmentVelocity * 0.25f;
+            float minimalDamageVelocity = segmentVelocity * 0.5f;
+            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
+            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+            {
+                NPC.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
             }
         }
 
@@ -371,7 +402,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             if (hitboxBotRight < minDist)
                 minDist = hitboxBotRight;
 
-            return minDist <= (phase2Started ? 70f : 35f) * NPC.scale && NPC.Opacity >= 1f;
+            return minDist <= (phase2Started ? 70f : 35f) * NPC.scale && NPC.Opacity >= 1f && invinceTime <= 0;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
@@ -465,7 +496,7 @@ namespace CalamityMod.NPCs.DevourerofGods
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
             NPC.damage = (int)(NPC.damage * NPC.GetExpertDamageMultiplier());
         }
 

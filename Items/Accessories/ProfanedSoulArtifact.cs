@@ -1,4 +1,6 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
+using System.Linq;
+using CalamityMod.CalPlayer;
 using CalamityMod.DataStructures;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Ores;
@@ -7,8 +9,6 @@ using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Accessories
     {
         public new string LocalizationCategory => "Items.Accessories";
         public static Asset<Texture2D> HeatTex;
-        
+
         public static int ShieldRechargeDelay = CalamityUtils.SecondsToFrames(5);
         public static int TotalShieldRechargeTime = CalamityUtils.SecondsToFrames(2);
 

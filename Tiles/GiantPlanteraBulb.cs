@@ -203,9 +203,9 @@ namespace CalamityMod.Tiles
             var tile = Main.tile[i, j];
 
             spriteBatch.Draw(
-                Glow.Value, 
-                new Vector2(i * 16, j * 16 + 2) - Main.screenPosition + CalamityUtils.TileDrawOffset, 
-                new Rectangle(tile.TileFrameX, tile.TileFrameY + AnimationFrameHeight * Main.tileFrame[Type], 16, 16), 
+                Glow.Value,
+                new Vector2(i * 16, j * 16 + 2) - Main.screenPosition + CalamityUtils.TileDrawOffset,
+                new Rectangle(tile.TileFrameX, tile.TileFrameY + AnimationFrameHeight * Main.tileFrame[Type], 16, 16),
                 Color.Yellow
             );
         }

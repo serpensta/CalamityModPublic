@@ -11,7 +11,11 @@ AerospecBreastplate: {
 AerospecHat: {
 	DisplayName: Aerospec Hat
 	Tooltip: 10% increased magic damage and +30 max mana
-	SetBonus: 5% increased movement speed and magic critical strike chance
+	SetBonus:
+		'''
+		8% reduced mana cost
+		5% increased movement speed and magic critical strike chance
+		'''
 }
 
 AerospecHeadgear: {
@@ -136,7 +140,7 @@ StatigelHeadMagic: {
 	DisplayName: Statigel Cap
 	Tooltip:
 		'''
-		10% increased magic damage and 10% reduced mana usage
+		10% increased magic damage and 10% reduced mana cost
 		7% increased magic critical strike chance and +40 max mana
 		'''
 }

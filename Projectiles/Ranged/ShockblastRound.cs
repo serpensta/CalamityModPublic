@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Vector2 dspeed = -Projectile.velocity * Main.rand.NextFloat(0.5f, 0.7f);
                     float x2 = Projectile.Center.X - Projectile.velocity.X / 10f * i;
                     float y2 = Projectile.Center.Y - Projectile.velocity.Y / 10f * i;
-                    int dust = Dust.NewDust(new Vector2(x2, y2), 1, 1, 185, 0f, 0f, 0, default, 1f);
+                    int dust = Dust.NewDust(new Vector2(x2, y2), 1, 1, DustID.FrostHydra, 0f, 0f, 0, default, 1f);
                     Main.dust[dust].alpha = Projectile.alpha;
                     Main.dust[dust].position.X = x2;
                     Main.dust[dust].position.Y = y2;

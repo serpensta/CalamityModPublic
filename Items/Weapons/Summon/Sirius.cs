@@ -1,6 +1,6 @@
 ﻿using CalamityMod.Items.Materials;
-using CalamityMod.Projectiles.Summon;
 using CalamityMod.Items.Placeables.Ores;
+using CalamityMod.Projectiles.Summon;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;

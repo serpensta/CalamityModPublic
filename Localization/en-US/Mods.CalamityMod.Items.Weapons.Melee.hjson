@@ -491,7 +491,7 @@ FaultLine: {
 
 FeralthornClaymore: {
 	DisplayName: Feralthorn Claymore
-	Tooltip: Summons thorns on enemy hits
+	Tooltip: Sprouts thorns from enemies on hit
 }
 
 FlarefrostBlade: {
@@ -885,6 +885,7 @@ PhotonRipper: {
 		'''
 		Projects a directed stream of hardlight teeth at ultra high velocity
 		This weapon and its projectiles function as a chainsaw
+		Press <right> to use without chopping down trees
 		'''
 }
 

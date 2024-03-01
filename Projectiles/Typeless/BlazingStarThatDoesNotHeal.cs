@@ -1,13 +1,13 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Dusts;
 using CalamityMod.NPCs.Providence;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using CalamityMod.Dusts;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Typeless
 {
@@ -39,7 +39,7 @@ namespace CalamityMod.Projectiles.Typeless
                 if (Projectile.timeLeft < 160)
                     Projectile.timeLeft = 160;
             }
-            
+
             if (Projectile.velocity.Length() < 16f)
                 Projectile.velocity *= 1.01f;
         }

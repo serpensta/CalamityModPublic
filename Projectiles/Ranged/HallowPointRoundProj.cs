@@ -1,9 +1,9 @@
-using CalamityMod.Particles;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
+using CalamityMod.Particles;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Ranged
             // Once projectile is visible, spawn trailing sparkles
             if (Projectile.timeLeft <= 298 && Main.rand.NextBool(5))
             {
-                int idx = Dust.NewDust(Projectile.Center, 1, 1, 228, 0f, 0f);
+                int idx = Dust.NewDust(Projectile.Center, 1, 1, DustID.GoldFlame, 0f, 0f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].noLight = true;
                 Main.dust[idx].position = Projectile.Center;

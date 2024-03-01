@@ -22,7 +22,6 @@ using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.Abyss;
-using CalamityMod.NPCs.ExoMechs.Apollo;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Other;
 using CalamityMod.NPCs.ProfanedGuardians;
@@ -65,8 +64,8 @@ namespace CalamityMod.CalPlayer
 
             for (int j = 0; j < 20; j++)
             {
-                int sVeilDustIndex1 = Dust.NewDust(Player.Center, 1, 1, 21, sVeilDustDir.X * j, sVeilDustDir.Y * j);
-                int sVeilDustIndex2 = Dust.NewDust(Player.Center, 1, 1, 21, -sVeilDustDir.X * j, -sVeilDustDir.Y * j);
+                int sVeilDustIndex1 = Dust.NewDust(Player.Center, 1, 1, DustID.VilePowder, sVeilDustDir.X * j, sVeilDustDir.Y * j);
+                int sVeilDustIndex2 = Dust.NewDust(Player.Center, 1, 1, DustID.VilePowder, -sVeilDustDir.X * j, -sVeilDustDir.Y * j);
                 Main.dust[sVeilDustIndex1].noGravity = false;
                 Main.dust[sVeilDustIndex1].noLight = false;
                 Main.dust[sVeilDustIndex2].noGravity = false;
@@ -119,7 +118,7 @@ namespace CalamityMod.CalPlayer
 
             for (int j = 0; j < 100; j++)
             {
-                int scarfDodgeDust = Dust.NewDust(Player.position, Player.width, Player.height, 235, 0f, 0f, 100, default, 2f);
+                int scarfDodgeDust = Dust.NewDust(Player.position, Player.width, Player.height, DustID.LifeDrain, 0f, 0f, 100, default, 2f);
                 Dust dust = Main.dust[scarfDodgeDust];
                 dust.position.X += Main.rand.Next(-20, 21);
                 dust.position.Y += Main.rand.Next(-20, 21);
@@ -237,7 +236,7 @@ namespace CalamityMod.CalPlayer
 
                 for (int j = 0; j < 50; j++)
                 {
-                    int nebulousReviveDust = Dust.NewDust(Player.position, Player.width, Player.height, 173, 0f, 0f, 100, default, 2f);
+                    int nebulousReviveDust = Dust.NewDust(Player.position, Player.width, Player.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 2f);
                     Dust dust = Main.dust[nebulousReviveDust];
                     dust.position.X += Main.rand.Next(-20, 21);
                     dust.position.Y += Main.rand.Next(-20, 21);
@@ -331,7 +330,7 @@ namespace CalamityMod.CalPlayer
 
                 for (int i = 0; i < 60; i++)
                 {
-                    int d = Dust.NewDust(Player.position, Player.width, Player.height, 88, 0f, 0f, 0, default, 2.5f);
+                    int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.GemSapphire, 0f, 0f, 0, default, 2.5f);
                     Main.dust[d].noGravity = true;
                     Main.dust[d].velocity *= 5f;
                 }
@@ -1407,6 +1406,17 @@ namespace CalamityMod.CalPlayer
             if (freeDodgeFromShieldAbsorption)
             {
                 freeDodgeFromShieldAbsorption = false;
+
+                // 20FEB2024: Ozzatron: Hits fully absorbed by shields remove half of your current Adrenaline.
+                if (AdrenalineEnabled)
+                {
+                    // Draedon's Heart instead pauses for half the usual duration.
+                    if (draedonsHeart)
+                        nanomachinesLockoutTimer += DraedonsHeart.NanomachinePauseAfterShieldDamage;
+                    else if (adrenaline >= 0f)
+                        adrenaline /= 2f;
+                }
+
                 return true;
             }
 
@@ -1725,7 +1735,7 @@ namespace CalamityMod.CalPlayer
                     // Actually remove damage from the incoming hit, so that later shields have less damage incoming.
                     info.Damage -= masterChefDamageBlocked;
                 }
-                
+
                 // PSA
                 if (pSoulArtifact && pSoulShieldDurability > 0 && !shieldsFullyAbsorbedHit)
                 {
@@ -1865,7 +1875,7 @@ namespace CalamityMod.CalPlayer
 
                     if (pSoulArtifact && (!profanedCrystal || profanedCrystalBuffs))
                         Player.AddCooldown(ProfanedSoulShieldRecharge.ID, profanedCrystalBuffs ? (60 * 5) : (60 * 10), true); // 5 seconds psc, 10 seconds psa 
-                    
+
                     // Set The Sponge's recharge delay to full. Override any existing cooldown instance.
                     if (sponge)
                         Player.AddCooldown(SpongeRecharge.ID, TheSponge.ShieldRechargeDelay, true);
@@ -1893,6 +1903,9 @@ namespace CalamityMod.CalPlayer
                 chaliceBleedoutBuffer += bleedoutToApply;
                 info.Damage = ChaliceOfTheBloodGod.MinAllowedDamage;
 
+                // Defense damage is applied here.
+                DealDefenseDamage(info, bleedoutToApply);
+
                 // Display text indicating that damage was transferred to bleedout.
                 string text = $"({-bleedoutToApply})";
                 Rectangle location = new Rectangle((int)Player.position.X + 4, (int)Player.position.Y - 3, Player.width - 4, Player.height - 4);
@@ -1915,9 +1928,10 @@ namespace CalamityMod.CalPlayer
             // If the player was just hit by something capable of dealing defense damage, then apply defense damage.
             // Bloodflare Core makes every hit deal defense damage (to enable its function).
             // Defense damage is not applied if the player has iframes.
+            // This function will be ignored if the player is wearing Chalice, as it handles its defense damage elsewhere.
             bool hitCanApplyDefenseDamage = nextHitDealsDefenseDamage || bloodflareCore;
 
-            if (hitCanApplyDefenseDamage && !hasIFrames && !Player.creativeGodMode)
+            if (hitCanApplyDefenseDamage && !chaliceOfTheBloodGod && !hasIFrames && !Player.creativeGodMode)
             {
                 double halfDefense = Player.statDefense / 2.0;
                 int netMitigation = hurtInfo.SourceDamage - hurtInfo.Damage;
@@ -1939,7 +1953,7 @@ namespace CalamityMod.CalPlayer
                     {
                         float speed = Main.rand.NextFloat(1.8f, 8f);
                         Vector2 dustVel = new Vector2(speed, speed);
-                        Dust d = Dust.NewDustDirect(Player.position, Player.width, Player.height, 90);
+                        Dust d = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustID.GemRuby);
                         d.velocity = dustVel;
                         d.noGravity = true;
                         d.scale *= Main.rand.NextFloat(1.1f, 1.4f);
@@ -2053,7 +2067,7 @@ namespace CalamityMod.CalPlayer
 
                     // If using Draedon's Heart and not actively healing with Nanomachines, pause generation briefly.
                     if (draedonsHeart && !adrenalineModeActive)
-                        nanomachinesLockoutTimer = DraedonsHeart.NanomachinePauseAfterDamage;
+                        nanomachinesLockoutTimer += DraedonsHeart.NanomachinePauseAfterDamage;
                 }
 
                 if (evilSmasherBoost > 0)
@@ -2130,7 +2144,7 @@ namespace CalamityMod.CalPlayer
 
                         for (int d = 0; d < 20; d++)
                         {
-                            int dust = Dust.NewDust(Player.position, Player.width, Player.height, 31, 0f, 0f, 100, default, 2f);
+                            int dust = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                             Main.dust[dust].velocity *= 3f;
                             if (Main.rand.NextBool())
                             {
@@ -2141,10 +2155,10 @@ namespace CalamityMod.CalPlayer
 
                         for (int d = 0; d < 35; d++)
                         {
-                            int fire = Dust.NewDust(Player.position, Player.width, Player.height, 6, 0f, 0f, 100, default, 3f);
+                            int fire = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch, 0f, 0f, 100, default, 3f);
                             Main.dust[fire].noGravity = true;
                             Main.dust[fire].velocity *= 5f;
-                            fire = Dust.NewDust(Player.position, Player.width, Player.height, 6, 0f, 0f, 100, default, 2f);
+                            fire = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch, 0f, 0f, 100, default, 2f);
                             Main.dust[fire].velocity *= 2f;
                         }
                     }
@@ -2157,7 +2171,7 @@ namespace CalamityMod.CalPlayer
 
                     for (int d = 0; d < 10; d++)
                     {
-                        int ice = Dust.NewDust(Player.position, Player.width, Player.height, 67, 0f, 0f, 100, default, 2f);
+                        int ice = Dust.NewDust(Player.position, Player.width, Player.height, DustID.IceRod, 0f, 0f, 100, default, 2f);
                         Main.dust[ice].velocity *= 3f;
                         if (Main.rand.NextBool())
                         {
@@ -2167,10 +2181,10 @@ namespace CalamityMod.CalPlayer
                     }
                     for (int d = 0; d < 15; d++)
                     {
-                        int ice = Dust.NewDust(Player.position, Player.width, Player.height, 67, 0f, 0f, 100, default, 3f);
+                        int ice = Dust.NewDust(Player.position, Player.width, Player.height, DustID.IceRod, 0f, 0f, 100, default, 3f);
                         Main.dust[ice].noGravity = true;
                         Main.dust[ice].velocity *= 5f;
-                        ice = Dust.NewDust(Player.position, Player.width, Player.height, 67, 0f, 0f, 100, default, 2f);
+                        ice = Dust.NewDust(Player.position, Player.width, Player.height, DustID.IceRod, 0f, 0f, 100, default, 2f);
                         Main.dust[ice].velocity *= 2f;
                     }
                 }
@@ -2308,20 +2322,31 @@ namespace CalamityMod.CalPlayer
             if (Player.whoAmI == Main.myPlayer)
             {
                 int iFramesToAdd = 0;
-                if (tracersSeraph && hurtInfo.Damage > 200)
-                    iFramesToAdd += 30;
                 if (godSlayerThrowing && hurtInfo.Damage > 80)
                     iFramesToAdd += 30;
                 if (statigelSet && hurtInfo.Damage > 100)
                     iFramesToAdd += 30;
 
+                // Deific Amulet provides 10 to 40 bonus immunity frames when you get hit which scale with your missing health.
+                // If you only take 1 damage, you get 5 iframes.
+                // This effect is inherited by Rampart of Deities.
                 if (dAmulet)
                 {
-                    if (hurtInfo.Damage == 1)
-                        iFramesToAdd += 5;
+                    if (hurtInfo.Damage > 1)
+                    {
+                        float lifeRatio = (float)Player.statLife / Player.statLifeMax2;
+                        float iframeEffectivenessRatio = Utils.GetLerpValue(1.0f, 0.25f, lifeRatio, true);
+
+                        iFramesToAdd += (int)(iframeEffectivenessRatio * DeificAmulet.MaxBonusIFrames);
+                    }
                     else
-                        iFramesToAdd += 10;
+                        iFramesToAdd += 5;
                 }
+
+                // Ozzatron 20FEB2024: Moved extra iframes from Seraph Tracers to Rampart of Deities to counteract its loss of Charm of Myths
+                // This stacks with the above Deific Amulet effect
+                if (rampartOfDeities && hurtInfo.Damage > 200)
+                    iFramesToAdd += 30;
 
                 if (fabsolVodka)
                 {
@@ -2366,6 +2391,7 @@ namespace CalamityMod.CalPlayer
                         CalamityUtils.ProjectileRain(source, Player.Center, 400f, 100f, 500f, 800f, 29f, ModContent.ProjectileType<AstralStar>(), astralStarDamage, 5f, Player.whoAmI);
                     }
                 }
+                // TODO -- Make Deific Amulet and Rampart of Deities' retaliation effects way cooler
                 if (dAmulet)
                 {
                     var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<DeificAmulet>()));
@@ -2621,7 +2647,7 @@ namespace CalamityMod.CalPlayer
             }
             for (int j = 0; j < 100; j++)
             {
-                Dust.NewDust(Player.position, Player.width, Player.height, 235, (float)(2 * 0), -2f, 0, default, 1f);
+                Dust.NewDust(Player.position, Player.width, Player.height, DustID.LifeDrain, (float)(2 * 0), -2f, 0, default, 1f);
             }
             Player.mount.Dismount(Player);
             Player.dead = true;
@@ -2694,6 +2720,31 @@ namespace CalamityMod.CalPlayer
             // Under typical circumstances, defense damage scales with "net mitigation", aka how much damage the player DIDN'T take.
             // Thematically, this means it scales with how much damage the player's defense took instead of them.
             int netMitigation = hurtInfo.SourceDamage - hurtInfo.Damage;
+            int incomingDamageToUse = netMitigation <= 0 ? 0 : netMitigation;
+
+            // Leave it to the direct function to determine how much defense damage is taken. Use standard ratios.
+            DealDefenseDamage(incomingDamageToUse, false);
+        }
+
+        /// <summary>
+        /// Deals Calamity defense damage to a player, specifically built to handle Chalice of the Blood God's bleedout.
+        /// </summary>
+        /// <param name="hurtInfo">HurtInfo of the incoming strike to the player.</param>
+        /// <param name="bleedoutApplied">The bleedout applied on this specific hit. Used for reducing the defense damage inflicted.</param>
+        public void DealDefenseDamage(Player.HurtInfo hurtInfo, int bleedoutApplied)
+        {
+            // Legacy safeguard: Skip defense damage if the player is somehow "hit for zero" (this should never happen).
+            if (hurtInfo.Damage <= 0 || hurtInfo.SourceDamage <= 0)
+                return;
+
+            // Under typical circumstances, defense damage scales with "net mitigation", aka how much damage the player DIDN'T take.
+            // Thematically, this means it scales with how much damage the player's defense took instead of them.
+
+            CalamityPlayer modPlayer = Player.Calamity();
+
+            // Subtract the bleedout applied on this hit from the net mitigation.
+            // This prevents Chalice from making the player take much more defense damage than intended.
+            int netMitigation = hurtInfo.SourceDamage - (hurtInfo.Damage + bleedoutApplied);
             int incomingDamageToUse = netMitigation <= 0 ? 0 : netMitigation;
 
             // Leave it to the direct function to determine how much defense damage is taken. Use standard ratios.

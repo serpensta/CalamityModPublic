@@ -1,5 +1,5 @@
-﻿using CalamityMod.Items.Materials;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CalamityMod.Items.Materials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

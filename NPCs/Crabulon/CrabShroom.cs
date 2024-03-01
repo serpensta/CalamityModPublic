@@ -46,6 +46,10 @@ namespace CalamityMod.NPCs.Crabulon
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void FindFrame(int frameHeight)
@@ -133,7 +137,7 @@ namespace CalamityMod.NPCs.Crabulon
             Texture2D glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/Crabulon/CrabShroomGlow").Value;
             Color colorToShift = Main.zenithWorld ? new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB) : Color.Cyan;
             Color glowColor = Color.Lerp(Color.White, colorToShift, 0.5f);
-            
+
             int ClonesAroundShroom = Main.zenithWorld ? 4 : 0;
             for (int c = 0; c < 1 + ClonesAroundShroom; c++)
             {
@@ -159,12 +163,12 @@ namespace CalamityMod.NPCs.Crabulon
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 2; k++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 56, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, hit.HitDirection, -1f, 0, default, 1f);
 
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 6; k++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 56, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, hit.HitDirection, -1f, 0, default, 1f);
             }
         }
     }

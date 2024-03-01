@@ -1,11 +1,11 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System.Collections.Generic;
+using CalamityMod.Items.Materials;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Items.Weapons.Melee
 {
@@ -35,7 +35,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (!Main.zenithWorld)
                 if (Main.rand.NextBool(4))
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 174);
+                    Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.InfernoFork);
         }
 
         // NOTE: Modded item variants don't seem to be supported as of now, so this is probably temporary (also there is no way around modifiers screwing rarity/value in some way)
@@ -64,14 +64,14 @@ namespace CalamityMod.Items.Weapons.Melee
                 int increment;
                 for (int i = 0; i < 40; i = increment + 1)
                 {
-                    int swingDust = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, 174, 0f, 0f, 200, default, firstDustScale);
+                    int swingDust = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, DustID.InfernoFork, 0f, 0f, 200, default, firstDustScale);
                     Dust dust = Main.dust[swingDust];
                     dust.position = target.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * (float)target.width / 2f;
                     dust.noGravity = true;
                     dust.velocity.Y -= 6f;
                     dust.velocity *= 3f;
                     dust.velocity += dustVelocity * Main.rand.NextFloat();
-                    swingDust = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, 174, 0f, 0f, 100, default, secondDustScale);
+                    swingDust = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, DustID.InfernoFork, 0f, 0f, 100, default, secondDustScale);
                     dust.position = target.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * (float)target.width / 2f;
                     dust.velocity.Y -= 6f;
                     dust.velocity *= 2f;
@@ -83,7 +83,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 }
                 for (int j = 0; j < 20; j = increment + 1)
                 {
-                    int swingDust2 = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, 174, 0f, 0f, 0, default, thirdDustScale);
+                    int swingDust2 = Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, DustID.InfernoFork, 0f, 0f, 0, default, thirdDustScale);
                     Dust dust = Main.dust[swingDust2];
                     dust.position = target.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy((double)target.velocity.ToRotation(), default) * (float)target.width / 3f;
                     dust.noGravity = true;

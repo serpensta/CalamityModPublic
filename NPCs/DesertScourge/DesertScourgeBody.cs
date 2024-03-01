@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Events;
+using CalamityMod.Items.Placeables.Furniture;
 using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -62,29 +63,22 @@ namespace CalamityMod.NPCs.DesertScourge
             NPC.Calamity().VulnerableToWater = true;
         }
 
-        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
-        {
-            return false;
-        }
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 
         public override void AI()
         {
-            // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
-            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
-            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-            {
-                NPC.damage = 0;
-            }
-            else
-            {
-                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
-            }
+            bool bossRush = BossRushEvent.BossRushActive;
+            bool expertMode = Main.expertMode || bossRush;
+            bool masterMode = Main.masterMode || bossRush;
 
             if (NPC.ai[2] > 0f)
                 NPC.realLife = (int)NPC.ai[2];
+
+            if (NPC.life > Main.npc[(int)NPC.ai[1]].life)
+                NPC.life = Main.npc[(int)NPC.ai[1]].life;
+
+            // Percent life remaining
+            float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
             if (NPC.target < 0 || NPC.target == Main.maxPlayers || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
                 NPC.TargetClosest();
@@ -123,9 +117,9 @@ namespace CalamityMod.NPCs.DesertScourge
             if (Main.player[NPC.target].dead)
                 NPC.TargetClosest(false);
 
-            Vector2 segmentTilePos = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-            float playerXPos = Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2);
-            float playerYPos = Main.player[NPC.target].position.Y + (float)(Main.player[NPC.target].height / 2);
+            Vector2 segmentTilePos = NPC.Center;
+            float playerXPos = Main.player[NPC.target].Center.X;
+            float playerYPos = Main.player[NPC.target].Center.Y;
             playerXPos = (float)((int)(playerXPos / 16f) * 16);
             playerYPos = (float)((int)(playerYPos / 16f) * 16);
             segmentTilePos.X = (float)((int)(segmentTilePos.X / 16f) * 16);
@@ -137,14 +131,14 @@ namespace CalamityMod.NPCs.DesertScourge
             {
                 try
                 {
-                    segmentTilePos = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-                    playerXPos = Main.npc[(int)NPC.ai[1]].position.X + (float)(Main.npc[(int)NPC.ai[1]].width / 2) - segmentTilePos.X;
-                    playerYPos = Main.npc[(int)NPC.ai[1]].position.Y + (float)(Main.npc[(int)NPC.ai[1]].height / 2) - segmentTilePos.Y;
+                    segmentTilePos = NPC.Center;
+                    playerXPos = Main.npc[(int)NPC.ai[1]].Center.X - segmentTilePos.X;
+                    playerYPos = Main.npc[(int)NPC.ai[1]].Center.Y - segmentTilePos.Y;
                 }
                 catch
                 {
                 }
-                NPC.rotation = (float)System.Math.Atan2((double)playerYPos, (double)playerXPos) + 1.57f;
+                NPC.rotation = (float)System.Math.Atan2((double)playerYPos, (double)playerXPos) + MathHelper.PiOver2;
                 playerDistance = (float)System.Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
                 playerDistance = (playerDistance - (float)(NPC.width)) / playerDistance;
                 playerXPos *= playerDistance;
@@ -158,12 +152,27 @@ namespace CalamityMod.NPCs.DesertScourge
                 else if (playerXPos > 0f)
                     NPC.spriteDirection = -1;
             }
+
+            // Calculate contact damage based on velocity
+            float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
+            if (expertMode)
+                maxChaseSpeed += 5f * (1f - lifeRatio);
+
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
+            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
+            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+            {
+                NPC.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
+            }
         }
 
-        public override bool CheckActive()
-        {
-            return false;
-        }
+        public override bool CheckActive() => false;
 
         public override void HitEffect(NPC.HitInfo hit)
         {
@@ -179,10 +188,12 @@ namespace CalamityMod.NPCs.DesertScourge
                     Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity * randomSpread * Main.rand.NextFloat(), Mod.Find<ModGore>("ScourgeBody2").Type, NPC.scale);
                     Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity * randomSpread * Main.rand.NextFloat(), Mod.Find<ModGore>("ScourgeBody3").Type, NPC.scale);
                 }
+
                 for (int k = 0; k < 10; k++)
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f, 0, default, 1f);
             }
         }
+
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             // Sometimes "Deflect" projectiles in gfb into water blasts.
@@ -199,7 +210,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)

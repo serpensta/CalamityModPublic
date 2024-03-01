@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.Particles;
+using CalamityMod.Sounds;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using CalamityMod.Items.Weapons.Summon;
-using Terraria.Audio;
-using CalamityMod.Sounds;
-using System.IO;
-using CalamityMod.Particles;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -166,7 +166,7 @@ namespace CalamityMod.Projectiles.Summon
                 int laserShootRate = 3;
                 if (wrappedAttackTimer == 1f)
                     SoundEngine.PlaySound(CommonCalamitySounds.LaserCannonSound with { Volume = 0.25f }, CannonCenter);
-                
+
                 if (wrappedAttackTimer < laserCount * laserShootRate && wrappedAttackTimer % laserShootRate == 1f)
                 {
                     if (Main.myPlayer == Projectile.owner)
@@ -193,7 +193,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile heldCannon = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Main.LocalPlayer.Center, Vector2.UnitX, ModContent.ProjectileType<AtlasMunitionsAutocannonHeld>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
                 heldCannon.ModProjectile<AtlasMunitionsAutocannonHeld>().HeatInterpolant = HeatInterpolant * 0.65f;
                 heldCannon.originalDamage = Projectile.originalDamage;
-                
+
                 CannonIsMounted = false;
                 Projectile.netUpdate = true;
                 return;
@@ -313,7 +313,7 @@ namespace CalamityMod.Projectiles.Summon
 
         // Don't die on tile collision.
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
-        
+
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             fallThrough = false;

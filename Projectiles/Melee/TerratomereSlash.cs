@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using System;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -59,7 +59,7 @@ namespace CalamityMod.Projectiles.Melee
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Vector2 origin = texture.Size() * 0.5f;
             Vector2 scale = new Vector2(MathHelper.Lerp(0.8f, 1.25f, (float)Math.Pow(progress, 0.45)), MathHelper.Lerp(0.6f, 0.24f, (float)Math.Pow(progress, 0.4))) * Projectile.scale;
-            
+
             // Draw an inner bloom circle to signify power at the center of the strike along with two thinner lines.
             Vector2 bloomScale = Projectile.Size / bloomTexture.Size() * new Vector2(1f, 2f);
             Vector2 bloomOrigin = bloomTexture.Size() * 0.5f;

@@ -1,9 +1,7 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using CalamityMod.CalPlayer;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-using CalamityMod.Items.Materials;
-using CalamityMod.CalPlayer;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
@@ -23,6 +21,7 @@ namespace CalamityMod.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             CalamityPlayer modPlayer = player.Calamity();
+            player.noKnockback = true;
             modPlayer.tortShell = true;
         }
         public override void AddRecipes()

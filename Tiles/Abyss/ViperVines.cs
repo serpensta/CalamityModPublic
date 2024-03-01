@@ -26,7 +26,7 @@ namespace CalamityMod.Tiles.Abyss
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-		{
+        {
             if (WorldGen.loadSuccess)
             {
                 Tile tileAbove = Framing.GetTileSafely(i, j - 1);
@@ -36,8 +36,8 @@ namespace CalamityMod.Tiles.Abyss
                     return true;
                 }
             }
-			return true;
-		}
+            return true;
+        }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {

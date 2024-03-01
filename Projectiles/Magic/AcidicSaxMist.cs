@@ -1,5 +1,5 @@
+﻿using System;
 using CalamityMod.Buffs.StatDebuffs;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
