@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
-            Item.damage = 22;
+            Item.damage = 26;
             Item.DamageType = DamageClass.Summon;
             Item.shoot = ModContent.ProjectileType<HarvestStaffSentry>();
             Item.knockBack = 5f;
