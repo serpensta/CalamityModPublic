@@ -18,6 +18,7 @@ namespace CalamityMod.Projectiles.Melee
         public Player Owner => Main.player[Projectile.owner];
         public ref float ShootReach => ref Projectile.ai[0];
         public ref float Time => ref Projectile.ai[1];
+        public ref float CanBreakTrees => ref Projectile.ai[2];
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
@@ -65,10 +66,13 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.Opacity = Utils.GetLerpValue(0f, 12f, Time, true) * Utils.GetLerpValue(Lifetime, Lifetime - 12f, Lifetime - Projectile.timeLeft, true);
 
             // Destroy trees within the range of the past 20 oldPos positions.
-            for (int i = 0; i < 20; i++)
+            if (CanBreakTrees == 1)
             {
-                Point pointToCheck = (Projectile.oldPos[i] + Projectile.Size * 0.5f).ToTileCoordinates();
-                AbsolutelyFuckingAnnihilateTrees(pointToCheck.X, pointToCheck.Y);
+                for (int i = 0; i < 20; i++)
+                {
+                    Point pointToCheck = (Projectile.oldPos[i] + Projectile.Size * 0.5f).ToTileCoordinates();
+                    AbsolutelyFuckingAnnihilateTrees(pointToCheck.X, pointToCheck.Y);
+                }
             }
 
             // Emit light.

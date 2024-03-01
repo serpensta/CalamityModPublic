@@ -135,9 +135,6 @@ namespace CalamityMod.NPCs.SlimeGod
                 NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<CrimulanPaladin>());
             }
 
-            // Set damage
-            NPC.damage = NPC.defDamage;
-
             // Enrage based on large slimes
             bool purpleSlimeAlive = false;
             bool redSlimeAlive = false;
@@ -180,6 +177,9 @@ namespace CalamityMod.NPCs.SlimeGod
             // Vanish phase
             if (!purpleSlimeAlive && !redSlimeAlive)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 // Make sure Opacity is set to 0.8f if it's below that when the vanish phase starts
                 if (NPC.ai[3] == 0f)
                 {
@@ -387,7 +387,11 @@ namespace CalamityMod.NPCs.SlimeGod
 
                 return;
             }
-            else if (expertMode)
+
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
+            if (expertMode)
             {
                 float divisor = bossRush ? 90f : death ? 180f : revenge ? 240f : 300f;
                 if (phase2)
@@ -441,6 +445,9 @@ namespace CalamityMod.NPCs.SlimeGod
             NPC.ai[0] -= 1f;
             if (distanceFromFlyDestination < 200f || NPC.ai[0] > 0f)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 if (distanceFromFlyDestination < 200f)
                     NPC.ai[0] = 20f;
 
