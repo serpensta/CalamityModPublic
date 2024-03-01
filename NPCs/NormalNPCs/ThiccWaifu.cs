@@ -133,6 +133,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_Hover()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
             int hoverTime = (int)MathHelper.Lerp(330f, 180f, 1f - lifeRatio);
             float hoverAcceleration = MathHelper.Lerp(0.2f, 0.425f, 1f - lifeRatio);
@@ -194,6 +197,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_CloudTeleport()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int teleportFadeoutTime = 75;
             int teleportFadeinTime = 60;
 
@@ -246,6 +252,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_LightningSummon()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int cloudSummonDelay = 60;
             int cloudSummonRate = 30;
             int totalCloudWavesToSummon = 5;
@@ -285,6 +294,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_TornadoSummon()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int tornadoSpawnDelay = 60;
             int totalTornadosToSummon = Phase2 ? 8 : 5;
 
@@ -313,6 +325,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_NimbusSummon()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int nimbusSummonDelay = 45;
             int totalNimbiToSummon = 5;
             int nimbusSummonRate = 50;
@@ -380,7 +395,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (AttackTimer >= (sliceChargeTime + sliceChargeDelay) * totalSlices)
             {
-                NPC.damage = NPC.defDamage;
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 CurrentAttackState = AttackState.Hover;
                 AttackTimer = 0f;
                 NPC.netUpdate = true;

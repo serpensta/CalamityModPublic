@@ -32,7 +32,11 @@ namespace CalamityMod.NPCs.Perforator
             NPC.width = 40;
             NPC.height = 50;
             NPC.defense = 10;
+
             NPC.LifeMaxNERB(180, 216, 7000);
+            if (Main.zenithWorld)
+                NPC.lifeMax *= 4;
+
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
@@ -70,20 +74,6 @@ namespace CalamityMod.NPCs.Perforator
 
         public override void AI()
         {
-            // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = 4f;
-            float minimalDamageVelocity = 8f;
-            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
-            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
-            {
-                NPC.damage = 0;
-            }
-            else
-            {
-                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
-            }
-
             NPC.realLife = -1;
 
             // Target
@@ -124,9 +114,9 @@ namespace CalamityMod.NPCs.Perforator
                     NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, NPC.whoAmI, -1f, 0f, 0f, 0, 0, 0);
             }
 
-            Vector2 segmentDirection = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
-            float targetX = Main.player[NPC.target].position.X + (Main.player[NPC.target].width / 2);
-            float targetY = Main.player[NPC.target].position.Y + (Main.player[NPC.target].height / 2);
+            Vector2 segmentDirection = NPC.Center;
+            float targetX = Main.player[NPC.target].Center.X;
+            float targetY = Main.player[NPC.target].Center.Y;
 
             targetX = (int)(targetX / 16f) * 16;
             targetY = (int)(targetY / 16f) * 16;
@@ -140,9 +130,9 @@ namespace CalamityMod.NPCs.Perforator
             {
                 try
                 {
-                    segmentDirection = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
-                    targetX = Main.npc[(int)NPC.ai[1]].position.X + (Main.npc[(int)NPC.ai[1]].width / 2) - segmentDirection.X;
-                    targetY = Main.npc[(int)NPC.ai[1]].position.Y + (Main.npc[(int)NPC.ai[1]].height / 2) - segmentDirection.Y;
+                    segmentDirection = NPC.Center;
+                    targetX = Main.npc[(int)NPC.ai[1]].Center.X - segmentDirection.X;
+                    targetY = Main.npc[(int)NPC.ai[1]].Center.Y - segmentDirection.Y;
                 }
                 catch
                 {
@@ -158,6 +148,21 @@ namespace CalamityMod.NPCs.Perforator
                 NPC.velocity = Vector2.Zero;
                 NPC.position.X += targetX;
                 NPC.position.Y += targetY;
+            }
+
+            // Calculate contact damage based on velocity
+            float maxChaseSpeed = 16f;
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
+            float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
+            if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+            {
+                NPC.damage = 0;
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
             }
         }
 

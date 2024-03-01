@@ -37,6 +37,10 @@ namespace CalamityMod.NPCs.DesertScourge
         private bool TailSpawned = false;
         public bool playRoarSound = false;
 
+        public const float SegmentVelocity_Normal = 8f;
+        public const float SegmentVelocity_Expert = 10f;
+        public const float SegmentVelocity_Master = 12f;
+
         public static readonly SoundStyle RoarSound = new("CalamityMod/Sounds/Custom/DesertScourgeRoar");
 
         public override void SetStaticDefaults()
@@ -134,6 +138,7 @@ namespace CalamityMod.NPCs.DesertScourge
         {
             bool bossRush = BossRushEvent.BossRushActive;
             bool expertMode = Main.expertMode || bossRush;
+            bool masterMode = Main.masterMode || bossRush;
             bool revenge = CalamityWorld.revenge || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
@@ -177,19 +182,19 @@ namespace CalamityMod.NPCs.DesertScourge
             bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
             bool quickFall = NPC.Calamity().newAI[1] == 2f;
 
-            float speed = 0.09f;
-            float turnSpeed = 0.06f;
+            float speed = death ? 0.15f : 0.12f;
+            float turnSpeed = death ? 0.1f : 0.08f;
 
-            if (expertMode)
+            if (revenge)
             {
-                float velocityScale = death ? 0.12f : 0.06f;
+                float velocityScale = death ? 0.08f : 0.06f;
                 speed += velocityScale * (1f - lifeRatio);
-                float accelerationScale = death ? 0.075f : 0.05f;
+                float accelerationScale = death ? 0.05f : 0.04f;
                 turnSpeed += accelerationScale * (1f - lifeRatio);
             }
 
-            speed += 0.12f * enrageScale;
-            turnSpeed += 0.06f * enrageScale;
+            speed += 0.1f * enrageScale;
+            turnSpeed += 0.05f * enrageScale;
 
             if (Main.getGoodWorld)
             {
@@ -371,7 +376,10 @@ namespace CalamityMod.NPCs.DesertScourge
             else
                 NPC.localAI[1] = 0f;
 
-            float maxChaseSpeed = 16f;
+            float maxChaseSpeed = masterMode ? SegmentVelocity_Master : expertMode ? SegmentVelocity_Expert : SegmentVelocity_Normal;
+            if (expertMode)
+                maxChaseSpeed += 5f * (1f - lifeRatio);
+
             if (player.dead)
             {
                 shouldFly = false;

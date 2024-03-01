@@ -58,6 +58,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             if (NPC.justHit)
                 NPC.localAI[0] = 0f;
 

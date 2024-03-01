@@ -1372,6 +1372,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                             if (NPC.velocity.Y > segmentVelocity)
                                 NPC.velocity.Y = segmentVelocity;
 
+                            // This bool exists to stop the strange wiggle behavior when worms are falling down
+                            bool slowXVelocity = Math.Abs(NPC.velocity.X) > segmentVelocity;
                             if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 2.2)
                             {
                                 if (NPC.velocity.X < 0f)
@@ -1381,17 +1383,27 @@ namespace CalamityMod.NPCs.DevourerofGods
                             }
                             else if (NPC.velocity.Y == segmentVelocity)
                             {
-                                if (NPC.velocity.X < targetX)
-                                    NPC.velocity.X += turnSpeedCopy;
-                                else if (NPC.velocity.X > targetX)
-                                    NPC.velocity.X -= turnSpeedCopy;
+                                if (slowXVelocity)
+                                {
+                                    if (NPC.velocity.X < targetX)
+                                        NPC.velocity.X += turnSpeedCopy;
+                                    else if (NPC.velocity.X > targetX)
+                                        NPC.velocity.X -= turnSpeedCopy;
+                                }
+                                else
+                                    NPC.velocity.X = 0f;
                             }
                             else if (NPC.velocity.Y > 4f)
                             {
-                                if (NPC.velocity.X < 0f)
-                                    NPC.velocity.X += turnSpeedCopy * 0.9f;
+                                if (slowXVelocity)
+                                {
+                                    if (NPC.velocity.X < 0f)
+                                        NPC.velocity.X += turnSpeedCopy * 0.9f;
+                                    else
+                                        NPC.velocity.X -= turnSpeedCopy * 0.9f;
+                                }
                                 else
-                                    NPC.velocity.X -= turnSpeedCopy * 0.9f;
+                                    NPC.velocity.X = 0f;
                             }
                         }
                         else
@@ -2136,6 +2148,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                         if (NPC.velocity.Y > segmentVelocity)
                             NPC.velocity.Y = segmentVelocity;
 
+                        // This bool exists to stop the strange wiggle behavior when worms are falling down
+                        bool slowXVelocity = Math.Abs(NPC.velocity.X) > segmentVelocity;
                         if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 2.2)
                         {
                             if (NPC.velocity.X < 0f)
@@ -2145,17 +2159,27 @@ namespace CalamityMod.NPCs.DevourerofGods
                         }
                         else if (NPC.velocity.Y == segmentVelocity)
                         {
-                            if (NPC.velocity.X < targetX)
-                                NPC.velocity.X += turnSpeedCopy;
-                            else if (NPC.velocity.X > targetX)
-                                NPC.velocity.X -= turnSpeedCopy;
+                            if (slowXVelocity)
+                            {
+                                if (NPC.velocity.X < targetX)
+                                    NPC.velocity.X += turnSpeedCopy;
+                                else if (NPC.velocity.X > targetX)
+                                    NPC.velocity.X -= turnSpeedCopy;
+                            }
+                            else
+                                NPC.velocity.X = 0f;
                         }
                         else if (NPC.velocity.Y > 4f)
                         {
-                            if (NPC.velocity.X < 0f)
-                                NPC.velocity.X += turnSpeedCopy * 0.9f;
+                            if (slowXVelocity)
+                            {
+                                if (NPC.velocity.X < 0f)
+                                    NPC.velocity.X += turnSpeedCopy * 0.9f;
+                                else
+                                    NPC.velocity.X -= turnSpeedCopy * 0.9f;
+                            }
                             else
-                                NPC.velocity.X -= turnSpeedCopy * 0.9f;
+                                NPC.velocity.X = 0f;
                         }
                     }
                     else

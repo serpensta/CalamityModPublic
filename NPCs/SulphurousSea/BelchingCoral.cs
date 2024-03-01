@@ -64,6 +64,9 @@ namespace CalamityMod.NPCs.SulphurousSea
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             NPC.velocity.Y += 0.25f;
             NPC.TargetClosest(false);
             Player player = Main.player[NPC.target];

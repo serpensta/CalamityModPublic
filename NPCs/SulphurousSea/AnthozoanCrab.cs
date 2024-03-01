@@ -17,6 +17,7 @@ namespace CalamityMod.NPCs.SulphurousSea
     public class AnthozoanCrab : ModNPC
     {
         public int boulderIndex;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 16;
@@ -67,12 +68,17 @@ namespace CalamityMod.NPCs.SulphurousSea
         {
             writer.Write(boulderIndex);
         }
+
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             boulderIndex = reader.ReadInt32();
         }
+
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             if (NPC.ai[1]++ % 360f < 280f)
             {
                 if (NPC.ai[2] > 1f)

@@ -35,7 +35,6 @@ namespace CalamityMod.NPCs.SunkenSea
         private int attack = -1; //-1 doing nothing, 0 = shell hiding, 1 = telestomp, 2 = pearl burst, 3 = pearl rain
         private bool attackAnim = false;
         private bool hasBeenHit = false;
-        private bool statChange = false;
         private bool hide = false;
 
         public override void SetStaticDefaults()
@@ -56,6 +55,7 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.lavaImmune = true;
             NPC.npcSlots = 5f;
             NPC.damage = Main.hardMode ? 100 : 50;
+            NPC.defense = Main.hardMode ? 35 : 10;
             NPC.width = 160;
             NPC.height = 120;
             NPC.defense = 9999;
@@ -94,7 +94,6 @@ namespace CalamityMod.NPCs.SunkenSea
             writer.Write(NPC.dontTakeDamage);
             writer.Write(NPC.chaseable);
             writer.Write(hasBeenHit);
-            writer.Write(statChange);
             writer.Write(hide);
             for (int i = 0; i < 2; i++)
                 writer.Write(NPC.Calamity().newAI[i]);
@@ -108,7 +107,6 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.dontTakeDamage = reader.ReadBoolean();
             NPC.chaseable = reader.ReadBoolean();
             hasBeenHit = reader.ReadBoolean();
-            statChange = reader.ReadBoolean();
             hide = reader.ReadBoolean();
             for (int i = 0; i < 2; i++)
                 NPC.Calamity().newAI[i] = reader.ReadSingle();
@@ -117,36 +115,34 @@ namespace CalamityMod.NPCs.SunkenSea
         public override void AI()
         {
             NPC.TargetClosest(true);
+
             Player player = Main.player[NPC.target];
             CalamityGlobalNPC calamityGlobalNPC = NPC.Calamity();
+
             if (NPC.justHit && hitAmount < 5)
             {
                 ++hitAmount;
                 hasBeenHit = true;
             }
+
             NPC.chaseable = hasBeenHit;
+
             if (hitAmount == 5)
             {
                 if (Main.netMode != NetmodeID.Server)
                 {
                     if (!Main.player[NPC.target].dead && Main.player[NPC.target].active)
-                    {
                         player.AddBuff(ModContent.BuffType<Clamity>(), 2); //CLAM INVASION
-                    }
                 }
 
                 if (!hide)
                     Lighting.AddLight(NPC.Center, 0f, (255 - NPC.alpha) * 2.5f / 255f, (255 - NPC.alpha) * 2.5f / 255f);
 
-                if (!statChange)
-                {
-                    NPC.defense = Main.hardMode ? 35 : 10;
-                    NPC.damage = NPC.defDamage;
-                    statChange = true;
-                }
-
                 if (NPC.ai[0] < 240f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.ai[0] += 1f;
                     hide = false;
                 }
@@ -154,14 +150,18 @@ namespace CalamityMod.NPCs.SunkenSea
                 {
                     if (attack == -1)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         attack = Main.rand.Next(2);
                         if (attack == 0)
-                        {
                             attack = Main.rand.Next(2); //rarer chance of doing the hiding clam
-                        }
                     }
                     else if (attack == 0)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         hide = true;
                         NPC.defense = 9999;
                         NPC.ai[1] += 1f;
@@ -190,11 +190,14 @@ namespace CalamityMod.NPCs.SunkenSea
                         }
                         else if (NPC.ai[2] == 1f)
                         {
+                            // Avoid cheap bullshit
                             NPC.damage = 0;
+
                             NPC.chaseable = false;
                             NPC.dontTakeDamage = true;
                             NPC.noGravity = true;
                             NPC.noTileCollide = true;
+
                             NPC.alpha += Main.hardMode ? 8 : 5;
                             if (NPC.alpha >= 255)
                             {
@@ -223,10 +226,13 @@ namespace CalamityMod.NPCs.SunkenSea
                                 vector *= 34f;
                                 Main.dust[attackDust].position = NPC.Center - vector;
                             }
+
                             NPC.alpha -= Main.hardMode ? 7 : 4;
                             if (NPC.alpha <= 0)
                             {
+                                // Set damage
                                 NPC.damage = NPC.defDamage;
+
                                 NPC.chaseable = true;
                                 NPC.dontTakeDamage = false;
                                 NPC.alpha = 0;
@@ -236,6 +242,9 @@ namespace CalamityMod.NPCs.SunkenSea
                         }
                         else if (NPC.ai[2] == 3f)
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             NPC.velocity.Y += 0.8f;
                             attackAnim = true;
                             if (NPC.Center.Y > (player.Center.Y - (float)(NPC.height / 2) + player.gfxOffY - 15f))
@@ -249,6 +258,9 @@ namespace CalamityMod.NPCs.SunkenSea
                         {
                             if (NPC.velocity.Y == 0f)
                             {
+                                // Avoid cheap bullshit
+                                NPC.damage = 0;
+
                                 NPC.ai[2] = 0f;
                                 NPC.ai[0] = 0f;
                                 NPC.netUpdate = true;
@@ -269,6 +281,7 @@ namespace CalamityMod.NPCs.SunkenSea
                                     }
                                 }
                             }
+
                             NPC.velocity.Y += 0.8f;
                         }
                     }

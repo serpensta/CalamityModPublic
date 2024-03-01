@@ -29,7 +29,7 @@ namespace CalamityMod.NPCs.Crags
             AIType = -1;
             NPC.npcSlots = 1f;
             NPC.damage = 30;
-            NPC.width = 60;
+            NPC.width = 40;
             NPC.height = 40;
             NPC.defense = 30;
             NPC.DR_NERD(0.15f);
@@ -73,6 +73,9 @@ namespace CalamityMod.NPCs.Crags
 
         public override void AI()
         {
+            // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
+            NPC.damage = 0;
+
             bool provy = DownedBossSystem.downedProvidence;
             Player target = Main.player[NPC.target];
             if (NPC.target < 0 || NPC.target == Main.maxPlayers || target.dead)
@@ -163,13 +166,10 @@ namespace CalamityMod.NPCs.Crags
                 NPC.localAI[0] = 0f;
                 if (Collision.CanHit(NPC.position, NPC.width, NPC.height, target.position, target.width, target.height))
                 {
-                    int dmg = 30;
-                    if (Main.expertMode)
-                    {
-                        dmg = 22;
-                    }
+                    int dmg = Main.expertMode ? 22 : 30;
                     int projType = ModContent.ProjectileType<BrimstoneBarrage>();
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), npcCenter.X, npcCenter.Y, targetX, targetY, projType, dmg + (provy ? 30 : 0), 0f, Main.myPlayer, 1f, 0f);
+                    Vector2 projectileVelocity = new Vector2(targetX, targetY);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 16f, projectileVelocity, projType, dmg + (provy ? 30 : 0), 0f, Main.myPlayer, 1f, 0f);
                 }
             }
             int npcTileX = (int)NPC.Center.X;
