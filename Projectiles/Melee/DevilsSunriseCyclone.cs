@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Melee
             if (red > 255)
                 red = 255;
 
-            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 66, 0f, 0f, 100, new Color(red, greenAndBlue, greenAndBlue), 1f);
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.RainbowTorch, 0f, 0f, 100, new Color(red, greenAndBlue, greenAndBlue), 1f);
             Main.dust[dust].velocity *= 0.3f;
             Main.dust[dust].noGravity = true;
 
@@ -213,7 +213,7 @@ namespace CalamityMod.Projectiles.Melee
                 Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                 rotate = rotate.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * 6.28318548f / (float)dustAmt), default) + Projectile.Center;
                 Vector2 faceDirection = rotate - Projectile.Center;
-                int cycloneDust = Dust.NewDust(rotate + faceDirection, 0, 0, 66, faceDirection.X, faceDirection.Y, 100, new Color(red, greenAndBlue, greenAndBlue), 1f);
+                int cycloneDust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.RainbowTorch, faceDirection.X, faceDirection.Y, 100, new Color(red, greenAndBlue, greenAndBlue), 1f);
                 Main.dust[cycloneDust].noGravity = true;
                 Main.dust[cycloneDust].noLight = true;
                 Main.dust[cycloneDust].velocity = faceDirection;

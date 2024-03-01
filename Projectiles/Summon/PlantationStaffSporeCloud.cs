@@ -43,7 +43,7 @@ namespace CalamityMod.Projectiles.Summon
                 Particle smoke = new SmallSmokeParticle(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width / 2, Projectile.height / 2), Main.rand.NextVector2Circular(1f, 1f), Color.Green, Color.DarkGreen, Utils.Remap(Projectile.timeLeft, 180f, 0f, 1.2f, 0.2f), Utils.Remap(Projectile.timeLeft, 180f, 0f, 150f, 0f));
                 GeneralParticleHandler.SpawnParticle(smoke);
 
-                Dust sporeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 46);
+                Dust sporeDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Poisoned);
                 sporeDust.noGravity = true;
                 sporeDust.velocity = Vector2.Zero;
                 sporeDust.alpha = (int)Utils.Remap(Projectile.timeLeft, 180f, 0f, 0f, 255f);

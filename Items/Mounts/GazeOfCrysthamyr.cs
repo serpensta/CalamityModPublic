@@ -12,7 +12,7 @@ namespace CalamityMod.Items.Mounts
         public new string LocalizationCategory => "Items.Mounts";
         public override void SetStaticDefaults()
         {
-           
+
         }
 
         public override void SetDefaults()

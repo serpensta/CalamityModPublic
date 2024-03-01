@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             for (int i = 0; i < 20; i++)
             {
-                int pinkish = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 73, 0f, 0f, 0, default, 1f);
+                int pinkish = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PinkFairy, 0f, 0f, 0, default, 1f);
                 Main.dust[pinkish].noGravity = true;
                 Main.dust[pinkish].velocity += Projectile.velocity * 0.1f;
             }

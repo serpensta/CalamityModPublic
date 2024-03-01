@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Rogue
             int numDust = 2;
             for (int i = 0; i < numDust; i++)
             {
-                Dust.NewDust(Projectile.position, 4, 4, 6, Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(minScale, maxScale));
+                Dust.NewDust(Projectile.position, 4, 4, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(minScale, maxScale));
             }
 
             Projectile.Kill();
@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Rogue
             int numDust = 2;
             for (int i = 0; i < numDust; i++)
             {
-                int dust = Dust.NewDust(Projectile.position, 4, 4, 6, 0f, -2f, 0, default, Main.rand.NextFloat(minScale, maxScale));
+                int dust = Dust.NewDust(Projectile.position, 4, 4, DustID.Torch, 0f, -2f, 0, default, Main.rand.NextFloat(minScale, maxScale));
                 Main.dust[dust].noGravity = true;
             }
             return false;

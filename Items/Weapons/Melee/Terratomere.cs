@@ -55,7 +55,7 @@ namespace CalamityMod.Items.Weapons.Melee
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
-        
+
         public override void AddRecipes()
         {
             CreateRecipe().

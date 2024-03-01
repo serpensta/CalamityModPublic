@@ -44,7 +44,8 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (type == ProjectileID.Bullet) {
+            if (type == ProjectileID.Bullet)
+            {
                 type = ProjectileID.BulletHighVelocity;
                 damage += 4; // in 1.4, HVBs deal 11 damage and Musket Balls deal 7
             }
@@ -54,7 +55,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Vector2 vel = velocity;
             Projectile shot = Projectile.NewProjectileDirect(source, position, vel, type, damage, knockback, player.whoAmI);
             CalamityGlobalProjectile cgp = shot.Calamity();
-            cgp.supercritHits  = -1;
+            cgp.supercritHits = -1;
             cgp.appliesSomaShred = true;
             return false;
         }

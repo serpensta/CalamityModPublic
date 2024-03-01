@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -24,7 +24,7 @@ namespace CalamityMod.NPCs.DevourerofGods
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.75f,
                 PortraitScale = 0.75f,
@@ -58,6 +58,10 @@ namespace CalamityMod.NPCs.DevourerofGods
             NPC.HitSound = SoundID.NPCHit4;
             NPC.DeathSound = SoundID.NPCDeath14;
             NPC.netAlways = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -65,9 +69,9 @@ namespace CalamityMod.NPCs.DevourerofGods
             int associatedNPCType = ModContent.NPCType<DevourerofGodsHead>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicGuardian")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CosmicGuardian")
             });
         }
 
@@ -136,7 +140,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             if (CalamityGlobalNPC.DoGHead < 0 || !Main.npc[CalamityGlobalNPC.DoGHead].active)
             {
                 NPC.velocity.Y -= 4f;
-                
+
                 if ((double)NPC.position.Y < Main.topWorld + 16f)
                 {
                     for (int a = 0; a < Main.maxNPCs; a++)
@@ -178,8 +182,9 @@ namespace CalamityMod.NPCs.DevourerofGods
             Vector2 segmentDirection = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
             float dogHeadX = Main.npc[CalamityGlobalNPC.DoGHead].position.X + (Main.npc[CalamityGlobalNPC.DoGHead].width / 2);
             float dogHeadY = Main.npc[CalamityGlobalNPC.DoGHead].position.Y + (Main.npc[CalamityGlobalNPC.DoGHead].height / 2);
-            float maxDistanceFromDoG = BossRushEvent.BossRushActive ? 30f : CalamityWorld.revenge ? 25f : 23f;
+            float segmentVelocity = BossRushEvent.BossRushActive ? 30f : CalamityWorld.revenge ? 25f : 23f;
             float velocityMult = BossRushEvent.BossRushActive ? 0.9f : CalamityWorld.revenge ? 0.75f : 0.23f;
+            float maxDistanceFromDoGHead = 160f;
 
             if (increaseSpeedMore)
                 velocityMult *= 4f;
@@ -191,18 +196,18 @@ namespace CalamityMod.NPCs.DevourerofGods
                 if (Main.npc[i].active && (Main.npc[i].type == NPC.type || Main.npc[i].type == ModContent.NPCType<DevourerofGodsHead>()) && i != NPC.whoAmI)
                 {
                     Vector2 distFromHead = Main.npc[i].Center - NPC.Center;
-                    if (distFromHead.Length() < 400f)
+                    if (distFromHead.Length() < maxDistanceFromDoGHead)
                     {
                         distFromHead.Normalize();
-                        distFromHead *= 400f;
+                        distFromHead *= maxDistanceFromDoGHead;
                         dogHeadX -= distFromHead.X;
                         dogHeadY -= distFromHead.Y;
                     }
                 }
             }
 
-            float higherMaxDistance = maxDistanceFromDoG * 1.3f;
-            float lowerMaxDistance = maxDistanceFromDoG * 0.7f;
+            float higherMaxDistance = segmentVelocity * 1.3f;
+            float lowerMaxDistance = segmentVelocity * 0.7f;
             float npcSpeed = NPC.velocity.Length();
             if (npcSpeed > 0f)
             {
@@ -227,7 +232,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             float targetDistance = (float)Math.Sqrt(dogHeadX * dogHeadX + dogHeadY * dogHeadY);
             float absoluteDoGX = Math.Abs(dogHeadX);
             float absoluteDoGY = Math.Abs(dogHeadY);
-            float timeToReachTarget = maxDistanceFromDoG / targetDistance;
+            float timeToReachTarget = segmentVelocity / targetDistance;
             dogHeadX *= timeToReachTarget;
             dogHeadY *= timeToReachTarget;
             if ((NPC.velocity.X > 0f && dogHeadX > 0f) || (NPC.velocity.X < 0f && dogHeadX < 0f) || (NPC.velocity.Y > 0f && dogHeadY > 0f) || (NPC.velocity.Y < 0f && dogHeadY < 0f))
@@ -254,7 +259,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                         NPC.velocity.Y = NPC.velocity.Y - velocityMult;
                     }
                 }
-                if (Math.Abs(dogHeadY) < maxDistanceFromDoG * 0.2 && ((NPC.velocity.X > 0f && dogHeadX < 0f) || (NPC.velocity.X < 0f && dogHeadX > 0f)))
+                if (Math.Abs(dogHeadY) < segmentVelocity * 0.2 && ((NPC.velocity.X > 0f && dogHeadX < 0f) || (NPC.velocity.X < 0f && dogHeadX > 0f)))
                 {
                     if (NPC.velocity.Y > 0f)
                     {
@@ -265,7 +270,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                         NPC.velocity.Y = NPC.velocity.Y - velocityMult * 2f;
                     }
                 }
-                if (Math.Abs(dogHeadX) < maxDistanceFromDoG * 0.2 && ((NPC.velocity.Y > 0f && dogHeadY < 0f) || (NPC.velocity.Y < 0f && dogHeadY > 0f)))
+                if (Math.Abs(dogHeadX) < segmentVelocity * 0.2 && ((NPC.velocity.Y > 0f && dogHeadY < 0f) || (NPC.velocity.Y < 0f && dogHeadY > 0f)))
                 {
                     if (NPC.velocity.X > 0f)
                     {
@@ -289,7 +294,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                     {
                         NPC.velocity.X = NPC.velocity.X - velocityMult * 1.1f; //changed from 1.1
                     }
-                    if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < maxDistanceFromDoG * 0.5)
+                    if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 0.5)
                     {
                         if (NPC.velocity.Y > 0f)
                         {
@@ -311,7 +316,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                     {
                         NPC.velocity.Y = NPC.velocity.Y - velocityMult * 1.1f;
                     }
-                    if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < maxDistanceFromDoG * 0.5)
+                    if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 0.5)
                     {
                         if (NPC.velocity.X > 0f)
                         {
@@ -324,7 +329,21 @@ namespace CalamityMod.NPCs.DevourerofGods
                     }
                 }
             }
-            NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + 1.57f;
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = segmentVelocity * 0.25f;
+            float minimalDamageVelocity = segmentVelocity * 0.5f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)(NPC.defDamage * 0.5f);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
+            }
+
+            NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

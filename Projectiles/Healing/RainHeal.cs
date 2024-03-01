@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Healing
 {
     public class RainHeal : ModProjectile, ILocalizedModType
@@ -17,7 +19,7 @@ namespace CalamityMod.Projectiles.Healing
             Projectile.alpha = 255;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 180;
-			Projectile.tileCollide = false;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
@@ -32,7 +34,7 @@ namespace CalamityMod.Projectiles.Healing
 
             float dustX = Projectile.velocity.X * 0.2f;
             float dustY = -(Projectile.velocity.Y * 0.2f);
-            int rainbow = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 66, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
+            int rainbow = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowTorch, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
             Dust dust = Main.dust[rainbow];
             dust.noGravity = true;
             dust.position.X -= dustX;

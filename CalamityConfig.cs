@@ -37,7 +37,7 @@ namespace CalamityMod
 
         private const int MinParticleLimit = 100;
         private const int MaxParticleLimit = 2000;
-        
+
         [BackgroundColor(192, 54, 64, 192)]
         [SliderColor(224, 165, 56, 128)]
         [Range(MinParticleLimit, MaxParticleLimit)]
@@ -155,7 +155,7 @@ namespace CalamityMod
         [Range(0f, 100f)]
         [DefaultValue(SpeedrunTimerUI.DefaultTimerPosY)]
         public float SpeedrunTimerPosY { get; set; }
-        
+
         [BackgroundColor(192, 54, 64, 192)]
         [DefaultValue(true)]
         public bool FlightBar { get; set; }

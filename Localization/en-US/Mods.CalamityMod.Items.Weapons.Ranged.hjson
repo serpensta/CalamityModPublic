@@ -29,7 +29,7 @@ AngelicShotgun: {
 	Tooltip:
 		'''
 		Each shot casts a radiant beam of holy light from the sky
-		Converts musket balls into illuminated bullets
+		Converts musket balls into hallow-point rounds
 		'Fighting 'til the war's won'
 		'''
 }
@@ -1020,10 +1020,10 @@ Scorpio: {
 	DisplayName: Scorpio
 	Tooltip:
 		'''
-		Hold <left> to fire streams of homing nano missiles and charge energy
-		Maximum charge is reached after firing 3 streams
+		Hold <left> to fire a barrage of homing nano missiles and charge energy
+		Maximum charge is reached after firing 3 barrages
 		<right> while holding <left> at max charge to launch a nano nuke
-		Nano nukes deal massive damage and reset the cooldown of missile streams
+		Nano nukes deal massive damage and reset the cooldown of missile barrages
 		'''
 }
 

@@ -60,7 +60,7 @@ namespace CalamityMod.Items.Weapons.Melee
             StatModifier playerMeleeDmg = player.GetTotalDamage<MeleeDamageClass>();
             int rainbowBoomDamage = (int)playerMeleeDmg.ApplyTo(damage * 0.5f);
             int rainBoltDamage = (int)playerMeleeDmg.ApplyTo(damage * 0.75f);
-            
+
             Projectile.NewProjectile(source, targetPos, Vector2.Zero, ModContent.ProjectileType<RainbowBoom>(), rainbowBoomDamage, 0f, player.whoAmI);
 
             if (targetLife <= (targetMaxLife * 0.5f) && player.ownedProjectileCounts[ModContent.ProjectileType<RainBolt>()] < 3)
@@ -85,7 +85,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool(3))
             {
-                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 66, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
+                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.RainbowTorch, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
                 Main.dust[dust].noGravity = true;
             }
         }

@@ -12,7 +12,7 @@ namespace CalamityMod.Items.Placeables
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 200;
-			ItemID.Sets.SortingPriorityExtractibles[Type] = 1; // Silt Block
+            ItemID.Sets.SortingPriorityExtractibles[Type] = 1; // Silt Block
         }
 
         public override void SetDefaults()

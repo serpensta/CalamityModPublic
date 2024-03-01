@@ -170,7 +170,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.numHits++;
 
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0, -5).RotatedByRandom(0.6f) * Main.rand.NextFloat(0.9f, 1.1f), ModContent.ProjectileType<DepthCrusherSplitProjectile>(), startDamage / 4, Projectile.knockBack / 4, Projectile.owner);
-                
+
                 if (Projectile.velocity.X != oldVelocity.X)
                 {
                     Projectile.velocity.X = -oldVelocity.X * 0.8f;

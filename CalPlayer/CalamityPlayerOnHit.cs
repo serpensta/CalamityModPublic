@@ -67,7 +67,7 @@ namespace CalamityMod.CalPlayer
 
             if (flamingItemEnchant)
                 target.AddBuff(BuffType<VulnerabilityHex>(), VulnerabilityHex.AflameDuration);
-            
+
             target.Calamity().IncreasedColdEffects_EskimoSet = eskimoSet;
             target.Calamity().IncreasedColdEffects_CryoStone = CryoStone;
 
@@ -194,7 +194,7 @@ namespace CalamityMod.CalPlayer
             cgn.IncreasedColdEffects_CryoStone = CryoStone;
 
             cgn.IncreasedElectricityEffects_Transformer = transformer;
-            
+
             cgn.IncreasedHeatEffects_Fireball = fireball;
             cgn.IncreasedHeatEffects_CinnamonRoll = cinnamonRoll;
             cgn.IncreasedHeatEffects_HellfireTreads = hellfireTreads;
@@ -605,7 +605,7 @@ namespace CalamityMod.CalPlayer
             if (silvaMage && silvaMageCooldown <= 0 && (proj.penetrate == 1 || proj.timeLeft <= 5))
             {
                 silvaMageCooldown = 300;
-                SoundEngine.PlaySound(SoundID.Zombie103 , proj.Center); //So scuffed, just because zombie sounds werent ported normally
+                SoundEngine.PlaySound(SoundID.Zombie103, proj.Center); //So scuffed, just because zombie sounds werent ported normally
                 // Silva Mage Blasts: 800 + 60%, softcap on the whole combined thing starts at 1400
                 int silvaBurstDamage = Player.ApplyArmorAccDamageBonusesTo(CalamityUtils.DamageSoftCap(800.0 + 0.6 * proj.damage, 1400));
                 Projectile.NewProjectile(source, proj.Center, Vector2.Zero, ProjectileType<SilvaBurst>(), silvaBurstDamage, 8f, Player.whoAmI);
@@ -752,7 +752,7 @@ namespace CalamityMod.CalPlayer
         {
             var spawnSource = proj.GetSource_FromThis();
             int Type = ProjectileType<DragonScalesInfernado>();
-            if (modProj.stealthStrike && dragonScales && Main.projectile.Count(proj => proj.type == Type && proj.active) < 1) 
+            if (modProj.stealthStrike && dragonScales && Main.projectile.Count(proj => proj.type == Type && proj.active) < 1)
             {
                 int damage = (int)Player.GetTotalDamage<RogueDamageClass>().ApplyTo(DragonScales.TornadoBaseDamage);
                 damage = Player.ApplyArmorAccDamageBonusesTo(damage);
@@ -1187,6 +1187,16 @@ namespace CalamityMod.CalPlayer
                 if (proj.type == ProjectileID.VampireKnife)
                 {
                     float cooldown = damage * 0.075f;
+                    if (cooldown < 0f)
+                        cooldown = 0f;
+
+                    Main.player[Main.myPlayer].lifeSteal -= cooldown;
+                }
+
+                // Increases the degree to which Bloodfire Arrows contribute to the lifesteal cap
+                if (proj.type == ModContent.ProjectileType<BloodfireArrowProj>())
+                {
+                    float cooldown = 6;
                     if (cooldown < 0f)
                         cooldown = 0f;
 

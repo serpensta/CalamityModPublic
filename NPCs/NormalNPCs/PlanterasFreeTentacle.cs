@@ -36,7 +36,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 20;
-            
+
             NPC.lifeMax = 500;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
@@ -49,6 +49,10 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToSickness = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void FindFrame(int frameHeight)
@@ -73,7 +77,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             // Spore dust
             if (Main.rand.NextBool(10))
             {
-                Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 44, 0f, 0f, 250, default, 0.4f);
+                Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.JungleSpore, 0f, 0f, 250, default, 0.4f);
                 dust.fadeIn = 0.7f;
             }
 
@@ -217,13 +221,13 @@ namespace CalamityMod.NPCs.NormalNPCs
             if (NPC.life > 0)
             {
                 for (int i = 0; (double)i < hit.Damage / (double)NPC.lifeMax * 100.0; i++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 167, hit.HitDirection, -1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Plantera_Green, hit.HitDirection, -1f);
 
                 return;
             }
 
             for (int i = 0; i < 150; i++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 167, 2 * hit.HitDirection, -2f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Plantera_Green, 2 * hit.HitDirection, -2f);
 
             if (Main.netMode != NetmodeID.Server)
             {

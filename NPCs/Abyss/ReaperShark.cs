@@ -61,17 +61,20 @@ namespace CalamityMod.NPCs.Abyss
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbyssLayer4Biome>().Type };
+
             if (Main.zenithWorld) // legg
-            {
                 NPC.height = (int)(NPC.height * 1.5f);
-            }
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ReaperShark")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ReaperShark")
             });
         }
 
@@ -493,7 +496,7 @@ namespace CalamityMod.NPCs.Abyss
                         {
                             Vector2 expr_80F = (Vector2.Normalize(NPC.velocity) * new Vector2((float)NPC.width / 2f, (float)NPC.height) * 0.75f * 0.5f).RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * 6.28318548f / (float)dustAmt), default) + NPC.Center;
                             Vector2 dustDirection = expr_80F - NPC.Center;
-                            int chargeDust = Dust.NewDust(expr_80F + dustDirection, 0, 0, 172, dustDirection.X * 2f, dustDirection.Y * 2f, 100, default, 1.4f);
+                            int chargeDust = Dust.NewDust(expr_80F + dustDirection, 0, 0, DustID.DungeonWater, dustDirection.X * 2f, dustDirection.Y * 2f, 100, default, 1.4f);
                             Main.dust[chargeDust].noGravity = true;
                             Main.dust[chargeDust].noLight = true;
                             Main.dust[chargeDust].velocity = Vector2.Normalize(dustDirection) * 3f;
@@ -593,7 +596,7 @@ namespace CalamityMod.NPCs.Abyss
                     {
                         Vector2 arg_E1C_0 = (Vector2.Normalize(NPC.velocity) * new Vector2((float)(NPC.width + 50) / 2f, (float)NPC.height) * 0.75f).RotatedBy((double)(j - (phase2DustAmt / 2 - 1)) * 3.1415926535897931 / (double)(float)phase2DustAmt, default) + shorkCenter;
                         Vector2 phase2DustRotation = ((float)(Main.rand.NextDouble() * 3.1415927410125732) - 1.57079637f).ToRotationVector2() * (float)Main.rand.Next(3, 8);
-                        int phase2Dust = Dust.NewDust(arg_E1C_0 + phase2DustRotation, 0, 0, 172, phase2DustRotation.X * 2f, phase2DustRotation.Y * 2f, 100, default, 1.4f);
+                        int phase2Dust = Dust.NewDust(arg_E1C_0 + phase2DustRotation, 0, 0, DustID.DungeonWater, phase2DustRotation.X * 2f, phase2DustRotation.Y * 2f, 100, default, 1.4f);
                         Main.dust[phase2Dust].noGravity = true;
                         Main.dust[phase2Dust].noLight = true;
                         Main.dust[phase2Dust].velocity /= 4f;
@@ -634,7 +637,7 @@ namespace CalamityMod.NPCs.Abyss
         public override void FindFrame(int frameHeight)
         {
             int newFrameHeight = (int)(frameHeight * (Main.zenithWorld ? 1.5f : 1f));
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.3f,
                 PortraitPositionXOverride = 54f,

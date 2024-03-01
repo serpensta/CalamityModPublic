@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Enemy
 {
     public class TornadoHostile : ModProjectile, ILocalizedModType
@@ -86,7 +86,7 @@ namespace CalamityMod.Projectiles.Enemy
                     dustVelocity.X *= -1f;
                     Vector2 dustCustomData = new Vector2(6f, 10f);
                     Vector2 dustPosition = centering + sizeModPos * dustVelocity * 0.5f + dustCustomData;
-                    Dust cloudDust = Main.dust[Dust.NewDust(dustPosition, 0, 0, 16, 0f, 0f, 0, default, 1.5f)];
+                    Dust cloudDust = Main.dust[Dust.NewDust(dustPosition, 0, 0, DustID.Cloud, 0f, 0f, 0, default, 1.5f)];
                     cloudDust.position = dustPosition;
                     cloudDust.customData = centering + dustCustomData;
                     cloudDust.fadeIn = 1f;

@@ -19,7 +19,7 @@ namespace CalamityMod.UI
         private const float MouseDragEpsilon = 0.05f; // 0.05%
         private const int FlightAnimFrameDelay = 5;
         private const int FlightAnimFrames = 17;
-        
+
         private static int FlightAnimFrame = -1;
         private static int FlightAnimTimer = 0;
 
@@ -37,7 +37,7 @@ namespace CalamityMod.UI
                 return limitedBarTexture;
             return borderTexture;
         }
-        
+
         private static object GetFlightTime(CalamityPlayer modPlayer)
         {
             Player player = modPlayer.Player;
@@ -81,7 +81,7 @@ namespace CalamityMod.UI
         private static void Reset() => dragOffset = null;
 
 
-        
+
         public static void Draw(SpriteBatch spriteBatch, Player player)
         {
             // Sanity check the planned position before drawing
@@ -102,10 +102,10 @@ namespace CalamityMod.UI
 
             // If not drawing the flight bar, save its latest position to config and leave.
             if (CalamityConfig.Instance.FlightBar && player.wingsLogic > 0)
-			{
-				DrawFlightBar(spriteBatch, modPlayer, screenPos);
-			}
-			else
+            {
+                DrawFlightBar(spriteBatch, modPlayer, screenPos);
+            }
+            else
             {
                 bool changed = false;
                 if (CalamityConfig.Instance.FlightBarPosX != screenRatioPosition.X)
@@ -125,17 +125,17 @@ namespace CalamityMod.UI
             }
 
             Rectangle mouseHitbox = new Rectangle((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y, 8, 8);
-            Rectangle flightBar = Utils.CenteredRectangle(screenPos,  borderTexture.Size() * uiScale);
+            Rectangle flightBar = Utils.CenteredRectangle(screenPos, borderTexture.Size() * uiScale);
 
-			MouseState ms = Mouse.GetState();
-			Vector2 mousePos = Main.MouseScreen;
+            MouseState ms = Mouse.GetState();
+            Vector2 mousePos = Main.MouseScreen;
 
             // Handle mouse dragging
-			if (flightBar.Intersects(mouseHitbox))
-			{
-				if (!CalamityConfig.Instance.MeterPosLock)
-					Main.LocalPlayer.mouseInterface = true;
-                
+            if (flightBar.Intersects(mouseHitbox))
+            {
+                if (!CalamityConfig.Instance.MeterPosLock)
+                    Main.LocalPlayer.mouseInterface = true;
+
                 if (modPlayer.Player.equippedWings != null && modPlayer.Player.wingTimeMax > 0) //equipped wings and max wingtime above 0 (so not disabled bar)
                 {
                     string textToDisplay = CalamityUtils.GetText("UI.Flight").Format((GetFlightTime(modPlayer).ToString() + (modPlayer.infiniteFlight ? "" : "%"))); //the percent is here and not in localisation otherwise it looks like a dick when it's infinite flight
@@ -143,37 +143,37 @@ namespace CalamityMod.UI
                 }
 
                 Vector2 newScreenRatioPosition = screenRatioPosition;
-				// As long as the mouse button is held down, drag the meter along with an offset.
+                // As long as the mouse button is held down, drag the meter along with an offset.
                 if (!CalamityConfig.Instance.MeterPosLock && ms.LeftButton == ButtonState.Pressed)
                 {
-					// If the drag offset doesn't exist yet, create it.
-					if (!dragOffset.HasValue)
-						dragOffset = mousePos - screenPos;
+                    // If the drag offset doesn't exist yet, create it.
+                    if (!dragOffset.HasValue)
+                        dragOffset = mousePos - screenPos;
 
-					// Given the mouse's absolute current position, compute where the corner of the flight bar should be based on the original drag offset.
-					Vector2 newCorner = mousePos - dragOffset.GetValueOrDefault(Vector2.Zero);
+                    // Given the mouse's absolute current position, compute where the corner of the flight bar should be based on the original drag offset.
+                    Vector2 newCorner = mousePos - dragOffset.GetValueOrDefault(Vector2.Zero);
 
-					// Convert the new corner position into a screen ratio position.
-					newScreenRatioPosition.X = (100f * newCorner.X) / Main.screenWidth;
-					newScreenRatioPosition.Y = (100f * newCorner.Y) / Main.screenHeight;
-				}
+                    // Convert the new corner position into a screen ratio position.
+                    newScreenRatioPosition.X = (100f * newCorner.X) / Main.screenWidth;
+                    newScreenRatioPosition.Y = (100f * newCorner.Y) / Main.screenHeight;
+                }
 
-				// Compute the change in position. If it is large enough, actually move the meter
-				Vector2 delta = newScreenRatioPosition - screenRatioPosition;
-				if (Math.Abs(delta.X) >= MouseDragEpsilon || Math.Abs(delta.Y) >= MouseDragEpsilon)
-				{
-					CalamityConfig.Instance.FlightBarPosX = newScreenRatioPosition.X;
-					CalamityConfig.Instance.FlightBarPosY = newScreenRatioPosition.Y;
-				}
+                // Compute the change in position. If it is large enough, actually move the meter
+                Vector2 delta = newScreenRatioPosition - screenRatioPosition;
+                if (Math.Abs(delta.X) >= MouseDragEpsilon || Math.Abs(delta.Y) >= MouseDragEpsilon)
+                {
+                    CalamityConfig.Instance.FlightBarPosX = newScreenRatioPosition.X;
+                    CalamityConfig.Instance.FlightBarPosY = newScreenRatioPosition.Y;
+                }
 
-				// When the mouse is released, save the config and destroy the drag offset.
-				if (ms.LeftButton == ButtonState.Released)
-				{
-					dragOffset = null;
-					CalamityMod.SaveConfig(CalamityConfig.Instance);
-				}
+                // When the mouse is released, save the config and destroy the drag offset.
+                if (ms.LeftButton == ButtonState.Released)
+                {
+                    dragOffset = null;
+                    CalamityMod.SaveConfig(CalamityConfig.Instance);
+                }
             }
-		}
+        }
 
         /**
         private const int FlightAnimFrameDelay = 5;
@@ -187,7 +187,7 @@ namespace CalamityMod.UI
             float uiScale = Main.UIScale;
             Player player = modPlayer.Player;
             float flightRatio = Math.Min(player.wingTime / player.wingTimeMax, 1f); // why the FUCK can wingtime be higher than max wingtime?????????
-            if (!completedAnimation && FlightAnimFrame == -1 && modPlayer.infiniteFlight) 
+            if (!completedAnimation && FlightAnimFrame == -1 && modPlayer.infiniteFlight)
                 FlightAnimFrame++;
             if (FlightAnimFrame > -1) //animation started, complete it.
             {
@@ -203,16 +203,16 @@ namespace CalamityMod.UI
                     else
                     {
                         FlightAnimTimer = 0;
-                        FlightAnimFrame++;   
+                        FlightAnimFrame++;
                     }
                 }
             }
             Texture2D correctBorder = GetApplicableBorder(modPlayer); //Fetch texture after animation calculations in case update to infinite flight
-            
+
             if (completedAnimation && !modPlayer.infiniteFlight && correctBorder != infiniteBarTexture)
                 completedAnimation = false; //reset flight anim once infinite flight expires.
-            
-            
+
+
             float offset = (correctBorder.Width - barTexture.Width) * 0.5f;
             spriteBatch.Draw(correctBorder, screenPos, null, Color.White, 0f, correctBorder.Size() * 0.5f, uiScale, SpriteEffects.None, 0);
             if (correctBorder != disabledBarTexture && correctBorder != infiniteBarTexture) //neither requires an internal bar to be drawn
@@ -231,7 +231,7 @@ namespace CalamityMod.UI
                 float animOffset = 5f;
                 float xOffset = (correctBorder.Width - flightBarAnimTexture.Width) / 2f;
                 int frameHeight = (flightBarAnimTexture.Height / FlightAnimFrames) - 1;
-                float yOffset = FlightAnimFrame == 0 ? 0 : ((correctBorder.Height / FlightAnimFrame) - frameHeight) / 2f ;
+                float yOffset = FlightAnimFrame == 0 ? 0 : ((correctBorder.Height / FlightAnimFrame) - frameHeight) / 2f;
                 Vector2 sizeDiffOffset = new Vector2(xOffset, yOffset);
                 Rectangle animCropRect = new Rectangle(0, (frameHeight + 1) * FlightAnimFrame, flightBarAnimTexture.Width, frameHeight);
                 spriteBatch.Draw(flightBarAnimTexture, screenPos + sizeDiffOffset, animCropRect, Color.White, 0f, origin * Main.UIScale, uiScale, SpriteEffects.None, 0);

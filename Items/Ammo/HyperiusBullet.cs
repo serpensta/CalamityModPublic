@@ -18,7 +18,7 @@ namespace CalamityMod.Items.Ammo
         {
             Item.width = 24;
             Item.height = 30;
-            Item.damage = 18;
+            Item.damage = 19;
             Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 9999;
             Item.consumable = true;
@@ -26,7 +26,7 @@ namespace CalamityMod.Items.Ammo
             Item.value = Item.sellPrice(copper: 16);
             Item.rare = ItemRarityID.Cyan;
             Item.shoot = ModContent.ProjectileType<HyperiusBulletProj>();
-            Item.shootSpeed = 16f;
+            Item.shootSpeed = 5f;
             Item.ammo = AmmoID.Bullet;
         }
 

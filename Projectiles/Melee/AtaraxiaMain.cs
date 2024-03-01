@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -42,7 +42,7 @@ namespace CalamityMod.Projectiles.Melee
             // Spawn dust with a 1/2 chance
             if (Main.rand.NextBool())
             {
-                int idx = Dust.NewDust(Projectile.Center, 1, 1, 90);
+                int idx = Dust.NewDust(Projectile.Center, 1, 1, DustID.GemRuby);
                 Main.dust[idx].position = Projectile.Center;
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 0.6f;
@@ -78,15 +78,15 @@ namespace CalamityMod.Projectiles.Melee
             Vector2 corner = new Vector2(Projectile.position.X, Projectile.position.Y);
             for (int i = 0; i < 50; i++)
             {
-                int idx = Dust.NewDust(corner, Projectile.width, Projectile.height, 86, 0f, 0f, 0, new Color(210, 0, 255), 2.2f);
+                int idx = Dust.NewDust(corner, Projectile.width, Projectile.height, DustID.GemAmethyst, 0f, 0f, 0, new Color(210, 0, 255), 2.2f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 2.5f;
 
-                idx = Dust.NewDust(corner, Projectile.width, Projectile.height, 118, 0f, 0f, 100, new Color(210, 0, 255), 1.8f);
+                idx = Dust.NewDust(corner, Projectile.width, Projectile.height, DustID.Ice_Purple, 0f, 0f, 100, new Color(210, 0, 255), 1.8f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 1.8f;
 
-                idx = Dust.NewDust(corner, Projectile.width, Projectile.height, 71, 0f, 0f, 100, new Color(210, 0, 255), 1.0f);
+                idx = Dust.NewDust(corner, Projectile.width, Projectile.height, DustID.UndergroundHallowedEnemies, 0f, 0f, 100, new Color(210, 0, 255), 1.0f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 4.0f;
             }

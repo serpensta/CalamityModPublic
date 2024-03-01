@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Magic
@@ -111,7 +112,7 @@ namespace CalamityMod.Projectiles.Magic
             int inc;
             for (int i = 0; i < 25; i = inc + 1)
             {
-                int hadalDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 14, 0f, 0f, 0, default, 1f);
+                int hadalDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Demonite, 0f, 0f, 0, default, 1f);
                 Main.dust[hadalDust].position = (Main.dust[hadalDust].position + Projectile.position) / 2f;
                 Main.dust[hadalDust].velocity = new Vector2((float)Main.rand.Next(-100, 101), (float)Main.rand.Next(-100, 101));
                 Main.dust[hadalDust].velocity.Normalize();

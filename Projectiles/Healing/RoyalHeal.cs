@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Healing
 {
     public class RoyalHeal : ModProjectile, ILocalizedModType
@@ -24,7 +26,7 @@ namespace CalamityMod.Projectiles.Healing
             {
                 float dustX = Projectile.velocity.X * 0.334f * (float)i;
                 float dustY = -(Projectile.velocity.Y * 0.334f) * (float)i;
-                int pureHeal = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 20, 0f, 0f, 100, default, 1.1f);
+                int pureHeal = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurificationPowder, 0f, 0f, 100, default, 1.1f);
                 Dust dust = Main.dust[pureHeal];
                 dust.noGravity = true;
                 dust.position.X -= dustX;
@@ -34,7 +36,7 @@ namespace CalamityMod.Projectiles.Healing
             {
                 float dustX2 = Projectile.velocity.X * 0.2f * (float)j;
                 float dustY2 = -(Projectile.velocity.Y * 0.2f) * (float)j;
-                int pureHeal2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 20, 0f, 0f, 100, default, 1.3f);
+                int pureHeal2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurificationPowder, 0f, 0f, 100, default, 1.3f);
                 Dust dust2 = Main.dust[pureHeal2];
                 dust2.noGravity = true;
                 dust2.position.X -= dustX2;

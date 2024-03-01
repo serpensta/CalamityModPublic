@@ -1,7 +1,7 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System.Collections.Generic;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -92,7 +92,7 @@ namespace CalamityMod.Projectiles.Summon
                     }
                 }
             }
-			hasHitNPC = false;
+            hasHitNPC = false;
             if (!foundTarget)
             {
                 for (int k = 0; k < Main.maxNPCs; k++)

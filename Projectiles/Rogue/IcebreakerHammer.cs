@@ -34,7 +34,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 67, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.IceRod, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -97,7 +97,7 @@ namespace CalamityMod.Projectiles.Rogue
                     {
                         Player owner = Main.player[Projectile.owner];
                         Player player = Main.player[i];
-                        if ((owner.team != player.team || player.team == 0)  && player.hostile && owner.hostile && !player.dead && !player.buffImmune[buffType] && Vector2.Distance(Projectile.Center, player.Center) <= radius)
+                        if ((owner.team != player.team || player.team == 0) && player.hostile && owner.hostile && !player.dead && !player.buffImmune[buffType] && Vector2.Distance(Projectile.Center, player.Center) <= radius)
                         {
                             if (player.FindBuffIndex(buffType) == -1)
                                 player.AddBuff(buffType, 60, false);

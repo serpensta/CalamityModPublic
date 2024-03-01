@@ -28,7 +28,7 @@ namespace CalamityMod.Items.Accessories
         // This is per frame. The ideal is 50% per second, so it's 0.83% per frame.
         internal static readonly double BleedoutExponentialDecay = 0.0083333333333;
         internal static readonly Color BleedoutBufferDamageTextColor = new(230, 40, 100);
-        
+
         public new string LocalizationCategory => "Items.Accessories";
         public override void SetStaticDefaults()
         {

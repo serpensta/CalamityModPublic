@@ -1,10 +1,11 @@
 ﻿using System;
-using CalamityMod.BiomeManagers;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Linq;
+using CalamityMod.BiomeManagers;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Placeables.Banners;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -13,7 +14,6 @@ using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using CalamityMod.Buffs.DamageOverTime;
 
 namespace CalamityMod.NPCs.Abyss
 {
@@ -24,7 +24,7 @@ namespace CalamityMod.NPCs.Abyss
         public bool shouldTarget = false;
         public int boomTimer = -1;
         public int currentFrame = 0;
-        
+
         public const int dyingDuration = 75;
 
         public override void SetStaticDefaults()
@@ -54,13 +54,17 @@ namespace CalamityMod.NPCs.Abyss
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbyssLayer1Biome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CannonballJellyfish")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CannonballJellyfish")
             });
         }
 
@@ -82,7 +86,7 @@ namespace CalamityMod.NPCs.Abyss
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot) => !dying && base.CanHitPlayer(target, ref cooldownSlot);
 
-        private void DyingAI() 
+        private void DyingAI()
         {
             if (boomTimer == 0)
             {
@@ -99,26 +103,26 @@ namespace CalamityMod.NPCs.Abyss
                     Explode();
                     return;
                 }
-                    
+
             }
 
             if (boomTimer == 60 && !shouldTarget) //happens only once
             {
                 NPC.velocity.Y = 0.75f; //sink slowly
             }
-                
 
-            if (shouldTarget) 
+
+            if (shouldTarget)
             {
                 // Get a target
                 if (NPC.target < 0 || !NPC.target.WithinBounds(Main.maxPlayers) || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
                     NPC.TargetClosest();
-                
+
                 if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > CalamityGlobalNPC.CatchUpDistance200Tiles)
                     NPC.TargetClosest();
-                
+
                 Player player = Main.player[NPC.target];
-                
+
                 if (boomTimer >= (dyingDuration - 20)) //home for the first 20 frames, not beyond that 
                 {
                     float targetXDirection = player.position.X + (float)(player.width / 2);
@@ -139,11 +143,11 @@ namespace CalamityMod.NPCs.Abyss
                     NPC.velocity.Y = (NPC.velocity.Y * 5f + targetYDist) / 6f;
 
                     NPC.velocity *= 0.9f; //slow it down a bit to be fair
-                
+
                     NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + 1.57f;
 
                 }
-                
+
 
                 //apparently NPC.wet can return true even when out of water :skull:
                 if (!Collision.DrownCollision(NPC.position, NPC.width, NPC.height) || Collision.SolidCollision(NPC.Center, NPC.width, NPC.height) || NPC.Hitbox.Intersects(player.Hitbox)) //explode when in contact with a tile or target
@@ -156,7 +160,7 @@ namespace CalamityMod.NPCs.Abyss
 
             boomTimer--;
         }
-        
+
         public override void AI()
         {
             NPC.chaseable = !dying && hasBeenHit;
@@ -229,7 +233,7 @@ namespace CalamityMod.NPCs.Abyss
                 NPC.netUpdate = true; //update current frame variable
                 NPC.frameCounter = 0;
             }
-                
+
             NPC.frame.Y = currentFrame * frameHeight;
         }
 

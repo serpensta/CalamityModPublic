@@ -126,7 +126,7 @@ namespace CalamityMod.Projectiles.Summon
 
                     return;
                 }
-                
+
                 // Reset opacity and the dropped timer. This is done to undo any potential fadeout effects from the dropped state.
                 CannonDroppedTimer = 0f;
                 Projectile.Opacity = 1f;

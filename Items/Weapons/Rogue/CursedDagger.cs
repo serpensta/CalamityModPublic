@@ -1,11 +1,11 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Rogue;
+﻿using CalamityMod.Projectiles.Rogue;
+using log4net.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using log4net.Core;
-using Terraria.Audio;
 
 namespace CalamityMod.Items.Weapons.Rogue
 {

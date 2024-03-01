@@ -1,15 +1,15 @@
-﻿using CalamityMod.NPCs;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs;
 using CalamityMod.NPCs.ExoMechs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent;
 
 namespace CalamityMod.Skies
 {

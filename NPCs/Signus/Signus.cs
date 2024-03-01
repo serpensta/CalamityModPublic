@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
@@ -16,16 +18,14 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityMod.NPCs.Signus
 {
@@ -42,7 +42,7 @@ namespace CalamityMod.NPCs.Signus
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 PortraitPositionYOverride = 10f,
                 Scale = 0.4f,
@@ -80,7 +80,7 @@ namespace CalamityMod.NPCs.Signus
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Signus")
@@ -136,8 +136,6 @@ namespace CalamityMod.NPCs.Signus
             bool phase2 = lifeRatio < 0.75f && expertMode;
             bool phase3 = lifeRatio < 0.5f;
             bool phase4 = lifeRatio < 0.33f;
-
-            NPC.damage = NPC.defDamage;
 
             // Get a target
             if (NPC.target < 0 || NPC.target == Main.maxPlayers || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
@@ -223,6 +221,9 @@ namespace CalamityMod.NPCs.Signus
 
             if (NPC.ai[0] <= 2f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.rotation = NPC.velocity.X * 0.04f;
                 float playerLocation = vectorCenter.X - player.Center.X;
                 NPC.direction = playerLocation < 0f ? 1 : -1;
@@ -271,6 +272,9 @@ namespace CalamityMod.NPCs.Signus
             }
             else if (NPC.ai[0] == 0f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     NPC.localAI[1] += bossRush ? 1.5f : 1f;
@@ -445,6 +449,9 @@ namespace CalamityMod.NPCs.Signus
             }
             else if (NPC.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 NPC.rotation = NPC.velocity.X * 0.04f;
                 float playerLocation = vectorCenter.X - player.Center.X;
                 NPC.direction = playerLocation < 0f ? 1 : -1;
@@ -609,6 +616,9 @@ namespace CalamityMod.NPCs.Signus
 
                 if (calamityGlobalNPC.newAI[0] == 0f) // Line up the charge
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     float velocity = bossRush ? 18f : revenge ? 16f : expertMode ? 15f : 14f;
                     if (expertMode)
                         velocity += death ? 6f * (float)(1D - lifeRatio) : 4f * (float)(1D - lifeRatio);
@@ -644,11 +654,17 @@ namespace CalamityMod.NPCs.Signus
                 }
                 else if (calamityGlobalNPC.newAI[0] == 1f) // Pause before charge
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.velocity *= 0.8f;
 
                     NPC.ai[1] += 1f;
                     if (NPC.ai[1] >= 5f)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         calamityGlobalNPC.newAI[0] = 2f;
 
                         NPC.netUpdate = true;
@@ -665,6 +681,9 @@ namespace CalamityMod.NPCs.Signus
                 }
                 else if (calamityGlobalNPC.newAI[0] == 2f) // Charging
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         bool buffed = false;
@@ -715,6 +734,9 @@ namespace CalamityMod.NPCs.Signus
                 }
                 else if (calamityGlobalNPC.newAI[0] == 3f) // Slow down after charging and reset
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     if (stealthTimer >= maxStealth)
                     {
                         stealthTimer = 0;

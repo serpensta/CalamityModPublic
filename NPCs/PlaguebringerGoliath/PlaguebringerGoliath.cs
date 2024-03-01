@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -20,15 +22,13 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityMod.NPCs.PlaguebringerGoliath
 {
@@ -57,7 +57,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.4f,
                 PortraitScale = 0.5f,
@@ -67,7 +67,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             };
             value.Position.X -= 48f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
         public override void SetDefaults()
@@ -97,7 +97,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundJungle,
@@ -271,6 +271,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             canDespawn = despawnTimer <= 0;
             if (canDespawn)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (NPC.velocity.Y > 3f)
                     NPC.velocity.Y = 3f;
                 NPC.velocity.Y -= 0.2f;
@@ -289,6 +292,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                     chargeDistance = 0;
                     NPC.netUpdate = true;
                 }
+
                 return;
             }
 
@@ -381,6 +385,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 // Charge
                 if (NPC.ai[1] % 2f == 0f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     float playerLocation = vectorCenter.X - player.Center.X;
 
                     float chargeThresholdY = 20f;
@@ -388,6 +395,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                     if (Math.Abs(NPC.Center.Y - (player.Center.Y - chargeDistance)) < chargeThresholdY)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         if (diagonalDash)
                         {
                             switch (Main.rand.Next(3))
@@ -484,6 +494,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 // Slow down after charge
                 else
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     if (NPC.velocity.X < 0f)
                         NPC.direction = -1;
                     else
@@ -549,6 +562,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                         return;
                     }
 
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     float playerLocation = vectorCenter.X - player.Center.X;
                     NPC.direction = playerLocation < 0 ? 1 : -1;
                     NPC.spriteDirection = NPC.direction;
@@ -588,6 +604,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             // Move closer if too far away
             else if (NPC.ai[0] == 2f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 float playerLocation = vectorCenter.X - player.Center.X;
                 NPC.direction = playerLocation < 0 ? 1 : -1;
                 NPC.spriteDirection = NPC.direction;
@@ -621,6 +640,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             // Spawn less missiles
             else if (NPC.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 charging = false;
                 Vector2 missileSpawnPos = new Vector2(NPC.direction == 1 ? NPC.getRect().BottomLeft().X : NPC.getRect().BottomRight().X, NPC.getRect().Bottom().Y + 20f);
                 missileSpawnPos.X += NPC.direction * 120;
@@ -696,6 +718,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             // Missile spawn
             else if (NPC.ai[0] == 5f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 charging = false;
                 Vector2 missileSpawnPos = new Vector2(NPC.direction == 1 ? NPC.getRect().BottomLeft().X : NPC.getRect().BottomRight().X, NPC.getRect().Bottom().Y + 20f);
                 missileSpawnPos.X += NPC.direction * 120;
@@ -723,7 +748,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 if (shouldSpawnMissiles)
                 {
-                    SoundEngine.PlaySound(SoundID.Item88,NPC.Center);
+                    SoundEngine.PlaySound(SoundID.Item88, NPC.Center);
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -778,6 +803,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             // Stinger phase
             else if (NPC.ai[0] == 3f)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 Vector2 stingerSpawnPos = new Vector2(NPC.direction == 1 ? NPC.getRect().BottomLeft().X : NPC.getRect().BottomRight().X, NPC.getRect().Bottom().Y + 20f);
                 stingerSpawnPos.X += NPC.direction * 120;
 
@@ -881,6 +909,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 // Charge
                 if (NPC.ai[1] % 2f == 0f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     float playerLocation = vectorCenter.X - player.Center.X;
 
                     float chargeThresholdY = 20f;
@@ -888,6 +919,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                     if (Math.Abs(vectorCenter.Y - (player.Center.Y - 500f)) < chargeThresholdY)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         if (MissileCountdown == 1)
                         {
                             SoundEngine.PlaySound(BarrageLaunchSound, NPC.Center);
@@ -998,6 +1032,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 // Slow down after charge
                 else
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     if (NPC.velocity.X < 0f)
                         NPC.direction = -1;
                     else
@@ -1029,6 +1066,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                         return;
                     }
+
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
 
                     NPC.rotation = NPC.velocity.X * 0.02f;
                     charging = false;
@@ -1263,7 +1303,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 NPC.frame.X = NPC.frame.X == 0 ? width : 0;
                 if (charging)
                 {
-                   flyingFrame2 = !flyingFrame2;
+                    flyingFrame2 = !flyingFrame2;
                 }
             }
         }

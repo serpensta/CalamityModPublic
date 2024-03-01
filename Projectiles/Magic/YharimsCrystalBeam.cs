@@ -1,8 +1,8 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -148,7 +148,7 @@ namespace CalamityMod.Projectiles.Magic
             // If the host crystal is fully charged, the interpolation starts at the host crystal's center instead.
             // Overriding that, if the player shoves the crystal into or through a wall, the interpolation starts at the player's center.
             Vector2 samplingPoint = Projectile.Center;
-            if(hostCrystal.ai[0] >= YharimsCrystalPrism.MaxCharge)
+            if (hostCrystal.ai[0] >= YharimsCrystalPrism.MaxCharge)
                 samplingPoint = hostCrystal.Center;
             if (!Collision.CanHitLine(Main.player[Projectile.owner].Center, 0, 0, hostCrystal.Center, 0, 0))
                 samplingPoint = Main.player[Projectile.owner].Center;
@@ -258,7 +258,7 @@ namespace CalamityMod.Projectiles.Magic
                 float dustAngle = Projectile.rotation + (Main.rand.NextBool() ? 1f : -1f) * MathHelper.PiOver2;
                 float dustStartDist = Main.rand.NextFloat(1f, 1.8f);
                 Vector2 dustVel = dustAngle.ToRotationVector2() * dustStartDist;
-                int d = Dust.NewDust(laserEndPos, 0, 0, 244, dustVel.X, dustVel.Y, 0, beamColor, 3.3f);
+                int d = Dust.NewDust(laserEndPos, 0, 0, DustID.CopperCoin, dustVel.X, dustVel.Y, 0, beamColor, 3.3f);
                 Main.dust[d].color = beamColor;
                 Main.dust[d].noGravity = true;
                 Main.dust[d].scale = 1.2f;

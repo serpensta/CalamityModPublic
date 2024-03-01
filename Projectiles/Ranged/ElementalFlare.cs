@@ -1,9 +1,9 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -92,7 +92,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (StickToEnemies)
-                Projectile.ModifyHitNPCSticky(MaxStick);            
+                Projectile.ModifyHitNPCSticky(MaxStick);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -100,7 +100,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (StickToTiles || StickToEnemies)
             {
                 Projectile.velocity = oldVelocity * 0.95f;
-    			Projectile.position -= Projectile.velocity;
+                Projectile.position -= Projectile.velocity;
 
                 // No more enemy sticking + reset duration
                 if (StickToEnemies)

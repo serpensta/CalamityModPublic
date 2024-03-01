@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Rogue;
+﻿using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -30,12 +30,12 @@ namespace CalamityMod.Items.Weapons.Rogue
         }
 
         public override void ModifyStatsExtra(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-		{
+        {
             if (player.Calamity().StealthStrikeAvailable())
-				type = ModContent.ProjectileType<AshenStalagmiteProj>();
-		}
+                type = ModContent.ProjectileType<AshenStalagmiteProj>();
+        }
 
-		public override float StealthDamageMultiplier => 1.15f;
+        public override float StealthDamageMultiplier => 1.15f;
         public override float StealthVelocityMultiplier => 0.6f;
         public override float StealthKnockbackMultiplier => 2.5f;
 

@@ -1,4 +1,7 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -28,9 +31,6 @@ using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -107,7 +107,7 @@ namespace CalamityMod.NPCs.Providence
         public SlotId BurningSoundSlot;
         //Level of sound playing
         public float SoundWarningLevel = -1f;
-        
+
         public static float normalDR = 0.3f;
         public static float cocoonDR = 0.9f;
 
@@ -119,7 +119,7 @@ namespace CalamityMod.NPCs.Providence
             Main.npcFrameCount[NPC.type] = 3;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.2f,
                 PortraitScale = 0.32f,
@@ -162,7 +162,7 @@ namespace CalamityMod.NPCs.Providence
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheHallow,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
@@ -219,7 +219,7 @@ namespace CalamityMod.NPCs.Providence
             DeathAnimationTimer = reader.ReadInt32();
             borderRadius = reader.ReadSingle();
             shouldDrawInfernoBorder = reader.ReadBoolean();
-            
+
             for (int i = 0; i < 4; i++)
                 NPC.Calamity().newAI[i] = reader.ReadSingle();
 
@@ -379,7 +379,7 @@ namespace CalamityMod.NPCs.Providence
             float distanceX = Math.Abs(NPC.Center.X - player.Center.X);
 
             // Inflict Holy Inferno if target is too far away
-            float burnIntensity = CalculateBurnIntensity(attackDelayAfterCocoon);    
+            float burnIntensity = CalculateBurnIntensity(attackDelayAfterCocoon);
 
             if (!player.dead && player.active && !player.creativeGodMode && !Dying)
             {
@@ -430,7 +430,7 @@ namespace CalamityMod.NPCs.Providence
             {
                 if (SoundWarningLevel <= 1f)
                     burningSound?.Stop();
-                else if(SoundWarningLevel <= 2f)
+                else if (SoundWarningLevel <= 2f)
                     burningSound.Volume = SoundWarningLevel - 1f;
             }
 
@@ -615,7 +615,7 @@ namespace CalamityMod.NPCs.Providence
                             if (i % dustDivisor == 0)
                             {
                                 currentDustPos = Vector2.Lerp(dustLineStart, dustLineEnd, i / (float)maxHealDustIterations);
-                                int dust = Dust.NewDust(currentDustPos, 0, 0, 267, 0f, 0f, 0, dustColor, 1f);
+                                int dust = Dust.NewDust(currentDustPos, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, dustColor, 1f);
                                 Main.dust[dust].position = currentDustPos;
                                 Main.dust[dust].velocity = spinningpoint.RotatedBy(MathHelper.TwoPi * i / maxHealDustIterations) * dustVelocityMult * (0.8f + Main.rand.NextFloat() * 0.4f) + NPC.velocity;
                                 Main.dust[dust].noGravity = true;
@@ -1004,7 +1004,7 @@ namespace CalamityMod.NPCs.Providence
                                         newColor.R = 0;
                                 }
 
-                                int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 267, 0f, 0f, 0, newColor);
+                                int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.RainbowMk2, 0f, 0f, 0, newColor);
                                 Main.dust[dust].position = NPC.Center + Main.rand.NextVector2Circular(NPC.width * 2f, NPC.height * 2f) + new Vector2(0f, -150f);
                                 Main.dust[dust].velocity *= Main.rand.NextFloat() * 0.8f;
                                 Main.dust[dust].noGravity = true;
@@ -1185,7 +1185,7 @@ namespace CalamityMod.NPCs.Providence
                                 int maxDust = 3;
                                 for (int j = 0; j < maxDust; j++)
                                 {
-                                    int dust = Dust.NewDust(fireFrom, 0, 0, 267, 0f, 0f, 0, dustColor, 1f);
+                                    int dust = Dust.NewDust(fireFrom, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, dustColor, 1f);
                                     Main.dust[dust].position = fireFrom;
                                     Main.dust[dust].velocity = vector2 * cocoonProjVelocity * (j * 0.5f + 1f);
                                     Main.dust[dust].noGravity = true;
@@ -1245,7 +1245,7 @@ namespace CalamityMod.NPCs.Providence
                                 int maxDust = 3;
                                 for (int j = 0; j < maxDust; j++)
                                 {
-                                    int dust = Dust.NewDust(fireFrom, 0, 0, 267, 0f, 0f, 0, dustColor, 1f);
+                                    int dust = Dust.NewDust(fireFrom, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, dustColor, 1f);
                                     Main.dust[dust].position = fireFrom;
                                     Main.dust[dust].velocity = vector2 * cocoonProjVelocity * (j * 0.5f + 1f);
                                     Main.dust[dust].noGravity = true;
@@ -1286,7 +1286,7 @@ namespace CalamityMod.NPCs.Providence
                             int maxDust = 3;
                             for (int j = 0; j < maxDust; j++)
                             {
-                                int dust = Dust.NewDust(fireFrom, 0, 0, 267, 0f, 0f, 0, dustColor, 1f);
+                                int dust = Dust.NewDust(fireFrom, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, dustColor, 1f);
                                 Main.dust[dust].position = fireFrom;
                                 Main.dust[dust].velocity = velocity2 * cocoonProjVelocity * 2f;
                                 Main.dust[dust].noGravity = true;
@@ -1591,7 +1591,7 @@ namespace CalamityMod.NPCs.Providence
                                         currentDustPos = Vector2.Lerp(dustLineStart, dustLineEnd, j / (float)maxHealDustIterations);
                                         Color dustColor = Main.hslToRgb(Main.rgbToHsl(nightAI ? new Color(100, 200, 250) : new Color(255, 200, Math.Abs(Math.Abs(blue) - (int)(dustSpawned * 2.55f)))).X, 1f, 0.5f);
                                         dustColor.A = 255;
-                                        int dust = Dust.NewDust(currentDustPos, 0, 0, 267, 0f, 0f, 0, dustColor, 1f);
+                                        int dust = Dust.NewDust(currentDustPos, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, dustColor, 1f);
                                         Main.dust[dust].position = currentDustPos + new Vector2(32f, 32f).RotatedByRandom(MathHelper.TwoPi) * i;
                                         Main.dust[dust].velocity = spinningpoint.RotatedBy(MathHelper.TwoPi * j / maxHealDustIterations) * dustVelocityMult * (0.8f + Main.rand.NextFloat() * 0.4f);
                                         Main.dust[dust].noGravity = true;
@@ -1620,7 +1620,7 @@ namespace CalamityMod.NPCs.Providence
                                 Vector2 dustVelocity = dustSpawnPos - dustLineEnd;
                                 Color dustColor = Main.hslToRgb(Main.rgbToHsl(nightAI ? new Color(100, 200, 250) : new Color(255, 200, Math.Abs(Math.Abs(blue) - (int)(circleDustSpawned * 7.08f)))).X, 1f, 0.5f);
                                 dustColor.A = 255;
-                                int dust = Dust.NewDust(dustSpawnPos + dustVelocity, 0, 0, 267, dustVelocity.X, dustVelocity.Y, 0, dustColor, 1.4f);
+                                int dust = Dust.NewDust(dustSpawnPos + dustVelocity, 0, 0, DustID.RainbowMk2, dustVelocity.X, dustVelocity.Y, 0, dustColor, 1.4f);
                                 Main.dust[dust].noGravity = true;
                                 Main.dust[dust].noLight = true;
                                 Main.dust[dust].velocity = dustVelocity * 0.33f;
@@ -1835,7 +1835,7 @@ namespace CalamityMod.NPCs.Providence
             if (CalamityGlobalNPC.holyBossAttacker != -1 && Main.npc[CalamityGlobalNPC.holyBossAttacker].active)
                 guardianAlive = true;
 
-            
+
             if (CalamityGlobalNPC.holyBossDefender != -1 && Main.npc[CalamityGlobalNPC.holyBossDefender].active)
                 guardianAlive = true;
 
@@ -1848,7 +1848,7 @@ namespace CalamityMod.NPCs.Providence
             // It is determined based on how much time has elapsed during the attack thus far, specifically for the two cocoon attacks.
             // This shave-off does not happen when guardians are present.
             float shorterDistanceFade = Utils.GetLerpValue(0f, 120f, aiTimer, true);
-            
+
             //Distance does not get shorter if in GFB / Guardians are alive
             if (!guardianAlive && NPC.localAI[1] < (float)BossMode.Red)
             {
@@ -2098,13 +2098,13 @@ namespace CalamityMod.NPCs.Providence
                             getTextureGlowString = baseGlowTextureString + "ProvidenceAltGlow";
                             getTextureGlow2String = baseGlowTextureString + "ProvidenceAltGlow2";
                             break;
-                        
+
                         case 2:
                             getTextureString = baseTextureString + "ProvidenceAttack";
                             getTextureGlowString = baseGlowTextureString + "ProvidenceAttackGlow";
                             getTextureGlow2String = baseGlowTextureString + "ProvidenceAttackGlow2";
                             break;
-                        
+
                         case 3:
                             getTextureString = baseTextureString + "ProvidenceAttackAlt";
                             getTextureGlowString = baseGlowTextureString + "ProvidenceAttackAltGlow";
@@ -2326,9 +2326,9 @@ namespace CalamityMod.NPCs.Providence
                 float scaleMult = 2.75f + scaleDuringShieldDespawn;
                 spriteBatch.Draw(shieldTexture, shieldDrawPos, shieldFrame, color2, NPC.rotation, origin, shieldScale2 * scaleMult * 0.45f, SpriteEffects.None, 0f);
                 spriteBatch.Draw(shieldTexture, shieldDrawPos, shieldFrame, color2, NPC.rotation, origin, shieldScale2 * scaleMult * 0.5f, SpriteEffects.None, 0f);
-                
+
                 // The shield for the border MUST be drawn before the main shield, it becomes incredibly visually obnoxious otherwise.
-                
+
                 // The scale used for the noise overlay polygons also grows and shrinks
                 // This is intentionally out of sync with the shield, and intentionally desynced per player
                 // Don't put this anywhere less than 0.25f or higher than 1f. The higher it is, the denser / more zoomed out the noise overlay is.
@@ -2340,19 +2340,19 @@ namespace CalamityMod.NPCs.Providence
                 shieldEffect.Parameters["blowUpPower"].SetValue(2.8f);
                 shieldEffect.Parameters["blowUpSize"].SetValue(0.4f);
                 shieldEffect.Parameters["noiseScale"].SetValue(noiseScale);
-                
+
                 shieldEffect.Parameters["shieldOpacity"].SetValue(opacityScaleDuringShieldDespawn);
                 shieldEffect.Parameters["shieldEdgeBlendStrenght"].SetValue(4f);
-                
+
                 Color edgeColor = CalamityUtils.MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.2f, color, color2);
-                
+
                 // Define shader parameters for shield color
                 shieldEffect.Parameters["shieldColor"].SetValue(color.ToVector3());
                 shieldEffect.Parameters["shieldEdgeColor"].SetValue(edgeColor.ToVector3());
-                
+
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, shieldEffect, Main.GameViewMatrix.TransformationMatrix);
-                
+
                 // Fetch shield heat overlay texture (this is the neutrons fed to the shader)
                 Texture2D heatTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/GreyscaleGradients/Neurons2").Value;
                 Vector2 pos = NPC.Center + NPC.gfxOffY * Vector2.UnitY - Main.screenPosition;
@@ -2470,7 +2470,7 @@ namespace CalamityMod.NPCs.Providence
                     ModContent.ProjectileType<TarragonAura>()
                 };
 
-                bool allowedClass = projectile.CountsAsClass<SummonDamageClass>() || (!projectile.CountsAsClass<MeleeDamageClass>() && !projectile.CountsAsClass<RangedDamageClass>() && 
+                bool allowedClass = projectile.CountsAsClass<SummonDamageClass>() || (!projectile.CountsAsClass<MeleeDamageClass>() && !projectile.CountsAsClass<RangedDamageClass>() &&
                     !projectile.CountsAsClass<MagicDamageClass>() && !projectile.CountsAsClass<ThrowingDamageClass>() && !projectile.CountsAsClass<SummonMeleeSpeedDamageClass>());
                 bool allowedDamage = allowedClass && hit.Damage <= 75; //Flat 75 regardless of difficulty.
                 //Absorber on-hit effects likely won't proc this but Deific Amulet and Astral Bulwark stars will proc this.
@@ -2677,13 +2677,13 @@ namespace CalamityMod.NPCs.Providence
                     break;
                 case (int)Providence.BossMode.Violet:
                     BuffType = ModContent.BuffType<Shadowflame>();
-                    Multiplier = 0.60f; 
+                    Multiplier = 0.60f;
                     break;
                 default:
                     break;
             }
             Target.AddBuff(BuffType, (int)(BaseDuration * Multiplier));
-            
+
             //A. Specifically inflicts Vaporfied in quirky RGB Mode because it's a colorful debuff
             //B. Apply the negative healing
             if (Mode >= (int)Providence.BossMode.Red)
@@ -2704,7 +2704,7 @@ namespace CalamityMod.NPCs.Providence
                 }
                 NetMessage.SendData(MessageID.SpiritHeal, -1, -1, null, Target.whoAmI, NegativeHealValue);
 
-                Target.AddBuff(ModContent.BuffType<Vaporfied>(), (int)(BaseDuration * Multiplier));   
+                Target.AddBuff(ModContent.BuffType<Vaporfied>(), (int)(BaseDuration * Multiplier));
             }
         }
     }

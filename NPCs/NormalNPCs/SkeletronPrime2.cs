@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.DataStructures;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -56,7 +56,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToSickness = false;
             AnimationType = NPCID.SkeletronPrime;
-            Music = MusicID.Boss1;
+            Music = MusicID.Boss3;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -352,6 +352,8 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.defense *= 2;
                     NPC.damage = NPC.defDamage * 2;
 
+                    calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
+
                     if (phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         NPC.localAI[0] += 1f;
@@ -381,7 +383,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(laserFireDirection) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                             NPC.localAI[1] += 1f;
@@ -455,6 +457,9 @@ namespace CalamityMod.NPCs.NormalNPCs
                     calamityGlobalNPC.DR = 0.9999f;
                     calamityGlobalNPC.unbreakableDR = true;
 
+                    calamityGlobalNPC.CurrentlyEnraged = true;
+                    calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = true;
+
                     if (NPC.IsMechQueenUp)
                         NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.X / 15f * 0.5f, 0.75f);
                     else
@@ -493,8 +498,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 enragedHeadSkullTargetX *= enragedHeadSkullTargetDist;
                                 enragedHeadSkullTargetY *= enragedHeadSkullTargetDist;
 
-                                Vector2 value = new Vector2(enragedHeadSkullTargetX * 1f + Main.rand.Next(-50, 51) * 0.01f, enragedHeadSkullTargetY * 1f + Main.rand.Next(-50, 51) * 0.01f);
-                                value.Normalize();
+                                Vector2 value = new Vector2(enragedHeadSkullTargetX * 1f + Main.rand.Next(-50, 51) * 0.01f, enragedHeadSkullTargetY * 1f + Main.rand.Next(-50, 51) * 0.01f).SafeNormalize(Vector2.UnitY);
                                 value *= enragedHeadSpeed;
                                 value += NPC.velocity;
                                 enragedHeadSkullTargetX = value.X;
@@ -601,7 +605,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         if (NPC.ai[2] % bombSpawnDivisor == 0f)
                         {
                             NPC.localAI[0] += 1f;
-                            
+
                             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > 64f)
                             {
                                 SoundEngine.PlaySound(SoundID.Item61, NPC.Center);
@@ -618,8 +622,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                     enragedHeadBombTargetX *= enragedHeadBombTargetDist;
                                     enragedHeadBombTargetY *= enragedHeadBombTargetDist;
 
-                                    Vector2 value = new Vector2(enragedHeadBombTargetX + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f, enragedHeadBombTargetY + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f);
-                                    value.Normalize();
+                                    Vector2 value = new Vector2(enragedHeadBombTargetX + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f, enragedHeadBombTargetY + Main.rand.Next(-bombSpread, bombSpread + 1) * 0.01f).SafeNormalize(Vector2.UnitY);
                                     value *= enragedHeadSpeed;
                                     enragedHeadBombTargetX = value.X;
                                     enragedHeadBombTargetY = value.Y;
@@ -646,7 +649,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             // Go to floating phase, or spinning phase if in phase 2
                             if (NPC.localAI[0] >= totalBombs)
                             {
-                                NPC.velocity.Normalize();
+                                NPC.velocity = NPC.velocity.SafeNormalize(Vector2.UnitY);
 
                                 // Fly overhead and spit spreads of bombs into the air if on low health
                                 NPC.ai[1] = phase3 ? 6f : 1f;
@@ -675,7 +678,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     float flightAcceleration = bossRush ? 0.3f : death ? 0.25f : 0.2f;
 
                     Vector2 destination = new Vector2(Main.player[NPC.target].Center.X, Main.player[NPC.target].Center.Y - 500f);
-                    NPC.SimpleFlyMovement(Vector2.Normalize(destination - NPC.Center) * flightVelocity, flightAcceleration);
+                    NPC.SimpleFlyMovement((destination - NPC.Center).SafeNormalize(Vector2.UnitY) * flightVelocity, flightAcceleration);
 
                     // Spit bombs and then go to floating phase
                     NPC.localAI[3] += 1f;
@@ -713,7 +716,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 for (int k = 0; k < totalProjectiles; k++)
                                 {
                                     Vector2 bombVelocity = spinningPoint.RotatedBy(radians * k);
-                                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(bombVelocity) * 30f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
+                                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + bombVelocity.SafeNormalize(Vector2.UnitY) * 30f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
                                     Main.projectile[proj].timeLeft = 900;
                                     Main.projectile[proj].tileCollide = false;
                                 }
@@ -749,16 +752,16 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             for (int dustIndex = 0; dustIndex < firstDustCloudParticleAmount; dustIndex++)
             {
-                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                 Main.dust[dust].velocity *= 1.4f;
             }
 
             for (int dustIndex = 0; dustIndex < secondDustCloudParticleAmount; dustIndex++)
             {
-                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 3.5f);
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, 0f, 0f, 100, default(Color), 3.5f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 7f;
-                dust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 1.5f);
+                dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, 0f, 0f, 100, default(Color), 1.5f);
                 Main.dust[dust].velocity *= 3f;
             }
 
@@ -849,21 +852,21 @@ namespace CalamityMod.NPCs.NormalNPCs
                     Main.gore[num802].velocity.X -= 1f;
                     Main.gore[num802].velocity.Y -= 1f;
                 }
-                
+
                 for (int num798 = 0; num798 < 10; num798++)
                 {
-                    int num799 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                    int num799 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                     Dust dust = Main.dust[num799];
                     dust.velocity *= 1.4f;
                 }
 
                 for (int num800 = 0; num800 < 5; num800++)
                 {
-                    int num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 6, 0f, 0f, 100, default(Color), 2.5f);
+                    int num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Torch, 0f, 0f, 100, default(Color), 2.5f);
                     Main.dust[num801].noGravity = true;
                     Dust dust = Main.dust[num801];
                     dust.velocity *= 5f;
-                    num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 6, 0f, 0f, 100, default(Color), 1.5f);
+                    num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Torch, 0f, 0f, 100, default(Color), 1.5f);
                     dust = Main.dust[num801];
                     dust.velocity *= 3f;
                 }

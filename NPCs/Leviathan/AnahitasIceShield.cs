@@ -1,8 +1,8 @@
-﻿using CalamityMod.Events;
+﻿using System.IO;
+using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,6 +21,7 @@ namespace CalamityMod.NPCs.Leviathan
                 return CalamityUtils.FindFirstProjectile(ModContent.ProjectileType<LeviathanSpawner>()) != -1;
             }
         }
+
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -38,11 +39,7 @@ namespace CalamityMod.NPCs.Leviathan
             NPC.height = 100;
             NPC.defense = 10;
             NPC.DR_NERD(0.5f);
-            NPC.lifeMax = 650;
-            if (BossRushEvent.BossRushActive)
-            {
-                NPC.lifeMax = 1000;
-            }
+            NPC.lifeMax = BossRushEvent.BossRushActive ? 1000 : 650;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.alpha = 255;
@@ -119,13 +116,13 @@ namespace CalamityMod.NPCs.Leviathan
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 67, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.IceRod, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 25; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 67, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.IceRod, hit.HitDirection, -1f, 0, default, 1f);
                 }
             }
         }

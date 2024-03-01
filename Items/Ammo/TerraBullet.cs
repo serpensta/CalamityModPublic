@@ -18,7 +18,7 @@ namespace CalamityMod.Items.Ammo
         {
             Item.width = 8;
             Item.height = 8;
-            Item.damage = 9;
+            Item.damage = 8;
             Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 9999;
             Item.consumable = true;
@@ -26,7 +26,7 @@ namespace CalamityMod.Items.Ammo
             Item.value = Item.sellPrice(copper: 16);
             Item.rare = ItemRarityID.Lime;
             Item.shoot = ModContent.ProjectileType<TerraBulletMain>();
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 2f;
             Item.ammo = AmmoID.Bullet;
         }
 

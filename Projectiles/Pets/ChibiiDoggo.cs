@@ -66,10 +66,10 @@ namespace CalamityMod.Projectiles.Pets
                 Color colorAlpha = colorArea;
                 colorAlpha = Projectile.GetAlpha(colorAlpha);
                 goto IL_6899;
-                IL_6881:
+IL_6881:
                 counter += twoConst;
                 continue;
-                IL_6899:
+IL_6899:
                 float trailColorChange = (float)(eightCompare - counter);
                 if (twoConst < 0)
                 {
@@ -129,7 +129,7 @@ namespace CalamityMod.Projectiles.Pets
 
                 for (int i = 0; i < 77; i++) //loop to make lots of dust
                 {
-                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 182, Projectile.velocity.X * 0.7f, Projectile.velocity.Y * 0.7f, 100, default, 2.5f);
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.TheDestroyer, Projectile.velocity.X * 0.7f, Projectile.velocity.Y * 0.7f, 100, default, 2.5f);
 
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 1.5f;
@@ -201,11 +201,11 @@ namespace CalamityMod.Projectiles.Pets
                 {
                     if (Main.rand.NextBool())
                     {
-                        SoundEngine.PlaySound(SoundID.Meowmere with { Volume = SoundID.Meowmere.Volume * 4f}, Projectile.position); //nya
+                        SoundEngine.PlaySound(SoundID.Meowmere with { Volume = SoundID.Meowmere.Volume * 4f }, Projectile.position); //nya
                     }
                     else
                     {
-                        SoundEngine.PlaySound(SoundID.ScaryScream with { Volume = SoundID.ScaryScream.Volume * 2f}, player.position); //REEEEEEE
+                        SoundEngine.PlaySound(SoundID.ScaryScream with { Volume = SoundID.ScaryScream.Volume * 2f }, player.position); //REEEEEEE
                     }
                     notlocalai1 = -600f;
                 }

@@ -19,7 +19,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override void SetStaticDefaults()
         {
             // Long live Megafleet. You will be missed. Maybe one day we can revive you.
-                   }
+        }
 
         public override void SetDefaults()
         {

@@ -1,9 +1,9 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -19,14 +19,14 @@ namespace CalamityMod.NPCs.SunkenSea
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 5;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0);
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers();
             value.Position.X += 24f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
         }
 
         public override void SetDefaults()
         {
-            NPC.damage = 20;
+            NPC.damage = Main.hardMode ? 50 : 20;
             NPC.width = 116;
             NPC.height = 36;
             NPC.defense = Main.hardMode ? 15 : 5;
@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.value = Main.hardMode ? Item.buyPrice(0, 0, 50, 0) : Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath55;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             Banner = NPC.type;
             BannerItem = ModContent.ItemType<EutrophicRayBanner>();
             NPC.Calamity().VulnerableToHeat = false;
@@ -45,11 +45,15 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<SunkenSeaBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.EutrophicRay")
             });
@@ -81,11 +85,7 @@ namespace CalamityMod.NPCs.SunkenSea
             if (NPC.justHit && !hasBeenHit)
             {
                 hasBeenHit = true;
-                NPC.damage = Main.expertMode ? 40 : 20;
-                if (Main.hardMode)
-                {
-                    NPC.damage = Main.expertMode ? 100 : 50;
-                }
+                NPC.damage = NPC.defDamage;
                 NPC.noTileCollide = true;
                 NPC.noGravity = true;
                 if (NPC.Center.X < Main.player[NPC.target].Center.X)
@@ -163,9 +163,7 @@ namespace CalamityMod.NPCs.SunkenSea
                 }
             }
             else
-            {
                 NPC.damage = 0;
-            }
         }
 
         public override void FindFrame(int frameHeight)
@@ -210,18 +208,18 @@ namespace CalamityMod.NPCs.SunkenSea
             }
             return 0f;
         }
-        
+
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 68, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueCrystalShard, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 25; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 68, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueCrystalShard, hit.HitDirection, -1f, 0, default, 1f);
                 }
                 if (Main.netMode != NetmodeID.Server)
                 {

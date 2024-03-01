@@ -1,7 +1,7 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
+using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Summon
             {
                 for (int i = 0; i < 30; i++)
                 {
-                    int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 16f), Projectile.width, Projectile.height - 16, 59, 0f, 0f, 0, default, 1f);
+                    int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y + 16f), Projectile.width, Projectile.height - 16, DustID.BlueTorch, 0f, 0f, 0, default, 1f);
                     Main.dust[spawnDust].velocity *= 2f;
                     Main.dust[spawnDust].scale *= 1.15f;
                 }

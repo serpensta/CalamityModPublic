@@ -1,4 +1,11 @@
 ﻿using System;
+using System.IO;
+using CalamityMod.Balancing;
+using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Items.Pets;
+using CalamityMod.Items.Potions;
+using CalamityMod.Projectiles.Boss;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -6,13 +13,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
-using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Items.Potions;
-using CalamityMod.Items.Pets;
-using CalamityMod.Projectiles.Boss;
-using CalamityMod.World;
-using CalamityMod.Balancing;
 
 namespace CalamityMod.NPCs.Other
 {
@@ -161,7 +161,7 @@ namespace CalamityMod.NPCs.Other
             {
                 // old was zombie 1 - zombie 62
                 // ideally would be collaborative inferal screeches of various devs
-                SoundEngine.PlaySound(Polterghast.Polterghast.creepySounds[Main.rand.Next(1, Polterghast.Polterghast.creepySounds.Count)] with { PitchVariance = 2}, NPC.position);
+                SoundEngine.PlaySound(Polterghast.Polterghast.creepySounds[Main.rand.Next(1, Polterghast.Polterghast.creepySounds.Count)] with { PitchVariance = 2 }, NPC.position);
             }
             Player playerLOL = Main.player[NPC.target];
             playerLOL.velocity.X *= 0.99f;
@@ -574,7 +574,7 @@ namespace CalamityMod.NPCs.Other
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             double pisquaredover6 = Math.Pow(MathHelper.Pi, 2) / 6;
-            npcLoot.AddIf(()=> CalamityWorld.LegendaryMode && CalamityWorld.revenge, ModContent.ItemType<SuspiciousLookingNOU>()); // guaranteed in legendarev mode
+            npcLoot.AddIf(() => CalamityWorld.LegendaryMode && CalamityWorld.revenge, ModContent.ItemType<SuspiciousLookingNOU>()); // guaranteed in legendarev mode
             npcLoot.AddIf(() => !(CalamityWorld.LegendaryMode && CalamityWorld.revenge), ModContent.ItemType<SuspiciousLookingNOU>(), 27); // otherwise 1 in 27
             npcLoot.Add(ModContent.ItemType<DeliciousMeat>(), 1, 22, (int)(pisquaredover6 * 100));
         }

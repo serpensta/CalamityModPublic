@@ -1,9 +1,9 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Dusts;
 namespace CalamityMod.Projectiles.Magic
 {
     public class TearsofHeavenProjectile : ModProjectile, ILocalizedModType

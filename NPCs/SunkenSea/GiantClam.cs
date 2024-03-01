@@ -1,4 +1,6 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Materials;
@@ -14,15 +16,13 @@ using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.SunkenSea
 {
@@ -35,14 +35,13 @@ namespace CalamityMod.NPCs.SunkenSea
         private int attack = -1; //-1 doing nothing, 0 = shell hiding, 1 = telestomp, 2 = pearl burst, 3 = pearl rain
         private bool attackAnim = false;
         private bool hasBeenHit = false;
-        private bool statChange = false;
         private bool hide = false;
 
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 12;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.4f,
             };
@@ -55,7 +54,8 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.Calamity().canBreakPlayerDefense = true;
             NPC.lavaImmune = true;
             NPC.npcSlots = 5f;
-            NPC.damage = 50;
+            NPC.damage = Main.hardMode ? 100 : 50;
+            NPC.defense = Main.hardMode ? 35 : 10;
             NPC.width = 160;
             NPC.height = 120;
             NPC.defense = 9999;
@@ -72,11 +72,15 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<SunkenSeaBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.GiantClam")
             });
@@ -90,7 +94,6 @@ namespace CalamityMod.NPCs.SunkenSea
             writer.Write(NPC.dontTakeDamage);
             writer.Write(NPC.chaseable);
             writer.Write(hasBeenHit);
-            writer.Write(statChange);
             writer.Write(hide);
             for (int i = 0; i < 2; i++)
                 writer.Write(NPC.Calamity().newAI[i]);
@@ -104,7 +107,6 @@ namespace CalamityMod.NPCs.SunkenSea
             NPC.dontTakeDamage = reader.ReadBoolean();
             NPC.chaseable = reader.ReadBoolean();
             hasBeenHit = reader.ReadBoolean();
-            statChange = reader.ReadBoolean();
             hide = reader.ReadBoolean();
             for (int i = 0; i < 2; i++)
                 NPC.Calamity().newAI[i] = reader.ReadSingle();
@@ -113,41 +115,34 @@ namespace CalamityMod.NPCs.SunkenSea
         public override void AI()
         {
             NPC.TargetClosest(true);
+
             Player player = Main.player[NPC.target];
             CalamityGlobalNPC calamityGlobalNPC = NPC.Calamity();
+
             if (NPC.justHit && hitAmount < 5)
             {
                 ++hitAmount;
                 hasBeenHit = true;
             }
+
             NPC.chaseable = hasBeenHit;
+
             if (hitAmount == 5)
             {
                 if (Main.netMode != NetmodeID.Server)
                 {
                     if (!Main.player[NPC.target].dead && Main.player[NPC.target].active)
-                    {
                         player.AddBuff(ModContent.BuffType<Clamity>(), 2); //CLAM INVASION
-                    }
                 }
 
                 if (!hide)
                     Lighting.AddLight(NPC.Center, 0f, (255 - NPC.alpha) * 2.5f / 255f, (255 - NPC.alpha) * 2.5f / 255f);
 
-                if (!statChange)
-                {
-                    NPC.defense = 10;
-                    NPC.damage = Main.expertMode ? 100 : 50;
-                    if (Main.hardMode)
-                    {
-                        NPC.defense = 35;
-                        NPC.damage = Main.expertMode ? 200 : 100;
-                    }
-                    statChange = true;
-                }
-
                 if (NPC.ai[0] < 240f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.ai[0] += 1f;
                     hide = false;
                 }
@@ -155,14 +150,18 @@ namespace CalamityMod.NPCs.SunkenSea
                 {
                     if (attack == -1)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         attack = Main.rand.Next(2);
                         if (attack == 0)
-                        {
                             attack = Main.rand.Next(2); //rarer chance of doing the hiding clam
-                        }
                     }
                     else if (attack == 0)
                     {
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
+
                         hide = true;
                         NPC.defense = 9999;
                         NPC.ai[1] += 1f;
@@ -191,11 +190,14 @@ namespace CalamityMod.NPCs.SunkenSea
                         }
                         else if (NPC.ai[2] == 1f)
                         {
+                            // Avoid cheap bullshit
                             NPC.damage = 0;
+
                             NPC.chaseable = false;
                             NPC.dontTakeDamage = true;
                             NPC.noGravity = true;
                             NPC.noTileCollide = true;
+
                             NPC.alpha += Main.hardMode ? 8 : 5;
                             if (NPC.alpha >= 255)
                             {
@@ -212,7 +214,7 @@ namespace CalamityMod.NPCs.SunkenSea
                         {
                             if (Main.rand.NextBool())
                             {
-                                int attackDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, 226, 0f, 0f, 200, default, 1.5f);
+                                int attackDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Electric, 0f, 0f, 200, default, 1.5f);
                                 Main.dust[attackDust].noGravity = true;
                                 Main.dust[attackDust].velocity *= 0.75f;
                                 Main.dust[attackDust].fadeIn = 1.3f;
@@ -224,14 +226,13 @@ namespace CalamityMod.NPCs.SunkenSea
                                 vector *= 34f;
                                 Main.dust[attackDust].position = NPC.Center - vector;
                             }
+
                             NPC.alpha -= Main.hardMode ? 7 : 4;
                             if (NPC.alpha <= 0)
                             {
-                                NPC.damage = Main.expertMode ? 100 : 50;
-                                if (Main.hardMode)
-                                {
-                                    NPC.damage = Main.expertMode ? 200 : 100;
-                                }
+                                // Set damage
+                                NPC.damage = NPC.defDamage;
+
                                 NPC.chaseable = true;
                                 NPC.dontTakeDamage = false;
                                 NPC.alpha = 0;
@@ -241,6 +242,9 @@ namespace CalamityMod.NPCs.SunkenSea
                         }
                         else if (NPC.ai[2] == 3f)
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             NPC.velocity.Y += 0.8f;
                             attackAnim = true;
                             if (NPC.Center.Y > (player.Center.Y - (float)(NPC.height / 2) + player.gfxOffY - 15f))
@@ -254,6 +258,9 @@ namespace CalamityMod.NPCs.SunkenSea
                         {
                             if (NPC.velocity.Y == 0f)
                             {
+                                // Avoid cheap bullshit
+                                NPC.damage = 0;
+
                                 NPC.ai[2] = 0f;
                                 NPC.ai[0] = 0f;
                                 NPC.netUpdate = true;
@@ -266,7 +273,7 @@ namespace CalamityMod.NPCs.SunkenSea
                                     {
                                         for (int stompDustAmount = 0; stompDustAmount < 5; stompDustAmount++)
                                         {
-                                            int stompDust = Dust.NewDust(new Vector2(NPC.position.X - 30f, NPC.position.Y + (float)NPC.height), NPC.width + 30, 4, 33, 0f, 0f, 100, default, 1.5f);
+                                            int stompDust = Dust.NewDust(new Vector2(NPC.position.X - 30f, NPC.position.Y + (float)NPC.height), NPC.width + 30, 4, DustID.Water, 0f, 0f, 100, default, 1.5f);
                                             Main.dust[stompDust].velocity *= 0.2f;
                                         }
                                         int stompGore = Gore.NewGore(NPC.GetSource_FromAI(), new Vector2((float)(stompDustArea - 30), NPC.position.Y + (float)NPC.height - 12f), default, Main.rand.Next(61, 64), 1f);
@@ -274,6 +281,7 @@ namespace CalamityMod.NPCs.SunkenSea
                                     }
                                 }
                             }
+
                             NPC.velocity.Y += 0.8f;
                         }
                     }
@@ -475,13 +483,13 @@ namespace CalamityMod.NPCs.SunkenSea
         {
             for (int k = 0; k < 5; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 37, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Obsidian, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 50; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 37, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Obsidian, hit.HitDirection, -1f, 0, default, 1f);
                 }
                 if (Main.netMode != NetmodeID.Server)
                 {
