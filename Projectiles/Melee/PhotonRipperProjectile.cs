@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.Melee
             Vector2 playerRotatedPosition = Owner.RotatedRelativePoint(Owner.MountedCenter);
             if (Main.myPlayer == Projectile.owner)
             {
-                if (!Owner.CantUseHoldout())
+                if ((!Owner.CantUseHoldout() && Projectile.ai[2] == 1) || (Projectile.ai[2] == 0 && Owner.Calamity().mouseRight && Owner.active && !Owner.dead))
                     HandleChannelMovement(playerRotatedPosition);
                 else
                     Projectile.Kill();
@@ -228,7 +228,7 @@ namespace CalamityMod.Projectiles.Melee
                     shootReach = 72f;
 			}
 
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Owner.Center, Projectile.velocity, ModContent.ProjectileType<PrismTooth>(), (int)ToothDamage, 0f, Projectile.owner, shootReach, Projectile.whoAmI);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Owner.Center, Projectile.velocity, ModContent.ProjectileType<PrismTooth>(), (int)ToothDamage, 0f, Projectile.owner, shootReach, Projectile.whoAmI, Projectile.ai[2]);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
