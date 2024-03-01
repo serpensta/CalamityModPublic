@@ -52,6 +52,9 @@ namespace CalamityMod.NPCs.SunkenSea
 
         public override void AI()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             Lighting.AddLight(NPC.Center, (255 - NPC.alpha) * 0f / 255f, (255 - NPC.alpha) * 0.30f / 255f, (255 - NPC.alpha) * 0.30f / 255f);
 
             if (NPC.ai[2] > 0f)

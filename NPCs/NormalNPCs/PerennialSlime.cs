@@ -51,6 +51,11 @@ namespace CalamityMod.NPCs.NormalNPCs
             });
         }
 
+        public override void AI()
+        {
+            NPC.damage = (NPC.velocity.Y == 0f || NPC.velocity.Length() < 3f) ? 0 : NPC.defDamage;
+        }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.PlayerSafe || !NPC.downedPlantBoss || spawnInfo.Player.Calamity().ZoneAbyss ||

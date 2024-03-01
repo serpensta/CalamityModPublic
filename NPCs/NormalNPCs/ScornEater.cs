@@ -79,6 +79,8 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (NPC.velocity.Y == 0f)
             {
+                NPC.knockBackResist = 0f;
+
                 // Avoid cheap bullshit
                 NPC.damage = 0;
 
@@ -139,14 +141,16 @@ namespace CalamityMod.NPCs.NormalNPCs
             }
             else
             {
+                NPC.knockBackResist = 0.1f;
+
                 if (NPC.direction == 1 && NPC.velocity.X < 1f)
                 {
-                    NPC.velocity.X = NPC.velocity.X + 0.1f;
+                    NPC.velocity.X += 0.1f;
                     return;
                 }
 
                 if (NPC.direction == -1 && NPC.velocity.X > -1f)
-                    NPC.velocity.X = NPC.velocity.X - 0.1f;
+                    NPC.velocity.X -= 0.1f;
             }
         }
 

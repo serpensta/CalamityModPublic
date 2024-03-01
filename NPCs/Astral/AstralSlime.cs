@@ -59,6 +59,11 @@ namespace CalamityMod.NPCs.Astral
             });
         }
 
+        public override void AI()
+        {
+            NPC.damage = (NPC.velocity.Y == 0f || NPC.velocity.Length() < 3f) ? 0 : NPC.defDamage;
+        }
+
         public override void FindFrame(int frameHeight)
         {
             //DO DUST

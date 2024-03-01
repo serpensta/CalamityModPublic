@@ -74,6 +74,8 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void AI()
         {
+            NPC.damage = (NPC.velocity.Y == 0f || NPC.velocity.Length() < 3f) ? 0 : NPC.defDamage;
+
             // Release green light at the position of the slime.
             Lighting.AddLight((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16, 0.6f, 0.8f, 0.6f);
 

@@ -88,6 +88,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
         public static bool BuffedSlimeAI(NPC npc, Mod mod)
         {
+            bool isSpikedSlime = npc.type == NPCID.SlimeSpiked || npc.type == NPCID.SpikedIceSlime || npc.type == NPCID.SpikedJungleSlime || npc.type == ModContent.NPCType<CryoSlime>();
             bool isLavaSlime = npc.type == NPCID.LavaSlime || npc.type == ModContent.NPCType<InfernalCongealment>();
             bool canShootProjectile = npc.type == NPCID.SpikedIceSlime || npc.type == NPCID.SlimeSpiked || npc.type == NPCID.SpikedJungleSlime;
             int projectileShootType = -1;
@@ -225,6 +226,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 targetResetCountdown = 1f;
                 npc.TargetClosest();
             }
+
+            // Avoid cheap bullshit
+            if (!isSpikedSlime)
+                npc.damage = (npc.velocity.Y == 0f || npc.velocity.Length() < 3f) ? 0 : npc.defDamage;
 
             if (npc.velocity.Y == 0f)
             {

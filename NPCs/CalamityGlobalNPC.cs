@@ -3729,6 +3729,7 @@ namespace CalamityMod.NPCs
                                 case NPCID.SlimeSpiked:
                                 case NPCID.SandSlime:
                                 case NPCID.GoldenSlime:
+                                case NPCID.ShimmerSlime:
                                     return SlimeAI.BuffedSlimeAI(npc, Mod);
                             }
                         }
@@ -4721,6 +4722,46 @@ namespace CalamityMod.NPCs
         #region AI
         public override void AI(NPC npc)
         {
+            switch (npc.type)
+            {
+                case NPCID.BlueSlime:
+                case NPCID.MotherSlime:
+                case NPCID.LavaSlime:
+                case NPCID.DungeonSlime:
+                case NPCID.CorruptSlime:
+                case NPCID.IlluminantSlime:
+                case NPCID.ToxicSludge:
+                case NPCID.IceSlime:
+                case NPCID.Crimslime:
+                case NPCID.UmbrellaSlime:
+                case NPCID.RainbowSlime:
+                case NPCID.SlimeMasked:
+                case NPCID.HoppinJack:
+                case NPCID.SlimeRibbonWhite:
+                case NPCID.SlimeRibbonYellow:
+                case NPCID.SlimeRibbonGreen:
+                case NPCID.SlimeRibbonRed:
+                case NPCID.SandSlime:
+                case NPCID.GoldenSlime:
+                case NPCID.ShimmerSlime:
+                case NPCID.GreenSlime:
+                case NPCID.RedSlime:
+                case NPCID.PurpleSlime:
+                case NPCID.YellowSlime:
+                case NPCID.BlackSlime:
+                case NPCID.JungleSlime:
+                case NPCID.BabySlime:
+                case NPCID.Pinky:
+                case NPCID.BunnySlimed:
+                case NPCID.Slimeling:
+                case NPCID.Slimer2:
+                    npc.damage = (npc.velocity.Y == 0f || npc.velocity.Length() < 3f) ? 0 : npc.defDamage;
+                    break;
+
+                default:
+                    break;
+            }
+
             if (CalamityWorld.revenge && npc.type == NPCID.DungeonGuardian)
                 SkeletronAI.RevengeanceDungeonGuardianAI(npc);
         }

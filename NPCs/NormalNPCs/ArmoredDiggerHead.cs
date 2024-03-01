@@ -191,7 +191,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 NPC.localAI[1] = 0f;
             }
-            float fallSpeed = death ? 13.5f : 10f;
+            float maxChaseSpeed = death ? 13.5f : 10f;
             if (Main.player[NPC.target].dead || (!Main.zenithWorld && (double)Main.player[NPC.target].position.Y < Main.rockLayer * 16.0))
             {
                 flying = false;
@@ -199,7 +199,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 if ((double)NPC.position.Y > Main.rockLayer * 16.0)
                 {
                     NPC.velocity.Y = NPC.velocity.Y + 1f;
-                    fallSpeed = death ? 27f : 20f;
+                    maxChaseSpeed *= 2f;
                 }
                 if ((double)NPC.position.Y > (double)((Main.maxTilesY - 200) * 16))
                 {
@@ -229,11 +229,11 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 NPC.TargetClosest(true);
                 NPC.velocity.Y = NPC.velocity.Y + 0.15f;
-                if (NPC.velocity.Y > fallSpeed)
+                if (NPC.velocity.Y > maxChaseSpeed)
                 {
-                    NPC.velocity.Y = fallSpeed;
+                    NPC.velocity.Y = maxChaseSpeed;
                 }
-                if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)fallSpeed * 0.4)
+                if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.4)
                 {
                     if (NPC.velocity.X < 0f)
                     {
@@ -244,7 +244,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         NPC.velocity.X = NPC.velocity.X + acceleration * 1.1f;
                     }
                 }
-                else if (NPC.velocity.Y == fallSpeed)
+                else if (NPC.velocity.Y == maxChaseSpeed)
                 {
                     if (NPC.velocity.X < targetXDist)
                     {
@@ -286,7 +286,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 targetDistance = (float)Math.Sqrt((double)(targetXDist * targetXDist + targetYDist * targetYDist));
                 float absoluteTargetX = Math.Abs(targetXDist);
                 float absoluteTargetY = Math.Abs(targetYDist);
-                float timeToReachTarget = fallSpeed / targetDistance;
+                float timeToReachTarget = maxChaseSpeed / targetDistance;
                 targetXDist *= timeToReachTarget;
                 targetYDist *= timeToReachTarget;
                 if (((NPC.velocity.X > 0f && targetXDist > 0f) || (NPC.velocity.X < 0f && targetXDist < 0f)) && ((NPC.velocity.Y > 0f && targetYDist > 0f) || (NPC.velocity.Y < 0f && targetYDist < 0f)))
@@ -326,7 +326,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     {
                         NPC.velocity.Y = NPC.velocity.Y - acceleration;
                     }
-                    if ((double)Math.Abs(targetYDist) < (double)fallSpeed * 0.2 && ((NPC.velocity.X > 0f && targetXDist < 0f) || (NPC.velocity.X < 0f && targetXDist > 0f)))
+                    if ((double)Math.Abs(targetYDist) < (double)maxChaseSpeed * 0.2 && ((NPC.velocity.X > 0f && targetXDist < 0f) || (NPC.velocity.X < 0f && targetXDist > 0f)))
                     {
                         if (NPC.velocity.Y > 0f)
                         {
@@ -337,7 +337,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             NPC.velocity.Y = NPC.velocity.Y - acceleration * 2f;
                         }
                     }
-                    if ((double)Math.Abs(targetXDist) < (double)fallSpeed * 0.2 && ((NPC.velocity.Y > 0f && targetYDist < 0f) || (NPC.velocity.Y < 0f && targetYDist > 0f)))
+                    if ((double)Math.Abs(targetXDist) < (double)maxChaseSpeed * 0.2 && ((NPC.velocity.Y > 0f && targetYDist < 0f) || (NPC.velocity.Y < 0f && targetYDist > 0f)))
                     {
                         if (NPC.velocity.X > 0f)
                         {
@@ -359,7 +359,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     {
                         NPC.velocity.X = NPC.velocity.X - acceleration * 1.1f;
                     }
-                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)fallSpeed * 0.5)
+                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.5)
                     {
                         if (NPC.velocity.Y > 0f)
                         {
@@ -381,7 +381,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     {
                         NPC.velocity.Y = NPC.velocity.Y - acceleration * 1.1f;
                     }
-                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)fallSpeed * 0.5)
+                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.5)
                     {
                         if (NPC.velocity.X > 0f)
                         {
@@ -394,7 +394,22 @@ namespace CalamityMod.NPCs.NormalNPCs
                     }
                 }
             }
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)(NPC.defDamage * 0.5f);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
+            }
+
             NPC.rotation = (float)Math.Atan2((double)NPC.velocity.Y, (double)NPC.velocity.X) + 1.57f;
+
             if (flying)
             {
                 if (NPC.localAI[0] != 1f)
