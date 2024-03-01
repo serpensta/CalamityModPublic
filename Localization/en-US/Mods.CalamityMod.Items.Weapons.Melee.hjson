@@ -885,6 +885,7 @@ PhotonRipper: {
 		'''
 		Projects a directed stream of hardlight teeth at ultra high velocity
 		This weapon and its projectiles function as a chainsaw
+		Press <right> to use without chopping down trees
 		'''
 }
 
