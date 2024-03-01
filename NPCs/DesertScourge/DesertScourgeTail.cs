@@ -65,11 +65,18 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void AI()
         {
+            bool bossRush = BossRushEvent.BossRushActive;
+            bool expertMode = Main.expertMode || bossRush;
+            bool masterMode = Main.masterMode || bossRush;
+
             if (NPC.ai[2] > 0f)
                 NPC.realLife = (int)NPC.ai[2];
 
             if (NPC.life > Main.npc[(int)NPC.ai[1]].life)
                 NPC.life = Main.npc[(int)NPC.ai[1]].life;
+
+            // Percent life remaining
+            float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
             if (NPC.target < 0 || NPC.target == Main.maxPlayers || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
                 NPC.TargetClosest();
@@ -145,7 +152,10 @@ namespace CalamityMod.NPCs.DesertScourge
             }
 
             // Calculate contact damage based on velocity
-            float maxChaseSpeed = 16f;
+            float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
+            if (expertMode)
+                maxChaseSpeed += 5f * (1f - lifeRatio);
+
             float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
             float minimalDamageVelocity = maxChaseSpeed * 0.5f;
             float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
