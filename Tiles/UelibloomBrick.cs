@@ -51,7 +51,7 @@ namespace CalamityMod.Tiles
                 {
                     Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);
                 }
-                catch {}
+                catch { }
             }
         }
 

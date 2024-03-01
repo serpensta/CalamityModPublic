@@ -24,9 +24,9 @@ namespace CalamityMod.ILEditing
 
             return orig(type);
         }
-        
+
         #endregion
-        
+
         #region Soaring Insignia Changes
         private static void RemoveSoaringInsigniaInfiniteWingTime(ILContext il)
         {

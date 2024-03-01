@@ -1,12 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Events;
+using CalamityMod.NPCs.TownNPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using System;
-using CalamityMod.NPCs.TownNPCs;
-using CalamityMod.Events;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -82,10 +82,10 @@ namespace CalamityMod.Projectiles.Boss
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
             for (int i = 0; i < 15; i++)
             {
-                if (Main.rand.Next(3) != 0)
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 166);
+                if (!Main.rand.NextBool(3))
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Plantera_Pink);
                 else
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 167);
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Plantera_Green);
             }
         }
     }

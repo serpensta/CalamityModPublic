@@ -1,4 +1,6 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Events;
 using CalamityMod.Items;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Ammo;
@@ -18,8 +20,6 @@ using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -1063,7 +1063,7 @@ namespace CalamityMod.NPCs
         #endregion
 
         #region Shop Stuff
-         public override void ModifyShop(NPCShop shop)
+        public override void ModifyShop(NPCShop shop)
         {
             int type = shop.NpcType;
             int goldCost = NPC.downedMoonlord ? 16 : Main.hardMode ? 8 : 4;

@@ -99,7 +99,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
 
             // Flight timer
             float aiSwitchTimer = doubleWormPhase ? (Main.getGoodWorld ? 600f : 1200f) : (Main.getGoodWorld ? 900f : 1800f);
-            
+
             calamityGlobalNPC.newAI[3] += 1f;
             if (calamityGlobalNPC.newAI[3] >= aiSwitchTimer)
                 calamityGlobalNPC.newAI[3] = 0f;

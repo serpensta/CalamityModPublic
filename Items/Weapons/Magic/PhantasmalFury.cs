@@ -36,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.rare = ModContent.RarityType<PureGreen>();
         }
 
-        
+
         public override void AddRecipes()
         {
             CreateRecipe().

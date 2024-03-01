@@ -22,7 +22,7 @@ namespace CalamityMod.Tiles.AstralDesert
             Main.tileBlockLight[Type] = true;
             Main.tileSand[Type] = true;
             Main.tileBrick[Type] = true;
-			TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Sand"]);
+            TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Sand"]);
 
             CalamityUtils.MergeWithGeneral(Type);
             CalamityUtils.MergeWithDesert(Type);

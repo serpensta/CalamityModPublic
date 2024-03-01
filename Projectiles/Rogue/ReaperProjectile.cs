@@ -1,15 +1,15 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Dusts;
+using CalamityMod.Particles;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Particles;
-using Terraria.Graphics.Shaders;
-using Microsoft.Xna.Framework.Graphics;
-using CalamityMod.Dusts;
-using Microsoft.CodeAnalysis;
 
 namespace CalamityMod.Projectiles.Rogue
 {

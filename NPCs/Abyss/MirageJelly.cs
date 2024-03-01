@@ -1,11 +1,11 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -27,7 +27,7 @@ namespace CalamityMod.NPCs.Abyss
             Main.npcFrameCount[NPC.type] = 7;
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-               PortraitPositionYOverride = 20
+                PortraitPositionYOverride = 20
             };
             value.Position.Y += 30f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
@@ -63,9 +63,9 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.MirageJelly")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.MirageJelly")
             });
         }
 
@@ -147,7 +147,7 @@ namespace CalamityMod.NPCs.Abyss
                         NPC.ai[1] = (float)teleportTileX;
                         NPC.ai[2] = (float)teleportTileY;
                         NPC.netUpdate = true;
-                        Block:
+Block:
                         ;
                     }
                 }
@@ -197,7 +197,7 @@ namespace CalamityMod.NPCs.Abyss
 
                 var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-                Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+                Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4),
                 NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
             }
         }

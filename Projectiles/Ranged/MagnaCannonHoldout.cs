@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Projectile.timeLeft = MagnaCannon.AftershotCooldownFrames;
                     ShootTimer--;
                 }
-                    
+
                 if (ShootTimer <= 0f)
                 {
                     ChargeSound?.Stop();

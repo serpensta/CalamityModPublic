@@ -46,7 +46,7 @@ namespace CalamityMod.Items.Accessories
                         player.buffTime[l] = 80;
                 }
             }
-            
+
             Lighting.AddLight(player.Center, 0.825f, 0.66f, 0f);
             if (Main.myPlayer == player.whoAmI)
             {

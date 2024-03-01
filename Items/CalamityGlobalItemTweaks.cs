@@ -23,7 +23,7 @@ namespace CalamityMod.Items
         {
             // Various shorthands for items which receive very simple changes, such as setting one flag.
             IItemTweak[] trueMelee = Do(TrueMelee);
-            IItemTweak[] trueMeleeNoSpeed = Do(TrueMeleeNoSpeed); 
+            IItemTweak[] trueMeleeNoSpeed = Do(TrueMeleeNoSpeed);
             IItemTweak[] pointBlank = Do(PointBlank);
             IItemTweak[] autoReuse = Do(AutoReuse);
             IItemTweak[] nonConsumableBossSummon = Do(MaxStack(1), NotConsumable, UseTimeExact(10));
@@ -502,7 +502,7 @@ namespace CalamityMod.Items
                 { ItemID.SwordWhip, autoReuse }, // Durendal
                 { ItemID.TempestStaff, Do(AutoReuse, UseExact(20)) },
                 { ItemID.ThornWhip, autoReuse }, // Snapthorn
-                { ItemID.VampireFrogStaff, Do(AutoReuse, UseExact(30)) },                
+                { ItemID.VampireFrogStaff, Do(AutoReuse, UseExact(30)) },
                 { ItemID.XenoStaff, Do(AutoReuse, UseExact(20)) },
                 #endregion
 

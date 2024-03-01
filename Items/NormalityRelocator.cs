@@ -1,7 +1,7 @@
-﻿using CalamityMod.CalPlayer;
-using CalamityMod.Items.Placeables.Plates;
+﻿using System.Collections.Generic;
+using CalamityMod.CalPlayer;
 using CalamityMod.Items.Placeables.Ores;
-using System.Collections.Generic;
+using CalamityMod.Items.Placeables.Plates;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -29,10 +29,10 @@ namespace CalamityMod.Items
 
         public override void ModifyTooltips(List<TooltipLine> list) => list.IntegrateHotkey(CalamityKeybinds.NormalityRelocatorHotKey);
 
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ToolsOther;
-		}
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ToolsOther;
+        }
 
         public override void UpdateInventory(Player player)
         {

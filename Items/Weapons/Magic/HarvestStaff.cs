@@ -35,7 +35,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.scale = 0.9f;
         }
 
-        
+
         public override void AddRecipes()
         {
             CreateRecipe().

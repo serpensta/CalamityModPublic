@@ -1,12 +1,12 @@
-﻿using CalamityMod.Items.Weapons.Magic;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Weapons.Magic;
+using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.Audio;
-using CalamityMod.Sounds;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Magic
 {

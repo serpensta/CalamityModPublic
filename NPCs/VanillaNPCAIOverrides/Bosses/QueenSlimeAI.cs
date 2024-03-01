@@ -1,12 +1,12 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -277,7 +277,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     newColor2.A = 150;
                     for (int i = 0; i < 10; i++)
                     {
-                        int queenSlimeDust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 50, newColor2, 1.5f);
+                        int queenSlimeDust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 50, newColor2, 1.5f);
                         Main.dust[queenSlimeDust].noGravity = true;
                         Main.dust[queenSlimeDust].velocity *= 2f;
                     }
@@ -353,7 +353,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         newColor.A = 150;
                         for (int n = 0; n < 10; n++)
                         {
-                            int queenSlimeDust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 50, newColor, 1.5f);
+                            int queenSlimeDust2 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 50, newColor, 1.5f);
                             Main.dust[queenSlimeDust2].noGravity = true;
                             Main.dust[queenSlimeDust2].velocity *= 0.5f;
                         }
@@ -533,7 +533,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             for (int l = 0; l < 20; l++)
                             {
-                                int slamDust = Dust.NewDust(npc.Bottom - new Vector2(npc.width / 2, 30f), npc.width, 30, 31, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor());
+                                int slamDust = Dust.NewDust(npc.Bottom - new Vector2(npc.width / 2, 30f), npc.width, 30, DustID.Smoke, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor());
                                 Main.dust[slamDust].noGravity = true;
                                 Main.dust[slamDust].velocity.Y = -5f + Main.rand.NextFloat() * -3f;
                                 Main.dust[slamDust].velocity.X *= 7f;
@@ -551,7 +551,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             for (int m = 0; m < 4; m++)
                             {
                                 Vector2 position = npc.Bottom - new Vector2(Main.rand.NextFloatDirection() * 16f, Main.rand.Next(8));
-                                int slamDust2 = Dust.NewDust(position, 2, 2, 31, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.4f);
+                                int slamDust2 = Dust.NewDust(position, 2, 2, DustID.Smoke, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.4f);
                                 Main.dust[slamDust2].position = position;
                                 Main.dust[slamDust2].noGravity = true;
                                 Main.dust[slamDust2].velocity.Y = npc.velocity.Y * 0.9f;
@@ -780,7 +780,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         Vector2 v = slamDustArea - npc.Center;
                         v = v.SafeNormalize(Vector2.Zero) * -8f;
-                        int superSlamDust = Dust.NewDust(slamDustArea, 2, 2, 31, v.X, v.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.8f);
+                        int superSlamDust = Dust.NewDust(slamDustArea, 2, 2, DustID.Smoke, v.X, v.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.8f);
                         Main.dust[superSlamDust].position = slamDustArea;
                         Main.dust[superSlamDust].noGravity = true;
                         Main.dust[superSlamDust].alpha = 250;
@@ -1133,7 +1133,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         newColor2.A = 150;
                         for (int num27 = 0; num27 < 10; num27++)
                         {
-                            int num28 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 50, newColor2, 1.5f);
+                            int num28 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 50, newColor2, 1.5f);
                             Main.dust[num28].noGravity = true;
                             Main.dust[num28].velocity *= 2f;
                         }
@@ -1150,10 +1150,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.ai[1] += (Main.masterMode ? 2f : 1f);
                     num3 = MathHelper.Clamp((60f - npc.ai[1]) / 60f, 0f, 1f);
                     num3 = 0.5f + num3 * 0.5f;
-                    
+
                     if (npc.ai[1] >= 60f)
                         flag = true;
-                    
+
                     if (npc.ai[1] == 60f)
                     {
                         Gore.NewGore(npc.GetSource_FromAI(), npc.Center + new Vector2(-40f, -npc.height / 2), npc.velocity, GoreID.QueenSlimeCrown);
@@ -1196,7 +1196,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         newColor.A = 150;
                         for (int n = 0; n < 10; n++)
                         {
-                            int num26 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 50, newColor, 1.5f);
+                            int num26 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 50, newColor, 1.5f);
                             Main.dust[num26].noGravity = true;
                             Main.dust[num26].velocity *= 0.5f;
                         }
@@ -1332,7 +1332,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                 for (int l = 0; l < 20; l++)
                                 {
-                                    int num22 = Dust.NewDust(npc.Bottom - new Vector2(npc.width / 2, 30f), npc.width, 30, 31, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor());
+                                    int num22 = Dust.NewDust(npc.Bottom - new Vector2(npc.width / 2, 30f), npc.width, 30, DustID.Smoke, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor());
                                     Main.dust[num22].noGravity = true;
                                     Main.dust[num22].velocity.Y = -5f + Main.rand.NextFloat() * -3f;
                                     Main.dust[num22].velocity.X *= 7f;
@@ -1343,7 +1343,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 for (int m = 0; m < 4; m++)
                                 {
                                     Vector2 vector3 = npc.Bottom - new Vector2(Main.rand.NextFloatDirection() * 16f, Main.rand.Next(8));
-                                    int num23 = Dust.NewDust(vector3, 2, 2, 31, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.4f);
+                                    int num23 = Dust.NewDust(vector3, 2, 2, DustID.Smoke, npc.velocity.X, npc.velocity.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.4f);
                                     Main.dust[num23].position = vector3;
                                     Main.dust[num23].noGravity = true;
                                     Main.dust[num23].velocity.Y = npc.velocity.Y * 0.9f;
@@ -1501,7 +1501,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             Vector2 v = vector2 - npc.Center;
                             v = v.SafeNormalize(Vector2.Zero) * -8f;
-                            int num17 = Dust.NewDust(vector2, 2, 2, 31, v.X, v.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.8f);
+                            int num17 = Dust.NewDust(vector2, 2, 2, DustID.Smoke, v.X, v.Y, 40, NPC.AI_121_QueenSlime_GetDustColor(), 1.8f);
                             Main.dust[num17].position = vector2;
                             Main.dust[num17].noGravity = true;
                             Main.dust[num17].alpha = 250;
@@ -1577,7 +1577,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 Main.npc[num33].ai[0] = -500 * Main.rand.Next(3);
                 Main.npc[num33].ai[1] = 0f;
                 if (Main.netMode == NetmodeID.Server && num33 < Main.maxNPCs)
-                    NetMessage.SendData(23, -1, -1, null, num33);
+                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num33);
             }
 
             return false;

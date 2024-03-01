@@ -1,10 +1,10 @@
-﻿using CalamityMod.BiomeManagers;
-using CalamityMod.Dusts;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Dusts;
 using CalamityMod.Items.Placeables.Banners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -57,9 +57,9 @@ namespace CalamityMod.NPCs.AcidRain
             int associatedNPCType = ModContent.NPCType<GammaSlime>(); //This exists so you're not locked out of getting an entry for Irradiated Slime if you skip the second tier
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.IrradiatedSlime")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.IrradiatedSlime")
             });
         }
 

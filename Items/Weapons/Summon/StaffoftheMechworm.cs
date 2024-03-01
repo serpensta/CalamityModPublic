@@ -1,7 +1,7 @@
-﻿using CalamityMod.Projectiles.Summon;
+﻿using System.Linq;
+using CalamityMod.Projectiles.Summon;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

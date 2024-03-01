@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -67,7 +67,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
             }
 
             if (Main.rand.NextBool(5))
-                Dust.NewDust(Projectile.Center + new Vector2(-25f, -25f), 50, 50, 58, 0f, 0f, 150, default(Color), 1.2f);
+                Dust.NewDust(Projectile.Center + new Vector2(-25f, -25f), 50, 50, DustID.Enchanted_Pink, 0f, 0f, 150, default(Color), 1.2f);
 
             if (Main.rand.NextBool(10))
                 Gore.NewGore(Projectile.GetSource_FromAI(), new Vector2(Projectile.position.X, Projectile.position.Y), default(Vector2), Main.rand.Next(16, 18));

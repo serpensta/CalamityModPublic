@@ -1,7 +1,7 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
+using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -79,7 +79,7 @@ namespace CalamityMod.Projectiles.Summon
             }
             if (Projectile.alpha == 0 && Main.rand.NextBool(15))
             {
-                Dust silvaDust = Main.dust[Dust.NewDust(Projectile.Top, 0, 0, 267, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 1f)];
+                Dust silvaDust = Main.dust[Dust.NewDust(Projectile.Top, 0, 0, DustID.RainbowMk2, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 1f)];
                 silvaDust.velocity.X = 0f;
                 silvaDust.noGravity = true;
                 silvaDust.fadeIn = 1f;

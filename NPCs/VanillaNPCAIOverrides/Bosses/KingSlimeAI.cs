@@ -1,12 +1,12 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -63,7 +63,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 Vector2 vector = npc.Center + new Vector2(-40f, -(float)npc.height / 2);
                 for (int i = 0; i < 20; i++)
                 {
-                    int rubyDust = Dust.NewDust(vector, npc.width / 2, npc.height / 2, 90, 0f, 0f, 100, default, 2f);
+                    int rubyDust = Dust.NewDust(vector, npc.width / 2, npc.height / 2, DustID.GemRuby, 0f, 0f, 100, default, 2f);
                     Main.dust[rubyDust].velocity *= 2f;
                     Main.dust[rubyDust].noGravity = true;
                     if (Main.rand.NextBool())
@@ -199,7 +199,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        int slimeDust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
+                        int slimeDust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
                         Main.dust[slimeDust].noGravity = true;
                         Main.dust[slimeDust].velocity *= 0.5f;
                     }
@@ -238,7 +238,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 for (int j = 0; j < 10; j++)
                 {
-                    int slimyDust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
+                    int slimyDust = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
                     Main.dust[slimyDust].noGravity = true;
                     Main.dust[slimyDust].velocity *= 2f;
                 }
@@ -364,7 +364,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Spawn dust
-            int idleSlimeDust = Dust.NewDust(npc.position, npc.width, npc.height, 4, npc.velocity.X, npc.velocity.Y, 255, new Color(0, 80, 255, 80), npc.scale * 1.2f);
+            int idleSlimeDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 255, new Color(0, 80, 255, 80), npc.scale * 1.2f);
             Main.dust[idleSlimeDust].noGravity = true;
             Main.dust[idleSlimeDust].velocity *= 0.5f;
 
@@ -614,7 +614,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (!Collision.CanHitLine(npc.Center, 0, 0, Main.player[npc.target].Center, 0, 0) || Math.Abs(npc.Top.Y - Main.player[npc.target].Bottom.Y) > 160f)
             {
                 npc.ai[2]++;
-                if (Main.netMode != 1)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                     npc.localAI[0]++;
             }
             else if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -649,7 +649,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[0] == 60f)
                     Gore.NewGore(npc.GetSource_FromAI(), npc.Center + new Vector2(-40f, -npc.height / 2), npc.velocity, 734);
 
-                if (npc.ai[0] >= 60f && Main.netMode != 1)
+                if (npc.ai[0] >= 60f && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.Bottom = new Vector2(npc.localAI[1], npc.localAI[2]);
                     npc.ai[1] = 6f;
@@ -657,7 +657,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.netUpdate = true;
                 }
 
-                if (Main.netMode == 1 && npc.ai[0] >= 120f)
+                if (Main.netMode == NetmodeID.MultiplayerClient && npc.ai[0] >= 120f)
                 {
                     npc.ai[1] = 6f;
                     npc.ai[0] = 0f;
@@ -667,7 +667,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     for (int num249 = 0; num249 < 10; num249++)
                     {
-                        int num250 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
+                        int num250 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
                         Main.dust[num250].noGravity = true;
                         dust = Main.dust[num250];
                         dust.velocity *= 0.5f;
@@ -684,7 +684,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.ai[0]++;
                 num236 = MathHelper.Clamp(npc.ai[0] / 30f, 0f, 1f);
                 num236 = 0.5f + num236 * 0.5f;
-                if (npc.ai[0] >= 30f && Main.netMode != 1)
+                if (npc.ai[0] >= 30f && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.ai[1] = 0f;
                     npc.ai[0] = 0f;
@@ -701,7 +701,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 for (int num251 = 0; num251 < 10; num251++)
                 {
-                    int num252 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, 4, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
+                    int num252 = Dust.NewDust(npc.position + Vector2.UnitX * -20f, npc.width + 40, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 150, new Color(78, 136, 255, 80), 2f);
                     Main.dust[num252].noGravity = true;
                     dust = Main.dust[num252];
                     dust.velocity *= 2f;
@@ -786,7 +786,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
-            int num254 = Dust.NewDust(npc.position, npc.width, npc.height, 4, npc.velocity.X, npc.velocity.Y, 255, new Color(0, 80, 255, 80), npc.scale * 1.2f);
+            int num254 = Dust.NewDust(npc.position, npc.width, npc.height, DustID.TintableDust, npc.velocity.X, npc.velocity.Y, 255, new Color(0, 80, 255, 80), npc.scale * 1.2f);
             Main.dust[num254].noGravity = true;
             dust = Main.dust[num254];
             dust.velocity *= 0.5f;
@@ -834,7 +834,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 Main.npc[num260].ai[0] = -1000 * Main.rand.Next(3);
                 Main.npc[num260].ai[1] = 0f;
                 if (Main.netMode == NetmodeID.Server && num260 < Main.maxNPCs)
-                    NetMessage.SendData(23, -1, -1, null, num260);
+                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num260);
             }
 
             return false;

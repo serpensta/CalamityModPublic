@@ -1,11 +1,11 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -244,7 +244,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         // Play roar sound on players nearby
                         if (Main.player[Main.myPlayer].active && !Main.player[Main.myPlayer].dead && Vector2.Distance(Main.player[Main.myPlayer].Center, npc.Center) < 2800f)
-                            SoundEngine.PlaySound(SoundID.NPCDeath10 with { Pitch = SoundID.NPCDeath10.Pitch - 0.25f}, Main.player[Main.myPlayer].Center);
+                            SoundEngine.PlaySound(SoundID.NPCDeath10 with { Pitch = SoundID.NPCDeath10.Pitch - 0.25f }, Main.player[Main.myPlayer].Center);
                     }
                 }
                 else if (distanceFromTarget < distanceBeforeSlowingDown)
@@ -688,7 +688,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             int num355 = NPC.NewNPC(npc.GetSource_FromAI(), num353 * 16 + 8, num354 * 16, 24);
                             if (Main.netMode == NetmodeID.Server && num355 < Main.maxNPCs)
-                                NetMessage.SendData(23, -1, -1, null, num355);
+                                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num355);
 
                             break;
                         }
@@ -961,7 +961,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.life = 0;
                     npc.active = false;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                        NetMessage.SendData(28, -1, -1, null, npc.whoAmI, -1f);
+                        NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f);
 
                     return false;
                 }

@@ -1,11 +1,11 @@
-﻿using CalamityMod.World;
+﻿using System;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -44,7 +44,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.ai[0] != -1f && Main.rand.NextBool(4))
             {
                 npc.position += npc.netOffset;
-                Dust dust = Dust.NewDustDirect(npc.position + new Vector2(5f), npc.width - 10, npc.height - 10, 5);
+                Dust dust = Dust.NewDustDirect(npc.position + new Vector2(5f), npc.width - 10, npc.height - 10, DustID.Blood);
                 dust.velocity *= 0.5f;
                 if (dust.velocity.Y < 0f)
                     dust.velocity.Y *= -1f;
@@ -95,7 +95,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 npc.position += npc.netOffset;
                                 Vector2 dustRotation = (Vector2.Normalize(npc.velocity) * new Vector2(npc.width / 2f, npc.height) * 0.75f * 0.5f).RotatedBy((l - (dustAmt / 2 - 1)) * ((float)Math.PI * 2f) / dustAmt) + npc.Center;
                                 Vector2 dustVelocity = dustRotation - npc.Center;
-                                int spawnDustBlood = Dust.NewDust(dustRotation + dustVelocity, 0, 0, 5, dustVelocity.X * 2f, dustVelocity.Y * 2f, 100, default, 1.4f);
+                                int spawnDustBlood = Dust.NewDust(dustRotation + dustVelocity, 0, 0, DustID.Blood, dustVelocity.X * 2f, dustVelocity.Y * 2f, 100, default, 1.4f);
                                 Main.dust[spawnDustBlood].noGravity = true;
                                 Main.dust[spawnDustBlood].velocity = Vector2.Normalize(dustVelocity) * 3f;
                                 npc.position -= npc.netOffset;
@@ -201,11 +201,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             npc.rotation = npc.rotation.AngleLerp(chargeFaceDirection, 0.02f);
                             npc.position += npc.netOffset;
                             npc.BloodNautilus_GetMouthPositionAndRotation(out Vector2 mouthPosition4, out Vector2 mouthDirection4);
-                            Dust chargeUpDust = Dust.NewDustDirect(mouthPosition4 + mouthDirection4 * 60f - new Vector2(40f), 80, 80, 16, 0f, 0f, 150, Color.Transparent, 0.6f);
+                            Dust chargeUpDust = Dust.NewDustDirect(mouthPosition4 + mouthDirection4 * 60f - new Vector2(40f), 80, 80, DustID.Cloud, 0f, 0f, 150, Color.Transparent, 0.6f);
                             chargeUpDust.fadeIn = 1f;
                             chargeUpDust.velocity = chargeUpDust.position.DirectionTo(mouthPosition4 + Main.rand.NextVector2Circular(15f, 15f)) * chargeUpDust.velocity.Length();
                             chargeUpDust.noGravity = true;
-                            chargeUpDust = Dust.NewDustDirect(mouthPosition4 + mouthDirection4 * 100f - new Vector2(30f), 60, 60, 16, 0f, 0f, 100, Color.Transparent, 0.9f);
+                            chargeUpDust = Dust.NewDustDirect(mouthPosition4 + mouthDirection4 * 100f - new Vector2(30f), 60, 60, DustID.Cloud, 0f, 0f, 100, Color.Transparent, 0.9f);
                             chargeUpDust.fadeIn = 1.5f;
                             chargeUpDust.velocity = chargeUpDust.position.DirectionTo(mouthPosition4 + Main.rand.NextVector2Circular(15f, 15f)) * (chargeUpDust.velocity.Length() + 5f);
                             chargeUpDust.noGravity = true;
@@ -228,10 +228,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             for (int m = 0; m < 4; m++)
                             {
-                                Dust chargeBloodDust = Dust.NewDustDirect(mouthPosition5 + mouthDirection5 * 60f - new Vector2(15f), 30, 30, 5, 0f, 0f, 0, Color.Transparent, 1.5f);
+                                Dust chargeBloodDust = Dust.NewDustDirect(mouthPosition5 + mouthDirection5 * 60f - new Vector2(15f), 30, 30, DustID.Blood, 0f, 0f, 0, Color.Transparent, 1.5f);
                                 chargeBloodDust.velocity = chargeBloodDust.position.DirectionFrom(mouthPosition5 + Main.rand.NextVector2Circular(5f, 5f)) * chargeBloodDust.velocity.Length();
                                 chargeBloodDust.position -= mouthDirection5 * 60f;
-                                chargeBloodDust = Dust.NewDustDirect(mouthPosition5 + mouthDirection5 * 100f - new Vector2(20f), 40, 40, 5, 0f, 0f, 100, Color.Transparent, 1.5f);
+                                chargeBloodDust = Dust.NewDustDirect(mouthPosition5 + mouthDirection5 * 100f - new Vector2(20f), 40, 40, DustID.Blood, 0f, 0f, 100, Color.Transparent, 1.5f);
                                 chargeBloodDust.velocity = chargeBloodDust.position.DirectionFrom(mouthPosition5 + Main.rand.NextVector2Circular(10f, 10f)) * (chargeBloodDust.velocity.Length() + 5f);
                                 chargeBloodDust.position -= mouthDirection5 * 100f;
                             }
@@ -267,13 +267,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             npc.position += npc.netOffset;
                             npc.velocity *= 0.95f;
                             npc.BloodNautilus_GetMouthPositionAndRotation(out Vector2 mouthPosition2, out Vector2 mouthDirection2);
-                            if (Main.rand.Next(4) != 0)
+                            if (!Main.rand.NextBool(4))
                             {
-                                Dust bloodProjChargeUpDust = Dust.NewDustDirect(mouthPosition2 + mouthDirection2 * 60f - new Vector2(60f), 120, 120, 16, 0f, 0f, 150, Color.Transparent, 0.6f);
+                                Dust bloodProjChargeUpDust = Dust.NewDustDirect(mouthPosition2 + mouthDirection2 * 60f - new Vector2(60f), 120, 120, DustID.Cloud, 0f, 0f, 150, Color.Transparent, 0.6f);
                                 bloodProjChargeUpDust.fadeIn = 1f;
                                 bloodProjChargeUpDust.velocity = bloodProjChargeUpDust.position.DirectionTo(mouthPosition2 + Main.rand.NextVector2Circular(15f, 15f)) * (bloodProjChargeUpDust.velocity.Length() + 3f);
                                 bloodProjChargeUpDust.noGravity = true;
-                                bloodProjChargeUpDust = Dust.NewDustDirect(mouthPosition2 + mouthDirection2 * 100f - new Vector2(80f), 160, 160, 16, 0f, 0f, 100, Color.Transparent, 0.9f);
+                                bloodProjChargeUpDust = Dust.NewDustDirect(mouthPosition2 + mouthDirection2 * 100f - new Vector2(80f), 160, 160, DustID.Cloud, 0f, 0f, 100, Color.Transparent, 0.9f);
                                 bloodProjChargeUpDust.fadeIn = 1.5f;
                                 bloodProjChargeUpDust.velocity = bloodProjChargeUpDust.position.DirectionTo(mouthPosition2 + Main.rand.NextVector2Circular(15f, 15f)) * (bloodProjChargeUpDust.velocity.Length() + 5f);
                                 bloodProjChargeUpDust.noGravity = true;
@@ -291,10 +291,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             {
                                 for (int i = 0; i < 5; i++)
                                 {
-                                    Dust bloodProjShootDust = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 50f - new Vector2(15f), 30, 30, 5, 0f, 0f, 0, Color.Transparent, 1.5f);
+                                    Dust bloodProjShootDust = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 50f - new Vector2(15f), 30, 30, DustID.Blood, 0f, 0f, 0, Color.Transparent, 1.5f);
                                     bloodProjShootDust.velocity = bloodProjShootDust.position.DirectionFrom(mouthPosition3 + Main.rand.NextVector2Circular(5f, 5f)) * bloodProjShootDust.velocity.Length();
                                     bloodProjShootDust.position -= mouthDirection3 * 60f;
-                                    bloodProjShootDust = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 90f - new Vector2(20f), 40, 40, 5, 0f, 0f, 100, Color.Transparent, 1.5f);
+                                    bloodProjShootDust = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 90f - new Vector2(20f), 40, 40, DustID.Blood, 0f, 0f, 100, Color.Transparent, 1.5f);
                                     bloodProjShootDust.velocity = bloodProjShootDust.position.DirectionFrom(mouthPosition3 + Main.rand.NextVector2Circular(10f, 10f)) * (bloodProjShootDust.velocity.Length() + 5f);
                                     bloodProjShootDust.position -= mouthDirection3 * 100f;
                                 }
@@ -309,10 +309,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 // Spawn dust with each spit
                                 for (int j = 0; j < 20; j++)
                                 {
-                                    Dust bloodProjShootDust2 = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 60f - new Vector2(15f), 30, 30, 5, 0f, 0f, 0, Color.Transparent, 1.5f);
+                                    Dust bloodProjShootDust2 = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 60f - new Vector2(15f), 30, 30, DustID.Blood, 0f, 0f, 0, Color.Transparent, 1.5f);
                                     bloodProjShootDust2.velocity = bloodProjShootDust2.position.DirectionFrom(mouthPosition3 + Main.rand.NextVector2Circular(5f, 5f)) * bloodProjShootDust2.velocity.Length();
                                     bloodProjShootDust2.position -= mouthDirection3 * 60f;
-                                    bloodProjShootDust2 = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 100f - new Vector2(20f), 40, 40, 5, 0f, 0f, 100, Color.Transparent, 1.5f);
+                                    bloodProjShootDust2 = Dust.NewDustDirect(mouthPosition3 + mouthDirection3 * 100f - new Vector2(20f), 40, 40, DustID.Blood, 0f, 0f, 100, Color.Transparent, 1.5f);
                                     bloodProjShootDust2.velocity = bloodProjShootDust2.position.DirectionFrom(mouthPosition3 + Main.rand.NextVector2Circular(10f, 10f)) * (bloodProjShootDust2.velocity.Length() + 5f);
                                     bloodProjShootDust2.position -= mouthDirection3 * 100f;
                                 }
@@ -360,9 +360,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             float t = npc.ai[1] / bloodSquidPhaseTime;
                             float scaleFactor2 = Utils.GetLerpValue(0f, 0.5f, t) * Utils.GetLerpValue(1f, 0.5f, t);
                             Lighting.AddLight(npc.Center, new Vector3(1f, 0.5f, 0.5f) * scaleFactor2);
-                            if (Main.rand.Next(3) != 0)
+                            if (!Main.rand.NextBool(3))
                             {
-                                Dust bloodSquidSpawnDust = Dust.NewDustDirect(npc.Center - new Vector2(6f), 12, 12, 5, 0f, 0f, 60, Color.Transparent, 1.4f);
+                                Dust bloodSquidSpawnDust = Dust.NewDustDirect(npc.Center - new Vector2(6f), 12, 12, DustID.Blood, 0f, 0f, 60, Color.Transparent, 1.4f);
                                 bloodSquidSpawnDust.position += new Vector2(npc.spriteDirection * 12, 12f);
                                 bloodSquidSpawnDust.velocity *= 0.1f;
                             }

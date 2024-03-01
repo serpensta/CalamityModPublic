@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
@@ -424,7 +424,7 @@ namespace CalamityMod.NPCs
                             npc.ai[2] = npc.ai[3] = 0f;
 
                             // Try to lay another egg at a 66% chance if the amount of eggs + spawns is not at the limit.
-                            if (NPC.CountNPCS(NPCID.MothronEgg) + NPC.CountNPCS(NPCID.MothronSpawn) < 3 && Main.rand.Next(3) != 0)
+                            if (NPC.CountNPCS(NPCID.MothronEgg) + NPC.CountNPCS(NPCID.MothronSpawn) < 3 && !Main.rand.NextBool(3))
                                 aiState = (int)MothronAIState.PickSpotToLayEgg;
                             else if (Collision.SolidCollision(npc.position, npc.width, npc.height))
                                 aiState = (int)MothronAIState.FlyTowardsPlayer;

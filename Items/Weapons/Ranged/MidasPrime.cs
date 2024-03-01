@@ -94,7 +94,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         // This hook is a convenient location to change the use sound.
         public override void UseAnimation(Player player)
         {
-            Item.UseSound = ShootSound; 
+            Item.UseSound = ShootSound;
             if (player.altFunctionUse == 2)
                 Item.UseSound = RicoshotCoin.BlingSound;
         }

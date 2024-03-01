@@ -34,7 +34,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.shootSpeed = 10f;
         }
 
-        
+
         public override void AddRecipes()
         {
             CreateRecipe().

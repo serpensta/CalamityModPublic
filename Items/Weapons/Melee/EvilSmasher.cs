@@ -25,7 +25,7 @@ namespace CalamityMod.Items.Weapons.Melee
         }
 
         public override float UseSpeedMultiplier(Player player) => 1f + (player.Calamity().evilSmasherBoost * 0.1f);
- 
+
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage) => damage *= 1f + player.Calamity().evilSmasherBoost * 0.1f;
 
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback) => knockback *= 1f + (player.Calamity().evilSmasherBoost * 0.1f);

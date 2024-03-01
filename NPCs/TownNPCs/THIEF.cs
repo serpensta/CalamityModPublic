@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items;
+﻿using System.Collections.Generic;
+using CalamityMod.Items;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Pets;
 using CalamityMod.Items.Weapons.Rogue;
@@ -6,7 +7,6 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -37,7 +37,8 @@ namespace CalamityMod.NPCs.TownNPCs
                 .SetBiomeAffection<JungleBiome>(AffectionLevel.Dislike)
                 .SetNPCAffection(NPCID.GoblinTinkerer, AffectionLevel.Like)
                 .SetNPCAffection(NPCID.Dryad, AffectionLevel.Dislike);
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers() {
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
                 Velocity = 1f // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifiers);
@@ -62,9 +63,9 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,                   
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.THIEF")
             });
         }
@@ -128,7 +129,7 @@ namespace CalamityMod.NPCs.TownNPCs
         {
             if (Main.bloodMoon)
                 return this.GetLocalizedValue("Chat.BloodMoon" + Main.rand.Next(1, 4 + 1));
-            
+
             WeightedRandom<string> dialogue = new WeightedRandom<string>();
 
             dialogue.Add(this.GetLocalizedValue("Chat.Normal1"));
@@ -153,7 +154,7 @@ namespace CalamityMod.NPCs.TownNPCs
             int cirrusIndex = NPC.FindFirstNPC(ModContent.NPCType<FAP>());
             if (cirrusIndex != -1)
                 dialogue.Add(this.GetLocalization("Chat.DrunkPrincess").Format(Main.npc[cirrusIndex].GivenName));
-            
+
             int merchantIndex = NPC.FindFirstNPC(NPCID.Merchant);
             if (merchantIndex != -1)
                 dialogue.Add(this.GetLocalization("Chat.Merchant").Format(Main.npc[merchantIndex].GivenName));
@@ -243,7 +244,7 @@ namespace CalamityMod.NPCs.TownNPCs
         public override void SetChatButtons(ref string button, ref string button2)
         {
             button = Language.GetTextValue("LegacyInterface.28");
-            button2 = this.GetLocalizedValue("RefundButton");;
+            button2 = this.GetLocalizedValue("RefundButton"); ;
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)

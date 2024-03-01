@@ -52,28 +52,28 @@ namespace CalamityMod.Projectiles.Boss
             {
                 float randDustXVel = 0f;
                 float randDustYVel = 0f;
-                if (Main.rand.Next(2) == 1)
+                if (Main.rand.NextBool(2))
                 {
                     randDustXVel = Projectile.velocity.X * 0.5f;
                     randDustYVel = Projectile.velocity.Y * 0.5f;
                 }
-                int bombDust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + randDustXVel, Projectile.position.Y + 3f + randDustYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 6, 0f, 0f, 100, default, 0.5f);
+                int bombDust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + randDustXVel, Projectile.position.Y + 3f + randDustYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Torch, 0f, 0f, 100, default, 0.5f);
                 Main.dust[bombDust].scale *= 2f + (float)Main.rand.Next(10) * 0.1f;
                 Main.dust[bombDust].velocity *= 0.2f;
                 Main.dust[bombDust].noGravity = true;
-                bombDust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + randDustXVel, Projectile.position.Y + 3f + randDustYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 31, 0f, 0f, 100, default, 0.25f);
+                bombDust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + randDustXVel, Projectile.position.Y + 3f + randDustYVel) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Smoke, 0f, 0f, 100, default, 0.25f);
                 Main.dust[bombDust].fadeIn = 1f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[bombDust].velocity *= 0.05f;
             }
             else if (Main.rand.NextBool(4))
             {
-                int smoke = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 31, 0f, 0f, 100, default, 0.5f);
+                int smoke = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 0.5f);
                 Main.dust[smoke].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[smoke].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[smoke].noGravity = true;
                 Main.dust[smoke].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2)).RotatedBy((double)Projectile.rotation, default) * 1.1f;
                 Main.rand.Next(2);
-                smoke = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 1f);
+                smoke = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 1f);
                 Main.dust[smoke].scale = 1f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[smoke].noGravity = true;
                 Main.dust[smoke].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2 - 6)).RotatedBy((double)Projectile.rotation, default) * 1.1f;
@@ -102,7 +102,7 @@ namespace CalamityMod.Projectiles.Boss
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
             for (int i = 0; i < 8; i++)
             {
-                int plagued = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 89, 0f, 0f, 100, default, 2f);
+                int plagued = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[plagued].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -112,10 +112,10 @@ namespace CalamityMod.Projectiles.Boss
             }
             for (int j = 0; j < 10; j++)
             {
-                int plagued2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 89, 0f, 0f, 100, default, 3f);
+                int plagued2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, 0f, 0f, 100, default, 3f);
                 Main.dust[plagued2].noGravity = true;
                 Main.dust[plagued2].velocity *= 5f;
-                plagued2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 89, 0f, 0f, 100, default, 2f);
+                plagued2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[plagued2].velocity *= 2f;
             }
 
@@ -190,7 +190,7 @@ namespace CalamityMod.Projectiles.Boss
         {
             if (info.Damage <= 0)
                 return;
-            
+
             if (Main.zenithWorld) // it is the plague, you get very sick.
             {
                 target.AddBuff(ModContent.BuffType<SulphuricPoisoning>(), 240, true);

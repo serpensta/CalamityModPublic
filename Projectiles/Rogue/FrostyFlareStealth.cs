@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Rogue
                     }
                 }
 
-                int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 172);
+                int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.DungeonWater);
                 Main.dust[index2].noGravity = true;
             }
             else

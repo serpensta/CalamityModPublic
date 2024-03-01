@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,7 +47,7 @@ namespace CalamityMod.Projectiles.Ranged
             }
             float x2 = Projectile.position.X - Projectile.velocity.X / 10f;
             float y2 = Projectile.position.Y - Projectile.velocity.Y / 10f;
-            int terraDust = Dust.NewDust(new Vector2(x2, y2), 1, 1, 74, 0f, 0f, 0, default, 0.8f);
+            int terraDust = Dust.NewDust(new Vector2(x2, y2), 1, 1, DustID.GreenFairy, 0f, 0f, 0, default, 0.8f);
             Main.dust[terraDust].alpha = Projectile.alpha;
             Main.dust[terraDust].position.X = x2;
             Main.dust[terraDust].position.Y = y2;
@@ -57,7 +57,8 @@ namespace CalamityMod.Projectiles.Ranged
             if (speed == 0f)
                 speed = Projectile.velocity.Length();
 
-            if (Projectile.timeLeft < 90) {
+            if (Projectile.timeLeft < 90)
+            {
                 CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 450f, speed, 12f);
             }
         }

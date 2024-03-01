@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Buffs;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.CalPlayer;
@@ -20,8 +22,6 @@ using CalamityMod.Projectiles.VanillaProjectileOverrides;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles
         // For example if you have 716% critical strike chance, you are guaranteed +700% damage and then have a 16% chance for +800% damage instead.
         // An example of this is Soma Prime, but any bullet fired from that gun can supercrit when this bool is activated.
         // Set this to -1 if you want the projectile to supercrit forever, and to any positive value to make it supercrit only x times
-        public int supercritHits  = 0;
+        public int supercritHits = 0;
 
         // Without adjusting underlying crit calculations, set this to true to force a projectile as a crit.
         // TODO -- In the TML 1.4.4 port, there is a much better way to set NPC strike events to be forced crits.
@@ -171,7 +171,7 @@ namespace CalamityMod.Projectiles
             // Hornet Staff's minion changes.
             if (projectile.type == ProjectileID.Hornet)
                 return HornetMinionAI.DoHornetMinionAI(projectile);
-            
+
             // Imp Staff's minion changes.
             if (projectile.type == ProjectileID.FlyingImp)
                 return ImpMinionAI.DoImpMinionAI(projectile);
@@ -189,7 +189,7 @@ namespace CalamityMod.Projectiles
                 return HoundiusShootiusFireballAI.DoHoundiusShootiusFireballAI(projectile);
 
             #endregion
-            
+
             if (!Main.player[projectile.owner].ActiveItem().IsAir && !Main.player[projectile.owner].ActiveItem().Calamity().canFirePointBlankShots)
                 pointBlankShotDuration = 0;
 
@@ -324,7 +324,7 @@ namespace CalamityMod.Projectiles
                 {
                     for (int num173 = 0; num173 < 2; num173++)
                     {
-                        int num174 = Dust.NewDust(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, 5, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 1.5f);
+                        int num174 = Dust.NewDust(new Vector2(projectile.position.X + 4f, projectile.position.Y + 4f), projectile.width - 8, projectile.height - 8, DustID.Blood, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 1.5f);
                         Main.dust[num174].position -= projectile.velocity;
                         Main.dust[num174].noGravity = true;
                         Main.dust[num174].velocity.X *= 0.3f;
@@ -364,7 +364,7 @@ namespace CalamityMod.Projectiles
                         SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
                         for (int num135 = 0; num135 < 10; num135++)
                         {
-                            int num136 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 0, default(Color), 2f);
+                            int num136 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y, 0, default(Color), 2f);
                             Main.dust[num136].noGravity = true;
                             Main.dust[num136].velocity = projectile.Center - Main.dust[num136].position;
                             Main.dust[num136].velocity.Normalize();
@@ -473,7 +473,7 @@ namespace CalamityMod.Projectiles
                     SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
                     for (int i = 0; i < 20; i++)
                     {
-                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 91, 0f, 0f, 100);
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.GemDiamond, 0f, 0f, 100);
                         Main.dust[dust].velocity *= 3f;
                         Main.dust[dust].velocity += projectile.velocity * 0.75f;
                         Main.dust[dust].scale *= 1.2f;
@@ -486,7 +486,7 @@ namespace CalamityMod.Projectiles
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 91, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.GemDiamond, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100);
                         Main.dust[dust].velocity *= 0.6f;
                         Main.dust[dust].scale *= 1.4f;
                         Main.dust[dust].noGravity = true;
@@ -506,7 +506,7 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[0] = 1f;
                     for (int i = 0; i < 8; i++)
                     {
-                        Dust blood1 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
+                        Dust blood1 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y, 100)];
                         blood1.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
                         blood1.scale = 1.5f;
                         blood1.fadeIn = 1.7f;
@@ -516,7 +516,7 @@ namespace CalamityMod.Projectiles
 
                 projectile.alpha = 0;
 
-                Dust blood2 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100)];
+                Dust blood2 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y, 100)];
                 blood2.velocity = blood2.velocity / 4f + projectile.velocity / 2f;
                 blood2.scale = 1.2f;
                 blood2.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
@@ -534,7 +534,7 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[0] = 1f;
                     for (int i = 0; i < 8; i++)
                     {
-                        Dust blood1 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                        Dust blood1 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y, 100);
                         blood1.velocity = (Main.rand.NextFloatDirection() * MathHelper.Pi).ToRotationVector2() * 2f + projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                         blood1.scale = 0.9f;
                         blood1.fadeIn = 1.1f;
@@ -544,7 +544,7 @@ namespace CalamityMod.Projectiles
 
                 projectile.alpha = 0;
 
-                Dust blood2 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                Dust blood2 = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y, 100);
                 blood2.velocity = blood2.velocity / 4f + projectile.velocity / 2f;
                 blood2.scale = 1.2f;
                 blood2.position = projectile.Center + Main.rand.NextFloat() * projectile.velocity * 2f;
@@ -553,7 +553,7 @@ namespace CalamityMod.Projectiles
                 {
                     if (Main.rand.NextBool(3))
                     {
-                        Dust blood3 = Dust.NewDustDirect(projectile.oldPos[j], projectile.width, projectile.height, 5, projectile.velocity.X, projectile.velocity.Y, 100);
+                        Dust blood3 = Dust.NewDustDirect(projectile.oldPos[j], projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y, 100);
                         blood3.velocity = blood3.velocity / 4f + projectile.velocity / 2f;
                         blood3.scale = 1.2f;
                         blood3.position = projectile.oldPos[j] + projectile.Size / 2f + Main.rand.NextFloat() * projectile.velocity * 2f;
@@ -574,21 +574,21 @@ namespace CalamityMod.Projectiles
                 }
 
                 if (Main.rand.NextBool())
-                    Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 0.9f).noGravity = true;
+                    Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, DustID.t_Honey, 0f, 0f, 0, default(Color), 0.9f).noGravity = true;
 
                 if (projectile.localAI[0] == 0f)
                 {
                     projectile.localAI[0] = 1f;
                     for (int num99 = 0; num99 < 20; num99++)
                     {
-                        Dust dust3 = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 1.3f);
+                        Dust dust3 = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, DustID.t_Honey, 0f, 0f, 0, default(Color), 1.3f);
                         dust3.noGravity = true;
                         dust3.velocity += projectile.velocity * 0.75f;
                     }
 
                     for (int num100 = 0; num100 < 10; num100++)
                     {
-                        Dust dust4 = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, 147, 0f, 0f, 0, default(Color), 1.3f);
+                        Dust dust4 = Dust.NewDustDirect(projectile.position - projectile.velocity, projectile.width, projectile.height, DustID.t_Honey, 0f, 0f, 0, default(Color), 1.3f);
                         dust4.noGravity = true;
                         dust4.velocity *= 2f;
                     }
@@ -661,12 +661,12 @@ namespace CalamityMod.Projectiles
                                 newColor.A = 150;
                                 for (int l = 0; l < num5 - 1; l++)
                                 {
-                                    int num6 = Dust.NewDust(projectile.position, 12, 12, 4, 0f, 0f, 50, newColor, 1.5f);
+                                    int num6 = Dust.NewDust(projectile.position, 12, 12, DustID.TintableDust, 0f, 0f, 50, newColor, 1.5f);
                                     Main.dust[num6].velocity.Y -= 0.1f + (float)num4 * 0.5f;
                                     Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
                                     Main.dust[num6].velocity.X *= Main.rand.NextFloatDirection() * 3f;
                                     Main.dust[num6].position = new Vector2(i * 16 + Main.rand.Next(16), j * 16 + Main.rand.Next(16));
-                                    if (Main.rand.Next(3) != 0)
+                                    if (!Main.rand.NextBool(3))
                                     {
                                         Main.dust[num6].velocity *= 0.5f;
                                         Main.dust[num6].noGravity = true;
@@ -695,12 +695,12 @@ namespace CalamityMod.Projectiles
                             newColor2.A = 150;
                             for (int n = 0; n < 3; n++)
                             {
-                                int num8 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 50, newColor2, 2f - (float)num4 * 0.15f + num7 * 0.5f);
+                                int num8 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Smoke, 0f, 0f, 50, newColor2, 2f - (float)num4 * 0.15f + num7 * 0.5f);
                                 Main.dust[num8].velocity.Y -= 0.1f + (float)num4 * 0.5f + num7 * (float)num4 * 1f;
                                 Main.dust[num8].velocity.Y *= Main.rand.NextFloat();
                                 Main.dust[num8].velocity.X *= Main.rand.NextFloatDirection() * 3f;
                                 Main.dust[num8].position = new Vector2(i * 16 + 20, j * 16 + 20);
-                                if (Main.rand.Next(3) != 0)
+                                if (!Main.rand.NextBool(3))
                                 {
                                     Main.dust[num8].velocity *= 0.5f;
                                     Main.dust[num8].noGravity = true;
@@ -855,7 +855,7 @@ namespace CalamityMod.Projectiles
                             num737 = 0.5f;
 
                         Vector2 value40 = new Vector2(-projectile.width * 0.2f * projectile.scale, 0f).RotatedBy(num737 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
-                        Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
+                        Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, DustID.Electric, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
                         zap.position = projectile.Center + value40;
                         zap.velocity = Vector2.Normalize(zap.position - projectile.Center) * 2f;
                         zap.noGravity = true;
@@ -870,7 +870,7 @@ namespace CalamityMod.Projectiles
                             num740 = 0.5f;
 
                         Vector2 value41 = new Vector2(-projectile.width * 0.6f * projectile.scale, 0f).RotatedBy(num740 * MathHelper.TwoPi).RotatedBy(projectile.velocity.ToRotation());
-                        Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 226, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
+                        Dust zap = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, DustID.Electric, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 0.7f);
                         zap.velocity = Vector2.Zero;
                         zap.position = projectile.Center + value41;
                         zap.noGravity = true;
@@ -919,7 +919,7 @@ namespace CalamityMod.Projectiles
                     projectile.light = 0.9f;
 
                     if (Main.rand.NextBool(10))
-                        Dust.NewDust(projectile.position, projectile.width, projectile.height, 58, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 150, default, 1.2f);
+                        Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Enchanted_Pink, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 150, default, 1.2f);
 
                     if (Main.rand.NextBool(20) && Main.netMode != NetmodeID.Server)
                         Gore.NewGore(projectile.GetSource_FromAI(), projectile.position, projectile.velocity * 0.2f, Main.rand.Next(16, 18), 1f);
@@ -985,9 +985,9 @@ namespace CalamityMod.Projectiles
                 float num1036 = projectile.ai[1] / 180f * MathHelper.TwoPi;
                 for (float num1037 = 0f; num1037 < 3f; num1037++)
                 {
-                    if (Main.rand.Next(3) == 0)
+                    if (Main.rand.NextBool(3))
                     {
-                        Dust shflame = Dust.NewDustDirect(projectile.Center, 0, 0, 27, 0f, -2f, 200);
+                        Dust shflame = Dust.NewDustDirect(projectile.Center, 0, 0, DustID.Shadowflame, 0f, -2f, 200);
                         shflame.position = projectile.Center + Vector2.UnitY.RotatedBy(num1037 * MathHelper.TwoPi / 3f + projectile.ai[1]) * 10f;
                         shflame.noGravity = true;
                         shflame.velocity = projectile.DirectionFrom(shflame.position);
@@ -1194,33 +1194,33 @@ namespace CalamityMod.Projectiles
                             projectile.frame = 0;
                     }
 
-                    if (Main.rand.Next(4) == 0)
+                    if (Main.rand.NextBool(4))
                     {
                         Vector2 value4 = -Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(11.25f)).RotatedBy(projectile.velocity.ToRotation());
-                        Dust smoke = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100);
+                        Dust smoke = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Smoke, 0f, 0f, 100);
                         smoke.velocity *= 0.1f;
                         smoke.position = projectile.Center + value4 * projectile.width / 2f;
                         smoke.fadeIn = 0.9f;
                     }
 
-                    if (Main.rand.Next(32) == 0)
+                    if (Main.rand.NextBool(32))
                     {
                         Vector2 value5 = -Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(22.5f)).RotatedBy(projectile.velocity.ToRotation());
-                        Dust smoke = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 155, default, 0.8f);
+                        Dust smoke = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Smoke, 0f, 0f, 155, default, 0.8f);
                         smoke.velocity *= 0.3f;
                         smoke.position = projectile.Center + value5 * projectile.width / 2f;
-                        if (Main.rand.Next(2) == 0)
+                        if (Main.rand.NextBool(2))
                             smoke.fadeIn = 1.4f;
                     }
 
-                    if (Main.rand.Next(2) == 0)
+                    if (Main.rand.NextBool(2))
                     {
                         Vector2 value6 = -Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(45f)).RotatedBy(projectile.velocity.ToRotation());
-                        Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 27, 0f, 0f, 0, default, 1.2f);
+                        Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Shadowflame, 0f, 0f, 0, default, 1.2f);
                         shflame.velocity *= 0.3f;
                         shflame.noGravity = true;
                         shflame.position = projectile.Center + value6 * projectile.width / 2f;
-                        if (Main.rand.Next(2) == 0)
+                        if (Main.rand.NextBool(2))
                             shflame.fadeIn = 1.4f;
                     }
 
@@ -1302,7 +1302,7 @@ namespace CalamityMod.Projectiles
                     for (int num724 = 0; num724 < 6; num724++)
                     {
                         Vector2 vector51 = projectile.Center + spinningpoint13.RotatedBy(num724 * MathHelper.TwoPi / 6f);
-                        Dust ice = Dust.NewDustDirect(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, 197, 0f, 0f, 100, Color.Transparent);
+                        Dust ice = Dust.NewDustDirect(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, DustID.NorthPole, 0f, 0f, 100, Color.Transparent);
                         ice.noGravity = true;
                     }
 
@@ -1537,7 +1537,7 @@ namespace CalamityMod.Projectiles
 
                     for (int i = 0; i < 2; i++)
                     {
-                        Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 27, 0f, 0f, 100);
+                        Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Shadowflame, 0f, 0f, 100);
                         shflame.noGravity = true;
                     }
 
@@ -1578,7 +1578,7 @@ namespace CalamityMod.Projectiles
                             newColor.A = 150;
                             int num72 = 8;
                             bool noGravity = Main.rand.NextBool();
-                            Dust slime = Dust.NewDustDirect(projectile.position - new Vector2(num72, num72) + projectile.velocity, projectile.width + num72 * 2, projectile.height + num72 * 2, 4, 0f, 0f, 50, newColor, 1.2f);
+                            Dust slime = Dust.NewDustDirect(projectile.position - new Vector2(num72, num72) + projectile.velocity, projectile.width + num72 * 2, projectile.height + num72 * 2, DustID.TintableDust, 0f, 0f, 50, newColor, 1.2f);
                             slime.velocity *= 0.3f;
                             slime.velocity += projectile.velocity * 0.3f;
                             slime.noGravity = noGravity;
@@ -1615,7 +1615,7 @@ namespace CalamityMod.Projectiles
                         if (projectile.alpha == 0 && Main.rand.NextBool(3))
                         {
                             Color newColor = new Color(78, 136, 255, 150);
-                            Dust slime = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 4, 0f, 0f, 50, newColor, 1.2f);
+                            Dust slime = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, DustID.TintableDust, 0f, 0f, 50, newColor, 1.2f);
                             slime.velocity *= 0.3f;
                             slime.velocity += projectile.velocity * 0.3f;
                             slime.noGravity = true;
@@ -1758,7 +1758,7 @@ namespace CalamityMod.Projectiles
                     }
                     else if (Main.rand.NextBool())
                     {
-                        int num28 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100);
+                        int num28 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Smoke, 0f, 0f, 100);
                         Main.dust[num28].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
                         Main.dust[num28].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
                         Main.dust[num28].noGravity = true;
@@ -1873,12 +1873,12 @@ namespace CalamityMod.Projectiles
                                 num23 = projectile.velocity.Y * 0.5f;
                             }
 
-                            Dust fire = Dust.NewDustDirect(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, 6, 0f, 0f, 100);
+                            Dust fire = Dust.NewDustDirect(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, DustID.Torch, 0f, 0f, 100);
                             fire.scale *= 2f + Main.rand.Next(10) * 0.1f;
                             fire.velocity *= 0.2f;
                             fire.noGravity = true;
 
-                            Dust smoke = Dust.NewDustDirect(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, 31, 0f, 0f, 100, default(Color), 0.5f);
+                            Dust smoke = Dust.NewDustDirect(new Vector2(projectile.position.X + 3f + num22, projectile.position.Y + 3f + num23) - projectile.velocity * 0.5f, projectile.width - 8, projectile.height - 8, DustID.Smoke, 0f, 0f, 100, default(Color), 0.5f);
                             smoke.fadeIn = 1f + Main.rand.Next(5) * 0.1f;
                             smoke.velocity *= 0.05f;
                         }
@@ -1921,7 +1921,7 @@ namespace CalamityMod.Projectiles
                     }
 
                     projectile.tileCollide = projectile.ai[0] >= 300f;
-                    
+
                     if (projectile.timeLeft > 600)
                         projectile.timeLeft = 600;
 
@@ -2289,7 +2289,7 @@ namespace CalamityMod.Projectiles
 
                         for (int num725 = 0; num725 < 2; num725++)
                         {
-                            Dust ice = Dust.NewDustDirect(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, 197, 0f, 0f, 100, Color.Transparent);
+                            Dust ice = Dust.NewDustDirect(vector51 + Utils.RandomVector2(Main.rand, -8f, 8f) / 2f, 8, 8, DustID.NorthPole, 0f, 0f, 100, Color.Transparent);
                             ice.noGravity = true;
                         }
                     }
@@ -2401,7 +2401,7 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.alpha < 40)
                     {
-                        Dust dust = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, 229, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 1.2f);
+                        Dust dust = Dust.NewDustDirect(projectile.Center - Vector2.One * 5f, 10, 10, DustID.Vortex, (0f - projectile.velocity.X) / 3f, (0f - projectile.velocity.Y) / 3f, 150, Color.Transparent, 1.2f);
                         dust.noGravity = true;
                     }
 
@@ -2437,7 +2437,7 @@ namespace CalamityMod.Projectiles
                     }
 
                     projectile.localAI[0]++;
-                    if (projectile.localAI[0] >= 330f && projectile.ai[0] > 0f && Main.netMode != 1)
+                    if (projectile.localAI[0] >= 330f && projectile.ai[0] > 0f && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         projectile.ai[0] *= -1f;
                         projectile.netUpdate = true;
@@ -2557,19 +2557,19 @@ namespace CalamityMod.Projectiles
                         Vector2 vector79 = projectile.Center + projectile.velocity * (projectile.localAI[1] - 14f);
                         for (int num809 = 0; num809 < 2; num809 = num3 + 1)
                         {
-                            float num810 = projectile.velocity.ToRotation() + ((Main.rand.Next(2) == 1) ? -1f : 1f) * MathHelper.PiOver2;
+                            float num810 = projectile.velocity.ToRotation() + ((Main.rand.NextBool(2)) ? -1f : 1f) * MathHelper.PiOver2;
                             float num811 = (float)Main.rand.NextDouble() * 2f + 2f;
                             Vector2 vector80 = new((float)Math.Cos(num810) * num811, (float)Math.Sin(num810) * num811);
-                            Dust dust = Dust.NewDustDirect(vector79, 0, 0, 229, vector80.X, vector80.Y);
+                            Dust dust = Dust.NewDustDirect(vector79, 0, 0, DustID.Vortex, vector80.X, vector80.Y);
                             dust.noGravity = true;
                             dust.scale = 1.7f;
                             num3 = num809;
                         }
 
-                        if (Main.rand.Next(5) == 0)
+                        if (Main.rand.NextBool(5))
                         {
                             Vector2 value29 = projectile.velocity.RotatedBy(MathHelper.PiOver2) * ((float)Main.rand.NextDouble() - 0.5f) * projectile.width;
-                            Dust smoke = Dust.NewDustDirect(vector79 + value29 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default, 1.5f);
+                            Dust smoke = Dust.NewDustDirect(vector79 + value29 - Vector2.One * 4f, 8, 8, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
                             smoke.velocity *= 0.5f;
                             smoke.velocity.Y = -Math.Abs(smoke.velocity.Y);
                         }
@@ -2882,7 +2882,7 @@ namespace CalamityMod.Projectiles
                             case 1:
                                 if (!Main.rand.NextBool(3))
                                 {
-                                    Dust venom = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 171, 0f, 0f, 100);
+                                    Dust venom = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Venom, 0f, 0f, 100);
                                     venom.noGravity = true;
                                     venom.fadeIn = 1.5f;
                                     venom.velocity *= 0.25f;
@@ -2891,7 +2891,7 @@ namespace CalamityMod.Projectiles
                             case 2:
                                 if (Main.rand.NextBool())
                                 {
-                                    Dust cflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 75, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
+                                    Dust cflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.CursedTorch, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
                                     cflame.noGravity = true;
                                     cflame.velocity *= 0.7f;
                                     cflame.velocity.Y -= 0.5f;
@@ -2900,7 +2900,7 @@ namespace CalamityMod.Projectiles
                             case 3:
                                 if (Main.rand.NextBool())
                                 {
-                                    Dust fire = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 6, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
+                                    Dust fire = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Torch, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 2.5f);
                                     fire.noGravity = true;
                                     fire.velocity *= 0.7f;
                                     fire.velocity.Y -= 0.5f;
@@ -2909,7 +2909,7 @@ namespace CalamityMod.Projectiles
                             case 4:
                                 if (Main.rand.NextBool())
                                 {
-                                    Dust gold = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 57, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 1.1f);
+                                    Dust gold = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Enchanted_Gold, projectile.velocity.X * 0.2f + (projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, new Color(), 1.1f);
                                     gold.noGravity = true;
                                     gold.velocity *= 0.5f;
                                 }
@@ -2917,7 +2917,7 @@ namespace CalamityMod.Projectiles
                             case 5:
                                 if (Main.rand.NextBool())
                                 {
-                                    Dust ichor = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 169, 0f, 0f, 100);
+                                    Dust ichor = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.IchorTorch, 0f, 0f, 100);
                                     ichor.velocity.X += projectile.direction;
                                     ichor.velocity.Y += 0.2f;
                                     ichor.noGravity = true;
@@ -2926,7 +2926,7 @@ namespace CalamityMod.Projectiles
                             case 6:
                                 if (Main.rand.NextBool())
                                 {
-                                    Dust nanite = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 135, 0f, 0f, 100);
+                                    Dust nanite = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.IceTorch, 0f, 0f, 100);
                                     nanite.velocity.X += projectile.direction;
                                     nanite.velocity.Y += 0.2f;
                                     nanite.noGravity = true;
@@ -2935,7 +2935,7 @@ namespace CalamityMod.Projectiles
                             case 8:
                                 if (Main.rand.NextBool(4))
                                 {
-                                    Dust poison = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 46, 0f, 0f, 100);
+                                    Dust poison = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Poisoned, 0f, 0f, 100);
                                     poison.noGravity = true;
                                     poison.fadeIn = 1.5f;
                                     poison.velocity *= 0.25f;
@@ -2979,7 +2979,7 @@ namespace CalamityMod.Projectiles
                     bool lifeAndShieldCondition = player.statLife >= player.statLifeMax2 && (!modPlayer.HasAnyEnergyShield || modPlayer.TotalEnergyShielding >= modPlayer.TotalMaxShieldDurability);
                     if (lifeAndShieldCondition && Main.rand.NextBool(5))
                     {
-                        Dust dust = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 91, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f, 0, default, 0.5f);
+                        Dust dust = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, DustID.GemDiamond, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f, 0, default, 0.5f);
                         dust.noGravity = true;
                     }
                 }
@@ -3014,7 +3014,7 @@ namespace CalamityMod.Projectiles
                 {
                     CalamityUtils.HomeInOnNPC(projectile, !projectile.tileCollide, 300f, 12f, 20f);
                 }
-                if (brimstoneBullets) 
+                if (brimstoneBullets)
                 {
                     PointParticle spark = new PointParticle(projectile.Center + projectile.velocity * 3, projectile.velocity, false, 2, 0.9f, Color.Crimson * 0.7f);
                     GeneralParticleHandler.SpawnParticle(spark);
@@ -3488,7 +3488,7 @@ namespace CalamityMod.Projectiles
                 SoundEngine.PlaySound(SoundID.NPCDeath1, projectile.Center);
                 for (int num573 = 0; num573 < 30; num573++)
                 {
-                    int num574 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 147);
+                    int num574 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.t_Honey);
                     if (Main.rand.NextBool())
                     {
                         Dust dust2 = Main.dust[num574];
@@ -3512,7 +3512,7 @@ namespace CalamityMod.Projectiles
 
                     for (int num951 = 0; num951 < 20; num951++)
                     {
-                        int num952 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                        int num952 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust2 = Main.dust[num952];
                         dust2.velocity *= 1.4f;
                     }

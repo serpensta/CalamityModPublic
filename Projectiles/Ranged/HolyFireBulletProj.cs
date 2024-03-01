@@ -43,7 +43,7 @@ namespace CalamityMod.Projectiles.Ranged
                 if (Main.rand.NextBool())
                 {
                     float scale = Main.rand.NextFloat(0.6f, 1.6f);
-                    int dustID = Dust.NewDust(Projectile.Center, 1, 1, 244);
+                    int dustID = Dust.NewDust(Projectile.Center, 1, 1, DustID.CopperCoin);
                     Main.dust[dustID].position = Projectile.Center;
                     Main.dust[dustID].noGravity = true;
                     Main.dust[dustID].scale = scale;
@@ -81,7 +81,7 @@ namespace CalamityMod.Projectiles.Ranged
             for (int k = 0; k < 4; k++)
             {
                 float scale = Main.rand.NextFloat(1.4f, 1.8f);
-                int dustID = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 244);
+                int dustID = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.CopperCoin);
                 Main.dust[dustID].noGravity = false;
                 Main.dust[dustID].scale = scale;
                 float angleDeviation = 0.25f;

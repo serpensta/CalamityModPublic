@@ -31,7 +31,7 @@ namespace CalamityMod.Items
                     return false;
                 return (NPC.downedMechBoss1.ToInt() + NPC.downedMechBoss2.ToInt() + NPC.downedMechBoss3.ToInt()) >= 2;
             }
-            
+
             switch (item.type)
             {
                 #region Boss Treasure Bags
@@ -362,7 +362,7 @@ namespace CalamityMod.Items
                 case ItemID.GoodieBag:
                     RemoveBatHookFromGoodieBag(loot);
                     break;
-                #endregion
+                    #endregion
             }
         }
         #endregion

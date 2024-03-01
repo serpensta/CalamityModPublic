@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Ranged
 {
     public class TerraArrowMain : ModProjectile, ILocalizedModType
@@ -48,7 +48,7 @@ namespace CalamityMod.Projectiles.Ranged
             SoundEngine.PlaySound(SoundID.Item60, Projectile.Center);
             for (int d = 0; d < 3; d++)
             {
-                int terra = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 107, 0f, 0f, 100, default, 2f);
+                int terra = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.TerraBlade, 0f, 0f, 100, default, 2f);
                 Main.dust[terra].velocity *= 1.2f;
                 if (Main.rand.NextBool())
                 {

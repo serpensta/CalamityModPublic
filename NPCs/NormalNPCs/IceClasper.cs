@@ -1,26 +1,26 @@
-﻿using CalamityMod.Items.Accessories;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Weapons.Summon;
-using CalamityMod.World;
 using CalamityMod.Projectiles.Enemy;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent;
-using System.IO;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
     public class IceClasper : ModNPC
     {
         public Player player => Main.player[NPC.target];
-        
+
         public bool expert = Main.expertMode;
         public bool revenge = CalamityWorld.revenge;
         public bool death = CalamityWorld.death;
@@ -50,7 +50,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public float MaxVelocity = 10f;
         public float DistanceFromPlayer = 500f;
-        
+
         // Although it is weird that Death Mode less projectiles, the AI also changes, making it a shotgun spread of 3 projectiles, so it'd be 2*3.
         public float AmountOfProjectiles = (CalamityWorld.death) ? 2f : (CalamityWorld.revenge) ? 4f : (Main.expertMode) ? 3f : 3f;
         public float TimeBetweenProjectiles = (CalamityWorld.death) ? 50f : (CalamityWorld.revenge) ? 35f : (Main.expertMode) ? 40f : 45f;
@@ -104,11 +104,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundSnow,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.IceClasper")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.IceClasper")
             });
         }
 
@@ -169,11 +169,11 @@ namespace CalamityMod.NPCs.NormalNPCs
         }
 
         public void State_Shooting(Player player)
-        {                        
+        {
             // Minimun distance so the minion is able to shoot.
             if (NPC.Distance(player.Center) > 800f)
                 return;
-            
+
             AITimer++;
 
             if (AITimer >= TimeBetweenBurst)
@@ -243,7 +243,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 telegraphDust.noGravity = true;
                 NPC.netUpdate = true;
             }
-        }   
+        }
 
         public void State_Dashing(Player player)
         {
@@ -301,13 +301,13 @@ namespace CalamityMod.NPCs.NormalNPCs
         {
             for (int k = 0; k < 3; k++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 92, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Frost, hit.HitDirection, -1f, 0, default, 1f);
             }
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 15; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 92, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Frost, hit.HitDirection, -1f, 0, default, 1f);
                 }
                 if (Main.netMode != NetmodeID.Server)
                 {

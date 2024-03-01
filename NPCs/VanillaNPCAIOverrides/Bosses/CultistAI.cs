@@ -1,13 +1,13 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Events;
 using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -1011,7 +1011,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.velocity.Y = npc.ai[3];
                 for (int i = 0; i < 13; i++)
                 {
-                    int ancientLight = Dust.NewDust(npc.position, npc.width, npc.height, 261, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 2.5f);
+                    int ancientLight = Dust.NewDust(npc.position, npc.width, npc.height, DustID.AncientLight, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 2.5f);
                     Main.dust[ancientLight].noGravity = true;
                     Main.dust[ancientLight].fadeIn = 1f;
                     Dust dust = Main.dust[ancientLight];
@@ -1025,7 +1025,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 if (Main.rand.Next(10 - (int)Math.Min(7f, npc.velocity.Length())) < 1)
                 {
-                    int ancientLight2 = Dust.NewDust(npc.position, npc.width, npc.height, 261, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 2.5f);
+                    int ancientLight2 = Dust.NewDust(npc.position, npc.width, npc.height, DustID.AncientLight, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 2.5f);
                     Main.dust[ancientLight2].noGravity = true;
                     Dust dust = Main.dust[ancientLight2];
                     dust.velocity *= 0.2f;
@@ -1143,7 +1143,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (Main.rand.NextBool(6))
             {
                 Vector2 shadowflameDustRotate = Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi);
-                Dust shadowflameDust = Main.dust[Dust.NewDust(npc.Center - shadowflameDustRotate * 20f, 0, 0, 27, 0f, 0f, 0, default, 1f)];
+                Dust shadowflameDust = Main.dust[Dust.NewDust(npc.Center - shadowflameDustRotate * 20f, 0, 0, DustID.Shadowflame, 0f, 0f, 0, default, 1f)];
                 shadowflameDust.noGravity = true;
                 shadowflameDust.position = npc.Center - shadowflameDustRotate * Main.rand.Next(10, 21) * npc.scale;
                 shadowflameDust.velocity = shadowflameDustRotate.RotatedBy(MathHelper.PiOver2) * 4f;
@@ -1153,7 +1153,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (Main.rand.NextBool(6))
             {
                 Vector2 darkDustRotate = Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi);
-                Dust darkDust = Main.dust[Dust.NewDust(npc.Center - darkDustRotate * 30f, 0, 0, 240, 0f, 0f, 0, default, 1f)];
+                Dust darkDust = Main.dust[Dust.NewDust(npc.Center - darkDustRotate * 30f, 0, 0, DustID.Granite, 0f, 0f, 0, default, 1f)];
                 darkDust.noGravity = true;
                 darkDust.position = npc.Center - darkDustRotate * 20f * npc.scale;
                 darkDust.velocity = darkDustRotate.RotatedBy(-MathHelper.PiOver2) * 2f;
@@ -1163,7 +1163,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (Main.rand.NextBool(6))
             {
                 Vector2 darkDustRotate2 = Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi);
-                Dust darkDust2 = Main.dust[Dust.NewDust(npc.Center - darkDustRotate2 * 30f, 0, 0, 240, 0f, 0f, 0, default, 1f)];
+                Dust darkDust2 = Main.dust[Dust.NewDust(npc.Center - darkDustRotate2 * 30f, 0, 0, DustID.Granite, 0f, 0f, 0, default, 1f)];
                 darkDust2.position = npc.Center - darkDustRotate2 * 20f * npc.scale;
                 darkDust2.velocity = Vector2.Zero;
                 darkDust2.scale = 0.5f + Main.rand.NextFloat();

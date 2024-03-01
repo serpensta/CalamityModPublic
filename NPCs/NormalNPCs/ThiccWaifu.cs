@@ -89,11 +89,11 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Rain,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ThiccWaifu")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ThiccWaifu")
             });
         }
 
@@ -145,7 +145,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust cloudDust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 16);
+                    Dust cloudDust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Cloud);
                     cloudDust.velocity = Main.rand.NextVector2CircularEdge(4f, 4f);
                     cloudDust.velocity.Y /= 3f;
                     cloudDust.scale = Main.rand.NextFloat(1.15f, 1.35f);
@@ -212,7 +212,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                 if (Main.rand.NextFloat() < particleSpawnRate && !Main.dedServ)
                 {
-                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 16);
+                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Cloud);
 
                     if (Main.rand.NextBool(15) && Main.netMode != NetmodeID.Server)
                     {
@@ -239,7 +239,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 NPC.Opacity = fadeinCompletion;
 
                 if (Main.rand.NextFloat() < particleSpawnRate && !Main.dedServ)
-                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 16);
+                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Cloud);
             }
 
             if (AttackTimer >= teleportFadeoutTime + teleportFadeinTime)
@@ -356,7 +356,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 if (!Main.dedServ)
                 {
                     for (int i = 0; i < 20; i++)
-                        Dust.NewDustDirect(spawnPosition.ToVector2(), -20, 20, 16);
+                        Dust.NewDustDirect(spawnPosition.ToVector2(), -20, 20, DustID.Cloud);
 
                     SoundEngine.PlaySound(SoundID.Item122, spawnPosition.ToVector2());
                 }
@@ -461,12 +461,12 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 5; k++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 16, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Cloud, hit.HitDirection, -1f, 0, default, 1f);
 
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 50; k++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 16, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Cloud, hit.HitDirection, -1f, 0, default, 1f);
             }
         }
 

@@ -1,11 +1,12 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using System;
+using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.NPCs.SunkenSea;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.Audio;
-using CalamityMod.NPCs.SunkenSea;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -40,7 +41,7 @@ namespace CalamityMod.Projectiles.Melee
                     float shortXVel = Projectile.velocity.X / 3f * (float)i;
                     float shortYVel = Projectile.velocity.Y / 3f * (float)i;
                     int dustPos = 4;
-                    int waterDust = Dust.NewDust(new Vector2(Projectile.position.X + (float)dustPos, Projectile.position.Y + (float)dustPos), Projectile.width - dustPos * 2, Projectile.height - dustPos * 2, 33, 0f, 0f, 0, new Color(0, 142, 255), 1.5f);
+                    int waterDust = Dust.NewDust(new Vector2(Projectile.position.X + (float)dustPos, Projectile.position.Y + (float)dustPos), Projectile.width - dustPos * 2, Projectile.height - dustPos * 2, DustID.Water, 0f, 0f, 0, new Color(0, 142, 255), 1.5f);
                     Dust waterdust = Main.dust[waterDust];
                     waterdust.noGravity = true;
                     waterdust.velocity *= 0.1f;
@@ -127,7 +128,7 @@ namespace CalamityMod.Projectiles.Melee
                 for (int i = 0; i < 50; i++)
                 {
                     Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f);
-                    int waterDust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), Projectile.width / 2, Projectile.height / 2, 33, velocity.X, velocity.Y, 0, new Color(0, 142, 255), 1.5f);
+                    int waterDust = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y), Projectile.width / 2, Projectile.height / 2, DustID.Water, velocity.X, velocity.Y, 0, new Color(0, 142, 255), 1.5f);
                     Main.dust[waterDust].velocity *= 2f;
                 }
             }

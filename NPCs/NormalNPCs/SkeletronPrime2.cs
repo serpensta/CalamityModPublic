@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.DataStructures;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -605,7 +605,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         if (NPC.ai[2] % bombSpawnDivisor == 0f)
                         {
                             NPC.localAI[0] += 1f;
-                            
+
                             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > 64f)
                             {
                                 SoundEngine.PlaySound(SoundID.Item61, NPC.Center);
@@ -752,16 +752,16 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             for (int dustIndex = 0; dustIndex < firstDustCloudParticleAmount; dustIndex++)
             {
-                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                 Main.dust[dust].velocity *= 1.4f;
             }
 
             for (int dustIndex = 0; dustIndex < secondDustCloudParticleAmount; dustIndex++)
             {
-                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 3.5f);
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, 0f, 0f, 100, default(Color), 3.5f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 7f;
-                dust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 1.5f);
+                dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, 0f, 0f, 100, default(Color), 1.5f);
                 Main.dust[dust].velocity *= 3f;
             }
 
@@ -852,21 +852,21 @@ namespace CalamityMod.NPCs.NormalNPCs
                     Main.gore[num802].velocity.X -= 1f;
                     Main.gore[num802].velocity.Y -= 1f;
                 }
-                
+
                 for (int num798 = 0; num798 < 10; num798++)
                 {
-                    int num799 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                    int num799 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                     Dust dust = Main.dust[num799];
                     dust.velocity *= 1.4f;
                 }
 
                 for (int num800 = 0; num800 < 5; num800++)
                 {
-                    int num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 6, 0f, 0f, 100, default(Color), 2.5f);
+                    int num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Torch, 0f, 0f, 100, default(Color), 2.5f);
                     Main.dust[num801].noGravity = true;
                     Dust dust = Main.dust[num801];
                     dust.velocity *= 5f;
-                    num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, 6, 0f, 0f, 100, default(Color), 1.5f);
+                    num801 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Torch, 0f, 0f, 100, default(Color), 1.5f);
                     dust = Main.dust[num801];
                     dust.velocity *= 3f;
                 }

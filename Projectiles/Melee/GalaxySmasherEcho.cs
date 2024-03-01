@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
+using CalamityMod.Particles;
+using CalamityMod.Projectiles.DraedonsArsenal;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Particles;
-using CalamityMod.Projectiles.DraedonsArsenal;
 using static Humanizer.In;
 
 namespace CalamityMod.Projectiles.Melee

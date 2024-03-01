@@ -59,7 +59,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 return SwingState.Swinging;
             }
-            
+
             set
             {
                 Projectile.ai[0] = (int)value;
@@ -76,7 +76,7 @@ namespace CalamityMod.Projectiles.Melee
             get => Projectile.ai[1] > 0;
             set => Projectile.ai[1] = value ? 1 : 0;
         }
-        
+
 
         public ref float SwingTime => ref Projectile.localAI[0];
         public ref float SquishFactor => ref Projectile.localAI[1];
@@ -90,9 +90,9 @@ namespace CalamityMod.Projectiles.Melee
 
 
         public static float MaxSwingAngle = MathHelper.PiOver2 * 1.8f;
-        public CurveSegment SlowStart = new (PolyOutEasing, 0f, -1f, 0.3f, 2);
-        public CurveSegment SwingFast = new (PolyInEasing, 0.27f, -0.7f, 1.6f, 4);
-        public CurveSegment EndSwing = new (PolyOutEasing, 0.85f, 0.9f, 0.1f, 2);
+        public CurveSegment SlowStart = new(PolyOutEasing, 0f, -1f, 0.3f, 2);
+        public CurveSegment SwingFast = new(PolyInEasing, 0.27f, -0.7f, 1.6f, 4);
+        public CurveSegment EndSwing = new(PolyOutEasing, 0.85f, 0.9f, 0.1f, 2);
         public float SwingAngleShiftAtProgress(float progress) => State == SwingState.BonkDash ? 0 : MaxSwingAngle * PiecewiseAnimation(progress, new CurveSegment[] { SlowStart, SwingFast, EndSwing });
         public float SwordRotationAtProgress(float progress) => State == SwingState.BonkDash ? BaseRotation : BaseRotation + SwingAngleShiftAtProgress(progress) * Direction;
         public float SquishAtProgress(float progress) => State == SwingState.BonkDash ? 1 : MathHelper.Lerp(SquishVector.X, SquishVector.Y, (float)Math.Abs(Math.Sin(SwingAngleShiftAtProgress(progress))));
@@ -231,7 +231,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.velocity = Owner.MountedCenter.DirectionTo(Owner.Calamity().mouseWorld);
             //Give the sword slash a random squouish
             SquishFactor = Main.rand.NextFloat(0.67f, 1f); //Note higher squishes make the trail look wonky
-            
+
             //If youre doing a slash and this is the first slash you do, you start small so it grows big
             if (startInitialization && State != SwingState.BonkDash)
                 Projectile.scale = 0.02f;
@@ -591,7 +591,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.netUpdate = true;
 
                 SoundEngine.PlaySound(Exoblade.DashHitSound, target.Center);
-                SoundEngine.PlaySound(Exoblade.BeamHitSound with { Volume = Exoblade.BeamHitSound.Volume * 1.2f}, target.Center);
+                SoundEngine.PlaySound(Exoblade.BeamHitSound with { Volume = Exoblade.BeamHitSound.Volume * 1.2f }, target.Center);
                 if (Main.myPlayer == Projectile.owner)
                 {
                     int lungeHitDamage = (int)(Projectile.damage * Exoblade.LungeDamageFactor);

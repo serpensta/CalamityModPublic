@@ -367,7 +367,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             //MoonlordDeathDrama.AddExplosion(npcPosition);
                             for (float j = 0f; j < randDustAmt * 2f; j = ai1 + 1f)
                             {
-                                Dust vortex = Main.dust[Dust.NewDust(npcPosition, 0, 0, 229, 0f, 0f, 0, default, 1f)];
+                                Dust vortex = Main.dust[Dust.NewDust(npcPosition, 0, 0, DustID.Vortex, 0f, 0f, 0, default, 1f)];
                                 vortex.noGravity = true;
                                 vortex.position = npcPosition;
                                 vortex.velocity = Vector2.UnitY.RotatedBy(twoPiOverRand + (MathHelper.TwoPi / randDustAmt) * j) * dustVelocityMult * (Main.rand.NextFloat() * 1.6f + 1.6f);
@@ -737,7 +737,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     deathrayAttackDustScale = 1.65f;
 
                                 Vector2 deathrayAttackDustRotation = center20 + ((float)Main.rand.NextDouble() * MathHelper.TwoPi).ToRotationVector2() * boltAndDeathrayVector / 2f;
-                                int deathrayAttackDust = Dust.NewDust(deathrayAttackDustRotation - Vector2.One * 8f, 16, 16, 229, npc.velocity.X / 2f, npc.velocity.Y / 2f, 0, default, 1f);
+                                int deathrayAttackDust = Dust.NewDust(deathrayAttackDustRotation - Vector2.One * 8f, 16, 16, DustID.Vortex, npc.velocity.X / 2f, npc.velocity.Y / 2f, 0, default, 1f);
                                 Main.dust[deathrayAttackDust].velocity = Vector2.Normalize(center20 - deathrayAttackDustRotation) * 3.5f * (10f - deathrayAttackDustAmt * 2f) / 10f;
                                 Main.dust[deathrayAttackDust].noGravity = true;
                                 Main.dust[deathrayAttackDust].scale = deathrayAttackDustScale;
@@ -1860,7 +1860,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         for (int k = 0; k < 2; k++)
                         {
-                            int trueEyeDust = Dust.NewDust(npc.Center + freeEyeRotation - Vector2.One * 4f, 0, 0, 229, 0f, 0f, 0, default, 1f);
+                            int trueEyeDust = Dust.NewDust(npc.Center + freeEyeRotation - Vector2.One * 4f, 0, 0, DustID.Vortex, 0f, 0f, 0, default, 1f);
                             Dust dust = Main.dust[trueEyeDust];
                             dust.velocity += freeEyeRotation / 15f;
                             Main.dust[trueEyeDust].noGravity = true;
@@ -2061,7 +2061,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     dustScale = 1.65f;
 
                                 Vector2 trueEyeDustDirection = trueEyeCentering + ((float)Main.rand.NextDouble() * MathHelper.TwoPi).ToRotationVector2() * thirtyVector / 2f;
-                                int trueEyeDust = Dust.NewDust(trueEyeDustDirection - Vector2.One * 8f, 16, 16, 229, npc.velocity.X / 2f, npc.velocity.Y / 2f, 0, default, 1f);
+                                int trueEyeDust = Dust.NewDust(trueEyeDustDirection - Vector2.One * 8f, 16, 16, DustID.Vortex, npc.velocity.X / 2f, npc.velocity.Y / 2f, 0, default, 1f);
                                 Main.dust[trueEyeDust].velocity = Vector2.Normalize(trueEyeCentering - trueEyeDustDirection) * 3.5f * (10f - dustAmt * 2f) / 10f;
                                 Main.dust[trueEyeDust].noGravity = true;
                                 Main.dust[trueEyeDust].scale = dustScale;
@@ -2241,7 +2241,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 Vector2 spinningpoint3 = Vector2.UnitY * -npc.height / 2f;
                 for (int i = 0; i < 4; i++)
                 {
-                    int leechDust = Dust.NewDust(npc.Center - Vector2.One * 4f + spinningpoint3.RotatedBy(i * MathHelper.TwoPi / 6f), 0, 0, 229, 0f, 0f, 0, default, 1f);
+                    int leechDust = Dust.NewDust(npc.Center - Vector2.One * 4f + spinningpoint3.RotatedBy(i * MathHelper.TwoPi / 6f), 0, 0, DustID.Vortex, 0f, 0f, 0, default, 1f);
                     Main.dust[leechDust].velocity = -Vector2.UnitY;
                     Main.dust[leechDust].noGravity = true;
                     Main.dust[leechDust].scale = 0.7f;
@@ -2251,7 +2251,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 spinningpoint3 = Vector2.UnitY * -npc.height / 6f;
                 for (int j = 0; j < 2; j++)
                 {
-                    int leechDust2 = Dust.NewDust(npc.Center - Vector2.One * 4f + spinningpoint3.RotatedBy(j * MathHelper.TwoPi / 6f), 0, 0, 229, 0f, -2f, 0, default, 1f);
+                    int leechDust2 = Dust.NewDust(npc.Center - Vector2.One * 4f + spinningpoint3.RotatedBy(j * MathHelper.TwoPi / 6f), 0, 0, DustID.Vortex, 0f, -2f, 0, default, 1f);
                     Main.dust[leechDust2].noGravity = true;
                     Main.dust[leechDust2].scale = 1.5f;
                     Main.dust[leechDust2].customData = npc;

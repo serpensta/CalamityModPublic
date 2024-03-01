@@ -1,8 +1,8 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System.Collections.Generic;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
                 Projectile.localAI[1] = 0f;
 
             // Attempt to fire a laser every 5 frames
-            if(Projectile.localAI[1] % FramesPerShot == 0f)
+            if (Projectile.localAI[1] % FramesPerShot == 0f)
             {
                 List<int> targets = new List<int>();
                 float laserRange = 300f;

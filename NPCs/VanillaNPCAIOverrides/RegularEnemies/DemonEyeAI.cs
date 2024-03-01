@@ -1,11 +1,11 @@
-﻿using CalamityMod.NPCs.Crags;
+﻿using System.Collections.Generic;
+using CalamityMod.NPCs.Crags;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.World;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 {

@@ -4,8 +4,8 @@ using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -136,7 +136,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     Main.npc[i].Distance(target.Center) < 240f &&
                     extraZaps < 3)
                 {
-                        
+
                     if (TryToSuperchargeNPC(Main.npc[i]))
                     {
                         for (float increment = 0f; increment <= 1f; increment += 0.05f)
@@ -160,7 +160,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             // No more than 3 enemies with streams
             if (Owner.ownedProjectileCounts[attackType] > 3)
                 return false;
-            
+
             // Prevent supercharging an enemy twice.
             for (int i = 0; i < Main.projectile.Length; i++)
             {

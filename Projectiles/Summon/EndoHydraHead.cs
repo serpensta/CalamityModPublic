@@ -1,10 +1,10 @@
-﻿using CalamityMod.DataStructures;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CalamityMod.DataStructures;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -173,7 +173,7 @@ namespace CalamityMod.Projectiles.Summon
         {
             for (int i = 0; i < 10; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 67);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IceRod);
             }
         }
         public override bool PreDraw(ref Color lightColor)

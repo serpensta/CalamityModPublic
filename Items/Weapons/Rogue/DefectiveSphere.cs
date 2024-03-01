@@ -52,11 +52,11 @@ namespace CalamityMod.Items.Weapons.Rogue
             }
         }
 
-		public override float StealthDamageMultiplier => 0.9f;
+        public override float StealthDamageMultiplier => 0.9f;
 
         public override void ModifyStatsExtra(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-		{
-			type = Utils.SelectRandom(Main.rand, new int[]
+        {
+            type = Utils.SelectRandom(Main.rand, new int[]
             {
                 type,
                 ProjectileType<SphereBladed>(),
@@ -64,8 +64,8 @@ namespace CalamityMod.Items.Weapons.Rogue
                 ProjectileType<SphereBlue>()
             });
             if (player.Calamity().StealthStrikeAvailable())
-				velocity = velocity + Main.rand.NextVector2Square(-1.5f, 1.5f);
-		}
+                velocity = velocity + Main.rand.NextVector2Square(-1.5f, 1.5f);
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

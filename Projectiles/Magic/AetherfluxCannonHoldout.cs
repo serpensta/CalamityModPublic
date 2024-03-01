@@ -51,7 +51,7 @@ namespace CalamityMod.Projectiles.Magic
             // Play a sound frame 1.
             if (DeployedFrames <= 0f)
             {
-                SoundEngine.PlaySound(SoundID.DD2_DarkMageCastHeal with { Volume = SoundID.DD2_DarkMageCastHeal.Volume * 1.5f}, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_DarkMageCastHeal with { Volume = SoundID.DD2_DarkMageCastHeal.Volume * 1.5f }, Projectile.Center);
             }
 
             // Update damage based on curent magic damage stat (so Mana Sickness affects it)
@@ -100,7 +100,7 @@ namespace CalamityMod.Projectiles.Magic
                     // Dust chaotically sheds off the crystal while charging or firing.
                     float dustInaccuracy = 0.045f;
 
-                    for (int i = -1; i <= 1 ; i += 2)
+                    for (int i = -1; i <= 1; i += 2)
                     {
                         Vector2 laserStartPos = gunBarrelPos + i * perp + Main.rand.NextVector2CircularEdge(6f, 6f);
                         Vector2 dustOnlySpread = Main.rand.NextVector2Circular(shootSpeed, shootSpeed);

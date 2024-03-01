@@ -34,7 +34,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.shoot = ModContent.ProjectileType<NightsRayBeam>();
             Item.shootSpeed = 6f;
         }
-        
+
         public override void AddRecipes()
         {
             CreateRecipe().

@@ -32,7 +32,7 @@ namespace CalamityMod.Items.Armor.FathomSwarmer
         }
 
 
-        
+
 
         public override void AddRecipes()
         {

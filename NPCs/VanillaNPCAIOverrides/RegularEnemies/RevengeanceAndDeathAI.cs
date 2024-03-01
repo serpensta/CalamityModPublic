@@ -1,4 +1,6 @@
-﻿using CalamityMod.NPCs.Astral;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.Astral;
 using CalamityMod.NPCs.Crags;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.PlagueEnemies;
@@ -6,8 +8,6 @@ using CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -106,7 +106,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             for (float i = 0f; i < 2f; i += 1f)
             {
                 Vector2 rotationVector = Vector2.UnitY.RotatedByRandom(Math.PI * 2.0) * (Main.rand.NextFloat() * 0.5f + 0.5f);
-                Dust dust = Dust.NewDustDirect(headPosition, 0, 0, 228, 0f, 0f, 0, default, 1f);
+                Dust dust = Dust.NewDustDirect(headPosition, 0, 0, DustID.GoldFlame, 0f, 0f, 0, default, 1f);
                 dust.position = headPosition + rotationVector * rotationVectorMult;
                 dust.noGravity = true;
                 dust.velocity = rotationVector * 2f;
@@ -717,7 +717,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                                 dustVelocity *= (float)Main.rand.Next(0, 100) * 0.1f;
                                 dustVelocity.Normalize();
                                 dustVelocity *= (float)Main.rand.Next(50, 90) * 0.1f;
-                                int dustIdx = Dust.NewDust(spawnPosiion, 1, 1, 27, 0f, 0f, 0, default, 1f);
+                                int dustIdx = Dust.NewDust(spawnPosiion, 1, 1, DustID.Shadowflame, 0f, 0f, 0, default, 1f);
                                 Main.dust[dustIdx].velocity = -dustVelocity * 0.3f;
                                 Main.dust[dustIdx].alpha = 100;
                                 if (Main.rand.NextBool())
@@ -881,7 +881,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                         for (int l = 0; l < 20; l++)
                         {
                             Vector2 spawnPosition = npc.Center + Vector2.UnitX * (float)npc.spriteDirection * 40f;
-                            Dust dust = Main.dust[Dust.NewDust(spawnPosition, 0, 0, 259, 0f, 0f, 0, default, 1f)];
+                            Dust dust = Main.dust[Dust.NewDust(spawnPosition, 0, 0, DustID.SolarFlare, 0f, 0f, 0, default, 1f)];
                             Vector2 velocity = Vector2.UnitY.RotatedByRandom(Math.PI * 2.0);
                             dust.position = spawnPosition + velocity * 4f;
                             dust.velocity = velocity * 2f + Vector2.UnitX * Main.rand.NextFloat() * (float)npc.spriteDirection * 3f;
@@ -944,7 +944,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 }
                 if (Main.rand.NextBool(maxValue))
                 {
-                    Dust dust = Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, 229, 0f, 0f, 0, default, 1f)];
+                    Dust dust = Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, DustID.Vortex, 0f, 0f, 0, default, 1f)];
                     dust.noGravity = true;
                     dust.scale = 1f;
                     dust.noLight = true;
@@ -998,7 +998,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 }
                 if (Main.rand.NextBool(maxValue2))
                 {
-                    Dust dust = Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, 229, 0f, 0f, 0, default, 1f)];
+                    Dust dust = Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, DustID.Vortex, 0f, 0f, 0, default, 1f)];
                     dust.noGravity = true;
                     dust.scale = 1f;
                     dust.noLight = true;
@@ -1044,14 +1044,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     distY *= distance;
                     for (int m = 0; m < 20; m++)
                     {
-                        int dustIdx = Dust.NewDust(npc.position, npc.width, npc.height, 71, distX, distY, 200, default, 2f);
+                        int dustIdx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.UndergroundHallowedEnemies, distX, distY, 200, default, 2f);
                         Main.dust[dustIdx].noGravity = true;
                         Dust dust = Main.dust[dustIdx];
                         dust.velocity.X *= 2f;
                     }
                     for (int n = 0; n < 20; n++)
                     {
-                        int dustIdx = Dust.NewDust(npc.oldPos[2], npc.width, npc.height, 71, -distX, -distY, 200, default, 2f);
+                        int dustIdx = Dust.NewDust(npc.oldPos[2], npc.width, npc.height, DustID.UndergroundHallowedEnemies, -distX, -distY, 200, default, 2f);
                         Main.dust[dustIdx].noGravity = true;
                         Dust dust = Main.dust[dustIdx];
                         dust.velocity.X *= 2f;
@@ -1117,10 +1117,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 goto PrepareToShoot;
             }
 
-            // If anyone can give me an explanation of the real noticable differences between
-            //& and && (same with | and ||) with booleans,
-            // I'd greatly appreciate it
-            PrepareToShoot:
+// If anyone can give me an explanation of the real noticable differences between
+//& and && (same with | and ||) with booleans,
+// I'd greatly appreciate it
+PrepareToShoot:
             if (!ableToAlterAI3 & npcTimer)
             {
                 if (npc.velocity.Y == 0f && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
@@ -2059,7 +2059,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     {
                         Vector2 position = npc.Center + new Vector2((float)(npc.direction * -14), -8f) - Vector2.One * 4f;
                         Vector2 velocity = new Vector2((float)(npc.direction * -6), 12f) * 0.2f + Utils.RandomVector2(Main.rand, -1f, 1f) * 0.1f;
-                        Dust dust = Main.dust[Dust.NewDust(position, 8, 8, 229, velocity.X, velocity.Y, 100, Color.Transparent, 1f + Main.rand.NextFloat() * 0.5f)];
+                        Dust dust = Main.dust[Dust.NewDust(position, 8, 8, DustID.Vortex, velocity.X, velocity.Y, 100, Color.Transparent, 1f + Main.rand.NextFloat() * 0.5f)];
                         dust.noGravity = true;
                         dust.velocity = velocity;
                         dust.customData = npc;
@@ -2272,7 +2272,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 }
                 if (Main.rand.NextBool(6) && npc.ai[1] <= 20f)
                 {
-                    Dust dust = Main.dust[Dust.NewDust(npc.Center + new Vector2((float)((npc.spriteDirection == 1) ? 8 : -20), -20f), 8, 8, 229, npc.velocity.X, npc.velocity.Y, 100, default, 1f)];
+                    Dust dust = Main.dust[Dust.NewDust(npc.Center + new Vector2((float)((npc.spriteDirection == 1) ? 8 : -20), -20f), 8, 8, DustID.Vortex, npc.velocity.X, npc.velocity.Y, 100, default, 1f)];
                     dust.velocity = dust.velocity / 4f + npc.velocity / 2f;
                     dust.scale = 0.6f;
                     dust.noLight = true;
@@ -2291,7 +2291,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 }
                 if (Main.rand.NextBool(6))
                 {
-                    Dust dust = Main.dust[Dust.NewDust(npc.Center, 2, 2, 229, 0f, 0f, 0, default, 1f)];
+                    Dust dust = Main.dust[Dust.NewDust(npc.Center, 2, 2, DustID.Vortex, 0f, 0f, 0, default, 1f)];
                     dust.position = npc.Center + new Vector2((float)((npc.spriteDirection == 1) ? 26 : -26), 24f);
                     dust.velocity.X = 0f;
                     if (dust.velocity.Y < 0f)
@@ -3519,7 +3519,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     npc.velocity.Y = -6f;
                     for (int i = 0; i < 35; i++)
                     {
-                        Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, 5);
+                        Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Blood);
                         dust.velocity *= 1f;
                         dust.scale = 1f + Main.rand.NextFloat() * 0.5f;
                         dust.fadeIn = 1.5f + Main.rand.NextFloat() * 0.5f;
@@ -3535,7 +3535,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     for (int j = 0; j < 2; j++)
                     {
-                        Dust eyeFishDust = Dust.NewDustDirect(npc.position, npc.width, npc.height, 5);
+                        Dust eyeFishDust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Blood);
                         eyeFishDust.velocity *= 1f;
                         eyeFishDust.scale = 1f + Main.rand.NextFloat() * 0.5f;
                         eyeFishDust.fadeIn = 1.5f + Main.rand.NextFloat() * 0.5f;
@@ -3907,12 +3907,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                 if (npc.type == NPCID.BloodSquid)
                 {
-                    int bloodDust = Dust.NewDust(npc.position, npc.width, npc.height, 5, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100);
+                    int bloodDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100);
                     Main.dust[bloodDust].velocity *= 0.5f;
                 }
                 else if (npc.type == NPCID.MeteorHead)
                 {
-                    int meteorDust = Dust.NewDust(new Vector2(npc.position.X - npc.velocity.X, npc.position.Y - npc.velocity.Y), npc.width, npc.height, 6, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 2f);
+                    int meteorDust = Dust.NewDust(new Vector2(npc.position.X - npc.velocity.X, npc.position.Y - npc.velocity.Y), npc.width, npc.height, DustID.Torch, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 2f);
                     Dust dust = Main.dust[meteorDust];
                     dust.noGravity = true;
                     dust.velocity.X *= 0.3f;
@@ -3932,7 +3932,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             }
             else if (npc.type != NPCID.Parrot && Main.rand.NextBool(40))
             {
-                int otherIdleDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + (float)npc.height * 0.25f), npc.width, (int)((float)npc.height * 0.5f), 5, npc.velocity.X, 2f, 0, default(Color), 1f);
+                int otherIdleDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + (float)npc.height * 0.25f), npc.width, (int)((float)npc.height * 0.5f), DustID.Blood, npc.velocity.X, 2f, 0, default(Color), 1f);
                 Dust dust = Main.dust[otherIdleDust];
                 dust.velocity.X *= 0.5f;
                 dust.velocity.Y *= 0.1f;
@@ -4127,7 +4127,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 }
                 for (int i = 0; i < 20; i++)
                 {
-                    Dust.NewDust(new Vector2(npc.position.X - 20f, npc.position.Y - 20f), npc.width + 40, npc.height + 40, 5, (float)(dustVelocity * 8), -1f, 0, default(Color), 1f);
+                    Dust.NewDust(new Vector2(npc.position.X - 20f, npc.position.Y - 20f), npc.width + 40, npc.height + 40, DustID.Blood, (float)(dustVelocity * 8), -1f, 0, default(Color), 1f);
                 }
             }
 
@@ -4141,7 +4141,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     {
                         for (int k = 0; k < 2; k++)
                         {
-                            Dust.NewDust(npc.position, npc.width, npc.height, 5, 0f, 0f, 100);
+                            Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, 0f, 0f, 100);
                         }
                     }
 
@@ -4151,7 +4151,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 }
 
                 if (npc.alpha == 0 && Main.rand.NextBool(5))
-                    Dust.NewDust(npc.position, npc.width, npc.height, 5, 0f, 0f, 100);
+                    Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, 0f, 0f, 100);
 
                 npc.position -= npc.netOffset;
             }
@@ -4309,7 +4309,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                         Main.npc[bloodEelSegment].ai[1] = currentBloodEel;
                         Main.npc[bloodEelSegment].CopyInteractions(npc);
                         Main.npc[currentBloodEel].ai[0] = bloodEelSegment;
-                        NetMessage.SendData(23, -1, -1, null, bloodEelSegment);
+                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, bloodEelSegment);
                         currentBloodEel = bloodEelSegment;
                     }
                 }
@@ -4577,13 +4577,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             {
                 Vector2 crawltipedeDustPos = npc.Center + (npc.rotation - MathHelper.PiOver2).ToRotationVector2() * 8f;
                 Vector2 crawltipedeDustRotation = npc.rotation.ToRotationVector2() * 16f;
-                Dust crawltipedeDust = Main.dust[Dust.NewDust(crawltipedeDustPos + crawltipedeDustRotation, 0, 0, 6, npc.velocity.X, npc.velocity.Y, 100, Color.Transparent, 1f + Main.rand.NextFloat() * 3f)];
+                Dust crawltipedeDust = Main.dust[Dust.NewDust(crawltipedeDustPos + crawltipedeDustRotation, 0, 0, DustID.Torch, npc.velocity.X, npc.velocity.Y, 100, Color.Transparent, 1f + Main.rand.NextFloat() * 3f)];
                 crawltipedeDust.noGravity = true;
                 crawltipedeDust.noLight = true;
                 crawltipedeDust.position -= new Vector2(4f);
                 crawltipedeDust.fadeIn = 1f;
                 crawltipedeDust.velocity = Vector2.Zero;
-                Dust crawltipedeDust2 = Main.dust[Dust.NewDust(crawltipedeDustPos - crawltipedeDustRotation, 0, 0, 6, npc.velocity.X, npc.velocity.Y, 100, Color.Transparent, 1f + Main.rand.NextFloat() * 3f)];
+                Dust crawltipedeDust2 = Main.dust[Dust.NewDust(crawltipedeDustPos - crawltipedeDustRotation, 0, 0, DustID.Torch, npc.velocity.X, npc.velocity.Y, 100, Color.Transparent, 1f + Main.rand.NextFloat() * 3f)];
                 crawltipedeDust2.noGravity = true;
                 crawltipedeDust2.noLight = true;
                 crawltipedeDust2.position -= new Vector2(4f);
@@ -5110,7 +5110,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.Tim)
                     {
-                        int goblinDust = Dust.NewDust(npc.position, npc.width, npc.height, 27, 0f, 0f, 100, default(Color), (float)Main.rand.Next(1, 3));
+                        int goblinDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Shadowflame, 0f, 0f, 100, default(Color), (float)Main.rand.Next(1, 3));
                         Dust dust = Main.dust[goblinDust];
                         dust.velocity *= 3f;
                         if (Main.dust[goblinDust].scale > 1f)
@@ -5120,49 +5120,49 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     }
                     else if (npc.type == NPCID.DarkCaster)
                     {
-                        int darkCasterDust = Dust.NewDust(npc.position, npc.width, npc.height, 172, 0f, 0f, 100, default(Color), 1.5f);
+                        int darkCasterDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.DungeonWater, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[darkCasterDust];
                         dust.velocity *= 3f;
                         Main.dust[darkCasterDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.Necromancer || npc.type == NPCID.NecromancerArmored)
                     {
-                        int necromancerDust = Dust.NewDust(npc.position, npc.width, npc.height, 173, 0f, 0f, 0, default(Color), 1f);
+                        int necromancerDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.ShadowbeamStaff, 0f, 0f, 0, default(Color), 1f);
                         Dust dust = Main.dust[necromancerDust];
                         dust.velocity *= 2f;
                         Main.dust[necromancerDust].scale = 1.4f;
                     }
                     else if (npc.type == NPCID.DiabolistRed || npc.type == NPCID.DiabolistWhite)
                     {
-                        int diabolistDust = Dust.NewDust(npc.position, npc.width, npc.height, 174, 0f, 0f, 100, default(Color), 1.5f);
+                        int diabolistDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.InfernoFork, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[diabolistDust];
                         dust.velocity *= 3f;
                         Main.dust[diabolistDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.RaggedCaster || npc.type == NPCID.RaggedCasterOpenCoat)
                     {
-                        int raggedCasterDust = Dust.NewDust(npc.position, npc.width, npc.height, 175, 0f, 0f, 100, default(Color), 1.5f);
+                        int raggedCasterDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.SpectreStaff, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[raggedCasterDust];
                         dust.velocity *= 3f;
                         Main.dust[raggedCasterDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.RuneWizard)
                     {
-                        int runeWizardDust = Dust.NewDust(npc.position, npc.width, npc.height, 106, 0f, 0f, 100, default(Color), 2.5f);
+                        int runeWizardDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.RuneWizard, 0f, 0f, 100, default(Color), 2.5f);
                         Dust dust = Main.dust[runeWizardDust];
                         dust.velocity *= 3f;
                         Main.dust[runeWizardDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.DesertDjinn)
                     {
-                        int desertSpiritDust = Dust.NewDust(npc.position, npc.width, npc.height, 27, 0f, 0f, 100, default(Color), 2.5f);
+                        int desertSpiritDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Shadowflame, 0f, 0f, 100, default(Color), 2.5f);
                         Dust dust = Main.dust[desertSpiritDust];
                         dust.velocity *= 3f;
                         Main.dust[desertSpiritDust].noGravity = true;
                     }
                     else
                     {
-                        int fireImpDust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 2.5f);
+                        int fireImpDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, 0f, 0f, 100, default(Color), 2.5f);
                         Dust dust = Main.dust[fireImpDust];
                         dust.velocity *= 3f;
                         Main.dust[fireImpDust].noGravity = true;
@@ -5180,7 +5180,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.Tim)
                     {
-                        int goblinCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 27, 0f, 0f, 100, default(Color), (float)Main.rand.Next(1, 3));
+                        int goblinCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Shadowflame, 0f, 0f, 100, default(Color), (float)Main.rand.Next(1, 3));
                         Dust dust = Main.dust[goblinCastDust];
                         dust.velocity *= 3f;
                         if (Main.dust[goblinCastDust].scale > 1f)
@@ -5190,49 +5190,49 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     }
                     else if (npc.type == NPCID.DarkCaster)
                     {
-                        int darkCasterCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 172, 0f, 0f, 100, default(Color), 1.5f);
+                        int darkCasterCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.DungeonWater, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[darkCasterCastDust];
                         dust.velocity *= 3f;
                         Main.dust[darkCasterCastDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.RuneWizard)
                     {
-                        int runeWizardCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 106, 0f, 0f, 100, default(Color), 2.5f);
+                        int runeWizardCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.RuneWizard, 0f, 0f, 100, default(Color), 2.5f);
                         Dust dust = Main.dust[runeWizardCastDust];
                         dust.velocity *= 3f;
                         Main.dust[runeWizardCastDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.Necromancer || npc.type == NPCID.NecromancerArmored)
                     {
-                        int necromancerCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 173, 0f, 0f, 0, default(Color), 1f);
+                        int necromancerCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.ShadowbeamStaff, 0f, 0f, 0, default(Color), 1f);
                         Dust dust = Main.dust[necromancerCastDust];
                         dust.velocity *= 2f;
                         Main.dust[necromancerCastDust].scale = 1.4f;
                     }
                     else if (npc.type == NPCID.DiabolistRed || npc.type == NPCID.DiabolistWhite)
                     {
-                        int diabolistCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 174, 0f, 0f, 100, default(Color), 1.5f);
+                        int diabolistCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.InfernoFork, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[diabolistCastDust];
                         dust.velocity *= 3f;
                         Main.dust[diabolistCastDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.RaggedCaster || npc.type == NPCID.RaggedCasterOpenCoat)
                     {
-                        int raggedCasterCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 175, 0f, 0f, 100, default(Color), 1.5f);
+                        int raggedCasterCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.SpectreStaff, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[raggedCasterCastDust];
                         dust.velocity *= 3f;
                         Main.dust[raggedCasterCastDust].noGravity = true;
                     }
                     else if (npc.type == NPCID.DesertDjinn)
                     {
-                        int desertSpiritCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 27, 0f, 0f, 100, default(Color), 2.5f);
+                        int desertSpiritCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Shadowflame, 0f, 0f, 100, default(Color), 2.5f);
                         Dust dust = Main.dust[desertSpiritCastDust];
                         dust.velocity *= 3f;
                         Main.dust[desertSpiritCastDust].noGravity = true;
                     }
                     else
                     {
-                        int fireImpCastDust = Dust.NewDust(npc.position, npc.width, npc.height, 6, 0f, 0f, 100, default(Color), 2.5f);
+                        int fireImpCastDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, 0f, 0f, 100, default(Color), 2.5f);
                         Dust dust = Main.dust[fireImpCastDust];
                         dust.velocity *= 3f;
                         Main.dust[fireImpCastDust].noGravity = true;
@@ -5489,7 +5489,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             {
                 if (Main.rand.NextBool(5))
                 {
-                    int shadowflameSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 27, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 1.5f);
+                    int shadowflameSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.Shadowflame, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 1.5f);
                     Dust dust = Main.dust[shadowflameSpawnDust];
                     dust.noGravity = true;
                     dust.velocity.X *= 0.5f;
@@ -5498,9 +5498,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             }
             else if (npc.type == NPCID.DarkCaster)
             {
-                if (Main.rand.Next(3) != 0)
+                if (!Main.rand.NextBool(3))
                 {
-                    int waterSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 172, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 0.9f);
+                    int waterSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.DungeonWater, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 0.9f);
                     Dust dust = Main.dust[waterSpawnDust];
                     dust.noGravity = true;
                     dust.velocity.X *= 0.3f;
@@ -5522,7 +5522,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     {
                         if (Main.rand.Next(255) > 255 - npc.alpha)
                         {
-                            int runeSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 106, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 1.2f);
+                            int runeSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.RuneWizard, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 1.2f);
                             Dust dust = Main.dust[runeSpawnDust];
                             dust.noGravity = true;
                             dust.velocity.X *= (0.1f + (float)Main.rand.Next(30) * 0.01f);
@@ -5537,7 +5537,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (Main.rand.NextBool())
                     {
-                        int necroSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 173, 0f, 0f, 0, default(Color), 1f);
+                        int necroSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.ShadowbeamStaff, 0f, 0f, 0, default(Color), 1f);
                         Dust dust = Main.dust[necroSpawnDust];
                         dust.velocity.X *= 0.5f;
                         dust.velocity.Y *= 0.5f;
@@ -5547,7 +5547,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (Main.rand.NextBool())
                     {
-                        int flameSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 174, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 1f);
+                        int flameSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.InfernoFork, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 1f);
                         Dust dust = Main.dust[flameSpawnDust];
                         dust.noGravity = true;
                         dust.velocity *= 0.4f;
@@ -5559,7 +5559,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (Main.rand.NextBool())
                     {
-                        int ghostSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 175, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 0.1f);
+                        int ghostSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.SpectreStaff, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 0.1f);
                         Dust dust = Main.dust[ghostSpawnDust];
                         dust.noGravity = true;
                         dust.velocity *= 0.5f;
@@ -5575,7 +5575,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     }
                     if (Main.rand.NextBool())
                     {
-                        int desertSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, 6, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 2f);
+                        int desertSpawnDust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + 2f), npc.width, npc.height, DustID.Torch, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 2f);
                         Dust dust = Main.dust[desertSpawnDust];
                         dust.noGravity = true;
                         dust.velocity.X *= 1f;
@@ -5796,12 +5796,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
         {
             if (npc.type == NPCID.Hellbat || npc.type == NPCID.Lavabat)
             {
-                int lavaDust = Dust.NewDust(npc.position, npc.width, npc.height, 6, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 2f);
+                int lavaDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 100, default(Color), 2f);
                 Main.dust[lavaDust].noGravity = true;
             }
             if (npc.type == NPCID.IceBat && Main.rand.NextBool(10))
             {
-                int iceDust = Dust.NewDust(npc.position, npc.width, npc.height, 67, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
+                int iceDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.IceRod, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
                 Main.dust[iceDust].noGravity = true;
                 Dust dust = Main.dust[iceDust];
                 dust.velocity *= 0.2f;
@@ -6667,7 +6667,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     npc.noTileCollide = false;
                     if (Main.rand.NextBool())
                     {
-                        int sand = Dust.NewDust(new Vector2(npc.position.X - 4f, npc.position.Y + (float)npc.height - 8f), npc.width + 8, 24, 32, 0f, npc.velocity.Y / 2f, 0, default(Color), 1f);
+                        int sand = Dust.NewDust(new Vector2(npc.position.X - 4f, npc.position.Y + (float)npc.height - 8f), npc.width + 8, 24, DustID.Sand, 0f, npc.velocity.Y / 2f, 0, default(Color), 1f);
                         Dust dust = Main.dust[sand];
                         dust.velocity.X *= 0.4f;
                         dust.velocity.Y *= -1f;
@@ -6979,7 +6979,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                 if (Main.rand.NextBool(6))
                 {
-                    int pixieDust = Dust.NewDust(npc.position, npc.width, npc.height, 55, 0f, 0f, 200, npc.color, 1f);
+                    int pixieDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Pixie, 0f, 0f, 200, npc.color, 1f);
                     Dust dust = Main.dust[pixieDust];
                     dust.velocity *= 0.3f;
                 }
@@ -6997,7 +6997,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                 if (Main.rand.NextBool(3))
                 {
-                    int iceEleDust = Dust.NewDust(npc.position, npc.width, npc.height, 92, 0f, 0f, 200, default(Color), 1f);
+                    int iceEleDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Frost, 0f, 0f, 200, default(Color), 1f);
                     Dust dust = Main.dust[iceEleDust];
                     dust.velocity *= 0.3f;
                     Main.dust[iceEleDust].noGravity = true;
@@ -7703,7 +7703,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     if (npc.ai[1] < 30f)
                     {
                         Vector2 nebulaBeastDustRotation = npc.Center + Vector2.UnitX * (float)npc.spriteDirection * -20f;
-                        Dust nebulaBeastDust = Main.dust[Dust.NewDust(nebulaBeastDustRotation, 0, 0, 242, 0f, 0f, 0, default(Color), 1f)];
+                        Dust nebulaBeastDust = Main.dust[Dust.NewDust(nebulaBeastDustRotation, 0, 0, DustID.PinkTorch, 0f, 0f, 0, default(Color), 1f)];
                         Vector2 nebulaBeastDustVelocity = Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi);
                         nebulaBeastDust.position = nebulaBeastDustRotation + nebulaBeastDustVelocity * 20f;
                         nebulaBeastDust.velocity = -nebulaBeastDustVelocity * 2f;
@@ -7716,7 +7716,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                         for (int l = 0; l < 20; l++)
                         {
                             Vector2 nebulaBeastDustRotation2 = npc.Center + Vector2.UnitX * (float)npc.spriteDirection * -20f;
-                            Dust nebulaBeastDust2 = Main.dust[Dust.NewDust(nebulaBeastDustRotation2, 0, 0, 242, 0f, 0f, 0, default(Color), 1f)];
+                            Dust nebulaBeastDust2 = Main.dust[Dust.NewDust(nebulaBeastDustRotation2, 0, 0, DustID.PinkTorch, 0f, 0f, 0, default(Color), 1f)];
                             Vector2 nebulaBeastDustVelocity2 = Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi);
                             nebulaBeastDust2.position = nebulaBeastDustRotation2 + nebulaBeastDustVelocity2 * 4f;
                             nebulaBeastDust2.velocity = nebulaBeastDustVelocity2 * 4f + Vector2.UnitX * Main.rand.NextFloat() * (float)npc.spriteDirection * -5f;
@@ -8048,7 +8048,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (Main.rand.NextBool(3))
                     {
-                        Dust nebulaBeastIdleDust = Main.dust[Dust.NewDust(hitbox.TopLeft(), hitbox.Width, hitbox.Height, 242, 0f, 0f, 0, default(Color), 1f)];
+                        Dust nebulaBeastIdleDust = Main.dust[Dust.NewDust(hitbox.TopLeft(), hitbox.Width, hitbox.Height, DustID.PinkTorch, 0f, 0f, 0, default(Color), 1f)];
                         nebulaBeastIdleDust.velocity = Vector2.Zero;
                         nebulaBeastIdleDust.noGravity = true;
                         nebulaBeastIdleDust.fadeIn = 1f;
@@ -8123,7 +8123,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
             if (npc.type == NPCID.IceTortoise && Main.rand.NextBool(10))
             {
-                int iceTortoiseDust = Dust.NewDust(npc.position, npc.width, npc.height, 67, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
+                int iceTortoiseDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.IceRod, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
                 Main.dust[iceTortoiseDust].noGravity = true;
                 Dust dust = Main.dust[iceTortoiseDust];
                 dust.velocity *= 0.2f;
@@ -8351,7 +8351,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (npc.type == NPCID.IceTortoise && Main.rand.Next(3) < 2)
                     {
-                        int iceTortoiseSpinDust = Dust.NewDust(npc.position, npc.width, npc.height, 67, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
+                        int iceTortoiseSpinDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.IceRod, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
                         Main.dust[iceTortoiseSpinDust].noGravity = true;
                         Dust dust = Main.dust[iceTortoiseSpinDust];
                         dust.velocity *= 0.2f;
@@ -8487,7 +8487,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                         if (Main.rand.Next(3) < 2)
                         {
-                            int spinAttackDust = Dust.NewDust(npc.Center - new Vector2(30f), 60, 60, 6, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
+                            int spinAttackDust = Dust.NewDust(npc.Center - new Vector2(30f), 60, 60, DustID.Torch, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default(Color), 1.5f);
                             Dust dust = Main.dust[spinAttackDust];
                             dust.noGravity = true;
                             dust.velocity *= 0.2f;
@@ -8502,11 +8502,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                                 Vector2 vector68 = npc.Center - new Vector2(50f);
                                 for (int i = 0; i < 32; i++)
                                 {
-                                    int spinEndDust = Dust.NewDust(vector68, 100, 100, 6, 0f, 0f, 100, default(Color), 2.5f);
+                                    int spinEndDust = Dust.NewDust(vector68, 100, 100, DustID.Torch, 0f, 0f, 100, default(Color), 2.5f);
                                     Dust dust = Main.dust[spinEndDust];
                                     dust.noGravity = true;
                                     dust.velocity *= 3f;
-                                    spinEndDust = Dust.NewDust(vector68, 100, 100, 6, 0f, 0f, 100, default(Color), 1.5f);
+                                    spinEndDust = Dust.NewDust(vector68, 100, 100, DustID.Torch, 0f, 0f, 100, default(Color), 1.5f);
                                     dust.velocity *= 2f;
                                     dust.noGravity = true;
                                 }
@@ -8526,7 +8526,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                             for (int k = 0; k < 5; k++)
                             {
-                                int moreSpinEndDust = Dust.NewDust(npc.position, npc.width, npc.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                                int moreSpinEndDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                                 Main.dust[moreSpinEndDust].velocity *= Main.rand.NextFloat();
                             }
 
@@ -9128,7 +9128,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     npc.netUpdate = true;
                     for (int i = 0; i < 15; i++)
                     {
-                        Dust eyeFishDust = Dust.NewDustDirect(npc.position, npc.width, npc.height, 5);
+                        Dust eyeFishDust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Blood);
                         Dust dust = eyeFishDust;
                         dust.velocity *= 0.5f;
                         eyeFishDust.scale = 1f + Main.rand.NextFloat() * 0.5f;
@@ -9146,7 +9146,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     for (int j = 0; j < 2; j++)
                     {
-                        Dust eyeFishDust2 = Dust.NewDustDirect(npc.position, npc.width, npc.height, 5);
+                        Dust eyeFishDust2 = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Blood);
                         Dust dust = eyeFishDust2;
                         dust.velocity *= 1f;
                         eyeFishDust2.scale = 1f + Main.rand.NextFloat() * 0.5f;
@@ -9158,7 +9158,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                 if (Main.rand.NextBool(3))
                 {
-                    Dust eyeFishIdleDust = Dust.NewDustDirect(npc.position, npc.width, npc.height, 5);
+                    Dust eyeFishIdleDust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Blood);
                     Dust dust = eyeFishIdleDust;
                     dust.velocity *= 0f;
                     eyeFishIdleDust.alpha = 120;
@@ -9544,13 +9544,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                             break;
                     }
 
-                    int idx = Dust.NewDust(npc.Center, 0, 0, 226, 0f, 0f, 100, default, 0.5f);
+                    int idx = Dust.NewDust(npc.Center, 0, 0, DustID.Electric, 0f, 0f, 100, default, 0.5f);
                     Main.dust[idx].noGravity = true;
                     Main.dust[idx].position = npc.Center + spinningpoint * scaleFactor2 + dustSpawnDelta;
                     Main.dust[idx].velocity = Vector2.Zero;
                     spinningpoint *= -1f;
 
-                    idx = Dust.NewDust(npc.Center, 0, 0, 226, 0f, 0f, 100, default, 0.5f);
+                    idx = Dust.NewDust(npc.Center, 0, 0, DustID.Electric, 0f, 0f, 100, default, 0.5f);
                     Main.dust[idx].noGravity = true;
                     Main.dust[idx].position = npc.Center + spinningpoint * scaleFactor2 + dustSpawnDelta;
                     Main.dust[idx].velocity = Vector2.Zero;
@@ -9671,7 +9671,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
             // Drone dust
             if (npc.type == NPCID.MartianDrone && npc.ai[0] != 3f)
             {
-                int idx = Dust.NewDust(npc.position, npc.width, npc.height, 226, 0f, 0f, 100, default, 0.5f);
+                int idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 0.5f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity = npc.velocity / 5f;
                 Vector2 rotationVector = new Vector2(-10f, 10f);
@@ -9693,7 +9693,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     if (Main.rand.Next(3) < dustSpawnChance)
                     {
-                        int idx = Dust.NewDust(npc.Center - new Vector2(dustSpawnAreaSize), dustSpawnAreaSize * 2, dustSpawnAreaSize * 2, 6, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 1.5f);
+                        int idx = Dust.NewDust(npc.Center - new Vector2(dustSpawnAreaSize), dustSpawnAreaSize * 2, dustSpawnAreaSize * 2, DustID.Torch, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 1.5f);
                         Main.dust[idx].noGravity = true;
                         Dust dust = Main.dust[idx];
                         dust.velocity *= 0.2f;
@@ -9775,7 +9775,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 // Spawn some cool dust.
                 if (npc.type == NPCID.MartianDrone && Main.rand.NextBool(4))
                 {
-                    int idx = Dust.NewDust(npc.position, npc.width, npc.height, 226, 0f, 0f, 100, default, 0.5f);
+                    int idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 0.5f);
                     Main.dust[idx].noGravity = true;
                     Dust dust = Main.dust[idx];
                     dust.velocity *= 2f;
@@ -9863,7 +9863,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                 for (int i = 0; i < 10; i++)
                 {
-                    int idx = Dust.NewDust(npc.position, npc.width, npc.height, 31, 0f, 0f, 100, default, 1.5f);
+                    int idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
                     Dust dust = Main.dust[idx];
                     dust.velocity *= 1.4f;
                     Main.dust[idx].position = ((float)Main.rand.NextDouble() * MathHelper.TwoPi).ToRotationVector2() * ((float)Main.rand.NextDouble() * 96f) + npc.Center;
@@ -9871,7 +9871,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                 for (int i = 0; i < 40; i++)
                 {
-                    int idx = Dust.NewDust(npc.position, npc.width, npc.height, 226, 0f, 0f, 100, default, 0.5f);
+                    int idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 0.5f);
                     Main.dust[idx].noGravity = true;
                     Dust dust = Main.dust[idx];
                     dust.velocity *= 2f;
@@ -9880,7 +9880,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                     if (Main.rand.NextBool())
                     {
-                        idx = Dust.NewDust(npc.position, npc.width, npc.height, 226, 0f, 0f, 100, default, 0.9f);
+                        idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 0.9f);
                         Main.dust[idx].noGravity = true;
                         dust = Main.dust[idx];
                         dust.velocity *= 1.2f;
@@ -9890,7 +9890,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
 
                     if (Main.rand.NextBool(4))
                     {
-                        idx = Dust.NewDust(npc.position, npc.width, npc.height, 226, 0f, 0f, 100, default, 0.7f);
+                        idx = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 0.7f);
                         dust = Main.dust[idx];
                         dust.velocity *= 1.2f;
                         Main.dust[idx].position = ((float)Main.rand.NextDouble() * MathHelper.TwoPi).ToRotationVector2() * ((float)Main.rand.NextDouble() * 96f) + npc.Center;
@@ -10598,7 +10598,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                             apparitionCenter += apparitionRandVelocity;
                             apparitionRandVelocity.Normalize();
                             apparitionRandVelocity *= Main.rand.Next(50, 90) * 0.2f;
-                            int shadowflameDust = Dust.NewDust(apparitionCenter, 1, 1, 27);
+                            int shadowflameDust = Dust.NewDust(apparitionCenter, 1, 1, DustID.Shadowflame);
                             Main.dust[shadowflameDust].velocity = -apparitionRandVelocity * 0.3f;
                             Main.dust[shadowflameDust].alpha = 100;
                             if (Main.rand.NextBool())
@@ -10620,7 +10620,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                         if (Main.rand.NextBool(5))
                         {
                             npc.position += npc.netOffset;
-                            int idleShadowflameDust = Dust.NewDust(npc.position, npc.width, npc.height, 27);
+                            int idleShadowflameDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Shadowflame);
                             Main.dust[idleShadowflameDust].alpha = 100;
                             Dust dust = Main.dust[idleShadowflameDust];
                             dust.velocity *= 0.3f;
@@ -10652,7 +10652,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     for (int l = 0; l < 2; l++)
                     {
                         npc.position += npc.netOffset;
-                        int visionDust = Dust.NewDust(npc.position - new Vector2(dustPosition), npc.width + dustPosition * 2, npc.height + dustPosition * 2, 228, 0f, 0f, 100, default(Color), 2f);
+                        int visionDust = Dust.NewDust(npc.position - new Vector2(dustPosition), npc.width + dustPosition * 2, npc.height + dustPosition * 2, DustID.GoldFlame, 0f, 0f, 100, default(Color), 2f);
                         Main.dust[visionDust].noGravity = true;
                         Main.dust[visionDust].noLight = true;
                         npc.position -= npc.netOffset;
@@ -10788,7 +10788,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 int squidDustVelocity = 10;
                 npc.position += npc.netOffset;
 
-                int squidDust = Dust.NewDust(npc.position - new Vector2(squidDustVelocity), npc.width + squidDustVelocity * 2, npc.height + squidDustVelocity * 2, 228, 0f, 0f, 100, default(Color), 2f);
+                int squidDust = Dust.NewDust(npc.position - new Vector2(squidDustVelocity), npc.width + squidDustVelocity * 2, npc.height + squidDustVelocity * 2, DustID.GoldFlame, 0f, 0f, 100, default(Color), 2f);
                 Main.dust[squidDust].noGravity = true;
                 Main.dust[squidDust].noLight = true;
 
@@ -11203,7 +11203,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                     }
 
                     Vector2 dustRotation = cellCenter + ((float)Main.rand.NextDouble() * ((float)Math.PI * 2f)).ToRotationVector2() * (12f - dustAmt * 2);
-                    int cellDust = Dust.NewDust(dustRotation - Vector2.One * 12f, 24, 24, 226, npc.velocity.X / 2f, npc.velocity.Y / 2f);
+                    int cellDust = Dust.NewDust(dustRotation - Vector2.One * 12f, 24, 24, DustID.Electric, npc.velocity.X / 2f, npc.velocity.Y / 2f);
                     Dust dust = Main.dust[cellDust];
                     dust.position -= new Vector2(2f);
                     Main.dust[cellDust].velocity = Vector2.Normalize(cellCenter - dustRotation) * 1.5f * (10f - dustAmt * 2f) / 10f;

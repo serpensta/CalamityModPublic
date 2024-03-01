@@ -1,8 +1,9 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Boss
@@ -40,7 +41,7 @@ namespace CalamityMod.Projectiles.Boss
 
             if (Projectile.Opacity == 1f && Main.rand.NextBool(15))
             {
-                Dust dust = Main.dust[Dust.NewDust(Projectile.Top, 0, 0, 267, 0f, 0f, 100, new Color(150, 100, 255, 255), 1f)];
+                Dust dust = Main.dust[Dust.NewDust(Projectile.Top, 0, 0, DustID.RainbowMk2, 0f, 0f, 100, new Color(150, 100, 255, 255), 1f)];
                 dust.velocity.X = 0f;
                 dust.noGravity = true;
                 dust.fadeIn = 1f;

@@ -63,7 +63,7 @@ namespace CalamityMod.Projectiles.Summon
                     Vector2 source = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                     source = source.RotatedBy((double)((float)(d - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
                     Vector2 dustVel = source - Projectile.Center;
-                    int dusty = Dust.NewDust(source + dustVel, 0, 0, 7, dustVel.X * 1.75f, dustVel.Y * 1.75f, 100, default, 1.1f);
+                    int dusty = Dust.NewDust(source + dustVel, 0, 0, DustID.WoodFurniture, dustVel.X * 1.75f, dustVel.Y * 1.75f, 100, default, 1.1f);
                     Main.dust[dusty].noGravity = true;
                     Main.dust[dusty].velocity = dustVel;
                 }
@@ -146,11 +146,11 @@ namespace CalamityMod.Projectiles.Summon
                 if (Projectile.owner == Main.myPlayer)
                 {
                     if (eaterCooldown > 0)
-                        eaterCooldown -= Main.rand.Next(1,3);
+                        eaterCooldown -= Main.rand.Next(1, 3);
 
                     if (eaterCooldown <= 0)
                     {
-                        int projNumber = Main.rand.Next(1,3);
+                        int projNumber = Main.rand.Next(1, 3);
                         for (int index2 = 0; index2 < projNumber; index2++)
                         {
                             float xVector = (float)Main.rand.Next(-35, 36) * 0.02f;

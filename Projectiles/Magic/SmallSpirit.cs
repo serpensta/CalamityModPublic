@@ -1,6 +1,6 @@
-﻿using CalamityMod.Graphics.Metaballs;
+﻿using System;
+using CalamityMod.Graphics.Metaballs;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 

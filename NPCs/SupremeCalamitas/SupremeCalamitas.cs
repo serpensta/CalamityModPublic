@@ -1,4 +1,8 @@
-﻿using CalamityMod.Buffs.Alcohol;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using CalamityMod.Buffs.Alcohol;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -27,18 +31,14 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -183,9 +183,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public const int brothersSpawnCastTime = 150;
         public const int MaxCirrusAlcohols = 20;
         public const int MaxCirrusAlcoholDebuffDuration = 1500;
-        
+
         // Sounds.
-        public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SupremeCalamitasSpawn") { Volume = 1.2f }; 
+        public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SupremeCalamitasSpawn") { Volume = 1.2f };
         public static readonly SoundStyle SepulcherSummonSound = new("CalamityMod/Sounds/Custom/SCalSounds/SepulcherSpawn");
         public static readonly SoundStyle BrimstoneShotSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneShoot");
         public static readonly SoundStyle BrimstoneBigShotSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot"); // DON'T YOU WANNA BE A [BIG SHOT]
@@ -263,7 +263,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SupremeCalamitas")
             });
@@ -403,7 +403,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             #region StartUp
 
             CalamityGlobalNPC.SCal = NPC.whoAmI;
-			HandleMusicVariables();
+            HandleMusicVariables();
 
             bool wormAlive = false;
             if (CalamityGlobalNPC.SCalWorm != -1)
@@ -445,15 +445,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             int monsterDamage = NPC.GetProjectileDamage(ModContent.ProjectileType<BrimstoneMonster>());
             int waveDamage = NPC.GetProjectileDamage(ModContent.ProjectileType<BrimstoneWave>());
             int hellblastDamage = NPC.GetProjectileDamage(ModContent.ProjectileType<BrimstoneHellblast>());
-			if (bossRush)
-			{
-				bulletHellblastDamage /= 2;
-				barrageDamage /= 2;
-				gigablastDamage /= 2;
-				fireblastDamage /= 2;
-				monsterDamage /= 2;
-				waveDamage /= 2;
-				hellblastDamage /= 2;
+            if (bossRush)
+            {
+                bulletHellblastDamage /= 2;
+                barrageDamage /= 2;
+                gigablastDamage /= 2;
+                fireblastDamage /= 2;
+                monsterDamage /= 2;
+                waveDamage /= 2;
+                hellblastDamage /= 2;
             }
 
             int bulletHellblast = zenithAI ? ModContent.ProjectileType<BrimstoneWave>() : ModContent.ProjectileType<BrimstoneHellblast2>();
@@ -1228,7 +1228,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             if (!Main.zenithWorld)
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), player.position.X + Main.rand.Next(-1000, 1001), player.position.Y - 1000f, 0f, 3f * uDieLul, bulletHellblast, bulletHellblastDamage, 0f, Main.myPlayer);
-                            
+
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), player.position.X + 1000f, player.position.Y + Main.rand.Next(-1000, 1001), -3f * uDieLul, 0f, bulletHellblast, bulletHellblastDamage, 0f, Main.myPlayer);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), player.position.X - 1000f, player.position.Y + Main.rand.Next(-1000, 1001), 3f * uDieLul, 0f, bulletHellblast, bulletHellblastDamage, 0f, Main.myPlayer);
                         }
@@ -1954,9 +1954,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                         int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (perturbedSpeed).SafeNormalize(Vector2.UnitY) * 3f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                                         if (p.WithinBounds(Main.maxProjectiles))
                                         {
-                                             Main.projectile[p].DamageType = DamageClass.Default;
-                                             Main.projectile[p].friendly = false;
-                                             Main.projectile[p].hostile = true;
+                                            Main.projectile[p].DamageType = DamageClass.Default;
+                                            Main.projectile[p].friendly = false;
+                                            Main.projectile[p].hostile = true;
                                         }
                                     }
                                 }
@@ -3057,13 +3057,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 normalOnly.Add(DropHelper.PerPlayer(ModContent.ItemType<Calamity>()));
 
                 // SCal vanity set (This drops all at once, or not at all)
-				var scalVanitySet = ItemDropRule.Common(ModContent.ItemType<AshenHorns>(), 7);
-				scalVanitySet.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SCalMask>()));
-				scalVanitySet.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SCalRobes>()));
-				scalVanitySet.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SCalBoots>()));
-				normalOnly.Add(scalVanitySet);
+                var scalVanitySet = ItemDropRule.Common(ModContent.ItemType<AshenHorns>(), 7);
+                scalVanitySet.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SCalMask>()));
+                scalVanitySet.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SCalRobes>()));
+                scalVanitySet.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SCalBoots>()));
+                normalOnly.Add(scalVanitySet);
 
-				// Furniture
+                // Furniture
                 normalOnly.Add(ModContent.ItemType<ThankYouPainting>(), ThankYouPainting.DropInt);
             }
 
@@ -3168,7 +3168,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 alicornFrameCounter++;
                 if (alicornFrameCounter > 6)
                 {
-                    alicornFrame ++;
+                    alicornFrame++;
                     alicornFrameCounter = 0;
                 }
                 if (alicornFrame > 14 || alicornFrame < 9)

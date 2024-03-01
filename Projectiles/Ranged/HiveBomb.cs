@@ -36,11 +36,11 @@ namespace CalamityMod.Projectiles.Ranged
                         halfX = Projectile.velocity.X * 0.5f;
                         halfY = Projectile.velocity.Y * 0.5f;
                     }
-                    int dust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + halfX, Projectile.position.Y + 3f + halfY) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 6, 0f, 0f, 100, default, 1f);
+                    int dust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + halfX, Projectile.position.Y + 3f + halfY) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Torch, 0f, 0f, 100, default, 1f);
                     Main.dust[dust].scale *= 2f + (float)Main.rand.Next(10) * 0.1f;
                     Main.dust[dust].velocity *= 0.2f;
                     Main.dust[dust].noGravity = true;
-                    dust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + halfX, Projectile.position.Y + 3f + halfY) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, 31, 0f, 0f, 100, default, 0.5f);
+                    dust = Dust.NewDust(new Vector2(Projectile.position.X + 3f + halfX, Projectile.position.Y + 3f + halfY) - Projectile.velocity * 0.5f, Projectile.width - 8, Projectile.height - 8, DustID.Smoke, 0f, 0f, 100, default, 0.5f);
                     Main.dust[dust].fadeIn = 1f + (float)Main.rand.Next(5) * 0.1f;
                     Main.dust[dust].velocity *= 0.05f;
                 }
@@ -51,13 +51,13 @@ namespace CalamityMod.Projectiles.Ranged
             }
             else if (Main.rand.NextBool())
             {
-                int dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 31, 0f, 0f, 100, default, 1f);
+                int dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1f);
                 Main.dust[dust2].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[dust2].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2)).RotatedBy((double)Projectile.rotation, default) * 1.1f;
                 Main.rand.Next(2);
-                dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 1f);
+                dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 1f);
                 Main.dust[dust2].scale = 1f + (float)Main.rand.Next(5) * 0.1f;
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2 - 6)).RotatedBy((double)Projectile.rotation, default) * 1.1f;
@@ -121,7 +121,7 @@ namespace CalamityMod.Projectiles.Ranged
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             for (int i = 0; i < 20; i++)
             {
-                int dusty = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 89, 0f, 0f, 100, default, 2f);
+                int dusty = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[dusty].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -131,10 +131,10 @@ namespace CalamityMod.Projectiles.Ranged
             }
             for (int j = 0; j < 30; j++)
             {
-                int dusty2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 89, 0f, 0f, 100, default, 3f);
+                int dusty2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, 0f, 0f, 100, default, 3f);
                 Main.dust[dusty2].noGravity = true;
                 Main.dust[dusty2].velocity *= 5f;
-                dusty2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 89, 0f, 0f, 100, default, 2f);
+                dusty2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[dusty2].velocity *= 2f;
             }
 

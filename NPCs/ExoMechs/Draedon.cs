@@ -1,23 +1,22 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.IO;
+using CalamityMod.Events;
 using CalamityMod.NPCs.ExoMechs.Ares;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
+using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Sounds;
-
 using ApolloBoss = CalamityMod.NPCs.ExoMechs.Apollo.Apollo;
 using ArtemisBoss = CalamityMod.NPCs.ExoMechs.Artemis.Artemis;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.ExoMechs
 {
@@ -115,7 +114,7 @@ namespace CalamityMod.NPCs.ExoMechs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Draedon")
             });
@@ -164,14 +163,14 @@ namespace CalamityMod.NPCs.ExoMechs
             // Prevent stupid natural despawns.
             NPC.timeLeft = 3600;
 
-			// Check if Boss Rush is active
-			bool bossRush = BossRushEvent.BossRushActive;
+            // Check if Boss Rush is active
+            bool bossRush = BossRushEvent.BossRushActive;
 
             // Emit music. If the battle is ongoing, Draedon emits the battle theme.
             // Otherwise, he emits his trademark ambience.
             // This takes priority over anything except Moon Lord's music fadeout.
             if (!ExoMechIsPresent)
-				CalamityGlobalNPC.draedonAmbience = NPC.whoAmI;
+                CalamityGlobalNPC.draedonAmbience = NPC.whoAmI;
 
             // Decide an initial target and play a teleport sound on the first frame.
             if (TalkTimer == 0f)
@@ -374,131 +373,131 @@ namespace CalamityMod.NPCs.ExoMechs
 
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    SoundEngine.PlaySound(CommonCalamitySounds.FlareSound with { Volume = CommonCalamitySounds.FlareSound.Volume * 1.55f}, PlayerToFollow.Center);
+                    SoundEngine.PlaySound(CommonCalamitySounds.FlareSound with { Volume = CommonCalamitySounds.FlareSound.Volume * 1.55f }, PlayerToFollow.Center);
                     if (!exoMechdusa)
-                    SoundEngine.PlaySound(SelectionSound, PlayerToFollow.Center);
+                        SoundEngine.PlaySound(SelectionSound, PlayerToFollow.Center);
                 }
             }
 
-			if (!bossRush && !exoMechdusa)
-			{
-				// Dialogue lines depending on what phase the exo mechs are at.
-				switch ((int)DialogueType)
-				{
-					case 1:
+            if (!bossRush && !exoMechdusa)
+            {
+                // Dialogue lines depending on what phase the exo mechs are at.
+                switch ((int)DialogueType)
+                {
+                    case 1:
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase1Text1", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase1Text1", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase1Text2", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase1Text2", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						break;
+                        break;
 
-					case 2:
+                    case 2:
 
-						if (TalkTimer == ExoMechPhaseDialogueTime)
-						{
-							SoundEngine.PlaySound(LaughSound, PlayerToFollow.Center);
-							if (Main.netMode != NetmodeID.MultiplayerClient)
-							{
-								CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase2Text1", TextColor);
-								NPC.netUpdate = true;
-							}
-						}
+                        if (TalkTimer == ExoMechPhaseDialogueTime)
+                        {
+                            SoundEngine.PlaySound(LaughSound, PlayerToFollow.Center);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase2Text1", TextColor);
+                                NPC.netUpdate = true;
+                            }
+                        }
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase2Text2", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase2Text2", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						break;
+                        break;
 
-					case 3:
+                    case 3:
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase3Text1", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase3Text1", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						if (TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
-						{
-							SoundEngine.PlaySound(LaughSound, PlayerToFollow.Center);
-							if (Main.netMode != NetmodeID.MultiplayerClient)
-							{
-								CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase3Text2", TextColor);
-								NPC.netUpdate = true;
-							}
-						}
+                        if (TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
+                        {
+                            SoundEngine.PlaySound(LaughSound, PlayerToFollow.Center);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase3Text2", TextColor);
+                                NPC.netUpdate = true;
+                            }
+                        }
 
-						break;
+                        break;
 
-					case 4:
+                    case 4:
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase4Text1", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase4Text1", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase4Text2", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase4Text2", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						break;
+                        break;
 
-					case 5:
+                    case 5:
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase5Text1", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase5Text1", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase5Text2", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase5Text2", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						break;
+                        break;
 
-					case 6:
+                    case 6:
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase6Text1", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase6Text1", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
-						{
-							CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase6Text2", TextColor);
-							NPC.netUpdate = true;
-						}
+                        if (Main.netMode != NetmodeID.MultiplayerClient && TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine)
+                        {
+                            CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase6Text2", TextColor);
+                            NPC.netUpdate = true;
+                        }
 
-						if (TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine * 2f)
-						{
-							SoundEngine.PlaySound(LaughSound, PlayerToFollow.Center);
-							if (Main.netMode != NetmodeID.MultiplayerClient)
-							{
-								CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase6Text3", TextColor);
-								NPC.netUpdate = true;
-							}
-						}
+                        if (TalkTimer == ExoMechPhaseDialogueTime + DelayPerDialogLine * 2f)
+                        {
+                            SoundEngine.PlaySound(LaughSound, PlayerToFollow.Center);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Status.Boss.DraedonExoPhase6Text3", TextColor);
+                                NPC.netUpdate = true;
+                            }
+                        }
 
-						break;
-				}
+                        break;
+                }
             }
 
             if (TalkTimer > ExoMechChooseDelay + 10f && !ExoMechIsPresent)
@@ -514,7 +513,7 @@ namespace CalamityMod.NPCs.ExoMechs
                 SoundEngine.PlaySound(SoundID.Item33, NPC.Center);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Vector2 shoot = PlayerToFollow.Center - NPC.Center; 
+                    Vector2 shoot = PlayerToFollow.Center - NPC.Center;
                     shoot.Normalize();
                     shoot *= 4;
                     int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - Vector2.UnitY * 30, shoot, ModContent.ProjectileType<Projectiles.Turret.DraedonLaser>(), 116, 0, Main.myPlayer);
@@ -644,9 +643,9 @@ namespace CalamityMod.NPCs.ExoMechs
                     NPC.HitEffect();
                     NPC.active = false;
                     NPC.netUpdate = true;
-					// Die you lil piece of shit stop creating endless loop in BR
-					if (BossRushEvent.BossRushActive)
-						NPC.NPCLoot();
+                    // Die you lil piece of shit stop creating endless loop in BR
+                    if (BossRushEvent.BossRushActive)
+                        NPC.NPCLoot();
                 }
             }
 
@@ -658,7 +657,7 @@ namespace CalamityMod.NPCs.ExoMechs
                     Lighting.AddLight(NPC.Center, 0.5f, 1.25f, 1.25f);
                     if (ProjFrameChangeCounter == 0)
                     {
-                        Dust d = Main.dust[Dust.NewDust(new Vector2(NPC.Center.X - 45, NPC.Center.Y - 70), NPC.width, (int)(NPC.height * 1.5f), 229, 0, Main.rand.Next(-2, -1), 60)];
+                        Dust d = Main.dust[Dust.NewDust(new Vector2(NPC.Center.X - 45, NPC.Center.Y - 70), NPC.width, (int)(NPC.height * 1.5f), DustID.Vortex, 0, Main.rand.Next(-2, -1), 60)];
                         d.noGravity = true;
                     }
                 }
@@ -805,8 +804,8 @@ namespace CalamityMod.NPCs.ExoMechs
 
         public override bool CheckDead()
         {
-			if (BossRushEvent.BossRushActive || exoMechdusa)
-				return true;
+            if (BossRushEvent.BossRushActive || exoMechdusa)
+                return true;
 
             if (!HasBeenKilled)
             {
@@ -858,7 +857,7 @@ namespace CalamityMod.NPCs.ExoMechs
             Vector2 playerToDrae = PlayerToFollow.Center - NPC.Center;
             playerToDrae.Normalize();
             float extraRotation = PlayerToFollow.Center.X - NPC.Center.X < 0 ? -MathHelper.PiOver4 * 4 : 0;
-            float gunRotation = playerToDrae.ToRotation() + extraRotation; 
+            float gunRotation = playerToDrae.ToRotation() + extraRotation;
 
             if (!NPC.IsABestiaryIconDummy)
             {
@@ -870,7 +869,7 @@ namespace CalamityMod.NPCs.ExoMechs
             }
 
             if (!leaving)
-            spriteBatch.Draw(texture, new Vector2(drawPosition.X, drawPosition.Y + hoveroffset), holo ? null : frame, holo ? holoColor : (drawColor * NPC.Opacity), NPC.rotation, origin, NPC.scale, direction, 0f);
+                spriteBatch.Draw(texture, new Vector2(drawPosition.X, drawPosition.Y + hoveroffset), holo ? null : frame, holo ? holoColor : (drawColor * NPC.Opacity), NPC.rotation, origin, NPC.scale, direction, 0f);
 
             if (!NPC.IsABestiaryIconDummy)
                 spriteBatch.ExitShaderRegion();

@@ -47,7 +47,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
-            SpriteEffects flip = Math.Sign(Projectile.velocity.X) < 0? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteEffects flip = Math.Sign(Projectile.velocity.X) < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor * 0.3f, Projectile.rotation * 1.2f, texture.Size() / 2f, 1.5f, flip, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor * 0.4f, Projectile.rotation, texture.Size() / 2f, 2f, flip, 0);

@@ -1,8 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -79,11 +79,11 @@ namespace CalamityMod.Projectiles.Melee
             {
                 float oldXVel = Projectile.oldVelocity.X * (30f / (float)i);
                 float oldYVel = Projectile.oldVelocity.Y * (30f / (float)i);
-                int causticDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXVel, Projectile.oldPosition.Y - oldYVel), 8, 8, 44, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.8f);
+                int causticDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXVel, Projectile.oldPosition.Y - oldYVel), 8, 8, DustID.JungleSpore, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.8f);
                 Main.dust[causticDust].noGravity = true;
                 Dust dust = Main.dust[causticDust];
                 dust.velocity *= 0.5f;
-                causticDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXVel, Projectile.oldPosition.Y - oldYVel), 8, 8, 44, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.4f);
+                causticDust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXVel, Projectile.oldPosition.Y - oldYVel), 8, 8, DustID.JungleSpore, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 100, default, 1.4f);
                 dust = Main.dust[causticDust];
                 dust.velocity *= 0.05f;
                 inc = i;

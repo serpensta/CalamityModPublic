@@ -4,10 +4,9 @@ using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using Terraria.DataStructures;
 
 namespace CalamityMod.Items.Fishing.FishingRods
 {
@@ -18,7 +17,7 @@ namespace CalamityMod.Items.Fishing.FishingRods
         {
             ItemID.Sets.CanFishInLava[Item.type] = true;
 
-                   }
+        }
 
         public override void SetDefaults()
         {

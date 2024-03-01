@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,7 +28,7 @@ namespace CalamityMod.Projectiles.Magic
         public override void AI()
         {
             Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - MathHelper.PiOver2;
-            Dust dust = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 14, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1f)];
+            Dust dust = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Demonite, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 1f)];
             dust.velocity = Vector2.Zero;
             dust.position -= Projectile.velocity / 5f;
             dust.noGravity = true;
