@@ -21,6 +21,7 @@ namespace CalamityMod.NPCs.Leviathan
                 return CalamityUtils.FindFirstProjectile(ModContent.ProjectileType<LeviathanSpawner>()) != -1;
             }
         }
+
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -38,11 +39,7 @@ namespace CalamityMod.NPCs.Leviathan
             NPC.height = 100;
             NPC.defense = 10;
             NPC.DR_NERD(0.5f);
-            NPC.lifeMax = 650;
-            if (BossRushEvent.BossRushActive)
-            {
-                NPC.lifeMax = 1000;
-            }
+            NPC.lifeMax = BossRushEvent.BossRushActive ? 1000 : 650;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.alpha = 255;

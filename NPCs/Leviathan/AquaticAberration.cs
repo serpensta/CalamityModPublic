@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Events;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using System;
@@ -13,6 +14,17 @@ namespace CalamityMod.NPCs.Leviathan
 {
     public class AquaticAberration : ModNPC
     {
+        public bool WaitingForLeviathan
+        {
+            get
+            {
+                if (Main.npc.IndexInRange(CalamityGlobalNPC.leviathan) && Main.npc[CalamityGlobalNPC.leviathan].life / (float)Main.npc[CalamityGlobalNPC.leviathan].lifeMax >= ((CalamityWorld.death || BossRushEvent.BossRushActive) ? 0.7f : 0.4f))
+                    return true;
+
+                return CalamityUtils.FindFirstProjectile(ModContent.ProjectileType<LeviathanSpawner>()) != -1;
+            }
+        }
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -30,11 +42,7 @@ namespace CalamityMod.NPCs.Leviathan
             NPC.width = 50;
             NPC.height = 50;
             NPC.defense = 14;
-            NPC.lifeMax = 600;
-            if (BossRushEvent.BossRushActive)
-            {
-                NPC.lifeMax = 10000;
-            }
+            NPC.lifeMax = BossRushEvent.BossRushActive ? 10000 : 600;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.knockBackResist = 0.2f;
@@ -117,13 +125,10 @@ namespace CalamityMod.NPCs.Leviathan
             if (CalamityGlobalNPC.siren != -1)
                 sirenAlive = Main.npc[CalamityGlobalNPC.siren].active;
 
-            if (CalamityGlobalNPC.siren != -1)
+            if (sirenAlive)
             {
-                if (Main.npc[CalamityGlobalNPC.siren].active)
-                {
-                    if (Main.npc[CalamityGlobalNPC.siren].damage == 0)
-                        sirenAlive = false;
-                }
+                if (WaitingForLeviathan)
+                    sirenAlive = false;
             }
 
             float inertia = bossRush ? 24f : death ? 26f : revenge ? 27f : expertMode ? 28f : 30f;
