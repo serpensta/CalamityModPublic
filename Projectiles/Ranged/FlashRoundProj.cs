@@ -3,8 +3,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Items.Ammo;
-using CalamityMod.Particles;
 
 namespace CalamityMod.Projectiles.Ranged
 {

@@ -1,13 +1,8 @@
-﻿using System;
+﻿using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Particles;
-using Terraria.Graphics.Shaders;
-using Microsoft.Xna.Framework.Graphics;
-using static Terraria.ModLoader.ModContent;
-using CalamityMod.Buffs.DamageOverTime;
 
 namespace CalamityMod.Projectiles.Ranged
 {
