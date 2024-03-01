@@ -1,7 +1,7 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using System;
+using CalamityMod.Buffs.StatDebuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -129,7 +129,7 @@ namespace CalamityMod.Projectiles.Typeless
             if (Main.rand.NextBool(12))
             {
                 Vector2 offset = -Vector2.UnitX.RotatedByRandom(0.2).RotatedBy((double)Projectile.velocity.ToRotation(), default);
-                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 234, 0f, 0f, 100, default, 1f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BoneTorch, 0f, 0f, 100, default, 1f);
                 Main.dust[idx].velocity *= 0.1f;
                 Main.dust[idx].position = Projectile.Center + offset * (float)Projectile.width / 2f + Projectile.velocity * 2f;
                 Main.dust[idx].fadeIn = 0.9f;
@@ -137,7 +137,7 @@ namespace CalamityMod.Projectiles.Typeless
             if (Main.rand.NextBool(64))
             {
                 Vector2 offset = -Vector2.UnitX.RotatedByRandom(0.4).RotatedBy((double)Projectile.velocity.ToRotation(), default);
-                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 234, 0f, 0f, 155, default, 0.8f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BoneTorch, 0f, 0f, 155, default, 0.8f);
                 Main.dust[idx].velocity *= 0.3f;
                 Main.dust[idx].position = Projectile.Center + offset * (float)Projectile.width / 2f;
                 if (Main.rand.NextBool())
@@ -174,7 +174,7 @@ namespace CalamityMod.Projectiles.Typeless
             for (int i = 0; i < 2; i++)
             {
                 int sizeFactor = 14;
-                int idx = Dust.NewDust(Projectile.position, Projectile.width - sizeFactor * 2, Projectile.height - sizeFactor * 2, 263, 0f, 0f, 100, default, 1.35f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width - sizeFactor * 2, Projectile.height - sizeFactor * 2, DustID.PortalBolt, 0f, 0f, 100, default, 1.35f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 0.1f;
                 Main.dust[idx].velocity += Projectile.velocity * 0.5f;
@@ -182,7 +182,7 @@ namespace CalamityMod.Projectiles.Typeless
             if (Main.rand.NextBool(8))
             {
                 int sizeFactor = 16;
-                int idx = Dust.NewDust(Projectile.position, Projectile.width - sizeFactor * 2, Projectile.height - sizeFactor * 2, 263, 0f, 0f, 100, default, 1f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width - sizeFactor * 2, Projectile.height - sizeFactor * 2, DustID.PortalBolt, 0f, 0f, 100, default, 1f);
                 Main.dust[idx].velocity *= 0.25f;
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity += Projectile.velocity * 0.5f;
@@ -221,7 +221,7 @@ namespace CalamityMod.Projectiles.Typeless
             Vector2 value3 = (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2();
             Vector2 velocity = value3 * Projectile.velocity.Length() * (float)Projectile.MaxUpdates;
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
-			Projectile.ExpandHitboxBy(height);
+            Projectile.ExpandHitboxBy(height);
             Projectile.maxPenetrate = -1;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;

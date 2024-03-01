@@ -1,10 +1,10 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
+using CalamityMod.CalPlayer;
 using CalamityMod.DataStructures;
 using CalamityMod.Items.Materials;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Effects;
@@ -40,7 +40,7 @@ namespace CalamityMod.Items.Accessories
                 {
                     Player player = Main.player[i];
                     if (player is null || !player.active || player.outOfRange || player.dead)
-                       continue;
+                        continue;
 
                     CalamityPlayer modPlayer = player.Calamity();
 
@@ -154,7 +154,7 @@ namespace CalamityMod.Items.Accessories
                     Color wulfGreen = new Color(194, 255, 67) * 0.8f;
                     Color edgeColor = CalamityUtils.MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.2f, blueTint, cyanTint, wulfGreen);
                     Color shieldColor = blueTint;
-                    
+
 
                     // Define shader parameters for shield color
                     shieldEffect.Parameters["shieldColor"].SetValue(shieldColor.ToVector3());

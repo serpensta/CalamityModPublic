@@ -1,19 +1,19 @@
-﻿using CalamityMod.Items.Accessories;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.Projectiles.Pets;
+using CalamityMod.Projectiles.Rogue;
+using CalamityMod.Sounds;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using CalamityMod.Sounds;
-using Terraria.Audio;
-using CalamityMod.World;
-using CalamityMod.Projectiles.Rogue;
-using CalamityMod.Projectiles.Pets;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
@@ -96,7 +96,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
@@ -149,7 +149,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         if (Main.zenithWorld && player.active && !farFromPlayer)
                         {
                             AIState = HovercraftAIState.SwoopDownward;
-                            SoundEngine.PlaySound(SoundID.DD2_KoboldFlyerHurt with { Pitch = SoundID.DD2_KoboldFlyerHurt.Pitch + 0.5f }, NPC.Center); 
+                            SoundEngine.PlaySound(SoundID.DD2_KoboldFlyerHurt with { Pitch = SoundID.DD2_KoboldFlyerHurt.Pitch + 0.5f }, NPC.Center);
                             return;
                         }
                         NPC.velocity = Vector2.Lerp(NPC.velocity, Vector2.UnitY * -8f, 0.1f);
@@ -290,13 +290,13 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 for (int k = 0; k < 5; k++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 3, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GrassBlades, hit.HitDirection, -1f, 0, default, 1f);
                 }
                 if (NPC.life <= 0)
                 {
                     for (int k = 0; k < 20; k++)
                     {
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, 3, hit.HitDirection, -1f, 0, default, 1f);
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GrassBlades, hit.HitDirection, -1f, 0, default, 1f);
                     }
 
                     if (!Main.dedServ)

@@ -1,6 +1,6 @@
-﻿using CalamityMod.Buffs.StatBuffs;
+﻿using System;
+using CalamityMod.Buffs.StatBuffs;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -40,7 +40,7 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.velocity.Y *= 1.01f;
 
             int scale = (int)((Projectile.ai[0] - 60f) * 4.25f);
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 5, 0f, 0f, 100, new Color(scale, 0, 0, 50), 2f);
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 100, new Color(scale, 0, 0, 50), 2f);
             Main.dust[dust].velocity *= 0f;
             Main.dust[dust].noGravity = true;
         }

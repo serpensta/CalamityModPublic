@@ -16,7 +16,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         #region Other Stats
         public static int OriginalUseTime = 63;
-        
+
         public static float TimeBetweenShots = 21;
         public static float ProjectilesPerBurst = 2f;
 

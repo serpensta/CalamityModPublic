@@ -790,7 +790,7 @@ namespace CalamityMod.ILEditing
             cachedLavaStyle = default;
             orig(self);
         }
-        
+
         private static void DrawCustomLava(Terraria.GameContent.Drawing.On_TileDrawing.orig_DrawPartialLiquid orig, TileDrawing self, bool behindBlocks, Tile tileCache, ref Vector2 position, ref Rectangle liquidSize, int liquidType, ref VertexColors colors)
         {
             if (liquidType != 1)
@@ -861,7 +861,7 @@ namespace CalamityMod.ILEditing
             cursor.Emit(OpCodes.Ldloc, 8);
             cursor.Emit(OpCodes.Ldloc, 3);
             cursor.Emit(OpCodes.Ldloc, 4);
-            
+
             // Caching these values can save a LOT of overhead at runtime.
             ModWaterStyle sunkenSeaWater = ModContent.GetInstance<SunkenSeaWater>();
             ModWaterStyle sulphuricWater = ModContent.GetInstance<SulphuricWater>();
@@ -869,7 +869,7 @@ namespace CalamityMod.ILEditing
             ModWaterStyle upperAbyssWater = ModContent.GetInstance<UpperAbyssWater>();
             ModWaterStyle middleAbyssWater = ModContent.GetInstance<MiddleAbyssWater>();
             ModWaterStyle voidWater = ModContent.GetInstance<VoidWater>();
-            
+
             cursor.EmitDelegate<Func<VertexColors, Texture2D, int, int, int, VertexColors>>((initialColor, initialTexture, liquidType, x, y) =>
             {
                 // Don't bother changing the color if the cached drawing style is null.

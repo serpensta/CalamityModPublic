@@ -401,7 +401,7 @@ namespace CalamityMod
         public struct RocketBehaviorInfo
         {
             internal int rocketItemType;
-            
+
             // Explosion radii for various rocket ammos. Defaults to the sizes used in vanilla launchers.
             public int smallRadius = 3; // Rocket I and II
             public int mediumRadius = 6; // Rocket III and IV
@@ -839,7 +839,7 @@ namespace CalamityMod
                     {
                         if (blastImmuneTiles.Contains(type) || // Respects standard blast immunities if enabled, so they're covered
                             Main.tileContainer[tile.TileType] || // Chests should never be exploded
-                            // Dungeon tiles and TileLoader CanExplode are considered part of respecting standard blast immunities
+                                                                 // Dungeon tiles and TileLoader CanExplode are considered part of respecting standard blast immunities
                             respectStandardBlastImmunity && (Main.tileDungeon[type] || !TileLoader.CanExplode(tx, ty)) ||
                             // TileLoader CanKillTile can block the destruction of a tile regardless of whether it is via an explosion
                             !TileLoader.CanKillTile(tx, ty, tile.TileType, ref refTrue) || !TileLoader.CanKillTile(tx, ty, tile.TileType, ref refFalse))
@@ -892,8 +892,8 @@ namespace CalamityMod
                         }
                     }
 
-                    // Label to jump to if wall destruction is aborted.
-                    PostWallBlastLoop:;
+// Label to jump to if wall destruction is aborted.
+PostWallBlastLoop:;
                 }
             }
         }
@@ -908,7 +908,7 @@ namespace CalamityMod
             Vector2 corner = projectile.position;
             for (int i = 0; i < 40; i++)
             {
-                int idx = Dust.NewDust(corner, projectile.width, projectile.height, 31, 0f, 0f, 100, default, 2f);
+                int idx = Dust.NewDust(corner, projectile.width, projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                 Main.dust[idx].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -918,10 +918,10 @@ namespace CalamityMod
             }
             for (int i = 0; i < 70; i++)
             {
-                int idx = Dust.NewDust(corner, projectile.width, projectile.height, 6, 0f, 0f, 100, default, 3f);
+                int idx = Dust.NewDust(corner, projectile.width, projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 5f;
-                idx = Dust.NewDust(corner, projectile.width, projectile.height, 6, 0f, 0f, 100, default, 2f);
+                idx = Dust.NewDust(corner, projectile.width, projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
                 Main.dust[idx].velocity *= 2f;
             }
 

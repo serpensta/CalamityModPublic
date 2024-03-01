@@ -14,9 +14,9 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class DragonsBreath : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
-        
+
         public static readonly SoundStyle FireballSound = new("CalamityMod/Sounds/Custom/Yharon/YharonFireball", 3) { PitchVariance = 0.3f, Volume = 0.75f };
-	    public static readonly SoundStyle WeldingStart = new("CalamityMod/Sounds/Item/DragonsBreathStrongStart") { Volume = 1.75f };
+        public static readonly SoundStyle WeldingStart = new("CalamityMod/Sounds/Item/DragonsBreathStrongStart") { Volume = 1.75f };
         public static readonly SoundStyle WeldingBurn = new("CalamityMod/Sounds/Item/WeldingBurn") { Volume = 0.65f };
         public static readonly SoundStyle WeldingShoot = new("CalamityMod/Sounds/Item/WeldingShoot") { Volume = 0.45f };
 
@@ -111,7 +111,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                     StrongShotMode = false;
                     DragonsBreathSetUseTime = 5;
                     DragonsBreathSetUseAnimation = 9;
-    }
+                }
             }
             return false;
         }

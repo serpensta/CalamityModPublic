@@ -1,11 +1,11 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -125,7 +125,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 if (!leftFistAlive)
                 {
-                    int lostLeftFistDust = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, 31, 0f, 0f, 100, default, 1f);
+                    int lostLeftFistDust = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Smoke, 0f, 0f, 100, default, 1f);
                     Dust dust = Main.dust[lostLeftFistDust];
                     dust.alpha += Main.rand.Next(100);
                     dust.velocity *= 0.2f;
@@ -134,8 +134,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.rand.NextBool(10))
                     {
-                        lostLeftFistDust = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, 6, 0f, 0f, 0, default, 1f);
-                        if (Main.rand.Next(20) != 0)
+                        lostLeftFistDust = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Torch, 0f, 0f, 0, default, 1f);
+                        if (!Main.rand.NextBool(20))
                         {
                             Main.dust[lostLeftFistDust].noGravity = true;
                             dust = Main.dust[lostLeftFistDust];
@@ -146,7 +146,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
                 if (!rightFistAlive)
                 {
-                    int lostRightFistDust = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, 31, 0f, 0f, 100, default, 1f);
+                    int lostRightFistDust = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Smoke, 0f, 0f, 100, default, 1f);
                     Dust dust = Main.dust[lostRightFistDust];
                     dust.alpha += Main.rand.Next(100);
                     dust.velocity *= 0.2f;
@@ -155,8 +155,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.rand.NextBool(10))
                     {
-                        lostRightFistDust = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, 6, 0f, 0f, 0, default, 1f);
-                        if (Main.rand.Next(20) != 0)
+                        lostRightFistDust = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Torch, 0f, 0f, 0, default, 1f);
+                        if (!Main.rand.NextBool(20))
                         {
                             Main.dust[lostRightFistDust].noGravity = true;
                             dust = Main.dust[lostRightFistDust];
@@ -330,7 +330,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         for (int j = 0; j < 4; j++)
                         {
-                            int fallDust = Dust.NewDust(new Vector2(npc.position.X - 20f, npc.position.Y + npc.height), npc.width + 20, 4, 31, 0f, 0f, 100, default, 1.5f);
+                            int fallDust = Dust.NewDust(new Vector2(npc.position.X - 20f, npc.position.Y + npc.height), npc.width + 20, 4, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
                             Dust dust = Main.dust[fallDust];
                             dust.velocity *= 0.2f;
                         }
@@ -1375,15 +1375,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 if (!flag2)
                 {
-                    int num2 = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, 31, 0f, 0f, 100);
+                    int num2 = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Smoke, 0f, 0f, 100);
                     Main.dust[num2].alpha += Main.rand.Next(100);
                     Main.dust[num2].velocity *= 0.2f;
                     Main.dust[num2].velocity.Y -= 0.5f + (float)Main.rand.Next(10) * 0.1f;
                     Main.dust[num2].fadeIn = 0.5f + (float)Main.rand.Next(10) * 0.1f;
                     if (Main.rand.NextBool(10))
                     {
-                        num2 = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, 6);
-                        if (Main.rand.Next(20) != 0)
+                        num2 = Dust.NewDust(new Vector2(npc.Center.X - 80f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Torch);
+                        if (!Main.rand.NextBool(20))
                         {
                             Main.dust[num2].noGravity = true;
                             Main.dust[num2].scale *= 1f + (float)Main.rand.Next(10) * 0.1f;
@@ -1394,15 +1394,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 if (!flag3)
                 {
-                    int num3 = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, 31, 0f, 0f, 100);
+                    int num3 = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Smoke, 0f, 0f, 100);
                     Main.dust[num3].alpha += Main.rand.Next(100);
                     Main.dust[num3].velocity *= 0.2f;
                     Main.dust[num3].velocity.Y -= 0.5f + (float)Main.rand.Next(10) * 0.1f;
                     Main.dust[num3].fadeIn = 0.5f + (float)Main.rand.Next(10) * 0.1f;
                     if (Main.rand.NextBool(10))
                     {
-                        num3 = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, 6);
-                        if (Main.rand.Next(20) != 0)
+                        num3 = Dust.NewDust(new Vector2(npc.Center.X + 62f * npc.scale, npc.Center.Y - 9f), 8, 8, DustID.Torch);
+                        if (!Main.rand.NextBool(20))
                         {
                             Main.dust[num3].noGravity = true;
                             Main.dust[num3].scale *= 1f + (float)Main.rand.Next(10) * 0.1f;
@@ -1496,7 +1496,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         for (int m = 0; m < 4; m++)
                         {
-                            int num5 = Dust.NewDust(new Vector2(npc.position.X - 20f, npc.position.Y + (float)npc.height), npc.width + 20, 4, 31, 0f, 0f, 100, default(Color), 1.5f);
+                            int num5 = Dust.NewDust(new Vector2(npc.position.X - 20f, npc.position.Y + (float)npc.height), npc.width + 20, 4, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                             Main.dust[num5].velocity *= 0.2f;
                         }
 

@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Items.Materials;
+using CalamityMod.Projectiles.Typeless;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Projectiles.Typeless;
 
 namespace CalamityMod.Items.Tools
 {

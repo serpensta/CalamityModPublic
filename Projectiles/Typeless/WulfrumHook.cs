@@ -1,19 +1,19 @@
 ﻿using System;
-using CalamityMod.Particles;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using CalamityMod.Items.Materials;
-using Terraria.DataStructures;
-using ReLogic.Utilities;
-using CalamityMod.Items.Accessories;
 using System.Collections.Generic;
 using System.Linq;
 using CalamityMod.Graphics.Primitives;
+using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Materials;
+using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Typeless
 {

@@ -1,16 +1,16 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Graphics.Primitives;
+using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Particles;
+using CalamityMod.Sounds;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Sounds;
-using CalamityMod.Particles;
-using Terraria.Graphics.Shaders;
-using Microsoft.Xna.Framework.Graphics;
-using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.Graphics.Primitives;
-using Microsoft.CodeAnalysis;
 
 namespace CalamityMod.Projectiles.Ranged
 {

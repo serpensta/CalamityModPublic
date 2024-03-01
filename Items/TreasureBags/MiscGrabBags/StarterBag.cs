@@ -89,7 +89,7 @@ namespace CalamityMod.Items.TreasureBags.MiscGrabBags
                 return playerName == "Heart Plus Up";
             };
             itemLoot.AddIf(getsHapuFruit, ModContent.ItemType<HapuFruit>());
-            
+
             // Apelusa dev item
             // Name specific: "Pelusa"
             static bool getsRedBow(DropAttemptInfo info)
@@ -99,7 +99,7 @@ namespace CalamityMod.Items.TreasureBags.MiscGrabBags
             }
 
             itemLoot.AddIf(getsRedBow, ModContent.ItemType<RedBow>());
-            
+
             // Mishiro dev vanity
             // Name specific: "Amber" or "Mishiro"
             static bool getsOracleHeadphones(DropAttemptInfo info)

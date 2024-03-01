@@ -1,7 +1,7 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
+using CalamityMod.CalPlayer;
 using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -57,7 +57,7 @@ namespace CalamityMod.Projectiles.Typeless
                 }
             }
 
-			Projectile.damage = (int)player.GetBestClassDamage().ApplyTo(Projectile.originalDamage);
+            Projectile.damage = (int)player.GetBestClassDamage().ApplyTo(Projectile.originalDamage);
 
             //Animation
             Projectile.frameCounter++;
@@ -80,7 +80,7 @@ namespace CalamityMod.Projectiles.Typeless
                     Vector2 spawnPos = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                     spawnPos = spawnPos.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
                     Vector2 velocity = spawnPos - Projectile.Center;
-                    int idx = Dust.NewDust(spawnPos + velocity, 0, 0, 56, velocity.X * 1.5f, velocity.Y * 1.5f, 100, default, 1.4f);
+                    int idx = Dust.NewDust(spawnPos + velocity, 0, 0, DustID.BlueFairy, velocity.X * 1.5f, velocity.Y * 1.5f, 100, default, 1.4f);
                     Main.dust[idx].noGravity = true;
                     Main.dust[idx].noLight = true;
                     Main.dust[idx].velocity = velocity;
@@ -91,7 +91,7 @@ namespace CalamityMod.Projectiles.Typeless
             //Periodically create dust
             if (Main.rand.NextBool(16) && !modPlayer.fungalClumpVanity)
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 56, Projectile.velocity.X * 0.05f, Projectile.velocity.Y * 0.05f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.BlueFairy, Projectile.velocity.X * 0.05f, Projectile.velocity.Y * 0.05f);
             }
 
             //Anti-sticky movement failsafe

@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -42,7 +42,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 float shortXVel = Projectile.velocity.X / 3f * (float)i;
                 float shortYVel = Projectile.velocity.Y / 3f * (float)i;
-                int natureDust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 157, 0f, 0f, 100, default, 1f);
+                int natureDust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.ChlorophyteWeapon, 0f, 0f, 100, default, 1f);
                 Dust dust = Main.dust[natureDust];
                 dust.noGravity = true;
                 dust.velocity *= 0.1f;
@@ -52,7 +52,7 @@ namespace CalamityMod.Projectiles.Magic
             }
             if (Main.rand.NextBool(8))
             {
-                int natual = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 157, 0f, 0f, 100, default, 0.5f);
+                int natual = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.ChlorophyteWeapon, 0f, 0f, 100, default, 0.5f);
                 Main.dust[natual].velocity *= 0.25f;
                 Main.dust[natual].velocity += Projectile.velocity * 0.5f;
             }

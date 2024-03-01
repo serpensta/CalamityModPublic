@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Armor.Prismatic
         public new string LocalizationCategory => "Items.Armor.PostMoonLord";
         public override void SetStaticDefaults()
         {
-           
+
             if (Main.netMode == NetmodeID.Server)
                 return;
 

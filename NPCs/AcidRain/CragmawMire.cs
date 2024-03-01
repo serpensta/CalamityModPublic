@@ -94,9 +94,9 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CragmawMire")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.CragmawMire")
             });
         }
 
@@ -512,7 +512,7 @@ namespace CalamityMod.NPCs.AcidRain
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             // If post-Polter, the drop rates are 10%. Otherwise they're 100%.
-			// This is accomplished by adding rules if the CONDITION "Post-Polter" fails.
+            // This is accomplished by adding rules if the CONDITION "Post-Polter" fails.
             LeadingConditionRule postPolter = npcLoot.DefineConditionalDropSet(() => DownedBossSystem.downedPolterghast);
             postPolter.Add(ModContent.ItemType<NuclearFuelRod>(), 10, hideLootReport: !DownedBossSystem.downedPolterghast);
             postPolter.Add(ModContent.ItemType<SpentFuelContainer>(), 10, hideLootReport: !DownedBossSystem.downedPolterghast);

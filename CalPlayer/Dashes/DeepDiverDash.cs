@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 namespace CalamityMod.CalPlayer.Dashes
 {
@@ -19,7 +20,7 @@ namespace CalamityMod.CalPlayer.Dashes
         {
             for (int d = 0; d < 60; d++)
             {
-                Dust iceDashDust = Dust.NewDustDirect(player.position, player.width, player.height, 33, 0f, 0f, 100, default, 1.25f);
+                Dust iceDashDust = Dust.NewDustDirect(player.position, player.width, player.height, DustID.Water, 0f, 0f, 100, default, 1.25f);
                 iceDashDust.position += Main.rand.NextVector2Square(-5f, 5f);
                 iceDashDust.velocity *= 0.2f;
                 iceDashDust.scale *= Main.rand.NextFloat(1f, 1.2f);
@@ -33,7 +34,7 @@ namespace CalamityMod.CalPlayer.Dashes
         {
             for (int m = 0; m < 24; m++)
             {
-                Dust iceDashDust = Dust.NewDustDirect(player.position + Vector2.UnitY * 4f, player.width, player.height - 8, 33, 0f, 0f, 100, default, 1.25f);
+                Dust iceDashDust = Dust.NewDustDirect(player.position + Vector2.UnitY * 4f, player.width, player.height - 8, DustID.Water, 0f, 0f, 100, default, 1.25f);
                 iceDashDust.position += Main.rand.NextVector2Square(-5f, 5f);
                 iceDashDust.velocity *= 0.2f;
                 iceDashDust.scale *= Main.rand.NextFloat(1f, 1.2f);

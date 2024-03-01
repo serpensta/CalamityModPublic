@@ -1,7 +1,7 @@
-﻿using CalamityMod.NPCs;
-using CalamityMod.NPCs.AcidRain;
+﻿using CalamityMod.Buffs.Potions;
 using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Buffs.Potions;
+using CalamityMod.NPCs;
+using CalamityMod.NPCs.AcidRain;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;

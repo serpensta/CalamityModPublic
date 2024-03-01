@@ -1,8 +1,8 @@
-﻿using CalamityMod.Graphics.Metaballs;
+﻿using System.Linq;
+using CalamityMod.Graphics.Metaballs;
 using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;

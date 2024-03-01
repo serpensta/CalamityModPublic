@@ -44,6 +44,7 @@ ChargedBlast.DisplayName: Blast
 ChargedBlast2.DisplayName: Blast
 ChickenExplosion.DisplayName: Kentucky Fried Explosion
 ChickenRocket.DisplayName: Chicken Rocket
+CinderArrowProj.DisplayName: Cinder Arrow
 ClamorRifleProj.DisplayName: Clamor Bolt
 ClamorRifleProjSplit.DisplayName: Clamor Bolt
 ClaretCannonProj.DisplayName: Claret Cannon
@@ -67,6 +68,7 @@ DWArrow.DisplayName: Death's Arrow
 ElementalFire.DisplayName: Elemental Fire
 ElementalFlare.DisplayName: Elemental Flare
 ElysianArrowProj.DisplayName: Elysian Arrow
+ElysianArrowRain.DisplayName: Elysian Light
 EmesisGore.DisplayName: Rotten Gore
 EssenceFire.DisplayName: God Slayer Fire
 ExoCrystalArrow.DisplayName: Exo Crystal
@@ -105,8 +107,8 @@ HydrasBlood.DisplayName: Hydra's Blood
 HyperiusBulletProj.DisplayName: Hyperius Bullet
 HyperiusSplit.DisplayName: Hyperius Bad Time
 IcicleArrowProj.DisplayName: Icicle Arrow
-IcyBulletProj.DisplayName: Icy Bullet
-IlluminatedBullet.DisplayName: Illuminated Bullet
+HailstormBulletProj.DisplayName: Hailstorm Bullet
+HallowPointRoundProj.DisplayName: Hallow-Point Round
 ImpactRound.DisplayName: Impact Round
 KarasawaShot.DisplayName: Karasawa Shot
 LeafArrow.DisplayName: Leaf Arrow
@@ -127,7 +129,6 @@ MiniatureFolly.DisplayName: Miniature Folly
 MiniSharkron.DisplayName: Mini Sharkron
 MistArrow.DisplayName: Mist Arrow
 MortarRoundProj.DisplayName: Mortar
-NapalmArrowProj.DisplayName: Napalm Arrow
 NeedlerProj.DisplayName: Needle
 NorfleetComet.DisplayName: Comet
 NorfleetExplosion.DisplayName: Explosion
@@ -244,3 +245,4 @@ DragonsBreathFlames.DisplayName: Draconic Flames
 DragonsBreathMag.DisplayName: Dragons Breath Cartridge
 FlakKrakenProjectile.DisplayName: Flak Kraken
 FlakToxicannonProjectile.DisplayName: Flak Toxicannon
+VanquisherArrowProj.DisplayName: Vanquisher Arrow Proj

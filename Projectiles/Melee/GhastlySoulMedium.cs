@@ -1,11 +1,11 @@
+﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -45,7 +45,7 @@ namespace CalamityMod.Projectiles.Melee
             {
                 Projectile.frame = 0;
             }
-            int ghostlyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 173, 0f, 0f, 0, default, 1f);
+            int ghostlyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.ShadowbeamStaff, 0f, 0f, 0, default, 1f);
             Dust dust = Main.dust[ghostlyDust];
             dust.velocity *= 0.1f;
             Main.dust[ghostlyDust].scale = 1.3f;
@@ -117,7 +117,7 @@ namespace CalamityMod.Projectiles.Melee
                 Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                 rotate = rotate.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * 6.28318548f / (float)dustAmt), default) + Projectile.Center;
                 Vector2 faceDirection = rotate - Projectile.Center;
-                int killedDust = Dust.NewDust(rotate + faceDirection, 0, 0, 173, faceDirection.X * 1.5f, faceDirection.Y * 1.5f, 100, default, 2f);
+                int killedDust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.ShadowbeamStaff, faceDirection.X * 1.5f, faceDirection.Y * 1.5f, 100, default, 2f);
                 Main.dust[killedDust].noGravity = true;
                 Main.dust[killedDust].noLight = true;
                 Main.dust[killedDust].velocity = faceDirection;

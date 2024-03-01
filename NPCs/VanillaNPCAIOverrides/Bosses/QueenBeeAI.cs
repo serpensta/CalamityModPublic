@@ -1,15 +1,15 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Events;
-using CalamityMod.World;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
 using CalamityMod.NPCs.PlagueEnemies;
 using CalamityMod.Projectiles.Boss;
+using CalamityMod.World;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -279,7 +279,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
                         npc.direction = playerLocation < 0 ? 1 : -1;
                         npc.spriteDirection = npc.direction;
-                        
+
                         SoundEngine.PlaySound(SoundID.Zombie125, npc.Center);
 
                         return false;

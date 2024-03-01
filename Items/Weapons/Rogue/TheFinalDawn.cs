@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Rarities;
 using Terraria;
-using Terraria.ID;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 

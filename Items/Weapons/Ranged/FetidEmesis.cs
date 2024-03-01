@@ -45,7 +45,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                     ModContent.ProjectileType<EmesisGore>(), damage, knockback, player.whoAmI);
                 for (int i = 0; i < 5; i++)
                 {
-                    Dust dust = Dust.NewDustDirect(position, 10, 10, 27);
+                    Dust dust = Dust.NewDustDirect(position, 10, 10, DustID.Shadowflame);
                     dust.velocity = Vector2.Normalize(velocity).RotatedByRandom(MathHelper.ToRadians(15f));
                     dust.noGravity = true;
                 }

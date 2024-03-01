@@ -1,4 +1,7 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using System.IO;
+using System.Linq;
+using CalamityMod.Dusts;
 using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.DraedonsArsenal;
@@ -6,9 +9,6 @@ using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;

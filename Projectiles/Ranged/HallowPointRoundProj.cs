@@ -1,13 +1,13 @@
-using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Ranged
 {
-    public class IlluminatedBullet : ModProjectile, ILocalizedModType
+    public class HallowPointRoundProj : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override void SetStaticDefaults()
@@ -25,7 +25,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = true;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 300;
-            Projectile.extraUpdates = 3;
+            Projectile.MaxUpdates = 5;
 
             // Invisible for the first few frames
             Projectile.alpha = 255;
@@ -35,7 +35,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            Lighting.AddLight(Projectile.Center, 1f, 0.7f, 0f);
+            Lighting.AddLight(Projectile.Center, 0.7f, 0.5f, 0.3f);
 
             // Projectile becomes visible after a few frames
             if (Projectile.timeLeft == 298)
@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Ranged
             // Once projectile is visible, spawn trailing sparkles
             if (Projectile.timeLeft <= 298 && Main.rand.NextBool(5))
             {
-                int idx = Dust.NewDust(Projectile.Center, 1, 1, 228, 0f, 0f);
+                int idx = Dust.NewDust(Projectile.Center, 1, 1, DustID.GoldFlame, 0f, 0f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].noLight = true;
                 Main.dust[idx].position = Projectile.Center;
@@ -54,20 +54,18 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override bool PreDraw(ref Color lightColor)
         {
-            CalamityUtils.DrawAfterimagesFromEdge(Projectile, 0, lightColor);
+            CalamityUtils.DrawAfterimagesFromEdge(Projectile, 0, Color.White);
             return false;
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            target.AddBuff(ModContent.BuffType<HolyFlames>(), 120);
-        }
-
-        // On impact, make impact dust and play a sound.
+        // On impact, make impact sparkle and play a sound.
         public override void OnKill(int timeLeft)
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+
+            GenericSparkle impactParticle = new GenericSparkle(Projectile.Center, Vector2.Zero, Color.Goldenrod, Color.White, Main.rand.NextFloat(0.7f, 1.2f), 12);
+            GeneralParticleHandler.SpawnParticle(impactParticle);
         }
     }
 }

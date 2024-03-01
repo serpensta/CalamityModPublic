@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -24,13 +24,13 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
-            Projectile.alpha = 255;
-            Projectile.timeLeft = 120;
+            Projectile.timeLeft = 210;
             Projectile.extraUpdates = 1;
+            Projectile.tileCollide = false;
             AIType = ProjectileID.Bullet;
         }
 
-        public override bool? CanHitNPC(NPC target) => Projectile.timeLeft < 90 && target.CanBeChasedBy(Projectile);
+        public override bool? CanHitNPC(NPC target) => Projectile.ai[2] >= 30 && target.CanBeChasedBy(Projectile);
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -40,25 +40,20 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void AI()
         {
+            Projectile.ai[2]++;
             Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
-            if (Projectile.alpha > 0)
-            {
-                Projectile.alpha -= 85;
-            }
-            float x2 = Projectile.position.X - Projectile.velocity.X / 10f;
-            float y2 = Projectile.position.Y - Projectile.velocity.Y / 10f;
-            int terraDust = Dust.NewDust(new Vector2(x2, y2), 1, 1, 74, 0f, 0f, 0, default, 0.8f);
-            Main.dust[terraDust].alpha = Projectile.alpha;
-            Main.dust[terraDust].position.X = x2;
-            Main.dust[terraDust].position.Y = y2;
-            Main.dust[terraDust].velocity *= 0f;
-            Main.dust[terraDust].noGravity = true;
+
+            Dust dust = Dust.NewDustPerfect(Projectile.Center, 264, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.6f));
+            dust.noGravity = true;
+            dust.scale = Main.rand.NextFloat(0.5f, 0.8f);
+            dust.color = Main.rand.NextBool(3) ? Color.MediumAquamarine : Color.Lime;
 
             if (speed == 0f)
                 speed = Projectile.velocity.Length();
 
-            if (Projectile.timeLeft < 90) {
-                CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 450f, speed, 12f);
+            if (Projectile.ai[2] >= 30)
+            {
+                CalamityUtils.HomeInOnNPC(Projectile, true, 500f, speed, 12f);
             }
         }
     }

@@ -222,7 +222,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         Main.LocalPlayer.Calamity().GeneralScreenShakePower = screenShakePower;
 
                     if (calamityGlobalNPC.newAI[0] == exhaustionGateValue)
-                        SoundEngine.PlaySound(SoundID.NPCDeath64 with { Pitch = SoundID.NPCDeath64.Pitch - 0.9f, Volume = SoundID.NPCDeath64.Volume + 0.4f}, player.Center); // fart
+                        SoundEngine.PlaySound(SoundID.NPCDeath64 with { Pitch = SoundID.NPCDeath64.Pitch - 0.9f, Volume = SoundID.NPCDeath64.Volume + 0.4f }, player.Center); // fart
 
                     if (Main.netMode != NetmodeID.MultiplayerClient && calamityGlobalNPC.newAI[0] % 5f == 0f)
                     {

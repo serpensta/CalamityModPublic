@@ -30,14 +30,14 @@ namespace CalamityMod.Projectiles.Rogue
             {
                 if (Main.rand.NextBool(7))
                 {
-                    int index = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 171, 0.0f, 0.0f, 100, new Color(), 1f);
+                    int index = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Venom, 0.0f, 0.0f, 100, new Color(), 1f);
                     Main.dust[index].noGravity = true;
                     Main.dust[index].fadeIn = 1.5f;
                     Main.dust[index].velocity *= 0.25f;
                 }
                 if (Main.rand.NextBool(5))
                 {
-                    int index = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 46, 0.0f, 0.0f, 100, new Color(), 1f);
+                    int index = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Poisoned, 0.0f, 0.0f, 100, new Color(), 1f);
                     Main.dust[index].noGravity = true;
                     Main.dust[index].fadeIn = 1.5f;
                     Main.dust[index].velocity *= 0.25f;

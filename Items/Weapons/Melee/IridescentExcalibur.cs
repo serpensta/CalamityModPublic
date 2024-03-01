@@ -133,7 +133,7 @@ namespace CalamityMod.Items.Weapons.Melee
                         break;
                 }
 
-                Dust swingDust = Main.dust[Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 267, 0f, 0f, alpha, color, 1.2f)];
+                Dust swingDust = Main.dust[Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.RainbowMk2, 0f, 0f, alpha, color, 1.2f)];
                 swingDust.noGravity = true;
             }
         }

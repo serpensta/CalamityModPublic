@@ -14,7 +14,7 @@ namespace CalamityMod.BiomeManagers
         public override int BiomeTorchItemType => ModContent.ItemType<AstralTorch>();
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
         public override string BestiaryIcon => "CalamityMod/BiomeManagers/AstralDesertIcon";
-		// Could use its own unique background
+        // Could use its own unique background
         public override string BackgroundPath => "CalamityMod/Backgrounds/MapBackgrounds/AstralBG";
         public override string MapBackground => "CalamityMod/Backgrounds/MapBackgrounds/AstralBG";
         public override int Music => CalamityMod.Instance.GetMusicFromMusicMod("AstralInfection") ?? MusicID.Space;

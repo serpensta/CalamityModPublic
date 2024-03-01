@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
@@ -20,15 +22,13 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityMod.NPCs.PlaguebringerGoliath
 {
@@ -67,7 +67,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             };
             value.Position.X -= 48f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
         public override void SetDefaults()
@@ -97,7 +97,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.UndergroundJungle,
@@ -748,7 +748,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 if (shouldSpawnMissiles)
                 {
-                    SoundEngine.PlaySound(SoundID.Item88,NPC.Center);
+                    SoundEngine.PlaySound(SoundID.Item88, NPC.Center);
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -1303,7 +1303,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 NPC.frame.X = NPC.frame.X == 0 ? width : 0;
                 if (charging)
                 {
-                   flyingFrame2 = !flyingFrame2;
+                    flyingFrame2 = !flyingFrame2;
                 }
             }
         }

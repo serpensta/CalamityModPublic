@@ -54,7 +54,7 @@ namespace CalamityMod.Items.PermanentBoosters
             // We prematurely stop it from getting to that point
             if (!Player.active || Main.masterMode)
                 return false;
-            
+
             return Player.Calamity().extraAccessoryML;
         }
         public override bool IsHidden() => IsEmpty && !IsEnabled();

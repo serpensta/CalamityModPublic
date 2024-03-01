@@ -36,10 +36,11 @@ namespace CalamityMod.Projectiles.Melee
         public override void AI()
         {
             // Unexist with target
-            if (target is null || !target.active) {
+            if (target is null || !target.active)
+            {
                 Projectile.Kill();
             }
- 
+
             Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center;     // Stay with target
 
             if (Projectile.ai[1] == CurrentSwordTimer)

@@ -1,8 +1,8 @@
+﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -56,7 +56,8 @@ namespace CalamityMod.Projectiles.Melee.Shortswords
         {
             OnHitEffect();
 
-            if (NumHits < 3) {      // Just to avoid insanity from stacking so many super dummies or hitting many worm segments at once
+            if (NumHits < 3)
+            {      // Just to avoid insanity from stacking so many super dummies or hitting many worm segments at once
                 // 2x bonus for true melee hits (spawns an additional aura plus the one aura from the cosmic shiv ball)
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<CosmicShivAura>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
                 NumHits++;

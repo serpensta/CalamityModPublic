@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles.Magic
                 return true;
             }
             bool consume = Projectile.ai[0] == Projectile.ai[1];
-            if(consume)
+            if (consume)
             {
                 Projectile.localAI[0] = MathHelper.Clamp(Projectile.localAI[0] - 1f, MinManaConsumptionDelay, MaxManaConsumptionDelay);
                 Projectile.ai[1] += Projectile.localAI[0];

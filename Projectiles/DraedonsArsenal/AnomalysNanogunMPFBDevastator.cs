@@ -1,11 +1,11 @@
 ﻿using System;
+using CalamityMod.Items.Weapons.DraedonsArsenal;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Items.Weapons.DraedonsArsenal;
 
 namespace CalamityMod.Projectiles.DraedonsArsenal
 {
@@ -59,14 +59,14 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             int yPos = texture.Height / Main.projFrames[Type] * Projectile.frame;
-            Main.EntitySpriteDraw(texture, 
-                Projectile.position - Main.screenPosition, 
-                new Rectangle(0, yPos, texture.Width, texture.Height / Main.projFrames[Type]), 
-                lightColor, 
-                0f, 
-                Vector2.Zero, 
-                1f, 
-                SpriteEffects.None, 
+            Main.EntitySpriteDraw(texture,
+                Projectile.position - Main.screenPosition,
+                new Rectangle(0, yPos, texture.Width, texture.Height / Main.projFrames[Type]),
+                lightColor,
+                0f,
+                Vector2.Zero,
+                1f,
+                SpriteEffects.None,
                 0);
 
             return false;

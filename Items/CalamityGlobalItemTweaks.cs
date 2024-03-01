@@ -23,7 +23,7 @@ namespace CalamityMod.Items
         {
             // Various shorthands for items which receive very simple changes, such as setting one flag.
             IItemTweak[] trueMelee = Do(TrueMelee);
-            IItemTweak[] trueMeleeNoSpeed = Do(TrueMeleeNoSpeed); 
+            IItemTweak[] trueMeleeNoSpeed = Do(TrueMeleeNoSpeed);
             IItemTweak[] pointBlank = Do(PointBlank);
             IItemTweak[] autoReuse = Do(AutoReuse);
             IItemTweak[] nonConsumableBossSummon = Do(MaxStack(1), NotConsumable, UseTimeExact(10));
@@ -76,6 +76,7 @@ namespace CalamityMod.Items
                 { ItemID.Code2, Do(AutoReuse, DamageExact(43)) },
                 { ItemID.CorruptYoyo, Do(AutoReuse, DamageExact(20)) }, // Malaise
                 { ItemID.CrimsonYoyo, Do(AutoReuse, DamageExact(20)) }, // Artery
+                { ItemID.CrystalBullet, Do(DamageExact(8)) },
                 { ItemID.CrystalDart, Do(DamageExact(20)) },
                 { ItemID.CrystalSerpent, Do(DamageExact(45)) },
                 { ItemID.CrystalStorm, Do(DamageExact(40)) },
@@ -134,7 +135,8 @@ namespace CalamityMod.Items
                 { ItemID.IceBoomerang, Do(UseExact(25), ShootSpeedExact(9)) },
                 { ItemID.IceRod, Do(UseExact(6), DamageExact(30), ShootSpeedExact(20)) },
                 { ItemID.IceSickle, Do(AutoReuse, UseMeleeSpeed, DamageExact(75), ShootSpeedExact(20f)) },
-                { ItemID.IchorArrow, Do(DamageExact(11)) },
+                { ItemID.IchorArrow, Do(DamageExact(13)) },
+                { ItemID.IchorBullet, Do(DamageExact(11)) },
                 { ItemID.ImpStaff, Do(AutoReuse, UseExact(30), DamageExact(25)) },
                 { ItemID.InfernoFork, Do(DamageExact(84)) },
                 { ItemID.InfluxWaver, Do(UseMeleeSpeed, DamageExact(80), UseExact(25)) },
@@ -502,7 +504,7 @@ namespace CalamityMod.Items
                 { ItemID.SwordWhip, autoReuse }, // Durendal
                 { ItemID.TempestStaff, Do(AutoReuse, UseExact(20)) },
                 { ItemID.ThornWhip, autoReuse }, // Snapthorn
-                { ItemID.VampireFrogStaff, Do(AutoReuse, UseExact(30)) },                
+                { ItemID.VampireFrogStaff, Do(AutoReuse, UseExact(30)) },
                 { ItemID.XenoStaff, Do(AutoReuse, UseExact(20)) },
                 #endregion
 

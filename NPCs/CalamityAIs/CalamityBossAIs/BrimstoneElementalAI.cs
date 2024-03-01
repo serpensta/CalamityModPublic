@@ -139,7 +139,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 {
                     if (Main.rand.Next(3) < dustAmt)
                     {
-                        int dust = Dust.NewDust(npc.Center - new Vector2(size), size * 2, size * 2, 235, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 1.5f);
+                        int dust = Dust.NewDust(npc.Center - new Vector2(size), size * 2, size * 2, DustID.LifeDrain, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, 90, default, 1.5f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity *= 0.2f;
                         Main.dust[dust].fadeIn = 1f;
@@ -303,7 +303,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 Vector2 position = new Vector2(npc.ai[1] * 16f - (npc.width / 2), npc.ai[2] * 16f - (npc.height / 2));
                 for (int m = 0; m < 5; m++)
                 {
-                    int dust = Dust.NewDust(position, npc.width, npc.height, 235, 0f, -1f, 90, default, 2f);
+                    int dust = Dust.NewDust(position, npc.width, npc.height, DustID.LifeDrain, 0f, -1f, 90, default, 2f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].fadeIn = 1f;
                 }
@@ -322,7 +322,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     npc.position = position;
                     for (int n = 0; n < 15; n++)
                     {
-                        int warpDust = Dust.NewDust(npc.position, npc.width, npc.height, 235, 0f, -1f, 90, default, 3f);
+                        int warpDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.LifeDrain, 0f, -1f, 90, default, 3f);
                         Main.dust[warpDust].noGravity = true;
                     }
                     npc.ai[0] = 2f;

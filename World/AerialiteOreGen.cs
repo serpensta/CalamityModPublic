@@ -1,15 +1,15 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
-using Terraria.GameContent.Generation;
-using Terraria.WorldBuilding;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityMod.DataStructures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using CalamityMod.DataStructures;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.Generation;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace CalamityMod.World
 {
@@ -19,7 +19,7 @@ namespace CalamityMod.World
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int x = 5; x < Main.maxTilesX - 5; x++) 
+                for (int x = 5; x < Main.maxTilesX - 5; x++)
                 {
                     for (int y = 5; y < Main.worldSurface; y++)
                     {
@@ -27,7 +27,7 @@ namespace CalamityMod.World
                         {
                             Tile tile = Main.tile[x, y];
 
-                            if (WorldGen.genRand.Next(365) == 0 && tile.TileType == TileID.Cloud && tile.HasTile)
+                            if (WorldGen.genRand.NextBool(365)&& tile.TileType == TileID.Cloud && tile.HasTile)
                             {
                                 ShapeData circle = new ShapeData();
                                 ShapeData biggerCircle = new ShapeData();

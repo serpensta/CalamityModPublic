@@ -58,7 +58,7 @@ namespace CalamityMod.World
                 contents.Insert(0, new ChestItem(mainItem, 1));
                 contents.Insert(1, new ChestItem(bars, WorldGen.genRand.Next(4, 7)));
             }
-            
+
             for (int i = 0; i < contents.Count; i++)
             {
                 chest.item[i].SetDefaults(contents[i].Type);

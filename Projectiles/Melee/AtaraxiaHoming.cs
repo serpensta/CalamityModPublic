@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
@@ -139,9 +140,9 @@ namespace CalamityMod.Projectiles.Melee
             Lighting.AddLight(Projectile.Center, 0.3f, 0.1f, 0.45f);
 
             // Spawn dust with a 3/4 chance if currently homing in
-            if (homing && Main.rand.Next(4) != 3)
+            if (homing && !Main.rand.NextBool(4))
             {
-                int idx = Dust.NewDust(Projectile.Center, 1, 1, 70);
+                int idx = Dust.NewDust(Projectile.Center, 1, 1, DustID.PurpleCrystalShard);
                 Main.dust[idx].position = Projectile.Center;
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 0.25f;

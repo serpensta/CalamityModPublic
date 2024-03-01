@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Accessories.Wings;
@@ -17,6 +19,7 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.NPCs.Bumblebirb;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
@@ -25,17 +28,14 @@ using CalamityMod.Tiles.Ores;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
+using ReLogic.Utilities;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using ReLogic.Utilities;
-using CalamityMod.NPCs.Bumblebirb;
 
 namespace CalamityMod.NPCs.Yharon
 {
@@ -118,7 +118,7 @@ namespace CalamityMod.NPCs.Yharon
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Yharon")
             });
@@ -503,7 +503,7 @@ namespace CalamityMod.NPCs.Yharon
                         Vector2 dustRotation = Vector2.Normalize(NPC.velocity) * new Vector2(NPC.width / 2f, NPC.height) * 0.75f * 0.5f;
                         dustRotation = dustRotation.RotatedBy((i - (dustAmt / 2 - 1)) * MathHelper.TwoPi / dustAmt) + NPC.Center;
                         Vector2 dustDirection = dustRotation - NPC.Center;
-                        int orangeDust = Dust.NewDust(dustRotation + dustDirection, 0, 0, 244, dustDirection.X * 2f, dustDirection.Y * 2f, 100, default, 1.4f);
+                        int orangeDust = Dust.NewDust(dustRotation + dustDirection, 0, 0, DustID.CopperCoin, dustDirection.X * 2f, dustDirection.Y * 2f, 100, default, 1.4f);
                         Main.dust[orangeDust].noGravity = true;
                         Main.dust[orangeDust].noLight = true;
                         Main.dust[orangeDust].velocity = Vector2.Normalize(dustDirection) * 3f;
@@ -1046,7 +1046,7 @@ namespace CalamityMod.NPCs.Yharon
                 {
                     RoarSoundSlot = SoundEngine.PlaySound(RoarSound, NPC.Center);
                     SoundEngine.PlaySound(OrbSound, NPC.Center);
-                } 
+                }
 
                 NPC.ai[2] += 1f;
 
@@ -1840,7 +1840,7 @@ namespace CalamityMod.NPCs.Yharon
                 if (!targetDead)
                 {
                     if (Vector2.Distance(NPC.Center, destination) > reduceSpeedChargeDistance)
-                    NPC.SimpleFlyMovement(desiredVelocity, acceleration);
+                        NPC.SimpleFlyMovement(desiredVelocity, acceleration);
                     else
                         NPC.velocity *= 0.98f;
                 }
@@ -2139,7 +2139,7 @@ namespace CalamityMod.NPCs.Yharon
                             {
                                 // Set damage
                                 NPC.damage = setDamage;
-                            
+
                                 Vector2 vector = NPC.SafeDirectionTo(targetData.Center, Vector2.UnitX * NPC.spriteDirection);
                                 NPC.spriteDirection = (vector.X > 0f) ? 1 : -1;
                                 NPC.rotation = vector.ToRotation();
@@ -2639,7 +2639,7 @@ namespace CalamityMod.NPCs.Yharon
                 Vector2 dustRotate = Vector2.Normalize(NPC.velocity) * new Vector2((NPC.width + 50) / 2f, NPC.height) * 0.75f;
                 dustRotate = dustRotate.RotatedBy((i - (dustAmt / 2 - 1)) * (double)pie / (float)dustAmt) + NPC.Center;
                 Vector2 dustVel = ((float)(Main.rand.NextDouble() * pie) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                int chargeDust = Dust.NewDust(dustRotate + dustVel, 0, 0, 244, dustVel.X * 2f, dustVel.Y * 2f, 100, default, 1.4f);
+                int chargeDust = Dust.NewDust(dustRotate + dustVel, 0, 0, DustID.CopperCoin, dustVel.X * 2f, dustVel.Y * 2f, 100, default, 1.4f);
                 Main.dust[chargeDust].noGravity = true;
                 Main.dust[chargeDust].noLight = true;
                 Main.dust[chargeDust].velocity /= 4f;
@@ -3245,7 +3245,7 @@ namespace CalamityMod.NPCs.Yharon
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int fieryDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 244, 0f, 0f, 100, default, 2f);
+                    int fieryDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fieryDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -3255,10 +3255,10 @@ namespace CalamityMod.NPCs.Yharon
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 244, 0f, 0f, 100, default, 3f);
+                    int fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 3f);
                     Main.dust[fieryDust2].noGravity = true;
                     Main.dust[fieryDust2].velocity *= 5f;
-                    fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 244, 0f, 0f, 100, default, 2f);
+                    fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fieryDust2].velocity *= 2f;
                 }
 

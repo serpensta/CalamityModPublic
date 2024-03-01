@@ -1,8 +1,8 @@
-﻿using Terraria.ModLoader;
-using Terraria.ID;
-using CalamityMod.Items.Materials;
-using CalamityMod.Tiles.DraedonSummoner;
+﻿using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.DraedonStructures;
+using CalamityMod.Tiles.DraedonSummoner;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.DraedonMisc
 {

@@ -1,17 +1,17 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.Summon;
+using CalamityMod.CalPlayer;
+using CalamityMod.Items.Weapons.Summon;
+using CalamityMod.NPCs.PlaguebringerGoliath;
+using CalamityMod.Particles;
+using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
-using System;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Items.Weapons.Summon;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using CalamityMod.Sounds;
-using CalamityMod.Particles;
-using CalamityMod.NPCs.PlaguebringerGoliath;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -236,7 +236,7 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.MaxUpdates = InfectedRemote.MaxUpdatesWhenCharging;
 
             float wrappedAttackTimer = AITimer % (hoverTime + chargeTime);
-            
+
             // Hover into position, to the top left/right of the target.
             if (wrappedAttackTimer < hoverTime)
             {

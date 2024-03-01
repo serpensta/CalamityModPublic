@@ -135,7 +135,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
             for (int i = 0; i < 20; i++)
             {
-                Dust boomDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 261, Scale: 2f);
+                Dust boomDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.AncientLight, Scale: 2f);
                 boomDust.noGravity = true;
             }
 

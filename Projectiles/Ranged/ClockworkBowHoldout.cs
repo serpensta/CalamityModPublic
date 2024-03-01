@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;
@@ -20,7 +20,7 @@ namespace CalamityMod.Projectiles.Ranged
         private ref float CurrentChargingFrames => ref Projectile.ai[0];
         private ref float LoadedBolts => ref Projectile.ai[1];
         private ref float FramesToLoadBolt => ref Projectile.localAI[0];
-        
+
         private float storedVelocity = 1f;
 
         private float angularSpread = MathHelper.ToRadians(16);

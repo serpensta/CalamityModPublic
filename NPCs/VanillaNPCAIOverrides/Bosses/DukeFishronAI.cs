@@ -1,11 +1,11 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -300,13 +300,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         Vector2 dust = (Vector2.Normalize(npc.velocity) * new Vector2(npc.width / 2f, npc.height) * 0.75f * 0.5f).RotatedBy((i - (dustAmt / 2 - 1)) * MathHelper.TwoPi / dustAmt) + npc.Center;
                         Vector2 sharknadoDustDirection = dust - npc.Center;
-                        int sharknadoDust = Dust.NewDust(dust + sharknadoDustDirection, 0, 0, 172, sharknadoDustDirection.X * 2f, sharknadoDustDirection.Y * 2f, 100, default, 1.4f);
+                        int sharknadoDust = Dust.NewDust(dust + sharknadoDustDirection, 0, 0, DustID.DungeonWater, sharknadoDustDirection.X * 2f, sharknadoDustDirection.Y * 2f, 100, default, 1.4f);
                         Main.dust[sharknadoDust].noGravity = true;
                         Main.dust[sharknadoDust].noLight = true;
                         Main.dust[sharknadoDust].velocity = Vector2.Normalize(sharknadoDustDirection) * 3f;
                     }
 
-                    SoundEngine.PlaySound(SoundID.Zombie20,npc.Center);
+                    SoundEngine.PlaySound(SoundID.Zombie20, npc.Center);
                 }
 
                 npc.ai[2] += 1f;
@@ -448,7 +448,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 arg_E1C_0 = (Vector2.Normalize(npc.velocity) * new Vector2((npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((j - (chargeDustAmt / 2 - 1)) * MathHelper.Pi / chargeDustAmt) + npc.Center;
                     Vector2 chargeDustDirection = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int chargeDust = Dust.NewDust(arg_E1C_0 + chargeDustDirection, 0, 0, 172, chargeDustDirection.X * 2f, chargeDustDirection.Y * 2f, 100, default, 1.4f);
+                    int chargeDust = Dust.NewDust(arg_E1C_0 + chargeDustDirection, 0, 0, DustID.DungeonWater, chargeDustDirection.X * 2f, chargeDustDirection.Y * 2f, 100, default, 1.4f);
                     Main.dust[chargeDust].noGravity = true;
                     Main.dust[chargeDust].noLight = true;
                     Main.dust[chargeDust].velocity /= 4f;
@@ -722,7 +722,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 arg_1A97_0 = (Vector2.Normalize(npc.velocity) * new Vector2((npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((k - (phase2ChargeDustAmt / 2 - 1)) * MathHelper.Pi / phase2ChargeDustAmt) + npc.Center;
                     Vector2 phase2ChargeDustDirection = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int phase2ChargeDust = Dust.NewDust(arg_1A97_0 + phase2ChargeDustDirection, 0, 0, 172, phase2ChargeDustDirection.X * 2f, phase2ChargeDustDirection.Y * 2f, 100, default, 1.4f);
+                    int phase2ChargeDust = Dust.NewDust(arg_1A97_0 + phase2ChargeDustDirection, 0, 0, DustID.DungeonWater, phase2ChargeDustDirection.X * 2f, phase2ChargeDustDirection.Y * 2f, 100, default, 1.4f);
                     Main.dust[phase2ChargeDust].noGravity = true;
                     Main.dust[phase2ChargeDust].noLight = true;
                     Main.dust[phase2ChargeDust].velocity /= 4f;
@@ -1006,7 +1006,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 arg_2444_0 = (Vector2.Normalize(npc.velocity) * new Vector2((npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((m - (phase3ChargeDustAmt / 2 - 1)) * MathHelper.Pi / phase3ChargeDustAmt) + npc.Center;
                     Vector2 phase3ChargeDustDirection = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int phase3ChargeDust = Dust.NewDust(arg_2444_0 + phase3ChargeDustDirection, 0, 0, 172, phase3ChargeDustDirection.X * 2f, phase3ChargeDustDirection.Y * 2f, 100, default, 1.4f);
+                    int phase3ChargeDust = Dust.NewDust(arg_2444_0 + phase3ChargeDustDirection, 0, 0, DustID.DungeonWater, phase3ChargeDustDirection.X * 2f, phase3ChargeDustDirection.Y * 2f, 100, default, 1.4f);
                     Main.dust[phase3ChargeDust].noGravity = true;
                     Main.dust[phase3ChargeDust].noLight = true;
                     Main.dust[phase3ChargeDust].velocity /= 4f;
@@ -1333,7 +1333,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         Vector2 vector = (Vector2.Normalize(npc.velocity) * new Vector2((float)npc.width / 2f, npc.height) * 0.75f * 0.5f).RotatedBy((float)(i - (num24 / 2 - 1)) * MathHelper.TwoPi / (float)num24) + npc.Center;
                         Vector2 vector2 = vector - npc.Center;
-                        int num25 = Dust.NewDust(vector + vector2, 0, 0, 172, vector2.X * 2f, vector2.Y * 2f, 100, default(Color), 1.4f);
+                        int num25 = Dust.NewDust(vector + vector2, 0, 0, DustID.DungeonWater, vector2.X * 2f, vector2.Y * 2f, 100, default(Color), 1.4f);
                         Main.dust[num25].noGravity = true;
                         Main.dust[num25].noLight = true;
                         Main.dust[num25].velocity = Vector2.Normalize(vector2) * 3f;
@@ -1489,7 +1489,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 vector4 = (Vector2.Normalize(npc.velocity) * new Vector2((float)(npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((double)(j - (num28 / 2 - 1)) * Math.PI / (double)(float)num28) + center;
                     Vector2 vector5 = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int num29 = Dust.NewDust(vector4 + vector5, 0, 0, 172, vector5.X * 2f, vector5.Y * 2f, 100, default(Color), 1.4f);
+                    int num29 = Dust.NewDust(vector4 + vector5, 0, 0, DustID.DungeonWater, vector5.X * 2f, vector5.Y * 2f, 100, default(Color), 1.4f);
                     Main.dust[num29].noGravity = true;
                     Main.dust[num29].noLight = true;
                     Main.dust[num29].velocity /= 4f;
@@ -1767,7 +1767,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 vector10 = (Vector2.Normalize(npc.velocity) * new Vector2((float)(npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((double)(k - (num33 / 2 - 1)) * Math.PI / (double)(float)num33) + center;
                     Vector2 vector11 = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int num34 = Dust.NewDust(vector10 + vector11, 0, 0, 172, vector11.X * 2f, vector11.Y * 2f, 100, default(Color), 1.4f);
+                    int num34 = Dust.NewDust(vector10 + vector11, 0, 0, DustID.DungeonWater, vector11.X * 2f, vector11.Y * 2f, 100, default(Color), 1.4f);
                     Main.dust[num34].noGravity = true;
                     Main.dust[num34].noLight = true;
                     Main.dust[num34].velocity /= 4f;
@@ -1986,7 +1986,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 vector13 = (Vector2.Normalize(npc.velocity) * new Vector2((float)(npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((double)(m - (num38 / 2 - 1)) * Math.PI / (double)(float)num38) + center;
                     Vector2 vector14 = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int num39 = Dust.NewDust(vector13 + vector14, 0, 0, 172, vector14.X * 2f, vector14.Y * 2f, 100, default(Color), 1.4f);
+                    int num39 = Dust.NewDust(vector13 + vector14, 0, 0, DustID.DungeonWater, vector14.X * 2f, vector14.Y * 2f, 100, default(Color), 1.4f);
                     Main.dust[num39].noGravity = true;
                     Main.dust[num39].noLight = true;
                     Main.dust[num39].velocity /= 4f;
@@ -2020,7 +2020,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[2] == (float)(num14 / 2))
                     SoundEngine.PlaySound(SoundID.Zombie20, npc.Center);
 
-                if (Main.netMode != 1 && npc.ai[2] == (float)(num14 / 2))
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[2] == (float)(num14 / 2))
                 {
                     if (npc.ai[1] == 0f)
                         npc.ai[1] = 300 * Math.Sign((center - player.Center).X);

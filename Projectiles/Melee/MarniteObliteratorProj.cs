@@ -1,9 +1,9 @@
-﻿using CalamityMod.Graphics.Primitives;
+﻿using System;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Tools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;

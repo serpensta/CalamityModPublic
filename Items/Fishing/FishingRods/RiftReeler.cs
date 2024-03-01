@@ -1,10 +1,10 @@
-﻿using CalamityMod.Projectiles.Typeless;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Projectiles.Typeless;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Items.Materials;
-using Terraria.DataStructures;
 
 namespace CalamityMod.Items.Fishing.FishingRods
 {
@@ -16,7 +16,7 @@ namespace CalamityMod.Items.Fishing.FishingRods
         {
             ItemID.Sets.CanFishInLava[Item.type] = true;
 
-                   }
+        }
 
         public override void SetDefaults()
         {
@@ -32,10 +32,10 @@ namespace CalamityMod.Items.Fishing.FishingRods
             Item.value = CalamityGlobalItem.Rarity8BuyPrice;
             Item.rare = ItemRarityID.Yellow;
         }
-        
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            for (int index = 0; index < Main.rand.Next(3,6); ++index) //3 to 5 bobbers
+            for (int index = 0; index < Main.rand.Next(3, 6); ++index) //3 to 5 bobbers
             {
                 float SpeedX = velocity.X + Main.rand.NextFloat(-3.75f, 3.75f);
                 float SpeedY = velocity.Y + Main.rand.NextFloat(-3.75f, 3.75f);

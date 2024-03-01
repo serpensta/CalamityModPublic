@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityMod.Items.Weapons.Summon;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using CalamityMod.Items.Weapons.Summon;
-using Terraria.GameContent;
 using Terraria.Audio;
-using System.Linq;
-using System;
-using System.Collections.Generic;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Summon.SmallAresArms
 {
@@ -121,7 +121,7 @@ namespace CalamityMod.Projectiles.Summon.SmallAresArms
         public ref float Time => ref Projectile.ai[1];
 
         public static Rectangle MouseRectangle => new((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y, 2, 2);
-        
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.DrawScreenCheckFluff[Type] = 9999999;
@@ -152,7 +152,7 @@ namespace CalamityMod.Projectiles.Summon.SmallAresArms
                 laserCannonID,
                 gaussNukeID,
             };
-            
+
             // Initialize things.
             if (PlayerOffset == Vector2.Zero)
                 PlayerOffset = Main.MouseWorld - Main.LocalPlayer.Center;
@@ -219,7 +219,7 @@ namespace CalamityMod.Projectiles.Summon.SmallAresArms
                 {
                     if (!arms.Contains(Main.projectile[i].type) || Main.projectile[i].owner != Projectile.owner || !Main.projectile[i].active || Main.projectile[i].ai[0] != ArmIndex)
                         continue;
-                    
+
                     Main.projectile[i].Kill();
                 }
             }

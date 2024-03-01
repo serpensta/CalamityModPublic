@@ -194,7 +194,7 @@ namespace CalamityMod.Projectiles.Melee
                 float maxDistance = Projectile.scale * 82f;
                 Vector2 distance = Main.rand.NextVector2Circular(maxDistance, maxDistance);
                 Vector2 angularVelocity = Utils.SafeNormalize(distance.RotatedBy(MathHelper.PiOver2), Vector2.Zero) * 2f * (1f + distance.Length() / 15f);
-                Particle glitter = new CritSpark(Projectile.Center + distance, angularVelocity, Main.rand.Next(3) == 0 ? Color.HotPink : Color.Plum, Color.DarkOrchid, 1f + 1 * (distance.Length() / maxDistance), 10, 0.05f, 3f);
+                Particle glitter = new CritSpark(Projectile.Center + distance, angularVelocity, Main.rand.NextBool(3)? Color.HotPink : Color.Plum, Color.DarkOrchid, 1f + 1 * (distance.Length() / maxDistance), 10, 0.05f, 3f);
                 GeneralParticleHandler.SpawnParticle(glitter);
             }
 
@@ -204,7 +204,7 @@ namespace CalamityMod.Projectiles.Melee
             Particle smoke = new HeavySmokeParticle(Projectile.Center + smokePos, smokeSpeed, Color.Lerp(Color.Navy, Color.Indigo, (float)Math.Sin(Main.GlobalTimeWrappedHourly * 6f)), 30, Main.rand.NextFloat(0.4f, 1f) * Projectile.scale, 0.8f, 0, false, 0, true);
             GeneralParticleHandler.SpawnParticle(smoke);
 
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.NextBool(3))
             {
                 Particle smokeGlow = new HeavySmokeParticle(Projectile.Center + smokePos, smokeSpeed, Main.hslToRgb(0.85f, 1, 0.5f), 20, Main.rand.NextFloat(0.4f, 1f) * Projectile.scale, 0.8f, 0, true, 0.01f, true);
                 GeneralParticleHandler.SpawnParticle(smokeGlow);

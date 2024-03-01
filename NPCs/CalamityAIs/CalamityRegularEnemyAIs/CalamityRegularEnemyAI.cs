@@ -320,14 +320,14 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs
                     {
                         for (int k = 0; k < 5; k++)
                         {
-                            Dust.NewDust(npc.position, npc.width, npc.height, 33, 0f, -1f, 0, default, 1f);
+                            Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, 0f, -1f, 0, default, 1f);
                         }
                     }
                     if (npc.type == ModContent.NPCType<AquaticUrchin>() || npc.type == ModContent.NPCType<SeaUrchin>())
                     {
                         for (int k = 0; k < 5; k++)
                         {
-                            Dust.NewDust(npc.position, npc.width, npc.height, 33, 0f, -1f, 0, default, 1f);
+                            Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, 0f, -1f, 0, default, 1f);
                         }
                     }
                 }

@@ -49,10 +49,10 @@ namespace CalamityMod.Projectiles.Pets
                 Color colorAlpha = colorArea;
                 colorAlpha = Projectile.GetAlpha(colorAlpha);
                 goto IL_6899;
-                IL_6881:
+IL_6881:
                 counter += twoConst;
                 continue;
-                IL_6899:
+IL_6899:
                 float trailColorChange = (float)(twelveCompare - counter);
                 if (twoConst < 0)
                 {

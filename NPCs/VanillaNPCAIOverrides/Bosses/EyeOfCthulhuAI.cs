@@ -1,11 +1,11 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
@@ -108,7 +108,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (Main.rand.NextBool(5))
             {
-                int randomBlood = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + npc.height * 0.25f), npc.width, (int)(npc.height * 0.5f), 5, npc.velocity.X, 2f, 0, default, 1f);
+                int randomBlood = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + npc.height * 0.25f), npc.width, (int)(npc.height * 0.5f), DustID.Blood, npc.velocity.X, 2f, 0, default, 1f);
                 Dust dust = Main.dust[randomBlood];
                 dust.velocity.X *= 0.5f;
                 dust.velocity.Y *= 0.1f;
@@ -210,7 +210,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             if (spawnServant)
                             {
                                 for (int m = 0; m < 10; m++)
-                                    Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                                    Dust.NewDust(servantSpawnCenter, 20, 20, DustID.Blood, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
                             }
                         }
                     }
@@ -369,7 +369,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     for (int n = 0; n < 10; n++)
-                        Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                        Dust.NewDust(servantSpawnCenter, 20, 20, DustID.Blood, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
                 }
 
                 if (npc.ai[1] == 100f)
@@ -396,13 +396,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         for (int i = 0; i < 20; i++)
-                            Dust.NewDust(npc.position, npc.width, npc.height, 5, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
+                            Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
 
                         SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     }
                 }
 
-                Dust.NewDust(npc.position, npc.width, npc.height, 5, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
+                Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
                 npc.velocity *= 0.98f;
 
                 if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
@@ -805,7 +805,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (spawnServant)
                         {
                             for (int m = 0; m < 10; m++)
-                                Dust.NewDust(servantSpawnCenter, 20, 20, 5, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
+                                Dust.NewDust(servantSpawnCenter, 20, 20, DustID.Blood, servantSpawnVelocity.X * 0.4f, servantSpawnVelocity.Y * 0.4f, 0, default, 1f);
                         }
                     }
 
@@ -1000,7 +1000,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (Main.rand.NextBool(5))
             {
-                int num9 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + (float)npc.height * 0.25f), npc.width, (int)((float)npc.height * 0.5f), 5, npc.velocity.X, 2f);
+                int num9 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y + (float)npc.height * 0.25f), npc.width, (int)((float)npc.height * 0.5f), DustID.Blood, npc.velocity.X, 2f);
                 Main.dust[num9].velocity.X *= 0.5f;
                 Main.dust[num9].velocity.Y *= 0.1f;
             }
@@ -1119,12 +1119,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 Main.npc[num22].velocity.X = vector3.X;
                                 Main.npc[num22].velocity.Y = vector3.Y;
                                 if (Main.netMode == NetmodeID.Server && num22 < Main.maxNPCs)
-                                    NetMessage.SendData(23, -1, -1, null, num22);
+                                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num22);
                             }
 
                             SoundEngine.PlaySound(SoundID.NPCHit1, vector2);
                             for (int m = 0; m < 10; m++)
-                                Dust.NewDust(vector2, 20, 20, 5, vector3.X * 0.4f, vector3.Y * 0.4f);
+                                Dust.NewDust(vector2, 20, 20, DustID.Blood, vector3.X * 0.4f, vector3.Y * 0.4f);
                         }
                     }
                 }
@@ -1288,11 +1288,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         Main.npc[num34].velocity.X = vector7.X;
                         Main.npc[num34].velocity.Y = vector7.Y;
                         if (Main.netMode == NetmodeID.Server && num34 < Main.maxNPCs)
-                            NetMessage.SendData(23, -1, -1, null, num34);
+                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, num34);
                     }
 
                     for (int n = 0; n < 10; n++)
-                        Dust.NewDust(vector6, 20, 20, 5, vector7.X * 0.4f, vector7.Y * 0.4f);
+                        Dust.NewDust(vector6, 20, 20, DustID.Blood, vector7.X * 0.4f, vector7.Y * 0.4f);
                 }
 
                 if (npc.ai[1] >= 100f)
@@ -1321,14 +1321,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             }
 
                             for (int num36 = 0; num36 < 20; num36++)
-                                Dust.NewDust(npc.position, npc.width, npc.height, 5, (float)Main.rand.Next(-30, 31) * 0.2f, (float)Main.rand.Next(-30, 31) * 0.2f);
+                                Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, (float)Main.rand.Next(-30, 31) * 0.2f, (float)Main.rand.Next(-30, 31) * 0.2f);
 
                             SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
                         }
                     }
                 }
 
-                Dust.NewDust(npc.position, npc.width, npc.height, 5, (float)Main.rand.Next(-30, 31) * 0.2f, (float)Main.rand.Next(-30, 31) * 0.2f);
+                Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, (float)Main.rand.Next(-30, 31) * 0.2f, (float)Main.rand.Next(-30, 31) * 0.2f);
                 npc.velocity *= 0.98f;
                 if ((double)npc.velocity.X > -0.1 && (double)npc.velocity.X < 0.1)
                     npc.velocity.X = 0f;

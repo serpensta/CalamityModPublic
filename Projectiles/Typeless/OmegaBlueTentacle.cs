@@ -146,7 +146,7 @@ namespace CalamityMod.Projectiles.Typeless
                 int limit = (int)(tickVel.Length() / factor);
                 if (limit == 0)
                 {
-                    int d = Dust.NewDust(dustPos, 0, 0, 20, 0, 0, 100, Color.Transparent, 0.9f);
+                    int d = Dust.NewDust(dustPos, 0, 0, DustID.PurificationPowder, 0, 0, 100, Color.Transparent, 0.9f);
                     Main.dust[d].noGravity = true;
                     Main.dust[d].noLight = true;
                     Main.dust[d].fadeIn = 1f;
@@ -158,7 +158,7 @@ namespace CalamityMod.Projectiles.Typeless
                     tickVel *= factor;
                     for (int i = 0; i <= limit; i++)
                     {
-                        int d = Dust.NewDust(dustPos, 0, 0, 20, 0, 0, 100, Color.Transparent, 0.9f);
+                        int d = Dust.NewDust(dustPos, 0, 0, DustID.PurificationPowder, 0, 0, 100, Color.Transparent, 0.9f);
                         Main.dust[d].noGravity = true;
                         Main.dust[d].noLight = true;
                         Main.dust[d].fadeIn = 1f;

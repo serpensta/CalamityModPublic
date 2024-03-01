@@ -1213,7 +1213,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         float despawnDustOpacity = MathHelper.Lerp(1.3f, 0.7f, npc.Opacity);
                         Color newColor = Main.hslToRgb(Main.rand.NextFloat(), 1f, 0.5f);
-                        int despawnRainbowDust = Dust.NewDust(npc.position - npc.Size * 0.5f, npc.width * 2, npc.height * 2, 267, 0f, 0f, 0, newColor);
+                        int despawnRainbowDust = Dust.NewDust(npc.position - npc.Size * 0.5f, npc.width * 2, npc.height * 2, DustID.RainbowMk2, 0f, 0f, 0, newColor);
                         Main.dust[despawnRainbowDust].position = npc.Center + Main.rand.NextVector2Circular(npc.width, npc.height);
                         Main.dust[despawnRainbowDust].velocity *= Main.rand.NextFloat() * 0.8f;
                         Main.dust[despawnRainbowDust].noGravity = true;
@@ -2291,7 +2291,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             float num19 = MathHelper.Lerp(1.3f, 0.7f, npc.Opacity);
                             Color newColor = Main.hslToRgb(Main.rand.NextFloat(), 1f, 0.5f);
-                            int num20 = Dust.NewDust(npc.position - npc.Size * 0.5f, npc.width * 2, npc.height * 2, 267, 0f, 0f, 0, newColor);
+                            int num20 = Dust.NewDust(npc.position - npc.Size * 0.5f, npc.width * 2, npc.height * 2, DustID.RainbowMk2, 0f, 0f, 0, newColor);
                             Main.dust[num20].position = npc.Center + Main.rand.NextVector2Circular(npc.width, npc.height);
                             Main.dust[num20].velocity *= Main.rand.NextFloat() * 0.8f;
                             Main.dust[num20].noGravity = true;
@@ -2357,7 +2357,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 float fadeInScalar = MathHelper.Lerp(1.3f, 0.7f, npc.Opacity) * Utils.GetLerpValue(0f, 120f, timer, clamped: true);
                 Color newColor = Main.hslToRgb(timer / spawnTime, 1f, 0.5f);
-                int dust = Dust.NewDust(npc.position, npc.width, npc.height, 267, 0f, 0f, 0, newColor);
+                int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.RainbowMk2, 0f, 0f, 0, newColor);
                 Main.dust[dust].position = npc.Center + Main.rand.NextVector2Circular((float)npc.width * 3f, (float)npc.height * 3f) + new Vector2(0f, -150f);
                 Main.dust[dust].velocity *= Main.rand.NextFloat() * 0.8f;
                 Main.dust[dust].noGravity = true;

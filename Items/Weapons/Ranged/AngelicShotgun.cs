@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.Calamity().donorItem = true;
 
             Item.shootSpeed = BulletSpeed;
-            Item.shoot = ModContent.ProjectileType<IlluminatedBullet>();
+            Item.shoot = ModContent.ProjectileType<HallowPointRoundProj>();
             Item.useAmmo = AmmoID.Bullet;
             Item.Calamity().canFirePointBlankShots = true;
         }
@@ -52,6 +52,10 @@ namespace CalamityMod.Items.Weapons.Ranged
             int NumBullets = Main.rand.Next(5, 8);
             Vector2 baseVelocity = velocity.SafeNormalize(Vector2.Zero) * BulletSpeed;
 
+            // If Musket Balls are used, damage is set to match Hallow-Point Rounds for both bullets and lasers
+            if (type == ProjectileID.Bullet)
+                damage += HallowPointRound.BaseDamage - 7;
+
             // Fire a shotgun spread of bullets.
             for (int i = 0; i < NumBullets; ++i)
             {
@@ -60,7 +64,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Vector2 randomVelocity = baseVelocity + new Vector2(dx, dy);
 
                 if (type == ProjectileID.Bullet)
-                    Projectile.NewProjectile(source, position, randomVelocity, ModContent.ProjectileType<IlluminatedBullet>(), damage, knockback, player.whoAmI);
+                    Projectile.NewProjectile(source, position, randomVelocity, Item.shoot, damage, knockback, player.whoAmI);
                 else
                     Projectile.NewProjectile(source, position, randomVelocity, type, damage, knockback, player.whoAmI);
             }

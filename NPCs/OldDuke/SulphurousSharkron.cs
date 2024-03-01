@@ -1,19 +1,19 @@
-﻿using CalamityMod.BiomeManagers;
-using CalamityMod.Buffs.StatDebuffs;
-using System;
+﻿using System;
 using System.IO;
+using CalamityMod.BiomeManagers;
+using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Dusts;
+using CalamityMod.Events;
+using CalamityMod.Projectiles.Boss;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Dusts;
-using CalamityMod.Projectiles.Boss;
-using CalamityMod.Events;
-using CalamityMod.World;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.OldDuke
 {

@@ -1,6 +1,6 @@
-﻿using CalamityMod.Projectiles.Typeless;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
+using CalamityMod.Projectiles.Typeless;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +12,7 @@ namespace CalamityMod.Items.Weapons.Typeless
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
-			ItemID.Sets.SortingPriorityTerraforming[Type] = 92; // Blood Water
+            ItemID.Sets.SortingPriorityTerraforming[Type] = 92; // Blood Water
         }
 
         public override void SetDefaults()
