@@ -3261,6 +3261,10 @@ namespace CalamityMod.Projectiles
                     }
                 }
             }
+
+            //Crystal bullet projectiles deal 50% of the bullet's damage which is absurd in vanilla, this nerfs them to 27.5%
+            if (projectile.type == ProjectileID.CrystalShard)
+                modifiers.SourceDamage *= 0.55f;
         }
         #endregion
 

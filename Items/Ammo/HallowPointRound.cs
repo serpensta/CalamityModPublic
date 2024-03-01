@@ -1,13 +1,13 @@
-﻿using CalamityMod.Items.Materials;
-using CalamityMod.Projectiles.Ranged;
+﻿using CalamityMod.Projectiles.Ranged;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Ammo
 {
-    public class HyperiusBullet : ModItem, ILocalizedModType
+    public class HallowPointRound : ModItem, ILocalizedModType
     {
+        public static int BaseDamage = 18;
         public new string LocalizationCategory => "Items.Ammo";
         public override void SetStaticDefaults()
         {
@@ -16,25 +16,25 @@ namespace CalamityMod.Items.Ammo
 
         public override void SetDefaults()
         {
-            Item.width = 24;
-            Item.height = 30;
-            Item.damage = 19;
+            Item.width = 8;
+            Item.height = 18;
+            Item.damage = BaseDamage;
             Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 9999;
             Item.consumable = true;
-            Item.knockBack = 1.5f;
-            Item.value = Item.sellPrice(copper: 16);
-            Item.rare = ItemRarityID.Cyan;
-            Item.shoot = ModContent.ProjectileType<HyperiusBulletProj>();
-            Item.shootSpeed = 5f;
+            Item.knockBack = 3f;
+            Item.value = Item.sellPrice(copper: 12);
+            Item.rare = ItemRarityID.Pink;
+            Item.shoot = ModContent.ProjectileType<HallowPointRoundProj>();
+            Item.shootSpeed = 6f;
             Item.ammo = AmmoID.Bullet;
         }
 
         public override void AddRecipes()
         {
-            CreateRecipe(150).
-                AddIngredient(ItemID.MusketBall, 150).
-                AddIngredient<LifeAlloy>().
+            CreateRecipe(100).
+                AddIngredient(ItemID.EmptyBullet, 100).
+                AddIngredient(ItemID.HallowedBar).
                 AddTile(TileID.MythrilAnvil).
                 Register();
         }

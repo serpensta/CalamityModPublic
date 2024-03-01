@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Ranged
 {
     public class TerraArrowSplit : ModProjectile, ILocalizedModType
@@ -12,48 +13,61 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void SetDefaults()
         {
-            Projectile.width = 10;
-            Projectile.height = 10;
+            Projectile.width = 12;
+            Projectile.height = 12;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.arrow = true;
             Projectile.penetrate = 1;
+            Projectile.extraUpdates = 2;
             Projectile.alpha = 255;
-            Projectile.timeLeft = 120;
-            Projectile.aiStyle = ProjAIStyleID.Arrow;
+            Projectile.timeLeft = 450;
+            Projectile.ArmorPenetration = 8;
         }
-
-        public override bool? CanHitNPC(NPC target) => Projectile.timeLeft < 90 && target.CanBeChasedBy(Projectile);
-
         public override void AI()
         {
-            Projectile.alpha -= 5;
-            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
-
-            if (Projectile.timeLeft < 90)
+            // If you get the direct arrowhead hit, make sure those arrows hit by making them large
+            if (Projectile.ai[1] == 1)
             {
-                CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 450f, 12f, 20f);
+                Projectile.ExpandHitboxBy(60);
+                Projectile.ai[1] = 0;
             }
+            Lighting.AddLight(Projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
+            if (Projectile.alpha > 0)
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, 264, Projectile.velocity.RotatedByRandom(0.4) * Main.rand.NextFloat(0.05f, 0.3f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.8f, 1.3f);
+                dust.color = Main.rand.NextBool(3) ? Color.MediumAquamarine : Color.Lime;
+                Projectile.alpha -= 20;
+                Projectile.velocity *= 1.09f;
+            }
+            else if (Main.rand.NextBool())
+            {
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center, 264, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f));
+                dust2.noGravity = true;
+                dust2.scale = Main.rand.NextFloat(0.35f, 0.65f);
+                dust2.color = Main.rand.NextBool(3) ? Color.MediumAquamarine : Color.Lime;
+            }
+
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
         }
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.Item60, Projectile.position);
-            Projectile.position.X = Projectile.position.X + (float)(Projectile.width / 2);
-            Projectile.position.Y = Projectile.position.Y + (float)(Projectile.height / 2);
-            Projectile.width = 30;
-            Projectile.height = 30;
-            Projectile.position.X = Projectile.position.X - (float)(Projectile.width / 2);
-            Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
-            for (int i = 0; i < 2; i++)
+            int Dusts = 6;
+            float radians = MathHelper.TwoPi / Dusts;
+            Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
+            float rotRando = Main.rand.NextFloat(0.1f, 2.5f);
+            for (int i = 0; i < Dusts; i++)
             {
-                int terraDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TerraBlade, 0f, 0f, 100, default, 2f);
-                if (Main.rand.NextBool())
-                {
-                    Main.dust[terraDust].scale = 0.5f;
-                    Main.dust[terraDust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
-                }
+                Vector2 dustVelocity = spinningPoint.RotatedBy(radians * i).RotatedBy(0.5f * rotRando) * 3f;
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center, 264, dustVelocity);
+                dust2.noGravity = true;
+                dust2.scale = Main.rand.NextFloat(0.65f, 0.95f);
+                dust2.color = Main.rand.NextBool(3) ? Color.MediumAquamarine : Color.Lime;
             }
+            SoundEngine.PlaySound(SoundID.Item118 with { Pitch = 0.5f }, Projectile.Center);
         }
     }
 }

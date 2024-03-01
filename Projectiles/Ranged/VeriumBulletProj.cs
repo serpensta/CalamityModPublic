@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,8 +12,8 @@ namespace CalamityMod.Projectiles.Ranged
         private float speed = 0f;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 18;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
         public override void SetDefaults()
@@ -33,8 +34,9 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override bool PreDraw(ref Color lightColor)
         {
-            CalamityUtils.DrawAfterimagesFromEdge(Projectile, 0, lightColor);
-            return false;
+            if (Projectile.localAI[0] > 7f && Projectile.penetrate > 1)
+                CalamityUtils.DrawAfterimagesFromEdge(Projectile, 0, Color.Plum);
+            return true;
         }
 
         public override bool PreAI()
@@ -43,16 +45,6 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.spriteDirection = Projectile.direction;
 
             Projectile.localAI[0] += 1f;
-            if (Projectile.localAI[0] > 4f)
-            {
-                if (Main.rand.NextBool())
-                {
-                    int purple = Dust.NewDust(Projectile.position, 1, 1, DustID.PurpleCrystalShard, 0f, 0f, 0, default, 0.5f);
-                    Main.dust[purple].alpha = Projectile.alpha;
-                    Main.dust[purple].velocity *= 0f;
-                    Main.dust[purple].noGravity = true;
-                }
-            }
 
             if (Projectile.ai[0] > 0f)
                 Projectile.ai[0]--;
@@ -60,6 +52,16 @@ namespace CalamityMod.Projectiles.Ranged
                 speed = Projectile.velocity.Length();
             if (Projectile.penetrate == 1 && Projectile.ai[0] <= 0f)
             {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 226 : 303, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f));
+                dust.noGravity = true;
+                if (dust.type == 226)
+                    dust.scale = Main.rand.NextFloat(0.15f, 0.25f);
+                else
+                {
+                    dust.color = Color.Cyan;
+                    dust.scale = Main.rand.NextFloat(0.25f, 0.45f);
+                }
+
                 float inertia = 15f;
                 Vector2 center = Projectile.Center;
                 float maxDistance = 300f;
@@ -117,7 +119,24 @@ namespace CalamityMod.Projectiles.Ranged
                 }
                 return false;
             }
+            else if (Projectile.localAI[0] > 4f && Main.rand.NextBool())
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(5) ? 223 : 303, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.5f));
+                dust.noGravity = true;
+                if (dust.type == 223)
+                    dust.scale = Main.rand.NextFloat(0.35f, 0.55f);
+                else
+                {
+                    dust.color = Color.Cyan;
+                    dust.scale = Main.rand.NextFloat(0.45f, 0.65f);
+                }
+            }
             return true;
+        }
+        // This projectile is always fullbright.
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Projectile.penetrate == 1 ? Color.LightSkyBlue : Color.Plum;
         }
 
         public override bool? CanHitNPC(NPC target) => Projectile.ai[0] <= 0f && target.CanBeChasedBy(Projectile);
@@ -130,6 +149,27 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.damage /= 2;
             if (target.life > 0)
                 Projectile.ai[1] = target.whoAmI;
+            Projectile.velocity = Projectile.velocity.RotatedByRandom(0.35f) * Main.rand.NextFloat(0.98f, 1.02f);
+            if (Projectile.penetrate == 1)
+            {
+                for (int k = 0; k < 4; k++)
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center, 223, Projectile.velocity.RotatedByRandom(0.5) * Main.rand.NextFloat(0.1f, 0.9f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(0.5f, 0.7f);
+                }
+            }
+            else
+            {
+                Projectile.tileCollide = false;
+                for (int k = 0; k < 2; k++)
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center, 226, Projectile.velocity.RotatedByRandom(0.5) * Main.rand.NextFloat(0.1f, 0.9f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(0.5f, 0.7f);
+                }
+                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact with { PitchVariance = 0.2f, Pitch = 0.8f, Volume = 0.4f }, Projectile.Center);
+            }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

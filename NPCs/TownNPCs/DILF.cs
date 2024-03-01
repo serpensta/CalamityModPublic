@@ -141,25 +141,25 @@ namespace CalamityMod.NPCs.TownNPCs
         {
             Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
             NPCShop shop = new(Type);
-            shop.Add(ModContent.ItemType<FrostbiteBlaster>())
-            .Add(ModContent.ItemType<IcicleTrident>())
-            .Add(ModContent.ItemType<IceStar>())
-            .Add(ModContent.ItemType<ArcticBearPaw>(), Condition.DownedMechBossAll)
-            .Add(ModContent.ItemType<CryogenicStaff>(), Condition.DownedMechBossAll)
-            .Add(ModContent.ItemType<FrostyFlare>(), Condition.DownedMechBossAll)
-            .Add(ModContent.ItemType<Cryophobia>(), Condition.DownedMechBossAll)
-            .Add(ModContent.ItemType<AbsoluteZero>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
-            .Add(ModContent.ItemType<EternalBlizzard>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
-            .Add(ModContent.ItemType<WintersFury>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
-            .Add(ModContent.ItemType<IcyBullet>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
-            .Add(ModContent.ItemType<IcicleArrow>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
-            .Add(ModContent.ItemType<PermafrostsConcoction>())
-            .Add(ItemID.SuperManaPotion)
-            .Add(ModContent.ItemType<DeliciousMeat>())
-            .AddWithCustomValue(ModContent.ItemType<Popo>(), Item.buyPrice(5))
-            .Add(ModContent.ItemType<BloodRune>(), Condition.PlayerCarriesItem(ModContent.ItemType<IceBarrage>()))
-            .Add(ItemID.IceCream, Condition.HappyEnough, Condition.InSnow)
-            .Register();
+                shop.Add(ModContent.ItemType<FrostbiteBlaster>())
+                .Add(ModContent.ItemType<IcicleTrident>())
+                .Add(ModContent.ItemType<IceStar>())
+                .Add(ModContent.ItemType<ArcticBearPaw>(), Condition.DownedMechBossAll)
+                .Add(ModContent.ItemType<CryogenicStaff>(), Condition.DownedMechBossAll)
+                .Add(ModContent.ItemType<FrostyFlare>(), Condition.DownedMechBossAll)
+                .Add(ModContent.ItemType<Cryophobia>(), Condition.DownedMechBossAll)
+                .Add(ModContent.ItemType<AbsoluteZero>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
+                .Add(ModContent.ItemType<EternalBlizzard>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
+                .Add(ModContent.ItemType<WintersFury>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
+                .Add(ModContent.ItemType<HailstormBullet>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
+                .Add(ModContent.ItemType<IcicleArrow>(), Condition.DownedEverscream, Condition.DownedSantaNK1, Condition.DownedIceQueen)
+                .Add(ModContent.ItemType<PermafrostsConcoction>())
+                .Add(ItemID.SuperManaPotion)
+                .Add(ModContent.ItemType<DeliciousMeat>())
+                .AddWithCustomValue(ModContent.ItemType<Popo>(), Item.buyPrice(5))
+                .Add(ModContent.ItemType<BloodRune>(), Condition.PlayerCarriesItem(ModContent.ItemType<IceBarrage>()))
+                .Add(ItemID.IceCream, Condition.HappyEnough, Condition.InSnow)
+                .Register();
         }
 
         // Make this Town NPC teleport to the King statue when triggered.

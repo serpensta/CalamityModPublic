@@ -6,7 +6,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Ammo
 {
-    public class NapalmArrow : ModItem, ILocalizedModType
+    [LegacyName("NapalmArrow")]
+    public class CinderArrow : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Ammo";
         public override void SetStaticDefaults()
@@ -25,7 +26,7 @@ namespace CalamityMod.Items.Ammo
             Item.knockBack = 1.5f;
             Item.value = Item.sellPrice(copper: 12);
             Item.rare = ItemRarityID.LightRed;
-            Item.shoot = ModContent.ProjectileType<NapalmArrowProj>();
+            Item.shoot = ModContent.ProjectileType<CinderArrowProj>();
             Item.shootSpeed = 13f;
             Item.ammo = AmmoID.Arrow;
         }
@@ -33,10 +34,9 @@ namespace CalamityMod.Items.Ammo
         public override void AddRecipes()
         {
             CreateRecipe(250).
-                AddIngredient(ItemID.WoodenArrow, 250).
-                AddIngredient<EssenceofHavoc>().
-                AddIngredient(ItemID.Torch).
-                AddTile(TileID.Anvils).
+                AddIngredient(ItemID.HellfireArrow, 250).
+                AddIngredient<UnholyCore>().
+                AddTile(TileID.MythrilAnvil).
                 Register();
         }
     }
