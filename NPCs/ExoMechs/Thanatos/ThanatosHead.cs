@@ -1165,7 +1165,7 @@ namespace CalamityMod.NPCs.ExoMechs.Thanatos
                 float reticleOpacity = Utils.GetLerpValue(auraRadius * 0.5f - 40f, auraRadius * 0.5f + 100f, targetHeadDistance, true);
                 float reticleOffsetDistance = MathHelper.SmoothStep(300f, 0f, reticleOpacity);
                 float reticleFadeToWhite = ((float)Math.Cos(Main.GlobalTimeWrappedHourly * 6.8f) * 0.5f + 0.5f) * reticleOpacity * 0.67f;
-                Color reticleBaseColor = new Color(32, 0, 255, 127) * reticleOpacity;
+                Color reticleBaseColor = new Color(255, 0, 0, 127) * reticleOpacity;
                 Color reticleFlashBaseColor = Color.Lerp(reticleBaseColor, new Color(255, 255, 255, 0), reticleFadeToWhite) * reticleOpacity;
                 Vector2 origin = leftReticleTexture.Size() * 0.5f;
 
