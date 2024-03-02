@@ -8177,7 +8177,9 @@ PrepareToShoot:
                 }
 
                 npc.defense = npc.defDefense;
-                npc.damage = npc.defDamage;
+
+                // Avoid cheap bullshit
+                npc.damage = 0;
 
                 if (npc.type == NPCID.GiantShelly || npc.type == NPCID.GiantShelly2)
                 {
@@ -8319,6 +8321,9 @@ PrepareToShoot:
             }
             else if (npc.ai[0] == 1f)
             {
+                // Avoid cheap bullshit
+                npc.damage = 0;
+
                 npc.velocity.X = npc.velocity.X * 0.5f;
 
                 if (npc.type == NPCID.GiantShelly || npc.type == NPCID.GiantShelly2)
@@ -8451,6 +8456,9 @@ PrepareToShoot:
 
                 if (npc.ai[0] == 4f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     if (npc.wet && npc.directionY < 0)
                     {
                         npc.velocity.Y = npc.velocity.Y - 0.45f;
@@ -8602,6 +8610,9 @@ PrepareToShoot:
 
                     if (npc.ai[0] == 5f)
                     {
+                        // Avoid cheap bullshit
+                        npc.damage = 0;
+
                         npc.rotation = 0f;
                         npc.velocity.X = 0f;
 

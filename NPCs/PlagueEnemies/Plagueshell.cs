@@ -54,6 +54,11 @@ namespace CalamityMod.NPCs.PlagueEnemies
             });
         }
 
+        public override void AI()
+        {
+            NPC.damage = NPC.ai[0] == 3f ? (int)(NPC.defDamage * 1.8) : 0;
+        }
+
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 5; k++)

@@ -4722,6 +4722,7 @@ namespace CalamityMod.NPCs
         #region AI
         public override void AI(NPC npc)
         {
+            // Fair contact damage
             switch (npc.type)
             {
                 case NPCID.BlueSlime:
@@ -4756,6 +4757,20 @@ namespace CalamityMod.NPCs
                 case NPCID.Slimeling:
                 case NPCID.Slimer2:
                     npc.damage = (npc.velocity.Y == 0f || npc.velocity.Length() < 3f) ? 0 : npc.defDamage;
+                    break;
+
+                case NPCID.GiantShelly:
+                case NPCID.GiantShelly2:
+                    npc.damage = npc.ai[0] == 3f ? (int)(npc.defDamage * 1.35) : 0;
+                    break;
+
+                case NPCID.GiantTortoise:
+                case NPCID.IceTortoise:
+                    npc.damage = npc.ai[0] == 3f ? (int)(npc.defDamage * 1.8) : 0;
+                    break;
+
+                case NPCID.SolarSroller:
+                    npc.damage = npc.ai[0] == 6f ? (int)(npc.defDamage * 1.4) : 0;
                     break;
 
                 default:
