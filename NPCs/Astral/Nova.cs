@@ -137,6 +137,9 @@ namespace CalamityMod.NPCs.Astral
             Player target = Main.player[NPC.target];
             if (NPC.ai[3] >= 0)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 CalamityGlobalNPC.DoFlyingAI(NPC, (CalamityWorld.death ? 8.5f : CalamityWorld.revenge ? 7f : 5.5f), (CalamityWorld.death ? 0.055f : CalamityWorld.revenge ? 0.045f : 0.035f), 400f, 150, false);
 
                 if (Collision.CanHit(NPC.position, NPC.width, NPC.height, target.position, target.width, target.height))
@@ -173,11 +176,20 @@ namespace CalamityMod.NPCs.Astral
 
                     NPC.velocity += new Vector2(NPC.ai[1], NPC.ai[2]) * travelAcceleration; //acceleration per frame
 
+                    // Set damage or avoid cheap bullshit
+                    if (NPC.velocity.Length() > 4f)
+                        NPC.damage = NPC.defDamage;
+                    else
+                        NPC.damage = 0;
+
                     //rotation
                     NPC.rotation = NPC.velocity.ToRotation();
                 }
                 else if (NPC.ai[3] == -waitBeforeTravel)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     between.Normalize();
                     NPC.ai[1] = between.X;
                     NPC.ai[2] = between.Y;
@@ -188,6 +200,9 @@ namespace CalamityMod.NPCs.Astral
                 }
                 else
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     //slowdown
                     NPC.velocity *= slowdown;
 

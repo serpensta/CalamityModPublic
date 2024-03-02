@@ -120,7 +120,7 @@ namespace CalamityMod.NPCs.Abyss
             {
                 if (!reset2 && phase3)
                 {
-                    NPC.damage /= 2;
+                    NPC.damage = 0;
                     NPC.noTileCollide = true;
                     NPC.netAlways = true;
                     NPC.localAI[0] = 0f;
@@ -135,6 +135,9 @@ namespace CalamityMod.NPCs.Abyss
                 NPC.spriteDirection = (NPC.direction > 0) ? -1 : 1;
                 if (NPC.ai[2] == 0f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.TargetClosest(true);
                     if (!Main.player[NPC.target].dead && (Main.player[NPC.target].Center - NPC.Center).Length() < 170f && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
                     {
@@ -149,6 +152,9 @@ namespace CalamityMod.NPCs.Abyss
 
                 if (NPC.ai[2] < 0f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.ai[2] += 1f;
                     if (NPC.ai[2] == 0f)
                     {
@@ -180,6 +186,9 @@ namespace CalamityMod.NPCs.Abyss
 
                         if (!canAttack)
                         {
+                            // Avoid cheap bullshit
+                            NPC.damage = 0;
+
                             if (!Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                             {
                                 NPC.noTileCollide = false;
@@ -209,6 +218,9 @@ namespace CalamityMod.NPCs.Abyss
                         }
                         if (canAttack)
                         {
+                            // Set damage
+                            NPC.damage = phase3 ? (int)(NPC.defDamage * 0.5) : NPC.defDamage;
+
                             if (NPC.ai[3] > 0f && !Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                             {
                                 if (Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
@@ -306,6 +318,9 @@ namespace CalamityMod.NPCs.Abyss
                     }
                     else
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         if (NPC.velocity.Y == 0f)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -463,6 +478,9 @@ namespace CalamityMod.NPCs.Abyss
                 }
                 if (NPC.ai[0] == -1f)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.dontTakeDamage = true;
                     NPC.chaseable = false;
                     NPC.velocity *= 0.98f;
@@ -515,6 +533,9 @@ namespace CalamityMod.NPCs.Abyss
                 }
                 else if (NPC.ai[0] == 0f && !player.dead)
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     NPC.dontTakeDamage = false;
                     NPC.chaseable = true;
                     if (NPC.ai[1] == 0f)
@@ -571,6 +592,9 @@ namespace CalamityMod.NPCs.Abyss
                     NPC.ai[2] += 1f;
                     if (NPC.ai[2] >= 30f)
                     {
+                        // Set damage
+                        NPC.damage = NPC.defDamage;
+
                         NPC.ai[0] = 1f;
                         NPC.ai[1] = 0f;
                         NPC.ai[2] = 0f;
@@ -591,6 +615,9 @@ namespace CalamityMod.NPCs.Abyss
                 }
                 else if (NPC.ai[0] == 1f)
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     int phase2DustAmt = 7;
                     for (int j = 0; j < phase2DustAmt; j++)
                     {
