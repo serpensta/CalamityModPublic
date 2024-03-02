@@ -192,6 +192,9 @@ namespace CalamityMod.NPCs.Astral
 
         public override void AI()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             //PICK A TARGET
             if (!NPC.HasValidTarget || idling)
             {
@@ -272,7 +275,7 @@ namespace CalamityMod.NPCs.Astral
                     if (Main.player[i].active && !Main.player[i].dead && Main.player[i].getRect().Intersects(hitbox))
                     {
                         Vector2 before = Main.player[i].velocity;
-                        Main.player[i].Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.damage, NPC.direction);
+                        Main.player[i].Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.defDamage, NPC.direction);
                         Vector2 after = Main.player[i].velocity;
                         Vector2 difference = after - before;
 

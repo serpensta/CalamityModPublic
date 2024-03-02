@@ -132,16 +132,16 @@ namespace CalamityMod.NPCs.NormalNPCs
             Player player = Main.player[NPC.target];
 
             bool farFromPlayer = NPC.Distance(player.Center) > 960f;
-            bool obstanceInFrontOfPlayer = Main.remixWorld ? false : !Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
+            bool obstacleInFrontOfPlayer = Main.remixWorld ? false : !Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
 
-            if (NPC.target < 0 || NPC.target >= 255 || farFromPlayer || obstanceInFrontOfPlayer || player.dead || !player.active)
+            if (NPC.target < 0 || NPC.target >= 255 || farFromPlayer || obstacleInFrontOfPlayer || player.dead || !player.active)
             {
                 NPC.TargetClosest(false);
                 player = Main.player[NPC.target];
                 farFromPlayer = NPC.Distance(player.Center) > 960f;
-                obstanceInFrontOfPlayer = !Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
+                obstacleInFrontOfPlayer = !Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
                 // Fly away if there is no living target, or the closest target is too far away... unless its Gfb
-                if (player.dead || !player.active || farFromPlayer || obstanceInFrontOfPlayer)
+                if (player.dead || !player.active || farFromPlayer || obstacleInFrontOfPlayer)
                 {
                     if (FlyAwayTimer > 420)
                     {
@@ -174,6 +174,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (StunTime > 0)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (!Main.dedServ && Main.rand.NextBool(4))
                 {
                     for (int i = 0; i < 2; i++)
@@ -204,6 +207,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (AIState == HovercraftAIState.Searching || AIState == HovercraftAIState.Hover)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 Vector2 destination = player.Center + new Vector2(SearchXOffset * SearchDirection, -160f);
                 NPC.velocity = NPC.SafeDirectionTo(destination, Vector2.UnitY) * (Supercharged ? 7f : 5f);
                 if (AIState == HovercraftAIState.Hover)
@@ -229,6 +235,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (AIState == HovercraftAIState.Slowdown)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 SubphaseTime++;
                 if (SubphaseTime < 30f)
                 {
@@ -244,6 +253,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (AIState == HovercraftAIState.SwoopDownward)
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
                 NPC.rotation = 0f;
                 float swoopType = Supercharged ? TotalSubphaseTime - 40f : TotalSubphaseTime;
                 float swoopSlowdownTime = Supercharged ? 10f : 45f;

@@ -108,16 +108,16 @@ namespace CalamityMod.NPCs.NormalNPCs
             Player player = Main.player[NPC.target];
 
             bool farFromPlayer = NPC.Distance(player.Center) > 960f;
-            bool obstanceInFrontOfPlayer = Main.remixWorld ? false : !Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
+            bool obstacleInFrontOfPlayer = Main.remixWorld ? false : !Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
 
-            if (NPC.target < 0 || NPC.target >= 255 || farFromPlayer || obstanceInFrontOfPlayer || player.dead || !player.active)
+            if (NPC.target < 0 || NPC.target >= Main.maxPlayers || farFromPlayer || obstacleInFrontOfPlayer || player.dead || !player.active)
             {
                 NPC.TargetClosest(false);
                 player = Main.player[NPC.target];
                 farFromPlayer = NPC.Distance(player.Center) > 960f;
-                obstanceInFrontOfPlayer = !Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
+                obstacleInFrontOfPlayer = !Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
                 // Fly away if there is no living target, or the closest target is too far away.
-                if (player.dead || !player.active || farFromPlayer || obstanceInFrontOfPlayer)
+                if (player.dead || !player.active || farFromPlayer || obstacleInFrontOfPlayer)
                 {
                     if (FlyAwayTimer > 420)
                     {
@@ -146,16 +146,21 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (AIState == DroneAIState.Searching)
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (NPC.direction == 0)
                     NPC.direction = 1;
 
+                float searchVelocity = CalamityWorld.death ? 10f : CalamityWorld.revenge ? 9f : Main.expertMode ? 8f : 6f;
                 Vector2 destination = player.Center + new Vector2(300f * NPC.direction, -90f);
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.SafeDirectionTo(destination) * 6f, 0.1f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.SafeDirectionTo(destination) * searchVelocity, searchVelocity / 60f);
                 if (NPC.Distance(destination) < 40f)
                 {
                     Time++;
                     NPC.velocity *= 0.95f;
-                    if (Time >= 40f)
+                    float chargeDelay = CalamityWorld.death ? 10f : CalamityWorld.revenge ? 15f : Main.expertMode ? 20f : 40f;
+                    if (Time >= chargeDelay)
                     {
                         AIState = DroneAIState.Charging;
                         NPC.netUpdate = true;
@@ -164,8 +169,12 @@ namespace CalamityMod.NPCs.NormalNPCs
             }
             else
             {
+                // Set damage
+                NPC.damage = NPC.defDamage;
+
+                float chargeVelocity = CalamityWorld.death ? 10f : CalamityWorld.revenge ? 9f : Main.expertMode ? 8f : 6f;
                 if (HorizontalChargeTime < 25)
-                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.SafeDirectionTo(player.Center) * 6f, 0.1f);
+                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.SafeDirectionTo(player.Center) * chargeVelocity, chargeVelocity / 60f);
 
                 if (Supercharged && Main.netMode != NetmodeID.MultiplayerClient && HorizontalChargeTime % 30f == 29f)
                 {
@@ -182,11 +191,13 @@ namespace CalamityMod.NPCs.NormalNPCs
                     }
                     else
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitX * 6f * NPC.spriteDirection, NPC.SafeDirectionTo(player.Center, Vector2.UnitY) * 6f, ProjectileID.SaucerLaser, 12, 0f);
+
                     SoundEngine.PlaySound(SoundID.Item12);
                 }
 
+                float totalChargeTime = TotalHorizontalChargeTime - (CalamityWorld.death ? 25f : CalamityWorld.revenge ? 20f : Main.expertMode ? 15f : 0f);
                 HorizontalChargeTime++;
-                if (HorizontalChargeTime > TotalHorizontalChargeTime)
+                if (HorizontalChargeTime > totalChargeTime)
                 {
                     AIState = DroneAIState.Searching;
                     HorizontalChargeTime = 0f;

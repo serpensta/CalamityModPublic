@@ -127,6 +127,9 @@ namespace CalamityMod.NPCs.Astral
                 // Move towards the target and lunge at them, releasing meteors.
                 if (attemptingToAttackTarget)
                 {
+                    // Set damage
+                    NPC.damage = NPC.defDamage;
+
                     NPC.TargetClosest(true);
                     NPC.velocity += new Vector2(NPC.direction, NPC.directionY) * 0.15f;
                     NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -6f, 6f);
@@ -166,6 +169,9 @@ namespace CalamityMod.NPCs.Astral
                 }
                 else
                 {
+                    // Avoid cheap bullshit
+                    NPC.damage = 0;
+
                     // Rebound on collision.
                     if (NPC.collideX)
                     {
@@ -211,6 +217,9 @@ namespace CalamityMod.NPCs.Astral
             }
             else
             {
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 if (NPC.velocity.Y == 0f)
                 {
                     // Search for any potential closer targets if attempting to attack.
