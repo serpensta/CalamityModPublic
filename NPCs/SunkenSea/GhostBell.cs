@@ -152,6 +152,18 @@ namespace CalamityMod.NPCs.SunkenSea
                 new Microsoft.Xna.Framework.Rectangle?(NPC.frame), color, NPC.rotation, halfSizeTexture, 1f, spriteEffects, 0f);
         }
 
+        // Can only hit the target if they're touching the tentacles
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            Vector2 npcCenter = NPC.Center;
+            Rectangle tentacleHitbox = new Rectangle((int)(npcCenter.X - (NPC.width / 4f)), (int)npcCenter.Y, NPC.width / 2, NPC.height / 2);
+
+            Rectangle targetHitbox = target.Hitbox;
+            bool insideTentacleHitbox = targetHitbox.Intersects(tentacleHitbox);
+
+            return insideTentacleHitbox;
+        }
+
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (hurtInfo.Damage > 0)
