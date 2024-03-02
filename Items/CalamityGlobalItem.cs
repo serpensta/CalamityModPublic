@@ -1195,14 +1195,13 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FairyBoots)
                 modPlayer.fairyBoots = true;
 
-            // Arcane and Magnet Flower buffs
+            // Mana Flower tinker buffs
             if (item.type == ItemID.MagnetFlower)
                 player.manaCost -= 0.02f;
-            if (item.type == ItemID.ArcaneFlower)
-            {
+            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.ManaCloak)
                 player.manaCost -= 0.04f;
+            if (item.type == ItemID.ArcaneFlower)
                 player.GetDamage<MagicDamageClass>() += 0.05f;
-            }
 
             if (item.type == ItemID.SniperScope)
             {

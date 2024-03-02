@@ -149,7 +149,7 @@ namespace CalamityMod.Projectiles.Boss
                     float distanceBetweenProjectiles = bossRush ? 160f : death ? 256f : revenge ? 288f : 320f;
                     Vector2 laserFirePosition = Main.npc[OwnerIndex].Center + beamDirection * distanceBetweenProjectiles;
                     int laserCount = (int)(LaserLength / distanceBetweenProjectiles);
-                    int type = ModContent.ProjectileType<ThanatosLaser>();
+                    int type = ModContent.ProjectileType<THanosSideLaser>();
                     int damage = Projectile.GetProjectileDamage(Main.npc[OwnerIndex].type);
                     for (int i = 0; i < laserCount; i++)
                     {
@@ -242,7 +242,7 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0)
                 return;
 
-            target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 180);
+            target.AddBuff(ModContent.BuffType<MiracleBlight>(), 240);
         }
 
         public override bool CanHitPlayer(Player target) => OwnerIsValid && Projectile.scale >= 0.5f;

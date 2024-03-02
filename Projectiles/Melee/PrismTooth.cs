@@ -125,14 +125,6 @@ namespace CalamityMod.Projectiles.Melee
             Vector2 generalOffset = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2) * 15f;
             generalOffset += Projectile.rotation.ToRotationVector2() * -5f * (float)Math.Sin(Projectile.rotation);
 
-            // Mess with the oldPos array so that the trail always points towards the crystal.
-            Vector2 oldPosition = Projectile.oldPos[1];
-            Projectile.oldPos[1] = Projectile.oldPos[0] - Projectile.rotation.ToRotationVector2() * Vector2.Distance(Projectile.oldPos[0], Projectile.oldPos[1]);
-
-            // Revert back if the above calculations caused any NaNs.
-            if (Projectile.oldPos[1].HasNaNs())
-                Projectile.oldPos[1] = oldPosition;
-
             Main.spriteBatch.EnterShaderRegion();
             GameShaders.Misc["CalamityMod:PrismaticStreak"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
 
