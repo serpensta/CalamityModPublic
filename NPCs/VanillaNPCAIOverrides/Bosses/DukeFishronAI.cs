@@ -20,6 +20,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Variables
             bool bossRush = BossRushEvent.BossRushActive;
+            bool masterMode = Main.masterMode || bossRush;
             bool death = CalamityWorld.death || bossRush;
             bool phase2 = lifeRatio < 0.7f;
             bool phase3 = lifeRatio < 0.4f;
@@ -197,7 +198,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     calamityGlobalNPC.newAI[0] = 0f;
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 1f, npc.target + 1);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 1f, npc.target + 1, (enrage || masterMode) ? 1 : 0);
 
                     npc.netUpdate = true;
                 }
@@ -376,6 +377,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             break;
                     }
 
+                    if (enrage && attackPicker == 2)
+                        attackPicker = 3;
+
                     if (phase2)
                         attackPicker = 4;
 
@@ -419,6 +423,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.ai[0] = 3f;
                         npc.ai[1] = 0f;
                         npc.ai[2] = 0f;
+                        if (enrage)
+                            npc.ai[2] = sharknadoPhaseTimer - 40;
                     }
 
                     // Go to phase 2
@@ -635,6 +641,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             break;
                     }
 
+                    if (enrage && phase2AttackPicker == 2)
+                        phase2AttackPicker = 3;
+
                     if (phase3)
                         phase2AttackPicker = 4;
 
@@ -802,7 +811,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     SoundEngine.PlaySound(SoundID.Zombie20, npc.Center);
 
                 if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[2] == sharknadoPhaseTimer - 30)
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 1f, npc.target + 1);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 1f, npc.target + 1, (enrage || masterMode) ? 1 : 0);
 
                 npc.ai[2] += 1f;
                 if (npc.ai[2] >= sharknadoPhaseTimer)
@@ -1591,8 +1600,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -Vector2.UnitX, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer);
                     if (masterMode)
                     {
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -Vector2.UnitY, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer);
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -1f, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -Vector2.UnitY, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 0f, -1f);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -1f, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 0f, -1f);
                     }
                 }
 

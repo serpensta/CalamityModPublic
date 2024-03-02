@@ -2390,7 +2390,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         npc.localAI[0] = 0f;
                         float num562 = 8f;
-                        int damage = 25;
+
+                        int type = ProjectileID.DeathLaser;
+                        int damage = npc.GetProjectileDamage(type);
 
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
@@ -2401,13 +2403,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 damage = (int)(damage * 0.9);
                         }
 
-                        int num564 = ProjectileID.DeathLaser;
                         num561 = num562 / num561;
                         num559 *= num561;
                         num560 *= num561;
                         vector68.X += num559 * 8f;
                         vector68.Y += num560 * 8f;
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector68.X, vector68.Y, num559, num560, num564, damage, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector68.X, vector68.Y, num559, num560, type, damage, 0f, Main.myPlayer);
                     }
                 }
             }
@@ -2488,7 +2489,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         npc.localAI[0] = 0f;
                         float num569 = 10f;
-                        int damage = 25;
+
+                        int type = ProjectileID.DeathLaser;
+                        int damage = npc.GetProjectileDamage(type);
 
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
@@ -2499,13 +2502,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 damage = (int)(damage * 0.9);
                         }
 
-                        int num571 = ProjectileID.DeathLaser;
                         num568 = num569 / num568;
                         num566 *= num568;
                         num567 *= num568;
                         vector69.X += num566 * 8f;
                         vector69.Y += num567 * 8f;
-                        int num572 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector69.X, vector69.Y, num566, num567, num571, damage, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector69.X, vector69.Y, num566, num567, type, damage, 0f, Main.myPlayer);
                     }
                 }
             }
@@ -2674,7 +2676,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         num546 = (0f - num546) * num547;
                         vector66.X += num545 * 4f;
                         vector66.Y += num546 * 4f;
-                        int num551 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector66.X, vector66.Y, num545, num546, num550, num549, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector66.X, vector66.Y, num545, num546, num550, num549, 0f, Main.myPlayer);
                     }
                 }
             }
@@ -2763,7 +2765,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         num553 *= num554;
                         vector67.X += num552 * 4f;
                         vector67.Y += num553 * 4f;
-                        int num558 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector67.X, vector67.Y, num552, num553, num557, num556, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector67.X, vector67.Y, num552, num553, num557, num556, 0f, Main.myPlayer);
                     }
                 }
             }

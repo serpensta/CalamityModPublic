@@ -1369,7 +1369,8 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                // HP boosted in Master Mode due to having two heads (piercing can make them die faster than normal here since they share an HP bar)
+                npc.lifeMax = (int)(npc.lifeMax * (Main.masterMode ? 1.4 : 1.2));
                 npc.npcSlots = 12f;
             }
             else if (npc.type <= NPCID.PrimeLaser && npc.type >= NPCID.PrimeCannon)
@@ -2178,6 +2179,23 @@ namespace CalamityMod.NPCs
         {
             EditGlobalCoinDrops(npc);
 
+            // Put this first so that any boss damage value modifications aren't reset
+            bool vanillaNPC = npc.type < NPCID.Count;
+            if (vanillaNPC)
+            {
+                if (NPCStats.EnemyStats.ContactDamageValues.ContainsKey(npc.type))
+                {
+                    npc.GetNPCDamage();
+                    npc.defDamage = npc.damage;
+                }
+
+                if ((npc.boss && npc.type != NPCID.MartianSaucerCore) || CalamityLists.bossHPScaleList.Contains(npc.type))
+                {
+                    double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+                    npc.lifeMax += (int)(npc.lifeMax * HPBoost);
+                }
+            }
+
             switch (npc.type)
             {
                 case NPCID.KingSlime:
@@ -2472,22 +2490,6 @@ namespace CalamityMod.NPCs
 
                     npc.damage = (int)(npc.damage * damageMultiplier);
                     npc.defDamage = npc.damage;
-                }
-            }
-
-            bool vanillaNPC = npc.type < NPCID.Count;
-            if (vanillaNPC)
-            {
-                if (NPCStats.EnemyStats.ContactDamageValues.ContainsKey(npc.type))
-                {
-                    npc.GetNPCDamage();
-                    npc.defDamage = npc.damage;
-                }
-
-                if ((npc.boss && npc.type != NPCID.MartianSaucerCore) || CalamityLists.bossHPScaleList.Contains(npc.type))
-                {
-                    double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
-                    npc.lifeMax += (int)(npc.lifeMax * HPBoost);
                 }
             }
 

@@ -767,6 +767,150 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            // Phase 1 sharknado
+            else if (projectile.type == ProjectileID.SharknadoBolt)
+            {
+                if (projectile.ai[1] < 0f)
+                {
+                    float num623 = 0.209439516f;
+                    float num624 = -2f;
+                    float num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
+
+                    projectile.velocity.Y -= num625;
+
+                    projectile.ai[0] += 1f;
+
+                    num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
+
+                    projectile.velocity.Y += num625;
+
+                    projectile.localAI[0] += 1f;
+                    if (projectile.localAI[0] > 10f)
+                    {
+                        projectile.alpha -= 5;
+                        if (projectile.alpha < 100)
+                            projectile.alpha = 100;
+
+                        projectile.rotation += projectile.velocity.X * 0.1f;
+                        projectile.frame = (int)(projectile.localAI[0] / 3f) % 3;
+                    }
+
+                    return false;
+                }
+            }
+
+            else if (projectile.type == ProjectileID.Sharknado)
+            {
+                projectile.damage = projectile.GetProjectileDamage(NPCID.DukeFishron);
+            }
+
+            // Larger cthulhunadoes
+            else if (projectile.type == ProjectileID.Cthulunado)
+            {
+                projectile.damage = projectile.GetProjectileDamage(NPCID.DukeFishron);
+
+                if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
+                {
+                    int num606 = 16;
+                    int num607 = 16;
+                    float num608 = 2f;
+                    int num609 = 150;
+                    int num610 = 42;
+
+                    if (projectile.velocity.X != 0f)
+                        projectile.direction = projectile.spriteDirection = -Math.Sign(projectile.velocity.X);
+
+                    int num3 = projectile.frameCounter;
+                    projectile.frameCounter = num3 + 1;
+                    if (projectile.frameCounter > 2)
+                    {
+                        num3 = projectile.frame;
+                        projectile.frame = num3 + 1;
+                        projectile.frameCounter = 0;
+                    }
+                    if (projectile.frame >= 6)
+                        projectile.frame = 0;
+
+                    if (projectile.localAI[0] == 0f && Main.myPlayer == projectile.owner)
+                    {
+                        projectile.localAI[0] = 1f;
+                        projectile.position.X += projectile.width / 2;
+                        projectile.position.Y += projectile.height / 2;
+                        projectile.scale = (num606 + num607 - projectile.ai[1]) * num608 / (num607 + num606);
+                        projectile.width = (int)(num609 * projectile.scale);
+                        projectile.height = (int)(num610 * projectile.scale);
+                        projectile.position.X -= projectile.width / 2;
+                        projectile.position.Y -= projectile.height / 2;
+                        projectile.netUpdate = true;
+                    }
+
+                    if (projectile.ai[1] != -1f)
+                    {
+                        projectile.scale = (num606 + num607 - projectile.ai[1]) * num608 / (num607 + num606);
+                        projectile.width = (int)(num609 * projectile.scale);
+                        projectile.height = (int)(num610 * projectile.scale);
+                    }
+
+                    if (!Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
+                    {
+                        projectile.alpha -= 30;
+                        if (projectile.alpha < 60)
+                            projectile.alpha = 60;
+                        if (projectile.alpha < 100)
+                            projectile.alpha = 100;
+                    }
+                    else
+                    {
+                        projectile.alpha += 30;
+                        if (projectile.alpha > 150)
+                            projectile.alpha = 150;
+                    }
+
+                    if (projectile.ai[0] > 0f)
+                        projectile.ai[0] -= 1f;
+
+                    if (projectile.ai[0] == 1f && projectile.ai[1] > 0f && projectile.owner == Main.myPlayer)
+                    {
+                        projectile.netUpdate = true;
+
+                        Vector2 center = projectile.Center;
+                        center.Y -= num610 * projectile.scale / 2f;
+
+                        float num611 = (num606 + num607 - projectile.ai[1] + 1f) * num608 / (num607 + num606);
+                        center.Y -= num610 * num611 / 2f;
+                        center.Y += 2f;
+
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), center.X, center.Y, projectile.velocity.X, projectile.velocity.Y, projectile.type, projectile.damage, projectile.knockBack, projectile.owner, 10f, projectile.ai[1] - 1f);
+
+                        if ((int)projectile.ai[1] % 3 == 0 && projectile.ai[1] != 0f)
+                        {
+                            int num614 = NPC.NewNPC(projectile.GetSource_FromAI(), (int)center.X, (int)center.Y, NPCID.Sharkron2);
+                            Main.npc[num614].velocity = projectile.velocity;
+                            Main.npc[num614].scale = 1.5f;
+                            Main.npc[num614].netUpdate = true;
+                            Main.npc[num614].ai[2] = projectile.width;
+                            Main.npc[num614].ai[3] = -1.5f;
+                        }
+                    }
+
+                    if (projectile.ai[0] <= 0f)
+                    {
+                        float num615 = 0.104719758f;
+                        float num616 = projectile.width / 5f * 2.5f;
+                        float num617 = (float)(Math.Cos(num615 * -(double)projectile.ai[0]) - 0.5) * num616;
+
+                        projectile.position.X -= num617 * -projectile.direction;
+
+                        projectile.ai[0] -= 1f;
+
+                        num617 = (float)(Math.Cos(num615 * -(double)projectile.ai[0]) - 0.5) * num616;
+                        projectile.position.X += num617 * -projectile.direction;
+                    }
+
+                    return false;
+                }
+            }
+
             else if (projectile.type == ProjectileID.CultistBossLightningOrb)
             {
                 if (NPC.AnyNPCs(NPCID.CultistBoss))
@@ -1040,7 +1184,7 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
-            if (projectile.type == ProjectileID.NurseSyringeHeal)
+            else if (projectile.type == ProjectileID.NurseSyringeHeal)
             {
                 ref float initialSpeed = ref projectile.localAI[1];
                 if (initialSpeed == 0f)
@@ -2055,147 +2199,6 @@ namespace CalamityMod.Projectiles
 
                     projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
                     projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
-
-                    return false;
-                }
-
-                // Phase 1 sharknado
-                else if (projectile.type == ProjectileID.SharknadoBolt)
-                {
-                    if (projectile.ai[1] < 0f)
-                    {
-                        float num623 = 0.209439516f;
-                        float num624 = -2f;
-                        float num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
-
-                        projectile.velocity.Y -= num625;
-
-                        projectile.ai[0] += 1f;
-
-                        num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
-
-                        projectile.velocity.Y += num625;
-
-                        projectile.localAI[0] += 1f;
-                        if (projectile.localAI[0] > 10f)
-                        {
-                            projectile.alpha -= 5;
-                            if (projectile.alpha < 100)
-                                projectile.alpha = 100;
-
-                            projectile.rotation += projectile.velocity.X * 0.1f;
-                            projectile.frame = (int)(projectile.localAI[0] / 3f) % 3;
-                        }
-
-                        return false;
-                    }
-                }
-
-                else if (projectile.type == ProjectileID.Sharknado)
-                {
-                    projectile.damage = projectile.GetProjectileDamage(NPCID.DukeFishron);
-                }
-
-                // Larger cthulhunadoes
-                else if (projectile.type == ProjectileID.Cthulunado)
-                {
-                    projectile.damage = projectile.GetProjectileDamage(NPCID.DukeFishron);
-
-                    int num606 = 16;
-                    int num607 = 16;
-                    float num608 = 2f;
-                    int num609 = 150;
-                    int num610 = 42;
-
-                    if (projectile.velocity.X != 0f)
-                        projectile.direction = projectile.spriteDirection = -Math.Sign(projectile.velocity.X);
-
-                    int num3 = projectile.frameCounter;
-                    projectile.frameCounter = num3 + 1;
-                    if (projectile.frameCounter > 2)
-                    {
-                        num3 = projectile.frame;
-                        projectile.frame = num3 + 1;
-                        projectile.frameCounter = 0;
-                    }
-                    if (projectile.frame >= 6)
-                        projectile.frame = 0;
-
-                    if (projectile.localAI[0] == 0f && Main.myPlayer == projectile.owner)
-                    {
-                        projectile.localAI[0] = 1f;
-                        projectile.position.X += projectile.width / 2;
-                        projectile.position.Y += projectile.height / 2;
-                        projectile.scale = (num606 + num607 - projectile.ai[1]) * num608 / (num607 + num606);
-                        projectile.width = (int)(num609 * projectile.scale);
-                        projectile.height = (int)(num610 * projectile.scale);
-                        projectile.position.X -= projectile.width / 2;
-                        projectile.position.Y -= projectile.height / 2;
-                        projectile.netUpdate = true;
-                    }
-
-                    if (projectile.ai[1] != -1f)
-                    {
-                        projectile.scale = (num606 + num607 - projectile.ai[1]) * num608 / (num607 + num606);
-                        projectile.width = (int)(num609 * projectile.scale);
-                        projectile.height = (int)(num610 * projectile.scale);
-                    }
-
-                    if (!Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
-                    {
-                        projectile.alpha -= 30;
-                        if (projectile.alpha < 60)
-                            projectile.alpha = 60;
-                        if (projectile.alpha < 100)
-                            projectile.alpha = 100;
-                    }
-                    else
-                    {
-                        projectile.alpha += 30;
-                        if (projectile.alpha > 150)
-                            projectile.alpha = 150;
-                    }
-
-                    if (projectile.ai[0] > 0f)
-                        projectile.ai[0] -= 1f;
-
-                    if (projectile.ai[0] == 1f && projectile.ai[1] > 0f && projectile.owner == Main.myPlayer)
-                    {
-                        projectile.netUpdate = true;
-
-                        Vector2 center = projectile.Center;
-                        center.Y -= num610 * projectile.scale / 2f;
-
-                        float num611 = (num606 + num607 - projectile.ai[1] + 1f) * num608 / (num607 + num606);
-                        center.Y -= num610 * num611 / 2f;
-                        center.Y += 2f;
-
-                        Projectile.NewProjectile(projectile.GetSource_FromThis(), center.X, center.Y, projectile.velocity.X, projectile.velocity.Y, projectile.type, projectile.damage, projectile.knockBack, projectile.owner, 10f, projectile.ai[1] - 1f);
-
-                        if ((int)projectile.ai[1] % 3 == 0 && projectile.ai[1] != 0f)
-                        {
-                            int num614 = NPC.NewNPC(projectile.GetSource_FromAI(), (int)center.X, (int)center.Y, NPCID.Sharkron2);
-                            Main.npc[num614].velocity = projectile.velocity;
-                            Main.npc[num614].scale = 1.5f;
-                            Main.npc[num614].netUpdate = true;
-                            Main.npc[num614].ai[2] = projectile.width;
-                            Main.npc[num614].ai[3] = -1.5f;
-                        }
-                    }
-
-                    if (projectile.ai[0] <= 0f)
-                    {
-                        float num615 = 0.104719758f;
-                        float num616 = projectile.width / 5f * 2.5f;
-                        float num617 = (float)(Math.Cos(num615 * -(double)projectile.ai[0]) - 0.5) * num616;
-
-                        projectile.position.X -= num617 * -projectile.direction;
-
-                        projectile.ai[0] -= 1f;
-
-                        num617 = (float)(Math.Cos(num615 * -(double)projectile.ai[0]) - 0.5) * num616;
-                        projectile.position.X += num617 * -projectile.direction;
-                    }
 
                     return false;
                 }
@@ -3482,6 +3485,7 @@ namespace CalamityMod.Projectiles
         }
         #endregion
 
+        #region Pre Kill
         public override bool PreKill(Projectile projectile, int timeLeft)
         {
             bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && (Main.masterMode || BossRushEvent.BossRushActive);
@@ -3624,6 +3628,7 @@ namespace CalamityMod.Projectiles
 
             return true;
         }
+        #endregion
 
         #region Kill
         public override void OnKill(Projectile projectile, int timeLeft)

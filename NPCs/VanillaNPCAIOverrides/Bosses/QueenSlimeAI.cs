@@ -874,8 +874,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
         public static bool VanillaQueenSlimeAI(NPC npc, Mod mod)
         {
-            int num = 30;
-            int num2 = 40;
             float num3 = 1f;
             bool flag = false;
             bool flag2 = npc.life <= npc.lifeMax / 2;
@@ -1166,11 +1164,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (Main.getGoodWorld)
                                     num14 = 15;
 
+                                int type = ProjectileID.QueenSlimeGelAttack;
                                 for (int j = 0; j < num14; j++)
                                 {
                                     Vector2 spinningpoint = new Vector2(9f, 0f);
                                     spinningpoint = spinningpoint.RotatedBy((float)(-j) * ((float)Math.PI * 2f) / (float)num14, Vector2.Zero);
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X, npc.Center.Y, spinningpoint.X, spinningpoint.Y, ProjectileID.QueenSlimeGelAttack, num, 0f, Main.myPlayer);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X, npc.Center.Y, spinningpoint.X, spinningpoint.Y, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                                 }
                             }
                         }
@@ -1315,7 +1314,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 SoundEngine.PlaySound(SoundID.Item167, npc.Center);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Bottom, Vector2.Zero, ProjectileID.QueenSlimeSmash, num2, 0f, Main.myPlayer);
+                                    int type = ProjectileID.QueenSlimeSmash;
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Bottom, Vector2.Zero, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
 
                                     if (Main.masterMode)
                                     {
@@ -1323,7 +1323,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                         for (int i = 0; i < 11; i++)
                                         {
                                             if (i != 5)
-                                                Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, ProjectileID.QueenSlimeSmash, num2, 0f, Main.myPlayer);
+                                                Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
 
                                             extraSmashPosition -= Vector2.UnitX * 200f;
                                         }
@@ -1459,11 +1459,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (!flag2)
                                     num15 = 6;
 
+                                int type = ProjectileID.QueenSlimeGelAttack;
                                 for (int j = 0; j < num15; j++)
                                 {
                                     Vector2 spinningpoint = new Vector2(Main.masterMode ? 12f : 9f, 0f);
                                     spinningpoint = spinningpoint.RotatedBy((float)(-j) * ((float)Math.PI * 2f) / (float)num14, Vector2.Zero);
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, ProjectileID.QueenSlimeGelAttack, num, 0f, Main.myPlayer);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                                 }
                             }
 

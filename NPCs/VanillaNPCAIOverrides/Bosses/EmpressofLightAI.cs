@@ -1282,11 +1282,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float desiredVelocity = 12f;
             float stopMovingDistance = 40f;
             float despawnDistance = 6400f;
-            int lanceDamage = 50;
-            int lanceWallDamage = 70;
-            int rainbowStreakDamage = 45;
-            int lastingRainbowDamage = 45;
-            int sunDanceDamage = 50;
+            int lanceDamage = npc.GetProjectileDamage(ProjectileID.FairyQueenLance);
+            int rainbowStreakDamage = npc.GetProjectileDamage(ProjectileID.HallowBossRainbowStreak);
+            int lastingRainbowDamage = npc.GetProjectileDamage(ProjectileID.HallowBossLastingRainbow);
+            int sunDanceDamage = npc.GetProjectileDamage(ProjectileID.FairyQueenSunDance);
 
             // Rotation
             npc.rotation = npc.velocity.X * 0.005f;
@@ -1319,36 +1318,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             int projectileDamageMultiplier = enraged ? 2 : 1;
 
             bool becomeVisible = true;
-            int lanceDamage_Expert = 30;
-            int rainbowStreakDamage_Expert = 30;
-            int lastingRainbowDamage_Expert = 30;
-            int sunDanceDamage_Expert = 35;
-            int lanceWallDamage_Expert = 65;
-            if (phase2)
-            {
-                lanceDamage = 60;
-                rainbowStreakDamage = 50;
-                lastingRainbowDamage = 50;
-                sunDanceDamage = 60;
-                lanceWallDamage = 65;
-                lanceDamage_Expert = 35;
-                rainbowStreakDamage_Expert = 35;
-                lastingRainbowDamage_Expert = 35;
-                sunDanceDamage_Expert = 40;
-                lanceWallDamage_Expert = 30;
-            }
-
-            lanceDamage = npc.GetAttackDamage_ForProjectiles(lanceDamage, lanceDamage_Expert);
-            rainbowStreakDamage = npc.GetAttackDamage_ForProjectiles(rainbowStreakDamage, rainbowStreakDamage_Expert);
-            lastingRainbowDamage = npc.GetAttackDamage_ForProjectiles(lastingRainbowDamage, lastingRainbowDamage_Expert);
-            sunDanceDamage = npc.GetAttackDamage_ForProjectiles(sunDanceDamage, sunDanceDamage_Expert);
-            lanceWallDamage = npc.GetAttackDamage_ForProjectiles(lanceWallDamage, lanceWallDamage_Expert);
 
             lanceDamage *= projectileDamageMultiplier;
             rainbowStreakDamage *= projectileDamageMultiplier;
             lastingRainbowDamage *= projectileDamageMultiplier;
             sunDanceDamage *= projectileDamageMultiplier;
-            lanceWallDamage *= projectileDamageMultiplier;
 
             if (enraged)
                 expertMode = true;
@@ -1989,7 +1963,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                     float ai2 = lance;
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), origin, Vector2.Zero, ProjectileID.FairyQueenLance, lanceWallDamage, 0f, Main.myPlayer, lanceRotation.ToRotation(), ai2);
+                                        Projectile.NewProjectile(npc.GetSource_FromAI(), origin, Vector2.Zero, ProjectileID.FairyQueenLance, lanceDamage, 0f, Main.myPlayer, lanceRotation.ToRotation(), ai2);
                                 }
                             }
                         }

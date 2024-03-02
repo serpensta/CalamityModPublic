@@ -1204,25 +1204,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (flag27)
                 {
                     float num397 = 9f;
-                    int num398 = Main.masterMode ? 13 : 11;
-                    int num399 = ProjectileID.EyeLaser;
+                    int type = ProjectileID.EyeLaser;
                     if ((double)Main.npc[Main.wofNPCIndex].life < (double)Main.npc[Main.wofNPCIndex].lifeMax * 0.5)
-                    {
-                        num398++;
                         num397 += 1f;
-                    }
-
                     if ((double)Main.npc[Main.wofNPCIndex].life < (double)Main.npc[Main.wofNPCIndex].lifeMax * 0.25)
-                    {
-                        num398++;
                         num397 += 1f;
-                    }
-
                     if ((double)Main.npc[Main.wofNPCIndex].life < (double)Main.npc[Main.wofNPCIndex].lifeMax * 0.1)
-                    {
-                        num398 += 2;
                         num397 += 2f;
-                    }
 
                     vector39 = npc.Center;
                     num392 = Main.player[npc.target].Center.X - vector39.X;
@@ -1233,7 +1221,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num393 *= num394;
                     vector39.X += num392;
                     vector39.Y += num393;
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector39.X, vector39.Y, num392, num393, num399, num398, 0f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector39.X, vector39.Y, num392, num393, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                 }
             }
 

@@ -1389,8 +1389,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num791 = num788 / num791;
                     num789 *= num791;
                     num790 *= num791;
-                    int num792 = 22;
-                    int num793 = ProjectileID.SeedPlantera;
+                    int type = ProjectileID.SeedPlantera;
                     int maxValue2 = 4;
                     int maxValue3 = 8;
                     if (Main.expertMode)
@@ -1401,25 +1400,23 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if ((double)npc.life < (double)npc.lifeMax * 0.8 && (Main.rand.NextBool(maxValue2) || Main.masterMode))
                     {
-                        num792 = 27;
                         npc.localAI[1] = -30f;
-                        num793 = ProjectileID.PoisonSeedPlantera;
+                        type = ProjectileID.PoisonSeedPlantera;
                     }
                     else if ((double)npc.life < (double)npc.lifeMax * 0.8 && Main.rand.NextBool(maxValue3))
                     {
-                        num792 = 31;
                         npc.localAI[1] = -120f;
-                        num793 = ProjectileID.ThornBall;
+                        type = ProjectileID.ThornBall;
                     }
 
+                    int damage = npc.GetProjectileDamage(type);
                     if (flag39)
-                        num792 *= 2;
+                        damage *= 2;
 
-                    num792 = npc.GetAttackDamage_ForProjectiles(num792, (float)num792 * 0.9f);
                     vector99.X += num789 * 3f;
                     vector99.Y += num790 * 3f;
-                    int num794 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector99.X, vector99.Y, num789, num790, num793, num792, 0f, Main.myPlayer);
-                    if (num793 != ProjectileID.ThornBall)
+                    int num794 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector99.X, vector99.Y, num789, num790, type, damage, 0f, Main.myPlayer);
+                    if (type != ProjectileID.ThornBall)
                         Main.projectile[num794].timeLeft = 300;
                 }
 

@@ -1368,9 +1368,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         num685 = num680 / num685;
                         num683 *= num685;
                         num684 *= num685;
-                        int num686 = 11;
-                        int num687 = ProjectileID.QueenBeeStinger;
-                        int num688 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector86.X, vector86.Y, num683, num684, num687, num686, 0f, Main.myPlayer);
+                        int type = ProjectileID.QueenBeeStinger;
+                        int num688 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector86.X, vector86.Y, num683, num684, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                         Main.projectile[num688].timeLeft = 300;
                     }
                 }

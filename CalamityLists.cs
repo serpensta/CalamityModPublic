@@ -2419,7 +2419,8 @@ namespace CalamityMod
                 NPCID.CultistDragonBody4,
                 NPCID.CultistDragonTail,
                 NPCID.BloodEelBody,
-                NPCID.BloodEelTail
+                NPCID.BloodEelTail,
+                NPCID.AncientDoom
             };
 
             // Reduce contact damage by 25%

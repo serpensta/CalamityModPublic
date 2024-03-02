@@ -884,7 +884,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             num9 *= num10;
                             num8 += (float)Main.rand.Next(-2, 3) * 0.05f;
                             num9 += (float)Main.rand.Next(-2, 3) * 0.05f;
-                            int damage = npc.GetAttackDamage_ForProjectiles(22f, 18f);
+
+                            int type = ProjectileID.DeathLaser;
+                            int damage = npc.GetProjectileDamage(type);
 
                             // Reduce mech boss projectile damage depending on the new ore progression changes
                             if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
@@ -895,10 +897,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * 0.9);
                             }
 
-                            int num11 = ProjectileID.DeathLaser;
                             vector.X += num8 * 5f;
                             vector.Y += num9 * 5f;
-                            int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, num8, num9, num11, damage, 0f, Main.myPlayer);
+                            int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, num8, num9, type, damage, 0f, Main.myPlayer);
                             Main.projectile[num12].timeLeft = 600;
                             npc.netUpdate = true;
                         }
@@ -1695,7 +1696,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.localAI[0] = 0f;
                 if (targetData.Type != 0 && Collision.CanHit(npc, targetData))
                 {
-                    int damage = npc.GetAttackDamage_ForProjectiles(25f, 22f);
+                    int type = ProjectileID.PinkLaser;
+                    int damage = npc.GetProjectileDamage(type);
 
                     // Reduce mech boss projectile damage depending on the new ore progression changes
                     if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
@@ -1706,7 +1708,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             damage = (int)(damage * 0.9);
                     }
 
-                    int num11 = ProjectileID.PinkLaser;
                     Vector2 vector3 = new Vector2(num4, num5);
                     if (NPC.IsMechQueenUp)
                     {
@@ -1715,7 +1716,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         vector3 = v.SafeNormalize(Vector2.UnitY) * num12;
                     }
 
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, vector3.X, vector3.Y, num11, damage, 0f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, vector3.X, vector3.Y, type, damage, 0f, Main.myPlayer);
                 }
             }
 

@@ -1904,10 +1904,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num715 = num712 / num715;
                     num713 *= num715;
                     num714 *= num715;
-                    int num716 = 18;
-                    int num717 = ProjectileID.Fireball;
+
+                    int type = ProjectileID.Fireball;
+                    int damage = npc.GetProjectileDamage(type);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector90.X, vector90.Y, num713, num714, num717, num716, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector90.X, vector90.Y, num713, num714, type, damage, 0f, Main.myPlayer);
                 }
             }
             else if (npc.ai[0] == 1f)
@@ -1952,10 +1953,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num724 = num721 / num724;
                     num722 *= num724;
                     num723 *= num724;
-                    int num725 = 24;
-                    int num726 = ProjectileID.Fireball;
+
+                    int type = ProjectileID.Fireball;
+                    int damage = npc.GetProjectileDamage(type);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector91.X, vector91.Y, num722, num723, num726, num725, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector91.X, vector91.Y, num722, num723, type, damage, 0f, Main.myPlayer);
                 }
 
                 npc.ai[2] += num719;
@@ -1974,8 +1976,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[2] > (float)(60 + Main.rand.Next(600)))
                 {
                     npc.ai[2] = 0f;
-                    int num728 = 28;
-                    int num729 = ProjectileID.EyeBeam;
+
+                    int type = ProjectileID.EyeBeam;
+                    int damage = npc.GetProjectileDamage(type);
+
                     if (npc.localAI[1] == 0f)
                     {
                         for (int num730 = 0; num730 < 2; num730++)
@@ -1997,7 +2001,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             vector91.Y += num733 * 3f;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                int num735 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector91.X, vector91.Y, num732, num733, num729, num728, 0f, Main.myPlayer);
+                                int num735 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector91.X, vector91.Y, num732, num733, type, damage, 0f, Main.myPlayer);
                                 Main.projectile[num735].timeLeft = 300;
                             }
                         }
@@ -2021,7 +2025,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         vector91.Y += num738 * 3f;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int num740 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector91.X, vector91.Y, num737, num738, num729, num728, 0f, Main.myPlayer);
+                            int num740 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector91.X, vector91.Y, num737, num738, type, damage, 0f, Main.myPlayer);
                             Main.projectile[num740].timeLeft = 300;
                         }
                     }
@@ -2131,8 +2135,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.ai[1] = 0f;
                 Vector2 vector93 = new Vector2(npc.Center.X, npc.Center.Y - 10f * npc.scale);
                 float num749 = 8f;
-                int num750 = 20;
-                int num751 = ProjectileID.Fireball;
+
+                int type = ProjectileID.Fireball;
+                int damage = npc.GetProjectileDamage(type);
+
                 float num752 = Main.player[npc.target].Center.X - vector93.X;
                 float num753 = Main.player[npc.target].Center.Y - vector93.Y;
                 float num754 = (float)Math.Sqrt(num752 * num752 + num753 * num753);
@@ -2140,7 +2146,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 num752 *= num754;
                 num753 *= num754;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector93.X, vector93.Y, num752, num753, num751, num750, 0f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector93.X, vector93.Y, num752, num753, type, damage, 0f, Main.myPlayer);
             }
 
             float num756 = enrageScale;
@@ -2190,43 +2196,25 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     float num758 = 11f;
-                    int num759 = 24;
-                    int num760 = ProjectileID.EyeBeam;
+                    int type = ProjectileID.EyeBeam;
+                    int damage = npc.GetProjectileDamage(type);
+
                     if ((double)Main.npc[NPC.golemBoss].life < (double)Main.npc[NPC.golemBoss].lifeMax * 0.5)
-                    {
-                        num759++;
                         num758 += 0.25f;
-                    }
-
                     if ((double)Main.npc[NPC.golemBoss].life < (double)Main.npc[NPC.golemBoss].lifeMax * 0.4)
-                    {
-                        num759++;
                         num758 += 0.25f;
-                    }
-
                     if ((double)Main.npc[NPC.golemBoss].life < (double)Main.npc[NPC.golemBoss].lifeMax * 0.3)
-                    {
-                        num759++;
                         num758 += 0.25f;
-                    }
-
                     if ((double)Main.npc[NPC.golemBoss].life < (double)Main.npc[NPC.golemBoss].lifeMax * 0.2)
-                    {
-                        num759++;
                         num758 += 0.25f;
-                    }
-
                     if ((double)Main.npc[NPC.golemBoss].life < (double)Main.npc[NPC.golemBoss].lifeMax * 0.1)
-                    {
-                        num759++;
                         num758 += 0.25f;
-                    }
 
                     float num761 = Main.player[npc.target].Center.X;
                     float num762 = Main.player[npc.target].Center.Y;
                     if (flag38)
                     {
-                        num759 = (int)((double)num759 * 1.5);
+                        damage = (int)((double)damage * 1.5);
                         num758 *= 2.5f;
                         num761 += Main.player[npc.target].velocity.X * Main.rand.NextFloat() * 50f;
                         num762 += Main.player[npc.target].velocity.Y * Main.rand.NextFloat() * 50f;
@@ -2242,7 +2230,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     vector94.Y += num762 * 3f;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        int num764 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector94.X, vector94.Y, num761, num762, num760, num759, 0f, Main.myPlayer);
+                        int num764 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector94.X, vector94.Y, num761, num762, type, damage, 0f, Main.myPlayer);
                         Main.projectile[num764].timeLeft = 300;
                     }
                 }

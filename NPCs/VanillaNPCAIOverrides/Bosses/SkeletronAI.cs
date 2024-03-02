@@ -1274,10 +1274,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             vector19 += npc.velocity;
                             num156 = vector19.X;
                             num157 = vector19.Y;
-                            int attackDamage_ForProjectiles = npc.GetAttackDamage_ForProjectiles(17f, 17f);
-                            int num159 = ProjectileID.Skull;
+                            int type = ProjectileID.Skull;
                             center3 += vector19 * 5f;
-                            int num160 = Projectile.NewProjectile(npc.GetSource_FromAI(), center3.X, center3.Y, num156, num157, num159, attackDamage_ForProjectiles, 0f, Main.myPlayer, -1f);
+                            int num160 = Projectile.NewProjectile(npc.GetSource_FromAI(), center3.X, center3.Y, num156, num157, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, -1f);
                             Main.projectile[num160].timeLeft = 300;
                         }
                     }
