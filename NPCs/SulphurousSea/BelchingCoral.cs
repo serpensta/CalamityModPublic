@@ -76,7 +76,7 @@ namespace CalamityMod.NPCs.SulphurousSea
                 {
                     int damage = Main.masterMode ? 17 : Main.expertMode ? 20 : 27;
                     Vector2 velocity = new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-11f, -6f));
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Top + new Vector2(0f, 6f), velocity, ModContent.ProjectileType<BelchingCoralSpike>(), 27, 3f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Top + new Vector2(0f, 6f), velocity, ModContent.ProjectileType<BelchingCoralSpike>(), damage, 3f);
                 }
             }
 
