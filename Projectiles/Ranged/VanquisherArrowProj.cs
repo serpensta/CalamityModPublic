@@ -89,23 +89,25 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Projectile.damage > 1 && Projectile.numHits < 1)
-                Projectile.damage = (int)(Projectile.damage * 0.6f);    
-
             target.AddBuff(ModContent.BuffType<GodSlayerInferno>(), 180);
+        }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            // First hit is 0.85% damage
+            if (Projectile.numHits < 1)
+                Projectile.damage = (int)(Projectile.damage * .85f);
+            // Second hit is 100% base damage, it is the "Slash Hit"
+            else
+                Projectile.damage = (int)(Projectile.damage * (1f / 0.85f));
+
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
         public override void OnKill(int timeLeft)
         {
             VoidSparkParticle spark2 = new VoidSparkParticle(Projectile.Center, new Vector2(0.1f, 0.1f).RotatedByRandom(100), false, 9, Main.rand.NextFloat(0.15f, 0.25f), Main.rand.NextBool() ? Color.Magenta : Color.Cyan);
             GeneralParticleHandler.SpawnParticle(spark2);
 
-            if (Projectile.owner == Main.myPlayer)
-            {
-                Projectile.damage = (int)(Projectile.damage * 0.4f);
-                Projectile.penetrate = -1;
-                Projectile.ExpandHitboxBy(170);
-                Projectile.Damage();
-            }
             SoundStyle onKill = new("CalamityMod/Sounds/Item/ScorpioHit");
             SoundEngine.PlaySound(onKill with { Volume = 0.25f, Pitch = 0.1f, PitchVariance = 0.3f }, Projectile.Center);
             SoundEngine.PlaySound(SoundID.DD2_FlameburstTowerShot with { Volume = 0.8f, Pitch = -0.5f, PitchVariance = 0.3f }, Projectile.Center);
