@@ -124,7 +124,7 @@ namespace CalamityMod.Projectiles.Enemy
             Projectile.localAI[1] += 1f;
             if (Projectile.localAI[1] == 60f && Projectile.owner == Main.myPlayer)
             {
-                int projectileDamage = Projectile.ai[0] != 0f ? (int)Projectile.ai[0] : Main.expertMode ? 25 : 40;
+                int projectileDamage = Projectile.ai[0] != 0f ? (int)Projectile.ai[0] : Main.masterMode ? 21 : Main.expertMode ? 25 : 40;
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<TornadoHostile>(), projectileDamage, 3f, Projectile.owner, 0f, Projectile.ai[1]);
             }
             if (Projectile.localAI[1] >= 120f)

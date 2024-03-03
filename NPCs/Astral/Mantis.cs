@@ -140,7 +140,7 @@ namespace CalamityMod.NPCs.Astral
                     SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                     Vector2 vector = Main.player[NPC.target].Center - NPC.Center;
                     vector.Normalize();
-                    int damage = DownedBossSystem.downedAstrumAureus ? 55 : 45;
+                    int damage = DownedBossSystem.downedAstrumAureus ? (Main.masterMode ? 34 : Main.expertMode ? 40 : 55) : (Main.masterMode ? 30 : Main.expertMode ? 35 : 45);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + (NPC.Center.X < target.Center.X ? -14f : 14f) * Vector2.UnitX, vector * 7f, ModContent.ProjectileType<MantisRing>(), damage, 0f);
                 }
             }

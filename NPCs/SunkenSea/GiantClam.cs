@@ -364,37 +364,40 @@ namespace CalamityMod.NPCs.SunkenSea
                     else if (attack == 2)
                     {
                         SoundEngine.PlaySound(SoundID.Item67, NPC.position);
-                        Vector2 clamPosition = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
-                        float spread = 45f * 0.0174f;
-                        double startAngle = Math.Atan2(NPC.velocity.X, NPC.velocity.Y) - spread / 2;
-                        double deltaAngle = spread / 8f;
-                        double offsetAngle;
-                        int projectileShot = ModContent.ProjectileType<PearlBurst>();
-                        int damage = Main.expertMode ? 28 : 35;
-                        float speed = 5f;
-                        Vector2 vector = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)(NPC.height / 2));
-                        float targetXDist = Main.player[NPC.target].position.X + (float)Main.player[NPC.target].width * 0.5f - vector.X + (float)Main.rand.Next(-20, 21);
-                        float targetYDist = Main.player[NPC.target].position.Y + (float)Main.player[NPC.target].height * 0.5f - vector.Y + (float)Main.rand.Next(-20, 21);
-                        float targetDistance = (float)Math.Sqrt((double)(targetXDist * targetXDist + targetYDist * targetYDist));
-                        targetDistance = speed / targetDistance;
-                        targetXDist *= targetDistance;
-                        targetYDist *= targetDistance;
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, targetXDist, targetYDist, projectileShot, damage, 0f, Main.myPlayer, 0f, 0f);
-                        for (int i = 0; i < 4; i++)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            offsetAngle = startAngle + deltaAngle * (i + i * i) / 2f + 32f * i;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), clamPosition.X, clamPosition.Y, (float)(Math.Sin(offsetAngle) * 3f), (float)(Math.Cos(offsetAngle) * 3f), projectileShot, damage, 0f, Main.myPlayer, 0f, 0f);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), clamPosition.X, clamPosition.Y, (float)(-Math.Sin(offsetAngle) * 3f), (float)(-Math.Cos(offsetAngle) * 3f), projectileShot, damage, 0f, Main.myPlayer, 0f, 0f);
+                            Vector2 clamPosition = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
+                            float spread = 45f * 0.0174f;
+                            double startAngle = Math.Atan2(NPC.velocity.X, NPC.velocity.Y) - spread / 2;
+                            double deltaAngle = spread / 8f;
+                            double offsetAngle;
+                            int projectileShot = ModContent.ProjectileType<PearlBurst>();
+                            int damage = Main.masterMode ? 23 : Main.expertMode ? 28 : 35;
+                            float speed = 5f;
+                            Vector2 vector = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)(NPC.height / 2));
+                            float targetXDist = Main.player[NPC.target].position.X + (float)Main.player[NPC.target].width * 0.5f - vector.X + (float)Main.rand.Next(-20, 21);
+                            float targetYDist = Main.player[NPC.target].position.Y + (float)Main.player[NPC.target].height * 0.5f - vector.Y + (float)Main.rand.Next(-20, 21);
+                            float targetDistance = (float)Math.Sqrt((double)(targetXDist * targetXDist + targetYDist * targetYDist));
+                            targetDistance = speed / targetDistance;
+                            targetXDist *= targetDistance;
+                            targetYDist *= targetDistance;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, targetXDist, targetYDist, projectileShot, damage, 0f, Main.myPlayer, 0f, 0f);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                offsetAngle = startAngle + deltaAngle * (i + i * i) / 2f + 32f * i;
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), clamPosition.X, clamPosition.Y, (float)(Math.Sin(offsetAngle) * 3f), (float)(Math.Cos(offsetAngle) * 3f), projectileShot, damage, 0f, Main.myPlayer, 0f, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), clamPosition.X, clamPosition.Y, (float)(-Math.Sin(offsetAngle) * 3f), (float)(-Math.Cos(offsetAngle) * 3f), projectileShot, damage, 0f, Main.myPlayer, 0f, 0f);
+                            }
                         }
                         attack = -1;
                         NPC.ai[3] = 0f;
                     }
                     else if (attack == 3)
                     {
+                        SoundEngine.PlaySound(SoundID.Item68, NPC.position);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            SoundEngine.PlaySound(SoundID.Item68, NPC.position);
-                            int damage = Main.expertMode ? 28 : 35;
+                            int damage = Main.masterMode ? 23 : Main.expertMode ? 28 : 35;
                             float shotSpacing = 750f;
                             for (int i = 0; i < 11; i++)
                             {

@@ -184,7 +184,7 @@ namespace CalamityMod.NPCs.AcidRain
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int damage = DownedBossSystem.downedPolterghast ? 52 : 33;
+                    int damage = DownedBossSystem.downedPolterghast ? (Main.masterMode ? 35 : Main.expertMode ? 42 : 52) : (Main.masterMode ? 22 : Main.expertMode ? 26 : 33);
                     float shootOffsetAngle = Main.rand.NextFloat(MathHelper.TwoPi);
                     for (int i = 0; i < spikesPerBurst; i++)
                     {
@@ -290,7 +290,7 @@ namespace CalamityMod.NPCs.AcidRain
                             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, NPC.Center);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                int nukeDamage = DownedBossSystem.downedPolterghast ? 72 : 38;
+                                int nukeDamage = DownedBossSystem.downedPolterghast ? (Main.masterMode ? 49 : Main.expertMode ? 58 : 72) : (Main.masterMode ? 25 : Main.expertMode ? 30 : 38);
                                 int dropletDamage = (int)(nukeDamage * 0.6f);
                                 int explosion = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CragmawExplosion>(), nukeDamage, 0f);
                                 if (Main.projectile.IndexInRange(explosion))
@@ -416,7 +416,7 @@ namespace CalamityMod.NPCs.AcidRain
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int laserbeamDamage = DownedBossSystem.downedPolterghast ? 120 : 40;
+                            int laserbeamDamage = DownedBossSystem.downedPolterghast ? (Main.masterMode ? 81 : Main.expertMode ? 96 : 120) : (Main.masterMode ? 27 : Main.expertMode ? 32 : 40);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, -Vector2.UnitY, ModContent.ProjectileType<CragmawBeam>(), laserbeamDamage, 0f, Main.myPlayer, 0f, NPC.whoAmI);
                         }
                     }

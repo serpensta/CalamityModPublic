@@ -445,11 +445,16 @@ namespace CalamityMod.NPCs.GreatSandShark
                                     burrowDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Sandstorm, 0f, 0f, 100, default, 2f);
                                     Main.dust[burrowDust2].velocity.X *= 2f;
                                 }
-                                int spawnX = (int)(NPC.width / 2);
-                                int projType = Main.zenithWorld ? ModContent.ProjectileType<AstralMeteorProj>() : ModContent.ProjectileType<GreatSandBlast>();
-                                for (int sand = 0; sand < 5; sand++)
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + (float)Main.rand.Next(-spawnX, spawnX), NPC.Center.Y,
-                                        (float)Main.rand.Next(-3, 4), (float)Main.rand.Next(-12, -6), projType, 40, 0f, Main.myPlayer);
+
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    int spawnX = (int)(NPC.width / 2);
+                                    int projType = Main.zenithWorld ? ModContent.ProjectileType<AstralMeteorProj>() : ModContent.ProjectileType<GreatSandBlast>();
+                                    int damage = Main.masterMode ? 25 : Main.expertMode ? 30 : 40;
+                                    for (int sand = 0; sand < 5; sand++)
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + (float)Main.rand.Next(-spawnX, spawnX), NPC.Center.Y,
+                                            (float)Main.rand.Next(-3, 4), (float)Main.rand.Next(-12, -6), projType, damage, 0f, Main.myPlayer);
+                                }
                             }
                             NPC.ai[2] = -30f;
 
@@ -552,14 +557,17 @@ namespace CalamityMod.NPCs.GreatSandShark
                 if (NPC.Calamity().newAI[0] >= 120)
                 {
                     SoundEngine.PlaySound(SoundID.Item105, Main.player[NPC.target].Center);
-                    for (int i = 0; i < 5; i++)
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        float speedX = 2f + (float)Main.rand.Next(-8, 5);
-                        float speedY = 2f + (float)Main.rand.Next(1, 6);
-                        int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, Main.player[NPC.target].Center.Y - 800, speedX, speedY, ModContent.ProjectileType<AstralFlame>(), 40, 0, Main.myPlayer);
-                        if (p.WithinBounds(Main.maxProjectiles))
+                        for (int i = 0; i < 5; i++)
                         {
-                            Main.projectile[p].timeLeft = 180;
+                            float speedX = 2f + (float)Main.rand.Next(-8, 5);
+                            float speedY = 2f + (float)Main.rand.Next(1, 6);
+                            int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, Main.player[NPC.target].Center.Y - 800, speedX, speedY, ModContent.ProjectileType<AstralFlame>(), 40, 0, Main.myPlayer);
+                            if (p.WithinBounds(Main.maxProjectiles))
+                            {
+                                Main.projectile[p].timeLeft = 180;
+                            }
                         }
                     }
                     NPC.Calamity().newAI[0] = 0;

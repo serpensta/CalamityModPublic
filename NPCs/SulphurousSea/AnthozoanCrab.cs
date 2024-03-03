@@ -173,9 +173,10 @@ namespace CalamityMod.NPCs.SulphurousSea
                 {
                     NPC.velocity.X = 0f;
                     Vector2 rockSpawnPosition = new Vector2(16f * -NPC.spriteDirection + NPC.Center.X, NPC.Bottom.Y - 6f);
+                    int damage = Main.masterMode ? 18 : Main.expertMode ? 21 : 29;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        boulderIndex = Projectile.NewProjectile(NPC.GetSource_FromAI(), rockSpawnPosition, Vector2.Zero, ModContent.ProjectileType<CrabBoulder>(), 29, 6f);
+                        boulderIndex = Projectile.NewProjectile(NPC.GetSource_FromAI(), rockSpawnPosition, Vector2.Zero, ModContent.ProjectileType<CrabBoulder>(), damage, 6f);
                         NPC.netUpdate = true;
                     }
                 }

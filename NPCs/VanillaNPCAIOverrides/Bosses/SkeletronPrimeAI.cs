@@ -166,7 +166,29 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Phases
             bool phase2 = lifeRatio < 0.66f;
+            bool spawnDestroyer = phase2 && masterMode && npc.localAI[2] == 0f;
             bool phase3 = lifeRatio < 0.33f;
+            bool spawnRetinazer = phase3 && masterMode && npc.localAI[2] == 1f;
+
+            // Spawn The Destroyer in Master Mode (just like Oblivion from Avalon)
+            if (spawnDestroyer)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    NPC.SpawnOnPlayer(Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].whoAmI, NPCID.TheDestroyer);
+
+                npc.localAI[2] = 1f;
+                npc.SyncVanillaLocalAI();
+            }
+
+            // Spawn Retinazer in Master Mode (just like Oblivion from Avalon)
+            if (spawnRetinazer)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    NPC.SpawnOnPlayer(Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].whoAmI, NPCID.Retinazer);
+
+                npc.localAI[2] = 2f;
+                npc.SyncVanillaLocalAI();
+            }
 
             // Despawn
             if (Main.player[npc.target].dead || Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) > 6000f || Math.Abs(npc.Center.Y - Main.player[npc.target].Center.Y) > 6000f)

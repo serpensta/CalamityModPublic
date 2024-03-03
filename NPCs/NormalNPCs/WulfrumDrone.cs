@@ -178,6 +178,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                 if (Supercharged && Main.netMode != NetmodeID.MultiplayerClient && HorizontalChargeTime % 30f == 29f)
                 {
+                    int damage = Main.masterMode ? 8 : Main.expertMode ? 9 : 12;
                     if (Main.zenithWorld)
                     {
                         int spread = 15;
@@ -185,12 +186,12 @@ namespace CalamityMod.NPCs.NormalNPCs
                         {
                             Vector2 velocity = NPC.SafeDirectionTo(player.Center, Vector2.UnitY) * 6f;
                             Vector2 perturbedspeed = new Vector2(velocity.X + Main.rand.Next(-2, 3), velocity.Y + Main.rand.Next(-2, 3)).RotatedBy(MathHelper.ToRadians(spread));
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitX * 6f * NPC.spriteDirection, perturbedspeed, ProjectileID.SaucerLaser, 12, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitX * 6f * NPC.spriteDirection, perturbedspeed, ProjectileID.SaucerLaser, damage, 0f);
                             spread -= Main.rand.Next(5, 8);
                         }
                     }
                     else
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitX * 6f * NPC.spriteDirection, NPC.SafeDirectionTo(player.Center, Vector2.UnitY) * 6f, ProjectileID.SaucerLaser, 12, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitX * 6f * NPC.spriteDirection, NPC.SafeDirectionTo(player.Center, Vector2.UnitY) * 6f, ProjectileID.SaucerLaser, damage, 0f);
 
                     SoundEngine.PlaySound(SoundID.Item12);
                 }

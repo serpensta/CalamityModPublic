@@ -646,7 +646,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs
                                 dist = speed / dist;
                                 velX *= dist;
                                 velY *= dist;
-                                int damage = Main.expertMode ? 40 : 50;
+                                int damage = Main.masterMode ? 34 : Main.expertMode ? 40 : 50;
                                 int beam = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + (npc.spriteDirection == 1 ? 25f : -25f), npc.Center.Y + (target.position.Y > npc.Center.Y ? 5f : -5f), velX, velY, ProjectileID.EyeBeam, damage, 0f, Main.myPlayer);
                                 Main.projectile[beam].tileCollide = true;
                             }
@@ -672,7 +672,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs
                                     dist = speed / dist;
                                     velX *= dist;
                                     velY *= dist;
-                                    int damage = Main.expertMode ? 25 : 35;
+                                    int damage = Main.masterMode ? 21 : Main.expertMode ? 25 : 35;
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + (npc.spriteDirection == 1 ? 10f : -10f), npc.Center.Y, velX, velY, ModContent.ProjectileType<SulphuricAcidMist>(), damage, 0f, Main.myPlayer);
                                 }
                             }

@@ -188,9 +188,9 @@ namespace CalamityMod.NPCs.AcidRain
                     if (NPC.spriteDirection == -1)
                         spitDirection += MathHelper.PiOver2;
 
-                    int damage = DownedBossSystem.downedPolterghast ? 40 : DownedBossSystem.downedAquaticScourge ? 26 : 18;
-                    if (Main.expertMode)
-                        damage = (int)Math.Round(damage * 0.8);
+                    int damage = DownedBossSystem.downedPolterghast ? (Main.masterMode ? 27 : Main.expertMode ? 32 : 40) :
+                        DownedBossSystem.downedAquaticScourge ? (Main.masterMode ? 17 : Main.expertMode ? 21 : 26) :
+                        (Main.masterMode ? 11 : Main.expertMode ? 14 : 18);
 
                     // Spit two extra streams of acid at the target post-Polterghast.
                     if (DownedBossSystem.downedPolterghast)

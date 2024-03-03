@@ -171,7 +171,8 @@ namespace CalamityMod.NPCs.NormalNPCs
                             targetDistance = projSpeed / targetDistance;
                             targetXDist *= targetDistance;
                             targetYDist *= targetDistance;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, targetXDist, targetYDist, ModContent.ProjectileType<HolyBomb>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                            int damage = Main.masterMode ? 25 : Main.expertMode ? 30 : 40;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, targetXDist, targetYDist, ModContent.ProjectileType<HolyBomb>(), damage, 0f, Main.myPlayer, 0f, 0f);
                             NPC.localAI[1] = 0f;
                             return;
                         }

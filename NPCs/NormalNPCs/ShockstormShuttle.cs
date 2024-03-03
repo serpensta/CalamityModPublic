@@ -82,16 +82,13 @@ namespace CalamityMod.NPCs.NormalNPCs
                         targetDist = projSpeed / targetDist;
                         velocity.X *= targetDist;
                         velocity.Y *= targetDist;
-                        int projDmg = 30;
-                        if (Main.expertMode)
-                        {
-                            projDmg = 22;
-                        }
+
+                        // These are already nerfed in Master Mode via global scaling code
+                        int projDmg = Main.expertMode ? 22 : 30;
                         int projType = ProjectileID.MartianTurretBolt;
                         if (Main.rand.NextBool(8))
-                        {
                             projType = ProjectileID.SaucerLaser;
-                        }
+
                         npcPos.X += velocity.X;
                         npcPos.Y += velocity.Y;
                         int spread = Main.getGoodWorld ? 100 : 20;

@@ -445,6 +445,7 @@ Continue:
 
         public void PerformSpecialAttack(float wrappedAttackTime)
         {
+            int damage = Main.masterMode ? 32 : Main.expertMode ? 38 : 48;
             Vector2 mouthPosition = NPC.Center - Vector2.UnitY * 26f;
             mouthPosition.X += NPC.spriteDirection * -54f;
 
@@ -467,7 +468,7 @@ Continue:
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             float angle = (wrappedAttackTime - (AttackCycleTime - SpecialAttackTime + 20f)) % 12f / 12f * MathHelper.ToRadians(15f) - MathHelper.ToRadians(7.5f);
-                            int bullet = Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToShootPosition.RotatedBy(angle) * 14f, ModContent.ProjectileType<NuclearBulletLarge>(), 48, 4f);
+                            int bullet = Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToShootPosition.RotatedBy(angle) * 14f, ModContent.ProjectileType<NuclearBulletLarge>(), damage, 4f);
                             Main.projectile[bullet].localAI[0] = angle;
                         }
                         NPC.spriteDirection = (ShootPosition.X - NPC.Center.X < 0).ToDirectionInt();
@@ -475,7 +476,7 @@ Continue:
                     }
 
                     if (wrappedAttackTime >= (AttackCycleTime - SpecialAttackTime + 35f) && AttackTime % 10f == 9f)
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToTarget * 12f, ModContent.ProjectileType<NuclearBulletLarge>(), 48, 3f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToTarget * 12f, ModContent.ProjectileType<NuclearBulletLarge>(), damage, 3f);
 
                     break;
 
@@ -486,8 +487,8 @@ Continue:
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             float angle = MathHelper.Lerp(MathHelper.ToRadians(35f), MathHelper.ToRadians(5f), (wrappedAttackTime - (AttackCycleTime - SpecialAttackTime + 35f)) / (SpecialAttackTime + 35f));
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToTarget.RotatedBy(angle) * 16f, ModContent.ProjectileType<NuclearBulletLarge>(), 48, 4.5f);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToTarget.RotatedBy(-angle) * 16f, ModContent.ProjectileType<NuclearBulletLarge>(), 48, 4.5f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToTarget.RotatedBy(angle) * 16f, ModContent.ProjectileType<NuclearBulletLarge>(), damage, 4.5f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToTarget.RotatedBy(-angle) * 16f, ModContent.ProjectileType<NuclearBulletLarge>(), damage, 4.5f);
                         }
 
                         NPC.spriteDirection = (Target.Center.X - NPC.Center.X < 0).ToDirectionInt();
@@ -504,7 +505,7 @@ Continue:
                             for (int i = 0; i < 3; i++)
                             {
                                 float angle = MathHelper.Lerp(-0.5f, 0.5f, i / 3f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToShootPosition.RotatedBy(angle) * 13f, ModContent.ProjectileType<NuclearBulletMedium>(), 48, 4f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPosition, directionToShootPosition.RotatedBy(angle) * 13f, ModContent.ProjectileType<NuclearBulletMedium>(), damage, 4f);
                             }
                         }
 
@@ -583,13 +584,14 @@ Continue:
                 SoundEngine.PlaySound(DeathSound, NPC.Center);
                 if (NPC.frame.Y < frameHeight * 8)
                 {
+                    int damage = Main.masterMode ? 32 : Main.expertMode ? 38 : 48;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < 16; i++)
                         {
                             int type = Main.rand.NextBool(4) ? ModContent.ProjectileType<SulphuricAcidMist>() : ModContent.ProjectileType<NuclearBulletLarge>();
                             float angle = MathHelper.TwoPi / 16f * i;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, angle.ToRotationVector2() * Main.rand.NextFloat(4f, 11f), type, 48, 3f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, angle.ToRotationVector2() * Main.rand.NextFloat(4f, 11f), type, damage, 3f);
                         }
                     }
 

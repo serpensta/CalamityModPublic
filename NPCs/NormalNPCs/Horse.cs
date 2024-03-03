@@ -232,17 +232,18 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.timeLeft = 60;
             }
 
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            NPC.localAI[0] += 1f;
+            if (NPC.localAI[0] >= 300f)
             {
-                NPC.localAI[0] += 1f;
-                if (NPC.localAI[0] >= 300f)
+                NPC.localAI[0] = 0f;
+                SoundEngine.PlaySound(SoundID.NPCHit43, NPC.Center);
+                NPC.TargetClosest();
+                if (Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
                 {
-                    NPC.localAI[0] = 0f;
-                    SoundEngine.PlaySound(SoundID.NPCHit43, NPC.Center);
-                    NPC.TargetClosest();
-                    if (Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
+                    float rockSpeed = 4f;
+                    int damage = Main.masterMode ? 18 : Main.expertMode ? 22 : 30;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        float rockSpeed = 4f;
                         Vector2 projPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
                         float targetXDist = Main.player[NPC.target].position.X + Main.player[NPC.target].width * 0.5f - projPosition.X;
                         float absoluteTargetX = Math.Abs(targetXDist) * 0.1f;
@@ -265,7 +266,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             targetYDist += Main.rand.Next(-40, 41);
                             targetXDist *= targetDistance;
                             targetYDist *= targetDistance;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition.X, projPosition.Y, targetXDist, targetYDist, rockType, 30, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), projPosition.X, projPosition.Y, targetXDist, targetYDist, rockType, damage, 0f, Main.myPlayer, 0f, 0f);
                         }
                     }
                 }

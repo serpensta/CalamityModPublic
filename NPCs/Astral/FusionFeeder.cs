@@ -156,7 +156,7 @@ namespace CalamityMod.NPCs.Astral
                             SoundEngine.PlaySound(SoundID.Item73, NPC.Center);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                int damage = DownedBossSystem.downedAstrumAureus ? 55 : 45;
+                                int damage = DownedBossSystem.downedAstrumAureus ? (Main.masterMode ? 34 : Main.expertMode ? 40 : 55) : (Main.masterMode ? 30 : Main.expertMode ? 35 : 45);
                                 Vector2 meteorShootVelocity = NPC.SafeDirectionTo(Target.Center) * 9f;
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + meteorShootVelocity * 6f, meteorShootVelocity, ModContent.ProjectileType<AstralMeteorProj>(), damage, 0f);
                             }

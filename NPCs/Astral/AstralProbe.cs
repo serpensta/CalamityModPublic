@@ -153,6 +153,7 @@ namespace CalamityMod.NPCs.Astral
                 NPC.localAI[0] = 0f;
                 if (Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
                 {
+                    // These are already nerfed in Master Mode via the global scaling code
                     int projDamage = Main.expertMode ? 14 : 18;
                     if (DownedBossSystem.downedAstrumAureus)
                         projDamage += 6;

@@ -136,7 +136,7 @@ namespace CalamityMod.NPCs.Abyss
             SoundEngine.PlaySound(SoundID.NPCDeath14, NPC.Center);
             if (Main.netMode != NetmodeID.MultiplayerClient && puffedUp)
             {
-                int damageBoom = 45;
+                int damageBoom = Main.masterMode ? 30 : Main.expertMode ? 35 : 45;
                 int projectileType = ModContent.ProjectileType<PufferExplosion>();
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, 0, 0, projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
             }

@@ -489,7 +489,7 @@ namespace CalamityMod.NPCs.AcidRain
                 double deltaAngleBoom = spreadBoom / 8f;
                 double offsetAngleBoom;
                 int iBoom;
-                int damageBoom = 200;
+                int damageBoom = Main.masterMode ? 127 : Main.expertMode ? 150 : 200;
                 for (iBoom = 0; iBoom < 25; iBoom++)
                 {
                     int projectileType = Main.rand.NextBool() ? ModContent.ProjectileType<SulphuricAcidMist>() : ModContent.ProjectileType<SulphuricAcidBubble>();

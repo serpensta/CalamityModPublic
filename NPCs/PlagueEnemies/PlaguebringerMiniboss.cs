@@ -309,7 +309,7 @@ namespace CalamityMod.NPCs.PlagueEnemies
                         int rocketChance = CalamityWorld.death ? 4 : CalamityWorld.revenge ? 7 : Main.expertMode ? 10 : 15;
                         bool fireRocket = Main.rand.NextBool(rocketChance);
                         int type = fireRocket ? ModContent.ProjectileType<HiveBombGoliath>() : ModContent.ProjectileType<PlagueStingerGoliathV2>();
-                        int damage = Main.expertMode ? (fireRocket ? 50 : 35) : (fireRocket ? 72 : 52);
+                        int damage = Main.masterMode ? (fireRocket ? 42 : 29) : Main.expertMode ? (fireRocket ? 50 : 35) : (fireRocket ? 72 : 52);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), stingerSpawnPos.X, stingerSpawnPos.Y, stingerTargetX, stingerTargetY, type, damage, 0f, Main.myPlayer);
                     }
                 }

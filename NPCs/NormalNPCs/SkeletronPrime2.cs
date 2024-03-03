@@ -195,6 +195,17 @@ namespace CalamityMod.NPCs.NormalNPCs
             // Phases
             bool phase2 = lifeRatio < 0.66f;
             bool phase3 = lifeRatio < 0.33f;
+            bool spawnSpazmatism = phase3 && NPC.localAI[2] == 0f;
+
+            // Spawn Spazmatism in Master Mode (just like Oblivion from Avalon)
+            if (spawnSpazmatism)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                    NPC.SpawnOnPlayer(Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].whoAmI, NPCID.Spazmatism);
+
+                NPC.localAI[2] = 1f;
+                NPC.SyncVanillaLocalAI();
+            }
 
             // Despawn
             if (Main.player[NPC.target].dead || Math.Abs(NPC.Center.X - Main.player[NPC.target].Center.X) > 6000f || Math.Abs(NPC.Center.Y - Main.player[NPC.target].Center.Y) > 6000f)

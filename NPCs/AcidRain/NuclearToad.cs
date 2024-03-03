@@ -134,12 +134,12 @@ namespace CalamityMod.NPCs.AcidRain
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int damage = Main.expertMode ? DownedBossSystem.downedAquaticScourge ? 21 : 8 : DownedBossSystem.downedAquaticScourge ? 27 : 10;
+                    int damage = Main.masterMode ? (DownedBossSystem.downedAquaticScourge ? 17 : 7) : Main.expertMode ? (DownedBossSystem.downedAquaticScourge ? 21 : 8) : (DownedBossSystem.downedAquaticScourge ? 27 : 10);
                     float speed = Main.rand.NextFloat(8f, 12f);
                     if (DownedBossSystem.downedPolterghast)
                     {
                         speed *= 1.8f;
-                        damage = Main.expertMode ? 36 : 45;
+                        damage = Main.masterMode ? 30 : Main.expertMode ? 36 : 45;
                     }
 
                     for (int i = 0; i < 7; i++)

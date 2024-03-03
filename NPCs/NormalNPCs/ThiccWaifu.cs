@@ -258,7 +258,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             int cloudSummonDelay = 60;
             int cloudSummonRate = 30;
             int totalCloudWavesToSummon = 5;
-            int lightningDamage = Main.expertMode ? 23 : 36;
+            int lightningDamage = Main.masterMode ? 19 : Main.expertMode ? 23 : 36;
             if (Phase2)
             {
                 cloudSummonRate -= 5;

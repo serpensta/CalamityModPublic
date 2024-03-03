@@ -441,15 +441,10 @@ namespace CalamityMod.NPCs.Abyss
                     {
                         NPC.localAI[0] = 0f;
                         NPC.netUpdate = true;
-                        int damage = 70;
-                        if (Main.expertMode)
-                        {
-                            damage = 55;
-                        }
+                        int damage = Main.masterMode ? 46 : Main.expertMode ? 55 : 70;
                         if (clone)
-                        {
                             damage /= 4;
-                        }
+
                         SoundEngine.PlaySound(SoundID.Item111, NPC.Center);
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)

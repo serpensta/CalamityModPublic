@@ -183,6 +183,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     Vector2 vecToPlayer = NPC.SafeDirectionTo(player.Center);
                     Vector2 projVelocity = vecToPlayer * ProjectileSpeed;
                     int type = ModContent.ProjectileType<IceClasperEnemyProjectile>();
+                    int damage = Main.masterMode ? 15 : Main.expertMode ? 18 : 24;
 
                     // If Death Mode on, the enemy will shoot out a spead of projectiles, instead of a burst.
                     if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -196,7 +197,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                     NPC.Center + projVelocity.SafeNormalize(Vector2.Zero) * 10f,
                                     spreadVelocity,
                                     type,
-                                    24,
+                                    damage,
                                     0f,
                                     Main.myPlayer);
                                 Main.projectile[projectile].timeLeft = 300;
@@ -209,7 +210,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 NPC.Center + projVelocity.SafeNormalize(Vector2.Zero) * 10f,
                                 projVelocity,
                                 type,
-                                24,
+                                damage,
                                 0f,
                                 Main.myPlayer);
                             Main.projectile[projectile].timeLeft = 300;
