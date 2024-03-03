@@ -194,7 +194,7 @@ namespace CalamityMod.NPCs.Leviathan
 
             Player player = Main.player[NPC.target];
 
-            bool notOcean = player.position.Y < 800f || player.position.Y > Main.worldSurface * 16.0 || (player.position.X > 6400f && player.position.X < (Main.maxTilesX * 16 - 6400));
+            bool notOcean = player.position.Y < 800f || player.position.Y > Main.worldSurface * 16D || (player.position.X > 6400f && player.position.X < (Main.maxTilesX * 16 - 6400));
 
             // Enrage
             if (notOcean && !bossRush)
@@ -533,10 +533,11 @@ namespace CalamityMod.NPCs.Leviathan
                     }
 
                     float gfbchargeboost = Main.zenithWorld ? 1100 : 0;
-                    float chargeDistance = ((sirenAlive && !phase4) ? 1100f : 900f) * NPC.scale + gfbchargeboost;
-                    chargeDistance -= 50f * enrageScale;
+                    float chargeDistanceY = 20f;
+                    float chargeDistanceX = ((sirenAlive && !phase4) ? 1100f : 900f) * NPC.scale + gfbchargeboost;
+                    chargeDistanceX -= 50f * enrageScale;
                     if (!sirenAlive || phase4)
-                        chargeDistance -= 250f * (1f - lifeRatio);
+                        chargeDistanceX -= 250f * (1f - lifeRatio);
 
                     if (NPC.ai[1] % 2f == 0f)
                     {
@@ -546,16 +547,18 @@ namespace CalamityMod.NPCs.Leviathan
                         int dustAmt = 7;
                         for (int j = 0; j < dustAmt; j++)
                         {
-                            Vector2 arg_E1C_0 = (Vector2.Normalize(NPC.velocity) * new Vector2((NPC.width + 50) / 2f, NPC.height) * 0.75f).RotatedBy((j - (dustAmt / 2 - 1)) * MathHelper.Pi / dustAmt) + npcCenter;
+                            Vector2 dustPosition = (Vector2.Normalize(NPC.velocity) * new Vector2((NPC.width + 50) / 2f, NPC.height) * 0.75f).RotatedBy((j - (dustAmt / 2 - 1)) * MathHelper.Pi / dustAmt) + npcCenter;
                             Vector2 dustRotation = ((float)(Main.rand.NextDouble() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                            int waterDust = Dust.NewDust(arg_E1C_0 + dustRotation, 0, 0, DustID.DungeonWater, dustRotation.X * 2f, dustRotation.Y * 2f, 100, default, 1.4f);
+                            int waterDust = Dust.NewDust(dustPosition + dustRotation, 0, 0, DustID.DungeonWater, dustRotation.X * 2f, dustRotation.Y * 2f, 100, default, 1.4f);
                             Main.dust[waterDust].noGravity = true;
                             Main.dust[waterDust].noLight = true;
                             Main.dust[waterDust].velocity /= 4f;
                             Main.dust[waterDust].velocity -= NPC.velocity;
                         }
 
-                        if (Math.Abs(NPC.position.Y + (NPC.height / 2) - (player.position.Y + (player.height / 2))) < 20f)
+                        float distanceFromTargetX = Math.Abs(NPC.Center.X - player.Center.X);
+                        float distanceFromTargetY = Math.Abs(NPC.Center.Y - player.Center.Y);
+                        if (distanceFromTargetY < chargeDistanceY && distanceFromTargetX >= chargeDistanceX)
                         {
                             // Set damage
                             NPC.damage = NPC.defDamage;
@@ -589,6 +592,7 @@ namespace CalamityMod.NPCs.Leviathan
                             return;
                         }
 
+                        // Velocity calculations
                         float chargeSpeed = revenge ? 7.5f : 6.5f;
                         float chargeAcceleration = revenge ? 0.12f : 0.11f;
                         chargeSpeed += 2f * enrageScale;
@@ -606,22 +610,26 @@ namespace CalamityMod.NPCs.Leviathan
                             chargeAcceleration *= 1.15f;
                         }
 
-                        if (npcCenter.Y < player.Center.Y)
+                        if (NPC.Center.Y < player.Center.Y - chargeDistanceY)
                             NPC.velocity.Y += chargeAcceleration;
-                        else
+                        else if (NPC.Center.Y > player.Center.Y + chargeDistanceY)
                             NPC.velocity.Y -= chargeAcceleration;
+                        else
+                            NPC.velocity.Y *= 0.7f;
 
                         if (NPC.velocity.Y < -chargeSpeed)
                             NPC.velocity.Y = -chargeSpeed;
                         if (NPC.velocity.Y > chargeSpeed)
                             NPC.velocity.Y = chargeSpeed;
 
-                        if (Math.Abs(npcCenter.X - player.Center.X) > chargeDistance + 200f)
+                        float distanceXMax = 200f;
+                        float distanceXMin = 20f;
+                        if (Math.Abs(npcCenter.X - player.Center.X) > chargeDistanceX + distanceXMax)
                             NPC.velocity.X += chargeAcceleration * NPC.direction;
-                        else if (Math.Abs(npcCenter.X - player.Center.X) < chargeDistance)
+                        else if (Math.Abs(npcCenter.X - player.Center.X) < chargeDistanceX + distanceXMin)
                             NPC.velocity.X -= chargeAcceleration * NPC.direction;
                         else
-                            NPC.velocity.X *= 0.8f;
+                            NPC.velocity.X *= 0.7f;
 
                         if (NPC.velocity.X < -chargeSpeed)
                             NPC.velocity.X = -chargeSpeed;
@@ -631,6 +639,11 @@ namespace CalamityMod.NPCs.Leviathan
                         float playerLocation2 = npcCenter.X - player.Center.X;
                         NPC.direction = playerLocation2 < 0 ? 1 : -1;
                         NPC.spriteDirection = NPC.direction;
+
+                        NPC.netUpdate = true;
+
+                        if (NPC.netSpam > 10)
+                            NPC.netSpam = 10;
                     }
                     else
                     {
@@ -647,11 +660,16 @@ namespace CalamityMod.NPCs.Leviathan
                         int chargeXDirectSign = 1;
                         if (npcCenter.X < player.Center.X)
                             chargeXDirectSign = -1;
-                        if (NPC.direction == chargeXDirectSign && Math.Abs(npcCenter.X - player.Center.X) > chargeDistance)
+                        if (NPC.direction == chargeXDirectSign && Math.Abs(npcCenter.X - player.Center.X) > chargeDistanceX)
+                            NPC.ai[2] = 1f;
+                        if (Math.Abs(NPC.Center.Y - player.Center.Y) > chargeDistanceX * 1.5f)
                             NPC.ai[2] = 1f;
 
                         if (NPC.ai[2] != 1f)
                             return;
+
+                        // Avoid cheap bullshit
+                        NPC.damage = 0;
 
                         float playerLocation = npcCenter.X - player.Center.X;
                         NPC.direction = playerLocation < 0 ? 1 : -1;
@@ -673,6 +691,11 @@ namespace CalamityMod.NPCs.Leviathan
                             NPC.ai[1] += 1f;
                             NPC.TargetClosest();
                         }
+
+                        NPC.netUpdate = true;
+
+                        if (NPC.netSpam > 10)
+                            NPC.netSpam = 10;
                     }
                 }
             }
