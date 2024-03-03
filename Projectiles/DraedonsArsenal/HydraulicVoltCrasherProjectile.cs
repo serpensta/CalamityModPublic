@@ -74,7 +74,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
                 // Check if the player's held item still has sufficient charge. If so, and they're still using it, take a tiny bit of charge from it.
                 CalamityGlobalItem modItem = heldItem.Calamity();
-                if (Owner.channel && modItem.Charge >= HydraulicVoltCrasher.HoldoutChargeUse)
+                if ((Owner.channel || Owner.Calamity().mouseRight) && modItem.Charge >= HydraulicVoltCrasher.HoldoutChargeUse)
                 {
                     modItem.Charge -= HydraulicVoltCrasher.HoldoutChargeUse;
 

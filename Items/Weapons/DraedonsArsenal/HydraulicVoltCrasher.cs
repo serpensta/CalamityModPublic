@@ -14,6 +14,10 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         public new string LocalizationCategory => "Items.Weapons.DraedonsArsenal";
         // This is the amount of charge consumed every frame the holdout projectile is summoned, i.e. the weapon is in use.
         public const float HoldoutChargeUse = 0.002f;
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+        }
 
         public override void SetDefaults()
         {
@@ -44,11 +48,27 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
             modItem.MaxCharge = 85f;
             modItem.ChargePerUse = 0f; // This weapon is a holdout. Charge is consumed by the holdout projectile.
         }
-
-        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0 && Item.Calamity().Charge > 0;
+        public override bool AltFunctionUse(Player player) => true;
 
         public override void ModifyTooltips(List<TooltipLine> tooltips) => CalamityGlobalItem.InsertKnowledgeTooltip(tooltips, 2);
 
+        public override bool CanUseItem(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                Item.hammer = 0;
+            }
+            else
+            {
+                Item.hammer = 100;
+            }
+            return player.ownedProjectileCounts[Item.shoot] <= 0 && Item.Calamity().Charge > 0;
+        }
+        public override void HoldItem(Player player)
+        {
+            if (Main.myPlayer == player.whoAmI)
+                player.Calamity().rightClickListener = true;
+        }
         public override void AddRecipes()
         {
             CreateRecipe().
