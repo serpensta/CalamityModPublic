@@ -98,7 +98,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.damage = (int)(Projectile.damage * .85f);
             // Second hit is 100% base damage, it is the "Slash Hit"
             else
-                Projectile.damage = (int)(Projectile.damage * 1f);
+                Projectile.damage = (int)(Projectile.damage * (1f / 0.85f));
 
             if (Projectile.damage < 1)
                 Projectile.damage = 1;
