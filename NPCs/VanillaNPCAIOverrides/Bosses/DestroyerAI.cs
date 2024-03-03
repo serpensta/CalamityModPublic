@@ -1,5 +1,6 @@
 ﻿using System;
 using CalamityMod.Events;
+using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -122,6 +123,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Check if other segments are still alive, if not, die
+            // Check for Oblivion too, since having a max power Destroyer during that fight would be turbo cancer
+            bool oblivionAlive = false;
             if (npc.type > NPCID.TheDestroyer)
             {
                 bool shouldDespawn = true;
@@ -146,6 +149,70 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.HitEffect(0, 10.0);
                     npc.checkDead();
                     npc.active = false;
+                }
+            }
+            else
+            {
+                if (masterMode)
+                {
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        if (Main.npc[i].active && (Main.npc[i].type == ModContent.NPCType<SkeletronPrime2>() || Main.npc[i].type == NPCID.SkeletronPrime))
+                        {
+                            oblivionAlive = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Total segment variable
+            int totalSegments = Main.getGoodWorld ? 100 : 80;
+
+            // Death Mode laser spit bool
+            bool spitLaserSpreads = death;
+
+            // Height of the box used to calculate whether The Destroyer should fly at its target or not
+            int noFlyZoneBoxHeight = masterMode ? 1600 : 1800;
+
+            // Speed and movement variables
+            float speed = masterMode ? 0.125f : 0.1f;
+            float turnSpeed = masterMode ? 0.1875f : 0.15f;
+
+            // If Oblivion is alive, don't fly, don't spit laser spreads, use the default vanilla no fly zone, reduce segment count to 60, use base speed and use base turn speed
+            if (oblivionAlive)
+            {
+                calamityGlobalNPC.newAI[3] = 0f;
+                totalSegments = Main.getGoodWorld ? 75 : 60;
+                spitLaserSpreads = false;
+                noFlyZoneBoxHeight = 2000;
+            }
+            else
+            {
+                noFlyZoneBoxHeight -= death ? 400 : (int)(400f * (1f - lifeRatio));
+
+                float speedBoost = death ? (0.14f * (1f - lifeRatio)) : (0.1f * (1f - lifeRatio));
+                float turnSpeedBoost = death ? (0.19f * (1f - lifeRatio)) : (0.15f * (1f - lifeRatio));
+
+                speed += speedBoost;
+                turnSpeed += turnSpeedBoost;
+
+                speed += 0.04f * enrageScale;
+                turnSpeed += 0.06f * enrageScale;
+
+                if (flyAtTarget)
+                {
+                    float speedMultiplier = phase5 ? 1.8f : phase4 ? 1.65f : 1.5f;
+                    speed *= speedMultiplier;
+                }
+
+                speed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
+                turnSpeed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
+
+                if (Main.getGoodWorld)
+                {
+                    speed *= 1.2f;
+                    turnSpeed *= 1.2f;
                 }
             }
 
@@ -189,7 +256,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.ai[3] = npc.whoAmI;
                         npc.realLife = npc.whoAmI;
                         int index = npc.whoAmI;
-                        int totalSegments = Main.getGoodWorld ? 100 : 80;
                         for (int j = 0; j <= totalSegments; j++)
                         {
                             int type = NPCID.TheDestroyerBody;
@@ -201,13 +267,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             Main.npc[segment].realLife = npc.whoAmI;
                             Main.npc[segment].ai[1] = index;
                             Main.npc[index].ai[0] = segment;
-                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, segment, 0f, 0f, 0f, 0, 0, 0);
+                            NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, segment);
                             index = segment;
                         }
                     }
 
                     // Laser breath in Death Mode
-                    if (death)
+                    if (spitLaserSpreads)
                     {
                         float laserBreathGateValue = 600f;
                         if (calamityGlobalNPC.newAI[0] < laserBreathGateValue)
@@ -395,8 +461,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Rectangle rectangle = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
                     int noFlyZone = 1000;
-                    int heightReduction = death ? 400 : (int)(400f * (1f - lifeRatio));
-                    int height = (masterMode ? 1600 : 1800) - heightReduction;
                     bool outsideNoFlyZone = true;
 
                     if (npc.position.Y > player.position.Y)
@@ -405,7 +469,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             if (Main.player[m].active)
                             {
-                                Rectangle noFlyRectangle = new Rectangle((int)Main.player[m].position.X - noFlyZone, (int)Main.player[m].position.Y - noFlyZone, noFlyZone * 2, height);
+                                Rectangle noFlyRectangle = new Rectangle((int)Main.player[m].position.X - noFlyZone, (int)Main.player[m].position.Y - noFlyZone, noFlyZone * 2, noFlyZoneBoxHeight);
                                 if (rectangle.Intersects(noFlyRectangle))
                                 {
                                     outsideNoFlyZone = false;
@@ -413,6 +477,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 }
                             }
                         }
+
                         if (outsideNoFlyZone)
                             shouldFly = true;
                     }
@@ -428,13 +493,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 shouldFly = false;
                 npc.velocity.Y += 2f;
 
-                if (npc.position.Y > Main.worldSurface * 16.0)
+                if (npc.position.Y > Main.worldSurface * 16D)
                 {
                     npc.velocity.Y += 2f;
                     segmentVelocity *= 2f;
                 }
 
-                if (npc.position.Y > Main.rockLayer * 16.0)
+                if (npc.position.Y > Main.rockLayer * 16D)
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -444,32 +509,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
+            // Max velocity
             float segmentVelocityBoost = death ? 6.5f * (1f - lifeRatio) : 5f * (1f - lifeRatio);
             segmentVelocity += segmentVelocityBoost;
             segmentVelocity += 4f * enrageScale;
-
-            // Speed and movement
-            float speedBoost = death ? (0.14f * (1f - lifeRatio)) : (0.1f * (1f - lifeRatio));
-            float turnSpeedBoost = death ? (0.19f * (1f - lifeRatio)) : (0.15f * (1f - lifeRatio));
-            float speed = (masterMode ? 0.125f : 0.1f) + speedBoost;
-            float turnSpeed = (masterMode ? 0.1875f : 0.15f) + turnSpeedBoost;
-            speed += 0.04f * enrageScale;
-            turnSpeed += 0.06f * enrageScale;
-
-            if (flyAtTarget)
-            {
-                float speedMultiplier = phase5 ? 1.8f : phase4 ? 1.65f : 1.5f;
-                speed *= speedMultiplier;
-            }
-
-            speed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
-            turnSpeed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
-
-            if (Main.getGoodWorld)
-            {
-                speed *= 1.2f;
-                turnSpeed *= 1.2f;
-            }
 
             Vector2 npcCenter = npc.Center;
             float targetTilePosX = player.Center.X;
