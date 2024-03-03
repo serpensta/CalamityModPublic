@@ -173,8 +173,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Spawn The Destroyer in Master Mode (just like Oblivion from Avalon)
             if (spawnDestroyer)
             {
+                Player destroyerSpawnPlayer = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
+                SoundEngine.PlaySound(SoundID.Roar, destroyerSpawnPlayer.Center);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                    NPC.SpawnOnPlayer(Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].whoAmI, NPCID.TheDestroyer);
+                    NPC.SpawnOnPlayer(destroyerSpawnPlayer.whoAmI, NPCID.TheDestroyer);
 
                 npc.localAI[2] = 1f;
                 npc.SyncVanillaLocalAI();
@@ -183,8 +185,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Spawn Retinazer in Master Mode (just like Oblivion from Avalon)
             if (spawnRetinazer)
             {
+                Player retinazerSpawnPlayer = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
+                SoundEngine.PlaySound(SoundID.Roar, retinazerSpawnPlayer.Center);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                    NPC.SpawnOnPlayer(Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].whoAmI, NPCID.Retinazer);
+                    NPC.SpawnOnPlayer(retinazerSpawnPlayer.whoAmI, NPCID.Retinazer);
 
                 npc.localAI[2] = 2f;
                 npc.SyncVanillaLocalAI();

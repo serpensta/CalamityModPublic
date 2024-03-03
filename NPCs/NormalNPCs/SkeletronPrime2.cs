@@ -200,8 +200,10 @@ namespace CalamityMod.NPCs.NormalNPCs
             // Spawn Spazmatism in Master Mode (just like Oblivion from Avalon)
             if (spawnSpazmatism)
             {
+                Player spazmatismSpawnPlayer = Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)];
+                SoundEngine.PlaySound(SoundID.Roar, spazmatismSpawnPlayer.Center);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                    NPC.SpawnOnPlayer(Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].whoAmI, NPCID.Spazmatism);
+                    NPC.SpawnOnPlayer(spazmatismSpawnPlayer.whoAmI, NPCID.Spazmatism);
 
                 NPC.localAI[2] = 1f;
                 NPC.SyncVanillaLocalAI();
