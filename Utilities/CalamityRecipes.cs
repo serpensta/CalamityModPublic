@@ -828,7 +828,7 @@ namespace CalamityMod
                 { Vanilla(ItemID.BloodySpine), BloodySpineRecipeEdit },
                 { Vanilla(ItemID.GoblinBattleStandard), ChangeIngredientStack(ItemID.TatteredCloth, 5) },
                 { Vanilla(ItemID.ChlorophyteBar), ChangeIngredientStack(ItemID.ChlorophyteOre, 4) },
-
+                { Vanilla(ItemID.OrichalcumAnvil), ChangeIngredientStack(ItemID.OrichalcumBar, 10) },
                 { Vanilla(ItemID.ShroomiteBar), ChangeIngredientStack(ItemID.GlowingMushroom, 5) },
                 { Vanilla(ItemID.TrueNightsEdge), TrueNightsEdgeRecipeEdit },
                 { Vanilla(ItemID.TrueExcalibur), ChangeIngredientStack(ItemID.ChlorophyteBar, 12) },
