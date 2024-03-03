@@ -85,7 +85,6 @@ namespace CalamityMod
         public static List<int> dungeonProjectileBuffList;
         public static List<int> bossHPScaleList;
         public static List<int> friendlyBeeList;
-        public static List<int> hardModeNerfList;
         public static List<int> debuffList;
         public static List<int> fireDebuffList;
         public static List<int> sicknessDebuffList;
@@ -1145,29 +1144,6 @@ namespace CalamityMod
                 ProjectileType<PlaguePrincess>(),
                 ProjectileType<BabyPlaguebringer>(),
                 ProjectileType<PlagueBeeSmall>()
-            };
-
-            hardModeNerfList = new List<int>()
-            {
-                ProjectileID.PinkLaser,
-                ProjectileID.FrostBlastHostile,
-                ProjectileID.GoldenShowerHostile,
-                ProjectileID.RainNimbus,
-                ProjectileID.FlamingArrow,
-                ProjectileID.BulletDeadeye,
-                ProjectileID.CannonballHostile,
-                ProjectileID.UnholyTridentHostile,
-                ProjectileID.FrostBeam,
-                ProjectileID.CursedFlameHostile,
-                ProjectileID.Stinger,
-                ProjectileID.BloodShot,
-                ProjectileID.BloodNautilusTears,
-                ProjectileID.BloodNautilusShot,
-                ProjectileID.RockGolemRock,
-                ProjectileID.IcewaterSpit,
-                ProjectileID.RocketSkeleton,
-                ProjectileID.SniperBullet,
-                ProjectileID.DrManFlyFlask
             };
 
             debuffList = new List<int>()
@@ -2803,7 +2779,6 @@ namespace CalamityMod
             dungeonProjectileBuffList = null;
             bossHPScaleList = null;
             friendlyBeeList = null;
-            hardModeNerfList = null;
             debuffList = null;
             fireDebuffList = null;
             sicknessDebuffList = null;

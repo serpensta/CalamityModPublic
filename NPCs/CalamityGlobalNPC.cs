@@ -1300,7 +1300,7 @@ namespace CalamityMod.NPCs
             if (CalamityLists.DeathModeSplittingWormIDs.Contains(npc.type))
             {
                 if (CalamityWorld.death)
-                    npc.lifeMax = (int)(npc.lifeMax * 0.15);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.15);
             }
 
             if (npc.type == NPCID.Mothron)
@@ -1309,87 +1309,87 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.MoonLordCore || npc.type == NPCID.MoonLordHand || npc.type == NPCID.MoonLordHead || npc.type == NPCID.MoonLordLeechBlob)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
 
                 if (npc.type == NPCID.MoonLordCore)
                     npc.npcSlots = 36f;
             }
             else if (npc.type == NPCID.CultistBoss || (npc.type >= NPCID.CultistDragonHead && npc.type <= NPCID.CultistDragonTail))
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
 
                 if (npc.type == NPCID.CultistBoss)
                     npc.npcSlots = 20f;
             }
             else if (npc.type == NPCID.DukeFishron)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.4);
                 npc.npcSlots = 20f;
             }
             else if (npc.type == NPCID.Sharkron || npc.type == NPCID.Sharkron2)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 5.0);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 5D);
             }
             else if (npc.type == NPCID.Golem || npc.type == NPCID.GolemHead)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.5);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.5);
 
                 if (npc.type == NPCID.Golem)
                     npc.npcSlots = 64f;
             }
             else if (npc.type == NPCID.GolemHeadFree)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 2.0);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 2D);
                 npc.width = 88;
                 npc.height = 90;
                 npc.dontTakeDamage = false;
             }
             else if (npc.type == NPCID.HallowBoss)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
                 npc.npcSlots = 32f;
             }
             else if (npc.type == NPCID.Plantera)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
                 npc.npcSlots = 32f;
             }
             else if (CalamityLists.DestroyerIDs.Contains(npc.type))
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.25);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.25);
                 npc.scale *= Main.zenithWorld ? 2.5f : CalamityWorld.death ? 1.7f : 1.5f;
                 npc.npcSlots = 10f;
             }
             else if (npc.type == NPCID.Probe)
             {
                 if (CalamityWorld.death)
-                    npc.lifeMax = (int)(npc.lifeMax * 2.0);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 2D);
 
                 npc.scale *= Main.zenithWorld ? 2f : CalamityWorld.death ? 1.3f : 1.2f;
             }
             else if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
             {
                 // HP boosted in Master Mode due to having two heads (piercing can make them die faster than normal here since they share an HP bar)
-                npc.lifeMax = (int)(npc.lifeMax * (Main.masterMode ? 1.4 : 1.2));
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * (Main.masterMode ? 1.4 : 1.2));
                 npc.npcSlots = 12f;
             }
             else if (npc.type <= NPCID.PrimeLaser && npc.type >= NPCID.PrimeCannon)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 0.65);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.65);
             }
             else if (npc.type == NPCID.Retinazer || npc.type == NPCID.Spazmatism)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
                 npc.npcSlots = 10f;
             }
             else if (npc.type == NPCID.QueenSlimeBoss)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
                 npc.npcSlots = 32f;
             }
             else if (npc.type == NPCID.WallofFlesh || npc.type == NPCID.WallofFleshEye)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.3);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.3);
 
                 if (npc.type == NPCID.WallofFlesh)
                     npc.npcSlots = 20f;
@@ -1410,34 +1410,34 @@ namespace CalamityMod.NPCs
             else if (npc.type == NPCID.SkeletronHand)
             {
                 if (CalamityWorld.death)
-                    npc.lifeMax = (int)(npc.lifeMax * 0.65);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.65);
                 else
-                    npc.lifeMax = (int)(npc.lifeMax * 0.9);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.9);
             }
             else if (npc.type == NPCID.QueenBee)
             {
                 npc.defense = 14;
                 npc.defDefense = npc.defense;
-                npc.lifeMax = (int)(npc.lifeMax * 1.8);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.8);
                 npc.npcSlots = 14f;
             }
             else if ((npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall) && CalamityPlayer.areThereAnyDamnBosses)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.5);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.5);
                 npc.scale *= 1.25f;
             }
             else if (npc.type == NPCID.BrainofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.65);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.65);
                 npc.npcSlots = 12f;
             }
             else if (npc.type == NPCID.Creeper)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.4);
             }
             else if (CalamityLists.EaterofWorldsIDs.Contains(npc.type))
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.2);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
 
                 if (npc.type == NPCID.EaterofWorldsHead)
                     npc.npcSlots = 10f;
@@ -1447,12 +1447,12 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.EyeofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 1.4);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.4);
                 npc.npcSlots = 10f;
             }
             else if (npc.type == NPCID.ServantofCthulhu)
             {
-                npc.lifeMax = (int)(npc.lifeMax * 4.0);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 4D);
             }
             else if (npc.type == NPCID.KingSlime)
             {
@@ -1461,7 +1461,7 @@ namespace CalamityMod.NPCs
                 else
                     npc.scale = Main.getGoodWorld ? 3f : 1.25f;
 
-                npc.lifeMax = (int)(npc.lifeMax * (Main.getGoodWorld ? 1.8 : 1.5));
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * (Main.getGoodWorld ? 1.8 : 1.5));
             }
             else if ((npc.type == NPCID.Wraith || npc.type == NPCID.Mimic || npc.type == NPCID.Reaper || npc.type == NPCID.PresentMimic || npc.type == NPCID.SandElemental || npc.type == NPCID.Ghost) && CalamityWorld.LegendaryMode)
             {
@@ -2192,7 +2192,7 @@ namespace CalamityMod.NPCs
                 if ((npc.boss && npc.type != NPCID.MartianSaucerCore) || CalamityLists.bossHPScaleList.Contains(npc.type))
                 {
                     double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
-                    npc.lifeMax += (int)(npc.lifeMax * HPBoost);
+                    npc.lifeMax += (int)Math.Round(npc.lifeMax * HPBoost);
                 }
             }
 
@@ -2286,15 +2286,15 @@ namespace CalamityMod.NPCs
 
                 // These go through walls and are very annoying with the new tombstone breaking spawning them mechanic in 1.4
                 case NPCID.Ghost:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.5);
                     break;
 
                 case NPCID.PirateGhost:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.33);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.33);
                     break;
 
                 case NPCID.BloodSquid:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.25);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.25);
                     break;
 
                 case NPCID.ChatteringTeethBomb:
@@ -2306,11 +2306,11 @@ namespace CalamityMod.NPCs
                     npc.lifeMax = 15;
                     break;
 
-                // Reduce prehardmode desert enemy stats pre-Desert Scourge
+                // Reduce prehardmode desert enemy stats
                 case NPCID.WalkingAntlion:
                 case NPCID.GiantWalkingAntlion:
-                    npc.lifeMax = (int)(npc.lifeMax * DesertEnemyStatMultiplier);
-                    npc.damage = (int)(npc.damage * DesertEnemyStatMultiplier);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * DesertEnemyStatMultiplier);
+                    npc.damage = (int)Math.Round(npc.damage * DesertEnemyStatMultiplier);
                     npc.defDamage = npc.damage;
                     npc.defense /= 2;
                     npc.defDefense = npc.defense;
@@ -2320,8 +2320,8 @@ namespace CalamityMod.NPCs
                 case NPCID.Antlion:
                 case NPCID.FlyingAntlion:
                 case NPCID.GiantFlyingAntlion:
-                    npc.lifeMax = (int)(npc.lifeMax * DesertEnemyStatMultiplier);
-                    npc.damage = (int)(npc.damage * DesertEnemyStatMultiplier);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * DesertEnemyStatMultiplier);
+                    npc.damage = (int)Math.Round(npc.damage * DesertEnemyStatMultiplier);
                     npc.defDamage = npc.damage;
                     npc.defense /= 2;
                     npc.defDefense = npc.defense;
@@ -2329,14 +2329,14 @@ namespace CalamityMod.NPCs
 
                 // Reduce Dungeon Guardian HP
                 case NPCID.DungeonGuardian:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.1);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.1);
                     canBreakPlayerDefense = true;
                     break;
 
                 // Reduce Tomb Crawler stats
                 case NPCID.TombCrawlerHead:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
-                    npc.damage = (int)(npc.damage * DesertEnemyStatMultiplier);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.5);
+                    npc.damage = (int)Math.Round(npc.damage * DesertEnemyStatMultiplier);
                     npc.defDamage = npc.damage;
                     // Tomb Crawler Head has 0 defense so there is no need to reduce it
                     canBreakPlayerDefense = true;
@@ -2344,8 +2344,8 @@ namespace CalamityMod.NPCs
 
                 case NPCID.TombCrawlerBody:
                 case NPCID.TombCrawlerTail:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
-                    npc.damage = (int)(npc.damage * DesertEnemyStatMultiplier);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.5);
+                    npc.damage = (int)Math.Round(npc.damage * DesertEnemyStatMultiplier);
                     npc.defDamage = npc.damage;
                     npc.defense /= 2;
                     npc.defDefense = npc.defense;
@@ -2360,7 +2360,7 @@ namespace CalamityMod.NPCs
 
                 // Make Core hitbox bigger and reduce HP
                 case NPCID.MartianSaucerCore:
-                    npc.lifeMax = (int)(npc.lifeMax * 0.6);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.6);
                     npc.width *= 2;
                     npc.height *= 2;
                     break;
@@ -2389,8 +2389,8 @@ namespace CalamityMod.NPCs
                 {
                     if (CalamityLists.DestroyerIDs.Contains(npc.type) || npc.type == NPCID.Probe || CalamityLists.SkeletronPrimeIDs.Contains(npc.type) || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer)
                     {
-                        npc.lifeMax = (int)(npc.lifeMax * 0.8);
-                        npc.damage = (int)(npc.damage * 0.8);
+                        npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.8);
+                        npc.damage = (int)Math.Round(npc.damage * 0.8);
                         npc.defDamage = npc.damage;
                     }
                 }
@@ -2398,8 +2398,8 @@ namespace CalamityMod.NPCs
                 {
                     if (CalamityLists.DestroyerIDs.Contains(npc.type) || npc.type == NPCID.Probe || CalamityLists.SkeletronPrimeIDs.Contains(npc.type) || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer)
                     {
-                        npc.lifeMax = (int)(npc.lifeMax * 0.9);
-                        npc.damage = (int)(npc.damage * 0.9);
+                        npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.9);
+                        npc.damage = (int)Math.Round(npc.damage * 0.9);
                         npc.defDamage = npc.damage;
                     }
                 }
@@ -2410,15 +2410,15 @@ namespace CalamityMod.NPCs
             {
                 if (npc.type == NPCID.ZombieMushroom || npc.type == NPCID.ZombieMushroomHat || npc.type == NPCID.AnomuraFungus || npc.type == NPCID.FungiBulb || npc.type == NPCID.MushiLadybug)
                 {
-                    npc.lifeMax = (int)(npc.lifeMax * 0.5);
-                    npc.damage = (int)(npc.damage * 0.5);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.5);
+                    npc.damage = (int)Math.Round(npc.damage * 0.5);
                     npc.defDamage = npc.damage;
                 }
             }
 
             if (Main.hardMode && CalamityLists.HardmodeNPCNerfList.Contains(npc.type))
             {
-                npc.damage = (int)(npc.damage * 0.75);
+                npc.damage = (int)Math.Round(npc.damage * 0.75);
                 npc.defDamage = npc.damage;
             }
 
@@ -2426,21 +2426,21 @@ namespace CalamityMod.NPCs
             {
                 if (CalamityLists.pumpkinMoonBuffList.Contains(npc.type))
                 {
-                    npc.lifeMax = (int)(npc.lifeMax * 3.5);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 3.5);
                     npc.damage += 30;
                     npc.life = npc.lifeMax;
                     npc.defDamage = npc.damage;
                 }
                 else if (CalamityLists.frostMoonBuffList.Contains(npc.type))
                 {
-                    npc.lifeMax = (int)(npc.lifeMax * 2.5);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 2.5);
                     npc.damage += 30;
                     npc.life = npc.lifeMax;
                     npc.defDamage = npc.damage;
                 }
                 else if (CalamityLists.eclipseBuffList.Contains(npc.type))
                 {
-                    npc.lifeMax = (int)(npc.lifeMax * 5D);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 5D);
                     npc.damage += 30;
                     npc.life = npc.lifeMax;
                     npc.defDamage = npc.damage;
@@ -2451,7 +2451,7 @@ namespace CalamityMod.NPCs
             {
                 if (CalamityLists.dungeonEnemyBuffList.Contains(npc.type))
                 {
-                    npc.lifeMax = (int)(npc.lifeMax * 2.5);
+                    npc.lifeMax = (int)Math.Round(npc.lifeMax * 2.5);
                     npc.damage += 30;
                     npc.life = npc.lifeMax;
                     npc.defDamage = npc.damage;
@@ -2488,7 +2488,7 @@ namespace CalamityMod.NPCs
                     if (CalamityWorld.death)
                         damageMultiplier += (damageMultiplier - 1D) * 0.6;
 
-                    npc.damage = (int)(npc.damage * damageMultiplier);
+                    npc.damage = (int)Math.Round(npc.damage * damageMultiplier);
                     npc.defDamage = npc.damage;
                 }
             }
@@ -3133,7 +3133,7 @@ namespace CalamityMod.NPCs
                         break;
                 }
 
-                npc.lifeMax = (int)(npc.lifeMax * scalar);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * scalar);
             }
         }
         #endregion
@@ -7782,8 +7782,8 @@ namespace CalamityMod.NPCs
             if (!Main.masterMode)
                 return;
 
-            npc.lifeMax = (int)(npc.lifeMax * MasterModeEnemyHPMultiplier);
-            npc.damage = (int)(npc.damage * MasterModeEnemyDamageMultiplier);
+            npc.lifeMax = (int)Math.Round(npc.lifeMax * MasterModeEnemyHPMultiplier);
+            npc.damage = (int)Math.Round(npc.damage * MasterModeEnemyDamageMultiplier);
         }
 
         // Adjust only knockback resist in Expert Mode (this is also adjusted in Master Mode because Expert has to be enabled if Master is enabled)
