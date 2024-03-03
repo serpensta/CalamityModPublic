@@ -16,9 +16,9 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 15f;
-            ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 240f;
-            ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 14f;
+            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 21f;
+            ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 320f;
+            ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 20f;
 
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
             Projectile.DamageType = DamageClass.MeleeNoSpeed;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 20;
+            Projectile.localNPCHitCooldown = 15;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -56,7 +56,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
 
             // Rain Starfury stars every 30 frames
             Projectile.localAI[1]++;
-            float starRainGateValue = 30f;
+            float starRainGateValue = 27f;
             if (Projectile.localAI[1] % starRainGateValue == 0f)
             {
                 Vector2 starSpawnLocation = Projectile.Center + new Vector2(Main.rand.Next(-200, 201), -600f);

@@ -20,8 +20,8 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 60;
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.timeLeft = 40;
+            Projectile.DamageType = TrueMeleeDamageClass.Instance;
             Projectile.usesIDStaticNPCImmunity = true;
             Projectile.idStaticNPCHitCooldown = 20;
         }

@@ -20,7 +20,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = 36;
             Item.height = 40;
             Item.DamageType = DamageClass.MeleeNoSpeed;
-            Item.damage = 14;
+            Item.damage = 21;
             Item.knockBack = 1.5f;
             Item.useTime = 25;
             Item.useAnimation = 25;
@@ -47,6 +47,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 AddIngredient(ItemID.Amethyst, 5).
                 AddIngredient(ItemID.PinkGel, 10).
                 AddIngredient(ItemID.FallenStar, 15).
+                AddIngredient(ItemID.MeteoriteBar, 10).
                 AddTile(TileID.Anvils).
                 Register();
         }
