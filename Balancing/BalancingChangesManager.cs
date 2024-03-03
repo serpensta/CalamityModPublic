@@ -394,8 +394,8 @@ namespace CalamityMod.Balancing
             // 35% resist to The Anomaly's Nanogun bomb explosions.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<AnomalysNanogunMPFBBoom>()))));
 
-            // 35% resist to Ultima.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<UltimaRay>()))));
+            // 30% resist to Ultima.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<UltimaRay>()))));
 
             // 30% resist to Eclipse's Fall.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<EclipsesFallMain>()))));
