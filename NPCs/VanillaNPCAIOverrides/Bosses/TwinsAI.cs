@@ -1,5 +1,6 @@
 ﻿using System;
 using CalamityMod.Events;
+using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -45,10 +46,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool spazAlive = false;
             if (CalamityGlobalNPC.fireEye != -1)
                 spazAlive = Main.npc[CalamityGlobalNPC.fireEye].active;
-
-            float phase2LifeRatio = masterMode ? 0.85f : 0.7f;
-            float finalPhaseLifeRatio = masterMode ? 0.4f : 0.25f;
-            bool finalPhase = lifeRatio < finalPhaseLifeRatio;
 
             // I'm not commenting this entire fucking thing, already did spaz, I'm not doing ret
             float retinazerHoverXDest = npc.Center.X - Main.player[npc.target].position.X - (Main.player[npc.target].width / 2);
@@ -105,6 +102,49 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
+            // Check for Oblivion in Master Mode
+            bool oblivionAlive = false;
+            if (masterMode && !bossRush)
+            {
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    if (Main.npc[i].active && (Main.npc[i].type == ModContent.NPCType<SkeletronPrime2>() || Main.npc[i].type == NPCID.SkeletronPrime))
+                    {
+                        oblivionAlive = true;
+                        break;
+                    }
+                }
+            }
+
+            // Phase HP ratios
+            float phase2LifeRatio = masterMode ? 0.85f : 0.7f;
+            float finalPhaseLifeRatio = masterMode ? 0.4f : 0.25f;
+
+            // Movement variables
+            float phase1MaxSpeedIncrease = 4f;
+            float phase1MaxAccelerationIncrease = 0.05f;
+            float phase1MaxChargeSpeedIncrease = 6f;
+
+            // Phase duration variables
+            float phase1MaxLaserPhaseDurationDecrease = 300f;
+
+            // If Oblivion is alive, go to phase 2 at 40% HP, reduce aggression of all attacks
+            if (oblivionAlive)
+            {
+                phase2LifeRatio = 0.4f;
+                finalPhaseLifeRatio = 0.1f;
+
+                phase1MaxSpeedIncrease = 2f;
+                phase1MaxAccelerationIncrease = 0.025f;
+                phase1MaxChargeSpeedIncrease = 3f;
+
+                phase1MaxLaserPhaseDurationDecrease = 150f;
+            }
+
+            // Phase checks
+            bool phase2 = lifeRatio < phase2LifeRatio;
+            bool finalPhase = lifeRatio < finalPhaseLifeRatio;
+
             Vector2 mechQueenSpacing = Vector2.Zero;
             if (NPC.IsMechQueenUp)
             {
@@ -143,8 +183,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (death)
                     {
-                        retinazerPhase1MaxSpeed += 8f * (1f - lifeRatio);
-                        retinazerPhase1Acceleration += 0.1f * (1f - lifeRatio);
+                        retinazerPhase1MaxSpeed += phase1MaxSpeedIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
+                        retinazerPhase1Acceleration += phase1MaxAccelerationIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
                     }
 
                     if (Main.getGoodWorld)
@@ -218,7 +258,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     npc.ai[2] += 1f;
-                    float phaseGateValue = 450f - (death ? 900f * (1f - lifeRatio) : 0f);
+                    float phaseGateValue = 450f - (death ? phase1MaxLaserPhaseDurationDecrease * ((1f - lifeRatio) / (1f - phase2LifeRatio)) : 0f);
                     float laserGateValue = 30f;
                     if (NPC.IsMechQueenUp)
                     {
@@ -288,7 +328,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float retinazerChargeSpeed = 15f;
                     retinazerChargeSpeed += 10f * enrageScale;
                     if (death)
-                        retinazerChargeSpeed += 12f * (1f - lifeRatio);
+                        retinazerChargeSpeed += phase1MaxChargeSpeedIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
                     if (Main.getGoodWorld)
                         retinazerChargeSpeed += 2f;
 
@@ -337,8 +377,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
                 }
 
-                // Enter phase 2 earlier
-                if (lifeRatio < phase2LifeRatio)
+                // Enter phase 2
+                if (phase2)
                 {
                     npc.ai[0] = 1f;
                     npc.ai[1] = 0f;
@@ -467,8 +507,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Avoid cheap bullshit
                     npc.damage = 0;
 
-                    float retinazerPhase2MaxSpeed = 9.5f + (death ? 3f * (phase2LifeRatio - lifeRatio) : 0f);
-                    float retinazerPhase2Accel = 0.175f + (death ? 0.05f * (phase2LifeRatio - lifeRatio) : 0f);
+                    float retinazerPhase2MaxSpeed = 9.5f + (death ? 3f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                    float retinazerPhase2Accel = 0.175f + (death ? 0.05f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                     retinazerPhase2MaxSpeed += 4.5f * enrageScale;
                     retinazerPhase2Accel += 0.075f * enrageScale;
 
@@ -545,7 +585,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     npc.ai[2] += spazAlive ? 1f : 1.25f;
-                    float phaseGateValue = NPC.IsMechQueenUp ? 900f : 300f - (death ? 120f * (phase2LifeRatio - lifeRatio) : 0f);
+                    float phaseGateValue = NPC.IsMechQueenUp ? 900f : 300f - (death ? 120f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                     if (npc.ai[2] >= phaseGateValue)
                     {
                         npc.ai[1] = 1f;
@@ -562,7 +602,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        npc.localAI[1] += 1f + (death ? phase2LifeRatio - lifeRatio : 0f);
+                        npc.localAI[1] += 1f + (death ? (phase2LifeRatio - lifeRatio) / phase2LifeRatio : 0f);
                         if (npc.localAI[1] >= (spazAlive ? 72f : 24f))
                         {
                             bool canHit = Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
@@ -615,8 +655,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.Center.X < Main.player[npc.target].position.X + Main.player[npc.target].width)
                             retinazerPhase2FaceDirection = -1;
 
-                        float retinazerPhase2RapidFireMaxSpeed = 9.5f + (death ? 3f * (phase2LifeRatio - lifeRatio) : 0f);
-                        float retinazerPhase2RapidFireAccel = 0.25f + (death ? 0.075f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float retinazerPhase2RapidFireMaxSpeed = 9.5f + (death ? 3f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                        float retinazerPhase2RapidFireAccel = 0.25f + (death ? 0.075f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                         retinazerPhase2RapidFireMaxSpeed += 4.5f * enrageScale;
                         retinazerPhase2RapidFireAccel += 0.15f * enrageScale;
 
@@ -673,7 +713,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            npc.localAI[1] += 1f + (death ? phase2LifeRatio - lifeRatio : 0f);
+                            npc.localAI[1] += 1f + (death ? (phase2LifeRatio - lifeRatio) / phase2LifeRatio : 0f);
                             if (npc.localAI[1] > (spazAlive ? 24f : 8f))
                             {
                                 bool canHit = Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
@@ -714,7 +754,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         npc.ai[2] += spazAlive ? 1f : 1.5f;
-                        if (npc.ai[2] >= 180f - (death ? 90f * (phase2LifeRatio - lifeRatio) : 0f))
+                        if (npc.ai[2] >= 180f - (death ? 90f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f))
                         {
                             npc.ai[1] = (!spazAlive || finalPhase) ? 4f : 0f;
                             npc.ai[2] = 0f;
@@ -732,7 +772,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         // Set rotation and velocity
                         npc.rotation = retinazerHoverRotation;
-                        float retinazerPhase3ChargeSpeed = 22f + (death ? 8f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float retinazerPhase3ChargeSpeed = 22f + (death ? 8f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                         retinazerPhase3ChargeSpeed += 10f * enrageScale;
 
                         if (!spazAlive)
@@ -762,7 +802,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.ai[3] % 3f == 0f)
                             chargeTime = spazAlive ? 90f : 60f;
                         if (death)
-                            chargeTime -= chargeTime * 0.25f * (phase2LifeRatio - lifeRatio);
+                            chargeTime -= chargeTime * 0.25f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio);
                         chargeTime -= chargeTime / 5 * enrageScale;
 
                         // Slow down
@@ -861,8 +901,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.damage = 0;
 
                         int chargeLineUpDist = spazAlive ? 600 : 500;
-                        float chargeSpeed = 12f + (death ? 4f * (phase2LifeRatio - lifeRatio) : 0f);
-                        float chargeAccel = 0.3f + (death ? 0.1f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float chargeSpeed = 12f + (death ? 4f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                        float chargeAccel = 0.3f + (death ? 0.1f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
 
                         if (spazAlive)
                         {
@@ -916,7 +956,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         // Take 1.25 or 1 second to get in position, then charge
                         npc.ai[2] += 1f;
-                        if (npc.ai[2] >= (spazAlive ? 75f : 60f) - (death ? 20f * (phase2LifeRatio - lifeRatio) : 0f))
+                        if (npc.ai[2] >= (spazAlive ? 75f : 60f) - (death ? 20f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f))
                         {
                             npc.TargetClosest();
                             npc.ai[1] = 2f;
@@ -964,29 +1004,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (CalamityGlobalNPC.laserEye != -1)
                 retAlive = Main.npc[CalamityGlobalNPC.laserEye].active;
 
-            float phase2LifeRatio = masterMode ? 0.85f : 0.7f;
-            float finalPhaseLifeRatio = masterMode ? 0.4f : 0.25f;
-            bool finalPhase = lifeRatio < finalPhaseLifeRatio;
-
             // Rotation
             Vector2 npcCenter = new Vector2(npc.Center.X, npc.position.Y + npc.height - 59f);
             Vector2 lookAt = new Vector2(Main.player[npc.target].position.X - (Main.player[npc.target].width / 2), Main.player[npc.target].position.Y - (Main.player[npc.target].height / 2));
             Vector2 rotationVector = npcCenter - lookAt;
-
-            // Boss Rush predictive charge rotation
-            if (npc.ai[1] == 5f && !retAlive && bossRush)
-            {
-                // Velocity
-                float chargeVelocity = 20f + (death ? 6f * (phase2LifeRatio - lifeRatio) : 0f);
-                chargeVelocity += 10f * enrageScale;
-                if (Main.getGoodWorld)
-                    chargeVelocity += 2f;
-                if (npc.ai[2] == -1f || (!retAlive && npc.ai[3] == 4f))
-                    chargeVelocity *= 1.3f;
-
-                lookAt += Main.player[npc.target].velocity * 20f;
-                rotationVector = (npcCenter - lookAt).SafeNormalize(Vector2.UnitY) * chargeVelocity;
-            }
 
             float spazmatismRotation = (float)Math.Atan2(rotationVector.Y, rotationVector.X) + MathHelper.PiOver2;
             if (spazmatismRotation < 0f)
@@ -1044,6 +1065,51 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
+            // Check for Oblivion in Master Mode
+            bool oblivionAlive = false;
+            if (masterMode && !bossRush)
+            {
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    if (Main.npc[i].active && (Main.npc[i].type == ModContent.NPCType<SkeletronPrime2>() || Main.npc[i].type == NPCID.SkeletronPrime))
+                    {
+                        oblivionAlive = true;
+                        break;
+                    }
+                }
+            }
+
+            // Phase HP ratios
+            float phase2LifeRatio = masterMode ? 0.85f : 0.7f;
+            float finalPhaseLifeRatio = masterMode ? 0.4f : 0.25f;
+
+            // Movement variables
+            float phase1MaxSpeedIncrease = 4.5f;
+            float phase1MaxAccelerationIncrease = 0.15f;
+            float phase1MaxChargeSpeedIncrease = 6f;
+
+            // Phase duration variables
+            float phase1MaxCursedFlamePhaseDurationDecrease = 200f;
+            float phase1MaxChargesDecrease = 4f;
+
+            // If Oblivion is alive, go to phase 2 at 40% HP, reduce aggression of all attacks
+            if (oblivionAlive)
+            {
+                phase2LifeRatio = 0.4f;
+                finalPhaseLifeRatio = 0.1f;
+
+                phase1MaxSpeedIncrease = 2.25f;
+                phase1MaxAccelerationIncrease = 0.075f;
+                phase1MaxChargeSpeedIncrease = 3f;
+
+                phase1MaxCursedFlamePhaseDurationDecrease = 100f;
+                phase1MaxChargesDecrease = 2f;
+            }
+
+            // Phase checks
+            bool phase2 = lifeRatio < phase2LifeRatio;
+            bool finalPhase = lifeRatio < finalPhaseLifeRatio;
+
             Vector2 mechQueenSpacing = Vector2.Zero;
             if (NPC.IsMechQueenUp)
             {
@@ -1086,8 +1152,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (death)
                     {
-                        spazmatismFireballMaxSpeed += 9f * (1f - lifeRatio);
-                        spazmatismFireballAccel += 0.3f * (1f - lifeRatio);
+                        spazmatismFireballMaxSpeed += phase1MaxSpeedIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
+                        spazmatismFireballAccel += phase1MaxAccelerationIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
                     }
 
                     if (Main.getGoodWorld)
@@ -1160,7 +1226,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     // Fire cursed flames for 5 seconds
                     npc.ai[2] += 1f;
-                    float phaseGateValue = NPC.IsMechQueenUp ? 900f : 300f - (death ? 600f * (1f - lifeRatio) : 0f);
+                    float phaseGateValue = NPC.IsMechQueenUp ? 900f : 300f - (death ? phase1MaxCursedFlamePhaseDurationDecrease * ((1f - lifeRatio) / (1f - phase2LifeRatio)) : 0f);
                     if (npc.ai[2] >= phaseGateValue)
                     {
                         // Reset AI array and go to charging phase
@@ -1228,7 +1294,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float spazmatismPhase1ChargeSpeed = 16f;
                     spazmatismPhase1ChargeSpeed += 8f * enrageScale;
                     if (death)
-                        spazmatismPhase1ChargeSpeed += 12f * (1f - lifeRatio);
+                        spazmatismPhase1ChargeSpeed += phase1MaxChargeSpeedIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
                     if (Main.getGoodWorld)
                         spazmatismPhase1ChargeSpeed *= 1.2f;
 
@@ -1276,7 +1342,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.rotation = spazmatismRotation;
                         float totalCharges = 8f;
                         if (death)
-                            totalCharges -= (float)Math.Round(16f * (1f - lifeRatio));
+                            totalCharges -= (float)Math.Round(phase1MaxChargesDecrease * ((1f - lifeRatio) / (1f - phase2LifeRatio)));
 
                         if (npc.ai[3] >= totalCharges)
                         {
@@ -1288,8 +1354,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
                 }
 
-                // Enter phase 2 earlier
-                if (lifeRatio < phase2LifeRatio)
+                // Enter phase 2
+                if (phase2)
                 {
                     // Reset AI array and go to transition phase
                     npc.ai[0] = 1f;
@@ -1422,8 +1488,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Avoid cheap bullshit
                     npc.damage = reducedSetDamage;
 
-                    float spazmatismFlamethrowerMaxSpeed = 6.2f + (death ? 2f * (phase2LifeRatio - lifeRatio) : 0f);
-                    float spazmatismFlamethrowerAccel = 0.1f + (death ? 0.03f * (phase2LifeRatio - lifeRatio) : 0f);
+                    float spazmatismFlamethrowerMaxSpeed = 6.2f + (death ? 2f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                    float spazmatismFlamethrowerAccel = 0.1f + (death ? 0.03f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                     spazmatismFlamethrowerMaxSpeed += 4f * enrageScale;
                     spazmatismFlamethrowerAccel += 0.06f * enrageScale;
 
@@ -1482,7 +1548,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     // Fire flamethrower for x seconds
                     npc.ai[2] += retAlive ? 1f : 2f;
-                    float phaseGateValue = NPC.IsMechQueenUp ? 900f : 180f - (death ? 60f * (phase2LifeRatio - lifeRatio) : 0f);
+                    float phaseGateValue = NPC.IsMechQueenUp ? 900f : 180f - (death ? 60f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                     if (npc.ai[2] >= phaseGateValue)
                     {
                         npc.ai[1] = (!retAlive || finalPhase) ? 5f : 1f;
@@ -1597,7 +1663,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         // Set rotation and velocity
                         npc.rotation = spazmatismRotation;
-                        float spazmatismPhase2ChargeSpeed = 16.75f + (death ? 5f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float spazmatismPhase2ChargeSpeed = 16.75f + (death ? 5f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                         spazmatismPhase2ChargeSpeed += 8f * enrageScale;
                         if (Main.getGoodWorld)
                             spazmatismPhase2ChargeSpeed *= 1.2f;
@@ -1615,7 +1681,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         npc.ai[2] += retAlive ? 1f : 1.25f;
 
-                        float chargeTime = 50f - (death ? 12f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float chargeTime = 50f - (death ? 12f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
 
                         // Slow down
                         if (npc.ai[2] >= chargeTime)
@@ -1677,7 +1743,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         else if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             // Velocity
-                            float spazmatismPhase3ChargeSpeed = 20f + (death ? 6f * (phase2LifeRatio - lifeRatio) : 0f);
+                            float spazmatismPhase3ChargeSpeed = 20f + (death ? 6f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                             spazmatismPhase3ChargeSpeed += 10f * enrageScale;
                             if (npc.ai[2] == -1f || (!retAlive && npc.ai[3] == secondFastCharge))
                                 spazmatismPhase3ChargeSpeed *= 1.3f;
@@ -1730,7 +1796,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.ai[2] == 0f)
                             SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
 
-                        float spazmatismRetDeadChargeSpeed = ((!retAlive && npc.ai[3] == 4f) ? 75f : 50f) - (float)Math.Round(death ? 14f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float spazmatismRetDeadChargeSpeed = ((!retAlive && npc.ai[3] == 4f) ? 75f : 50f) - (float)Math.Round(death ? 14f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
 
                         npc.ai[2] += 1f;
 
@@ -1778,8 +1844,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.damage = reducedSetDamage;
 
                         float chargeLineUpDist = retAlive ? 600f : 500f;
-                        float chargeSpeed = 16f + (death ? 5f * (phase2LifeRatio - lifeRatio) : 0f);
-                        float chargeAccel = 0.4f + (death ? 0.1f * (phase2LifeRatio - lifeRatio) : 0f);
+                        float chargeSpeed = 16f + (death ? 5f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                        float chargeAccel = 0.4f + (death ? 0.1f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
 
                         if (retAlive)
                         {
@@ -1855,7 +1921,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         // Take 3 seconds to get in position, then charge
-                        if (npc.ai[2] >= (retAlive ? 180f : 135f) - (death ? 45f * (phase2LifeRatio - lifeRatio) : 0f))
+                        if (npc.ai[2] >= (retAlive ? 180f : 135f) - (death ? 45f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f))
                         {
                             npc.TargetClosest();
                             npc.ai[1] = 3f;

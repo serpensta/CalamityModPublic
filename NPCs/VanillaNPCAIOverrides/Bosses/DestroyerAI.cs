@@ -153,7 +153,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
             else
             {
-                if (masterMode)
+                if (masterMode && !bossRush)
                 {
                     for (int i = 0; i < Main.maxNPCs; i++)
                     {

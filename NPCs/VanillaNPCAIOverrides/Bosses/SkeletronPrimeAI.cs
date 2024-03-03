@@ -166,9 +166,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Phases
             bool phase2 = lifeRatio < 0.66f;
-            bool spawnDestroyer = phase2 && masterMode && npc.localAI[2] == 0f;
+            bool spawnDestroyer = phase2 && masterMode && !bossRush && npc.localAI[2] == 0f;
             bool phase3 = lifeRatio < 0.33f;
-            bool spawnRetinazer = phase3 && masterMode && npc.localAI[2] == 1f;
+            bool spawnRetinazer = phase3 && masterMode && !bossRush && npc.localAI[2] == 1f;
 
             // Spawn The Destroyer in Master Mode (just like Oblivion from Avalon)
             if (spawnDestroyer)

@@ -195,7 +195,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             // Phases
             bool phase2 = lifeRatio < 0.66f;
             bool phase3 = lifeRatio < 0.33f;
-            bool spawnSpazmatism = phase3 && NPC.localAI[2] == 0f;
+            bool spawnSpazmatism = phase3 && !bossRush && NPC.localAI[2] == 0f;
 
             // Spawn Spazmatism in Master Mode (just like Oblivion from Avalon)
             if (spawnSpazmatism)
