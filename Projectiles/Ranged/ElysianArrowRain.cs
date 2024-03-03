@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = Lifetime;
-            Projectile.extraUpdates = 4;
+            Projectile.extraUpdates = 6;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
@@ -67,6 +67,11 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+
+            if (Projectile.damage > 1 && Projectile.numHits < 1)
+                Projectile.damage = (int)(Projectile.damage * 0.8f);
+
+
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 90);
             Projectile.timeLeft = 80;
         }
