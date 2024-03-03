@@ -63,7 +63,7 @@ namespace CalamityMod.Projectiles.Melee
 
                     else
                     {
-                        Vector2 idealVelocity = Projectile.SafeDirectionTo(Main.npc[TargetIndex].Center) * (Projectile.velocity.Length() + 3.5f);
+                        Vector2 idealVelocity = Projectile.SafeDirectionTo(Main.npc[TargetIndex].Center) * (Projectile.velocity.Length() + 6.5f);
                         Projectile.velocity = Vector2.Lerp(Projectile.velocity, idealVelocity, 0.08f);
                     }
                 }
