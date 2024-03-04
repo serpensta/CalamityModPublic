@@ -414,8 +414,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else
             {
                 npc.defense = 0;
-                int setDamage = (int)(npc.defDamage * (phase3 ? 1.4f : 1.2f));
-                int reducedSetDamage = (int)(setDamage * 0.5f);
+                int setDamage = (int)Math.Round(npc.defDamage * (phase3 ? 1.4 : 1.2));
+                int reducedSetDamage = (int)Math.Round(setDamage * 0.5);
 
                 if (npc.ai[1] == 0f & phase3)
                     npc.ai[1] = 5f;
@@ -1340,23 +1340,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             npc.defense = 0;
-            int num37 = 23;
-            int num38 = 18;
             if (Main.expertMode)
             {
                 if (flag2)
                     npc.defense = -(Main.masterMode ? 10 : 15);
-
                 if (flag3)
-                {
-                    num38 = 20;
                     npc.defense = -(Main.masterMode ? 20 : 30);
-                }
             }
 
-            npc.damage = npc.GetAttackDamage_LerpBetweenFinalValues(num37, num38);
-            int reducedSetDamage = (int)(npc.damage * 0.5f);
-            npc.damage = npc.GetAttackDamage_ScaledByStrength(npc.damage);
+            double phase2DamageMultiplier = 1.5;
+            npc.damage = (int)Math.Round(npc.defDamage * phase2DamageMultiplier);
+            int reducedSetDamage = (int)Math.Round(npc.damage * 0.5);
+
             if (npc.ai[1] == 0f && flag2)
                 npc.ai[1] = 5f;
 

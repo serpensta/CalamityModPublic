@@ -183,7 +183,7 @@ namespace CalamityMod.NPCs.Polterghast
             else
                 NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2;
 
-            int reducedSetDamage = (int)(NPC.defDamage * 0.5f);
+            int reducedSetDamage = (int)Math.Round(NPC.defDamage * 0.5);
 
             if (!chargePhase)
             {

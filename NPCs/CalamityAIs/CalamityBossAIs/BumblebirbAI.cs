@@ -148,7 +148,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             calamityGlobalNPC.DR = (phaseSwitchPhase || npc.ai[0] == 5f || (enrageScale == 3f && !bossRush)) ? (bossRush ? 0.99f : 0.55f) : 0.1f;
             calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = phaseSwitchPhase || npc.ai[0] == 5f || (enrageScale == 3f && !bossRush);
 
-            int reducedSetDamage = (int)(npc.defDamage * 0.5f);
+            int reducedSetDamage = (int)Math.Round(npc.defDamage * 0.5);
 
             if (phaseSwitchPhase)
             {

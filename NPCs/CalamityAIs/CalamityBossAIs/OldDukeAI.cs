@@ -79,12 +79,12 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             npc.defense = exhausted ? 0 : npc.defDefense;
             if (phase3AI)
             {
-                setDamage = (int)(setDamage * 1.2f);
+                setDamage = (int)Math.Round(setDamage * 1.2);
                 npc.defense = exhausted ? 0 : npc.defDefense - 40;
             }
             else if (phase2AI)
             {
-                setDamage = (int)(setDamage * 1.1f);
+                setDamage = (int)Math.Round(setDamage * 1.1);
                 npc.defense = exhausted ? 0 : npc.defDefense - 20;
             }
 

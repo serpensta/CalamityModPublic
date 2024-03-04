@@ -494,7 +494,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 npc.chaseable = !spazInPhase1;
 
-                int setDamage = (int)(npc.defDamage * 1.5);
+                int setDamage = (int)Math.Round(npc.defDamage * 1.5);
                 npc.defense = npc.defDefense + 10;
                 calamityGlobalNPC.DR = spazInPhase1 ? 0.9999f : 0.2f;
                 calamityGlobalNPC.unbreakableDR = spazInPhase1;
@@ -1472,8 +1472,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.chaseable = !retInPhase1;
 
                 // Increase defense and damage
-                int setDamage = (int)(npc.defDamage * 1.5);
-                int reducedSetDamage = (int)(setDamage * 0.5f);
+                int setDamage = (int)Math.Round(npc.defDamage * 1.5);
+                int reducedSetDamage = (int)Math.Round(setDamage * 0.5);
                 npc.defense = npc.defDefense + 18;
                 calamityGlobalNPC.DR = retInPhase1 ? 0.9999f : 0.2f;
                 calamityGlobalNPC.unbreakableDR = retInPhase1;
@@ -2969,8 +2969,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             npc.HitSound = SoundID.NPCHit4;
-            int setDamage = (int)(npc.defDamage * 1.5);
-            int reducedSetDamage = (int)(setDamage * 0.5f);
+            int setDamage = (int)Math.Round(npc.defDamage * 1.5);
+            int reducedSetDamage = (int)Math.Round(setDamage * 0.5);
             npc.defense = npc.defDefense + 18;
 
             if (npc.ai[1] == 0f)

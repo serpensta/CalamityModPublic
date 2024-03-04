@@ -930,7 +930,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.ai[1] == chargeGateValue + chargeDuration)
                             npc.velocity *= 0.45f;
 
-                        npc.damage = (int)(npc.defDamage * (dayTimeEnrage ? 3f : 1.5f));
+                        npc.damage = (int)Math.Round(npc.defDamage * (dayTimeEnrage ? 3D : 1.5));
                     }
                     else
                     {
@@ -2014,7 +2014,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             if (npc.ai[1] == endDashTime)
                                 npc.velocity *= 0.7f;
 
-                            npc.damage = (int)(npc.defDamage * (enraged ? 3f : 1.5f));
+                            npc.damage = (int)Math.Round(npc.defDamage * (enraged ? 3D : 1.5));
                         }
                         else
                         {

@@ -22,9 +22,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool bossRush = BossRushEvent.BossRushActive;
             bool masterMode = Main.masterMode || bossRush;
             bool death = CalamityWorld.death || bossRush;
-            bool phase2 = lifeRatio < 0.7f;
-            bool phase3 = lifeRatio < 0.4f;
-            bool phase4 = lifeRatio < 0.2f;
+            bool masterModeSurprise = lifeRatio >= 0.9f && masterMode;
+            bool phase2 = lifeRatio < (masterMode ? 0.6f : 0.7f);
+            bool phase3 = lifeRatio < (masterMode ? 0.3f : 0.4f);
+            bool phase4 = lifeRatio < (masterMode ? 0.1f : 0.2f);
             bool phase2AI = npc.ai[0] > 4f;
             bool phase3AI = npc.ai[0] > 9f;
             bool charging = npc.ai[3] < 10f;
@@ -33,12 +34,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             int setDamage = npc.defDamage;
             if (phase3AI)
             {
-                setDamage = (int)(setDamage * 1.32f);
+                setDamage = (int)Math.Round(setDamage * 1.32);
                 npc.defense = 0;
             }
             else if (phase2AI)
             {
-                setDamage = (int)(setDamage * 1.44f);
+                setDamage = (int)Math.Round(setDamage * 1.44);
                 npc.defense = (int)(npc.defDefense * 0.8f);
             }
             else
@@ -185,11 +186,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
+            if (masterMode)
+            {
+                idlePhaseTimer /= 2;
+                chargeTime -= 4;
+                chargeVelocity += 3f;
+            }
+
             if (CalamityWorld.LegendaryMode)
                 chargeTime += Main.rand.Next(5, 66);
 
             // Spawn cthulhunadoes in phase 3
-            if (phase3AI && (!phase4 || Main.getGoodWorld))
+            if (phase3AI && ((!phase4 && !masterModeSurprise) || Main.getGoodWorld))
             {
                 calamityGlobalNPC.newAI[0] += 1f;
                 float timeGateValue = 600f;
@@ -212,7 +220,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.rotation = 0f;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    npc.ai[0] = -1f;
+                    npc.ai[0] = masterModeSurprise ? 9f : -1f;
                     npc.netUpdate = true;
                 }
             }
@@ -957,6 +965,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
                     }
 
+                    // Go back to normalcy after dropping below 90% HP
+                    if (!masterModeSurprise && !phase3)
+                        phase3AttackPicker = 3;
+
                     // Set velocity for charge
                     if (phase3AttackPicker == 1)
                     {
@@ -987,6 +999,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     else if (phase3AttackPicker == 2)
                     {
                         npc.ai[0] = 12f;
+                        npc.ai[1] = 0f;
+                        npc.ai[2] = 0f;
+                    }
+
+                    // Go to next phase
+                    else if (phase3AttackPicker == 3)
+                    {
+                        npc.ai[0] = -1f;
                         npc.ai[1] = 0f;
                         npc.ai[2] = 0f;
                     }
@@ -1105,12 +1125,94 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             return false;
         }
 
+        public static bool BuffedDetonatingBubbleAI(NPC npc, Mod mod)
+        {
+            if (npc.target == Main.maxPlayers)
+            {
+                npc.TargetClosest();
+                npc.ai[3] = (float)Main.rand.Next(100, 151) / 100f;
+                float startingVelocity = (float)Main.rand.Next(250, 351) / 15f;
+                npc.velocity = (Main.player[npc.target].Center - npc.Center + new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101))).SafeNormalize(Vector2.UnitY) * startingVelocity;
+                npc.netUpdate = true;
+            }
+
+            bool pop = npc.ai[0] == 1f;
+            Vector2 velocityVector = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
+            float inertia = 40f;
+            float velocity = 25f;
+            npc.velocity = (npc.velocity * inertia + velocityVector * velocity) / (inertia + 1f);
+            npc.scale = npc.ai[3];
+            npc.alpha -= 30;
+            if (npc.alpha < 50)
+                npc.alpha = 50;
+
+            npc.alpha = 50;
+            npc.velocity.X = (npc.velocity.X * 50f + Main.windSpeedCurrent * 2f + (float)Main.rand.Next(-10, 11) * 0.1f) / 51f;
+            npc.velocity.Y = (npc.velocity.Y * 50f + -0.25f + (float)Main.rand.Next(-10, 11) * 0.2f) / 51f;
+            if (npc.velocity.Y > 0f)
+                npc.velocity.Y -= 0.04f;
+
+            if (npc.ai[0] == 0f)
+            {
+                int size = 40;
+                Rectangle rect = npc.getRect();
+                rect.X -= size + npc.width / 2;
+                rect.Y -= size + npc.height / 2;
+                rect.Width += size * 2;
+                rect.Height += size * 2;
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    Player player = Main.player[i];
+                    if (player.active && !player.dead && rect.Intersects(player.getRect()))
+                    {
+                        npc.ai[0] = 1f;
+                        npc.ai[1] = 4f;
+                        npc.netUpdate = true;
+                        break;
+                    }
+                }
+            }
+
+            if (npc.ai[0] == 0f)
+            {
+                npc.ai[1] += 1f;
+                float timeBeforePopping = 450f;
+                if (npc.ai[1] >= timeBeforePopping)
+                {
+                    npc.ai[0] = 1f;
+                    npc.ai[1] = 4f;
+                }
+            }
+
+            if (pop)
+            {
+                npc.ai[1] -= 1f;
+                if (npc.ai[1] <= 0f)
+                {
+                    npc.life = 0;
+                    npc.HitEffect();
+                    npc.active = false;
+                    return false;
+                }
+            }
+
+            if (pop)
+            {
+                npc.position = npc.Center;
+                npc.width = npc.height = 100;
+                npc.position = new Vector2(npc.position.X - (float)(npc.width / 2), npc.position.Y - (float)(npc.height / 2));
+                npc.EncourageDespawn(3);
+            }
+
+            return false;
+        }
+
         public static bool VanillaDukeFishronAI(NPC npc, Mod mod)
         {
             bool expertMode = Main.expertMode;
             bool masterMode = Main.masterMode;
 
-            float damageScale = expertMode ? 1.2f : 1f;
+            double damageScale = expertMode ? 1.2 : 1D;
             float phase2LifeRatio = masterMode ? 0.6f : 0.5f;
             float phase3LifeRatio = masterMode ? 0.25f : 0.15f;
             bool flag = npc.life <= npc.lifeMax * phase2LifeRatio;
@@ -1122,12 +1224,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             int setDamage = npc.defDamage;
             if (flag4)
             {
-                setDamage = (int)(setDamage * 1.1f * damageScale);
+                setDamage = (int)Math.Round(setDamage * 1.1 * damageScale);
                 npc.defense = 0;
             }
             else if (flag3)
             {
-                setDamage = (int)(setDamage * 1.2f * damageScale);
+                setDamage = (int)Math.Round(setDamage * 1.2 * damageScale);
                 npc.defense = (int)((float)npc.defDefense * 0.8f);
             }
             else

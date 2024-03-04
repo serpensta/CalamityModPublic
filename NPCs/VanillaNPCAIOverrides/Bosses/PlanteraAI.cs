@@ -54,8 +54,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool phase4 = lifeRatio < 0.2f;
 
             // Contact damage values for phase 2
-            int setDamage = (int)(npc.defDamage * 1.4f);
-            int reducedSetDamage = (int)(setDamage * 0.5f);
+            int setDamage = (int)Math.Round(npc.defDamage * 1.4);
+            int reducedSetDamage = (int)Math.Round(setDamage * 0.5);
 
             // Variables and target
             bool enrage = bossRush;
@@ -1424,14 +1424,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             npc.defense = 10;
-            int num795 = 70;
+            int setDamage = (int)Math.Round(npc.defDamage * 1.4);
             if (flag39)
             {
                 npc.defense *= 4;
-                num795 *= 2;
+                setDamage *= 2;
             }
 
-            npc.damage = npc.GetAttackDamage_ScaledByStrength(num795);
+            npc.damage = setDamage;
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {

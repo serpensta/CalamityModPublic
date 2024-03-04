@@ -2378,6 +2378,11 @@ namespace CalamityMod.NPCs
                     npc.dontTakeDamage = true;
                     break;
 
+                // Make Fishron's Bubbles immune to damage in Rev+ Master Mode
+                case NPCID.DetonatingBubble:
+                    npc.dontTakeDamage = Main.masterMode && CalamityWorld.revenge;
+                    break;
+
                 default:
                     break;
             }
@@ -3454,6 +3459,12 @@ namespace CalamityMod.NPCs
             {
                 if (npc.type == NPCID.QueenBee)
                     return QueenBeeAI.BuffedQueenBeeAI(npc, Mod);
+            }
+
+            if (Main.masterMode && CalamityWorld.revenge)
+            {
+                if (npc.type == NPCID.DetonatingBubble)
+                    return DukeFishronAI.BuffedDetonatingBubbleAI(npc, Mod);
             }
 
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)

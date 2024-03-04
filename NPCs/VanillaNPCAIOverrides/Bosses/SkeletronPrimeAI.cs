@@ -1698,7 +1698,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Min saw damage
-            int reducedSetDamage = (int)(npc.defDamage * 0.5f);
+            int reducedSetDamage = (int)Math.Round(npc.defDamage * 0.5);
 
             // Avoid cheap bullshit
             npc.damage = reducedSetDamage;
@@ -3128,7 +3128,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Min saw damage
-            int reducedSetDamage = (int)(npc.defDamage * 0.5f);
+            int reducedSetDamage = (int)Math.Round(npc.defDamage * 0.5);
 
             // Avoid cheap bullshit
             npc.damage = reducedSetDamage;

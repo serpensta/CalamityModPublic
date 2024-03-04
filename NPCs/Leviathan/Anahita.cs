@@ -771,7 +771,7 @@ namespace CalamityMod.NPCs.Leviathan
             else if (NPC.ai[0] == 4f)
             {
                 NPC.Calamity().canBreakPlayerDefense = true;
-                NPC.damage = (int)(NPC.defDamage * 1.5);
+                NPC.damage = (int)Math.Round(NPC.defDamage * 1.5);
 
                 if (CalamityWorld.LegendaryMode && CalamityWorld.revenge && NPC.ai[1] % 5f == 0f)
                 {

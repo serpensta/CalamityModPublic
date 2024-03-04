@@ -844,7 +844,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             if (npc.ai[1] == 0f)
             {
                 // Avoid cheap bullshit
-                npc.damage = (int)(npc.defDamage * 0.5f);
+                npc.damage = (int)Math.Round(npc.defDamage * 0.5);
 
                 float calCloneBroProjAttackMaxSpeed = 5f;
                 float calCloneBroProjAttackAccel = 0.1f;
@@ -1026,7 +1026,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     if (npc.ai[2] >= 75f)
                     {
                         // Avoid cheap bullshit
-                        npc.damage = (int)(npc.defDamage * 0.5f);
+                        npc.damage = (int)Math.Round(npc.defDamage * 0.5);
 
                         npc.velocity.X *= 0.93f;
                         npc.velocity.Y *= 0.93f;
@@ -1163,7 +1163,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             if (npc.ai[1] == 0f)
             {
                 // Avoid cheap bullshit
-                npc.damage = (int)(npc.defDamage * 0.5f);
+                npc.damage = (int)Math.Round(npc.defDamage * 0.5);
 
                 float calCloneBroProjAttackMaxSpeed = 4.5f;
                 float calCloneBroProjAttackAccel = 0.2f;
@@ -1345,7 +1345,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     if (npc.ai[2] >= 60f) //50
                     {
                         // Avoid cheap bullshit
-                        npc.damage = (int)(npc.defDamage * 0.5f);
+                        npc.damage = (int)Math.Round(npc.defDamage * 0.5);
 
                         npc.velocity.X *= 0.93f;
                         npc.velocity.Y *= 0.93f;

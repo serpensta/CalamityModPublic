@@ -434,11 +434,11 @@ namespace CalamityMod.NPCs.Polterghast
             else
                 NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2;
 
-            int phase1ReducedSetDamage = (int)(NPC.defDamage * 0.5f);
-            int phase2Damage = (int)(NPC.defDamage * 1.2f);
-            int phase2ReducedSetDamage = (int)(phase2Damage * 0.5f);
-            int phase3Damage = (int)(NPC.defDamage * 1.4f);
-            int phase3ReducedSetDamage = (int)(phase3Damage * 0.5f);
+            int phase1ReducedSetDamage = (int)Math.Round(NPC.defDamage * 0.5);
+            int phase2Damage = (int)Math.Round(NPC.defDamage * 1.2);
+            int phase2ReducedSetDamage = (int)Math.Round(phase2Damage * 0.5);
+            int phase3Damage = (int)Math.Round(NPC.defDamage * 1.4);
+            int phase3ReducedSetDamage = (int)Math.Round(phase3Damage * 0.5);
 
             if (!chargePhase)
             {

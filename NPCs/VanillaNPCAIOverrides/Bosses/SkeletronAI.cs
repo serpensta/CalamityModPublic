@@ -707,7 +707,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float headSpinTargetDist = (float)Math.Sqrt(headSpinTargetX * headSpinTargetX + headSpinTargetY * headSpinTargetY);
 
                 // Increase speed while charging
-                npc.damage = (int)(npc.defDamage * 1.3);
+                npc.damage = (int)Math.Round(npc.defDamage * 1.3);
 
                 if (!phase3)
                 {
@@ -1398,7 +1398,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float num173 = Main.player[npc.target].Center.Y - vector20.Y;
                 float num174 = (float)Math.Sqrt(num172 * num172 + num173 * num173);
                 float num175 = 3f;
-                npc.damage = npc.GetAttackDamage_LerpBetweenFinalValues(npc.defDamage, (float)npc.defDamage * 1.3f);
+                npc.damage = (int)Math.Round(npc.defDamage * 1.3);
                 if (Main.expertMode)
                 {
                     num175 = Main.masterMode ? 4f : 3.5f;

@@ -300,73 +300,73 @@ namespace CalamityMod
             {
                 { NPCID.KingSlime, new int[] { 40, 64, 80, 88, 96 } },
 
-                { ModContent.NPCType<DesertScourgeHead>(), new int[] { 30, 66, 88, 99, 132 } },
-                { ModContent.NPCType<DesertScourgeBody>(), new int[] { 16, 32, 40, 44, 60 } },
-                { ModContent.NPCType<DesertScourgeTail>(), new int[] { 12, 24, 30, 32, 42 } },
-                { ModContent.NPCType<DesertNuisanceHead>(), new int[] { 20, 44, 60, 70, 90 } },
-                { ModContent.NPCType<DesertNuisanceBody>(), new int[] { 14, 28, 32, 36, 45 } },
-                { ModContent.NPCType<DesertNuisanceTail>(), new int[] { 8, 16, 20, 24, 30 } },
+                { ModContent.NPCType<DesertScourgeHead>(), new int[] { 45, 66, 88, 99, 132 } },
+                { ModContent.NPCType<DesertScourgeBody>(), new int[] { 24, 32, 40, 44, 60 } },
+                { ModContent.NPCType<DesertScourgeTail>(), new int[] { 18, 24, 30, 32, 42 } },
+                { ModContent.NPCType<DesertNuisanceHead>(), new int[] { 30, 44, 60, 70, 90 } },
+                { ModContent.NPCType<DesertNuisanceBody>(), new int[] { 21, 28, 32, 36, 45 } },
+                { ModContent.NPCType<DesertNuisanceTail>(), new int[] { 12, 16, 20, 24, 30 } },
 
                 { NPCID.EyeofCthulhu, new int[] {
-                    15, // 23 in phase 2
-                    30, // 36 in phase 2, 40 in phase 3
+                    24, // 36 in phase 2
+                    30, // 45 in phase 2
                     40, // 48 in phase 2, 56 in phase 3
-                    60, // Same for all phases
-                    51 } }, // Vanilla: 54 in phase 2, 60 in phase 3; Rev: 61 in phase 2, 71 in phase 3; Death: 71 at all times
-                { NPCID.ServantofCthulhu, new int[] { 12, 24, 30, 34, 42 } },
+                    44, // 53 in phase 2, 62 in phase 3
+                    50 } }, // Vanilla: 75 in phase 2; Rev+: 60 in phase 2, 70 in phase 3
+                { NPCID.ServantofCthulhu, new int[] { 18, 24, 30, 34, 42 } },
 
                 { ModContent.NPCType<Crabulon>(), new int[] { 40, 64, 80, 88, 120 } },
                 { ModContent.NPCType<CrabShroom>(), new int[] { 25, 50, 62, 70, 75 } },
 
-                { NPCID.EaterofWorldsHead, new int[] { 25, 55, 77, 88, 132 } },
-                { NPCID.EaterofWorldsBody, new int[] { 15, 24, 32, 40, 60 } },
-                { NPCID.EaterofWorldsTail, new int[] { 10, 16, 24, 32, 42 } },
+                { NPCID.EaterofWorldsHead, new int[] { 38, 55, 77, 88, 132 } },
+                { NPCID.EaterofWorldsBody, new int[] { 18, 24, 32, 40, 60 } },
+                { NPCID.EaterofWorldsTail, new int[] { 12, 16, 24, 32, 42 } },
                 { NPCID.VileSpitEaterOfWorlds, new int[] { -1, 64, 64, 64, 96 } },
 
-                { NPCID.BrainofCthulhu, new int[] { 30, 54, 81, 99, 135 } },
-                { NPCID.Creeper, new int[] { 20, 36, 66, 80, 108 } },
+                { NPCID.BrainofCthulhu, new int[] { 36, 54, 81, 99, 135 } },
+                { NPCID.Creeper, new int[] { 24, 36, 66, 80, 108 } },
 
-                { ModContent.NPCType<HiveMind>(), new int[] { 35, 63, 81, 90, 135 } },
-                { ModContent.NPCType<DankCreeper>(), new int[] { 25, 50, 62, 68, 90 } },
+                { ModContent.NPCType<HiveMind>(), new int[] { 42, 63, 81, 90, 135 } },
+                { ModContent.NPCType<DankCreeper>(), new int[] { 30, 50, 62, 68, 90 } },
 
-                { ModContent.NPCType<PerforatorHive>(), new int[] { 30, 54, 63, 72, 108 } },
-                { ModContent.NPCType<PerforatorHeadLarge>(), new int[] { 45, 90, 108, 118, 150 } },
-                { ModContent.NPCType<PerforatorBodyLarge>(), new int[] { 24, 48, 56, 60, 75 } },
-                { ModContent.NPCType<PerforatorTailLarge>(), new int[] { 18, 36, 42, 46, 60 } },
-                { ModContent.NPCType<PerforatorHeadMedium>(), new int[] { 35, 70, 84, 92, 126 } },
-                { ModContent.NPCType<PerforatorBodyMedium>(), new int[] { 21, 42, 50, 54, 69 } },
-                { ModContent.NPCType<PerforatorTailMedium>(), new int[] { 14, 28, 34, 38, 54 } },
-                { ModContent.NPCType<PerforatorHeadSmall>(), new int[] { 30, 60, 72, 80, 102 } },
-                { ModContent.NPCType<PerforatorBodySmall>(), new int[] { 18, 36, 42, 46, 60 } },
-                { ModContent.NPCType<PerforatorTailSmall>(), new int[] { 10, 20, 26, 30, 45 } },
+                { ModContent.NPCType<PerforatorHive>(), new int[] { 36, 54, 63, 72, 108 } },
+                { ModContent.NPCType<PerforatorHeadLarge>(), new int[] { 54, 90, 108, 118, 150 } },
+                { ModContent.NPCType<PerforatorBodyLarge>(), new int[] { 28, 48, 56, 60, 75 } },
+                { ModContent.NPCType<PerforatorTailLarge>(), new int[] { 22, 36, 42, 46, 60 } },
+                { ModContent.NPCType<PerforatorHeadMedium>(), new int[] { 42, 70, 84, 92, 126 } },
+                { ModContent.NPCType<PerforatorBodyMedium>(), new int[] { 24, 42, 50, 54, 69 } },
+                { ModContent.NPCType<PerforatorTailMedium>(), new int[] { 18, 28, 34, 38, 54 } },
+                { ModContent.NPCType<PerforatorHeadSmall>(), new int[] { 36, 60, 72, 80, 102 } },
+                { ModContent.NPCType<PerforatorBodySmall>(), new int[] { 20, 36, 42, 46, 60 } },
+                { ModContent.NPCType<PerforatorTailSmall>(), new int[] { 14, 20, 26, 30, 45 } },
 
-                { NPCID.QueenBee, new int[] { 30, 54, 81, 99, 135 } },
+                { NPCID.QueenBee, new int[] { 36, 54, 81, 99, 135 } },
                 { NPCID.Bee, new int[] { 20, 24, 48, 60, 72 } },
                 { NPCID.BeeSmall, new int[] { 15, 18, 30, 44, 54 } },
 
                 { NPCID.SkeletronHead, new int[] {
-                    35, // Same for all phases
+                    42, // 55 while spinning
                     77, // 100 while spinning
                     88, // 114 while spinning
                     99, // 128 while spinning
                     132 } }, // 171 while spinning
-                { NPCID.SkeletronHand, new int[] { 20, 44, 77, 88, 110 } },
+                { NPCID.SkeletronHand, new int[] { 32, 44, 77, 88, 110 } },
                 { NPCID.ChaosBall, new int[] { -1, -1, -1, 40, 60 } },
 
                 { NPCID.Deerclops, new int[] { 20, 40, 50, 60, 80 } },
 
-                { ModContent.NPCType<SlimeGodCore>(), new int[] { 40, 80, 96, 104, 135 } },
-                { ModContent.NPCType<EbonianPaladin>(), new int[] { 45, 90, 108, 118, 150 } },
-                { ModContent.NPCType<SplitEbonianPaladin>(), new int[] { 40, 80, 96, 104, 135 } },
-                { ModContent.NPCType<CrimulanPaladin>(), new int[] { 50, 100, 120, 130, 171 } },
-                { ModContent.NPCType<SplitCrimulanPaladin>(), new int[] { 45, 90, 108, 118, 150 } },
-                { ModContent.NPCType<CorruptSlimeSpawn>(), new int[] { 30, 60, 72, 78, 99 } },
-                { ModContent.NPCType<CorruptSlimeSpawn2>(), new int[] { 20, 40, 48, 52, 66 } },
-                { ModContent.NPCType<CrimsonSlimeSpawn>(), new int[] { 35, 70, 84, 92, 120 } },
-                { ModContent.NPCType<CrimsonSlimeSpawn2>(), new int[] { 25, 50, 60, 66, 84 } },
+                { ModContent.NPCType<SlimeGodCore>(), new int[] { 48, 80, 96, 104, 135 } },
+                { ModContent.NPCType<EbonianPaladin>(), new int[] { 54, 90, 108, 118, 150 } },
+                { ModContent.NPCType<SplitEbonianPaladin>(), new int[] { 48, 80, 96, 104, 135 } },
+                { ModContent.NPCType<CrimulanPaladin>(), new int[] { 60, 100, 120, 130, 171 } },
+                { ModContent.NPCType<SplitCrimulanPaladin>(), new int[] { 54, 90, 108, 118, 150 } },
+                { ModContent.NPCType<CorruptSlimeSpawn>(), new int[] { 36, 60, 72, 78, 99 } },
+                { ModContent.NPCType<CorruptSlimeSpawn2>(), new int[] { 24, 40, 48, 52, 66 } },
+                { ModContent.NPCType<CrimsonSlimeSpawn>(), new int[] { 42, 70, 84, 92, 120 } },
+                { ModContent.NPCType<CrimsonSlimeSpawn2>(), new int[] { 30, 50, 60, 66, 84 } },
 
-                { NPCID.WallofFlesh, new int[] { 50, 150, 180, 195, 225 } },
-                { NPCID.WallofFleshEye, new int[] { 50, 150, 180, 195, 225 } },
+                { NPCID.WallofFlesh, new int[] { 100, 150, 180, 195, 225 } },
+                { NPCID.WallofFleshEye, new int[] { 100, 150, 180, 195, 225 } },
                 { NPCID.TheHungry, new int[] {
                     30, // Ranges from 30 to 75 depending on WoF life
                     60, // Ranges from 60 to 150 depending on WoF life
@@ -378,34 +378,34 @@ namespace CalamityMod
                 { NPCID.LeechBody, new int[] { 22, 44, 52, 56, 66 } },
                 { NPCID.LeechTail, new int[] { 18, 36, 42, 44, 54 } },
 
-                { NPCID.QueenSlimeBoss, new int[] { 60, 120, 150, 170, 240 } },
+                { NPCID.QueenSlimeBoss, new int[] { 80, 120, 150, 170, 240 } },
 
-                { ModContent.NPCType<Cryogen>(), new int[] { 60, 138, 161, 184, 276 } },
-                { ModContent.NPCType<CryogenShield>(), new int[] { 60, 120, 138, 158, 216 } },
+                { ModContent.NPCType<Cryogen>(), new int[] { 90, 138, 161, 184, 276 } },
+                { ModContent.NPCType<CryogenShield>(), new int[] { 80, 120, 138, 158, 216 } },
 
                 { NPCID.Spazmatism, new int[] {
-                    60, // 90 in phase 2
+                    70, // 105 in phase 2
                     102, // 153 in phase 2
                     119, // 178 in phase 2
                     136, // 204 in phase 2
                     204 } }, // 306 in phase 2
                 { NPCID.Retinazer, new int[] {
-                    50, // 75 in phase 2
+                    55, // 83 in phase 2
                     85, // 127 in phase 2
                     102, // 153 in phase 2
                     119, // 178 in phase 2
                     153 } }, // 229 in phase 2
 
-                { ModContent.NPCType<AquaticScourgeHead>(), new int[] { 80, 176, 187, 198, 264 } },
-                { ModContent.NPCType<AquaticScourgeBody>(), new int[] { 70, 112, 136, 144, 180 } },
-                { ModContent.NPCType<AquaticScourgeBodyAlt>(), new int[] { 65, 104, 112, 136, 168 } },
-                { ModContent.NPCType<AquaticScourgeTail>(), new int[] { 60, 96, 104, 112, 156 } },
+                { ModContent.NPCType<AquaticScourgeHead>(), new int[] { 110, 176, 187, 198, 264 } },
+                { ModContent.NPCType<AquaticScourgeBody>(), new int[] { 75, 112, 136, 144, 180 } },
+                { ModContent.NPCType<AquaticScourgeBodyAlt>(), new int[] { 70, 104, 112, 136, 168 } },
+                { ModContent.NPCType<AquaticScourgeTail>(), new int[] { 65, 96, 104, 112, 156 } },
 
-                { NPCID.TheDestroyer, new int[] { 70, 280, 300, 320, 420 } },
-                { NPCID.TheDestroyerBody, new int[] { 60, 102, 136, 153, 204 } },
-                { NPCID.TheDestroyerTail, new int[] { 40, 68, 102, 136, 153 } },
+                { NPCID.TheDestroyer, new int[] { 140, 280, 300, 320, 420 } },
+                { NPCID.TheDestroyerBody, new int[] { 70, 102, 136, 153, 204 } },
+                { NPCID.TheDestroyerTail, new int[] { 45, 68, 102, 136, 153 } },
 
-                { ModContent.NPCType<BrimstoneElemental>(), new int[] { 70, 112, 136, 144, 180 } },
+                { ModContent.NPCType<BrimstoneElemental>(), new int[] { 75, 112, 136, 144, 180 } },
 
                 { NPCID.SkeletronPrime, new int[] {
                     50, // 100 while spinning
@@ -419,24 +419,24 @@ namespace CalamityMod
                     102, // 204 while spinning
                     119, // 238 while spinning
                     153 } }, // 306 while spinning
-                { NPCID.PrimeVice, new int[] { 60, 102, 136, 153, 204 } },
-                { NPCID.PrimeSaw, new int[] { 60, 102, 136, 153, 204 } },
+                { NPCID.PrimeVice, new int[] { 70, 102, 136, 153, 204 } },
+                { NPCID.PrimeSaw, new int[] { 70, 102, 136, 153, 204 } },
                 { NPCID.PrimeCannon, new int[] { 30, 51, 68, 85, 102 } },
                 { NPCID.PrimeLaser, new int[] { 30, 51, 68, 85, 102 } },
 
-                { ModContent.NPCType<CalamitasClone>(), new int[] { 90, 144, 168, 176, 240 } },
-                { ModContent.NPCType<Cataclysm>(), new int[] { 60, 120, 138, 148, 198 } },
-                { ModContent.NPCType<Catastrophe>(), new int[] { 65, 130, 150, 162, 216 } },
+                { ModContent.NPCType<CalamitasClone>(), new int[] { 95, 144, 168, 176, 240 } },
+                { ModContent.NPCType<Cataclysm>(), new int[] { 80, 120, 138, 148, 198 } },
+                { ModContent.NPCType<Catastrophe>(), new int[] { 85, 130, 150, 162, 216 } },
 
                 { NPCID.Plantera, new int[] {
-                    50, // 70 in phase 2, vanilla is retarded and doesn't use the expert multiplier for plantera's damage
-                    100, // 140 in phase 2, vanilla is retarded and doesn't use the expert multiplier for plantera's damage
+                    70, // 98 in phase 2
+                    100, // 140 in phase 2
                     138, // 193 in phase 2
                     161, // 225 in phase 2
-                    207 } }, // Vanilla: Is retarded, so plantera does 150 in phase 1 and 210 in phase 2; Rev and Death: 289 in phase 2
-                { NPCID.PlanterasTentacle, new int[] { 60, 138, 161, 207, 276 } },
-                { ModContent.NPCType<PlanterasFreeTentacle>(), new int[] { 60, 138, 161, 207, 276 } },
-                { NPCID.Spore, new int[] { 70, 140, 160, 170, 210 } },
+                    207 } }, // 150 in phase 1 and 210 in phase 2; Rev and Death: 289 in phase 2
+                { NPCID.PlanterasTentacle, new int[] { 90, 138, 161, 207, 276 } },
+                { ModContent.NPCType<PlanterasFreeTentacle>(), new int[] { 90, 138, 161, 207, 276 } },
+                { NPCID.Spore, new int[] { 90, 140, 160, 170, 210 } },
 
                 { NPCID.HallowBoss, new int[] { 80, // 120 during charge
                     110, // 165 during charge
@@ -444,28 +444,28 @@ namespace CalamityMod
                     154, // 231 during charge
                     198 } }, // 297 during charge
 
-                { ModContent.NPCType<Leviathan>(), new int[] { 90, 216, 240, 252, 324 } },
+                { ModContent.NPCType<Leviathan>(), new int[] { 140, 216, 240, 252, 324 } },
                 { ModContent.NPCType<Anahita>(), new int[] {
-                    70, // 105 during charge
+                    75, // 113 during charge
                     112, // 168 during charge
                     136, // 204 during charge
                     144, // 216 during charge
                     192 } }, // 288 during charge
-                { ModContent.NPCType<AnahitasIceShield>(), new int[] { 55, 110, 126, 136, 165 } },
+                { ModContent.NPCType<AnahitasIceShield>(), new int[] { 70, 110, 126, 136, 165 } },
                 { NPCID.DetonatingBubble, new int[] { 100, 150, 180, 195, 225 } },
-                { ModContent.NPCType<AquaticAberration>(), new int[] { 70, 140, 160, 170, 210 } },
+                { ModContent.NPCType<AquaticAberration>(), new int[] { 90, 140, 160, 170, 210 } },
 
-                { ModContent.NPCType<AstrumAureus>(), new int[] { 100, 220, 242, 253, 330 } },
-                { ModContent.NPCType<AureusSpawn>(), new int[] { 66, 112, 128, 138, 180 } },
+                { ModContent.NPCType<AstrumAureus>(), new int[] { 145, 220, 242, 253, 330 } },
+                { ModContent.NPCType<AureusSpawn>(), new int[] { 75, 112, 128, 138, 180 } },
 
-                { NPCID.Golem, new int[] { 90, 144, 176, 192, 240 } },
-                { NPCID.GolemHead, new int[] { 80, 128, 144, 160, 192 } },
-                { NPCID.GolemFistLeft, new int[] { 70, 112, 144, 160, 180 } },
-                { NPCID.GolemFistRight, new int[] { 70, 112, 144, 160, 180 } },
+                { NPCID.Golem, new int[] { 95, 144, 176, 192, 240 } },
+                { NPCID.GolemHead, new int[] { 85, 128, 144, 160, 192 } },
+                { NPCID.GolemFistLeft, new int[] { 75, 112, 144, 160, 180 } },
+                { NPCID.GolemFistRight, new int[] { 75, 112, 144, 160, 180 } },
 
-                { ModContent.NPCType<PlaguebringerGoliath>(), new int[] { 100, 180, 216, 234, 297 } },
-                { ModContent.NPCType<PlagueHomingMissile>(), new int[] { 90, 180, 210, 224, 270 } },
-                { ModContent.NPCType<PlagueMine>(), new int[] { 100, 200, 240, 260, 330 } },
+                { ModContent.NPCType<PlaguebringerGoliath>(), new int[] { 120, 180, 216, 234, 297 } },
+                { ModContent.NPCType<PlagueHomingMissile>(), new int[] { 120, 180, 210, 224, 270 } },
+                { ModContent.NPCType<PlagueMine>(), new int[] { 130, 200, 240, 260, 330 } },
 
                 { NPCID.DukeFishron, new int[] {
                     100, // 120 in phase 2
@@ -476,11 +476,11 @@ namespace CalamityMod
                 { NPCID.Sharkron, new int[] { 100, 150, 180, 195, 225 } },
                 { NPCID.Sharkron2, new int[] { 120, 180, 210, 225, 270 } },
 
-                { ModContent.NPCType<RavagerBody>(), new int[] { 120, 192, 224, 232, 288 } },
-                { ModContent.NPCType<RavagerClawLeft>(), new int[] { 80, 160, 180, 200, 240 } },
-                { ModContent.NPCType<RavagerClawRight>(), new int[] { 80, 160, 180, 200, 240 } },
-                { ModContent.NPCType<RockPillar>(), new int[] { 120, 192, 224, 232, 288 } },
-                { ModContent.NPCType<FlamePillar>(), new int[] { 100, 160, 192, 200, 216 } },
+                { ModContent.NPCType<RavagerBody>(), new int[] { 130, 192, 224, 232, 288 } },
+                { ModContent.NPCType<RavagerClawLeft>(), new int[] { 105, 160, 180, 200, 240 } },
+                { ModContent.NPCType<RavagerClawRight>(), new int[] { 105, 160, 180, 200, 240 } },
+                { ModContent.NPCType<RockPillar>(), new int[] { 130, 192, 224, 232, 288 } },
+                { ModContent.NPCType<FlamePillar>(), new int[] { 105, 160, 192, 200, 216 } },
 
                 { NPCID.CultistDragonHead, new int[] { 120, 180, 210, 225, 270 } },
                 { NPCID.CultistDragonBody1, new int[] { 60, 90, 105, 120, 135 } },
@@ -488,72 +488,72 @@ namespace CalamityMod
                 { NPCID.CultistDragonBody3, new int[] { 60, 90, 105, 120, 135 } },
                 { NPCID.CultistDragonBody4, new int[] { 60, 90, 105, 120, 135 } },
                 { NPCID.CultistDragonTail, new int[] { 60, 90, 105, 120, 135 } },
-                { NPCID.AncientCultistSquidhead, new int[] { 90, 180, 210, 225, 270 } },
+                { NPCID.AncientCultistSquidhead, new int[] { 120, 180, 210, 225, 270 } },
                 { NPCID.AncientLight, new int[] { 120, 180, 210, 225, 270 } },
 
-                { ModContent.NPCType<AstrumDeusHead>(), new int[] { 120, 240, 268, 280, 360 } },
-                { ModContent.NPCType<AstrumDeusBody>(), new int[] { 100, 160, 192, 200, 240 } },
-                { ModContent.NPCType<AstrumDeusTail>(), new int[] { 80, 128, 160, 168, 192 } },
+                { ModContent.NPCType<AstrumDeusHead>(), new int[] { 160, 240, 268, 280, 360 } },
+                { ModContent.NPCType<AstrumDeusBody>(), new int[] { 105, 160, 192, 200, 240 } },
+                { ModContent.NPCType<AstrumDeusTail>(), new int[] { 85, 128, 160, 168, 192 } },
 
-                { ModContent.NPCType<ProfanedGuardianCommander>(), new int[] { 140, 224, 256, 280, 336 } },
-                { ModContent.NPCType<ProfanedGuardianDefender>(), new int[] { 120, 240, 264, 278, 336 } },
+                { ModContent.NPCType<ProfanedGuardianCommander>(), new int[] { 150, 224, 256, 280, 336 } },
+                { ModContent.NPCType<ProfanedGuardianDefender>(), new int[] { 160, 240, 264, 278, 336 } },
                 { ModContent.NPCType<ProfanedGuardianHealer>(), new int[] { 100, 200, 220, 232, 270 } },
 
-                { ModContent.NPCType<Bumblefuck>(), new int[] { 160, 256, 288, 304, 384 } },
-                { ModContent.NPCType<Bumblefuck2>(), new int[] { 110, 220, 242, 256, 330 } },
+                { ModContent.NPCType<Bumblefuck>(), new int[] { 170, 256, 288, 304, 384 } },
+                { ModContent.NPCType<Bumblefuck2>(), new int[] { 145, 220, 242, 256, 330 } },
 
                 { ModContent.NPCType<ProvSpawnOffense>(), new int[] { 120, 240, 264, 278, 336 } },
                 { ModContent.NPCType<ProvSpawnDefense>(), new int[] { 100, 200, 220, 232, 270 } },
                 { ModContent.NPCType<ProfanedRocks>(), new int[] { 100, 200, 220, 232, 270 } },
 
-                { ModContent.NPCType<CeaselessVoid>(), new int[] { 180, 360, 396, 418, 540 } },
-                { ModContent.NPCType<DarkEnergy>(), new int[] { 130, 260, 288, 304, 390 } },
+                { ModContent.NPCType<CeaselessVoid>(), new int[] { 240, 360, 396, 418, 540 } },
+                { ModContent.NPCType<DarkEnergy>(), new int[] { 175, 260, 288, 304, 390 } },
 
-                { ModContent.NPCType<StormWeaverHead>(), new int[] { 180, 360, 396, 418, 540 } },
-                { ModContent.NPCType<StormWeaverBody>(), new int[] { 120, 192, 224, 250, 330 } },
-                { ModContent.NPCType<StormWeaverTail>(), new int[] { 100, 160, 192, 210, 270 } },
+                { ModContent.NPCType<StormWeaverHead>(), new int[] { 240, 360, 396, 418, 540 } },
+                { ModContent.NPCType<StormWeaverBody>(), new int[] { 125, 192, 224, 250, 330 } },
+                { ModContent.NPCType<StormWeaverTail>(), new int[] { 105, 160, 192, 210, 270 } },
 
-                { ModContent.NPCType<Signus>(), new int[] { 175, 315, 351, 369, 459 } },
-                { ModContent.NPCType<CosmicLantern>(), new int[] { 130, 260, 288, 304, 390 } },
-                { ModContent.NPCType<CosmicMine>(), new int[] { 140, 280, 300, 320, 390 } },
+                { ModContent.NPCType<Signus>(), new int[] { 210, 315, 351, 369, 459 } },
+                { ModContent.NPCType<CosmicLantern>(), new int[] { 175, 260, 288, 304, 390 } },
+                { ModContent.NPCType<CosmicMine>(), new int[] { 190, 280, 300, 320, 390 } },
 
                 { ModContent.NPCType<Polterghast>(), new int[] {
-                    150, // 180 in phase 2, 210 in phase 3
+                    160, // 192 in phase 2, 224 in phase 3
                     240, // 288 in phase 2, 336 in phase 3
                     264, // 316 in phase 2, 369 in phase 3
                     280, // 336 in phase 2, 392 in phase 3
                     384 } }, // 460 in phase 2, 537 in phase 3
-                { ModContent.NPCType<PolterPhantom>(), new int[] { 210, 336, 360, 392, 528 } },
+                { ModContent.NPCType<PolterPhantom>(), new int[] { 224, 336, 360, 392, 528 } },
 
                 { ModContent.NPCType<OldDuke>(), new int[] {
-                    160, // 176 in phase 2, 192 in phase 3
+                    192, // 211 in phase 2, 230 in phase 3
                     288, // 316 in phase 2, 345 in phase 3
                     324, // 356 in phase 2, 388 in phase 3
                     342, // 376 in phase 2, 410 in phase 3
                     432 } }, // 475 in phase 2, 518 in phase 3
-                { ModContent.NPCType<OldDukeToothBall>(), new int[] { 180, 288, 328, 344, 432 } },
-                { ModContent.NPCType<SulphurousSharkron>(), new int[] { 180, 288, 328, 344, 432 } },
+                { ModContent.NPCType<OldDukeToothBall>(), new int[] { 192, 288, 328, 344, 432 } },
+                { ModContent.NPCType<SulphurousSharkron>(), new int[] { 192, 288, 328, 344, 432 } },
 
-                { ModContent.NPCType<DevourerofGodsHead>(), new int[] { 350, 700, 750, 780, 880 } },
-                { ModContent.NPCType<DevourerofGodsBody>(), new int[] { 220, 374, 425, 442, 561 } },
-                { ModContent.NPCType<DevourerofGodsTail>(), new int[] { 180, 306, 340, 357, 459 } },
-                { ModContent.NPCType<CosmicGuardianHead>(), new int[] { 180, 360, 396, 420, 510 } },
-                { ModContent.NPCType<CosmicGuardianBody>(), new int[] { 130, 260, 290, 320, 420 } },
-                { ModContent.NPCType<CosmicGuardianTail>(), new int[] { 100, 200, 230, 260, 330 } },
+                { ModContent.NPCType<DevourerofGodsHead>(), new int[] { 470, 700, 750, 780, 880 } },
+                { ModContent.NPCType<DevourerofGodsBody>(), new int[] { 250, 374, 425, 442, 561 } },
+                { ModContent.NPCType<DevourerofGodsTail>(), new int[] { 204, 306, 340, 357, 459 } },
+                { ModContent.NPCType<CosmicGuardianHead>(), new int[] { 240, 360, 396, 420, 510 } },
+                { ModContent.NPCType<CosmicGuardianBody>(), new int[] { 175, 260, 290, 320, 420 } },
+                { ModContent.NPCType<CosmicGuardianTail>(), new int[] { 135, 200, 230, 260, 330 } },
 
-                { ModContent.NPCType<Yharon>(), new int[] { 280, 448, 480, 512, 624 } },
+                { ModContent.NPCType<Yharon>(), new int[] { 300, 448, 480, 512, 624 } },
 
-                { ModContent.NPCType<SupremeCalamitas>(), new int[] { 320, 512, 544, 560, 696 } },
+                { ModContent.NPCType<SupremeCalamitas>(), new int[] { 340, 512, 544, 560, 696 } },
 
-                { ModContent.NPCType<Apollo>(), new int[] { 320, 512, 544, 560, 696 } },
-                { ModContent.NPCType<Artemis>(), new int[] { 300, 480, 512, 528, 660 } },
+                { ModContent.NPCType<Apollo>(), new int[] { 340, 512, 544, 560, 696 } },
+                { ModContent.NPCType<Artemis>(), new int[] { 320, 480, 512, 528, 660 } },
 
-                { ModContent.NPCType<ThanatosHead>(), new int[] { 350, 560, 592, 608, 756 } },
-                { ModContent.NPCType<ThanatosBody1>(), new int[] { 300, 480, 512, 528, 660 } },
-                { ModContent.NPCType<ThanatosBody2>(), new int[] { 300, 480, 512, 528, 660 } },
-                { ModContent.NPCType<ThanatosTail>(), new int[] { 250, 400, 424, 440, 552 } },
+                { ModContent.NPCType<ThanatosHead>(), new int[] { 375, 560, 592, 608, 756 } },
+                { ModContent.NPCType<ThanatosBody1>(), new int[] { 320, 480, 512, 528, 660 } },
+                { ModContent.NPCType<ThanatosBody2>(), new int[] { 320, 480, 512, 528, 660 } },
+                { ModContent.NPCType<ThanatosTail>(), new int[] { 270, 400, 424, 440, 552 } },
 
-                { ModContent.NPCType<PrimordialWyrmHead>(), new int[] { 400, 800, 850, 880, 1000 } }
+                { ModContent.NPCType<PrimordialWyrmHead>(), new int[] { 535, 800, 850, 880, 1000 } }
             };
 
             EnemyStats.ProjectileDamageValues = new SortedDictionary<Tuple<int, int>, int[]>
