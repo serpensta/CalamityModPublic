@@ -973,14 +973,12 @@ namespace CalamityMod.CalPlayer
                     if (Player.IsUnderwater())
                     {
                         if (Main.myPlayer == Player.whoAmI)
-                        {
                             Player.AddBuff(ModContent.BuffType<FrozenLungs>(), 2, false);
-                        }
                     }
                 }
                 if (iCantBreathe)
                 {
-                    if (Player.breath > 0)
+                    if (Player.breath > 0 && Player.miscCounter % 2 == 0)
                         Player.breath--;
                 }
             }
