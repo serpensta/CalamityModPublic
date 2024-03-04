@@ -2640,6 +2640,11 @@ namespace CalamityMod.CalPlayer
             if (CalamityMod.Instance.overhaul is null && CalamityConfig.Instance.FasterBaseSpeed)
                 Player.moveSpeed += BalancingConstants.DefaultMoveSpeedBoost;
 
+            // Reduce how slow Chilled makes the player, because it's cancerous right now
+            // The moveSpeed multiplier for Chilled in vanilla is 0.75, so we just multiply by 1.166667 here to make it 0.875, effectively cutting the reduction in half
+            if (Player.chilled)
+                Player.moveSpeed *= 1f + (1f / 6f);
+
             if (cirrusDress)
                 Player.moveSpeed -= 0.2f;
 
