@@ -286,7 +286,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             if (calamityGlobalNPC.newAI[0] % 30f == 0f)
                             {
                                 float velocity = bossRush ? 6f : death ? 5.333f : 5f;
-                                int type = ProjectileID.DeathLaser;
+                                int type = phase3 ? ModContent.ProjectileType<DestroyerElectricLaser>() : phase2 ? ModContent.ProjectileType<DestroyerCursedLaser>() : ProjectileID.DeathLaser;
                                 int damage = npc.GetProjectileDamage(type);
 
                                 // Reduce mech boss projectile damage depending on the new ore progression changes
@@ -301,11 +301,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 Vector2 projectileVelocity = (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
                                 int numProj = calamityGlobalNPC.newAI[0] % 60f == 0f ? (masterMode ? 9 : 7) : (masterMode ? 6 : 4);
                                 int spread = masterMode ? 75 : 54;
+                                float offset = type == ModContent.ProjectileType<DestroyerElectricLaser>() ? 60f : 30f;
                                 float rotation = MathHelper.ToRadians(spread);
                                 for (int i = 0; i < numProj; i++)
                                 {
                                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 5f, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * offset, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                     Main.projectile[proj].timeLeft = 900;
                                 }
                             }
