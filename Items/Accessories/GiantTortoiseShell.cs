@@ -1,9 +1,7 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using CalamityMod.CalPlayer;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-using CalamityMod.Items.Materials;
-using CalamityMod.CalPlayer;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
@@ -12,9 +10,9 @@ namespace CalamityMod.Items.Accessories
         public new string LocalizationCategory => "Items.Accessories";
         public override void SetDefaults()
         {
-            Item.defense = 15;
             Item.width = 20;
             Item.height = 24;
+            Item.defense = 15;
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;
             Item.rare = ItemRarityID.LightRed;
             Item.accessory = true;
@@ -23,6 +21,7 @@ namespace CalamityMod.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             CalamityPlayer modPlayer = player.Calamity();
+            player.noKnockback = true;
             modPlayer.tortShell = true;
         }
         public override void AddRecipes()

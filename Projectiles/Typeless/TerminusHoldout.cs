@@ -1,7 +1,6 @@
 ﻿using System;
 using CalamityMod.Events;
 using CalamityMod.Items.SummonItems;
-using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
@@ -40,7 +39,7 @@ namespace CalamityMod.Projectiles.Typeless
         public override void AI()
         {
             Time++;
-            if (!Owner.channel || Owner.noItems || Owner.CCed)
+            if (Owner.CantUseHoldout())
             {
                 // Reset the boss rush timer to what it would normally be if disabling is done prematurely.
                 if (BossRushEvent.BossRushActive || BossRushEvent.StartTimer > 0)

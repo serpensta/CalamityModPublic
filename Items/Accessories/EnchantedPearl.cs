@@ -1,8 +1,8 @@
-﻿using Terraria;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Items.Materials;
-using CalamityMod.Items.Placeables;
 
 namespace CalamityMod.Items.Accessories
 {

@@ -12,12 +12,13 @@ namespace CalamityMod.Items.Weapons.Melee
         public new string LocalizationCategory => "Items.Weapons.Melee";
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.Spears[Item.type] = true;
+            ItemID.Sets.Spears[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
             Item.width = 88;
+            Item.height = 88;
             Item.damage = 160;
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
@@ -29,7 +30,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.knockBack = 9.5f;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.height = 88;
             Item.value = CalamityGlobalItem.Rarity11BuyPrice;
             Item.rare = ItemRarityID.Purple;
             Item.shoot = ModContent.ProjectileType<ElementalLanceProjectile>();

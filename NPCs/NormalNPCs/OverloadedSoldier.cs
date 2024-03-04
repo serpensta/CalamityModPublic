@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.World;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -31,7 +31,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.defense = 18;
             NPC.DR_NERD(0.15f);
             NPC.lifeMax = NPC.downedMoonlord ? 1350 : 135;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.3f;
             NPC.value = Item.buyPrice(0, 0, 2, 0);
             NPC.HitSound = SoundID.NPCHit2;
             NPC.DeathSound = SoundID.NPCDeath2;
@@ -39,14 +39,18 @@ namespace CalamityMod.NPCs.NormalNPCs
             BannerItem = ModContent.ItemType<OverloadedSoldierBanner>();
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToWater = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.OverloadedSoldier")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.OverloadedSoldier")
             });
         }
 
@@ -98,7 +102,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     if (NPC.frame.Y > frameHeight * 13)
                         NPC.frame.Y = frameHeight;
                 }
-            }            
+            }
         }
 
         public override void AI()
@@ -178,7 +182,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) < 400f)
             {
                 maxVelocity += (CalamityWorld.death ? 8f : CalamityWorld.revenge ? 6f : 4f) - ((Main.player[NPC.target].Center - NPC.Center).Length() * 0.01f);
-             }
+            }
             if (NPC.velocity.X < -maxVelocity || NPC.velocity.X > maxVelocity)
             {
                 if (NPC.velocity.Y == 0f)

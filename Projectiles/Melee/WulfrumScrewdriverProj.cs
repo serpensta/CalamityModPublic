@@ -1,10 +1,10 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Effects;
@@ -53,7 +53,7 @@ namespace CalamityMod.Projectiles.Melee
         public CurveSegment HoldSegment = new CurveSegment(SineBumpEasing, 0.2f, 1f, 0.2f);
         public CurveSegment RetractSegment = new CurveSegment(PolyOutEasing, 0.76f, 1f, -0.8f, 3);
         public CurveSegment BumpSegment = new CurveSegment(SineBumpEasing, 0.9f, 0.2f, 0.15f);
-        internal float DistanceFromPlayer => PiecewiseAnimation(LifetimeCompletion, new CurveSegment[] { ThrustSegment, HoldSegment,  RetractSegment, BumpSegment });
+        internal float DistanceFromPlayer => PiecewiseAnimation(LifetimeCompletion, new CurveSegment[] { ThrustSegment, HoldSegment, RetractSegment, BumpSegment });
         public Vector2 OffsetFromPlayer => Projectile.velocity * DistanceFromPlayer * 12f;
 
 
@@ -76,12 +76,12 @@ namespace CalamityMod.Projectiles.Melee
             }
 
             //Manage position and rotation
-            Projectile.Center = Owner.MountedCenter + OffsetFromPlayer ;
+            Projectile.Center = Owner.MountedCenter + OffsetFromPlayer;
             Projectile.scale = 1f + (float)Math.Sin(LifetimeCompletion * MathHelper.Pi) * 0.2f; //SWAGGER
 
             //Make the owner look like theyre holding the sword bla bla
             Owner.heldProj = Projectile.whoAmI;
-            Owner.direction = Math.Sign(Projectile.velocity.X);
+            Owner.ChangeDir(MathF.Sign(Projectile.velocity.X));
             Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.velocity.ToRotation() * Owner.gravDir - MathHelper.PiOver2);
             Owner.itemTime = 2;
             Owner.itemAnimation = 2;
@@ -114,7 +114,7 @@ namespace CalamityMod.Projectiles.Melee
 
                         if (screw.AlreadyBazinged > 2)
                             SoundEngine.PlaySound(WulfrumScrewdriver.FunnyUltrablingSound, Projectile.Center);
-                        
+
 
                         if (Main.myPlayer == proj.owner)
                         {

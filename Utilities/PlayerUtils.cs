@@ -50,9 +50,6 @@ namespace CalamityMod
         public static float CalcDamage<T>(this Player player, float baseDamage) where T : DamageClass => player.GetTotalDamage<T>().ApplyTo(baseDamage);
         public static int CalcIntDamage<T>(this Player player, float baseDamage) where T : DamageClass => (int)player.CalcDamage<T>(baseDamage);
 
-        // Calculate and return Old Fashioned damage adjustment for Accessories and Set Bonuses.
-        public static int CalcOldFashionedDamage(int damage) => (int)(damage * OldFashioned.AccessoryAndSetBonusDamageMultiplier);
-
         // Naively determines the player's chosen (aka "best") class by whichever has the highest damage boost.
         public static DamageClass GetBestClass(this Player player)
         {
@@ -128,6 +125,20 @@ namespace CalamityMod
             // Add the best typical damage stat, then return the full modifier.
             ret += best - 1f;
             return ret;
+        }
+
+        /// <summary>
+        /// Extension method which calculates the player's current multiplicative boost to armor set bonus and accessory damage.<br />
+        /// This is currently only used by the Old Fashioned drink.
+        /// </summary>
+        /// <param name="player">The player whose armor / accessory damage bonus should be applied.</param>
+        /// <param name="damage">The damage to apply the bonus to.</param>
+        /// <returns>Boosted damage. If no boosts are applicable, returns the damage parameter that was passed in.</returns>
+        public static int ApplyArmorAccDamageBonusesTo(this Player player, float damage)
+        {
+            if (!player.Calamity().oldFashioned)
+                return (int)damage;
+            return (int)(damage * OldFashioned.AccessoryAndSetBonusDamageMultiplier);
         }
 
         public static float GetRangedAmmoCostReduction(this Player player)
@@ -271,7 +282,7 @@ namespace CalamityMod
                 return false;
             return true;
         }
-        
+
         // See also: Player.IsStandingStillForSpecialEffects (Vanilla shiny stone + standing still mana regen)
         // That is more or less equivalent to this with the default value of 0.05
         public static bool StandingStill(this Player player, float velocity = 0.05f) => player.velocity.Length() < velocity;
@@ -402,6 +413,25 @@ namespace CalamityMod
 
         #region Immunity Frames
         /// <summary>
+        /// Checks whether the player has any kind of immunity frames (or "iframes" for short) available.
+        /// </summary>
+        /// <param name="player">The player whose immunity frames should be checked.</param>
+        /// <returns>Whether or not they are currently in any immunity frames.</returns>
+        public static bool HasIFrames(this Player player)
+        {
+            // Check old school iframes first (aka "cooldown timer -1". Regular hits, falling damage, etc.)
+            if (player.immune || player.immuneTime > 0)
+                return true;
+
+            // Check more particular iframes. This primarily comes from traps, lava, and bosses.
+            for (int i = 0; i < player.hurtCooldowns.Length; i++)
+                if (player.hurtCooldowns[i] > 0)
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
         /// Gives the player the specified number of immunity frames (or "iframes" for short).<br />If the player already has more iframes than you want to give them, this function does nothing.
         /// </summary>
         /// <param name="player">The player who should be given immunity frames.</param>
@@ -421,6 +451,7 @@ namespace CalamityMod
                 return false;
 
             // Apply iframes thoroughly.
+            // Player.AddImmuneTime does exist, but is equivalent to the below code.
             player.immune = true;
             player.immuneNoBlink = !blink;
             player.immuneTime = frames;
@@ -682,7 +713,7 @@ namespace CalamityMod
         #endregion
 
         #region Visual Layers
-        public static void HideAccessories(this Player player, bool hideHeadAccs = true, bool hideBodyAccs = true, bool hideLegAccs = true,  bool hideShield = true)
+        public static void HideAccessories(this Player player, bool hideHeadAccs = true, bool hideBodyAccs = true, bool hideLegAccs = true, bool hideShield = true)
         {
             if (hideHeadAccs)
                 player.face = -1;
@@ -691,7 +722,7 @@ namespace CalamityMod
             {
                 player.handon = -1;
                 player.handoff = -1;
-                
+
                 player.back = -1;
                 player.front = -1;
                 player.neck = -1;
@@ -707,6 +738,13 @@ namespace CalamityMod
                 player.shield = -1;
         }
         #endregion
+
+        /// <summary>
+        /// A shorthand bool to check if the player can continue using the holdout or not.
+        /// </summary>
+        /// <param name="player">The player using the holdout.</param>
+        /// <returns>Returns <see langword="true"/> if the player CAN'T use the item.</returns>
+        public static bool CantUseHoldout(this Player player) => player == null || !player.active || player.dead || !player.channel || player.CCed || player.noItems;
 
         /// <summary>
         /// Makes the given player send the given packet to all appropriate receivers.<br />

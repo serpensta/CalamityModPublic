@@ -1,4 +1,6 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.Threading;
+using CalamityMod.Events;
 using CalamityMod.Items;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Accessories.Vanity;
@@ -25,8 +27,6 @@ using CalamityMod.Tiles.Ores;
 using CalamityMod.World;
 using CalamityMod.World.Planets;
 using Microsoft.Xna.Framework;
-using System;
-using System.Threading;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
@@ -772,7 +772,7 @@ namespace CalamityMod.NPCs
                             ItemID.LaserMachinegun,
                             ItemID.ElectrosphereLauncher,
                             ItemID.InfluxWaver,
-                            ModContent.ItemType<NullificationRifle>()
+                            ModContent.ItemType<NullificationPistol>()
                         };
 
                         npcLoot.Add(DropHelper.CalamityStyle(DropHelper.NormalWeaponDropRateFraction, saucerItems));
@@ -1446,8 +1446,13 @@ namespace CalamityMod.NPCs
                         // Remove the vanilla loot rule for Fishron Wings because it's part of the Calamity Style set.
                         npcLoot.RemoveWhere((rule) => rule is ItemDropWithConditionRule conditionalRule && conditionalRule.itemId == ItemID.FishronWings);
 
+                        // 02JAN2024: Ozzatron: Fixed silent breakage of Duke Fishron's weapon drops alteration caused by the 1.4.4 port and the Remix seed.
                         var dukeRootRules = npcLoot.Get(false);
-                        IItemDropRule notExpert = dukeRootRules.Find((rule) => rule is LeadingConditionRule dukeLCR && dukeLCR.condition is Conditions.NotExpert);
+                        IItemDropRule notRemix = dukeRootRules.Find((rule) => rule is LeadingConditionRule dukeLCR && dukeLCR.condition is Conditions.NotRemixSeed);
+                        if (notRemix is not LeadingConditionRule LCR_NotRemix)
+                            goto DukeEditFailed;
+                        var chain = notRemix.ChainedRules.Find((chain) => chain.RuleToChain is LeadingConditionRule dukeLCR2 && dukeLCR2.condition is Conditions.NotExpert);
+                        IItemDropRule notExpert = chain.RuleToChain;
                         if (notExpert is LeadingConditionRule LCR_NotExpert)
                         {
                             LCR_NotExpert.ChainedRules.RemoveAll((chainAttempt) =>
@@ -1469,8 +1474,9 @@ namespace CalamityMod.NPCs
                         }
                     }
                     catch (ArgumentNullException) { }
+DukeEditFailed:
 
-                    // Expert+ drops are also available on Normal
+// Expert+ drops are also available on Normal
                     npcLoot.AddNormalOnly(DropHelper.PerPlayer(ItemID.ShrimpyTruffle));
 
                     // Would be in the bag otherwise
@@ -1666,7 +1672,7 @@ namespace CalamityMod.NPCs
             LeadingConditionRule goldBossDrop = new LeadingConditionRule(DropHelper.GoldSetBonusBossCondition);
             goldBossDrop.Add(ItemID.GoldCoin, minQuantity: 3, maxQuantity: 3, hideLootReport: true);
             globalLoot.Add(goldBossDrop);
-            
+
             // Tarragon armor set bonus: 20% chance to drop hearts from all valid enemies
             // See the condition lambda in DropHelper for details
             // Does not show up in the Bestiary
@@ -1996,7 +2002,7 @@ namespace CalamityMod.NPCs
             {
                 string key = "Mods.CalamityMod.Status.Progression.HardmodeOreTier4Text";
                 Color messageColor = new Color(50, 255, 130);
-                CalamityUtils.SpawnOre(ModContent.TileType<HallowedOre>(), 12E-05, 0.55f, 0.9f, 3, 8, TileID.Pearlstone, TileID.HallowHardenedSand, TileID.HallowSandstone, TileID.HallowedIce);
+                CalamityUtils.SpawnOre(ModContent.TileType<HallowedOre>(), 17E-05, 0.55f, 0.9f, 8, 14, TileID.Pearlstone, TileID.HallowHardenedSand, TileID.HallowSandstone, TileID.HallowedIce);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
             }
         }

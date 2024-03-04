@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Summon;
+﻿using CalamityMod.Projectiles.Summon;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,18 +10,18 @@ namespace CalamityMod.Items.Weapons.Summon
     public class HauntedScroll : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Summon";
-	public override void SetStaticDefaults()
-	{
+        public override void SetStaticDefaults()
+        {
             ItemID.Sets.AnimatesAsSoul[Type] = true;
-	    Main.RegisterItemAnimation(Type, new DrawAnimationVertical(6, 6));
-	}
+            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(6, 6));
+        }
 
         public override void SetDefaults()
         {
-            Item.damage = 25;
-            Item.mana = 10;
             Item.width = 36;
             Item.height = 48;
+            Item.damage = 25;
+            Item.mana = 10;
             Item.useTime = Item.useAnimation = 24;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.noMelee = true;

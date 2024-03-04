@@ -1,9 +1,9 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System.Linq;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -14,8 +14,8 @@ namespace CalamityMod.Items.Weapons.Ranged
 {
     public class Photoviscerator : ModItem, ILocalizedModType
     {
-        public static readonly SoundStyle UseSound = new("CalamityMod/Sounds/Item/PhotoUseSound") { Volume = 0.55f };
-        public static readonly SoundStyle HitSound = new("CalamityMod/Sounds/Item/PhotoHitSound") { Volume = 0.45f };
+        public static readonly SoundStyle UseSound = new("CalamityMod/Sounds/Item/PhotoUseSound") { Volume = 0.35f };
+        public static readonly SoundStyle HitSound = new("CalamityMod/Sounds/Item/PhotoHitSound") { Volume = 0.4f };
         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         // Left-click stats
@@ -56,7 +56,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             if (player.whoAmI != Main.myPlayer)
                 return;
-            
+
             // Right-click channeling
             player.Calamity().rightClickListener = true;
 
@@ -79,7 +79,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             // The holdout will initially double up when right clicking otherwise
             if (player.altFunctionUse == 2f)
                 return false;
-            
+
             Projectile.NewProjectile(source, position, Vector2.Zero, type, 0, 0f, player.whoAmI);
             return false;
         }

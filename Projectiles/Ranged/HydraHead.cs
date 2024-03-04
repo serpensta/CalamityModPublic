@@ -1,11 +1,11 @@
-﻿using CalamityMod.DataStructures;
-using CalamityMod.Items.Weapons.Ranged;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CalamityMod.DataStructures;
+using CalamityMod.Items.Weapons.Ranged;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -137,7 +137,7 @@ namespace CalamityMod.Projectiles.Ranged
         public void PerformAttacks(Vector2 aimDestination)
         {
             Item heldItem = Owner.ActiveItem();
-            
+
             Vector2 shootDirection = Projectile.SafeDirectionTo(aimDestination);
 
             //Normal shot

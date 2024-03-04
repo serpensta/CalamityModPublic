@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items.Weapons.Magic;
+﻿using System;
+using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.ai[1] = (float)(soundDelayer - soundDelayMult * aiSoundDelay);
                 isActive = true;
             }
-            bool canUseItem = player.channel && !player.noItems && !player.CCed;
+            bool canUseItem = !player.CantUseHoldout();
             if (Projectile.localAI[0] > 0f)
             {
                 Projectile.localAI[0] -= 1f;

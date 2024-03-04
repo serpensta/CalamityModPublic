@@ -1,11 +1,11 @@
-﻿using CalamityMod.World;
+﻿using System.IO;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -91,7 +91,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        int redDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 182, 0f, 0f, 100, default, 2f);
+                        int redDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TheDestroyer, 0f, 0f, 100, default, 2f);
                         Main.dust[redDust].noGravity = true;
                         Main.dust[redDust].noLight = true;
                     }

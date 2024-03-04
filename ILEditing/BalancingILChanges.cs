@@ -1,12 +1,10 @@
 ﻿using System;
 using CalamityMod.Balancing;
 using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Placeables.FurniturePlagued;
-using CalamityMod.Items.Potions;
-using CalamityMod.NPCs.DraedonLabThings;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -16,19 +14,19 @@ namespace CalamityMod.ILEditing
     {
         #region Shimmer Changes
 
-        private static bool AdjustShimmerRequirements(On_Item.orig_CanShimmer orig, Item item)
+        private static bool AdjustShimmerRequirements(On_ShimmerTransforms.orig_IsItemTransformLocked orig, int type)
         {
             //Rod of Harmony / psc requires Draedong and SCal dead instead of Moon Lord.
-            if (item.type == ItemID.RodofDiscord || item.type == ModContent.ItemType<ProfanedSoulCrystal>())
+            if (type == ItemID.RodofDiscord || type == ModContent.ItemType<ProfanedSoulCrystal>())
             {
-                return DownedBossSystem.downedCalamitas && DownedBossSystem.downedExoMechs;
+                return !DownedBossSystem.downedCalamitas || !DownedBossSystem.downedExoMechs;
             }
 
-            return orig(item);
+            return orig(type);
         }
-        
+
         #endregion
-        
+
         #region Soaring Insignia Changes
         private static void RemoveSoaringInsigniaInfiniteWingTime(ILContext il)
         {
@@ -414,6 +412,148 @@ namespace CalamityMod.ILEditing
             // Replace the value entirely.
             cursor.Remove();
             cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.SharpeningStationArmorPenetration);
+        }
+        #endregion
+
+        #region Beetle Scale Mail (DPS chestplate) Nerf
+        private static void NerfBeetleScaleMail(ILContext il)
+        {
+            // Adjust melee damage from the Beetle Might buff.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.BeetleMight1)))
+            {
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the Beetle Might buff ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.1f))) // The amount of melee damage to grant.
+            {
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the amount of melee damage granted.");
+                return;
+            }
+
+            // Replace the value entirely.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.BeetleScaleMailMeleeDamagePerBeetle);
+
+            cursor.GotoNext();
+
+            // Adjust melee speed from the Beetle Might buff. 
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(0.1f))) // The amount of melee speed to grant.
+            {
+                LogFailure("Beetle Scale Mail Nerf", "Could not locate the amount of melee speed granted.");
+                return;
+            }
+
+            // Replace the value entirely.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_R4, BalancingConstants.BeetleScaleMailMeleeSpeedPerBeetle);
+        }
+        #endregion
+
+        #region Nebula Armor Nerfs
+        private static void NerfNebulaArmorBaseLifeRegenAndDamage(ILContext il)
+        {
+            // Nebula's buffs are processed in the order Mana, Life, Damage
+            // The mana buff is merely tracked and updated in this function, so it is not IL edited here.
+            var cursor = new ILCursor(il);
+
+            // Adjust life regen from the Nebula Life Boosters.
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.NebulaUpLife1)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the Nebula Life buff ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdfld<Player>("lifeRegen")))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the player's life regen being loaded.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(6)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the amount of life regen to grant.");
+                return;
+            }
+
+            // Replace the constant "load 6" opcode with a regular integer load with Calamity's value.
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_I4, BalancingConstants.NebulaLifeRegenPerBooster);
+
+            // Adjust damage from Nebula Damage Boosters.
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdcI4(BuffID.NebulaUpDmg1)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the Nebula Damage buff ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdcR4(0.15f)))
+            {
+                LogFailure("Nebula Armor Nerf", "Could not locate the amount of damage to grant.");
+                return;
+            }
+
+            // There are multiple branches pointing to this instruction, so it cannot be removed. Instead, swap its value directly.
+            cursor.Next.Operand = BalancingConstants.NebulaDamagePerBooster;
+        }
+
+        private static void RemoveNebulaLifeBoosterDoTImmunity(ILContext il)
+        {
+            // Prevent Nebula Life Boosters from canceling out all DoT debuff damage.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("nebulaLevelLife")))
+            {
+                LogFailure("Nebula Armor DoT Ignoring Nerf", "Could not locate the Nebula Armor Life Booster variable.");
+                return;
+            }
+
+            // Pop this value off the stack and replace it with a zero.
+            // Zero will never be greater than zero, so negative life regen will never be canceled out.
+            cursor.Emit(OpCodes.Pop);
+            cursor.Emit(OpCodes.Ldc_I4_0);
+        }
+
+        private static void NerfNebulaArmorManaRegen(ILContext il)
+        {
+            // Reduce Nebula armor mana regen.
+            // The regen is controlled by a frame counter threshold right at the top of the function, typically 6.
+            // 1 value is added to the counter for every Mana Booster you have.
+            // If the value reaches the threshold, you gain 1 mana.
+            // All that needs to be done is raising the threshold, so it takes more frames to get each point of mana.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdcI4(6)))
+            {
+                LogFailure("Nebula Armor Mana Regen Nerf", "Could not locate the Nebula Armor mana regeneration frame counter threshold.");
+                return;
+            }
+
+            // Swap the threshold with Calamity's value.
+            cursor.Next.Operand = BalancingConstants.NebulaManaRegenFrameCounterThreshold;
+        }
+        #endregion
+
+        #region Remove Melee Armor (Beetle Shell + Solar Flare) Multiplicative DR
+        private static void RemoveBeetleAndSolarFlareMultiplicativeDR(ILContext il)
+        {
+            // Remove the multiplicative DR from Solar Flare armor's Solar Shields
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("setSolar")))
+            {
+                LogFailure("Melee Multiplicative DR Removal", "Could not locate the Solar Flare set bonus field.");
+                return;
+            }
+
+            // AND with 0 (false) so that the Solar Flare set bonus is never considered to be active. This stops the multiplicative DR from applying.
+            cursor.Emit(OpCodes.Ldc_I4_0);
+            cursor.Emit(OpCodes.And);
+
+            // Remove the multiplicative DR from Beetle Shell's beetles
+            if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("beetleDefense")))
+            {
+                LogFailure("Melee Multiplicative DR Removal", "Could not locate the Beetle Shell set bonus field.");
+                return;
+            }
+
+            // AND with 0 (false) so that the Beetle Shell set bonus is never considered to be active. This stops the multiplicative DR from applying.
+            cursor.Emit(OpCodes.Ldc_I4_0);
+            cursor.Emit(OpCodes.And);
         }
         #endregion
 

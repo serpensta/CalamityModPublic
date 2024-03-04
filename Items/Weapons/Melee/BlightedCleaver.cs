@@ -14,6 +14,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.width = 88;
+            Item.height = 88;
             Item.damage = 64;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 26;
@@ -23,7 +24,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.knockBack = 5.5f;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.height = 88;
             Item.value = CalamityGlobalItem.Rarity8BuyPrice;
             Item.rare = ItemRarityID.Yellow;
             Item.shoot = ModContent.ProjectileType<BlazingPhantomBlade>();
@@ -34,7 +34,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool(5))
             {
-                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 106);
+                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.RuneWizard);
             }
         }
 

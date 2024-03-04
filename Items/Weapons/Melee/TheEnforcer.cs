@@ -1,10 +1,10 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -42,7 +42,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             var source = player.GetSource_ItemUse(Item);
             SoundEngine.PlaySound(SoundID.Item73, player.Center);
-            int j = Main.myPlayer;
+            int i = Main.myPlayer;
             float flameSpeed = 3f;
             player.itemTime = Item.useTime;
             Vector2 realPlayerPos = player.RotatedRelativePoint(player.MountedCenter, true);
@@ -65,11 +65,11 @@ namespace CalamityMod.Items.Weapons.Melee
             }
 
             int essenceDamage = player.CalcIntDamage<MeleeDamageClass>(0.25f * Item.damage);
-            for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 5; j++)
             {
                 realPlayerPos = new Vector2(player.position.X + player.width * 0.5f + (Main.rand.Next(401) * -(float)player.direction) + (Main.mouseX + Main.screenPosition.X - player.position.X), player.MountedCenter.Y);
                 realPlayerPos.X = (realPlayerPos.X + player.Center.X) / 2f + Main.rand.Next(-400, 401);
-                realPlayerPos.Y -= 100 * i;
+                realPlayerPos.Y -= 100 * j;
                 mouseXDist = Main.mouseX + Main.screenPosition.X - realPlayerPos.X;
                 mouseYDist = Main.mouseY + Main.screenPosition.Y - realPlayerPos.Y;
                 if (mouseYDist < 0f)
@@ -137,7 +137,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
             if (Main.rand.NextBool(3))
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 173);
+                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.ShadowbeamStaff);
         }
 
         public override void AddRecipes()

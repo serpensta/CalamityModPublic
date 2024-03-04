@@ -3,8 +3,8 @@ using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Localization;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Melee
@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Weapons.Melee
     public class StygianShield : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        
+
         // Held stats
         public const int HeldDefense = 16;
         public const int DisableDashDuration = 90;
@@ -21,6 +21,8 @@ namespace CalamityMod.Items.Weapons.Melee
         public int ThrownShieldID = ModContent.ProjectileType<StygianShieldThrown>();
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(HeldDefense, (DisableDashDuration / 60D).ToString("N1"));
+
+        public override void SetStaticDefaults() => ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 
         public override void SetDefaults()
         {
@@ -30,7 +32,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
-            Item.damage = 250;
+            Item.damage = 180;
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.useAnimation = Item.useTime = 40; // This is only for the "Very slow" tooltip. The real use time should be faster
             Item.shoot = ModContent.ProjectileType<StygianShieldAttack>();
@@ -42,8 +44,8 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.UseSound = null;
         }
 
-        // Can only throw a shield if none is active
-        public override bool AltFunctionUse(Player player) => player.ownedProjectileCounts[ThrownShieldID] <= 0;
+        // Can only throw a shield if there's two or less
+        public override bool AltFunctionUse(Player player) => player.ownedProjectileCounts[ThrownShieldID] <= 1;
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
@@ -102,7 +104,7 @@ namespace CalamityMod.Items.Weapons.Melee
             if (Player.ActiveItem().type == ModContent.ItemType<StygianShield>())
             {
                 Player.shield = EquipLoader.GetEquipSlot(Mod, "StygianShield", EquipType.Shield);
-			    Player.cShield = 0;
+                Player.cShield = 0;
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +18,8 @@ namespace CalamityMod.Projectiles.Ranged
         public static int Lifetime => 270;
         public static float Fadetime => 225f;
         public static float EmpowerTime => 135f;
-        public static Color SlimeColor => new Color (133, 133, 224);
+        public static float DamageFalloff => 0.85f;
+        public static Color SlimeColor => new Color(133, 133, 224);
 
         public ref float Time => ref Projectile.ai[0];
         public bool Empowered => Projectile.ai[0] >= EmpowerTime;
@@ -47,7 +50,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (Time == EmpowerTime)
             {
                 Projectile.penetrate = 1;
-                Projectile.damage *= 2;
+                Projectile.damage = (int)((Projectile.damage / Math.Pow(DamageFalloff, Projectile.numHits)) * 1.6f); // 7/4
                 Projectile.velocity *= 0f;
                 Projectile.rotation = Main.rand.NextFloat(0f, MathHelper.TwoPi);
 
@@ -89,11 +92,11 @@ namespace CalamityMod.Projectiles.Ranged
         {
             if (Projectile.velocity.X != oldVelocity.X)
             {
-                Projectile.velocity.X = -oldVelocity.X * (Bounced ? 1f : Utils.Remap(Time, 0f, EmpowerTime, 1.5f, 4f));
+                Projectile.velocity.X = -oldVelocity.X * (Bounced ? (1f / Projectile.ai[2]) : Utils.Remap(Time, 0f, EmpowerTime, 1.5f, 3f));
             }
             if (Projectile.velocity.Y != oldVelocity.Y)
             {
-                Projectile.velocity.Y = -oldVelocity.Y * (Bounced ? 1f : Utils.Remap(Time, 0f, EmpowerTime, 1.5f, 4f));
+                Projectile.velocity.Y = -oldVelocity.Y * (Bounced ? (1f / Projectile.ai[2]) : Utils.Remap(Time, 0f, EmpowerTime, 1.5f, 3f));
             }
             Projectile.ai[2]++;
             return false;
@@ -126,6 +129,14 @@ namespace CalamityMod.Projectiles.Ranged
                     dust.scale = dust.type == 20 ? Main.rand.NextFloat(0.9f, 1.9f) : Main.rand.NextFloat(1.6f, 2.2f);
                 }
             }
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (Projectile.numHits > 0 && !Empowered)
+                Projectile.damage = (int)(Projectile.damage * DamageFalloff);
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
 
         public override bool PreDraw(ref Color lightColor)

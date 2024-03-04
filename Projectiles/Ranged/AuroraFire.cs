@@ -1,9 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Ranged
@@ -13,8 +14,8 @@ namespace CalamityMod.Projectiles.Ranged
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override string Texture => "CalamityMod/Projectiles/Magic/RancorFog";
 
-        public static int Lifetime => 450;
-        public static int Fadetime => 420;
+        public static int Lifetime => 480;
+        public static int Fadetime => 450;
         public ref float Time => ref Projectile.ai[0];
         public ref float LightPower => ref Projectile.ai[1];
 
@@ -34,10 +35,10 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = -1;
-            Projectile.MaxUpdates = 3;
+            Projectile.MaxUpdates = 4;
             Projectile.timeLeft = Lifetime;
             Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = 6;
+            Projectile.idStaticNPCHitCooldown = 8;
         }
 
         public override void AI()
@@ -91,7 +92,11 @@ namespace CalamityMod.Projectiles.Ranged
             OrangeFogRot += MathHelper.ToRadians(1f);
             BlueFogRot -= MathHelper.ToRadians(1f);
             Projectile.Opacity = Utils.GetLerpValue(0f, 15f, Time, true) * Utils.GetLerpValue(450f, 360f, Time, true);
-            
+
+            // 08DEC2023: Ozzatron: All below code does not run on dedicated servers as it requires clientside lighting information.
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
             // Calculate light power. This checks below the position of the fog to check if this fog is underground.
             // Without this, it may render over the fullblack that the game renders for obscured tiles.
             float lightPowerBelow = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16 + 6).ToVector3().Length() / (float)Math.Sqrt(3D);

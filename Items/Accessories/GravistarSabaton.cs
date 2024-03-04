@@ -1,13 +1,17 @@
-﻿using Terraria;
-using Terraria.ModLoader;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
-using System.Collections.Generic;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
     public class GravistarSabaton : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Accessories";
+
+        public static readonly int PassthroughDamage = 150;
+        public static readonly int SlamDamage = 300;
+
         public override void SetDefaults()
         {
             Item.width = 20;

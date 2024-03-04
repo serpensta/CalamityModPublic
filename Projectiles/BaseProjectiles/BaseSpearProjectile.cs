@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -30,7 +30,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
                 Player player = Main.player[Projectile.owner];
 
                 // Adjust owner stats based on this projectile
-                player.direction = Projectile.direction;
+                player.ChangeDir(Projectile.direction);
                 player.heldProj = Projectile.whoAmI;
                 player.itemTime = player.itemAnimation;
 

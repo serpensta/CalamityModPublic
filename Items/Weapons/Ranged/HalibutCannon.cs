@@ -16,10 +16,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()
         {
-            Item.damage = 50;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 118;
             Item.height = 56;
+            Item.damage = 50;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 10;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -42,7 +42,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             SoundEngine.PlaySound(SoundID.Item38, player.Center);
-            
+
             // Really jammed in GFB
             if (Main.zenithWorld)
                 return Main.rand.NextBool(5);

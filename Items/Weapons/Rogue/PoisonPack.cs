@@ -1,10 +1,10 @@
-﻿using Terraria.DataStructures;
+﻿using CalamityMod.CalPlayer;
+using CalamityMod.Projectiles.Rogue;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using CalamityMod.Projectiles.Rogue;
-using CalamityMod.CalPlayer;
 
 namespace CalamityMod.Items.Weapons.Rogue
 {
@@ -15,12 +15,12 @@ namespace CalamityMod.Items.Weapons.Rogue
 
         public override void SetDefaults()
         {
+            Item.width = 14;
+            Item.height = 14;
             Item.damage = baseDamage;
             Item.DamageType = RogueDamageClass.Instance;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-            Item.width = 14;
-            Item.height = 14;
             Item.useTime = 19;
             Item.useAnimation = 19;
             Item.useStyle = ItemUseStyleID.Swing;

@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Melee;
+﻿using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,6 +14,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.width = 64;
+            Item.height = 74;
             Item.damage = 100;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 28;
@@ -23,7 +24,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.knockBack = 5.75f;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.height = 74;
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;
             Item.rare = ItemRarityID.LightRed;
             Item.shoot = ModContent.ProjectileType<TrueCausticEdgeProjectile>();
@@ -36,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool(3))
             {
-                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 74);
+                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.GreenFairy);
             }
         }
 

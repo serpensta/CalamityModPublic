@@ -62,13 +62,17 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AcidRainBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Trilobite")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Trilobite")
             });
         }
 
@@ -163,9 +167,7 @@ namespace CalamityMod.NPCs.AcidRain
             if (SpikeShootCountdown <= 0f)
             {
                 SoundEngine.PlaySound(SoundID.NPCDeath11, NPC.Center);
-                int projDamage = DownedBossSystem.downedPolterghast ? 35 : DownedBossSystem.downedAquaticScourge ? 29 : 21;
-                if (Main.expertMode)
-                    projDamage = (int)Math.Round(projDamage * 0.8);
+                int projDamage = DownedBossSystem.downedPolterghast ? (Main.masterMode ? 23 : Main.expertMode ? 28 : 35) : DownedBossSystem.downedAquaticScourge ? (Main.masterMode ? 19 : Main.expertMode ? 23 : 29) : (Main.masterMode ? 14 : Main.expertMode ? 17 : 21);
 
                 Vector2 spikeVelocity = -NPC.velocity.RotatedByRandom(0.18f);
                 if (Main.zenithWorld) // more true to the original concept art.

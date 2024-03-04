@@ -1,9 +1,9 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System.Linq;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -79,7 +79,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 return !Main.projectile.Any(n => n.active && n.owner == player.whoAmI && n.type == ProjectileType<ExobladeProj>());
 
 
-            return !Main.projectile.Any(n => n.active && n.owner == player.whoAmI && n.type == ProjectileType<ExobladeProj>() &&         
+            return !Main.projectile.Any(n => n.active && n.owner == player.whoAmI && n.type == ProjectileType<ExobladeProj>() &&
             !(n.ai[0] == 1 && n.ai[1] == 1)); //Ignores exoblades in post bonk stasis.
         }
 

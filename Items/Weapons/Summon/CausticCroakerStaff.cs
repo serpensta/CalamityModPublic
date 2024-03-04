@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Summon;
+﻿using CalamityMod.Projectiles.Summon;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,10 +12,10 @@ namespace CalamityMod.Items.Weapons.Summon
         public new string LocalizationCategory => "Items.Weapons.Summon";
         public override void SetDefaults()
         {
-            Item.damage = 8;
-            Item.mana = 10;
             Item.width = 36;
             Item.height = 42;
+            Item.damage = 8;
+            Item.mana = 10;
             Item.useTime = Item.useAnimation = 35;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;

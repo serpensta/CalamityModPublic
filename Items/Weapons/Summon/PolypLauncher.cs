@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Summon;
+﻿using CalamityMod.Projectiles.Summon;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,16 +12,16 @@ namespace CalamityMod.Items.Weapons.Summon
         public new string LocalizationCategory => "Items.Weapons.Summon";
         public override void SetDefaults()
         {
-            Item.damage = 12;
-            Item.mana = 10;
             Item.width = 26;
             Item.height = 56;
+            Item.damage = 12;
+            Item.mana = 10;
             Item.useTime = Item.useAnimation = 35;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.knockBack = 0f;
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item44;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<PolypLauncherSentry>();

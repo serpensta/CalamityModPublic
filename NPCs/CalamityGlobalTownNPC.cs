@@ -1,4 +1,6 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Events;
 using CalamityMod.Items;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Ammo;
@@ -18,8 +20,6 @@ using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -64,6 +64,7 @@ namespace CalamityMod.NPCs
         {
             "Dazren",
             "Johnny Test", // <@!589966747977777197> (konorango)
+            "Bling Bling Boy", // <@!522970788203069442> (phallguy)
         };
         private static readonly string[] ArmsDealerNames =
         {
@@ -89,6 +90,7 @@ namespace CalamityMod.NPCs
         private static readonly string[] DemolitionistNames =
         {
             "Tavish DeGroot", // <@!442447226992721930> (magicoal)
+            "Fimmy", // <@!407348617079160832> (darkmega5)
         };
         private static readonly string[] DryadNames =
         {
@@ -130,7 +132,7 @@ namespace CalamityMod.NPCs
             "Alfred Rend", // <@!606301806481375255> (Deadsqurp300#0907)
             "Leeman", // <@!281999243168841728> (Tweee#5831)
             "Mihai", // <@!373941893467209730> (cmihaii.)
-            "Aka Retribution", // <@!302318734633205761> (azurr_nihilo)
+            "Cooler Kevin", // <@!614126424751603714> (exellent.)
         };
         private static readonly string[] MechanicNames =
         {
@@ -187,6 +189,7 @@ namespace CalamityMod.NPCs
         {
             "Vorbis",
             "Angel",
+            "Mòrag Ladair", // <@!161893929485074432> (jalapeno9)
         };
         private static readonly string[] StylistNames =
         {
@@ -209,7 +212,6 @@ namespace CalamityMod.NPCs
         {
             "Stan Pines",
             "Slap Battles", // <@!923504188615450654> (gravityglider.)
-            "Matt Walsh", // <@!522970788203069442> (phallguy)
         };
         private static readonly string[] TruffleNames =
         {
@@ -240,6 +242,7 @@ namespace CalamityMod.NPCs
             "Kiriku", // <@!395312478160027668> (rulosss#6814)
             "Lacuna", // <@!790746689211203604> (_lacuna_)
             "Mae Borowski", //<@!219158690433990656> (justakkolite)
+            "Jackie", // <@!353241811717718016> (jackalchan)
         };
 
         // The following sets are for the 1.4 Town Pets: Town Dogs, Cats and Bunnies.
@@ -1060,7 +1063,7 @@ namespace CalamityMod.NPCs
         #endregion
 
         #region Shop Stuff
-         public override void ModifyShop(NPCShop shop)
+        public override void ModifyShop(NPCShop shop)
         {
             int type = shop.NpcType;
             int goldCost = NPC.downedMoonlord ? 16 : Main.hardMode ? 8 : 4;

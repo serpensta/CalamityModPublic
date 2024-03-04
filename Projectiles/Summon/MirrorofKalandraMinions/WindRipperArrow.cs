@@ -28,6 +28,7 @@ namespace CalamityMod.Projectiles.Summon.MirrorofKalandraMinions
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
+            Projectile.MaxUpdates = MirrorofKalandra.Wind_ArrowSpeedMult;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => Projectile.RotatingHitboxCollision(targetHitbox.TopLeft(), targetHitbox.Size());

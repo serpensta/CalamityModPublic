@@ -18,10 +18,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle Explosion = new("CalamityMod/Sounds/Item/DeadSunExplosion") { Volume = 0.5f };
         public override void SetDefaults()
         {
-            Item.damage = 100;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 70;
             Item.height = 24;
+            Item.damage = 100;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = 22;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;

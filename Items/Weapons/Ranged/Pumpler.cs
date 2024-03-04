@@ -1,9 +1,9 @@
-﻿using Terraria.DataStructures;
+﻿using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Projectiles.Ranged;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
@@ -12,12 +12,17 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
         public const int MaxPumpkins = 5;
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
-            Item.damage = 24;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 72;
             Item.height = 34;
+            Item.damage = 24;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 30;
             Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;

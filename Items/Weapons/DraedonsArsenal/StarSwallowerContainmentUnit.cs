@@ -1,10 +1,10 @@
-﻿using CalamityMod.CustomRecipes;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.DraedonsArsenal;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -19,11 +19,11 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         {
             CalamityGlobalItem modItem = Item.Calamity();
 
+            Item.width = 18;
+            Item.height = 28;
             Item.shootSpeed = 10f;
             Item.damage = 24;
             Item.mana = 10;
-            Item.width = 18;
-            Item.height = 28;
             Item.useTime = Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.noMelee = true;

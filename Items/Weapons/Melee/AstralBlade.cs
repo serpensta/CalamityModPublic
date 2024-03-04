@@ -1,12 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Items.Weapons.Melee
 {
     public class AstralBlade : ModItem, ILocalizedModType
@@ -14,10 +14,10 @@ namespace CalamityMod.Items.Weapons.Melee
         public new string LocalizationCategory => "Items.Weapons.Melee";
         public override void SetDefaults()
         {
-            Item.damage = 85;
-            Item.DamageType = DamageClass.Melee;
             Item.width = 80;
             Item.height = 80;
+            Item.damage = 85;
+            Item.DamageType = DamageClass.Melee;
             Item.scale = 1.5f;
             Item.useTime = 12;
             Item.useAnimation = 12;

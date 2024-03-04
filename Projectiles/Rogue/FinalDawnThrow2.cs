@@ -3,9 +3,9 @@ using CalamityMod.Items.Weapons.Rogue;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -44,9 +44,9 @@ namespace CalamityMod.Projectiles.Rogue
             Player player = Main.player[Projectile.owner];
             //Give iframes to the player
             if (player.immuneTime <= 30)
-            { 
-            player.immuneNoBlink = true;
-            player.immuneTime = 30;
+            {
+                player.immuneNoBlink = true;
+                player.immuneTime = 30;
             }
 
             // Spawn homing flames that chase the HIT enemy only. This is also limited to one burst
@@ -72,7 +72,7 @@ namespace CalamityMod.Projectiles.Rogue
 
             if (Projectile.localAI[0] == 0)
             {
-                SoundEngine.PlaySound(FinalDawn.UseSound, Projectile.position);
+                SoundEngine.PlaySound(TheFinalDawn.UseSound, Projectile.position);
                 Projectile.localAI[0] = 1;
             }
 
@@ -93,7 +93,7 @@ namespace CalamityMod.Projectiles.Rogue
             player.Center = Projectile.Center;
             player.fullRotationOrigin = player.Center - player.position;
             player.fullRotation = Projectile.rotation;
-            player.direction = Projectile.direction;
+            player.ChangeDir(Projectile.direction);
             player.heldProj = Projectile.whoAmI;
             player.bodyFrame.Y = player.bodyFrame.Height;
 
@@ -102,12 +102,12 @@ namespace CalamityMod.Projectiles.Rogue
             bool worldEdge = Projectile.Center.X < 1000 || Projectile.Center.Y < 1000 || Projectile.Center.X > Main.maxTilesX * 16 - 1000 || Projectile.Center.Y > Main.maxTilesY * 16 - 1000;
 
             Projectile.ai[0]++;
-            if(Projectile.ai[0] >= 60 || worldEdge)
+            if (Projectile.ai[0] >= 60 || worldEdge)
             {
                 Projectile.Kill();
             }
 
-            int idx = Dust.NewDust(Projectile.position, Projectile.width , Projectile.height, ModContent.DustType<FinalFlame>(), 0f, 0f, 0, default, 2.5f);
+            int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FinalFlame>(), 0f, 0f, 0, default, 2.5f);
             Main.dust[idx].velocity = Projectile.velocity * -0.5f;
             Main.dust[idx].noGravity = true;
             Main.dust[idx].noLight = false;

@@ -12,7 +12,7 @@ namespace CalamityMod.Items.Fishing.FishingRods
         {
             ItemID.Sets.CanFishInLava[Item.type] = true;
 
-                   }
+        }
 
         public override void SetDefaults()
         {

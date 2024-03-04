@@ -1,13 +1,12 @@
-﻿using CalamityMod.NPCs.Providence;
+﻿using System;
+using CalamityMod.Items.Accessories;
+using CalamityMod.NPCs.Providence;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Potions.Alcohol;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -34,9 +33,8 @@ namespace CalamityMod.Projectiles.Summon
 
             Player owner = Main.player[Projectile.owner];
             Projectile.damage = (int)owner.GetTotalDamage<SummonDamageClass>().ApplyTo(Projectile.originalDamage);
-            if (owner.Calamity().oldFashioned)
-                Projectile.damage = CalamityUtils.CalcOldFashionedDamage(Projectile.damage);
-            
+            Projectile.damage = owner.ApplyArmorAccDamageBonusesTo(Projectile.damage);
+
             if (Projectile.ai[0] < 240f)
             {
                 Projectile.ai[0] += 1f;
@@ -44,7 +42,7 @@ namespace CalamityMod.Projectiles.Summon
                 if (Projectile.timeLeft < 160)
                     Projectile.timeLeft = 160;
             }
-            
+
             if (Projectile.velocity.Length() < 16f)
                 Projectile.velocity *= 1.01f;
         }
@@ -122,7 +120,7 @@ namespace CalamityMod.Projectiles.Summon
         {
             if ((info.Damage <= 0 && Projectile.maxPenetrate < (int)Providence.BossMode.Red) || target.creativeGodMode)
                 return;
-            
+
             Projectile.Kill();
         }
     }

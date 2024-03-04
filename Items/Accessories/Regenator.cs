@@ -1,7 +1,7 @@
 ﻿using CalamityMod.CalPlayer;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Accessories
             //No lifesteal, no regen, no healing pots
             if (player.statLife >= (int)(player.statLifeMax2 * 0.5f))
             {
-                player.statLife = (int)(player.statLifeMax2 * 0.5f);    
+                player.statLife = (int)(player.statLifeMax2 * 0.5f);
                 player.moonLeech = true;
                 modPlayer.healingPotionMultiplier = 0;
 

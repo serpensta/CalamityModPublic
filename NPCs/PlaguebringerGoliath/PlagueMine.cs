@@ -1,15 +1,15 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.PlaguebringerGoliath
 {
@@ -33,7 +33,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.2f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.canGhostHeal = false;
@@ -41,6 +41,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPC.DeathSound = SoundID.NPCDeath14;
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToElectricity = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void AI()
@@ -154,7 +158,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPC.position.Y = NPC.position.Y - (float)(NPC.height / 2);
             for (int i = 0; i < 15; i++)
             {
-                int greenPlague = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 89, 0f, 0f, 100, default, 2f);
+                int greenPlague = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[greenPlague].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -165,10 +169,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             }
             for (int j = 0; j < 30; j++)
             {
-                int greenPlague2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 89, 0f, 0f, 100, default, 3f);
+                int greenPlague2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 3f);
                 Main.dust[greenPlague2].noGravity = true;
                 Main.dust[greenPlague2].velocity *= 5f;
-                greenPlague2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 89, 0f, 0f, 100, default, 2f);
+                greenPlague2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[greenPlague2].velocity *= 2f;
                 Main.dust[greenPlague2].noGravity = true;
             }

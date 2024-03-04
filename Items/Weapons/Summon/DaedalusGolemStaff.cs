@@ -1,8 +1,8 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Summon;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,9 +18,9 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = Item.height = 32;
             Item.damage = 70;
             Item.mana = 10;
-            Item.width = Item.height = 32;
             Item.useTime = Item.useAnimation = 25;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;

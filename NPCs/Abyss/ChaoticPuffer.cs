@@ -6,12 +6,12 @@ using CalamityMod.Projectiles.Enemy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.Abyss
 {
@@ -136,7 +136,7 @@ namespace CalamityMod.NPCs.Abyss
             SoundEngine.PlaySound(SoundID.NPCDeath14, NPC.Center);
             if (Main.netMode != NetmodeID.MultiplayerClient && puffedUp)
             {
-                int damageBoom = 45;
+                int damageBoom = Main.masterMode ? 30 : Main.expertMode ? 35 : 45;
                 int projectileType = ModContent.ProjectileType<PufferExplosion>();
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, 0, 0, projectileType, damageBoom, 0f, Main.myPlayer, 0f, 0f);
             }
@@ -151,7 +151,7 @@ namespace CalamityMod.NPCs.Abyss
 
                 var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-                Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+                Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4),
                 NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
             }
         }

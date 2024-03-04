@@ -46,7 +46,7 @@ AbyssalDivingSuit: {
 		Provides light underwater and extra mobility on ice
 		Provides a moderate amount of light in the abyss
 		Greatly reduces breath loss in the abyss
-		Reduces creature's ability to detect you in the abyss
+		Makes it more difficult for abyss creatures to detect you
 		Reduces the defense reduction that the abyss causes
 		Grants immunity to the sulphurous waters
 		Allows you to fall faster while in liquids
@@ -160,7 +160,7 @@ AnechoicPlating: {
 	DisplayName: Anechoic Plating
 	Tooltip:
 		'''
-		Reduces creature's ability to detect you in the abyss
+		Makes it more difficult for abyss creatures to detect you
 		Reduces the defense reduction that the abyss causes
 		'''
 }
@@ -236,11 +236,10 @@ AsgardianAegis: {
 	DisplayName: Asgardian Aegis
 	Tooltip:
 		'''
-		Grants immunity to knockback
-		Immune to most debuffs
-		+40 max life and +0.5 HP/s life regen
-		Grants a cosmic inferno dash which can slam through enemies without taking damage
-		+20 defense while submerged in liquid
+		Allows the ability to ram dash, empowered by the cosmic inferno
+		This dash can slam through enemies without taking damage
+		Grants immunity to knockback and fire blocks
+		Grants immunity to the vast majority of debuffs, including God Slayer Inferno
 		'''
 }
 
@@ -248,11 +247,10 @@ AsgardsValor: {
 	DisplayName: Asgard's Valor
 	Tooltip:
 		'''
-		Grants immunity to knockback
-		Immune to most debuffs
-		+16 defense while submerged in liquid
-		+20 max life
-		Grants a holy flame dash which can slam through enemies without taking damage
+		Allows the ability to ram dash
+		This dash can slam through enemies without taking damage
+		Grants immunity to knockback and fire blocks
+		Grants immunity to most debuffs, including most forms of frost and flame
 		'''
 }
 
@@ -359,9 +357,10 @@ ChaliceOfTheBloodGod: {
 	Tooltip:
 		'''
 		Increases max HP by 25%
+		+2 HP/s life regen and reduces the cooldown of healing potions by 25%
 		Taking more than 5 damage converts the hit into a damage over time bleed debuff
 		This bleeding does not interfere with life regeneration
-		Drinking a Healing Potion removes half of the remaining bleed damage
+		Drinking a healing potion cancels up to 50% of its heal value of remaining bleed damage
 		Unequipping this accessory while bleeding inflicts the remaining damage instantly
 		'All that for a drop of blood...'
 		'''
@@ -392,7 +391,7 @@ CorrosiveSpine: {
 	Tooltip:
 		'''
 		5% increased movement speed
-		All rogue weapons inflict poison and spawn irradiated clouds on enemy hits
+		All rogue weapons inflict poison and spawn poisoned clouds on enemy hits
 		You release a ton of clouds everywhere on hit
 		'''
 }
@@ -527,9 +526,9 @@ DeificAmulet: {
 	DisplayName: Deific Amulet
 	Tooltip:
 		'''
-		Causes stars to fall and grants increased immune time when damaged
-		+0.5 HP/s life regen
-		Reduces the cooldown of healing potions
+		Causes stars to fall and increases length of invincibility after taking damage
+		Grants bonus invincibility frames based on your missing health
+		This effect scales from 10 frames at full HP to 40 frames at 25% or less HP
 		'''
 }
 
@@ -546,8 +545,8 @@ DimensionalSoulArtifact: {
 	DisplayName: Dimensional Soul Artifact
 	Tooltip:
 		'''
-		Power
 		Multiplies all damage by 1.2x, but at the cost of increasing damage taken by 15%
+		Power
 		'''
 }
 
@@ -556,9 +555,8 @@ DraedonsHeart: {
 	Tooltip:
 		'''
 		{0}% reduced contact damage from enemies
-		Reduces defense damage taken by {1}%
 		[NANODESC]
-		With full Nanomachines, press [KEY] to heal {2} health over {3} {^3:second;seconds}
+		With full Nanomachines, press [KEY] to heal {1} health over {2} {^2:second;seconds}
 		While healing, you take [DR]% less damage
 		'Nanomachines, son'
 		'''
@@ -580,7 +578,7 @@ DragonScales: {
 	Tooltip:
 		'''
 		Rogue projectiles create slow fireballs as they travel
-		Stealth strikes create infernados on death
+		Stealth strikes create infernados where they hit
 		+10% max run speed and acceleration
 		Grants immunity to Dragonfire
 		'Only a living dragon holds true treasure'
@@ -661,9 +659,10 @@ ElysianAegis: {
 	DisplayName: Elysian Aegis
 	Tooltip:
 		'''
-		Grants immunity to knockback and the Burning, On Fire!, and Holy Flames debuffs
-		+30 max life
-		Grants an enhanced holy flame dash which can slam through enemies without taking damage
+		Allows the ability to ram dash, empowered by holy fire
+		This dash can slam through enemies without taking damage
+		Grants immunity to knockback and fire blocks
+		Grants immunity to most fire debuffs, including Daybreak and Holy Flames
 		Blessed by the Profaned Flame
 		'''
 }
@@ -681,8 +680,8 @@ EtherealExtorter: {
 	DisplayName: Ethereal Extorter
 	Tooltip:
 		'''
-		Rogue projectiles explode into homing souls on death
-		8% increased rogue damage and +10 maximum stealth
+		Rogue projectiles explode into homing souls on hit
+		8% increased rogue damage and +5 maximum stealth
 		'''
 }
 
@@ -812,6 +811,7 @@ GiantTortoiseShell: {
 	DisplayName: Giant Tortoise Shell
 	Tooltip:
 		'''
+		Grants immunity to knockback
 		5% increased damage reduction
 		10% reduced dash velocity
 		Taking a hit will remove the dash penalty and reduce defense and damage reduction for 5 seconds
@@ -1092,7 +1092,7 @@ MoonstoneCrown: {
 		'''
 		15% increased rogue projectile velocity
 		Stealth strikes summon lunar flares on enemy hits
-		Rogue projectiles very occasionally summon moon sigils behind them
+		Rogue projectiles summon homing moon sigils as they travel
 		'''
 }
 
@@ -1208,8 +1208,9 @@ OrnateShield: {
 	DisplayName: Ornate Shield
 	Tooltip:
 		'''
-		8% increased damage reduction and +20 health while wearing the Daedalus armor
-		Grants a frost dash which can slam through enemies without taking damage
+		Allows the ability to ram dash
+		This dash can slam through enemies without taking damage
+		Grants immunity to Chilled, Frostburn, Frostbite, and Frozen
 		'''
 }
 
@@ -1362,12 +1363,13 @@ RampartofDeities: {
 	DisplayName: Rampart of Deities
 	Tooltip:
 		'''
-		Causes stars to fall and gives increased immune time when damaged
-		+0.5 HP/s life regen and reduces the cooldown of healing potions
-		Absorbs 15% of damage done to players on your team
-		This effect is only active above 25% life
+		Causes stars to fall and increases length of invincibility after taking damage
+		Grants bonus invincibility frames based on your missing health
+		This effect scales from 10 frames at full HP to 40 frames at 25% or less HP
+		Being struck for over 200 damage grants 30 additional invincibility frames
 		Grants immunity to knockback
 		Puts a shell around the owner when below 50% life that reduces damage taken
+		Absorbs 25% of damage done to players on your team when above 25% life
 		'''
 }
 
@@ -1427,7 +1429,6 @@ RoverDrive: {
 		The shield grants 10 defense while active
 		After the shield is broken, it takes 10 seconds to charge back up
 		Being hit again while recharging restarts the charge timer
-		The shield's color will change to match your team selection as needed
 		Can also be scrapped at an extractinator
 		'''
 }
@@ -1455,7 +1456,8 @@ SandCloak: {
 	Tooltip:
 		'''
 		5% increased movement speed
-		Press [KEY] to consume 10% of your maximum stealth to create a protective dust veil which provides +6 defense and +1 HP/s life regen
+		Press [KEY] to consume 10% of your maximum stealth to create a protective dust veil which damages and knocks back enemies
+		While inside the veil, you are given +6 defense and +1 HP/s life regen
 		This effect has a 30 second cooldown before it can be used again
 		'''
 }
@@ -1539,7 +1541,11 @@ SigilofCalamitas: {
 
 SilencingSheath: {
 	DisplayName: Silencing Sheath
-	Tooltip: +10 maximum stealth
+	Tooltip:
+		'''
+		+10 maximum stealth
+		Stealth generates 4% faster
+		'''
 }
 
 SlagsplitterPauldron: {
@@ -1748,6 +1754,7 @@ TheAbsorber: {
 	Tooltip:
 		'''
 		12% increased movement and jump speed
+		Grants immunity to knockback
 		Enemies take immense damage when they touch you and are afflicted with a damaging sickness debuff that reduces damage reduction significantly
 		Using a healing potion will spawn a cleansing aura
 		Walking into the aura removes all debuffs and defense damage one time
@@ -1842,7 +1849,6 @@ TheSponge: {
 		The barrier starts recharging 9 seconds after being hit
 		Recharging from zero to full charge takes 6 seconds
 		Being hit again while recharging restarts the charge timer
-		The barrier's color will change to match your team selection as needed
 		'''
 }
 

@@ -1,6 +1,6 @@
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -25,7 +25,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             if (Main.rand.NextBool(4))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 56, 0f, 0f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f);
             }
             Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 0.785f;
             Projectile.alpha += 20;
@@ -39,13 +39,13 @@ namespace CalamityMod.Projectiles.Rogue
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.Calamity().stealthStrike)
-				SoundEngine.PlaySound(SoundID.NPCHit45, Projectile.position);
+                SoundEngine.PlaySound(SoundID.NPCHit45, Projectile.position);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (Projectile.Calamity().stealthStrike)
-				SoundEngine.PlaySound(SoundID.NPCHit45, Projectile.position);
+                SoundEngine.PlaySound(SoundID.NPCHit45, Projectile.position);
         }
 
         public override bool PreDraw(ref Color lightColor)

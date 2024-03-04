@@ -1,6 +1,6 @@
-﻿using CalamityMod.Projectiles.Magic;
+﻿using System.Collections.Generic;
+using CalamityMod.Projectiles.Magic;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -18,11 +18,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 28;
+            Item.height = 30;
             Item.damage = 82;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 12;
-            Item.width = 28;
-            Item.height = 30;
             Item.useTime = 25;
             Item.useAnimation = 25;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -34,7 +34,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<AtlantisSpear>();
             Item.shootSpeed = 32f;
-        }      
+        }
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
@@ -46,7 +46,7 @@ namespace CalamityMod.Items.Weapons.Magic
             }
         }
         public override float UseSpeedMultiplier(Player player) => (DownedBossSystem.downedDoG && Main.zenithWorld) ? 2.5f : 1f;
-        
+
         public override void ModifyTooltips(List<TooltipLine> list)
         {
             bool devourer = DownedBossSystem.downedDoG;

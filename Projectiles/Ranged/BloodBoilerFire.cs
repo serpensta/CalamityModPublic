@@ -52,7 +52,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Color bloodColor = Main.rand.NextBool() ? Color.Firebrick : Color.Red;
 
                 float randomSpeedMultiplier = Main.rand.NextFloat(0.8f, 1.55f);
-                Vector2 bloodVelocity = Projectile.velocity.RotatedByRandom(0.5) * randomSpeedMultiplier + new Vector2 (0, -3);
+                Vector2 bloodVelocity = Projectile.velocity.RotatedByRandom(0.5) * randomSpeedMultiplier + new Vector2(0, -3);
                 BloodParticle blood = new BloodParticle(Projectile.Center, bloodVelocity, bloodLifetime, bloodScale, bloodColor);
                 GeneralParticleHandler.SpawnParticle(blood);
             }
@@ -71,7 +71,7 @@ namespace CalamityMod.Projectiles.Ranged
                     GeneralParticleHandler.SpawnParticle(smoke);
                 }
             }
-            
+
             if (Projectile.ai[1] == 0f) // Blood pulses on the projectile before it turns around
             {
                 if (Main.rand.NextBool(9))

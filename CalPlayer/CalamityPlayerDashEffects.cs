@@ -1,10 +1,10 @@
-﻿using CalamityMod.Balancing;
+﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.CalPlayer.Dashes;
 using CalamityMod.EntitySources;
 using CalamityMod.Enums;
 using CalamityMod.Items.Mounts;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -27,10 +27,10 @@ namespace CalamityMod.CalPlayer
             set => dashID = value;
         }
 
-    public string DeferredDashID;
+        public string DeferredDashID;
 
         public string LastUsedDashID;
-        
+
         public PlayerDashEffect UsedDash
         {
             get
@@ -88,10 +88,15 @@ namespace CalamityMod.CalPlayer
                             UsedDash.OnHitEffects(Player, n, source, ref hitContext);
 
                             // Don't bother doing anything if no damage is done.
-                            if (hitContext.Damage <= 0)
+                            if (hitContext.damageClass is null || hitContext.BaseDamage <= 0)
                                 continue;
 
-                            Player.ApplyDamageToNPC(n, hitContext.Damage, hitContext.KnockbackFactor, hitContext.HitDirection, hitContext.CriticalHit);
+                            // Duplicated from the way TML edits vanilla ram dash damage (and Shield of Cthulhu)
+                            int dashDamage = (int)Player.GetTotalDamage(hitContext.damageClass).ApplyTo(hitContext.BaseDamage);
+                            float dashKB = Player.GetTotalKnockback(hitContext.damageClass).ApplyTo(hitContext.BaseKnockback);
+                            bool rollCrit = Main.rand.Next(100) < Player.GetTotalCritChance(hitContext.damageClass);
+
+                            Player.ApplyDamageToNPC(n, dashDamage, dashKB, hitContext.HitDirection, rollCrit, hitContext.damageClass, true);
                             if (n.Calamity().dashImmunityTime[Player.whoAmI] < 12)
                                 n.Calamity().dashImmunityTime[Player.whoAmI] = 12;
 
@@ -122,7 +127,7 @@ namespace CalamityMod.CalPlayer
                     dashDelayToApply = BalancingConstants.UniversalShieldSlamCooldown;
                 else if (UsedDash.CollisionType == DashCollisionType.ShieldBonk)
                     dashDelayToApply = BalancingConstants.UniversalShieldBonkCooldown;
-                
+
                 float dashSpeed = 12f;
                 float dashSpeedDecelerationFactor = 0.985f;
                 float runSpeed = Math.Max(Player.accRunSpeed, Player.maxRunSpeed);
@@ -160,7 +165,7 @@ namespace CalamityMod.CalPlayer
 
                     // Decide the player's facing direction.
                     if (Player.velocity.X != 0f)
-                        Player.direction = Math.Sign(Player.velocity.X);
+                        Player.ChangeDir(Math.Sign(Player.velocity.X));
 
                     // Handle mid-dash movement.
                     if (UsedDash.IsOmnidirectional)

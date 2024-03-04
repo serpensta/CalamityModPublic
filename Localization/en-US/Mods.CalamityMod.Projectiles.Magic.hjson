@@ -200,6 +200,7 @@ SlitheringEelProjectile.DisplayName: Slithering Eel
 SmallSpirit.DisplayName: Small Angry Spirit
 Snowball.DisplayName: Snowball
 Snowflake.DisplayName: Snowflake
+SnowflakeIceStar.DisplayName: Ice Star
 SolarElementalBeam.DisplayName: Solar Beam
 SoulPiercerBeam.DisplayName: Soul Piercer
 SoulPiercerBolt.DisplayName: Soul Piercer
@@ -217,6 +218,7 @@ TacticiansTrumpCardProj.DisplayName: Trump Beam
 TearsofHeavenProjectile.DisplayName: Tears of Heaven
 TerraBeam.DisplayName: Terra Beam
 TerraShard.DisplayName: Terra Shard
+Teslabeam.DisplayName: Teslabeam
 ThunderstormShot.DisplayName: Thunderous Shot
 ThunderstormShotSplit.DisplayName: Thunderous Shot
 TradewindsProjectile.DisplayName: Tradewinds Feather
@@ -239,7 +241,7 @@ VividBeam.DisplayName: Vivid Beam
 VividBolt.DisplayName: Vivid Bolt
 VividClarityBeam.DisplayName: Vivid Ray
 VividExplosion.DisplayName: Vivid Explosion
-VividLaser2.DisplayName: Vivid Bolt
+VividLaser2.DisplayName: Vivid Laser
 VividOrb.DisplayName: Vivid Orb
 VoidVortexProj.DisplayName: Void Vortex
 VolatileStarcore.DisplayName: Volatile Starcore

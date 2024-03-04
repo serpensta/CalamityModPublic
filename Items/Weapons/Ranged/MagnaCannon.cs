@@ -21,12 +21,17 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static int FullChargeFrames = 138; //126 frames is durration of charge sound
 
         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
-            Item.damage = 30;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 56;
             Item.height = 34;
+            Item.damage = 30;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = AftershotCooldownFrames;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;

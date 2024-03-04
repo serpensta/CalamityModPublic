@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Ranged;
+﻿using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,10 +12,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()
         {
-            Item.damage = 32;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 30;
             Item.height = 42;
+            Item.damage = 32;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 4;
             Item.useAnimation = 12;
             Item.reuseDelay = 20;

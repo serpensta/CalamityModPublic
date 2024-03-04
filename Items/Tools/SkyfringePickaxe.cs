@@ -11,6 +11,8 @@ namespace CalamityMod.Items.Tools
         public new string LocalizationCategory => "Items.Tools";
         public override void SetDefaults()
         {
+            Item.width = 44;
+            Item.height = 44;
             Item.damage = 12;
             Item.knockBack = 2.5f;
             Item.useTime = 12;
@@ -19,8 +21,6 @@ namespace CalamityMod.Items.Tools
             Item.tileBoost += 1;
 
             Item.DamageType = DamageClass.Melee;
-            Item.width = 44;
-            Item.height = 44;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;
@@ -42,7 +42,7 @@ namespace CalamityMod.Items.Tools
         {
             if (Main.rand.NextBool(3))
             {
-                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 59);
+                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.BlueTorch);
             }
         }
     }

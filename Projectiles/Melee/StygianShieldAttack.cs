@@ -1,8 +1,9 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using CalamityMod.Graphics.Primitives;
+using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Effects;
@@ -19,19 +20,17 @@ namespace CalamityMod.Projectiles.Melee
 
         // Bull Rush stats
         public const float MinChargeTime = 15f;
-        public const float MaxChargeTime = 60f;
-        public const float MaxChargeDistance = 800f; // 50 blocks
-        public const float MaxChargeDamageMult = 4f;
+        public const float MaxChargeTime = 45f;
+        public const float MaxChargeDistance = 720f; // 45 blocks
+        public const float MaxChargeDamageMult = 6f;
         public const float PiercingDamageMult = 0.6f;
         public const float DashDuration = 21f;
-        public const float IFrameRatio = 0.35f; // Amount given = Ratio * Charge, rounded down
 
         public Player Owner => Main.player[Projectile.owner];
         public ref float Charge => ref Projectile.ai[0];
         public ref float DashTime => ref Projectile.ai[1];
         public Vector2 DashDestination = Vector2.Zero;
 
-        internal PrimitiveTrail TrailDrawer;
         // Rawest placeholder sound
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/ExoMechs/ApolloMissileLaunch") { Volume = 0.6f };
 
@@ -88,7 +87,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 // Actually set the owner center if there's no issues
                 Owner.Center = Projectile.Center;
-                Owner.direction = Projectile.direction;
+                Owner.ChangeDir(Projectile.direction);
                 return;
             }
 
@@ -105,7 +104,7 @@ namespace CalamityMod.Projectiles.Melee
             }
 
             // Attack upon releasing the button
-            if (!Owner.channel || Owner.noItems || Owner.CCed)
+            if (Owner.CantUseHoldout())
                 Attack();
         }
 
@@ -125,7 +124,7 @@ namespace CalamityMod.Projectiles.Melee
                     // Give immunity frames
                     Owner.immune = true;
                     Owner.immuneNoBlink = true;
-                    Owner.immuneTime = (int)(IFrameRatio * Charge);
+                    Owner.immuneTime = (int)DashDuration;
                     for (int k = 0; k < Owner.hurtCooldowns.Length; k++)
                         Owner.hurtCooldowns[k] = Owner.immuneTime;
 
@@ -221,11 +220,9 @@ namespace CalamityMod.Projectiles.Melee
                 Color shieldColor = Color.LightSalmon;
 
                 // Main trail
-                if (TrailDrawer is null)
-                TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, specialShader: GameShaders.Misc["CalamityMod:TrailStreak"]);
-
                 GameShaders.Misc["CalamityMod:TrailStreak"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
-                TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f + extraOffset - (direction * 80f), 10);
+                PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f + extraOffset + Main.screenPosition - direction * 80f,
+                    shader: GameShaders.Misc["CalamityMod:TrailStreak"]), 10);
 
                 ArrowEffect.Parameters["halfSpreadAngle"].SetValue(MathHelper.ToRadians(7.5f));
                 ArrowEffect.Parameters["edgeColor"].SetValue(headColor.ToVector3());

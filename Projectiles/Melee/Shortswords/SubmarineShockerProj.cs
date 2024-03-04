@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee.Shortswords
 {
-    public class SubmarineShockerProj: BaseShortswordProjectile
+    public class SubmarineShockerProj : BaseShortswordProjectile
     {
         public override LocalizedText DisplayName => CalamityUtils.GetItemName<SubmarineShocker>();
         public override string Texture => "CalamityMod/Items/Weapons/Melee/SubmarineShocker";
@@ -46,11 +46,6 @@ namespace CalamityMod.Projectiles.Melee.Shortswords
         {
             if (Main.rand.NextBool(5))
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Electric);
-        }
-
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            modifiers.CritDamage *= 0.5f;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

@@ -1,8 +1,8 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,6 +15,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         public override void SetDefaults()
         {
             Item.width = 38;
+            Item.height = 38;
             Item.damage = 92;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -24,7 +25,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.useTime = 16;
             Item.knockBack = 9f;
             Item.UseSound = SoundID.Item1;
-            Item.height = 38;
             Item.value = CalamityGlobalItem.Rarity11BuyPrice;
             Item.rare = ItemRarityID.Purple;
             Item.shoot = ModContent.ProjectileType<ElementalDiskProj>();

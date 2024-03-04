@@ -1,8 +1,8 @@
-using Terraria;
-using Terraria.ModLoader;
+﻿using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using CalamityMod.Buffs.DamageOverTime;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Rogue
 {

@@ -17,7 +17,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         private const float Spread = 0.15f;
 
         public new string LocalizationCategory => "Items.Weapons.Ranged";
-        
+
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
@@ -25,10 +25,10 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 76;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 98;
             Item.height = 50;
+            Item.damage = 78;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = 12;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;

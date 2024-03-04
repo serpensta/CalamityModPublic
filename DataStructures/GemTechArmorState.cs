@@ -1,13 +1,15 @@
-﻿using CalamityMod.Projectiles.Melee;
+﻿using CalamityMod.CalPlayer;
+using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Armor.GemTech;
+using CalamityMod.Items.Potions.Alcohol;
+using CalamityMod.Projectiles.Melee;
 using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Typeless;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Items.Armor.GemTech;
-using CalamityMod.Items.Potions.Alcohol;
 
 namespace CalamityMod.DataStructures
 {
@@ -147,8 +149,7 @@ namespace CalamityMod.DataStructures
                 return;
 
             int damage = (int)Owner.GetTotalDamage<MeleeDamageClass>().ApplyTo(GemTechHeadgear.MeleeShardBaseDamage);
-            if (Owner.Calamity().oldFashioned)
-                damage = CalamityUtils.CalcOldFashionedDamage(damage);
+            damage = Owner.ApplyArmorAccDamageBonusesTo(damage);
 
             for (int i = 0; i < 14; i++)
             {
@@ -166,8 +167,7 @@ namespace CalamityMod.DataStructures
                 return;
 
             int damage = CalamityUtils.DamageSoftCap((int)(hitDamage * 0.32f), 400);
-            if (Owner.Calamity().oldFashioned)
-                damage = CalamityUtils.CalcOldFashionedDamage(damage);
+            damage = Owner.ApplyArmorAccDamageBonusesTo(damage);
 
             Vector2 spawnPosition = Owner.Center + Main.rand.NextVector2Circular(Owner.width, Owner.height) * 1.35f;
             Vector2 shootVelocity = (target.Center - spawnPosition) * 0.04f;
@@ -209,12 +209,17 @@ namespace CalamityMod.DataStructures
         public void PlayerOnHitEffects(int hitDamage)
         {
             // Don't do anything if the player is not wearing the Gem Tech set.
-            if (!Owner.Calamity().GemTechSet)
+            var cgp = Owner.Calamity();
+            if (!cgp.GemTechSet)
                 return;
 
             bool gemWasLost = false;
             int gemDamage = 0;
-            if (hitDamage >= GemTechHeadgear.GemBreakDamageLowerBound)
+            bool largeEnoughRegularHit = hitDamage >= GemTechHeadgear.GemBreakDamageLowerBound;
+            // 09FEB2024: Ozzatron: chalice of the blood god no longer protects you when using gem tech armor.
+            // It is now slightly anti-synergetic, in that taking tiny hits when you're already bleeding will make you keep losing gems.
+            bool largeEnoughChaliceHit = cgp.chaliceOfTheBloodGod && hitDamage == ChaliceOfTheBloodGod.MinAllowedDamage && cgp.chaliceBleedoutBuffer >= GemTechHeadgear.GemBreakDamageLowerBound;
+            if (largeEnoughRegularHit || largeEnoughChaliceHit)
             {
                 // Destroy the rogue gem.
                 if (GemIsActive(GemTechArmorGemType.Rogue) && GemThatShouldBeLost == GemTechArmorGemType.Rogue)
@@ -272,8 +277,7 @@ namespace CalamityMod.DataStructures
 
                 // Softcap the damage. This is done primarily to dampen stealth interactions.
                 gemDamage = CalamityUtils.DamageSoftCap(gemDamage, GemTechHeadgear.GemDamageSoftcapThreshold);
-                if (Owner.Calamity().oldFashioned)
-                    gemDamage = CalamityUtils.CalcOldFashionedDamage(gemDamage);
+                gemDamage = Owner.ApplyArmorAccDamageBonusesTo(gemDamage);
 
                 if (Main.myPlayer == OwnerIndex)
                     Projectile.NewProjectile(Owner.GetSource_ItemUse(Owner.ActiveItem()), gemPosition, Vector2.Zero, ModContent.ProjectileType<GemTechArmorGem>(), gemDamage, 0f, OwnerIndex, 0f, (int)GemThatShouldBeLost);

@@ -1,14 +1,14 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CalamityMod.CalPlayer;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
 
 namespace CalamityMod.Items.Accessories
 {
@@ -106,7 +106,7 @@ namespace CalamityMod.Items.Accessories
         // Mobility stat boosts
         public const float SpeedMultiplier = 0.5f; // 2.5% to 10% (x100)
         public const float FlightMultiplier = 1f; // 5% to 20% (x100)
-        
+
         public override void ModifyTooltips(List<TooltipLine> list)
         {
             float power = CalculatePower();

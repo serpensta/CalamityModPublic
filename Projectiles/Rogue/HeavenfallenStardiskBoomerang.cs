@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Rogue
         public override void AI()
         {
             if (Projectile.Calamity().stealthStrike && Projectile.timeLeft % 5f == 4f) // every 5 frames
-                CalamityUtils.ProjectileRain(Projectile.GetSource_FromThis(), Projectile.Center, 400f, 100f, 500f, 800f, 29f, ModContent.ProjectileType<HeavenfallenEnergy>(), Projectile.damage / 2, Projectile.knockBack * 0.5f, Projectile.owner);            
+                CalamityUtils.ProjectileRain(Projectile.GetSource_FromThis(), Projectile.Center, 400f, 100f, 500f, 800f, 29f, ModContent.ProjectileType<HeavenfallenEnergy>(), Projectile.damage / 2, Projectile.knockBack * 0.5f, Projectile.owner);
 
             if (Projectile.alpha > 0)
             {
@@ -64,7 +64,7 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.rotation += 0.5f;
 
             if (Owner.position.Y != Owner.oldPosition.Y && Projectile.ai[0] == 0f)
-                Projectile.ai[1]++;            
+                Projectile.ai[1]++;
 
             Projectile.ai[0]++;
 
@@ -157,7 +157,7 @@ namespace CalamityMod.Projectiles.Rogue
                 Main.dust[dusty].noGravity = true;
                 Main.dust[dusty].velocity *= 0f;
             }
-            
+
             if (Projectile.owner == Main.myPlayer && Projectile.ai[1] > 0)
             {
                 for (int i = 0; i < 5; i++)

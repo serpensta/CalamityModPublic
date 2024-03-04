@@ -19,11 +19,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 78;
+            Item.height = 78;
             Item.damage = 100;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 40;
-            Item.width = 78;
-            Item.height = 78;
             Item.useTime = 49;
             Item.useAnimation = 49;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -38,7 +38,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.rare = ModContent.RarityType<Turquoise>();
         }
 
-        
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Vector2 v = velocity;

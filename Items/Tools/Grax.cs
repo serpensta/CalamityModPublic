@@ -15,11 +15,13 @@ namespace CalamityMod.Items.Tools
 
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
+            Item.width = 62;
+            Item.height = 62;
             Item.damage = 472;
             Item.knockBack = 8f;
             Item.useTime = 4;
@@ -28,8 +30,6 @@ namespace CalamityMod.Items.Tools
             Item.axe = AxePower;
             Item.tileBoost += 5;
 
-            Item.width = 62;
-            Item.height = 62;
             Item.scale = 1.5f;
             Item.DamageType = DamageClass.Melee;
             Item.useStyle = ItemUseStyleID.Swing;

@@ -1,14 +1,14 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.IO;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.Audio;
 
 
 namespace CalamityMod.Projectiles.Melee
@@ -98,7 +98,7 @@ namespace CalamityMod.Projectiles.Melee
             }
 
             //Manage position and rotation
-            Projectile.Center = Owner.Center + DistanceFromPlayer ;
+            Projectile.Center = Owner.Center + DistanceFromPlayer;
             Projectile.scale = 1.4f + ((float)Math.Sin(Timer / 160f * MathHelper.Pi) * 0.6f); //SWAGGER
 
             if (Timer > ParryTime)
@@ -136,7 +136,7 @@ namespace CalamityMod.Projectiles.Melee
 
             //Make the owner look like theyre holding the sword bla bla
             Owner.heldProj = Projectile.whoAmI;
-            Owner.direction = Math.Sign(Projectile.velocity.X);
+            Owner.ChangeDir(Math.Sign(Projectile.velocity.X));
             Owner.itemRotation = Projectile.rotation;
             if (Owner.direction != 1)
             {

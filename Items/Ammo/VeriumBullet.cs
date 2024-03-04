@@ -12,14 +12,14 @@ namespace CalamityMod.Items.Ammo
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
-                   }
+        }
 
         public override void SetDefaults()
         {
-            Item.damage = 8;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 8;
             Item.height = 8;
+            Item.damage = 7;
+            Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 9999;
             Item.consumable = true;
             Item.knockBack = 1.25f;

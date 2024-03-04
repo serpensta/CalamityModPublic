@@ -1,5 +1,5 @@
-﻿using CalamityMod.Items.Placeables;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.Melee.Yoyos;
 using Terraria;
 using Terraria.ID;
@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public new string LocalizationCategory => "Items.Weapons.Melee";
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.Yoyo[Item.type] = true;
+            ItemID.Sets.Yoyo[Item.type] = true;
             ItemID.Sets.GamepadExtraRange[Item.type] = 15;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
         }

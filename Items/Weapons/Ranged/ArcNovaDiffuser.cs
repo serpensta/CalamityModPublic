@@ -25,12 +25,17 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static int Charge2Frames = 308;
 
         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
-            Item.damage = 172;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 72;
             Item.height = 38;
+            Item.damage = 172;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = AftershotCooldownFrames;
             Item.noMelee = true;
             Item.noUseGraphic = true;

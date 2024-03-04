@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Melee
 {
     public class TyphonsGreedBubble : ModProjectile, ILocalizedModType
@@ -99,14 +99,14 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.position.Y -= (float)(Projectile.height / 2);
             for (int i = 0; i < 2; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 33, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
             }
             for (int j = 0; j < 6; j++)
             {
-                int bubblyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 186, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
+                int bubblyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RedsWingsRun, 0f, 0f, 0, new Color(0, 255, 255), 2.5f);
                 Main.dust[bubblyDust].noGravity = true;
                 Main.dust[bubblyDust].velocity *= 3f;
-                bubblyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 186, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
+                bubblyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RedsWingsRun, 0f, 0f, 100, new Color(0, 255, 255), 1.5f);
                 Main.dust[bubblyDust].velocity *= 2f;
                 Main.dust[bubblyDust].noGravity = true;
             }
@@ -114,7 +114,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
-            Projectile.damage /= 2;
+            Projectile.damage /= 1;
             Projectile.Damage();
         }
     }

@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using CalamityMod.NPCs.SupremeCalamitas;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.NPCs.SupremeCalamitas;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -225,7 +225,7 @@ namespace CalamityMod.Projectiles.Boss
                     shootReach = distanceFromTarget + 32f;
                 else
                     shootReach = 72f;
-			}
+            }
 
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Cirrus.Center, Projectile.velocity, ModContent.ProjectileType<CirrusPhotonRipperPrismTooth>(), (int)ToothDamage, 0f, Projectile.owner, shootReach, Projectile.whoAmI, Projectile.ai[2]);
         }

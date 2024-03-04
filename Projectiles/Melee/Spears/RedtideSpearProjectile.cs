@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -84,13 +84,13 @@ namespace CalamityMod.Projectiles.Melee.Spears
 
                 //Mirror the angle if facing left.
                 return MathHelper.Pi - rotation - MathHelper.TwoPi;
-            } 
+            }
         }
 
         //Properly wrap the angle. Indeed, the angles on the left suddenly go from Pi to -Pi
         public float ProjectileRotationButWrappedForTransition
         {
-            get 
+            get
             {
                 if (ChargeDirection < 0 && Projectile.rotation > 0)
                     return Projectile.rotation - MathHelper.TwoPi;
@@ -282,7 +282,7 @@ namespace CalamityMod.Projectiles.Melee.Spears
 
         public void UpdateOwnerVars()
         {
-            Owner.direction = Math.Sign(BaseRotation.ToRotationVector2().X);
+            Owner.ChangeDir(Math.Sign(BaseRotation.ToRotationVector2().X));
             Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, AppropriateRotation - MathHelper.PiOver2);
             Owner.heldProj = Projectile.whoAmI;
             Owner.itemTime = 2;

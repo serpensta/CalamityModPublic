@@ -1,9 +1,9 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Buffs.Summon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -117,7 +117,7 @@ namespace CalamityMod.Projectiles.Summon
                 if (i < segments.Count)
                 {
                     if (segments.ContainsKey(i))
-                    segments[i].ModProjectile<BlackDragonBody>().SegmentMove();
+                        segments[i].ModProjectile<BlackDragonBody>().SegmentMove();
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace CalamityMod.Projectiles.Summon
             float distanceFromDestination = Projectile.Distance(destination);
 
             // Get a swerve effect if somewhat far from the target.
-            if (Projectile.Distance(destination) > 425f)
+            if (Projectile.Distance(destination) > 400f)
             {
                 Projectile.ai[2] = 0;
                 destination += (Projectile.ai[0] % 30f / 30f * MathHelper.TwoPi).ToRotationVector2() * 145f;

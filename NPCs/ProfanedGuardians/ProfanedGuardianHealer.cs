@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.Items;
@@ -6,8 +8,6 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -45,7 +45,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             Main.npcFrameCount[NPC.type] = 10;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 PortraitPositionXOverride = 0,
                 PortraitScale = 0.75f,
@@ -81,6 +81,10 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToWater = true;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -88,11 +92,11 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             int associatedNPCType = ModContent.NPCType<ProfanedGuardianCommander>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheHallow,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ProfanedGuardianHealer")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ProfanedGuardianHealer")
             });
         }
 
@@ -123,6 +127,9 @@ namespace CalamityMod.NPCs.ProfanedGuardians
         public override void AI()
         {
             CalamityGlobalNPC.doughnutBossHealer = NPC.whoAmI;
+
+            // Avoid cheap bullshit
+            NPC.damage = 0;
 
             Lighting.AddLight((int)((NPC.position.X + (NPC.width / 2)) / 16f), (int)((NPC.position.Y + (NPC.height / 2)) / 16f), 1.1f, 0.9f, 0f);
 
@@ -288,7 +295,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
                             Color baseColor = new Color(250, 150, 0);
                             float brightness = 0.8f;
                             Color dustColor = Color.Lerp(baseColor, Color.White, brightness);
-                            Dust dust = Main.dust[Dust.NewDust(NPC.Top, 0, 0, 267, 0f, 0f, 100, dustColor, 1f)];
+                            Dust dust = Main.dust[Dust.NewDust(NPC.Top, 0, 0, DustID.RainbowMk2, 0f, 0f, 100, dustColor, 1f)];
                             dust.velocity.X = 0f;
                             dust.noGravity = true;
                             dust.fadeIn = 1f;
@@ -378,7 +385,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
                             int maxDust = 3;
                             for (int k = 0; k < maxDust; k++)
                             {
-                                int dust = Dust.NewDust(shootFrom, 0, 0, 267, 0f, 0f, 0, dustColor, 1f);
+                                int dust = Dust.NewDust(shootFrom, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, dustColor, 1f);
                                 Main.dust[dust].position = shootFrom;
                                 Main.dust[dust].velocity = vector2 * starVelocity * (k * 0.5f + 1f);
                                 Main.dust[dust].noGravity = true;

@@ -1,18 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using CalamityMod.Graphics.Primitives;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Rogue
 {
     public class ScarletDevilProjectile : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Rogue";
-        internal PrimitiveTrail TrailDrawer;
         public ref float ShootTimer => ref Projectile.ai[0];
         public override string Texture => "CalamityMod/Items/Weapons/Rogue/ScarletDevil";
 
@@ -129,8 +129,8 @@ namespace CalamityMod.Projectiles.Rogue
             if (!Main.player[Projectile.owner].moonLeech)
             {
                 // Give on-heal effects from stealth strikes.
-                Main.player[Projectile.owner].statLife += 120;
-                Main.player[Projectile.owner].HealEffect(120);
+                Main.player[Projectile.owner].statLife += 90;
+                Main.player[Projectile.owner].HealEffect(90);
             }
 
             // And spawn a bloom of bullets.
@@ -175,11 +175,9 @@ namespace CalamityMod.Projectiles.Rogue
             }
             else
             {
-                if (TrailDrawer is null)
-                    TrailDrawer = new PrimitiveTrail(WidthFunction, ColorFunction, PrimitiveTrail.RigidPointRetreivalFunction, GameShaders.Misc["CalamityMod:OverpoweredTouhouSpearShader"]);
-
                 GameShaders.Misc["CalamityMod:OverpoweredTouhouSpearShader"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
-                TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition + Projectile.velocity.SafeNormalize(Vector2.Zero) * 86f, 60);
+                PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 86f, false,
+                    shader: GameShaders.Misc["CalamityMod:OverpoweredTouhouSpearShader"]), 60);
 
                 Texture2D spearTexture = ModContent.Request<Texture2D>(Texture).Value;
 

@@ -1,4 +1,6 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
@@ -7,16 +9,14 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
+using ReLogic.Content;
 using Terraria;
-using Terraria.ID;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
-using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using ReLogic.Content;
 
 namespace CalamityMod.NPCs.Astral
 {
@@ -109,7 +109,7 @@ namespace CalamityMod.NPCs.Astral
             //not much we can do. looks fine in-game so /shrug
             if (!Main.dedServ)
                 glowmask = ModContent.Request<Texture2D>("CalamityMod/NPCs/Astral/AtlasGlow", AssetRequestMode.ImmediateLoad).Value;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 PortraitPositionYOverride = -5
             };
@@ -154,13 +154,17 @@ namespace CalamityMod.NPCs.Astral
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToSickness = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbovegroundAstralBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Atlas")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Atlas")
             });
         }
 
@@ -188,6 +192,9 @@ namespace CalamityMod.NPCs.Astral
 
         public override void AI()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             //PICK A TARGET
             if (!NPC.HasValidTarget || idling)
             {
@@ -268,7 +275,7 @@ namespace CalamityMod.NPCs.Astral
                     if (Main.player[i].active && !Main.player[i].dead && Main.player[i].getRect().Intersects(hitbox))
                     {
                         Vector2 before = Main.player[i].velocity;
-                        Main.player[i].Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.damage, NPC.direction);
+                        Main.player[i].Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.defDamage, NPC.direction);
                         Vector2 after = Main.player[i].velocity;
                         Vector2 difference = after - before;
 
@@ -321,7 +328,7 @@ namespace CalamityMod.NPCs.Astral
                 {
                     NPC.velocity.X = idle_walkLeft ? -idle_walkMaxSpeed : idle_walkMaxSpeed;
                 }
-                idle_impulseWalk = idle_impulseWalk && idle_counter > 20 && Main.rand.Next(150) != 0;
+                idle_impulseWalk = idle_impulseWalk && idle_counter > 20 && !Main.rand.NextBool(150);
                 if (!idle_impulseWalk)
                 {
                     idle_counter = 0;

@@ -1,5 +1,5 @@
-﻿using CalamityMod.Items.Materials;
-using CalamityMod.Items.Armor.Victide;
+﻿using CalamityMod.Items.Armor.Victide;
+using CalamityMod.Items.Materials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

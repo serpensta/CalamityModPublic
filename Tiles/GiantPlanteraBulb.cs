@@ -52,8 +52,8 @@ namespace CalamityMod.Tiles
             TileObjectData.addTile(Type);
 
             // Adds two map entries for the bulb, first is for Pre-Hardmode, and the latter is for Hardmode.
-            AddMapEntry(new Color(107, 125, 33));
-            AddMapEntry(new Color(243, 82, 171));
+            AddMapEntry(new Color(107, 125, 33), CalamityUtils.GetText("Tiles.GiantBulb"));
+            AddMapEntry(new Color(243, 82, 171), CalamityUtils.GetText("Tiles.GiantBulb"));
 
             AnimationFrameHeight = 90;
             MineResist = 3f;
@@ -203,9 +203,9 @@ namespace CalamityMod.Tiles
             var tile = Main.tile[i, j];
 
             spriteBatch.Draw(
-                Glow.Value, 
-                new Vector2(i * 16, j * 16 + 2) - Main.screenPosition + CalamityUtils.TileDrawOffset, 
-                new Rectangle(tile.TileFrameX, tile.TileFrameY + AnimationFrameHeight * Main.tileFrame[Type], 16, 16), 
+                Glow.Value,
+                new Vector2(i * 16, j * 16 + 2) - Main.screenPosition + CalamityUtils.TileDrawOffset,
+                new Rectangle(tile.TileFrameX, tile.TileFrameY + AnimationFrameHeight * Main.tileFrame[Type], 16, 16),
                 Color.Yellow
             );
         }

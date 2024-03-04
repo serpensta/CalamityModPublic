@@ -1,13 +1,13 @@
-﻿using CalamityMod.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using CalamityMod.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using ReLogic.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -405,8 +405,8 @@ namespace CalamityMod
         public static Rectangle GetFrame(int itemID, int whoAmI, Texture2D texture = null)
         {
             texture ??= TextureAssets.Item[itemID].Value;
-            return Main.itemAnimations[itemID] == null 
-                ? texture.Frame() 
+            return Main.itemAnimations[itemID] == null
+                ? texture.Frame()
                 : Main.itemAnimations[itemID].GetFrame(texture, Main.itemFrameCounter[whoAmI]);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -418,8 +418,8 @@ namespace CalamityMod
         public static Rectangle GetFrame(int itemID, Texture2D texture = null)
         {
             texture ??= TextureAssets.Item[itemID].Value;
-            return Main.itemAnimations[itemID] == null 
-                ? texture.Frame() 
+            return Main.itemAnimations[itemID] == null
+                ? texture.Frame()
                 : Main.itemAnimations[itemID].GetFrame(texture);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -859,13 +859,6 @@ namespace CalamityMod
                 drawCall.Invoke(offset, aberrationColor);
             }
         }
-
-        /// <summary>
-        /// Sets the current render target to the provided one.
-        /// </summary>
-        /// <param name="target">The render target to swap to</param>
-        /// <param name="flushColor">The color to clear the screen with. Transparent by default</param>
-        public static void SwapTo(this ManagedRenderTarget target, Color? flushColor = null) => SwapTo(target.Target, flushColor);
 
         /// <summary>
         /// Sets the current render target to the provided one.

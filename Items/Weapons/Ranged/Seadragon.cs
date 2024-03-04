@@ -1,9 +1,9 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System;
+using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -22,10 +22,10 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 60;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 90;
             Item.height = 38;
+            Item.damage = 60;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 5;
             Item.useAnimation = 5;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -71,7 +71,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Projectile.NewProjectile(source, newPos, newVel * 1.2f, ModContent.ProjectileType<SeaDragonRocket>(), rocketDamage, knockback, player.whoAmI);
                 SoundEngine.PlaySound(SoundID.Item109, player.Center);
             }
-            
+
             // Muzzle blasts are always directly in line with the gun's muzzle.
             if (muzzleBlast)
             {

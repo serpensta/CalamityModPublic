@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void AI()
         {
             int dustType = 171;
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.NextBool(3))
             {
                 dustType = 46;
             }
@@ -169,7 +169,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                 rotate = rotate.RotatedBy((double)((float)(i - (constant / 2 - 1)) * 6.28318548f / (float)constant), default) + Projectile.Center;
                 Vector2 faceDirection = rotate - Projectile.Center;
-                int dust = Dust.NewDust(rotate + faceDirection, 0, 0, 171, faceDirection.X, faceDirection.Y, 100, default, 0.5f);
+                int dust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.Venom, faceDirection.X, faceDirection.Y, 100, default, 0.5f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].noLight = true;
                 Main.dust[dust].velocity = faceDirection;

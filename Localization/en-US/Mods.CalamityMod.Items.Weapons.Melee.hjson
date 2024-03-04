@@ -12,9 +12,8 @@ AbyssBlade: {
 	DisplayName: Abyss Blade
 	Tooltip:
 		'''
-		Fires short-range tridents
-		Hitting enemies will inflict the crush depth debuff
-		The lower the enemies' defense, the more damage they take from this debuff
+		Tosses a spinning abyssal sword that slices through enemies and releases water energy upon hitting a tile
+		The sword will fly towards enemies after a ricochet, dealing 2x damage
 		'''
 }
 
@@ -85,7 +84,7 @@ ArkoftheCosmos: {
 		<right> to snip out the scissor blades in front of you
 		Hitting an enemy with it will parry them, granting you brief invulnerability
 		You can parry projectiles to make them deal 160 less damage for a short period
-		Parrying anything will empower the next 10 swings of the sword
+		Parrying anything will empower the next 15 swings of the sword
 		'''
 	BlastInfo:
 		'''
@@ -170,7 +169,7 @@ BansheeHook: {
 
 Basher: {
 	DisplayName: Basher
-	Tooltip: Inflicts irradiated on enemy hits
+	Tooltip: Swings a rotten club that poisons and irradiates enemies on hit
 }
 
 BladecrestOathsword: {
@@ -190,7 +189,7 @@ Brimlance: {
 
 Brimlash: {
 	DisplayName: Brimlash
-	Tooltip: Fires a brimstone bolt that explodes into more bolts on death
+	Tooltip: Fires a brimstone bolt that explodes into more bolts on hit
 }
 
 BrimstoneSword: {
@@ -247,7 +246,19 @@ TaintedBlade: {
 
 CelestialClaymore: {
 	DisplayName: Celestial Claymore
-	Tooltip: Spawns cosmic energy flames near the player that generate large explosions
+	Tooltip: Spawns cosmic energy stars near the cursor that inflict several debuffs
+}
+
+ChronomancersScythe: {
+	DisplayName: Chronomancer's Scythe
+	Tooltip:
+		'''
+		Rapidly fires icicles
+		Press <right> to swing the scythe around you creating a clock pattern of homing icicles
+		Direct hits with the scythe have a chance to spawn clocks
+		Collecting the clocks increases movement speed and acceleration by 5% for each clock collected
+		This stacks up to 3 times and each level wears off after 5 seconds
+		'''
 }
 
 ClamCrusher: {
@@ -277,8 +288,9 @@ CosmicShiv: {
 	DisplayName: Cosmic Shiv
 	Tooltip:
 		'''
-		Fires a cosmic beam that homes in on enemies
-		Upon hitting an enemy, a barrage of offscreen objects home in on the enemy as well as raining stars
+		Fires a cosmic star that homes in on enemies
+		Upon hitting an enemy, a barrage of blades will persistently strike
+		Landing more stars causes more blades to strike
 		'''
 }
 
@@ -293,7 +305,7 @@ CrescentMoon: {
 
 DarklightGreatsword: {
 	DisplayName: Darklight Greatsword
-	Tooltip: Fires darklight blades that split on death
+	Tooltip: Fires darklight blades that split on impact
 }
 
 DeathsAscension: {
@@ -309,8 +321,8 @@ DepthCrusher: {
 	DisplayName: Depth Crusher
 	Tooltip:
 		'''
-		Hitting enemies will inflict the Riptide debuff
-		Press <right> to use without hammering down walls
+		Tosses a heavy abyssal crusher that releases water energy upon hitting a tile
+		The crusher will ricochet off of tiles and enemies
 		'''
 }
 
@@ -479,7 +491,7 @@ FaultLine: {
 
 FeralthornClaymore: {
 	DisplayName: Feralthorn Claymore
-	Tooltip: Summons thorns on enemy hits
+	Tooltip: Sprouts thorns from enemies on hit
 }
 
 FlarefrostBlade: {
@@ -610,7 +622,7 @@ GreatswordofJudgement: {
 	DisplayName: Greatsword of Judgement
 	Tooltip:
 		'''
-		Fires a white orb that emits white rain on death for a time
+		Fires a white orb that emits white rain from where it dissipates for a time
 		A pale white sword from a forgotten land
 		You can hear faint yet comforting whispers emanating from the blade
 		'No matter where you may be you are never alone
@@ -685,7 +697,7 @@ Lacerator: {
 	TooltipGFB: May be a viable weapon against DoG...
 }
 
-LifefruitScythe: {
+LifehuntScythe: {
 	DisplayName: Lifehunt Scythe
 	Tooltip: Heals you on hit and shoots an energy scythe
 }
@@ -782,8 +794,8 @@ NeptunesBounty: {
 	DisplayName: Neptune's Bounty
 	Tooltip:
 		'''
-		Fires a trident that rains additional tridents as it travels
-		Hitting enemies will inflict the crush depth debuff
+		Tosses a spinning abyssal sword which constantly sprays water energy
+		Once the blade begins falling, it will redirect itself towards enemies with increased velocity and 2x damage
 		'''
 }
 
@@ -831,22 +843,11 @@ Omniblade: {
 	Tooltip: An ancient blade forged by the legendary Omnir
 }
 
-Oracle: {
-	DisplayName: The Oracle
-	Tooltip:
-		'''
-		Emits an aura of red lightning which charges up when hitting enemies
-		Fires auric orbs when supercharged
-		An exceptionally agile yoyo
-		'Gaze into the past, the present, the future... and the circumstances of your inevitable demise'
-		'''
-}
-
 Orderbringer: {
 	DisplayName: Orderbringer
 	Tooltip:
 		'''
-		Fires a rainbow blade that emits rainbow rain on death for a time
+		Fires a rainbow blade that emits rainbow rain from where it dissipated for a time
 		A pale white sword from a forgotten land
 		You can hear faint yet comforting whispers emanating from the blade
 		'No matter where you may be you are never alone
@@ -884,6 +885,7 @@ PhotonRipper: {
 		'''
 		Projects a directed stream of hardlight teeth at ultra high velocity
 		This weapon and its projectiles function as a chainsaw
+		Press <right> to use without chopping down trees
 		'''
 }
 
@@ -987,7 +989,7 @@ SausageMaker: {
 
 ScourgeoftheCosmos: {
 	DisplayName: Scourge of the Cosmos
-	Tooltip: Throws a bouncing cosmic scourge that emits tiny homing cosmic scourges on death and tile hits
+	Tooltip: Throws a bouncing cosmic scourge that emits tiny homing cosmic scourges on enemy and tile hits
 }
 
 SeashineSword: {
@@ -1084,7 +1086,7 @@ StormRuler: {
 	DisplayName: Storm Ruler
 	Tooltip:
 		'''
-		Fires beams that generate tornadoes on death
+		Fires beams that generate tornadoes where they strike
 		Tornadoes suck enemies in
 		'Only a storm can fell a greatwood'
 		'''
@@ -1192,6 +1194,20 @@ TheBurningSky: {
 		'''
 }
 
+TheDarkMaster: {
+	DisplayName: The Dark Master
+	Tooltip:
+		'''
+		Fires red echo slash projectiles at full health
+		Projectile damage increases for every point of HP above 400
+		Press <right> to spawn three shadow clones in a Delta formation
+		The clones will mirror your sword swings and release projectiles
+		The clones will always fire projectiles regardless of your own HP
+		The clones may only exist while holding this weapon
+		'The blade by which the shadows levy their foes with a terrible fate'
+		'''
+}
+
 TheEnforcer: {
 	DisplayName: The Enforcer
 	Tooltip: Spawns essence flames on hit
@@ -1236,6 +1252,17 @@ TheObliterator: {
 		'''
 		Ruins nearby enemies with death lasers
 		An exceptionally agile yoyo
+		'''
+}
+
+TheOracle: {
+	DisplayName: The Oracle
+	Tooltip:
+		'''
+		Emits an aura of red lightning which charges up when hitting enemies
+		Fires auric orbs when supercharged
+		An exceptionally agile yoyo
+		'Gaze into the past, the present, the future... and the circumstances of your inevitable demise'
 		'''
 }
 
@@ -1314,7 +1341,11 @@ Tumbleweed: {
 
 TyphonsGreed: {
 	DisplayName: Typhon's Greed
-	Tooltip: Summons water spirits while in use
+	Tooltip:
+		'''
+		Summons water spirits while in use
+		These water spirits will home in on enemies after traveling towards the player
+		'''
 }
 
 BlightedCleaver: {

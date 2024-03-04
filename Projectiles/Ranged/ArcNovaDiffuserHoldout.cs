@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -29,8 +29,6 @@ namespace CalamityMod.Projectiles.Ranged
         private ref float ShootRecoilTimer => ref Projectile.ai[2]; // Dual functions for rapid fire shooting cooldown and recoil
         private bool ChargeLV1 => CurrentChargingFrames >= ArcNovaDiffuser.Charge1Frames;
         private bool ChargeLV2 => CurrentChargingFrames >= ArcNovaDiffuser.Charge2Frames;
-
-        private bool OwnerCanShoot => Owner.channel && !Owner.noItems && !Owner.CCed;
 
         public override void SetDefaults()
         {
@@ -63,7 +61,7 @@ namespace CalamityMod.Projectiles.Ranged
                 ChargeSound.Position = Projectile.Center;
 
             // Fire if the owner stops channeling or otherwise cannot use the weapon.
-            if (!OwnerCanShoot)
+            if (Owner.CantUseHoldout())
             {
                 // Big Shot mode
                 if (ChargeLV2)
@@ -81,9 +79,9 @@ namespace CalamityMod.Projectiles.Ranged
                         float charge2KB = Projectile.knockBack * 3f;
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), tipPosition, shootVelocity, ModContent.ProjectileType<NovaChargedShot>(), charge2Damage, charge2KB, Projectile.owner);
                         Owner.Calamity().GeneralScreenShakePower = 6.5f;
-                        for (int i = 0; i <= 20; i++)
+                        for (int i = 0; i <= 25; i++)
                         {
-                            Dust dust = Dust.NewDustPerfect(tipPosition, 107, shootVelocity.RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.2f, 1.2f), 0, default, Main.rand.NextFloat(1.5f, 2.3f));
+                            Dust dust = Dust.NewDustPerfect(tipPosition - Projectile.velocity * 15, 107, shootVelocity.RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.2f, 1.2f), 0, default, Main.rand.NextFloat(1f, 2.3f));
                             dust.noGravity = true;
                         }
 
@@ -113,9 +111,9 @@ namespace CalamityMod.Projectiles.Ranged
                         Vector2 shootVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * BulletSpeed;
                         Vector2 fireVec = shootVelocity.RotatedByRandom(MathHelper.ToRadians(2f));
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), tipPosition, fireVec, ModContent.ProjectileType<NovaShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                        for (int i = 0; i <= 3; i++)
+                        for (int i = 0; i <= 4; i++)
                         {
-                            Dust dust = Dust.NewDustPerfect(tipPosition, 107, shootVelocity.RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(1.3f, 1.7f));
+                            Dust dust = Dust.NewDustPerfect(tipPosition - Projectile.velocity * 15, 107, shootVelocity.RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.8f, 1.8f));
                             dust.noGravity = true;
                         }
 
@@ -123,7 +121,7 @@ namespace CalamityMod.Projectiles.Ranged
                         ShootRecoilTimer = 16f;
                         Projectile.netSpam = 0;
                         Projectile.netUpdate = true;
-                    } 
+                    }
                 }
                 // Retracting any remaining recoil
                 else if (ShootRecoilTimer > 0)
@@ -178,7 +176,7 @@ namespace CalamityMod.Projectiles.Ranged
                     float particleScale = MathHelper.Clamp(CurrentChargingFrames, 0f, ArcNovaDiffuser.Charge2Frames);
                     for (int i = 0; i < (ChargeLV2 ? 4 : ChargeLV1 ? 3 : 2); i++)
                     {
-                        SparkParticle spark2 = new SparkParticle((tipPosition -Projectile.velocity * 4) + Main.rand.NextVector2Circular(12, 12), -Projectile.velocity * Main.rand.NextFloat(16.1f, 30.8f), false, Main.rand.Next(2, 7), Main.rand.NextFloat(particleScale / 350f, particleScale / 270f), Main.rand.NextBool(4) ? Color.Chartreuse : Color.Lime);
+                        SparkParticle spark2 = new SparkParticle((tipPosition - Projectile.velocity * 4) + Main.rand.NextVector2Circular(12, 12), -Projectile.velocity * Main.rand.NextFloat(16.1f, 30.8f), false, Main.rand.Next(2, 7), Main.rand.NextFloat(particleScale / 350f, particleScale / 270f), Main.rand.NextBool(4) ? Color.Chartreuse : Color.Lime);
                         GeneralParticleHandler.SpawnParticle(spark2);
                     }
                     Particle orb = new GenericBloom(tipPosition, Projectile.velocity, Color.Lime, particleScale / 270f, 2, false);
@@ -237,7 +235,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             // Rumble (only while channeling)
             float rumble = MathHelper.Clamp(CurrentChargingFrames, 0f, ArcNovaDiffuser.Charge2Frames);
-            if (OwnerCanShoot)
+            if (!Owner.CantUseHoldout())
                 Projectile.position += Main.rand.NextVector2Circular(rumble / 70f, rumble / 70f);
         }
 

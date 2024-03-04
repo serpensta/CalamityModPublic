@@ -1,5 +1,5 @@
-﻿using CalamityMod.Projectiles.Magic;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Projectiles.Magic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -18,11 +18,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 50;
+            Item.height = 64;
             Item.damage = 40;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 16;
-            Item.width = 50;
-            Item.height = 64;
             Item.useTime = Item.useAnimation = 27;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			int cloudAmt = Main.rand.Next(3, 5 + 1);
+            int cloudAmt = Main.rand.Next(3, 5 + 1);
             for (int i = 0; i < cloudAmt; i++)
             {
                 Vector2 velocityReal = velocity * Main.rand.NextFloat(0.9f, 1.1f);

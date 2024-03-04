@@ -11,11 +11,11 @@ namespace CalamityMod.Items.Weapons.Magic
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()
         {
+            Item.width = 42;
+            Item.height = 20;
             Item.damage = 76;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 4;
-            Item.width = 42;
-            Item.height = 20;
             Item.useTime = 7;
             Item.useAnimation = 7;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -31,11 +31,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override Vector2? HoldoutOffset() => new Vector2(-5, 0);
 
-		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-		{
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
             velocity.X += (float)Main.rand.Next(-15, 16) * 0.05f;
             velocity.Y += (float)Main.rand.Next(-15, 16) * 0.05f;
-		}
+        }
 
         public override void AddRecipes()
         {

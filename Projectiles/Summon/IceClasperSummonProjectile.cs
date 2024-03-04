@@ -23,6 +23,7 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.width = Projectile.height = 28;
 
             Projectile.friendly = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }
 
@@ -32,7 +33,7 @@ namespace CalamityMod.Projectiles.Summon
 
             if (!Main.dedServ)
             {
-                Dust trailDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 172, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 1.5f);
+                Dust trailDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.DungeonWater, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 1.5f);
                 trailDust.noGravity = true;
             }
         }

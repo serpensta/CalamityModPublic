@@ -1,25 +1,25 @@
-﻿using CalamityMod.Events;
+﻿using CalamityMod.CalPlayer;
+using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.CalPlayer;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
     public class KingSlimeJewel : ModNPC
     {
-        private const int BoltShootGateValue = 75;
-        private const int BoltShootGateValue_Death = 60;
+        private const int BoltShootGateValue = 60;
+        private const int BoltShootGateValue_Death = 75;
         private const int BoltShootGateValue_BossRush = 45;
         private const float LightTelegraphDuration = 45f;
 
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true }; 
+            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
         }
 
@@ -32,8 +32,12 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.height = 22;
             NPC.defense = 10;
             NPC.DR_NERD(0.1f);
+
             NPC.lifeMax = 140;
-            NPC.knockBackResist = 0f;
+            double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+            NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
+
+            NPC.knockBackResist = 0.8f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.canGhostHeal = false;
@@ -62,7 +66,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             NPC.TargetClosest(true);
 
-            float velocity = 2f;
+            float velocity = 5f;
             float acceleration = 0.1f;
 
             if (NPC.position.Y > Main.player[NPC.target].position.Y - 350f)
@@ -75,7 +79,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 if (NPC.velocity.Y > velocity)
                     NPC.velocity.Y = velocity;
             }
-            else if (NPC.position.Y < Main.player[NPC.target].position.Y - 400f)
+            else if (NPC.position.Y < Main.player[NPC.target].position.Y - 500f)
             {
                 if (NPC.velocity.Y < 0f)
                     NPC.velocity.Y *= 0.98f;
@@ -119,7 +123,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 Vector2 projVector = new Vector2(xDist, yDist);
                 float projLength = projVector.Length();
 
-                float speed = 10f;
+                float speed = Main.masterMode ? 12f : 10f;
                 int type = ModContent.ProjectileType<JewelProjectile>();
 
                 projLength = speed / projLength;
@@ -132,7 +136,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 {
                     Vector2 dustVel = projVector;
                     dustVel.Normalize();
-                    int ruby = Dust.NewDust(NPC.Center, NPC.width, NPC.height, 90, dustVel.X, dustVel.Y, 100, default, 2f);
+                    int ruby = Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.GemRuby, dustVel.X, dustVel.Y, 100, default, 2f);
                     Main.dust[ruby].velocity *= 1.5f;
                     Main.dust[ruby].noGravity = true;
                     if (Main.rand.NextBool())
@@ -149,8 +153,8 @@ namespace CalamityMod.NPCs.NormalNPCs
                     int damage = NPC.GetProjectileDamage(type);
                     if (CalamityWorld.death || BossRushEvent.BossRushActive)
                     {
-                        int numProj = 3;
-                        float rotation = MathHelper.ToRadians(9);
+                        int numProj = 5;
+                        float rotation = MathHelper.ToRadians(12);
                         for (int i = 0; i < numProj; i++)
                         {
                             Vector2 perturbedSpeed = projVector.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
@@ -180,7 +184,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-            Dust.NewDust(NPC.position, NPC.width, NPC.height, 90, hit.HitDirection, -1f, 0, default, 1f);
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GemRuby, hit.HitDirection, -1f, 0, default, 1f);
             if (NPC.life <= 0)
             {
                 NPC.position.X = NPC.position.X + (NPC.width / 2);
@@ -191,7 +195,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 2; i++)
                 {
-                    int rubyDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 90, 0f, 0f, 100, default, 2f);
+                    int rubyDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemRuby, 0f, 0f, 100, default, 2f);
                     Main.dust[rubyDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -201,10 +205,10 @@ namespace CalamityMod.NPCs.NormalNPCs
                 }
                 for (int j = 0; j < 10; j++)
                 {
-                    int rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 90, 0f, 0f, 100, default, 3f);
+                    int rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemRuby, 0f, 0f, 100, default, 3f);
                     Main.dust[rubyDust2].noGravity = true;
                     Main.dust[rubyDust2].velocity *= 5f;
-                    rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 90, 0f, 0f, 100, default, 2f);
+                    rubyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemRuby, 0f, 0f, 100, default, 2f);
                     Main.dust[rubyDust2].velocity *= 2f;
                 }
             }

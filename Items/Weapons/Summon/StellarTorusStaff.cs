@@ -23,14 +23,14 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
+            Item.width = 42;
+            Item.height = 42;
             Item.damage = 185;
             Item.useTime = Item.useAnimation = 30;
             Item.knockBack = 4f;
             Item.mana = 10;
             Item.shoot = ModContent.ProjectileType<StellarTorusSummon>();
 
-            Item.width = 42;
-            Item.height = 42;
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.Calamity().donorItem = true;
@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Summon
 
             if (Main.projectile.IndexInRange(minion))
                 Main.projectile[minion].originalDamage = Item.OriginalDamage;
-            
+
             return false;
         }
 

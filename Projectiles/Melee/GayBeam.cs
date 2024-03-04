@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Buffs.DamageOverTime;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -235,7 +235,7 @@ namespace CalamityMod.Projectiles.Melee
 
             if (Main.rand.NextBool())
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 267, 0f, 0f, alpha, color, 1.5f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowMk2, 0f, 0f, alpha, color, 1.5f);
                 Main.dust[dust].noGravity = true;
             }
         }
@@ -408,15 +408,15 @@ namespace CalamityMod.Projectiles.Melee
 
             for (int d = 0; d < 3; d++)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 267, 0f, 0f, alpha, color, 1.5f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowMk2, 0f, 0f, alpha, color, 1.5f);
                 Main.dust[dust].noGravity = true;
             }
             for (int d = 0; d < 30; d++)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 267, 0f, 0f, alpha, color, 2.5f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowMk2, 0f, 0f, alpha, color, 2.5f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 3f;
-                dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 267, 0f, 0f, alpha, color, 1.5f);
+                dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowMk2, 0f, 0f, alpha, color, 1.5f);
                 Main.dust[dust].velocity *= 2f;
                 Main.dust[dust].noGravity = true;
             }

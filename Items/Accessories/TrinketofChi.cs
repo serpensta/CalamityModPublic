@@ -1,8 +1,8 @@
-﻿using CalamityMod.CalPlayer;
+﻿using CalamityMod.Buffs.StatBuffs;
+using CalamityMod.CalPlayer;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-using CalamityMod.Buffs.StatBuffs;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {

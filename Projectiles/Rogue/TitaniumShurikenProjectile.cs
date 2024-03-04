@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items.Weapons.Rogue;
+﻿using System;
+using CalamityMod.Items.Weapons.Rogue;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -26,13 +26,13 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.width = 34;
             Projectile.height = 34;
             Projectile.friendly = true;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 3;
             Projectile.aiStyle = ProjAIStyleID.ThrownProjectile;
             Projectile.timeLeft = 600;
             AIType = ProjectileID.ThrowingKnife;
             Projectile.DamageType = RogueDamageClass.Instance;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 20;
+            Projectile.localNPCHitCooldown = 30;
         }
 
         public override void AI()

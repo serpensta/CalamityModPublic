@@ -1,16 +1,16 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.IO;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
+using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using static CalamityMod.CalamityUtils;
-using Terraria.Audio;
-using CalamityMod.Sounds;
+using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -94,14 +94,14 @@ namespace CalamityMod.Projectiles.Melee
 
             if (Owner.whoAmI == Main.myPlayer && SwingRatio() > 0.5f && HasFired == 0f && Charge > 0)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Owner.Center + direction * 30f, Projectile.velocity * 2f, ProjectileType<TrueAncientBeam>(), (int)(Projectile.damage * TrueArkoftheAncients.beamDamageMultiplier), 2f, Owner.whoAmI) ;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Owner.Center + direction * 30f, Projectile.velocity * 2f, ProjectileType<TrueAncientBeam>(), (int)(Projectile.damage * TrueArkoftheAncients.beamDamageMultiplier), 2f, Owner.whoAmI);
                 HasFired = 1f;
             }
 
 
             //Make the owner look like theyre holding the sword bla bla
             Owner.heldProj = Projectile.whoAmI;
-            Owner.direction = Math.Sign(Projectile.velocity.X);
+            Owner.ChangeDir(Math.Sign(Projectile.velocity.X));
             Owner.itemRotation = Projectile.rotation;
             if (Owner.direction != 1)
             {
@@ -109,7 +109,7 @@ namespace CalamityMod.Projectiles.Melee
             }
             Owner.itemRotation = MathHelper.WrapAngle(Owner.itemRotation);
 
-            if (Charge > 0 && Main.rand.Next(2) == 0)
+            if (Charge > 0 && Main.rand.NextBool(2))
             {
                 Vector2 particleOrigin = Projectile.Center + Projectile.rotation.ToRotationVector2() * 85 * Projectile.scale;
                 Vector2 particleSpeed = Projectile.rotation.ToRotationVector2().RotatedByRandom(MathHelper.PiOver4) * Main.rand.NextFloat(1.2f, 2f);
@@ -130,7 +130,7 @@ namespace CalamityMod.Projectiles.Melee
 
             float drawAngle = Projectile.rotation;
             float drawRotation = Projectile.rotation + MathHelper.PiOver4 + extraAngle;
-            Vector2 drawOrigin = new Vector2(Owner.direction < 0 ? sword.Width : 0f , sword.Height);
+            Vector2 drawOrigin = new Vector2(Owner.direction < 0 ? sword.Width : 0f, sword.Height);
             Vector2 drawOffset = Owner.Center + drawAngle.ToRotationVector2() * 10f - Main.screenPosition;
 
             if (CalamityConfig.Instance.Afterimages && Timer > ProjectileID.Sets.TrailCacheLength[Projectile.type])
@@ -155,7 +155,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 float opacity = (float)Math.Sin(Timer / MaxTime * MathHelper.Pi);
                 float rotation = (-MathHelper.PiOver4 * 0.5f + MathHelper.PiOver4 * 0.5f * Timer / MaxTime) * SwingDirection;
-                Color smearColor = Main.hslToRgb(((Timer - MaxTime * 0.5f ) / (MaxTime * 0.5f)) * 0.7f, 1, 0.6f);
+                Color smearColor = Main.hslToRgb(((Timer - MaxTime * 0.5f) / (MaxTime * 0.5f)) * 0.7f, 1, 0.6f);
 
                 Main.EntitySpriteDraw(smear, Owner.Center - Main.screenPosition, null, smearColor * 0.5f * opacity, Projectile.velocity.ToRotation() + MathHelper.Pi + rotation, smear.Size() / 2f, Projectile.scale * 1.4f, SpriteEffects.None, 0);
 

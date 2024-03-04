@@ -1,6 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Magic
 {
     public class ParticleBeamofDoom : ModProjectile, ILocalizedModType
@@ -29,7 +31,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 Vector2 projPos = Projectile.position;
                 projPos -= Projectile.velocity * 0.25f;
-                int particleDust = Dust.NewDust(projPos, 1, 1, 206, 0f, 0f, 0, default, 2.5f);
+                int particleDust = Dust.NewDust(projPos, 1, 1, DustID.UnusedWhiteBluePurple, 0f, 0f, 0, default, 2.5f);
                 Main.dust[particleDust].position = projPos;
                 Main.dust[particleDust].velocity *= 0.1f;
             }

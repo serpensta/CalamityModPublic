@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -25,14 +25,13 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.DamageType = DamageClass.Magic;
             Projectile.aiStyle = ProjAIStyleID.Nail;
             AIType = ProjectileID.NailFriendly;
-            Projectile.extraUpdates = 1;
         }
 
         public override void AI()
         {
             if (Main.rand.NextBool(6))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 61, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.GreenTorch, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
         }
 
@@ -49,7 +48,7 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.localNPCHitCooldown = 10;
             for (int i = 0; i < 15; i++)
             {
-                int greenDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 61, 0f, 0f, 100, default, 1.2f);
+                int greenDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GreenTorch, 0f, 0f, 100, default, 1.2f);
                 Main.dust[greenDust].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -59,10 +58,10 @@ namespace CalamityMod.Projectiles.Magic
             }
             for (int j = 0; j < 30; j++)
             {
-                int greenDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 61, 0f, 0f, 100, default, 1.7f);
+                int greenDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GreenTorch, 0f, 0f, 100, default, 1.7f);
                 Main.dust[greenDust2].noGravity = true;
                 Main.dust[greenDust2].velocity *= 5f;
-                greenDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 61, 0f, 0f, 100, default, 1f);
+                greenDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GreenTorch, 0f, 0f, 100, default, 1f);
                 Main.dust[greenDust2].velocity *= 2f;
             }
         }

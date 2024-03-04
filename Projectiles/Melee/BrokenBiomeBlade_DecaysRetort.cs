@@ -1,13 +1,13 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using System;
+using System.IO;
+using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.Audio;
 
 
 namespace CalamityMod.Projectiles.Melee
@@ -73,7 +73,7 @@ namespace CalamityMod.Projectiles.Melee
 
             //Make the owner look like theyre holding the sword bla bla
             Owner.heldProj = Projectile.whoAmI;
-            Owner.direction = Math.Sign(direction.X);
+            Owner.ChangeDir(Math.Sign(direction.X));
             Owner.itemRotation = direction.ToRotation();
             if (Owner.direction != 1)
             {

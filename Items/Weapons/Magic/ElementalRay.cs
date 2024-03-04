@@ -18,11 +18,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 62;
+            Item.height = 62;
             Item.damage = 70;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 18;
-            Item.width = 62;
-            Item.height = 62;
             Item.useTime = 4;
             Item.useAnimation = 16;
             Item.reuseDelay = 14;
@@ -34,11 +34,11 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.rare = ItemRarityID.Purple;
             Item.UseSound = SoundID.Item60;
             Item.autoReuse = true;
-            Item.shoot = 1;
+            Item.shoot = ProjectileID.WoodenArrowFriendly;
             Item.shootSpeed = 6f;
         }
 
-        
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float offsetAngle = MathHelper.TwoPi * player.itemAnimation / player.itemAnimationMax;

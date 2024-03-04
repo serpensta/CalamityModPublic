@@ -63,7 +63,7 @@ namespace CalamityMod
             //
             // PART 1: General Immunity Status and applying all data contained in EnemyStats.DebuffImmunities
             //
-            
+
             // Also, can I just say that I hate Sorted Dictionaries and Tuples and want to make something explode? -Ben
             // I mean you can but sorted dicts and dicts in general are pre great -Amber
             // Neither of you are free of sin. In porting, we are all brothers in damnation. -Ozzatron
@@ -343,6 +343,7 @@ namespace CalamityMod
                 { ModContent.NPCType<MorayEel>(), abyss },
                 { ModContent.NPCType<OarfishHead>(), abyss },
                 { ModContent.NPCType<OarfishBody>(), abyss },
+                { ModContent.NPCType<SlabCrab>(), abyss },
                 { ModContent.NPCType<OarfishTail>(), abyss },
                 { ModContent.NPCType<ToxicMinnow>(), abyss },
                 { ModContent.NPCType<Viperfish>(), abyss },

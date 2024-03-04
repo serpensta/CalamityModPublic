@@ -12,12 +12,17 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class MolecularManipulator : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
-            Item.damage = 580;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 56;
             Item.height = 34;
+            Item.damage = 580;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -46,7 +51,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<NullificationRifle>().
+                AddIngredient<NullificationPistol>().
                 AddIngredient<DarkPlasma>(2).
                 AddIngredient<CoreofCalamity>().
                 AddTile(TileID.LunarCraftingStation).

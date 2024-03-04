@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Rogue;
+﻿using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,12 +12,12 @@ namespace CalamityMod.Items.Weapons.Rogue
         public const int BaseDamage = 16;
         public override void SetStaticDefaults()
         {
-                   }
+        }
         public override void SetDefaults()
         {
-            Item.damage = BaseDamage;
             Item.width = 26;
             Item.height = 26;
+            Item.damage = BaseDamage;
             Item.useTime = 23;
             Item.useAnimation = 23;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -35,7 +35,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         public override float StealthVelocityMultiplier => 2f;
 
         public override void ModifyStatsExtra(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-		{
+        {
             if (Main.bloodMoon)
             {
                 knockback *= 3f;
@@ -44,18 +44,18 @@ namespace CalamityMod.Items.Weapons.Rogue
             {
                 velocity *= Main.rand.NextFloat(0.85f, 1.3f);
                 velocity = velocity.RotatedByRandom(MathHelper.ToRadians(10f)); //random spread
-			}
-			else
-			{
-				type = ModContent.ProjectileType<BouncingEyeballProjectileStealthStrike>();
-			}
-		}
+            }
+            else
+            {
+                type = ModContent.ProjectileType<BouncingEyeballProjectileStealthStrike>();
+            }
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
-			if (p.WithinBounds(Main.maxProjectiles) && player.Calamity().StealthStrikeAvailable())
-				Main.projectile[p].Calamity().stealthStrike = true;
+            int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+            if (p.WithinBounds(Main.maxProjectiles) && player.Calamity().StealthStrikeAvailable())
+                Main.projectile[p].Calamity().stealthStrike = true;
             return false;
         }
     }

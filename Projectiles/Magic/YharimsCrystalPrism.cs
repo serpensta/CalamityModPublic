@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -84,7 +84,7 @@ namespace CalamityMod.Projectiles.Magic
 
                 // CheckMana returns true if the mana cost can be paid. If mana isn't consumed this frame, the CheckMana short-circuits out of being evaluated.
                 bool allowContinuedUse = !ShouldConsumeMana() || player.CheckMana(player.ActiveItem(), -1, true, false);
-                bool crystalStillInUse = player.channel && allowContinuedUse && !player.noItems && !player.CCed;
+                bool crystalStillInUse = !player.CantUseHoldout() && allowContinuedUse;
 
                 // The beams are only projected once (on frame 1).
                 if (crystalStillInUse && Projectile.ai[0] == 1f)
@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles.Magic
                 return true;
             }
             bool consume = Projectile.ai[0] == Projectile.ai[1];
-            if(consume)
+            if (consume)
             {
                 Projectile.localAI[0] = MathHelper.Clamp(Projectile.localAI[0] - 1f, MinManaConsumptionDelay, MaxManaConsumptionDelay);
                 Projectile.ai[1] += Projectile.localAI[0];

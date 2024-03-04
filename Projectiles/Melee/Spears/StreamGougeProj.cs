@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;
@@ -91,15 +91,14 @@ namespace CalamityMod.Projectiles.Melee.Spears
 
         public void DeterminePlayerVariables()
         {
-            bool spearStillInUse = Owner.channel && !Owner.noItems && !Owner.CCed;
-            Owner.direction = (Math.Cos(Projectile.rotation - MathHelper.Pi + MathHelper.PiOver4) > 0f).ToDirectionInt();
+            Owner.ChangeDir((Math.Cos(Projectile.rotation - MathHelper.Pi + MathHelper.PiOver4) > 0f).ToDirectionInt());
             Owner.heldProj = Projectile.whoAmI;
             Owner.itemTime = Owner.itemAnimation = 2;
             Owner.itemRotation = CalamityUtils.WrapAngle90Degrees(MathHelper.WrapAngle(Projectile.rotation - MathHelper.Pi + MathHelper.PiOver4));
             Projectile.Center = Owner.Center;
 
             // Die if the spear is no longer in use.
-            if (!spearStillInUse)
+            if (Owner.CantUseHoldout())
                 Projectile.Kill();
         }
 

@@ -1,11 +1,11 @@
-﻿using CalamityMod.Projectiles.Ranged;
+﻿using System;
+using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
@@ -124,7 +124,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+            player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
             float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
 
             Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 7f;
@@ -136,7 +136,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void UseItemFrame(Player player)
         {
-            player.direction = Math.Sign((player.Calamity().mouseWorld - player.Center).X);
+            player.ChangeDir(Math.Sign((player.Calamity().mouseWorld - player.Center).X));
 
             float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
             float rotation = (player.Center - player.Calamity().mouseWorld).ToRotation() * player.gravDir + MathHelper.PiOver2;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Healing
 {
     public class ManaPolarizerHealOrb : ModProjectile, ILocalizedModType
@@ -22,7 +24,7 @@ namespace CalamityMod.Projectiles.Healing
         public override void AI()
         {
             Projectile.HealingProjectile((int)Projectile.ai[1], (int)Projectile.ai[0], 3f, 15f);
-            int dusty = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 175, 0f, 0f, 100, default, 1.3f);
+            int dusty = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.SpectreStaff, 0f, 0f, 100, default, 1.3f);
             Dust dust = Main.dust[dusty];
             dust.noGravity = true;
             dust.position.X -= Projectile.velocity.X * 0.2f;

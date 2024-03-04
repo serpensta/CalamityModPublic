@@ -829,7 +829,7 @@ namespace CalamityMod
         internal static void SetUpCandelabra(this ModTile mt, int itemDropID, bool lavaImmune = false)
         {
             mt.RegisterItemDrop(itemDropID);
-            
+
             Main.tileLighted[mt.Type] = true;
             Main.tileFrameImportant[mt.Type] = true;
             Main.tileLavaDeath[mt.Type] = !lavaImmune;
@@ -878,7 +878,7 @@ namespace CalamityMod
             mt.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
             if (autoMapEntry)
                 mt.AddMapEntry(new Color(253, 221, 3), Language.GetText("ItemName.Candle"));
-            
+
             mt.AdjTiles = new int[] { TileID.Candles };
         }
 
@@ -1256,9 +1256,9 @@ namespace CalamityMod
             TileObjectData.newTile.StyleLineSkip = 2;
             TileObjectData.newTile.DrawYOffset = -2;
             TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-    		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
-	    	TileObjectData.newAlternate.DrawYOffset = -10;
-		    TileObjectData.addAlternate(0);
+            TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
+            TileObjectData.newAlternate.DrawYOffset = -10;
+            TileObjectData.addAlternate(0);
             TileObjectData.addTile(mt.Type);
 
             // All hanging lanterns count as light sources.
@@ -1292,7 +1292,7 @@ namespace CalamityMod
         internal static void SetUpPiano(this ModTile mt, int itemDropID, bool lavaImmune = false, bool solidTop = true)
         {
             mt.RegisterItemDrop(itemDropID);
-            
+
             Main.tileTable[mt.Type] = solidTop;
             Main.tileSolidTop[mt.Type] = solidTop;
             Main.tileLighted[mt.Type] = true;
@@ -1319,7 +1319,7 @@ namespace CalamityMod
         internal static void SetUpPlatform(this ModTile mt, int itemDropID, bool lavaImmune = false)
         {
             mt.RegisterItemDrop(itemDropID);
-            
+
             Main.tileLighted[mt.Type] = true;
             Main.tileFrameImportant[mt.Type] = true;
             Main.tileSolidTop[mt.Type] = true;
@@ -1528,9 +1528,10 @@ namespace CalamityMod
         internal static void SetUpTrophy(this ModTile mt)
         {
             // TODO -- how to force trophy drops correctly? they all have zero code in them
-            
+
             Main.tileFrameImportant[mt.Type] = true;
             Main.tileLavaDeath[mt.Type] = true;
+            Main.tileSpelunker[mt.Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
             TileObjectData.addTile(mt.Type);
             TileID.Sets.DisableSmartCursor[mt.Type] = true;
@@ -1578,6 +1579,7 @@ namespace CalamityMod
         {
             Main.tileFrameImportant[mt.Type] = true;
             Main.tileLavaDeath[mt.Type] = !lavaImmune;
+            Main.tileSpelunker[mt.Type] = true;
             Main.tileWaterDeath[mt.Type] = false;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
             TileObjectData.newTile.Width = 6;

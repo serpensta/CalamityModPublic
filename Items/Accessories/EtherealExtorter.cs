@@ -1,7 +1,7 @@
 ﻿using CalamityMod.CalPlayer;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Accessories
             CalamityPlayer modPlayer = player.Calamity();
             modPlayer.etherealExtorter = true;
             player.GetDamage<ThrowingDamageClass>() += 0.08f;
-            modPlayer.rogueStealthMax += 0.1f;
+            modPlayer.rogueStealthMax += 0.05f;
         }
     }
 }

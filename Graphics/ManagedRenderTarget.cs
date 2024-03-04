@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 
 namespace CalamityMod.Graphics
@@ -76,6 +76,13 @@ namespace CalamityMod.Graphics
             ShouldAutoDispose = shouldAutoDispose;
             RenderTargetManager.ManagedTargets.Add(this);
         }
+
+        /// <summary>
+        /// Sets the current render target to the provided one.
+        /// </summary>
+        /// <param name="target">The render target to swap to</param>
+        /// <param name="flushColor">The color to clear the screen with. Transparent by default</param>
+        public void SwapTo(Color? flushColor = null) => Target.SwapTo(flushColor);
 
         /// <summary>
         /// Automatically called by <see cref="RenderTargetManager"/>, do not call!

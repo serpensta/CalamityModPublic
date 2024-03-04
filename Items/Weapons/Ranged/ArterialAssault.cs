@@ -1,8 +1,8 @@
-﻿﻿using CalamityMod.Items.Materials;
+﻿using System;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -15,10 +15,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public override void SetDefaults()
         {
-            Item.damage = 110;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 44;
             Item.height = 100;
+            Item.damage = 110;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 3;
             Item.useAnimation = 15;
             Item.reuseDelay = 10;
@@ -79,7 +79,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             int shotArrow = Projectile.NewProjectile(source, realPlayerPos.X, realPlayerPos.Y, speedX4, speedY5, type, damage, knockback, player.whoAmI);
             Main.projectile[shotArrow].noDropItem = true;
             Main.projectile[shotArrow].tileCollide = false;
-            Main.projectile[shotArrow].timeLeft = (int)(Main.projectile[shotArrow].timeLeft * Main.projectile[shotArrow].MaxUpdates * 0.75f);
             CalamityGlobalProjectile cgp = Main.projectile[shotArrow].Calamity();
             cgp.allProjectilesHome = true;
             return false;

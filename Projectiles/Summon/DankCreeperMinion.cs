@@ -1,9 +1,9 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -49,7 +49,7 @@ namespace CalamityMod.Projectiles.Summon
                     Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
                     rotate = rotate.RotatedBy((double)((float)(i - (constant / 2 - 1)) * 6.28318548f / (float)constant), default) + Projectile.Center;
                     Vector2 faceDirection = rotate - Projectile.Center;
-                    int dust = Dust.NewDust(rotate + faceDirection, 0, 0, 14, faceDirection.X * 1.5f, faceDirection.Y * 1.5f, 100, default, 1.4f);
+                    int dust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.Demonite, faceDirection.X * 1.5f, faceDirection.Y * 1.5f, 100, default, 1.4f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].noLight = true;
                     Main.dust[dust].velocity = faceDirection;

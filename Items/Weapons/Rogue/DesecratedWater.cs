@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Rogue;
+﻿using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -13,9 +13,9 @@ namespace CalamityMod.Items.Weapons.Rogue
 
         public override void SetDefaults()
         {
-            Item.damage = BaseDamage;
             Item.width = 22;
             Item.height = 24;
+            Item.damage = BaseDamage;
             Item.useAnimation = 29;
             Item.useTime = 29;
             Item.noMelee = true;

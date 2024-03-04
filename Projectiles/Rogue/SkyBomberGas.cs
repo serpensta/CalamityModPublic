@@ -1,7 +1,7 @@
+﻿using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Dusts;
 using Terraria;
 using Terraria.ModLoader;
-using CalamityMod.Dusts;
-using CalamityMod.Buffs.StatDebuffs;
 
 namespace CalamityMod.Projectiles.Rogue
 {

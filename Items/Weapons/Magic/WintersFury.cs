@@ -1,7 +1,7 @@
-﻿using CalamityMod.Projectiles.Magic;
+﻿using System;
+using CalamityMod.Projectiles.Magic;
 using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -16,11 +16,11 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void SetDefaults()
         {
+            Item.width = 36;
+            Item.height = 40;
             Item.damage = 70;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 7;
-            Item.width = 36;
-            Item.height = 40;
             Item.useTime = 12;
             Item.useAnimation = 12;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Magic
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (Main.rand.Next(4) != 0)
+            if (!Main.rand.NextBool(4))
             {
                 Vector2 speed = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.Next(-15, 16)));
                 speed.Normalize();

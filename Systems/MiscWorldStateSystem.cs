@@ -108,7 +108,7 @@ namespace CalamityMod
                 downed.Add("dogName");
             if (bunnyName)
                 downed.Add("bunnyName");
-			#endregion
+            #endregion
 
             if (AcidRainEvent.HasTriedToSummonOldDuke)
                 downed.Add("spawnedBoomer");
@@ -163,7 +163,7 @@ namespace CalamityMod
             catName = downed.Contains("catName");
             dogName = downed.Contains("dogName");
             bunnyName = downed.Contains("bunnyName");
-			#endregion
+            #endregion
 
             AcidRainEvent.HasTriedToSummonOldDuke = downed.Contains("spawnedBoomer");
             AcidRainEvent.HasStartedAcidicDownpour = downed.Contains("startDownpour");

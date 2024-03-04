@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
+﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Rogue;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -157,7 +157,6 @@ namespace CalamityMod.Projectiles.Rogue
                                 Main.projectile[disk].idStaticNPCHitCooldown = Main.projectile[disk2].idStaticNPCHitCooldown = 8;
                                 Main.projectile[disk].usesIDStaticNPCImmunity = Main.projectile[disk2].usesIDStaticNPCImmunity = true;
                                 Main.projectile[disk].timeLeft = Main.projectile[disk2].timeLeft = 60;
-                                Main.projectile[disk].Calamity().CannotProc = Main.projectile[disk2].Calamity().CannotProc = true;
                             }
                         }
                     }
@@ -169,7 +168,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             if (Main.rand.NextBool(3))
             {
-                int rainbow = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 66, Projectile.direction * 2, 0f, 150, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1.3f);
+                int rainbow = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RainbowTorch, Projectile.direction * 2, 0f, 150, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1.3f);
                 Main.dust[rainbow].noGravity = true;
                 Main.dust[rainbow].velocity *= 0f;
             }

@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Dusts;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Dusts;
 
 namespace CalamityMod.Projectiles.Enemy
 {
@@ -111,6 +111,6 @@ namespace CalamityMod.Projectiles.Enemy
                 return;
 
             target.AddBuff(ModContent.BuffType<AstralInfectionDebuff>(), 45);
-		}
+        }
     }
 }

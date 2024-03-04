@@ -1,8 +1,8 @@
-﻿using CalamityMod.Tiles.Abyss;
+﻿using System;
+using CalamityMod.Tiles.Abyss;
 using CalamityMod.Tiles.AstralDesert;
 using CalamityMod.Tiles.SunkenSea;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -103,7 +103,7 @@ namespace CalamityMod.Projectiles.Typeless
             // If the sand hit a half brick, but was mostly going downwards (at a lower than 45 degree angle), then stack atop the half brick.
             if (placer.IsHalfBlock && proj.velocity.Y > 0f && Math.Abs(proj.velocity.Y) > Math.Abs(proj.velocity.X))
                 placer = Main.tile[p.X, --p.Y];
-            
+
             bool ValidTileBelow = true;
             bool SlopeTileBelow = false;
 
@@ -131,16 +131,16 @@ namespace CalamityMod.Projectiles.Typeless
                     if (PlacedBlock && SlopeTileBelow)
                     {
                         WorldGen.SlopeTile(p.X, p.Y + 1);
-						if (Main.netMode != NetmodeID.SinglePlayer)
-							NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 14, p.X, p.Y + 1);
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                            NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 14, p.X, p.Y + 1);
                     }
                     if (PlacedBlock && Main.netMode != NetmodeID.SinglePlayer)
-						NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, p.X, p.Y, SandBlockID);
+                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, p.X, p.Y, SandBlockID);
                 }
             }
             // Give the block back if you literally can't place it
             else
-                Item.NewItem(proj.GetSource_DropAsItem(), proj.position, proj.width, proj.height, SandItemID);            
+                Item.NewItem(proj.GetSource_DropAsItem(), proj.position, proj.width, proj.height, SandItemID);
         }
     }
 }

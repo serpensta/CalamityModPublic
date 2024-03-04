@@ -1,11 +1,11 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Summon;
+﻿using CalamityMod.Projectiles.Summon;
+using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Rarities;
 
 namespace CalamityMod.Items.Weapons.Summon
 {
@@ -36,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Summon
 
         // How long it takes for the cannon to fully cool off from the maximum heat value.
         public const int HeatDissipationTime = 180;
-        
+
         // This shouldn't be too high. If it is, the overdrive mode will be frustratingly inconsistent to use.
         public const float OverdriveProjectileAngularRandomness = 0.1f;
 
@@ -44,10 +44,10 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public override void SetDefaults()
         {
-            Item.damage = 200;
-            Item.mana = 10;
             Item.width = 40;
             Item.height = 38;
+            Item.damage = 200;
+            Item.mana = 10;
             Item.useTime = Item.useAnimation = 10;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;

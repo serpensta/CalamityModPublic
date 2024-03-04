@@ -1,11 +1,11 @@
 ﻿using CalamityMod.Buffs.Summon;
-using CalamityMod.Projectiles.Summon;
+using CalamityMod.CalPlayer.Dashes;
 using CalamityMod.Items.Materials;
+using CalamityMod.Items.Potions.Alcohol;
+using CalamityMod.Projectiles.Summon;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.CalPlayer.Dashes;
-using CalamityMod.Items.Potions.Alcohol;
 
 namespace CalamityMod.Items.Armor.Plaguebringer
 {
@@ -58,11 +58,10 @@ namespace CalamityMod.Items.Armor.Plaguebringer
                 }
                 if (player.ownedProjectileCounts[ModContent.ProjectileType<PlaguebringerSummon>()] < 1)
                 {
-                    int baseDamage = 80;
-                    if (player.Calamity().oldFashioned)
-                        baseDamage = CalamityUtils.CalcOldFashionedDamage(baseDamage);
-
+                    // 08DEC2023: Ozzatron: Plaguebringer armor dudes spawned with Old Fashioned active will retain their bonus damage indefinitely. Oops. Don't care.
+                    int baseDamage = player.ApplyArmorAccDamageBonusesTo(25);
                     var damage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(baseDamage);
+
                     var p = Projectile.NewProjectile(source, player.Center.X, player.Center.Y, 0f, -1f, ModContent.ProjectileType<PlaguebringerSummon>(), damage, 0f, player.whoAmI, 0f, 0f);
                     if (Main.projectile.IndexInRange(p))
                         Main.projectile[p].originalDamage = baseDamage;

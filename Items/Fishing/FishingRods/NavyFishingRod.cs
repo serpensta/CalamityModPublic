@@ -1,5 +1,5 @@
-﻿using CalamityMod.Items.Placeables;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.Typeless;
 using Terraria;
 using Terraria.ID;

@@ -1,10 +1,10 @@
-﻿using CalamityMod.BiomeManagers;
-using CalamityMod.Dusts;
+﻿using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Dusts;
 using CalamityMod.Items.Placeables.Banners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
@@ -29,7 +29,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.lifeMax = 220;
             NPC.defense = 5;
 
-            NPC.knockBackResist = 0f;
+            NPC.knockBackResist = 0.5f;
             AnimationType = NPCID.CorruptSlime;
             AIType = NPCID.ToxicSludge;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
@@ -46,6 +46,10 @@ namespace CalamityMod.NPCs.AcidRain
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AcidRainBiome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -53,9 +57,9 @@ namespace CalamityMod.NPCs.AcidRain
             int associatedNPCType = ModContent.NPCType<GammaSlime>(); //This exists so you're not locked out of getting an entry for Irradiated Slime if you skip the second tier
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.IrradiatedSlime")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.IrradiatedSlime")
             });
         }
 
@@ -73,6 +77,8 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void AI()
         {
+            NPC.damage = (NPC.velocity.Y == 0f || NPC.velocity.Length() < 3f) ? 0 : NPC.defDamage;
+
             Lighting.AddLight((int)((NPC.position.X + (float)(NPC.width / 2)) / 16f), (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f), 0.6f, 0.8f, 0.6f);
             if (Falling)
             {

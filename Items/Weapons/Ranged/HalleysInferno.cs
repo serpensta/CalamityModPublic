@@ -18,6 +18,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         public static readonly SoundStyle Hit = new("CalamityMod/Sounds/Item/HalleysInfernoHit") { Volume = 0.75f };
         public override void SetDefaults()
         {
+            Item.width = 84;
+            Item.height = 34;
             Item.damage = 444;
             Item.knockBack = 5.5f;
             Item.DamageType = DamageClass.Ranged;
@@ -33,8 +35,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.shootSpeed = 12f;
             Item.shoot = ModContent.ProjectileType<HalleysComet>();
 
-            Item.width = 84;
-            Item.height = 34;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.UseSound = Shoot;
@@ -46,6 +46,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override void ModifyWeaponCrit(Player player, ref float crit) => crit += 20;
 
         public override Vector2? HoldoutOffset() => new Vector2(-15, 0);
+
+        public override void HoldItem(Player player) => player.scope = true;
 
         public override bool CanConsumeAmmo(Item ammo, Player player) => Main.rand.Next(100) >= 50;
 

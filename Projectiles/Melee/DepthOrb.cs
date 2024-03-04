@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Melee
 {
     public class DepthOrb : ModProjectile, ILocalizedModType
@@ -19,7 +19,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.ignoreWater = true;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = 3;
             Projectile.extraUpdates = 1;
             Projectile.timeLeft = 75;
         }
@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Melee
         public override void AI()
         {
             Lighting.AddLight(Projectile.Center, 0f, 0f, 0.5f);
-            int waterDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 33, 0f, 0f, 100, default, 0.6f);
+            int waterDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.6f);
             Main.dust[waterDust].noGravity = true;
             Main.dust[waterDust].velocity *= 0.5f;
             Main.dust[waterDust].velocity += Projectile.velocity * 0.1f;
@@ -63,7 +63,7 @@ namespace CalamityMod.Projectiles.Melee
                 randoAdjust = rando3 / randoAdjust;
                 rando1 *= randoAdjust;
                 rando2 *= randoAdjust;
-                int killWaterDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 33, 0f, 0f, 100, default, 1.2f);
+                int killWaterDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 1.2f);
                 Dust dust = Main.dust[killWaterDust];
                 dust.noGravity = true;
                 dust.position.X = Projectile.Center.X;

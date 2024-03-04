@@ -51,7 +51,7 @@ namespace CalamityMod.Tiles.Abyss
         {
             Tile t = CalamityUtils.ParanoidTileRetrieval(i, j);
             Vector2 spawnPosition = new(i * 16f + 24f, j * 16f - 4f);
-            
+
             if (!Main.gamePaused && t.TileFrameX % 36 == 0 && t.TileFrameY % 36 == 0 && Collision.CanHitLine(spawnPosition, 1, 1, spawnPosition - Vector2.UnitY * 100f, 1, 1))
             {
                 float positionInterpolant = (i + j) * 0.041f % 1f;

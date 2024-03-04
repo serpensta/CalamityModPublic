@@ -47,7 +47,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Position = new Vector2(28f, 20f),
                 Scale = 0.65f,
@@ -81,15 +81,19 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPC.Calamity().VulnerableToElectricity = false;
             NPC.Calamity().VulnerableToWater = false;
             NPC.Calamity().VulnerableToHeat = false;
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Rain,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ThiccWaifu")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.ThiccWaifu")
             });
         }
 
@@ -129,6 +133,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_Hover()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
             int hoverTime = (int)MathHelper.Lerp(330f, 180f, 1f - lifeRatio);
             float hoverAcceleration = MathHelper.Lerp(0.2f, 0.425f, 1f - lifeRatio);
@@ -138,7 +145,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust cloudDust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 16);
+                    Dust cloudDust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Cloud);
                     cloudDust.velocity = Main.rand.NextVector2CircularEdge(4f, 4f);
                     cloudDust.velocity.Y /= 3f;
                     cloudDust.scale = Main.rand.NextFloat(1.15f, 1.35f);
@@ -190,6 +197,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_CloudTeleport()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int teleportFadeoutTime = 75;
             int teleportFadeinTime = 60;
 
@@ -202,7 +212,7 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                 if (Main.rand.NextFloat() < particleSpawnRate && !Main.dedServ)
                 {
-                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 16);
+                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Cloud);
 
                     if (Main.rand.NextBool(15) && Main.netMode != NetmodeID.Server)
                     {
@@ -229,7 +239,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 NPC.Opacity = fadeinCompletion;
 
                 if (Main.rand.NextFloat() < particleSpawnRate && !Main.dedServ)
-                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, 16);
+                    Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Cloud);
             }
 
             if (AttackTimer >= teleportFadeoutTime + teleportFadeinTime)
@@ -242,10 +252,13 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_LightningSummon()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int cloudSummonDelay = 60;
             int cloudSummonRate = 30;
             int totalCloudWavesToSummon = 5;
-            int lightningDamage = Main.expertMode ? 23 : 36;
+            int lightningDamage = Main.masterMode ? 19 : Main.expertMode ? 23 : 36;
             if (Phase2)
             {
                 cloudSummonRate -= 5;
@@ -281,6 +294,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_TornadoSummon()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int tornadoSpawnDelay = 60;
             int totalTornadosToSummon = Phase2 ? 8 : 5;
 
@@ -309,6 +325,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public void DoBehavior_NimbusSummon()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             int nimbusSummonDelay = 45;
             int totalNimbiToSummon = 5;
             int nimbusSummonRate = 50;
@@ -337,7 +356,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 if (!Main.dedServ)
                 {
                     for (int i = 0; i < 20; i++)
-                        Dust.NewDustDirect(spawnPosition.ToVector2(), -20, 20, 16);
+                        Dust.NewDustDirect(spawnPosition.ToVector2(), -20, 20, DustID.Cloud);
 
                     SoundEngine.PlaySound(SoundID.Item122, spawnPosition.ToVector2());
                 }
@@ -376,7 +395,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             if (AttackTimer >= (sliceChargeTime + sliceChargeDelay) * totalSlices)
             {
-                NPC.damage = NPC.defDamage;
+                // Avoid cheap bullshit
+                NPC.damage = 0;
+
                 CurrentAttackState = AttackState.Hover;
                 AttackTimer = 0f;
                 NPC.netUpdate = true;
@@ -440,12 +461,12 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 5; k++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 16, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Cloud, hit.HitDirection, -1f, 0, default, 1f);
 
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 50; k++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, 16, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Cloud, hit.HitDirection, -1f, 0, default, 1f);
             }
         }
 

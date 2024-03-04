@@ -1,6 +1,6 @@
-﻿using CalamityMod.Projectiles.Melee;
+﻿using System;
+using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +15,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = 46;
             Item.height = 62;
             Item.scale = 1.5f;
-            Item.damage = 160;
+            Item.damage = 141;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 22;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -29,10 +29,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shootSpeed = 9f;
         }
 
-        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
-        {
-            modifiers.CritDamage *= 0.5f;
-        }
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             var source = player.GetSource_ItemUse(Item);
@@ -135,7 +131,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool(3))
             {
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 6);
+                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.Torch);
             }
         }
 

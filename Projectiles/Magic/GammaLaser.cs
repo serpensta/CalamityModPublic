@@ -1,5 +1,5 @@
+﻿using System;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -23,6 +23,8 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.penetrate = 2;
             Projectile.timeLeft = 150;
             Projectile.DamageType = DamageClass.Magic;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
 
         public override void AI()
@@ -31,13 +33,8 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - 1.57f;
             if (Main.rand.NextBool(7))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 74, 0f, 0f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.GreenFairy, 0f, 0f);
             }
-        }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            target.immune[Projectile.owner] = 1;
         }
 
         public override bool PreDraw(ref Color lightColor)

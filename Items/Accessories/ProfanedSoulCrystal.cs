@@ -1,35 +1,65 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CalamityMod.Buffs.StatBuffs;
+using CalamityMod.Buffs.Summon.Whips;
 using CalamityMod.CalPlayer;
+using CalamityMod.DataStructures;
 using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using System.Linq;
-using CalamityMod.Buffs.Summon.Whips;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Items.Potions.Alcohol;
 
 namespace CalamityMod.Items.Accessories
 {
     //Developer item, dedicatee: Mishiro Usui/Amber Sienna
-    public class ProfanedSoulCrystal : ModItem, ILocalizedModType
+    public class ProfanedSoulCrystal : ModItem, ILocalizedModType, IDyeableShaderRenderer
     {
         public static string[] contributorNames = new[] { "IbanPlay", "Chen", "Nincity", "Amber", "Mishiro", "LordMetarex", "Memes" };
         public static int ShieldDurabilityMax = 125;
         public new string LocalizationCategory => "Items.Accessories";
-        
+
         public static int ShieldRechargeDelay = CalamityUtils.SecondsToFrames(5);
         public static int TotalShieldRechargeTime = CalamityUtils.SecondsToFrames(4);
-        
+
         public const int maxMinionRequirement = 10;
         public const int maxPscAnimTime = 120;
+
+        // Interface stuff.
+        public float RenderDepth => IDyeableShaderRenderer.ProfanedSoulShieldDepth;
+
+        public bool ShaderIsDyeable => false;
+
+        public bool ShouldDrawDyeableShader
+        {
+            get
+            {
+                bool result = false;
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    Player player = Main.player[i];
+                    if (player is null || !player.active || player.outOfRange || player.dead)
+                        continue;
+
+                    CalamityPlayer modPlayer = player.Calamity();
+
+                    // Do not render the shield if its visibility is off (or it does not exist)
+                    bool isVanityOnly = modPlayer.pSoulShieldVisible && !modPlayer.pSoulArtifact;
+                    bool shouldNotDraw = modPlayer.andromedaState >= AndromedaPlayerState.LargeRobot; //I am not dealing with drawing that :taxevasion:
+                    bool shieldExists = isVanityOnly || modPlayer.pSoulShieldDurability > 0;
+                    bool shouldntDraw = !modPlayer.pSoulShieldVisible || modPlayer.drawnAnyShieldThisFrame || shouldNotDraw || !shieldExists;
+                    result |= !shouldntDraw;
+                }
+                return result;
+            }
+        }
 
         public enum ProfanedSoulCrystalState
         {
@@ -39,11 +69,13 @@ namespace CalamityMod.Items.Accessories
             Empowered //psc but no other minions, healer guardian functionality, inherits all other functionality (except vanity) and goes even further beyond, any remaining attack changes are here
         }
 
+        public void DrawDyeableShader(SpriteBatch spriteBatch) => ProfanedSoulArtifact.DrawProfanedSoulShields();
+
         internal static ProfanedSoulCrystalState GetPscStateFor(Player player, bool ignoreNoBuffs = false)
         {
             if (!player.Calamity().profanedCrystalBuffs && !ignoreNoBuffs)
                 return ProfanedSoulCrystalState.Vanity; //vanity if no buffs
-            
+
             //vanity check during animation
             if (ignoreNoBuffs &&
                 (!DownedBossSystem.downedCalamitas || !DownedBossSystem.downedExoMechs ||
@@ -52,12 +84,12 @@ namespace CalamityMod.Items.Accessories
             {
                 return ProfanedSoulCrystalState.Vanity; //failsafe for vanity
             }
-            
+
             var noMinions = player.slotsMinions == 0;
             var noSentries = !Main.projectile.Any(proj => proj.active && proj.owner == player.whoAmI && proj.sentry);
             if (noMinions && noSentries)
                 return ProfanedSoulCrystalState.Empowered; //immediately check for empowered as it overrides everything else
-            
+
             return !Main.dayTime ? ProfanedSoulCrystalState.Enraged : //check for enrage
                 ProfanedSoulCrystalState.Buffs; //return buffs as the sole remaining option
         }
@@ -78,7 +110,7 @@ namespace CalamityMod.Items.Accessories
         {
             if (calPlayer.pscLerpColor != Color.White)
                 return calPlayer.pscLerpColor; //already set the lerp colour this frame, calculating it again is redundant
-            
+
             bool day = Main.dayTime;
             double totalTime = Main.dayTime ? Main.dayLength : Main.dayLength + Main.nightLength;
             double currentTime = Main.time;
@@ -107,12 +139,12 @@ namespace CalamityMod.Items.Accessories
             {
                 result = Color.Lerp(nonTargetColor, targetColor, (Main.time < midday ? 2f : 0f) - (float)interpolant);
             }
-                
+
 
             calPlayer.pscLerpColor = result;
             return result;
         }
-        
+
         /**
          * Notes: Drops from providence if the only damage source during the fight is from typeless damage or the profaned soul and the owners of those babs do not have profaned crystal.
          * All projectiles are in ProfanedSoulCrystalProjectiles.cs in the summon projectile directory
@@ -205,11 +237,11 @@ namespace CalamityMod.Items.Accessories
                 modPlayer.profanedCrystalAnim = maxPscAnimTime;
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<PscTransformAnimation>(), 0, 0f, player.whoAmI);
             }
-                
+
 
             modPlayer.profanedCrystalHide = hideVisual || modPlayer.profanedCrystalAnim > 0;
             modPlayer.pSoulShieldVisible = !hideVisual;
-            
+
             DetermineTransformationEligibility(player);
         }
 
@@ -222,7 +254,7 @@ namespace CalamityMod.Items.Accessories
         internal static void DetermineTransformationEligibility(Player player)
         {
             //short circuit immediately if profanedcrystalbuffs has already been set
-            
+
             if (!player.Calamity().profanedCrystalBuffs && player.Calamity().profanedCrystalAnim == -1 && DownedBossSystem.downedCalamitas && DownedBossSystem.downedExoMechs && (player.maxMinions - player.slotsMinions) >= maxMinionRequirement && !player.Calamity().profanedCrystalForce && player.HasBuff<ProfanedCrystalBuff>())
             {
                 player.Calamity().profanedCrystalBuffs = true;
@@ -237,10 +269,10 @@ namespace CalamityMod.Items.Accessories
                 return false;
 
             var source = player.GetSource_ItemUse(item);
-            int weaponType = item.CountsAsClass<MeleeDamageClass>() ? 1 : 
-                item.CountsAsClass<RangedDamageClass>() ? 2 : 
+            int weaponType = item.CountsAsClass<MeleeDamageClass>() ? 1 :
+                item.CountsAsClass<RangedDamageClass>() ? 2 :
                 item.CountsAsClass<MagicDamageClass>() ? 3 :
-                item.CountsAsClass<ThrowingDamageClass>() ? 4 : 
+                item.CountsAsClass<ThrowingDamageClass>() ? 4 :
                 item.CountsAsClass<SummonMeleeSpeedDamageClass>() ? 5 : -1;
             if (weaponType > 0)
             {
@@ -269,8 +301,7 @@ namespace CalamityMod.Items.Accessories
                                 int separation = (i * 4) - 8;
                                 int spearBaseDamage = 350;
                                 int spearDamage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(spearBaseDamage);
-                                if (player.Calamity().oldFashioned)
-                                    spearDamage = CalamityUtils.CalcOldFashionedDamage(spearDamage);
+                                spearDamage = player.ApplyArmorAccDamageBonusesTo(spearDamage);
 
                                 int proj = Projectile.NewProjectile(source, player.Center.X, player.Center.Y - separation, perturbedspeed.X, perturbedspeed.Y, ModContent.ProjectileType<ProfanedCrystalMeleeSpear>(), spearDamage, 1f, player.whoAmI, Main.rand.NextBool(player.Calamity().profanedSoulWeaponUsage == 4 ? 5 : 7) ? 1f : 0f);
                                 if (proj.WithinBounds(Main.maxProjectiles))
@@ -287,8 +318,7 @@ namespace CalamityMod.Items.Accessories
                         {
                             int spearBaseDamage = 250;
                             int spearDamage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(spearBaseDamage);
-                            if (player.Calamity().oldFashioned)
-                                spearDamage = CalamityUtils.CalcOldFashionedDamage(spearDamage);
+                            spearDamage = player.ApplyArmorAccDamageBonusesTo(spearDamage);
 
                             int proj = Projectile.NewProjectile(source, player.Center, correctedVelocity * 14f, ModContent.ProjectileType<ProfanedCrystalMeleeSpear>(), spearDamage, 1f, player.whoAmI, Main.rand.NextBool(player.Calamity().profanedSoulWeaponUsage == 4 ? 5 : 7) ? 1f : 0f, 1f);
                             if (proj.WithinBounds(Main.maxProjectiles))
@@ -314,8 +344,7 @@ namespace CalamityMod.Items.Accessories
                         int projType = isSmallBoomer ? isThiccBoomer ? 1 : 2 : 3;
                         int boomBaseDamage = 200;
                         int boomDamage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(boomBaseDamage);
-                        if (player.Calamity().oldFashioned)
-                            boomDamage = CalamityUtils.CalcOldFashionedDamage(boomDamage);
+                        boomDamage = player.ApplyArmorAccDamageBonusesTo(boomDamage);
 
                         switch (projType)
                         {
@@ -370,8 +399,7 @@ namespace CalamityMod.Items.Accessories
                             int sickPenalty = (int)(mageFireDamage * (0.05f * ((player.buffTime[player.FindBuffIndex(BuffID.ManaSickness)] + 60) / 60)));
                             mageFireDamage -= sickPenalty;
                         }
-                        if (player.Calamity().oldFashioned)
-                            mageFireDamage = CalamityUtils.CalcOldFashionedDamage(mageFireDamage);
+                        mageFireDamage = player.ApplyArmorAccDamageBonusesTo(mageFireDamage);
 
                         int proj = Projectile.NewProjectile(source, player.position, correctedVelocity, ModContent.ProjectileType<ProfanedCrystalMageFireball>(), mageFireDamage, 1f, player.whoAmI, empowered ? 1f : 0f);
                         if (proj.WithinBounds(Main.maxProjectiles))
@@ -390,7 +418,7 @@ namespace CalamityMod.Items.Accessories
                     {
                         player.Calamity().profanedSoulWeaponUsage = 0;
                     }
-                    
+
                     if (player.Calamity().profanedSoulWeaponUsage >= (empowered ? 120 : 360))
                     {
                         float crystalCount = 36f;
@@ -399,8 +427,7 @@ namespace CalamityMod.Items.Accessories
                             float angle = MathHelper.TwoPi / crystalCount * i;
                             int shardBaseDamage = 176;
                             int shardDamage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(shardBaseDamage);
-                            if (player.Calamity().oldFashioned)
-                                shardDamage = CalamityUtils.CalcOldFashionedDamage(shardDamage);
+                            shardDamage = player.ApplyArmorAccDamageBonusesTo(shardDamage);
 
                             int proj = Projectile.NewProjectile(source, player.Center, angle.ToRotationVector2() * 12f, ModContent.ProjectileType<ProfanedCrystalRogueShard>(), shardDamage, 1f, player.whoAmI, 0f, 0f);
                             if (proj.WithinBounds(Main.maxProjectiles))
@@ -418,8 +445,7 @@ namespace CalamityMod.Items.Accessories
                         int totalShardProjectiles = empowered ? 360 / 5 : 360 / 10;
                         int shardBaseDamage = empowered ? 125 : 220;
                         int shardDamage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(shardBaseDamage);
-                        if (player.Calamity().oldFashioned)
-                            shardDamage = CalamityUtils.CalcOldFashionedDamage(shardDamage);
+                        shardDamage = player.ApplyArmorAccDamageBonusesTo(shardDamage);
 
                         float interval = totalShardProjectiles / chains * (empowered ? 5f : 10f);
                         double patternInterval = Math.Floor(player.Calamity().profanedSoulWeaponUsage / interval);
@@ -458,9 +484,8 @@ namespace CalamityMod.Items.Accessories
                     if (player.Calamity().profanedSoulWeaponUsage == 0)
                     {
                         int whipBaseDamage = 250;
-                        int whipDamage = (int)player.GetTotalDamage<SummonDamageClass>().ApplyTo(whipBaseDamage);
-                        if (player.Calamity().oldFashioned)
-                            whipDamage = CalamityUtils.CalcOldFashionedDamage(whipDamage);
+                        int whipDamage = (int)player.GetTotalDamage<SummonMeleeSpeedDamageClass>().ApplyTo(whipBaseDamage);
+                        whipDamage = player.ApplyArmorAccDamageBonusesTo(whipDamage);
 
                         var buffed = player.HasBuff<ProfanedCrystalWhipBuff>();
                         correctedVelocity *= buffed ? 10f : 8f;
@@ -468,7 +493,7 @@ namespace CalamityMod.Items.Accessories
                         correctedVelocity.X = Math.Clamp(correctedVelocity.X, -permittedDistance, permittedDistance);
                         correctedVelocity.Y = Math.Clamp(correctedVelocity.Y, -permittedDistance, permittedDistance);
 
-                        player.direction = correctedVelocity.X > 0 ? 1 : -1; 
+                        player.ChangeDir(MathF.Sign(correctedVelocity.X));
                         Projectile.NewProjectile(source, player.Center, correctedVelocity, ModContent.ProjectileType<ProfanedCrystalWhip>(), whipDamage, 1f, player.whoAmI);
                         player.Calamity().profanedSoulWeaponUsage = 10;
                     }

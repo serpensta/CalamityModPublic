@@ -17,10 +17,10 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Item.damage = 78;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 68;
             Item.height = 22;
+            Item.damage = 78;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = TerraUseTime;
             Item.useAnimation = TerraUseTime;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -38,7 +38,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override Vector2? HoldoutOffset() => new Vector2(-10, 0);
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
-        
+
         // Spawning the holdout cannot consume ammo
         public override bool CanConsumeAmmo(Item ammo, Player player) => player.ownedProjectileCounts[Item.shoot] > 0;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

@@ -1,5 +1,5 @@
-﻿using CalamityMod.Items.Placeables;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables;
 using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -14,12 +14,12 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.EnchantedSword);
-            Item.useTime = 30;
-            Item.damage = 26;
-            Item.DamageType = DamageClass.Melee;
-            Item.value = CalamityGlobalItem.Rarity2BuyPrice;
             Item.width = 40;
             Item.height = 40;
+            Item.useTime = 30;
+            Item.damage = 25;
+            Item.DamageType = DamageClass.Melee;
+            Item.value = CalamityGlobalItem.Rarity2BuyPrice;
             Item.knockBack = 2;
             Item.shootSpeed = 11;
             Item.rare = ItemRarityID.Green;

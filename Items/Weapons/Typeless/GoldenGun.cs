@@ -12,9 +12,9 @@ namespace CalamityMod.Items.Weapons.Typeless
         public new string LocalizationCategory => "Items.Weapons.Typeless";
         public override void SetDefaults()
         {
-            Item.damage = 5;
             Item.width = 78;
             Item.height = 36;
+            Item.damage = 5;
             Item.useTime = 15;
             Item.useAnimation = 15;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -28,10 +28,10 @@ namespace CalamityMod.Items.Weapons.Typeless
             Item.shootSpeed = 12f;
         }
 
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ClasslessWeapon;
-		}
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ClasslessWeapon;
+        }
 
         public override Vector2? HoldoutOffset()
         {

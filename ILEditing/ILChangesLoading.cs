@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Armor.LunicCorps;
+using CalamityMod.Graphics.Renderers.CalamityRenderers;
 using CalamityMod.Tiles.DraedonStructures;
 using CalamityMod.Tiles.FurnitureExo;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
@@ -42,6 +43,7 @@ namespace CalamityMod.ILEditing
             On_Main.DrawInfernoRings += DrawForegroundParticles;
             On_TileDrawing.DrawPartialLiquid += DrawCustomLava;
             On_WaterfallManager.DrawWaterfall_int_int_int_float_Vector2_Rectangle_Color_SpriteEffects += DrawCustomLavafalls;
+            On_Main.RenderWater += CacheLavaStyle;
             IL_LiquidRenderer.DrawNormalLiquids += ChangeWaterQuadColors;
             IL_Main.oldDrawWater += DrawCustomLava3;
             On_TileLightScanner.GetTileLight += MakeSulphSeaWaterBetter;
@@ -49,13 +51,11 @@ namespace CalamityMod.ILEditing
             On_TileDrawing.Draw += ClearTilePings;
             On_CommonCode.ModifyItemDropFromNPC += ColorBlightedGel;
 
-            // Graphics (Energy shields)
-            // ORDER MATTERS. Whichever hook is registered last will draw a shield first, blocking all other hooks
-            // Please order these hooks in the ordering priority you want energy shields to have
-            On_Main.DrawInfernoRings += RoverDrive.DrawRoverDriveShields;
-            On_Main.DrawInfernoRings += LunicCorpsHelmet.DrawHaloShields;
-            On_Main.DrawInfernoRings += ProfanedSoulArtifact.DrawProfanedSoulShields; //both psa and psc
-            On_Main.DrawInfernoRings += TheSponge.DrawSpongeShields;
+            // Graphics (dyeable shader stuff)
+            On_Player.UpdateItemDye += DyeableShadersRenderer.FindDyesDetour;
+            On_Player.ApplyEquipFunctional += DyeableShadersRenderer.CheckAccessoryDetour;
+            On_Player.ApplyEquipVanity_Item += DyeableShadersRenderer.CheckVanityDetour;
+            On_Player.UpdateArmorSets += DyeableShadersRenderer.CheckArmorSetsDetour;
 
             // NPC behavior
             IL_Main.UpdateTime += PermitNighttimeTownNPCSpawning;
@@ -96,6 +96,9 @@ namespace CalamityMod.ILEditing
             IL_Projectile.AI_001 += AdjustChlorophyteBullets;
             IL_Projectile.AI_099_2 += LimitTerrarianProjectiles;
             IL_Player.UpdateBuffs += NerfSharpeningStation;
+            IL_Player.UpdateBuffs += NerfBeetleScaleMail;
+            IL_Player.UpdateBuffs += NerfNebulaArmorBaseLifeRegenAndDamage;
+            IL_Player.ApplyVanillaHurtEffectModifiers += RemoveBeetleAndSolarFlareMultiplicativeDR;
 
             // Movement speed balance
             IL_Player.UpdateJumpHeight += FixJumpHeightBoosts;
@@ -106,10 +109,12 @@ namespace CalamityMod.ILEditing
 
             // Life regen balance
             IL_Player.UpdateLifeRegen += PreventWellFedFromBeingRequiredInExpertModeForFullLifeRegen;
+            IL_Player.UpdateLifeRegen += RemoveNebulaLifeBoosterDoTImmunity;
 
             // Mana regen balance
             IL_Player.Update += ManaRegenDelayAdjustment;
             IL_Player.UpdateManaRegen += ManaRegenAdjustment;
+            IL_Player.UpdateManaRegen += NerfNebulaArmorManaRegen;
 
             // Debuff balancing
             IL_Projectile.StatusPlayer += RemoveFrozenInflictionFromDeerclopsIceSpikes;
@@ -123,13 +128,16 @@ namespace CalamityMod.ILEditing
             IL_UIWorldCreation.SetDefaultOptions += ChangeDefaultWorldSize;
             IL_UIWorldCreation.AddWorldSizeOptions += SwapSmallDescriptionKey;
             Terraria.IO.On_WorldFile.ClearTempTiles += ClearModdedTempTiles;
+            On_WorldGen.MakeDungeon += LimitDungeonEntranceXPosition;
+            IL_WorldGen.DungeonHalls += LimitDungeonHallsXPosition;
+            IL_WorldGen.MakeDungeon += ChangeDungeonSpikeQuantities;
 
             // Removal of vanilla stupidity
             IL_Player.UpdateBuffs += RemoveFeralBiteRandomDebuffs;
             IL_Sandstorm.HasSufficientWind += DecreaseSandstormWindSpeedRequirement;
             IL_Item.TryGetPrefixStatMultipliersForItem += RelaxPrefixRequirements;
             On_NPC.SlimeRainSpawns += PreventBossSlimeRainSpawns;
-            On_Item.CanShimmer += AdjustShimmerRequirements;
+            On_ShimmerTransforms.IsItemTransformLocked += AdjustShimmerRequirements;
 
             // TODO -- Beat Lava Slimes once and for all
             // IL.Terraria.NPC.VanillaHitEffect += RemoveLavaDropsFromExpertLavaSlimes;
@@ -142,6 +150,9 @@ namespace CalamityMod.ILEditing
 
             // Fix vanilla bugs exposed by Calamity mechanics
             IL_NPC.NPCLoot += FixSplittingWormBannerDrops;
+
+            // Fix vanilla not accounting for spritebatch modification in held projectile drawing
+            On_PlayerDrawLayers.DrawHeldProj += FixHeldProjectileBlendState;
 
             //Additional detours that are in their own item files given they are only relevant to these specific items:
             //Rover drive detours on Player.DrawInfernoRings to draw its shield

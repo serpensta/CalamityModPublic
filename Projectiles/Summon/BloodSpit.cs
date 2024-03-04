@@ -43,7 +43,7 @@ namespace CalamityMod.Projectiles.Summon
         {
             for (int i = 0; i < 15; i++)
             {
-                Dust blood = Dust.NewDustDirect(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 5, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f);
+                Dust blood = Dust.NewDustDirect(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f);
                 blood.velocity = Main.rand.NextVector2Circular(1f, 2f);
                 blood.noGravity = true;
             }

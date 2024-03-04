@@ -1,7 +1,7 @@
-﻿using CalamityMod.Projectiles.Magic;
+﻿using System;
+using CalamityMod.Projectiles.Magic;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -15,16 +15,16 @@ namespace CalamityMod.Items.Weapons.Magic
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetStaticDefaults()
         {
-                       Item.staff[Item.type] = true;
+            Item.staff[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
+            Item.width = 56;
+            Item.height = 56;
             Item.damage = 180;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 20;
-            Item.width = 56;
-            Item.height = 56;
             Item.useTime = 18;
             Item.useAnimation = 18;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -38,7 +38,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.shootSpeed = 12f;
         }
 
-        
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Vector2 realPlayerPos = player.RotatedRelativePoint(player.MountedCenter, true);

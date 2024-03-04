@@ -16,17 +16,17 @@ namespace CalamityMod.Items.Ammo
 
         public override void SetDefaults()
         {
-            Item.damage = 9;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 8;
             Item.height = 8;
+            Item.damage = 8;
+            Item.DamageType = DamageClass.Ranged;
             Item.maxStack = 9999;
             Item.consumable = true;
             Item.knockBack = 1.25f;
             Item.value = Item.sellPrice(copper: 16);
             Item.rare = ItemRarityID.Lime;
             Item.shoot = ModContent.ProjectileType<TerraBulletMain>();
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 2f;
             Item.ammo = AmmoID.Bullet;
         }
 

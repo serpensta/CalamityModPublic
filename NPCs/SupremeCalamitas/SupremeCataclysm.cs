@@ -1,19 +1,19 @@
-﻿using CalamityMod.Dusts;
+﻿using System;
+using System.IO;
+using CalamityMod.Dusts;
 using CalamityMod.Events;
+using CalamityMod.Items.Placeables.Furniture.Trophies;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
-using CalamityMod.Items.Placeables.Furniture.Trophies;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Particles;
-using Terraria.Audio;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -45,7 +45,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             Main.npcFrameCount[NPC.type] = 9;
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Scale = 0.3f,
                 PortraitPositionYOverride = 36f,
@@ -81,7 +81,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             int associatedNPCType = ModContent.NPCType<SupremeCalamitas>();
             bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[associatedNPCType], quickUnlock: true);
 
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.SupremeCataclysm")
             });
@@ -169,11 +169,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.TargetClosest();
 
             float acceleration = 1.5f;
-
-            // Reduce acceleration if target is holding a true melee weapon.
-            if (Main.player[NPC.target].HoldingTrueMeleeWeapon())
-                acceleration *= 0.5f;
-
             int verticalSpeed = (int)Math.Round(MathHelper.Lerp(2f, 6.5f, 1f - totalLifeRatio));
 
             // Move up.
@@ -217,8 +212,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     SoundEngine.PlaySound(SupremeCalamitas.HellblastSound, NPC.Center);
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
                     int damage = NPC.GetProjectileDamage(type);
-					if (bossRush)
-						damage /= 2;
+                    if (bossRush)
+                        damage /= 2;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 fistSpawnPosition = NPC.Center + Vector2.UnitX * -74f;
@@ -238,8 +233,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                     int type = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
                     int damage = NPC.GetProjectileDamage(type);
-					if (bossRush)
-						damage /= 2;
+                    if (bossRush)
+                        damage /= 2;
                     int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
                     float radians = MathHelper.TwoPi / totalProjectiles;
                     float velocity = Main.zenithWorld ? 5f : 7f;

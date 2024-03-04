@@ -53,7 +53,7 @@ namespace CalamityMod
                     else if (Main.hardMode)
                         return 12;
                     return 8;
-                
+
                 case PrefixID.Hard:
                     if (DownedBossSystem.downedDoG)
                         return 4;
@@ -147,11 +147,13 @@ namespace CalamityMod
                     };
                     prefix = IteratePrefix(rand, terrarianReforgeTiers, currentPrefix);
                 }
-                
+
                 // Yoyos, Flails, Spears, etc.
                 // Spears actually work fine with Legendary, but vanilla doesn't give it to them, so we won't either.
                 // Rapiers, whips, and other specific vanilla weapons (ie. Zenith or Excalibur) are specifically excluded from this, so they get broadsword reforges despite not scaling with melee speed.
-                else if ((item.channel || item.noMelee) && item.useStyle != ItemUseStyleID.Rapier && !item.CountsAsClass<SummonMeleeSpeedDamageClass>() && !PrefixLegacy.ItemSets.SwordsHammersAxesPicks[item.type])
+                //
+                // 18FEB2024: Ozzatron: removed the (item.channel || item.noMelee) because vanilla lets Burning Sky get Legendary
+                else if (item.channel && item.useStyle != ItemUseStyleID.Rapier && !item.CountsAsClass<SummonMeleeSpeedDamageClass>() && !PrefixLegacy.ItemSets.SwordsHammersAxesPicks[item.type])
                 {
                     int[][] meleeNoSpeedReforgeTiers = new int[][]
                     {
@@ -329,7 +331,7 @@ namespace CalamityMod
         {
             if (Main.dedServ || mhk is null)
                 return;
-            
+
             string finalKey = mhk.TooltipHotkeyString();
             tooltips.FindAndReplace("[KEY]", finalKey);
         }
@@ -772,29 +774,29 @@ namespace CalamityMod
                 mod.Find<ModPrefix>("Flimsy").Type,
                 mod.Find<ModPrefix>("Unbalanced").Type,
                 mod.Find<ModPrefix>("Atrocious").Type,
-				PrefixID.Keen,
-				PrefixID.Superior,
-				PrefixID.Forceful,
-				PrefixID.Broken,
-				PrefixID.Damaged,
-				PrefixID.Hurtful,
-				PrefixID.Strong,
-				PrefixID.Unpleasant,
-				PrefixID.Weak,
-				PrefixID.Ruthless,
-				PrefixID.Godly,
-				PrefixID.Demonic,
-				PrefixID.Zealous,
-				PrefixID.Quick,
-				PrefixID.Deadly2,
-				PrefixID.Agile,
-				PrefixID.Nimble,
-				PrefixID.Murderous,
-				PrefixID.Slow,
-				PrefixID.Sluggish,
-				PrefixID.Lazy,
-				PrefixID.Annoying,
-				PrefixID.Nasty
+                PrefixID.Keen,
+                PrefixID.Superior,
+                PrefixID.Forceful,
+                PrefixID.Broken,
+                PrefixID.Damaged,
+                PrefixID.Hurtful,
+                PrefixID.Strong,
+                PrefixID.Unpleasant,
+                PrefixID.Weak,
+                PrefixID.Ruthless,
+                PrefixID.Godly,
+                PrefixID.Demonic,
+                PrefixID.Zealous,
+                PrefixID.Quick,
+                PrefixID.Deadly2,
+                PrefixID.Agile,
+                PrefixID.Nimble,
+                PrefixID.Murderous,
+                PrefixID.Slow,
+                PrefixID.Sluggish,
+                PrefixID.Lazy,
+                PrefixID.Annoying,
+                PrefixID.Nasty
             });
             return roguePrefix;
         }

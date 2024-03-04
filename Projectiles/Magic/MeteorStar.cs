@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles.Magic
                         Projectile.velocity.X = mouseVec.X;
                         Projectile.velocity.Y = mouseVec.Y;
                     }
-                    player.direction = (Projectile.velocity.X > 0).ToDirectionInt();
+                    player.ChangeDir((int)Projectile.velocity.X);
                     player.velocity = Projectile.velocity;
                     if (Projectile.velocity.Y > 16f)
                     {

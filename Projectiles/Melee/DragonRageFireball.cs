@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Buffs.DamageOverTime;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -78,7 +78,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.ExpandHitboxBy(80);
             for (int d = 0; d < 5; d++)
             {
-                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 244, 0f, 0f, 100, default, 1f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.CopperCoin, 0f, 0f, 100, default, 1f);
                 Main.dust[idx].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -88,10 +88,10 @@ namespace CalamityMod.Projectiles.Melee
             }
             for (int d = 0; d < 8; d++)
             {
-                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 244, 0f, 0f, 100, default, 2f);
+                int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                 Main.dust[idx].noGravity = true;
                 Main.dust[idx].velocity *= 5f;
-                idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 244, 0f, 0f, 100, default, 1f);
+                idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.CopperCoin, 0f, 0f, 100, default, 1f);
                 Main.dust[idx].velocity *= 2f;
             }
 

@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Materials
 {
@@ -12,6 +12,7 @@ namespace CalamityMod.Items.Materials
         {
             Item.ResearchUnlockCount = 100;
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(6, 4));
+            ItemID.Sets.AnimatesAsSoul[Type] = true;
         }
 
         public override void SetDefaults()

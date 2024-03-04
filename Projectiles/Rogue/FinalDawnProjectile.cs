@@ -39,7 +39,7 @@ namespace CalamityMod.Projectiles.Rogue
                 Projectile.velocity = Main.MouseWorld - player.Center;
                 Projectile.velocity.Normalize();
             }
-            player.direction = Projectile.direction;
+            player.ChangeDir(Projectile.direction);
             player.heldProj = Projectile.whoAmI;
             Projectile.Center = player.Center;
             Projectile.position.Y -= 44;
@@ -80,7 +80,7 @@ namespace CalamityMod.Projectiles.Rogue
 
             if (Main.myPlayer == Projectile.owner)
             {
-                if (!player.channel || player.noItems || player.CCed)
+                if (player.CantUseHoldout())
                 {
                     AttemptExecuteAttacks(player);
                     Projectile.Kill();

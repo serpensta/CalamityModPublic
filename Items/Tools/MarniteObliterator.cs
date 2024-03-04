@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Projectiles.Melee;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Tools
 {
@@ -13,6 +13,8 @@ namespace CalamityMod.Items.Tools
 
         public override void SetDefaults()
         {
+            Item.width = 36;
+            Item.height = 18;
             Item.damage = 7;
             Item.ArmorPenetration = 5;
             Item.knockBack = 0f;
@@ -21,8 +23,6 @@ namespace CalamityMod.Items.Tools
             Item.pick = 50;
 
             Item.DamageType = TrueMeleeNoSpeedDamageClass.Instance;
-            Item.width = 36;
-            Item.height = 18;
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;

@@ -2,11 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Pets
 {
@@ -25,6 +24,9 @@ namespace CalamityMod.Projectiles.Pets
             Main.projPet[Projectile.type] = true;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
+            .WithOffset(-7f, 0f).WithSpriteDirection(-1).WhenNotSelected(0, 0);
         }
 
         public override void SetDefaults()
@@ -64,10 +66,10 @@ namespace CalamityMod.Projectiles.Pets
                 Color colorAlpha = colorArea;
                 colorAlpha = Projectile.GetAlpha(colorAlpha);
                 goto IL_6899;
-                IL_6881:
+IL_6881:
                 counter += twoConst;
                 continue;
-                IL_6899:
+IL_6899:
                 float trailColorChange = (float)(eightCompare - counter);
                 if (twoConst < 0)
                 {
@@ -127,7 +129,7 @@ namespace CalamityMod.Projectiles.Pets
 
                 for (int i = 0; i < 77; i++) //loop to make lots of dust
                 {
-                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 182, Projectile.velocity.X * 0.7f, Projectile.velocity.Y * 0.7f, 100, default, 2.5f);
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.TheDestroyer, Projectile.velocity.X * 0.7f, Projectile.velocity.Y * 0.7f, 100, default, 2.5f);
 
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 1.5f;
@@ -171,6 +173,11 @@ namespace CalamityMod.Projectiles.Pets
             }
 
             //companion cube lighting check and stab
+
+            // 08DEC2023: Ozzatron: All below code does not run on dedicated servers as it requires clientside lighting information.
+            if (Main.netMode == NetmodeID.Server)
+                return;
+
             Color color;
             color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
             Vector3 vector3_1 = color.ToVector3();
@@ -194,11 +201,11 @@ namespace CalamityMod.Projectiles.Pets
                 {
                     if (Main.rand.NextBool())
                     {
-                        SoundEngine.PlaySound(SoundID.Meowmere with { Volume = SoundID.Meowmere.Volume * 4f}, Projectile.position); //nya
+                        SoundEngine.PlaySound(SoundID.Meowmere with { Volume = SoundID.Meowmere.Volume * 4f }, Projectile.position); //nya
                     }
                     else
                     {
-                        SoundEngine.PlaySound(SoundID.ScaryScream with { Volume = SoundID.ScaryScream.Volume * 2f}, player.position); //REEEEEEE
+                        SoundEngine.PlaySound(SoundID.ScaryScream with { Volume = SoundID.ScaryScream.Volume * 2f }, player.position); //REEEEEEE
                     }
                     notlocalai1 = -600f;
                 }

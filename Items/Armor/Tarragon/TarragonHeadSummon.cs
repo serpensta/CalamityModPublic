@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Armor.Tarragon
 
         public override void UpdateEquip(Player player)
         {
-            player.endurance += 0.05f;
+            player.endurance += 0.1f;
             player.GetDamage<SummonDamageClass>() += 0.05f;
         }
 

@@ -1,8 +1,8 @@
-﻿using CalamityMod.Projectiles.Magic;
+﻿using System;
+using CalamityMod.Projectiles.Magic;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -15,16 +15,16 @@ namespace CalamityMod.Items.Weapons.Magic
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetStaticDefaults()
         {
-                       Item.staff[Item.type] = true;
+            Item.staff[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
+            Item.width = 80;
+            Item.height = 84;
             Item.damage = 328;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 16;
-            Item.width = 80;
-            Item.height = 84;
             Item.useTime = 11;
             Item.useAnimation = 22;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -45,7 +45,7 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int j = Main.myPlayer;
+            int i = Main.myPlayer;
             float beamSpeed = Item.shootSpeed;
             float beamKnockback = knockback;
             beamKnockback = player.GetWeaponKnockback(Item, beamKnockback);
@@ -70,11 +70,11 @@ namespace CalamityMod.Items.Weapons.Magic
             }
 
             int numLasers = 2;
-            for (int i = 0; i < numLasers; i++)
+            for (int j = 0; j < numLasers; j++)
             {
                 realPlayerPos = new Vector2(player.position.X + (float)player.width * 0.5f + (float)(Main.rand.Next(91) * -(float)player.direction) + ((float)Main.mouseX + Main.screenPosition.X - player.position.X), player.MountedCenter.Y - 600f);
                 realPlayerPos.X = (realPlayerPos.X + player.Center.X) / 2f + (float)Main.rand.Next(-200, 201);
-                realPlayerPos.Y -= (float)(100 * i);
+                realPlayerPos.Y -= (float)(100 * j);
                 mouseXDist = (float)Main.mouseX + Main.screenPosition.X - realPlayerPos.X;
                 mouseYDist = (float)Main.mouseY + Main.screenPosition.Y - realPlayerPos.Y;
                 if (mouseYDist < 0f)

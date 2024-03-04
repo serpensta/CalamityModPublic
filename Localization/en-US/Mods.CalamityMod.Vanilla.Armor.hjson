@@ -29,6 +29,12 @@ SetBonus: {
 	}
 
 	Copper: Increases all damage by 2
+	Crimson:
+		'''
+		Greatly increased natural life regen
+		Life regen is further increased the longer you avoid taking damage
+		Standing still also greatly amplifies life regen
+		'''
 	Eskimo:
 		'''
 		Multiplies all cold-based debuff damage by 1.25
@@ -57,13 +63,14 @@ SetBonus: {
 		Increases damage reduction by 6%
 		+1 HP/s life regen
 		'''
+	Jungle: 10% reduced mana costs
 	Lead:
 		'''
 		Increases damage reduction by 3%
 		+0.5 HP/s life regen
 		Grants immunity to knockback
 		'''
-	Meteor: Space Gun costs 50% mana
+	Meteor: All magic guns cost 33% mana
 	Mining: Mining ore will sometimes have additional yield
 	Molten:
 		'''
@@ -96,7 +103,6 @@ SetBonus: {
 		Every 10 defense gives you +0.5 HP/s life regen, 1% increased damage and 1% increased critical strike chance
 		These effects cap at 40 defense
 		'''
-	Shadow: 15% increased max movement speed and acceleration
 	Silver:
 		'''
 		+0.5 HP/s life regen
@@ -111,6 +117,8 @@ SetBonus: {
 		Increases all knockback by 33%, this counts for the above boost
 		Current bonus: {0}% critical strike chance from {1} knockback
 		'''
+	MagicHat: Increases maximum mana by 40
+	Wizard: 4% increased magic critical strike chance
 	CrystalAssassin:
 		'''
 		Allows the ability to dash

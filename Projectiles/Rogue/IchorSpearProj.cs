@@ -1,10 +1,10 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.Reflection.Metadata;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.Pets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil;
-using System;
-using System.Reflection.Metadata;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;

@@ -1,12 +1,12 @@
-﻿using CalamityMod.BiomeManagers;
+﻿using System;
+using System.IO;
+using CalamityMod.BiomeManagers;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -45,13 +45,17 @@ namespace CalamityMod.NPCs.Abyss
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = false;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<AbyssLayer3Biome>().Type };
+
+            // Scale stats in Expert and Master
+            CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+            CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.GiantSquid")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.GiantSquid")
             });
         }
 
@@ -69,6 +73,9 @@ namespace CalamityMod.NPCs.Abyss
 
         public override void AI()
         {
+            // Avoid cheap bullshit
+            NPC.damage = 0;
+
             if (NPC.direction == 0)
             {
                 NPC.TargetClosest(true);
@@ -125,11 +132,15 @@ namespace CalamityMod.NPCs.Abyss
             {
                 NPC.localAI[2] = 1f;
                 NPC.velocity *= 0.975f;
+
+                float lungeSpeed = CalamityWorld.death ? 24f : CalamityWorld.revenge ? 20f : 16f;
+                if (NPC.velocity.Length() > lungeSpeed * 0.4f)
+                    NPC.damage = NPC.defDamage;
+
                 float lungeThreshold = 1.6f;
                 if (NPC.velocity.X > -lungeThreshold && NPC.velocity.X < lungeThreshold && NPC.velocity.Y > -lungeThreshold && NPC.velocity.Y < lungeThreshold)
                 {
                     NPC.TargetClosest(true);
-                    float lungeSpeed = CalamityWorld.death ? 24f : CalamityWorld.revenge ? 20f : 16f;
                     Vector2 lungeNPCPos = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
                     float lungeTargetX = Main.player[NPC.target].position.X + (float)(Main.player[NPC.target].width / 2) - lungeNPCPos.X;
                     float lungeTargetY = Main.player[NPC.target].position.Y + (float)(Main.player[NPC.target].height / 2) - lungeNPCPos.Y;
@@ -215,7 +226,7 @@ namespace CalamityMod.NPCs.Abyss
 
                 var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-                Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+                Main.EntitySpriteDraw(tex, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4),
                 NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
             }
         }

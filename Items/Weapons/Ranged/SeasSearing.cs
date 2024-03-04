@@ -1,7 +1,7 @@
-﻿using Terraria.DataStructures;
-using CalamityMod.Projectiles.Ranged;
+﻿using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,15 +14,16 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
-            Item.damage = BaseDamage;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 88;
             Item.height = 44;
+            Item.damage = BaseDamage;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 5;
             Item.useAnimation = 10;
             Item.reuseDelay = 16;

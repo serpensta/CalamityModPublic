@@ -9,12 +9,17 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class SepticSkewer : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
+
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
+        }
         public override void SetDefaults()
         {
-            Item.damage = 272;
-            Item.DamageType = DamageClass.Ranged;
             Item.width = 46;
             Item.height = 24;
+            Item.damage = 272;
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 12;
             Item.useAnimation = 12;
             Item.useStyle = ItemUseStyleID.Shoot;

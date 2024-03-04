@@ -1,4 +1,6 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.IO;
+using CalamityMod.Events;
 using CalamityMod.Items;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.NormalNPCs;
@@ -7,8 +9,6 @@ using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.TileEntities;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -108,10 +108,20 @@ namespace CalamityMod
                             AndroombaFriendly.SwapSolution(index, solType);
                         break;
                     case CalamityModMessageType.SyncAndroombaAI:
-                        int idx = reader.ReadInt32();
-                        int phase = reader.ReadInt32();
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            AndroombaFriendly.ChangeAI(idx, phase);
+                        {
+                            int idx = reader.ReadInt32();
+                            int phase = reader.ReadInt32();
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                AndroombaFriendly.ChangeAI(idx, phase);
+                        }
+                        break;
+                    case CalamityModMessageType.SyncSlabCrabAI:
+                        {
+                            int idx = reader.ReadInt32();
+                            int phase = reader.ReadInt32();
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                AndroombaFriendly.ChangeAI(idx, phase);
+                        }
                         break;
                     case CalamityModMessageType.ServersideSpawnOldDuke:
                         byte playerIndex2 = reader.ReadByte();
@@ -344,6 +354,7 @@ namespace CalamityMod
         DeleteAllSuperDummies,
         SyncAndroombaSolution,
         SyncAndroombaAI,
+        SyncSlabCrabAI,
         ServersideSpawnOldDuke,
         ArmoredDiggerCountdownSync, // TODO -- remove this mechanic entirely
         ProvidenceDyeConditionSync, // TODO -- this packetstorms if you hit Provi with spam weapons. It should ONLY send a packet if the status changes.

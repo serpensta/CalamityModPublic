@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -28,12 +28,14 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 2;
             Projectile.ignoreWater = true;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 5;
         }
 
         public override void AI()
         {
-	    if (Projectile.ai[1] == 1f)
-		Projectile.penetrate = -1; // Gives infinite pierce to Valediction typhoons
+            if (Projectile.ai[1] == 1f)
+                Projectile.penetrate = -1; // Gives infinite pierce to Valediction typhoons
 
             Projectile.localAI[1] += 1f;
             if (Projectile.localAI[1] > 10f && Main.rand.NextBool(3))
@@ -43,7 +45,7 @@ namespace CalamityMod.Projectiles.Magic
                 {
                     Vector2 dustRotation = (Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width, (float)Projectile.height) / 2f).RotatedBy((double)(i - (dustAmt / 2 - 1)) * Math.PI / (double)dustAmt, new Vector2()) + Projectile.Center;
                     Vector2 randomRotation = ((Main.rand.NextFloat() * MathHelper.Pi) - MathHelper.PiOver2).ToRotationVector2() * (float)Main.rand.Next(3, 8);
-                    int nuclearDust = Dust.NewDust(dustRotation + randomRotation, 0, 0, 217, randomRotation.X * 2f, randomRotation.Y * 2f, 100, new Color(), 1.4f);
+                    int nuclearDust = Dust.NewDust(dustRotation + randomRotation, 0, 0, DustID.FishronWings, randomRotation.X * 2f, randomRotation.Y * 2f, 100, new Color(), 1.4f);
                     Dust dust = Main.dust[nuclearDust];
                     dust.noGravity = true;
                     dust.noLight = true;
@@ -98,7 +100,7 @@ namespace CalamityMod.Projectiles.Magic
             if (Projectile.ai[0] != 0f)
             {
                 int index = (int)(Projectile.ai[0] - 1);
-                if (Main.npc[index].active && !Main.npc[index].dontTakeDamage && Main.npc[index].immune[Projectile.owner] == 0)
+                if (Main.npc[index].active && !Main.npc[index].dontTakeDamage)
                 {
                     if ((Math.Abs(Projectile.Center.X - Main.npc[index].Center.X) + Math.Abs(Projectile.Center.Y - Main.npc[index].Center.Y)) < 1000f)
                     {
@@ -132,7 +134,7 @@ namespace CalamityMod.Projectiles.Magic
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             for (int k = 0; k < 5; k++)
             {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 34, 0f, 0f);
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.BreatheBubble, 0f, 0f);
                 Main.dust[dust].velocity *= 0f;
                 Main.dust[dust].noGravity = true;
             }
@@ -141,14 +143,6 @@ namespace CalamityMod.Projectiles.Magic
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(200, 200, 200, 200);
-        }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (Projectile.ai[1] != 1f) //Nuclear Fury
-            {
-                target.immune[Projectile.owner] = 5;
-            }
         }
 
         public override bool PreDraw(ref Color lightColor)

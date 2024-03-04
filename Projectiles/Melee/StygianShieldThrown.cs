@@ -1,8 +1,8 @@
-﻿using CalamityMod.Particles;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Particles;
 using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -65,7 +65,7 @@ namespace CalamityMod.Projectiles.Melee
                     Color blackGradient = Color.Lerp(new Color(40, 40, 40), Color.Black, lengthRatio);
                     float rotMotion = Projectile.timeLeft * MathHelper.TwoPi / 60f;
                     float trueRot = Projectile.oldRot[i] + rotMotion;
-                    Vector2 squishFactor = new Vector2 (0.8f, 1f);
+                    Vector2 squishFactor = new Vector2(0.8f, 1f);
 
                     Particle redSmear = new SemiCircularSmearVFX(truePos, redGradient, trueRot, 0.3f, squishFactor);
                     GeneralParticleHandler.SpawnParticle(redSmear);
@@ -86,7 +86,7 @@ namespace CalamityMod.Projectiles.Melee
 
             // Disallow the NPC to be targeted again
             PreviousNPCs.Add(target.whoAmI);
-            if(SeekNPC() == -1)
+            if (SeekNPC() == -1)
                 ReturnToOwner();
 
             // Return hits have diminishing damage
@@ -98,7 +98,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             SoundEngine.PlaySound(CollisionSound, Projectile.Center);
 
-            if(SeekNPC() == -1)
+            if (SeekNPC() == -1)
                 ReturnToOwner();
 
             // Counts as "hitting" something
@@ -146,13 +146,13 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.tileCollide = false;
 
             // Swiftly move back towards the player
-            Projectile.velocity = Projectile.SafeDirectionTo(Owner.Center) * 15f;
+            Projectile.velocity = Projectile.SafeDirectionTo(Owner.Center) * 20f;
 
             // Delete the projectile if it touches its owner or too far away.
             if (Projectile.Hitbox.Intersects(Owner.Hitbox) || Vector2.Distance(Projectile.Center, Owner.Center) >= 3000f)
                 Projectile.Kill();
         }
-        
+
         // Preventing unintended collisions with the floor
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {

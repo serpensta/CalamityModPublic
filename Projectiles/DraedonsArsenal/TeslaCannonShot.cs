@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.DraedonsArsenal
 {
@@ -47,7 +47,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     Main.dust[teslaDust].scale = Main.rand.Next(70, 110) * 0.026f;
                 }
 
-                if (Main.rand.Next(6) == 0)
+                if (Main.rand.NextBool(6))
                     Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, dustArray[6], 0f, 0f);
 
                 if (notArcingProjectile)
@@ -233,7 +233,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 Vector2 dustVel = new Vector2(dustSpeed, 0.0f).RotatedBy(Projectile.velocity.ToRotation());
                 dustVel = dustVel.RotatedBy(-angleRandom);
                 dustVel = dustVel.RotatedByRandom(2f * angleRandom);
-                int randomDustType = Main.rand.Next(2) == 0 ? dustArray[4] : dustArray[5];
+                int randomDustType = Main.rand.NextBool(2)? dustArray[4] : dustArray[5];
                 float scale = randomDustType == dustArray[4] ? 1.5f : 1f;
 
                 int electricDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 200, default, 2.5f * scale);
@@ -262,7 +262,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 Vector2 dustVel = new Vector2(dustSpeed, 0f).RotatedBy(Projectile.velocity.ToRotation());
                 dustVel = dustVel.RotatedBy(-angleRandom);
                 dustVel = dustVel.RotatedByRandom(2f * angleRandom);
-                int randomDustType = Main.rand.Next(2) == 0 ? dustArray[4] : dustArray[5];
+                int randomDustType = Main.rand.NextBool(2)? dustArray[4] : dustArray[5];
                 float scale = randomDustType == dustArray[4] ? 1.5f : 1f;
 
                 int electricDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 0, default, 3f * scale);
