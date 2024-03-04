@@ -197,23 +197,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         internal static void LoadHeadIcons()
         {
             string hoodedIconPath = "CalamityMod/NPCs/SupremeCalamitas/HoodedHeadIcon";
-            string hoodedIconP2Path = "CalamityMod/NPCs/SupremeCalamitas/HoodedHeadIconP2";
             string hoodlessIconPath = "CalamityMod/NPCs/SupremeCalamitas/HoodlessHeadIcon";
-            string hoodlessIconP2Path = "CalamityMod/NPCs/SupremeCalamitas/HoodlessHeadIconP2";
             string cirrusIconPath = "CalamityMod/NPCs/SupremeCalamitas/CirrusHeadIcon";
             string cirrusIconP2Path = "CalamityMod/NPCs/SupremeCalamitas/CirrusHeadIcon2";
 
             CalamityMod.Instance.AddBossHeadTexture(hoodedIconPath, -1);
             hoodedHeadIconIndex = ModContent.GetModBossHeadSlot(hoodedIconPath);
 
-            CalamityMod.Instance.AddBossHeadTexture(hoodedIconP2Path, -1);
-            hoodedHeadIconP2Index = ModContent.GetModBossHeadSlot(hoodedIconP2Path);
-
             CalamityMod.Instance.AddBossHeadTexture(hoodlessIconPath, -1);
             hoodlessHeadIconIndex = ModContent.GetModBossHeadSlot(hoodlessIconPath);
-
-            CalamityMod.Instance.AddBossHeadTexture(hoodlessIconP2Path, -1);
-            hoodlessHeadIconP2Index = ModContent.GetModBossHeadSlot(hoodlessIconP2Path);
 
             CalamityMod.Instance.AddBossHeadTexture(cirrusIconPath, -1);
             cirrusHeadIconIndex = ModContent.GetModBossHeadSlot(cirrusIconPath);
@@ -279,9 +271,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else
             {
                 if (!DownedBossSystem.downedCalamitas || BossRushEvent.BossRushActive)
-                    index = inPhase2 ? hoodedHeadIconP2Index : hoodedHeadIconIndex;
+                    index = hoodedHeadIconIndex;
                 else
-                    index = inPhase2 ? hoodlessHeadIconP2Index : hoodlessHeadIconIndex;
+                    index = hoodlessHeadIconIndex;
             }
         }
 
