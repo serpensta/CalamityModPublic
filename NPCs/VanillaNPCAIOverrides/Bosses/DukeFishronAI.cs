@@ -189,6 +189,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (masterMode)
             {
                 idlePhaseTimer /= 2;
+                idlePhaseAcceleration *= 1.3f;
+                idlePhaseVelocity *= 1.3f;
                 chargeTime -= 4;
                 chargeVelocity += 3f;
             }
@@ -433,6 +435,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.ai[2] = 0f;
                         if (enrage)
                             npc.ai[2] = sharknadoPhaseTimer - 40;
+                        else if (masterMode)
+                            npc.ai[2] = sharknadoPhaseTimer - 60;
                     }
 
                     // Go to phase 2
@@ -1042,6 +1046,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     Main.dust[phase3ChargeDust].velocity -= npc.velocity;
                 }
 
+                // Spawn bubbles during charge in Master Mode
+                if (masterMode && phase4)
+                {
+                    if (npc.ai[2] % (bubbleBelchPhaseDivisor * 2) == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.NPCDeath19, npc.Center);
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Vector2 bubbleSpawnDirection = Vector2.Normalize(player.Center - npc.Center) * (npc.width + 20) / 2f + npc.Center;
+                            NPC.NewNPC(npc.GetSource_FromAI(), (int)bubbleSpawnDirection.X, (int)bubbleSpawnDirection.Y + 45, NPCID.DetonatingBubble);
+                        }
+                    }
+                }
+
                 npc.ai[2] += 1f;
                 if (npc.ai[2] >= chargeTime)
                 {
@@ -1137,18 +1156,22 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             bool pop = npc.ai[0] == 1f;
+
             Vector2 velocityVector = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
-            float inertia = 40f;
+            float inertia = 30f;
             float velocity = 25f;
             npc.velocity = (npc.velocity * inertia + velocityVector * velocity) / (inertia + 1f);
+            
             npc.scale = npc.ai[3];
+
             npc.alpha -= 30;
             if (npc.alpha < 50)
                 npc.alpha = 50;
-
             npc.alpha = 50;
-            npc.velocity.X = (npc.velocity.X * 50f + Main.windSpeedCurrent * 2f + (float)Main.rand.Next(-10, 11) * 0.1f) / 51f;
-            npc.velocity.Y = (npc.velocity.Y * 50f + -0.25f + (float)Main.rand.Next(-10, 11) * 0.2f) / 51f;
+
+            float inertia2 = inertia + 10f;
+            npc.velocity.X = (npc.velocity.X * inertia2 + (float)Main.rand.Next(-10, 11) * 0.1f) / (inertia2 + 1f);
+            npc.velocity.Y = (npc.velocity.Y * inertia2 + -0.25f + (float)Main.rand.Next(-10, 11) * 0.2f) / (inertia2 + 1f);
             if (npc.velocity.Y > 0f)
                 npc.velocity.Y -= 0.04f;
 

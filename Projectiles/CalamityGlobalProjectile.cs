@@ -811,11 +811,13 @@ namespace CalamityMod.Projectiles
 
                 if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
                 {
+                    bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
+
                     int num606 = 16;
                     int num607 = 16;
-                    float num608 = 2f;
-                    int num609 = 150;
-                    int num610 = 42;
+                    float segmentScale = masterMode ? 2.5f : 2f;
+                    int segmentWidth = 150;
+                    int segmentHeight = 42;
 
                     if (projectile.velocity.X != 0f)
                         projectile.direction = projectile.spriteDirection = -Math.Sign(projectile.velocity.X);
@@ -836,9 +838,9 @@ namespace CalamityMod.Projectiles
                         projectile.localAI[0] = 1f;
                         projectile.position.X += projectile.width / 2;
                         projectile.position.Y += projectile.height / 2;
-                        projectile.scale = (num606 + num607 - projectile.ai[1]) * num608 / (num607 + num606);
-                        projectile.width = (int)(num609 * projectile.scale);
-                        projectile.height = (int)(num610 * projectile.scale);
+                        projectile.scale = (num606 + num607 - projectile.ai[1]) * segmentScale / (num607 + num606);
+                        projectile.width = (int)(segmentWidth * projectile.scale);
+                        projectile.height = (int)(segmentHeight * projectile.scale);
                         projectile.position.X -= projectile.width / 2;
                         projectile.position.Y -= projectile.height / 2;
                         projectile.netUpdate = true;
@@ -846,9 +848,9 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.ai[1] != -1f)
                     {
-                        projectile.scale = (num606 + num607 - projectile.ai[1]) * num608 / (num607 + num606);
-                        projectile.width = (int)(num609 * projectile.scale);
-                        projectile.height = (int)(num610 * projectile.scale);
+                        projectile.scale = (num606 + num607 - projectile.ai[1]) * segmentScale / (num607 + num606);
+                        projectile.width = (int)(segmentWidth * projectile.scale);
+                        projectile.height = (int)(segmentHeight * projectile.scale);
                     }
 
                     if (!Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
@@ -874,37 +876,39 @@ namespace CalamityMod.Projectiles
                         projectile.netUpdate = true;
 
                         Vector2 center = projectile.Center;
-                        center.Y -= num610 * projectile.scale / 2f;
+                        center.Y -= segmentHeight * projectile.scale / 2f;
 
-                        float num611 = (num606 + num607 - projectile.ai[1] + 1f) * num608 / (num607 + num606);
-                        center.Y -= num610 * num611 / 2f;
+                        float num611 = (num606 + num607 - projectile.ai[1] + 1f) * segmentScale / (num607 + num606);
+                        center.Y -= segmentHeight * num611 / 2f;
                         center.Y += 2f;
 
-                        Projectile.NewProjectile(projectile.GetSource_FromThis(), center.X, center.Y, projectile.velocity.X, projectile.velocity.Y, projectile.type, projectile.damage, projectile.knockBack, projectile.owner, 10f, projectile.ai[1] - 1f);
+                        float segmentSpawnDelay = 10f;
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), center, projectile.velocity, projectile.type, projectile.damage, projectile.knockBack, projectile.owner, segmentSpawnDelay, projectile.ai[1] - 1f);
 
-                        if ((int)projectile.ai[1] % 3 == 0 && projectile.ai[1] != 0f)
+                        int sharkronSpawnGateValue = masterMode ? 2 : 3;
+                        if ((int)projectile.ai[1] % sharkronSpawnGateValue == 0 && projectile.ai[1] != 0f)
                         {
-                            int num614 = NPC.NewNPC(projectile.GetSource_FromAI(), (int)center.X, (int)center.Y, NPCID.Sharkron2);
-                            Main.npc[num614].velocity = projectile.velocity;
-                            Main.npc[num614].scale = 1.5f;
-                            Main.npc[num614].netUpdate = true;
-                            Main.npc[num614].ai[2] = projectile.width;
-                            Main.npc[num614].ai[3] = -1.5f;
+                            int sharkron = NPC.NewNPC(projectile.GetSource_FromAI(), (int)center.X, (int)center.Y, NPCID.Sharkron2);
+                            Main.npc[sharkron].velocity = projectile.velocity;
+                            Main.npc[sharkron].scale = masterMode ? 2f : 1.5f;
+                            Main.npc[sharkron].netUpdate = true;
+                            Main.npc[sharkron].ai[2] = projectile.width;
+                            Main.npc[sharkron].ai[3] = -1.5f;
                         }
                     }
 
                     if (projectile.ai[0] <= 0f)
                     {
-                        float num615 = 0.104719758f;
-                        float num616 = projectile.width / 5f * 2.5f;
-                        float num617 = (float)(Math.Cos(num615 * -(double)projectile.ai[0]) - 0.5) * num616;
+                        float swayAmount = MathHelper.Pi / 30f;
+                        float widthSwayScale = projectile.width / 5f * 2.5f;
+                        float sway = (float)(Math.Cos(swayAmount * -(double)projectile.ai[0]) - 0.5) * widthSwayScale;
 
-                        projectile.position.X -= num617 * -projectile.direction;
+                        projectile.position.X -= sway * -projectile.direction;
 
                         projectile.ai[0] -= 1f;
 
-                        num617 = (float)(Math.Cos(num615 * -(double)projectile.ai[0]) - 0.5) * num616;
-                        projectile.position.X += num617 * -projectile.direction;
+                        sway = (float)(Math.Cos(swayAmount * -(double)projectile.ai[0]) - 0.5) * widthSwayScale;
+                        projectile.position.X += sway * -projectile.direction;
                     }
 
                     return false;

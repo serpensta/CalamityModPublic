@@ -2378,7 +2378,7 @@ namespace CalamityMod.NPCs
                     npc.dontTakeDamage = true;
                     break;
 
-                // Make Fishron's Bubbles immune to damage in Rev+ Master Mode
+                // Make Fishron and Anahita Bubbles immune to damage in Rev+ Master Mode
                 case NPCID.DetonatingBubble:
                     npc.dontTakeDamage = Main.masterMode && CalamityWorld.revenge;
                     break;

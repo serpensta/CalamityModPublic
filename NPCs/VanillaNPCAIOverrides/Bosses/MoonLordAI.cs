@@ -1919,7 +1919,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             npc.ai[2] = (Main.player[npc.target].Center - npc.Center).ToRotation() + MathHelper.PiOver2;
 
-                            npc.rotation = npc.rotation.AngleTowards(npc.ai[2], 0.104719758f);
+                            npc.rotation = npc.rotation.AngleTowards(npc.ai[2], MathHelper.Pi / 30f);
 
                             return false;
                         }
