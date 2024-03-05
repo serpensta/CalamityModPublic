@@ -1026,8 +1026,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         num653 = num650 / num653;
                         npc.velocity.X = num651 * num653;
                         npc.velocity.Y = num652 * num653;
+
+                        float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
+                        npc.direction = playerLocation < 0 ? 1 : -1;
                         npc.spriteDirection = npc.direction;
+
                         SoundEngine.PlaySound(SoundID.Zombie125, npc.Center);
+
                         return false;
                     }
 
@@ -1093,6 +1098,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (npc.velocity.X > 16f)
                         npc.velocity.X = 16f;
 
+                    // Face the correct direction
+                    float playerLocation2 = npc.Center.X - Main.player[npc.target].Center.X;
+                    npc.direction = playerLocation2 < 0 ? 1 : -1;
                     npc.spriteDirection = npc.direction;
 
                     return false;
@@ -1130,9 +1138,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 if (npc.ai[2] == 1f)
                 {
+                    // Avoid cheap bullshit
+                    npc.damage = 0;
+
                     npc.TargetClosest();
+
+                    float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
+                    npc.direction = playerLocation < 0 ? 1 : -1;
                     npc.spriteDirection = npc.direction;
+
                     npc.localAI[0] = 0f;
+
                     npc.velocity *= (Main.masterMode ? 0.8f : 0.9f);
                     float num658 = Main.masterMode ? 0.2f : 0.1f;
                     if (Main.expertMode)
@@ -1177,7 +1193,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.damage = 0;
 
                 npc.TargetClosest();
+
+                float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
+                npc.direction = playerLocation < 0 ? 1 : -1;
                 npc.spriteDirection = npc.direction;
+
                 float num659 = Main.masterMode ? 14f : 12f;
                 float num660 = 0.14f;
                 if (Main.expertMode)
@@ -1271,7 +1291,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 else
                     npc.velocity *= (Main.masterMode ? 0.8f : 0.9f);
 
+                float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
+                npc.direction = playerLocation < 0 ? 1 : -1;
                 npc.spriteDirection = npc.direction;
+
                 float maxBees = Main.masterMode ? 8f : 5f;
                 if (npc.ai[2] > maxBees)
                 {
@@ -1284,6 +1307,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 // Avoid cheap bullshit
                 npc.damage = 0;
+
+                float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
+                npc.direction = playerLocation < 0 ? 1 : -1;
+                npc.spriteDirection = npc.direction;
 
                 float num674 = 12f;
                 float num675 = 0.1f;
