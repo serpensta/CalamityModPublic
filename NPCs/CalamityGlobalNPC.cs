@@ -1340,8 +1340,6 @@ namespace CalamityMod.NPCs
             else if (npc.type == NPCID.GolemHeadFree)
             {
                 npc.lifeMax = (int)Math.Round(npc.lifeMax * 2D);
-                npc.width = 88;
-                npc.height = 90;
                 npc.dontTakeDamage = false;
             }
             else if (npc.type == NPCID.HallowBoss)
@@ -2356,6 +2354,12 @@ namespace CalamityMod.NPCs
                 case NPCID.Sharkron2:
                     npc.width = npc.height = 36;
                     canBreakPlayerDefense = true;
+                    break;
+
+                // Fix drawing issues with Golem's Free Head
+                case NPCID.GolemHeadFree:
+                    npc.width = 88;
+                    npc.height = 90;
                     break;
 
                 // Make Core hitbox bigger and reduce HP

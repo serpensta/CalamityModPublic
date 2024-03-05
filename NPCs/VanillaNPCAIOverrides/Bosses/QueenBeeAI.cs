@@ -838,9 +838,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
                 npc.TargetClosest();
 
+            bool enrage = true;
+            int targetTileX = (int)Main.player[npc.target].Center.X / 16;
+            int targetTileY = (int)Main.player[npc.target].Center.Y / 16;
+
+            Tile tile = Framing.GetTileSafely(targetTileX, targetTileY);
+            if (tile.WallType == WallID.HiveUnsafe)
+                enrage = false;
+
             bool dead4 = Main.player[npc.target].dead;
             float num644 = 0f;
-            if ((double)(npc.position.Y / 16f) < Main.worldSurface)
+            if ((double)(npc.position.Y / 16f) < Main.worldSurface && enrage)
                 num644 += 1f;
 
             if (!Main.player[npc.target].ZoneJungle)

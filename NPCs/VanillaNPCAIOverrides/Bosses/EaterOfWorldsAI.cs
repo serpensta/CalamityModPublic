@@ -680,6 +680,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.alpha = 0;
                 }
             }
+            else if (npc.type > NPCID.EaterofWorldsHead && npc.alpha > 0)
+            {
+                npc.alpha -= 42;
+                if (npc.alpha < 0)
+                    npc.alpha = 0;
+            }
 
             // Manually sync newAI because there is no GlobalNPC.SendExtraAI
             if (npc.active && npc.netUpdate && Main.netMode == NetmodeID.Server)
@@ -1179,6 +1185,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (npc.alpha < 0)
                         npc.alpha = 0;
                 }
+            }
+            else if (npc.type > NPCID.EaterofWorldsHead && npc.alpha > 0)
+            {
+                npc.alpha -= 42;
+                if (npc.alpha < 0)
+                    npc.alpha = 0;
             }
 
             return false;
