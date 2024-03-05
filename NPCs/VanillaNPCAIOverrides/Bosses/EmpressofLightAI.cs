@@ -849,8 +849,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 case 8:
                 case 9:
 
-                    takeDamage = !(npc.ai[1] >= 6f) || !(npc.ai[1] <= 40f);
-
                     int chargeDirection = (npc.ai[0] != 8f) ? 1 : (-1);
 
                     AI_120_HallowBoss_DoMagicEffect(npc.Center, 5, Utils.GetLerpValue(40f, 90f, npc.ai[1], clamped: true), npc);
@@ -1990,7 +1988,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         int dashVelocity = phase3 ? 80 : 50;
                         float dashAcceleration = phase3 ? 0.08f : 0.05f;
 
-                        takeDamage = !(npc.ai[1] >= 6f) || !(npc.ai[1] <= startDashTime);
                         int dashDirection = (npc.ai[0] != 8f ? 1 : -1);
                         AI_120_HallowBoss_DoMagicEffect(npc.Center, 5, Utils.GetLerpValue(startDashTime, endDashTime, npc.ai[1], clamped: true), npc);
 

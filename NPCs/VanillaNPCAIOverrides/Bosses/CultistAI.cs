@@ -1650,7 +1650,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                vec = Vector2.Normalize(player.Center - center3 + player.velocity * 20f);
+                                vec = Vector2.Normalize(player.Center - center3);
                                 if (vec.HasNaNs())
                                     vec = new Vector2(npc.direction, 0f);
 
@@ -1666,7 +1666,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        vec = Vector2.Normalize(player.Center - center + player.velocity * 20f);
+                        vec = Vector2.Normalize(player.Center - center);
                         if (vec.HasNaNs())
                             vec = new Vector2(npc.direction, 0f);
 
@@ -1720,7 +1720,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    vec2 = Vector2.Normalize(player.Center - center4 + player.velocity * 20f);
+                                    vec2 = Vector2.Normalize(player.Center - center4);
                                     if (vec2.HasNaNs())
                                         vec2 = new Vector2(npc.direction, 0f);
 
@@ -1741,7 +1741,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        vec2 = Vector2.Normalize(player.Center - center + player.velocity * 20f);
+                        vec2 = Vector2.Normalize(player.Center - center);
                         if (vec2.HasNaNs())
                             vec2 = new Vector2(npc.direction, 0f);
 
@@ -1791,7 +1791,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 vector8 = Vector2.Normalize(player.Center - center5 + player.velocity * 20f);
+                            Vector2 vector8 = Vector2.Normalize(player.Center - center5);
                             if (vector8.HasNaNs())
                                 vector8 = new Vector2(npc.direction, 0f);
 
@@ -2045,7 +2045,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                vec3 = Vector2.Normalize(player.Center - center7 + player.velocity * 20f);
+                                vec3 = Vector2.Normalize(player.Center - center7);
                                 if (vec3.HasNaNs())
                                     vec3 = new Vector2(npc.direction, 0f);
 
@@ -2068,28 +2068,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        vec3 = Vector2.Normalize(player.Center - center + player.velocity * 20f);
+                        vec3 = Vector2.Normalize(player.Center - center);
                         if (vec3.HasNaNs())
                             vec3 = new Vector2(npc.direction, 0f);
 
                         Vector2 vector15 = npc.Center + new Vector2(npc.direction * 30, 12f);
-                        
-                        // Normal = 1 and 0.5
-                        // Expert = 1, 0.667 and 0.333
-                        // Master = 1, 0.75, 0.5 and 0.25
-                        float ancientLightVelocityAndSpreadScale = (ancientLightAmount - ((npc.ai[1] - 4f) / ancientLightPhaseTime)) / ancientLightAmount;
-
-                        // Normal = 12f and 8f
-                        // Expert = 12f, 9.336f and 6.664f
-                        // Master = 12f, 10f, 8f and 6f
-                        float velocity = 12f * MathHelper.Lerp(1f / 3f, 1f, ancientLightVelocityAndSpreadScale);
-
-                        // Later spreads are wider
-                        float spread = (float)Math.PI * 2f / (float)Math.Round(25f * MathHelper.Lerp(0.1f, 1f, ancientLightVelocityAndSpreadScale));
-
-                        // Later spreads have more NPCs
-                        float ancientLightLimit = (float)Math.Round(5f + MathHelper.Lerp(0f, 10f, 1f - ancientLightVelocityAndSpreadScale));
-
+                        float velocity = masterMode ? 14f : expertMode ? 12f : 10f;
+                        float spread = MathHelper.ToRadians(masterMode ? 15f : expertMode ? 20f : 25f);
+                        float ancientLightLimit = 5f;
                         for (int i = 0; (float)i < ancientLightLimit; i++)
                         {
                             Vector2 spinningpoint2 = vec3 * velocity;
