@@ -705,6 +705,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 // Slow down and disappear in a burst of fire if should despawn.
                 if (!player.active || player.dead)
                 {
+                    if (SoundEngine.TryGetActiveSound(BulletHellRumbleSlot, out var rumbleSound) && rumbleSound.IsPlaying)
+                        rumbleSound.Stop();
+
                     canDespawn = true;
 
                     NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 0f, 0.065f);
@@ -789,6 +792,18 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.chaseable = false;
                 NPC.dontTakeDamage = true;
 
+                #region BulletHellEndTelegraphBH1
+                if (bulletHellCounter2 == (BulletHellDuration - 360))
+                    BulletHellRumbleSlot = SoundEngine.PlaySound(BulletHellSound, player.Center);
+                if (bulletHellCounter2 > (BulletHellDuration - 360))
+                {
+                    if (SoundEngine.TryGetActiveSound(BulletHellRumbleSlot, out var BHSound) && BHSound.IsPlaying)
+                    {
+                        BHSound.Position = player.MountedCenter;
+                    }
+                }
+                #endregion
+
                 if (!canDespawn)
                     NPC.velocity *= 0.95f;
 
@@ -838,7 +853,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     castFire.noGravity = true;
                 }
 
-                NPC.Center = safeBox.TopRight() + new Vector2(-120f, 620f);
+                Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
+                GeneralParticleHandler.SpawnParticle(pulse);
+                Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                GeneralParticleHandler.SpawnParticle(pulse2);
+
+                SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
 
                 for (int i = 0; i < 40; i++)
                 {
@@ -1630,8 +1650,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         castFire.noGravity = true;
                     }
 
-                    NPC.Center = safeBox.TopRight() + new Vector2(-120f, 620f);
-
                     for (int i = 0; i < 40; i++)
                     {
                         Dust castFire = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Square(-70f, 70f), cirrus ? (int)CalamityDusts.PurpleCosmilite : (int)CalamityDusts.Brimstone);
@@ -1666,8 +1684,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             projectile.ai[1] = 1f;
 
-                            if (projectile.timeLeft > 60)
-                                projectile.timeLeft = 60;
+                            if (projectile.timeLeft > 15)
+                                projectile.timeLeft = 15;
                         }
                     }
                 }
@@ -2089,6 +2107,17 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         NPC.ai[2] += 1f;
 
+                        // Bonus visuals
+                        if (!canDespawn && NPC.ai[2] < 23)
+                        {
+                            VoidSparkParticle spark2 = new VoidSparkParticle(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.3f, -NPC.velocity.RotatedByRandom(0.15f) * Main.rand.NextFloat(0.9f, 1.2f), false, 9, Main.rand.NextFloat(0.11f, 0.18f) - NPC.ai[2] * 0.0035f, Color.Red);
+                            GeneralParticleHandler.SpawnParticle(spark2);
+                            Dust dashDust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height), 182);
+                            dashDust.noGravity = true;
+                            dashDust.velocity = -NPC.velocity.RotatedByRandom(0.15f) * Main.rand.NextFloat(0.9f, 1.2f);
+                            dashDust.scale = Main.rand.NextFloat(0.3f, 0.6f);
+                        }
+
                         if (Math.Abs(NPC.velocity.X) > 0.15f)
                             NPC.spriteDirection = (NPC.velocity.X < 0f).ToDirectionInt();
 
@@ -2337,8 +2366,20 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         NPC.ai[2] = 0f;
                     else
                     {
-                        for (int i = 0; i < 50; i++)
-                            Dust.NewDust(NPC.position, NPC.width, NPC.height, cirrus ? (int)CalamityDusts.PurpleCosmilite : (int)CalamityDusts.Brimstone, Main.rand.Next(-30, 31) * 0.2f, Main.rand.Next(-30, 31) * 0.2f, 0, default, 1f);
+                        for (int i = 0; i < 90; i++)
+                        {
+                            Dust spawnDust = Dust.NewDustPerfect(NPC.Center, cirrus ? (int)CalamityDusts.PurpleCosmilite : (int)CalamityDusts.Brimstone, new Vector2(30, 30).RotatedByRandom(100) * Main.rand.NextFloat(0.05f, 1.2f));
+                            spawnDust.noGravity = true;
+                            spawnDust.scale = Main.rand.NextFloat(1.2f, 2.3f);
+                        }
+                        for (int i = 0; i < 40; i++)
+                        {
+                            Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
+                            GlowOrbParticle orb = new GlowOrbParticle(NPC.Center + sparkVel * 2, sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f), cirrus ? Color.Magenta : Color.Red, true, true);
+                            GeneralParticleHandler.SpawnParticle(orb);
+                        }
+                        Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Magenta : Color.Red, new Vector2(2f, 2f), 0, 0f, 1.1f, 25);
+                        GeneralParticleHandler.SpawnParticle(pulse);
 
                         SoundEngine.PlaySound(SpawnSound, NPC.Center);
                     }
@@ -2610,6 +2651,17 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     {
                         // Set damage
                         NPC.damage = NPC.defDamage;
+
+                        // Bonus visuals
+                        if (!canDespawn && NPC.ai[2] < 23)
+                        {
+                            VoidSparkParticle spark2 = new VoidSparkParticle(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.3f, -NPC.velocity.RotatedByRandom(0.15f) * Main.rand.NextFloat(0.9f, 1.2f), false, 9, Main.rand.NextFloat(0.11f, 0.18f) - NPC.ai[2] * 0.0035f, Color.Red);
+                            GeneralParticleHandler.SpawnParticle(spark2);
+                            Dust dashDust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height), 182);
+                            dashDust.noGravity = true;
+                            dashDust.velocity = -NPC.velocity.RotatedByRandom(0.15f) * Main.rand.NextFloat(0.9f, 1.2f);
+                            dashDust.scale = Main.rand.NextFloat(0.3f, 0.6f);
+                        }
 
                         float chargeVelocity = (wormAlive ? 26f : 30f) + (1f - lifeRatio) * 8f;
 
@@ -2952,7 +3004,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         spawnY = spawnYReset;
 
                         if (NPC.CountNPCS(ModContent.NPCType<SepulcherHead>()) <= 0) // Check is here for the zenith seed
-                            NPC.SpawnOnPlayer(NPC.FindClosestPlayer(), ModContent.NPCType<SepulcherHead>());
+                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)(safeBox.Center().X), (int)(safeBox.Bottom().Y), ModContent.NPCType<SepulcherHead>());
                     }
 
                     NPC.netUpdate = true;
@@ -2974,7 +3026,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.netUpdate = true;
             }
 
-            // Draw some magic dust much like the sandstorm elemental cast that approaches where the brothers will spawn.
+            // Draw some magic much like the sandstorm elemental cast that approaches where the brothers will spawn.
             if (attackCastDelay < brothersSpawnCastTime - 45f && attackCastDelay >= 60f)
             {
                 float castCompletion = Utils.GetLerpValue(brothersSpawnCastTime - 45f, 60f, attackCastDelay);
@@ -2982,58 +3034,65 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 Vector2 leftDustPosition = Vector2.CatmullRom(leftOfCircle + Vector2.UnitY * 1000f, leftOfCircle, catastropheSpawnPosition, catastropheSpawnPosition + Vector2.UnitY * 1000f, castCompletion);
                 Vector2 rightDustPosition = Vector2.CatmullRom(rightOfCircle + Vector2.UnitY * 1000f, rightOfCircle, cataclysmSpawnPosition, cataclysmSpawnPosition + Vector2.UnitY * 1000f, castCompletion);
 
-                Dust castMagicDust = Dust.NewDustPerfect(leftDustPosition, 267);
-                castMagicDust.scale = 1.67f;
-                castMagicDust.velocity = Main.rand.NextVector2CircularEdge(0.2f, 0.2f);
-                castMagicDust.color = cirrus ? Color.Pink : Color.Red;
-                castMagicDust.noGravity = true;
-
-                castMagicDust = Dust.CloneDust(castMagicDust);
-                castMagicDust.position = rightDustPosition;
+                GlowOrbParticle orb = new GlowOrbParticle(leftDustPosition, Vector2.Zero, false, 20, 2.8f - attackCastDelay * 0.01f, cirrus ? Color.Pink : Color.Red, true, true);
+                GeneralParticleHandler.SpawnParticle(orb);
+                GlowOrbParticle orb2 = new GlowOrbParticle(rightDustPosition, Vector2.Zero, false, 20, 2.8f - attackCastDelay * 0.01f, cirrus ? Color.Pink : Color.Red, true, true);
+                GeneralParticleHandler.SpawnParticle(orb2);
             }
 
             // Make some magic effects at where the bros will spawn.
             if (attackCastDelay < 60f)
             {
+                if (attackCastDelay == 59)
+                {
+
+                    Particle bloom1 = new BloomParticle(catastropheSpawnPosition, Vector2.Zero, Color.DeepSkyBlue, 0f, 1.4f, 59, false);
+                    GeneralParticleHandler.SpawnParticle(bloom1);
+                    Particle bloom2 = new BloomParticle(catastropheSpawnPosition, Vector2.Zero, Color.DeepSkyBlue, 0f, 1f, 59, false);
+                    GeneralParticleHandler.SpawnParticle(bloom2);
+                    Particle bloom3 = new BloomParticle(cataclysmSpawnPosition, Vector2.Zero, new Color(121, 21, 77), 0f, 1.4f, 59, false);
+                    GeneralParticleHandler.SpawnParticle(bloom3);
+                    Particle bloom4 = new BloomParticle(cataclysmSpawnPosition, Vector2.Zero, new Color(121, 21, 77), 0f, 1f, 59, false);
+                    GeneralParticleHandler.SpawnParticle(bloom4);
+                }
                 float burnPower = Utils.GetLerpValue(60f, 20f, attackCastDelay);
                 if (attackCastDelay == 0f)
                     burnPower = 4f;
 
-                for (int i = 0; i < MathHelper.Lerp(5, 25, burnPower); i++)
+                for (int i = 0; i < MathHelper.Lerp(1, 6, burnPower); i++)
                 {
-                    Dust fire = Dust.NewDustPerfect(catastropheSpawnPosition + Main.rand.NextVector2Circular(60f, 60f), 264);
-                    fire.velocity = Vector2.UnitY * -Main.rand.NextFloat(2f, 4f);
-
-                    if (attackCastDelay == 0)
-                    {
-                        fire.velocity += Main.rand.NextVector2Circular(4f, 4f);
-                        fire.fadeIn = 1.6f;
-                    }
-
-                    fire.noGravity = true;
-                    fire.noLight = true;
-                    fire.color = cirrus ? Color.BlueViolet : Color.OrangeRed;
-                    fire.scale = 1.4f + fire.velocity.Y * 0.16f;
-
-                    fire = Dust.NewDustPerfect(cataclysmSpawnPosition + Main.rand.NextVector2Circular(60f, 60f), 264);
-                    fire.velocity = Vector2.UnitY * -Main.rand.NextFloat(2f, 4f);
-
-                    if (attackCastDelay == 0)
-                    {
-                        fire.velocity += Main.rand.NextVector2Circular(4f, 4f);
-                        fire.fadeIn = 1.6f;
-                    }
-
-                    fire.noGravity = true;
-                    fire.noLight = true;
-                    fire.color = cirrus ? Color.BlueViolet : Color.OrangeRed;
-                    fire.scale = 1.4f + fire.velocity.Y * 0.16f;
+                    Vector2 velOffset = CalamityUtils.RandomVelocity(100f, 70f, 150f, 0.04f);
+                    velOffset *= Main.rand.NextFloat(2, 13);
+                    VoidSparkParticle spark1 = new VoidSparkParticle(catastropheSpawnPosition + velOffset * 4.5f, -velOffset * 0.25f, false, 9, Main.rand.NextFloat(0.08f, 0.16f) - attackCastDelay * 0.002f, Main.rand.NextBool(5) ? Color.DeepSkyBlue : Color.Red);
+                    GeneralParticleHandler.SpawnParticle(spark1);
+                    VoidSparkParticle spark2 = new VoidSparkParticle(cataclysmSpawnPosition + velOffset * 4.5f, -velOffset * 0.25f, false, 9, Main.rand.NextFloat(0.08f, 0.16f) - attackCastDelay * 0.002f, Main.rand.NextBool(5) ? new Color(121, 21, 77) : Color.Red);
+                    GeneralParticleHandler.SpawnParticle(spark2);
                 }
             }
 
             // And spawn them.
             if (attackCastDelay == 0)
             {
+                for (int i = 0; i < 30; i++)
+                {
+                    SparkParticle spark1 = new SparkParticle(catastropheSpawnPosition, new Vector2(5, 5).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f), false, 35, Main.rand.NextFloat(1.2f, 1.45f), Main.rand.NextBool() ? Color.DeepSkyBlue : Color.Red);
+                    GeneralParticleHandler.SpawnParticle(spark1);
+
+                    SparkParticle spark2 = new SparkParticle(cataclysmSpawnPosition, new Vector2(5, 5).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.5f), false, 35, Main.rand.NextFloat(1.2f, 1.45f), Main.rand.NextBool() ? new Color(80, 21, 77) : Color.Red);
+                    GeneralParticleHandler.SpawnParticle(spark2);
+
+                    Dust catastrophedust = Dust.NewDustPerfect(catastropheSpawnPosition, 279, new Vector2(9, 9).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.5f));
+                    catastrophedust.noGravity = true;
+                    catastrophedust.scale = Main.rand.NextFloat(1.5f, 1.85f);
+                    catastrophedust.color = Color.DeepSkyBlue;
+
+                    Dust cataclysmdust = Dust.NewDustPerfect(cataclysmSpawnPosition, 279, new Vector2(9, 9).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.5f));
+                    cataclysmdust.noGravity = true;
+                    cataclysmdust.scale = Main.rand.NextFloat(1.5f, 1.85f);
+                    cataclysmdust.color = new Color(80, 21, 77);
+
+                }
+
                 if (!BossRushEvent.BossRushActive)
                 {
                     string key = "Mods.CalamityMod.Status.Boss.SCalBrothersText";
@@ -3051,7 +3110,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     CalamityUtils.SpawnBossBetter(cataclysmSpawnPosition, cirrus ? ModContent.NPCType<DevourerofGodsHead>() : ModContent.NPCType<SupremeCataclysm>());
                 }
 
-                SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact, NPC.Center);
+                SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/NPCKilled/RavagerDeath1") with { Pitch = -0.2f }, cataclysmSpawnPosition);
+                SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/NPCKilled/RavagerDeath2") with { Pitch = -0.2f }, catastropheSpawnPosition);
                 hasSummonedBrothers = true;
             }
         }

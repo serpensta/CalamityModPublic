@@ -1,5 +1,7 @@
 ﻿using CalamityMod.Dusts;
+using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.NPCs.SupremeCalamitas;
+using CalamityMod.Particles;
 using CalamityMod.Skies;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -90,22 +92,20 @@ namespace CalamityMod.Projectiles.Boss
             Main.LocalPlayer.Calamity().GeneralScreenShakePower = Utils.GetLerpValue(3400f, 1560f, Main.LocalPlayer.Distance(Projectile.Center), true) * 16f;
 
             // Generate a dust explosion at the ritual's position.
-            float burstDirectionVariance = 3;
-            float burstSpeed = 14f;
-            for (int j = 0; j < 16; j++)
+            for (int i = 0; i < 90; i++)
             {
-                burstDirectionVariance += j * 2;
-                for (int k = 0; k < 40; k++)
-                {
-                    int type = Projectile.ai[1] == 1 ? 69 : (int)CalamityDusts.Brimstone;
-                    Dust burstDust = Dust.NewDustPerfect(Projectile.Center, type);
-                    burstDust.scale = Main.rand.NextFloat(3.1f, 3.5f);
-                    burstDust.position += Main.rand.NextVector2Circular(10f, 10f);
-                    burstDust.velocity = Main.rand.NextVector2Square(-burstDirectionVariance, burstDirectionVariance).SafeNormalize(Vector2.UnitY) * burstSpeed;
-                    burstDust.noGravity = true;
-                }
-                burstSpeed += 1.8f;
+                Dust spawnDust = Dust.NewDustPerfect(Projectile.Center, Projectile.ai[1] == 1 ? (int)CalamityDusts.PurpleCosmilite : (int)CalamityDusts.Brimstone, new Vector2(30, 30).RotatedByRandom(100) * Main.rand.NextFloat(0.05f, 1.2f));
+                spawnDust.noGravity = true;
+                spawnDust.scale = Main.rand.NextFloat(1.2f, 2.3f);
             }
+            for (int i = 0; i < 40; i++)
+            {
+                Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
+                GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center + sparkVel * 2, sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f), Projectile.ai[1] == 1 ? Color.Magenta : Color.Red, true, true);
+                GeneralParticleHandler.SpawnParticle(orb);
+            }
+            Particle pulse = new DirectionalPulseRing(Projectile.Center, Vector2.Zero, Projectile.ai[1] == 1 ? Color.Magenta : Color.Red, new Vector2(2f, 2f), 0, 0f, 1.1f, 25);
+            GeneralParticleHandler.SpawnParticle(pulse);
         }
     }
 }
