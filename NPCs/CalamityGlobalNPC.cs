@@ -3685,7 +3685,7 @@ namespace CalamityMod.NPCs
                     case NPCID.DukeFishron:
                         return DukeFishronAI.VanillaDukeFishronAI(npc, Mod);
 
-                    /*case NPCID.CultistBoss:
+                    case NPCID.CultistBoss:
                     case NPCID.CultistBossClone:
                         return CultistAI.VanillaCultistAI(npc, Mod);
                     case NPCID.AncientLight:
@@ -3693,7 +3693,7 @@ namespace CalamityMod.NPCs
                     case NPCID.AncientDoom:
                         return CultistAI.VanillaAncientDoomAI(npc, Mod);
 
-                    case NPCID.MoonLordCore:
+                    /*case NPCID.MoonLordCore:
                     case NPCID.MoonLordHand:
                     case NPCID.MoonLordHead:
                     case NPCID.MoonLordFreeEye:
