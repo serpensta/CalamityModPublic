@@ -166,6 +166,12 @@ namespace CalamityMod.NPCs
         public const float ExpertModeEnemyKnockbackMultiplier = 0.05f;
         public const float MasterModeEnemyKnockbackMultiplier = 0.1f;
 
+        // HP and damage multipliers for the Early Hardmode Progression Rework
+        public const double EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Classic = 0.8;
+        public const double EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Classic = 0.9;
+        public const double EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert = 0.9;
+        public const double EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert = 0.95;
+
         // Used to increase coin drops in Normal Mode
         private const double NPCValueMultiplier_NormalCalamity = 1.5;
 
@@ -2398,8 +2404,9 @@ namespace CalamityMod.NPCs
                 {
                     if (CalamityLists.DestroyerIDs.Contains(npc.type) || npc.type == NPCID.Probe || CalamityLists.SkeletronPrimeIDs.Contains(npc.type) || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer)
                     {
-                        npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.8);
-                        npc.damage = (int)Math.Round(npc.damage * 0.8);
+                        double multiplier = Main.expertMode ? EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert : EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Classic;
+                        npc.lifeMax = (int)Math.Round(npc.lifeMax * multiplier);
+                        npc.damage = (int)Math.Round(npc.damage * multiplier);
                         npc.defDamage = npc.damage;
                     }
                 }
@@ -2407,8 +2414,9 @@ namespace CalamityMod.NPCs
                 {
                     if (CalamityLists.DestroyerIDs.Contains(npc.type) || npc.type == NPCID.Probe || CalamityLists.SkeletronPrimeIDs.Contains(npc.type) || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer)
                     {
-                        npc.lifeMax = (int)Math.Round(npc.lifeMax * 0.9);
-                        npc.damage = (int)Math.Round(npc.damage * 0.9);
+                        double multiplier = Main.expertMode ? EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert : EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Classic;
+                        npc.lifeMax = (int)Math.Round(npc.lifeMax * multiplier);
+                        npc.damage = (int)Math.Round(npc.damage * multiplier);
                         npc.defDamage = npc.damage;
                     }
                 }

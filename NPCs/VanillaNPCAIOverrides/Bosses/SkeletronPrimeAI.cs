@@ -367,10 +367,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             // Reduce mech boss projectile damage depending on the new ore progression changes
                             if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                             {
+                                double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                                double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                                 if (!NPC.downedMechBossAny)
-                                    damage = (int)(damage * 0.8);
+                                    damage = (int)(damage * firstMechMultiplier);
                                 else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                    damage = (int)(damage * 0.9);
+                                    damage = (int)(damage * secondMechMultiplier);
                             }
 
                             float velocity = 3f;
@@ -628,10 +630,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     // Reduce mech boss projectile damage depending on the new ore progression changes
                                     if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                                     {
+                                        double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                                        double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                                         if (!NPC.downedMechBossAny)
-                                            damage = (int)(damage * 0.8);
+                                            damage = (int)(damage * firstMechMultiplier);
                                         else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                            damage = (int)(damage * 0.9);
+                                            damage = (int)(damage * secondMechMultiplier);
                                     }
 
                                     headCenter += value * 5f;
@@ -703,10 +707,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 // Reduce mech boss projectile damage depending on the new ore progression changes
                                 if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                                 {
+                                    double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                                    double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                                     if (!NPC.downedMechBossAny)
-                                        damage = (int)(damage * 0.8);
+                                        damage = (int)(damage * firstMechMultiplier);
                                     else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                        damage = (int)(damage * 0.9);
+                                        damage = (int)(damage * secondMechMultiplier);
                                 }
 
                                 int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + Main.rand.Next(npc.width / 2), npc.Center.Y + 4f, velocity.X, velocity.Y, type, damage, 0f, Main.myPlayer, npc.target, 1f);
@@ -908,10 +914,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                         {
+                            double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                            double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                             if (!NPC.downedMechBossAny)
-                                damage = (int)(damage * 0.8);
+                                damage = (int)(damage * firstMechMultiplier);
                             else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                damage = (int)(damage * 0.9);
+                                damage = (int)(damage * secondMechMultiplier);
                         }
 
                         laserArmTargetDist = laserSpeed / laserArmTargetDist;
@@ -976,10 +984,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                         {
+                            double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                            double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                             if (!NPC.downedMechBossAny)
-                                damage = (int)(damage * 0.8);
+                                damage = (int)(damage * firstMechMultiplier);
                             else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                damage = (int)(damage * 0.9);
+                                damage = (int)(damage * secondMechMultiplier);
                         }
 
                         float velocity = 3f;
@@ -1208,10 +1218,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                         {
+                            double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                            double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                             if (!NPC.downedMechBossAny)
-                                damage = (int)(damage * 0.8);
+                                damage = (int)(damage * firstMechMultiplier);
                             else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                damage = (int)(damage * 0.9);
+                                damage = (int)(damage * secondMechMultiplier);
                         }
 
                         cannonArmTargetDist = 0.5f / cannonArmTargetDist;
@@ -1253,10 +1265,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                         {
+                            double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                            double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
                             if (!NPC.downedMechBossAny)
-                                damage = (int)(damage * 0.8);
+                                damage = (int)(damage * firstMechMultiplier);
                             else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                damage = (int)(damage * 0.9);
+                                damage = (int)(damage * secondMechMultiplier);
                         }
 
                         Vector2 cannonSpreadTargetDist = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
@@ -2423,10 +2437,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                         {
+                            double firstMechMultiplier = Main.expertMode ? CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert : CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Classic;
+                            double secondMechMultiplier = Main.expertMode ? CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert : CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Classic;
                             if (!NPC.downedMechBossAny)
-                                damage = (int)(damage * 0.8);
+                                damage = (int)(damage * firstMechMultiplier);
                             else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                damage = (int)(damage * 0.9);
+                                damage = (int)(damage * secondMechMultiplier);
                         }
 
                         num561 = num562 / num561;
@@ -2522,10 +2538,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Reduce mech boss projectile damage depending on the new ore progression changes
                         if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
                         {
+                            double firstMechMultiplier = Main.expertMode ? CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert : CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Classic;
+                            double secondMechMultiplier = Main.expertMode ? CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert : CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Classic;
                             if (!NPC.downedMechBossAny)
-                                damage = (int)(damage * 0.8);
+                                damage = (int)(damage * firstMechMultiplier);
                             else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
-                                damage = (int)(damage * 0.9);
+                                damage = (int)(damage * secondMechMultiplier);
                         }
 
                         num568 = num569 / num568;
