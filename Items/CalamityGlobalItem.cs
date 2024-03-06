@@ -1569,11 +1569,11 @@ namespace CalamityMod.Items
                 /* Prehardmode = 2
                  * Hardmode = 3
                  * Post-Moon Lord = 4
-                 * Post-DoG = 6
+                 * Post-DoG = 5
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 4;
+                    player.statDefense += 3;
                 else if (NPC.downedMoonlord)
                     player.statDefense += 2;
                 else if (Main.hardMode)
@@ -1584,34 +1584,34 @@ namespace CalamityMod.Items
             if (item.prefix == PrefixID.Armored)
             {
                 /* Prehardmode = 3
-                 * Hardmode = 5
-                 * Post-Moon Lord = 6
-                 * Post-DoG = 8
+                 * Hardmode = 4
+                 * Post-Moon Lord = 5
+                 * Post-DoG = 6
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 5;
-                else if (NPC.downedMoonlord)
                     player.statDefense += 3;
-                else if (Main.hardMode)
+                else if (NPC.downedMoonlord)
                     player.statDefense += 2;
+                else if (Main.hardMode)
+                    player.statDefense += 1;
 
                 player.endurance += 0.0075f;
             }
             if (item.prefix == PrefixID.Warding)
             {
                 /* Prehardmode = 4
-                 * Hardmode = 6
-                 * Post-Moon Lord = 8
-                 * Post-DoG = 10
+                 * Hardmode = 5
+                 * Post-Moon Lord = 6
+                 * Post-DoG = 7
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 6;
+                    player.statDefense += 3;
                 else if (NPC.downedMoonlord)
-                    player.statDefense += 4;
-                else if (Main.hardMode)
                     player.statDefense += 2;
+                else if (Main.hardMode)
+                    player.statDefense += 1;
 
                 player.endurance += 0.01f;
             }
