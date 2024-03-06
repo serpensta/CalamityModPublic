@@ -621,6 +621,7 @@ namespace CalamityMod.CalPlayer
             // - Wearing Fearmonger armor
             // - Wearing Gem Tech armor and having the Blue Gem active
             // - Using Profaned Soul Crystal
+            // - Wearing any DD2 armor set
             // - During the Old One's Army event it's disabled by default
             bool isSummon = proj.CountsAsClass<SummonDamageClass>();
             if (isSummon)
@@ -628,10 +629,14 @@ namespace CalamityMod.CalPlayer
                 Item heldItem = Player.ActiveItem();
 
                 bool wearingForbiddenSet = Player.armor[0].type == ItemID.AncientBattleArmorHat && Player.armor[1].type == ItemID.AncientBattleArmorShirt && Player.armor[2].type == ItemID.AncientBattleArmorPants;
+
+                bool wearingDD2Tier2Armor = (Player.armor[0].type == ItemID.ApprenticeHat && Player.armor[1].type == ItemID.ApprenticeRobe && Player.armor[2].type == ItemID.ApprenticeTrousers) || (Player.armor[0].type == ItemID.SquireGreatHelm && Player.armor[1].type == ItemID.SquirePlating && Player.armor[2].type == ItemID.SquireGreaves) || (Player.armor[0].type == ItemID.HuntressWig && Player.armor[1].type == ItemID.HuntressJerkin && Player.armor[2].type == ItemID.HuntressPants) || (Player.armor[0].type == ItemID.MonkBrows && Player.armor[1].type == ItemID.MonkShirt && Player.armor[2].type == ItemID.MonkPants);
+                bool wearingDD2Tier3Armor = (Player.armor[0].type == ItemID.ApprenticeAltHead && Player.armor[1].type == ItemID.ApprenticeAltShirt && Player.armor[2].type == ItemID.ApprenticeAltPants) || (Player.armor[0].type == ItemID.SquireAltHead && Player.armor[1].type == ItemID.SquireAltShirt && Player.armor[2].type == ItemID.SquireAltPants) || (Player.armor[0].type == ItemID.HuntressAltHead && Player.armor[1].type == ItemID.HuntressAltShirt && Player.armor[2].type == ItemID.HuntressAltPants) || (Player.armor[0].type == ItemID.MonkAltHead && Player.armor[1].type == ItemID.MonkAltShirt && Player.armor[2].type == ItemID.MonkAltPants);
+
                 bool forbiddenWithMagicWeapon = wearingForbiddenSet && heldItem.CountsAsClass<MagicDamageClass>();
                 bool gemTechBlueGem = GemTechSet && GemTechState.IsBlueGemActive;
 
-                bool crossClassNerfDisabled = forbiddenWithMagicWeapon || fearmongerSet || gemTechBlueGem || profanedCrystalBuffs || DD2Event.Ongoing;
+                bool crossClassNerfDisabled = forbiddenWithMagicWeapon || fearmongerSet || gemTechBlueGem || profanedCrystalBuffs || wearingDD2Tier2Armor || wearingDD2Tier3Armor || DD2Event.Ongoing;
                 crossClassNerfDisabled |= CalamityLists.DisabledSummonerNerfMinions.Contains(proj.type);
 
                 // If this projectile is a summon, its owner is holding an item, and the cross class nerf isn't disabled from equipment:
