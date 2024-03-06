@@ -1193,7 +1193,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 npc.ai[1] = 0f;
 
-                Vector2 freeHeadCenter = new Vector2(npc.Center.X, npc.Center.Y - 10f * npc.scale);
+                Vector2 freeHeadCenter = new Vector2(npc.Center.X, npc.Center.Y + 20f * npc.scale);
                 float freeHeadSpeed = turboEnrage ? 8f : enrage ? 6.5f : 5f;
                 if (masterMode)
                     freeHeadSpeed *= 1.25f;
@@ -1232,7 +1232,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 bool leftLaserIsFast = Main.rand.NextBool();
                 for (int i = 0; i < numLasers; i++)
                 {
-                    Vector2 freeHeadProjSpawn = new Vector2(npc.Center.X, npc.Center.Y - 50f * npc.scale);
+                    Vector2 freeHeadProjSpawn = new Vector2(npc.Center.X, npc.Center.Y - 20f * npc.scale);
                     if (i == 0)
                         freeHeadProjSpawn.X -= 14f * npc.scale;
                     else if (i == 1)
@@ -2133,7 +2133,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 npc.TargetClosest();
                 npc.ai[1] = 0f;
-                Vector2 vector93 = new Vector2(npc.Center.X, npc.Center.Y - 10f * npc.scale);
+                Vector2 vector93 = new Vector2(npc.Center.X, npc.Center.Y + 20f * npc.scale);
                 float num749 = 8f;
 
                 int type = ProjectileID.Fireball;
@@ -2184,7 +2184,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.ai[2] = 0f;
                 for (int num757 = 0; num757 < 2; num757++)
                 {
-                    Vector2 vector94 = new Vector2(npc.Center.X, npc.Center.Y - 50f * npc.scale);
+                    Vector2 vector94 = new Vector2(npc.Center.X, npc.Center.Y - 20f * npc.scale);
                     switch (num757)
                     {
                         case 0:

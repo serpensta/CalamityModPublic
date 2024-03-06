@@ -95,6 +95,14 @@ namespace CalamityMod.Projectiles
         public const int DefaultPointBlankDuration = 18; // 18 frames
         public const float PointBlankShotDistanceLimit = 240f; // 15 tiles
 
+        // Empress of Light variables
+        private const float EmpressRainbowStreakSpreadOutCutoff = 140f;
+        private const int EmpressLastingRainbowTotalDuration = 660;
+
+        // Duke Fishron variables
+        private const int FishronSharknadoTotalDuration = 540;
+        private const int FishronCthulhunadoTotalDuration = 840;
+
         // Temporary flat damage reduction effects. This is typically used for parry effects such as Ark of the Ancients
         public int flatDRTimer = 0;
         /// <summary>
@@ -771,9 +779,37 @@ namespace CalamityMod.Projectiles
             // Phase 1 sharknado
             else if (projectile.type == ProjectileID.SharknadoBolt)
             {
-                if (projectile.ai[1] < 0f)
+                if (projectile.ai[1] == 0f)
                 {
-                    float num623 = 0.209439516f;
+                    float num552 = (float)Math.PI / 15f;
+                    float num553 = 4f;
+                    float num554 = (float)(Math.Cos(num552 * projectile.ai[0]) - 0.5) * num553;
+                    projectile.velocity.Y -= num554;
+                    projectile.ai[0]++;
+                    num554 = (float)(Math.Cos(num552 * projectile.ai[0]) - 0.5) * num553;
+                    projectile.velocity.Y += num554;
+                    projectile.localAI[0]++;
+                    if (projectile.localAI[0] > 10f)
+                    {
+                        projectile.alpha -= 5;
+                        if (projectile.alpha < 100)
+                            projectile.alpha = 100;
+
+                        projectile.rotation += projectile.velocity.X * 0.1f;
+                        projectile.frame = (int)(projectile.localAI[0] / 3f) % 3;
+                    }
+
+                    if (projectile.wet)
+                    {
+                        projectile.position.Y -= 16f;
+                        projectile.Kill();
+                    }
+
+                    return false;
+                }
+                else if (projectile.ai[1] < 0f)
+                {
+                    float num623 = (float)Math.PI / 15f;
                     float num624 = -2f;
                     float num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
 
@@ -794,6 +830,12 @@ namespace CalamityMod.Projectiles
 
                         projectile.rotation += projectile.velocity.X * 0.1f;
                         projectile.frame = (int)(projectile.localAI[0] / 3f) % 3;
+                    }
+
+                    if (projectile.wet)
+                    {
+                        projectile.position.Y -= 16f;
+                        projectile.Kill();
                     }
 
                     return false;
@@ -922,11 +964,11 @@ namespace CalamityMod.Projectiles
 
                 bool spreadOut = false;
                 bool homeIn = false;
-                float spreadOutCutoffTime = 140f;
+                float spreadOutCutoffTime = EmpressRainbowStreakSpreadOutCutoff;
                 float homeInCutoffTime = Main.dayTime ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
-                float spreadDeceleration = 0.98f;
-                float minAcceleration = revMasterMode ? 0.15f : 0.1f;
-                float maxAcceleration = revMasterMode ? 0.3f : 0.2f;
+                float spreadDeceleration = 0.97f;
+                float minAcceleration = revMasterMode ? 0.075f : 0.05f;
+                float maxAcceleration = revMasterMode ? 0.15f : 0.1f;
                 float homingVelocity = revMasterMode ? 36f : 30f;
                 float maxVelocity = homingVelocity * 1.5f;
                 float accelerationToMaxVelocity = 1.01f;
@@ -2868,7 +2910,8 @@ namespace CalamityMod.Projectiles
             // Accelerate for 1.5 seconds to full velocity
             if (projectile.type == ProjectileID.HallowBossLastingRainbow && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
             {
-                if (projectile.timeLeft > 570)
+                int spreadOutTime = 90;
+                if (projectile.timeLeft > EmpressLastingRainbowTotalDuration - spreadOutTime)
                     projectile.velocity *= ((Main.masterMode || BossRushEvent.BossRushActive) ? 1.017078f : 1.015525f);
             }
 
@@ -3482,6 +3525,7 @@ namespace CalamityMod.Projectiles
             if (projectile.hostile && (projectile.damage - flatDR <= 0))
                 return false;
 
+            int dealNoDamageTime = 60;
             switch (projectile.type)
             {
                 // Rev+ Deerclops ice spikes can only deal damage while they're not fading out
@@ -3502,14 +3546,26 @@ namespace CalamityMod.Projectiles
                         return projectile.velocity.Length() >= projectile.ai[1];
                     break;
 
-                // Duke Fishron tornadoes don't deal damage for a bit after they spawn
+                // Duke Fishron tornadoes deal no damage for 1 second after spawning
                 case ProjectileID.Sharknado:
-                    if (projectile.timeLeft > 420)
+                    if (projectile.timeLeft > FishronSharknadoTotalDuration - dealNoDamageTime)
                         return false;
                     break;
 
                 case ProjectileID.Cthulunado:
-                    if (projectile.timeLeft > 720)
+                    if (projectile.timeLeft > FishronCthulhunadoTotalDuration - dealNoDamageTime)
+                        return false;
+                    break;
+
+                // Empress Rainbow Streaks deal no damage if they haven't started homing
+                case ProjectileID.HallowBossRainbowStreak:
+                    if (projectile.hostile)
+                        return projectile.timeLeft <= EmpressRainbowStreakSpreadOutCutoff;
+                    break;
+
+                // Empress Lasting Rainbows deal no damage for 1 second after spawning
+                case ProjectileID.HallowBossLastingRainbow:
+                    if (projectile.timeLeft > EmpressLastingRainbowTotalDuration - dealNoDamageTime)
                         return false;
                     break;
 

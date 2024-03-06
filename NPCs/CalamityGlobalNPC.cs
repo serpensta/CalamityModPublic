@@ -6372,6 +6372,16 @@ namespace CalamityMod.NPCs
                 Vector2 eyesDrawPosition = headDrawPosition - npc.scale * new Vector2(1f, 12f);
                 Rectangle eyesFrame = new Rectangle(0, 0, TextureAssets.Golem[1].Value.Width, TextureAssets.Golem[1].Value.Height / 2);
                 spriteBatch.Draw(TextureAssets.Golem[1].Value, eyesDrawPosition, eyesFrame, eyeColor, 0f, eyesFrame.Size() * 0.5f, npc.scale, SpriteEffects.None, 0f);
+
+                // Draw the glowmasks.
+                int frameCounter = (int)npc.frameCounter / 4;
+                Rectangle frame = TextureAssets.Extra[106].Value.Frame(1, 8);
+                frame.Y += frame.Height * 2 * frameCounter + npc.frame.Y;
+                Rectangle glowFrame = frame;
+                spriteBatch.Draw(TextureAssets.Extra[106].Value, eyesDrawPosition, glowFrame, eyeColor, 0f, glowFrame.Size() * 0.5f, npc.scale, SpriteEffects.None, 0f);
+                frame = npc.frame;
+                Rectangle glowFrame2 = frame;
+                spriteBatch.Draw(TextureAssets.Extra[107].Value, eyesDrawPosition, glowFrame2, eyeColor, 0f, glowFrame2.Size() * 0.5f, npc.scale, SpriteEffects.None, 0f);
                 return false;
             }
 
