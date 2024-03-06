@@ -100,14 +100,19 @@ namespace CalamityMod.Projectiles.Boss
                     }
                 }
             }
-            
-            float targetDist = Main.player[target] == null ? 1000 : Main.player[target].dead ? 1000 : Vector2.Distance(Main.player[target].Center, Projectile.Center);
+
+            float targetDist;
+            if (!Main.player[target].dead && Main.player[target].active && Main.player[target] != null)
+                targetDist = Vector2.Distance(Main.player[target].Center, Projectile.Center);
+            else
+                targetDist = 1000;
+
             if (!withinRange)
             {
-                GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center - Projectile.velocity + Main.rand.NextVector2Circular(20, 20), -Projectile.velocity * Main.rand.NextFloat(0.3f, 1.9f), false, 14, Main.rand.NextFloat(0.35f, 0.6f), Color.Red * Projectile.Opacity, true, true);
+                GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center - Projectile.velocity + Main.rand.NextVector2Circular(20, 20), -Projectile.velocity * Main.rand.NextFloat(0.3f, 1.9f), false, 14, Main.rand.NextFloat(0.35f, 0.6f), (Main.rand.NextBool(4) ? new Color(121, 21, 77) : Color.Red) * Projectile.Opacity, true, true);
                 GeneralParticleHandler.SpawnParticle(orb);
             }
-            if ((Projectile.timeLeft == 1 && !withinRange) || (targetDist < 160 && Projectile.Opacity == 1f)) // When within 12 blocks of player or when it runs out of time
+            if ((Projectile.timeLeft == 1 && !withinRange) || (targetDist < 224 && Projectile.Opacity == 1f)) // When within 14 blocks of player or when it runs out of time
             {
                 if (!setLifetime)
                 {
@@ -135,9 +140,9 @@ namespace CalamityMod.Projectiles.Boss
                 {
                     Projectile.Opacity = 0;
                     Projectile.velocity *= 0;
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 2; i++)
                     {
-                        Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Red, 0.1f, 0.7f, 30, false);
+                        Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, new Color(121, 21, 77), 0.1f, 0.7f, 30, false);
                         GeneralParticleHandler.SpawnParticle(bloom);
                         if (Projectile.ai[1] == 1)
                             bloom.Lifetime = 0;
@@ -145,7 +150,12 @@ namespace CalamityMod.Projectiles.Boss
                 }
                 if (Projectile.timeLeft == 15)
                 {
-                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.White, 0.1f, 0.65f, 15, false);
+                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Red, 0.1f, 0.65f, 15, false);
+                    GeneralParticleHandler.SpawnParticle(bloom);
+                }
+                if (Projectile.timeLeft == 8)
+                {
+                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.White, 0.1f, 0.5f, 8, false);
                     GeneralParticleHandler.SpawnParticle(bloom);
                 }
             }
