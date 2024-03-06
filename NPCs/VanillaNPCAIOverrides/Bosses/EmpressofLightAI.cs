@@ -1271,10 +1271,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         {
             CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
 
-            Vector2 stopMovingLocation = new Vector2(-150f, -250f);
-            Vector2 stopMovingLocation2 = new Vector2(150f, -250f);
-            Vector2 stopMovingLocation3 = new Vector2(0f, -350f);
-            Vector2 stopMovingLocation4 = new Vector2(0f, -350f);
+            Vector2 stopMovingLocation = new Vector2(-250f, -350f);
+            Vector2 stopMovingLocation3 = new Vector2(0f, -450f);
+            Vector2 stopMovingLocation4 = new Vector2(0f, -450f);
             Vector2 stopMovingLocation5 = new Vector2(-80f, -500f);
             float moveSpeed = 0.5f;
             float desiredVelocity = 12f;

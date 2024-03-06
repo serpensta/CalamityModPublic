@@ -916,6 +916,65 @@ namespace CalamityMod.Projectiles
                 }
             }
 
+            else if (projectile.type == ProjectileID.HallowBossRainbowStreak && projectile.hostile)
+            {
+                bool revMasterMode = (Main.masterMode && CalamityWorld.revenge) || BossRushEvent.BossRushActive;
+
+                bool spreadOut = false;
+                bool homeIn = false;
+                float spreadOutCutoffTime = 140f;
+                float homeInCutoffTime = Main.dayTime ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
+                float spreadDeceleration = 0.98f;
+                float minAcceleration = revMasterMode ? 0.15f : 0.1f;
+                float maxAcceleration = revMasterMode ? 0.3f : 0.2f;
+                float homingVelocity = revMasterMode ? 36f : 30f;
+                float maxVelocity = homingVelocity * 1.5f;
+                float accelerationToMaxVelocity = 1.01f;
+
+                if (projectile.timeLeft > spreadOutCutoffTime)
+                    spreadOut = true;
+                else if (projectile.timeLeft > homeInCutoffTime)
+                    homeIn = true;
+
+                if (spreadOut)
+                {
+                    float spreadVelocity = (float)Math.Cos(projectile.whoAmI % 6f / 6f + projectile.position.X / 320f + projectile.position.Y / 160f);
+                    projectile.velocity *= spreadDeceleration;
+                    projectile.velocity = projectile.velocity.RotatedBy(spreadVelocity * MathHelper.TwoPi * 0.125f * 1f / 30f);
+                }
+
+                if (homeIn)
+                {
+                    int playerIndex = (int)projectile.ai[0];
+                    Vector2 velocity = projectile.velocity;
+                    if (Main.player.IndexInRange(playerIndex))
+                    {
+                        Player player = Main.player[playerIndex];
+                        velocity = projectile.DirectionTo(player.Center) * homingVelocity;
+                    }
+
+                    float amount = MathHelper.Lerp(minAcceleration, maxAcceleration, Utils.GetLerpValue(spreadOutCutoffTime, 30f, projectile.timeLeft, clamped: true));
+                    projectile.velocity = Vector2.SmoothStep(projectile.velocity, velocity, amount);
+                }
+                else
+                {
+                    if (projectile.velocity.Length() < maxVelocity)
+                    {
+                        projectile.velocity *= accelerationToMaxVelocity;
+                        if (projectile.velocity.Length() > maxVelocity)
+                        {
+                            projectile.velocity.Normalize();
+                            projectile.velocity *= maxVelocity;
+                        }
+                    }
+                }
+
+                projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
+                projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.CultistBossLightningOrb)
             {
                 if (NPC.AnyNPCs(NPCID.CultistBoss))
@@ -2161,49 +2220,6 @@ namespace CalamityMod.Projectiles
                         if (projectile.velocity.Y > 16f)
                             projectile.velocity.Y = 16f;
                     }
-
-                    return false;
-                }
-
-                else if (projectile.type == ProjectileID.HallowBossRainbowStreak && projectile.hostile)
-                {
-                    bool spreadOut = false;
-                    bool homeIn = false;
-                    float spreadOutCutoffTime = 140f;
-                    float homeInCutoffTime = Main.dayTime ? (masterMode ? 45f : 55f) : (masterMode ? 60f : 80f);
-                    float spreadDeceleration = 0.98f;
-                    float minAcceleration = masterMode ? 0.075f : 0.05f;
-                    float maxAcceleration = masterMode ? 0.125f : 0.1f;
-                    float homingVelocity = masterMode ? 36f : 30f;
-
-                    if (projectile.timeLeft > spreadOutCutoffTime)
-                        spreadOut = true;
-                    else if (projectile.timeLeft > homeInCutoffTime)
-                        homeIn = true;
-
-                    if (spreadOut)
-                    {
-                        float spreadVelocity = (float)Math.Cos(projectile.whoAmI % 6f / 6f + projectile.position.X / 320f + projectile.position.Y / 160f);
-                        projectile.velocity *= spreadDeceleration;
-                        projectile.velocity = projectile.velocity.RotatedBy(spreadVelocity * MathHelper.TwoPi * 0.125f * 1f / 30f);
-                    }
-
-                    if (homeIn)
-                    {
-                        int playerIndex = (int)projectile.ai[0];
-                        Vector2 velocity = projectile.velocity;
-                        if (Main.player.IndexInRange(playerIndex))
-                        {
-                            Player player = Main.player[playerIndex];
-                            velocity = projectile.DirectionTo(player.Center) * homingVelocity;
-                        }
-
-                        float amount = MathHelper.Lerp(minAcceleration, maxAcceleration, Utils.GetLerpValue(spreadOutCutoffTime, 30f, projectile.timeLeft, clamped: true));
-                        projectile.velocity = Vector2.SmoothStep(projectile.velocity, velocity, amount);
-                    }
-
-                    projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
-                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
                     return false;
                 }
