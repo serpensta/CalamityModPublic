@@ -1834,7 +1834,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Increase durability.
                         calamityGlobalNPC.DR = shouldBeInPhase2ButIsStillInPhase1 ? 0.99f : (BossRushEvent.BossRushActive ? 0.99f : 0.575f);
 
-                        float extraPhaseTime = (masterMode ? 30 : expertMode ? 75 : 120) - reducedAttackCooldown;
+                        float extraPhaseTime = (masterMode ? 90 : expertMode ? 105 : 120) - reducedAttackCooldown;
                         Vector2 offset = new Vector2(0f, -100f);
                         Vector2 sunDanceSpawnLocation = npc.Center + offset;
                         NPCAimedTarget targetData = npc.GetTargetData();
