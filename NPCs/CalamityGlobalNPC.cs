@@ -5163,6 +5163,10 @@ namespace CalamityMod.NPCs
                         target.AddBuff(BuffID.Bleeding, 300);
                     break;
 
+                case NPCID.PrimeSaw:
+                    target.AddBuff(BuffID.Bleeding, 180);
+                    break;
+
                 case NPCID.Plantera:
                     if (npc.life < npc.lifeMax / 2)
                         target.AddBuff(BuffID.Poisoned, 300);
