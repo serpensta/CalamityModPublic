@@ -5122,28 +5122,54 @@ namespace CalamityMod.NPCs
             {
                 case NPCID.VileSpitEaterOfWorlds:
                 case NPCID.VileSpit:
-                    target.AddBuff(BuffType<BrainRot>(), 240);
+
+                    target.AddBuff(BuffType<BrainRot>(), 180);
+                    if (Main.rand.NextBool(10))
+                        target.AddBuff(BuffID.Weak, 3600);
+                    else if (Main.rand.NextBool(5))
+                        target.AddBuff(BuffID.Weak, 720);
+                    else if (Main.rand.NextBool(2))
+                        target.AddBuff(BuffID.Weak, 120);
+                    else
+                        target.AddBuff(BuffID.Weak, 60);
+
                     break;
 
                 case NPCID.ShadowFlameApparition:
-                    target.AddBuff(BuffType<Shadowflame>(), 180);
+                    target.AddBuff(BuffType<Shadowflame>(), 120);
                     break;
+
                 case NPCID.ChaosBall:
                     if (Main.hardMode || CalamityPlayer.areThereAnyDamnBosses)
-                        target.AddBuff(BuffType<Shadowflame>(), 180);
+                        target.AddBuff(BuffType<Shadowflame>(), 120);
+                    break;
+
+                case NPCID.EyeofCthulhu:
+                    if (npc.ai[0] > 2f)
+                        target.AddBuff(BuffID.Bleeding, 180);
+                    break;
+
+                case NPCID.WallofFlesh:
+                    target.AddBuff(BuffID.Bleeding, 300);
                     break;
 
                 case NPCID.Spazmatism:
                     if (npc.ai[0] != 1f && npc.ai[0] != 2f && npc.ai[0] != 0f)
-                        target.AddBuff(BuffID.Bleeding, 600);
+                        target.AddBuff(BuffID.Bleeding, 300);
+                    break;
+
+                case NPCID.SkeletronPrime:
+                    if (npc.ai[1] == 1f || npc.ai[1] == 2f)
+                        target.AddBuff(BuffID.Bleeding, 300);
                     break;
 
                 case NPCID.Plantera:
                     if (npc.life < npc.lifeMax / 2)
-                        target.AddBuff(BuffID.Poisoned, 600);
+                        target.AddBuff(BuffID.Poisoned, 300);
                     break;
+
                 case NPCID.PlanterasTentacle:
-                    target.AddBuff(BuffID.Poisoned, 300);
+                    target.AddBuff(BuffID.Poisoned, 120);
                     break;
 
                 case NPCID.Golem:
@@ -5157,34 +5183,25 @@ namespace CalamityMod.NPCs
                     target.AddBuff(BuffType<ArmorCrunch>(), 240);
                     break;
 
-                case NPCID.AncientDoom:
-                    target.AddBuff(BuffType<Shadowflame>(), 180);
-                    break;
                 case NPCID.AncientLight:
                     target.AddBuff(BuffType<HolyFlames>(), 120);
                     break;
 
                 case NPCID.HallowBoss:
-                    target.AddBuff(Main.dayTime ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 320);
+                    target.AddBuff(Main.dayTime ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
                     break;
 
                 case NPCID.BloodNautilus:
-                    target.AddBuff(BuffType<BurningBlood>(), 480);
+                    target.AddBuff(BuffType<BurningBlood>(), 300);
                     break;
 
                 case NPCID.GoblinShark:
                 case NPCID.BloodEelHead:
-                    target.AddBuff(BuffType<BurningBlood>(), 300);
-                    break;
-                case NPCID.BloodEelBody:
                     target.AddBuff(BuffType<BurningBlood>(), 180);
-                    break;
-                case NPCID.BloodEelTail:
-                    target.AddBuff(BuffType<BurningBlood>(), 120);
                     break;
 
                 case NPCID.Lavabat:
-                    target.AddBuff(BuffID.OnFire, 180);
+                    target.AddBuff(BuffID.OnFire, 120);
                     break;
 
                 case NPCID.RuneWizard:
@@ -5243,7 +5260,7 @@ namespace CalamityMod.NPCs
                 switch (npc.type)
                 {
                     case NPCID.Hellbat:
-                        target.AddBuff(BuffID.OnFire, 120);
+                        target.AddBuff(BuffID.OnFire, 60);
                         break;
 
                     default:

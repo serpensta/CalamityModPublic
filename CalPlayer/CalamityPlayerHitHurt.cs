@@ -36,6 +36,7 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.UI;
 using CalamityMod.World;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -1295,11 +1296,28 @@ namespace CalamityMod.CalPlayer
                 }
                 else if (proj.type == ProjectileID.Skull)
                 {
-                    Player.AddBuff(BuffID.Weak, 300);
+                    Player.AddBuff(BuffID.Weak, 180);
                 }
-                else if (proj.type == ProjectileID.CursedFlameHostile)
+                else if (proj.type == ProjectileID.CursedFlameHostile || proj.type == ProjectileID.EyeFire)
                 {
-                    Player.AddBuff(BuffID.CursedInferno, 120);
+                    // Guaranteed Cursed Inferno for 1 second (vanilla also has a 68.75% chance of Cursed Inferno for 2 to 3 seconds)
+                    Player.AddBuff(BuffID.CursedInferno, 60);
+                }
+                else if (proj.type == ProjectileID.Stinger || proj.type == ProjectileID.QueenBeeStinger)
+                {
+                    // 66.6% chance of Poison for 3 seconds, 1 guaranteed second of Poison otherwise (vanilla also has a 33.3% chance of Poison for 10 seconds)
+                    if (Main.rand.Next(3) > 0)
+                        Player.AddBuff(BuffID.Poisoned, 180);
+                    else
+                        Player.AddBuff(BuffID.Poisoned, 60);
+                }
+                else if (proj.type == ProjectileID.PoisonSeedPlantera)
+                {
+                    // 75% chance of Poison for 3 to 5 seconds, guaranteed Poison for 2 seconds (vanilla also has a 50% chance of Poison for 3 to 7 seconds)
+                    if (Main.rand.Next(4) > 0)
+                        Player.AddBuff(BuffID.Poisoned, Main.rand.Next(180, 301));
+                    else
+                        Player.AddBuff(BuffID.Poisoned, 120);
                 }
                 else if (proj.type == ProjectileID.ThornBall)
                 {
