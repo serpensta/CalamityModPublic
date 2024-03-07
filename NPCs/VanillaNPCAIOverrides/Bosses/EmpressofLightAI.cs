@@ -1261,7 +1261,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             npc.dontTakeDamage = !takeDamage;
 
             if (phase3)
-                npc.defense = (int)(npc.defDefense * 0.5f);
+                npc.defense = (int)(npc.defDefense * 0.8f);
             else if (phase2)
                 npc.defense = (int)(npc.defDefense * 1.2f);
             else
@@ -2313,7 +2313,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             npc.dontTakeDamage = !takeDamage;
 
             if (phase3)
-                npc.defense = (int)(npc.defDefense * 0.5f);
+                npc.defense = (int)(npc.defDefense * 0.8f);
             else if (phase2)
                 npc.defense = (int)((float)npc.defDefense * 1.2f);
             else
