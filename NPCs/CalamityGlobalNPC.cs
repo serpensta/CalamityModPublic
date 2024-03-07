@@ -4753,6 +4753,18 @@ namespace CalamityMod.NPCs
             // Fair contact damage
             switch (npc.type)
             {
+                case NPCID.PumpkingBlade:
+                    npc.damage = (npc.ai[2] == 2f || npc.ai[2] == 5f) ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.Mothron:
+                    npc.damage = npc.ai[0] == 3.2f ? (int)Math.Round(npc.defDamage * 1.3) : npc.ai[0] == 2f ? (int)Math.Round(npc.defDamage * 0.5) : 0;
+                    break;
+
+                case NPCID.MothronSpawn:
+                    npc.damage = npc.ai[0] == 2.1f ? npc.defDamage : 0;
+                    break;
+
                 case NPCID.Flocko:
                     npc.damage = npc.ai[0] > 0f ? npc.defDamage : 0;
                     break;
