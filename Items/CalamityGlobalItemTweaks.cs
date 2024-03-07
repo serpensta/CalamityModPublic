@@ -141,7 +141,8 @@ namespace CalamityMod.Items
                 { ItemID.InfernoFork, Do(DamageExact(84)) },
                 { ItemID.InfluxWaver, Do(UseMeleeSpeed, DamageExact(80), UseExact(25)) },
                 { ItemID.IronShortsword, Do(AutoReuse, TrueMelee, DamageExact(10)) },
-                { ItemID.JestersArrow, Do(DamageExact(6)) },
+                // These Arrows feel terrible now after the vanilla 1.4.1 nerf, so I'm buffing them back up a bit.
+                // { ItemID.JestersArrow, Do(DamageExact(6)) },
                 { ItemID.Keybrand, Do(UseTurn, ScaleRatio(1.5f)) }, // Uses ratios due to remix seed
                 { ItemID.Kraken, Do(AutoReuse, DamageExact(85)) },
                 { ItemID.KOCannon, Do(DamageRatio(2.65f)) }, // Uses ratios due to remix seed

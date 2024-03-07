@@ -108,8 +108,9 @@ namespace CalamityMod.Balancing
             // 40% resist to Sky Glaze.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.EaterofWorldsIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileType<StickyFeather>()))));
 
+            // These Arrows feel terrible now after the vanilla 1.4.1 nerf, so I'm buffing them back up a bit.
             // 30% resist to Jester Arrows.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.EaterofWorldsIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileID.JestersArrow))));
+            // NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.EaterofWorldsIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileID.JestersArrow))));
             #endregion
 
             #region The Perforators
