@@ -2654,10 +2654,11 @@ namespace CalamityMod.NPCs.DevourerofGods
                 string key2 = "Mods.CalamityMod.Status.Progression.DoGBossText2";
                 Color messageColor2 = Color.Orange;
                 string key3 = "Mods.CalamityMod.Status.Progression.DargonBossText";
+                Color messageColor3 = Color.Yellow;
 
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
                 CalamityUtils.DisplayLocalizedText(key2, messageColor2);
-                CalamityUtils.DisplayLocalizedText(key3, messageColor2);
+                CalamityUtils.DisplayLocalizedText(key3, messageColor3);
             }
 
             // Mark DoG as dead
