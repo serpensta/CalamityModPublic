@@ -219,7 +219,7 @@ namespace CalamityMod.NPCs.Abyss
                         if (canAttack)
                         {
                             // Set damage
-                            NPC.damage = phase3 ? (int)(NPC.defDamage * 0.5) : NPC.defDamage;
+                            NPC.damage = phase3 ? (int)Math.Round(NPC.defDamage * 0.5) : NPC.defDamage;
 
                             if (NPC.ai[3] > 0f && !Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
                             {

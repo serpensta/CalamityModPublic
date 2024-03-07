@@ -296,7 +296,7 @@ namespace CalamityMod.NPCs
                     chargeDirection = ref npc.ai[2];
                     flySpeedAdditive = ref npc.ai[3];
 
-                    npc.damage = (int)(npc.defDamage * 1.2);
+                    npc.damage = (int)Math.Round(npc.defDamage * 1.2);
                     npc.collideX = false;
                     npc.collideY = false;
                     npc.noTileCollide = true;

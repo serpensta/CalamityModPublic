@@ -4388,6 +4388,9 @@ namespace CalamityMod.NPCs
                 }
             }
 
+            if (npc.type == NPCID.FungiBulb)
+                return RevengeanceAndDeathAI.BuffedPlantAI(npc, Mod);
+
             if (npc.type == NPCID.FungiSpore || npc.type == NPCID.Spore)
                 return RevengeanceAndDeathAI.BuffedSporeAI(npc, Mod);
 
@@ -4750,6 +4753,77 @@ namespace CalamityMod.NPCs
             // Fair contact damage
             switch (npc.type)
             {
+                case NPCID.Flocko:
+                    npc.damage = npc.ai[0] > 0f ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.Mimic:
+                case NPCID.IceMimic:
+                case NPCID.PresentMimic:
+                    npc.damage = (npc.ai[0] == 0f || npc.velocity.Y == 0f) ? 0 : npc.defDamage;
+                    break;
+
+                case NPCID.BigMimicCorruption:
+                case NPCID.BigMimicCrimson:
+                case NPCID.BigMimicHallow:
+                case NPCID.BigMimicJungle:
+                    npc.damage = npc.ai[0] == 3f ? 0 : npc.defDamage;
+                    
+                    // Spend less time in closed state
+                    if (npc.ai[0] == 3f)
+                        npc.ai[1] += 0.5f;
+
+                    break;
+
+                case NPCID.DeadlySphere:
+                    npc.damage = npc.ai[0] == 1f ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.NebulaHeadcrab:
+                    npc.damage = npc.ai[0] == 5f ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.MartianDrone:
+                case NPCID.SolarCorite:
+                    npc.damage = (npc.ai[0] == 2f || npc.ai[0] == 3f) ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.ArmedTorchZombie:
+                case NPCID.ArmedZombie:
+                case NPCID.ArmedZombieCenx:
+                case NPCID.ArmedZombieEskimo:
+                case NPCID.ArmedZombiePincussion:
+                case NPCID.ArmedZombieSlimed:
+                case NPCID.ArmedZombieSwamp:
+                case NPCID.ArmedZombieTwiggy:
+                case NPCID.Crawdad:
+                case NPCID.Crawdad2:
+                    npc.damage = npc.ai[2] == 0f ? 0 : (int)Math.Round(npc.defDamage * 1.4);
+                    break;
+
+                case NPCID.GraniteFlyer:
+                    npc.damage = npc.ai[0] == -1f ? 0 : npc.defDamage;
+                    break;
+
+                case NPCID.GraniteGolem:
+                    npc.damage = npc.ai[2] < 0f ? 0 : npc.defDamage;
+                    break;
+
+                case NPCID.Squid:
+                case NPCID.BlueJellyfish:
+                case NPCID.GreenJellyfish:
+                case NPCID.PinkJellyfish:
+                case NPCID.BloodJelly:
+                case NPCID.FungoFish:
+                    float damagingVelocity = npc.type == NPCID.GreenJellyfish ? 3.6f : 2.8f;
+                    npc.damage = (npc.dontTakeDamage || npc.velocity.Length() > damagingVelocity) ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.Herpling:
+                case NPCID.Derpling:
+                    npc.damage = (npc.velocity.Y == 0f || npc.velocity.Length() < 3f) ? 0 : npc.defDamage;
+                    break;
+
                 case NPCID.BlueSlime:
                 case NPCID.MotherSlime:
                 case NPCID.LavaSlime:
@@ -4786,16 +4860,16 @@ namespace CalamityMod.NPCs
 
                 case NPCID.GiantShelly:
                 case NPCID.GiantShelly2:
-                    npc.damage = npc.ai[0] == 3f ? (int)(npc.defDamage * 1.35) : 0;
+                    npc.damage = npc.ai[0] == 3f ? (int)Math.Round(npc.defDamage * 1.2) : 0;
                     break;
 
                 case NPCID.GiantTortoise:
                 case NPCID.IceTortoise:
-                    npc.damage = npc.ai[0] == 3f ? (int)(npc.defDamage * 1.8) : 0;
+                    npc.damage = npc.ai[0] == 3f ? (int)Math.Round(npc.defDamage * 1.4) : 0;
                     break;
 
                 case NPCID.SolarSroller:
-                    npc.damage = npc.ai[0] == 6f ? (int)(npc.defDamage * 1.4) : 0;
+                    npc.damage = npc.ai[0] == 6f ? (int)Math.Round(npc.defDamage * 1.2) : 0;
                     break;
 
                 default:

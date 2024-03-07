@@ -1249,7 +1249,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool flag3 = false;
             bool flag4 = false;
             if (phase2)
-                npc.defense = (int)((float)npc.defDefense * 0.65f);
+                npc.defense = (int)Math.Round(npc.defDefense * 0.65);
 
             if (!flag2)
             {

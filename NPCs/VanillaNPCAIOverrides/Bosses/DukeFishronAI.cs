@@ -40,7 +40,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else if (phase2AI)
             {
                 setDamage = (int)Math.Round(setDamage * 1.44);
-                npc.defense = (int)(npc.defDefense * 0.8f);
+                npc.defense = (int)Math.Round(npc.defDefense * 0.8);
             }
             else
                 npc.defense = npc.defDefense;
@@ -1253,7 +1253,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else if (flag3)
             {
                 setDamage = (int)Math.Round(setDamage * 1.2 * damageScale);
-                npc.defense = (int)((float)npc.defDefense * 0.8f);
+                npc.defense = (int)Math.Round(npc.defDefense * 0.8);
             }
             else
                 npc.defense = npc.defDefense;
