@@ -2859,7 +2859,13 @@ namespace CalamityMod.CalPlayer
             // Play a sound from taking defense damage.
             if (hurtSoundTimer == 0 && Main.myPlayer == Player.whoAmI)
             {
-                SoundEngine.PlaySound(DefenseDamageSound with { Volume = DefenseDamageSound.Volume * 0.75f }, Player.Center);
+                double maxVolumeDefenseDamageScalar = Main.masterMode ? 0.7 : CalamityWorld.death ? 0.6 : CalamityWorld.revenge ? 0.55 : Main.expertMode ? 0.5 : 0.4;
+                float maxVolumeDefenseDamage = (float)Math.Round(Player.statDefense * maxVolumeDefenseDamageScalar);
+                float minVolume = 0.5f;
+                float maxVolume = 1f;
+                float lerpAmount = MathHelper.Clamp(defenseDamage / maxVolumeDefenseDamage, 0f, 1f);
+                float defenseDamageSoundVolumeMultiplier = MathHelper.Lerp(minVolume, maxVolume, lerpAmount);
+                SoundEngine.PlaySound(DefenseDamageSound with { Volume = DefenseDamageSound.Volume * defenseDamageSoundVolumeMultiplier }, Player.Center);
                 hurtSoundTimer = 30;
             }
 
