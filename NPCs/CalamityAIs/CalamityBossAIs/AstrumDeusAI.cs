@@ -310,12 +310,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             if (npc.ai[2] > 0f)
                 npc.realLife = (int)npc.ai[2];
 
-            if (!head)
-            {
-                if (npc.life > Main.npc[(int)npc.ai[1]].life)
-                    npc.life = Main.npc[(int)npc.ai[1]].life;
-            }
-
             // Alpha effects
             if ((head || Main.npc[(int)npc.ai[1]].alpha < 128) && !npc.dontTakeDamage)
             {
@@ -355,11 +349,6 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     if (npc.netSpam >= 10)
                         npc.netSpam = 9;
                 }
-            }
-            else
-            {
-                if (npc.life > Main.npc[(int)npc.ai[0]].life)
-                    npc.life = Main.npc[(int)npc.ai[0]].life;
             }
 
             // Direction
@@ -413,6 +402,14 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         }
                     }
                 }
+
+                if (npc.life > Main.npc[(int)npc.ai[0]].life)
+                    npc.life = Main.npc[(int)npc.ai[0]].life;
+            }
+            else
+            {
+                if (npc.life > Main.npc[(int)npc.ai[1]].life)
+                    npc.life = Main.npc[(int)npc.ai[1]].life;
             }
 
             float segmentVelocity = deathModeEnragePhase_Head ? 19f : death ? 17.5f : 16f;
