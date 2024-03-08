@@ -231,16 +231,39 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         calamityGlobalNPC.newAI[2] -= 1f;
                 }
 
-                // Regenerate Probes in Master Mode
+                // Regenerate Probes in Master Mode if the number of Probes is less than 40 and the number of living NPCs is less than the segment count + 40 (this limit is here just in case)
                 if (masterMode && probeLaunched)
                 {
                     npc.localAI[2] += 1f;
                     if (npc.localAI[2] >= 600f)
                     {
-                        npc.ai[2] = 0f;
-                        npc.localAI[2] = 0f;
+                        int maxProbes = 40;
+                        bool regenerateProbeSegment = NPC.CountNPCS(NPCID.Probe) < maxProbes;
+                        if (regenerateProbeSegment)
+                        {
+                            int maxNPCs = totalSegments + maxProbes;
+                            int numNPCs = 0;
+                            for (int i = 0; i < Main.maxNPCs; i++)
+                            {
+                                if (Main.npc[i].active)
+                                {
+                                    numNPCs++;
+                                    if (numNPCs >= maxNPCs)
+                                    {
+                                        regenerateProbeSegment = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
 
-                        npc.netUpdate = true;
+                        if (regenerateProbeSegment)
+                        {
+                            npc.ai[2] = 0f;
+                            npc.netUpdate = true;
+                        }
+
+                        npc.localAI[2] = 0f;
                         npc.SyncVanillaLocalAI();
                     }
                 }
