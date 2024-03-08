@@ -1666,8 +1666,8 @@ namespace CalamityMod.Projectiles
                     int numDust = 5;
                     int numDust2 = 5;
                     int fadeInTime = 10;
-                    int fadeOutGateValue = 10;
-                    float killGateValue = 20f;
+                    int fadeOutGateValue = masterMode ? 80 : death ? 50 : 10;
+                    float killGateValue = masterMode ? 90f : death ? 60f : 20f;
                     int maxFrames = 5;
 
                     bool fadeIn = projectile.ai[0] < (float)fadeInTime;
@@ -1701,6 +1701,9 @@ namespace CalamityMod.Projectiles
                     if (fadeIn)
                     {
                         projectile.Opacity += 0.1f;
+                        if (projectile.Opacity > 1f)
+                            projectile.Opacity = 1f;
+
                         projectile.scale = projectile.Opacity * projectile.ai[1];
                     }
 
@@ -1754,7 +1757,7 @@ namespace CalamityMod.Projectiles
                         if (projectile.ai[0] == projectile.ai[2])
                         {
                             projectile.velocity *= 100f;
-                            projectile.velocity *= (death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
+                            projectile.velocity *= (masterMode ? 20f : death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
                         }
                     }
 
@@ -3542,13 +3545,20 @@ namespace CalamityMod.Projectiles
             if (projectile.hostile && (projectile.damage - flatDR <= 0))
                 return false;
 
+            bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
+            bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
+
             int dealNoDamageTime = 60;
             switch (projectile.type)
             {
                 // Rev+ Deerclops ice spikes can only deal damage while they're not fading out
                 case ProjectileID.DeerclopsIceSpike:
                     if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
-                        return projectile.ai[0] < 10f;
+                    {
+                        float fadeInTime = 10f;
+                        float fadeOutGateValue = masterMode ? 80f : death ? 50f : 10f;
+                        return (projectile.ai[0] >= fadeInTime && projectile.ai[0] < fadeOutGateValue);
+                    }
                     break;
 
                 // Rev+ Deerclops rubble doesn't deal damage while it's not flying upwards
