@@ -12,9 +12,9 @@ namespace CalamityMod.Items.Weapons.Melee
     public class Terratomere : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        public const int SwingTime = 83;
+        public const int SwingTime = 54;
 
-        public const int SlashLifetime = 27;
+        public const int SlashLifetime = 135;
 
         public const int SmallSlashCreationRate = 9;
 
@@ -38,7 +38,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 60;
             Item.height = 66;
-            Item.damage = 370;
+            Item.damage = 145;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 21;
             Item.useTime = 21;
@@ -51,7 +51,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.value = CalamityGlobalItem.Rarity12BuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.shoot = ModContent.ProjectileType<TerratomereHoldoutProj>();
-            Item.shootSpeed = 60f;
+            Item.shootSpeed = 30f;
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;

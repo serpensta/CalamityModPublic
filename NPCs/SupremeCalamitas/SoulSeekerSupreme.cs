@@ -60,7 +60,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.damage = 50;
             NPC.defense = 60;
             NPC.DR_NERD(NormalDR);
-            NPC.lifeMax = 14000;
+            NPC.lifeMax = 28000;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.DeathSound = SoundID.DD2_SkeletonDeath;
@@ -147,9 +147,11 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     {
                         if (seeker == NPC)
                             SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, SCal.Center);
+
                         break;
                     }
                 }
+
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     float targetDist = Vector2.Distance(Target.Center, NPC.Center);
@@ -180,7 +182,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         }
                     }
                 }
+
                 timer = 0;
+
                 NPC.netUpdate = true;
             }
             if (timer == shootRate - 35)
@@ -205,7 +209,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 prepShotDust.scale = Main.rand.NextFloat(1.2f, 1.9f);
             }
 
-            NPC.position = SCal.Center - MathHelper.ToRadians(RotationalDegreeOffset).ToRotationVector2() * 300f - NPC.Size * 0.5f;
+            float distanceFromSCal = Main.getGoodWorld ? 300f : 225f;
+            NPC.position = SCal.Center - MathHelper.ToRadians(RotationalDegreeOffset).ToRotationVector2() * distanceFromSCal - NPC.Size * 0.5f;
             RotationalDegreeOffset += 0.5f;
         }
 

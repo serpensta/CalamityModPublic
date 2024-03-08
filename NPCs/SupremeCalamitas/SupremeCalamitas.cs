@@ -1771,12 +1771,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         else
                         {
                             SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
-                            for (int i = 0; i < 20; i++)
+                            int totalSeekers = Main.getGoodWorld ? 20 : 10;
+                            int degreesBetweenEachSeeker = 360 / totalSeekers;
+                            int distanceFromSCal = Main.getGoodWorld ? 300 : 225;
+                            for (int i = 0; i < totalSeekers; i++)
                             {
-                                int FireEye = NPC.NewNPC(NPC.GetSource_FromAI(), (int)(vectorCenter.X + (Math.Sin(i * 18) * 300)), (int)(vectorCenter.Y + (Math.Cos(i * 18) * 300)), ModContent.NPCType<SoulSeekerSupreme>(), NPC.whoAmI, 0, 0, 0, -1);
+                                int FireEye = NPC.NewNPC(NPC.GetSource_FromAI(), (int)(vectorCenter.X + (Math.Sin(i * degreesBetweenEachSeeker) * distanceFromSCal)), (int)(vectorCenter.Y + (Math.Cos(i * degreesBetweenEachSeeker) * distanceFromSCal)), ModContent.NPCType<SoulSeekerSupreme>(), NPC.whoAmI, 0, 0, 0, -1);
                                 NPC Eye = Main.npc[FireEye];
-                                Eye.ai[0] = i * 18;
-                                Eye.ai[3] = i * 18;
+                                Eye.ai[0] = i * degreesBetweenEachSeeker;
+                                Eye.ai[3] = i * degreesBetweenEachSeeker;
                             }
                         }
                     }

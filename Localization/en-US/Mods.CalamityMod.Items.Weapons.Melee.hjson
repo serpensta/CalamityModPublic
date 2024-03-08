@@ -1171,7 +1171,8 @@ Terratomere: {
 	Tooltip:
 		'''
 		Heals the player on true melee hits
-		Fires a piercing energy bolt that causes hit targets to explode and be slashed
+		Fires several piercing energy bolts that rapidly seek targets
+		On hit, explodes and repeatedly slashes the target
 		'Linked to the essence of Terraria'
 		'''
 }

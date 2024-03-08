@@ -102,7 +102,7 @@ namespace CalamityMod.NPCs.DevourerofGods
         {
             NPC head = CalamityGlobalNPC.DoGHead >= 0 ? Main.npc[CalamityGlobalNPC.DoGHead] : null;
             DevourerofGodsHead modNPC = head?.ModNPC<DevourerofGodsHead>() ?? null;
-            if (head != null || modNPC.AwaitingPhase2Teleport || !modNPC.Phase2Started)
+            if (head is null || modNPC.AwaitingPhase2Teleport || !modNPC.Phase2Started)
                 return;
 
             rotation = NPC.rotation;

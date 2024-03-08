@@ -11,7 +11,6 @@ using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
 using CalamityMod.Particles;
-using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Projectiles.Ranged;
@@ -19,6 +18,8 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Projectiles.VanillaProjectileOverrides;
+using CalamityMod.Tiles.FurnitureAuric;
+using CalamityMod.Tiles.Ores;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -93,6 +94,14 @@ namespace CalamityMod.Projectiles
         public float pointBlankShotDistanceTravelled = 0f;
         public const int DefaultPointBlankDuration = 18; // 18 frames
         public const float PointBlankShotDistanceLimit = 240f; // 15 tiles
+
+        // Empress of Light variables
+        private const float EmpressRainbowStreakSpreadOutCutoff = 140f;
+        private const int EmpressLastingRainbowTotalDuration = 660;
+
+        // Duke Fishron variables
+        private const int FishronSharknadoTotalDuration = 540;
+        private const int FishronCthulhunadoTotalDuration = 840;
 
         // Temporary flat damage reduction effects. This is typically used for parry effects such as Ark of the Ancients
         public int flatDRTimer = 0;
@@ -465,7 +474,7 @@ namespace CalamityMod.Projectiles
             }
 
             // This has 2 extra updates, dust was reduced because of this fact
-            else if (projectile.type == ProjectileID.Shadowflames)
+            else if (projectile.type == ProjectileID.Shadowflames && projectile.ai[1] == 1f)
             {
                 float spawnDustGateValue = 2f * projectile.MaxUpdates;
                 if (projectile.localAI[0] == spawnDustGateValue)
@@ -502,6 +511,11 @@ namespace CalamityMod.Projectiles
             {
                 if (projectile.localAI[0] == 0f)
                 {
+                    if (Main.masterMode && !CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * CalamityGlobalNPC.MasterModeEnemyDamageMultiplier);
+                    if (!CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * 0.65);
+
                     SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
                     projectile.localAI[0] = 1f;
                     for (int i = 0; i < 8; i++)
@@ -530,6 +544,11 @@ namespace CalamityMod.Projectiles
             {
                 if (projectile.localAI[0] == 0f)
                 {
+                    if (Main.masterMode && !CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * CalamityGlobalNPC.MasterModeEnemyDamageMultiplier);
+                    if (!CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * 0.65);
+
                     SoundEngine.PlaySound(SoundID.Item171, projectile.Center);
                     projectile.localAI[0] = 1f;
                     for (int i = 0; i < 8; i++)
@@ -770,9 +789,37 @@ namespace CalamityMod.Projectiles
             // Phase 1 sharknado
             else if (projectile.type == ProjectileID.SharknadoBolt)
             {
-                if (projectile.ai[1] < 0f)
+                if (projectile.ai[1] == 0f)
                 {
-                    float num623 = 0.209439516f;
+                    float num552 = (float)Math.PI / 15f;
+                    float num553 = 4f;
+                    float num554 = (float)(Math.Cos(num552 * projectile.ai[0]) - 0.5) * num553;
+                    projectile.velocity.Y -= num554;
+                    projectile.ai[0]++;
+                    num554 = (float)(Math.Cos(num552 * projectile.ai[0]) - 0.5) * num553;
+                    projectile.velocity.Y += num554;
+                    projectile.localAI[0]++;
+                    if (projectile.localAI[0] > 10f)
+                    {
+                        projectile.alpha -= 5;
+                        if (projectile.alpha < 100)
+                            projectile.alpha = 100;
+
+                        projectile.rotation += projectile.velocity.X * 0.1f;
+                        projectile.frame = (int)(projectile.localAI[0] / 3f) % 3;
+                    }
+
+                    if (projectile.wet)
+                    {
+                        projectile.position.Y -= 16f;
+                        projectile.Kill();
+                    }
+
+                    return false;
+                }
+                else if (projectile.ai[1] < 0f)
+                {
+                    float num623 = (float)Math.PI / 15f;
                     float num624 = -2f;
                     float num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
 
@@ -793,6 +840,12 @@ namespace CalamityMod.Projectiles
 
                         projectile.rotation += projectile.velocity.X * 0.1f;
                         projectile.frame = (int)(projectile.localAI[0] / 3f) % 3;
+                    }
+
+                    if (projectile.wet)
+                    {
+                        projectile.position.Y -= 16f;
+                        projectile.Kill();
                     }
 
                     return false;
@@ -915,6 +968,65 @@ namespace CalamityMod.Projectiles
                 }
             }
 
+            else if (projectile.type == ProjectileID.HallowBossRainbowStreak && projectile.hostile)
+            {
+                bool revMasterMode = (Main.masterMode && CalamityWorld.revenge) || BossRushEvent.BossRushActive;
+
+                bool spreadOut = false;
+                bool homeIn = false;
+                float spreadOutCutoffTime = EmpressRainbowStreakSpreadOutCutoff;
+                float homeInCutoffTime = Main.dayTime ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
+                float spreadDeceleration = 0.97f;
+                float minAcceleration = revMasterMode ? 0.075f : 0.05f;
+                float maxAcceleration = revMasterMode ? 0.15f : 0.1f;
+                float homingVelocity = revMasterMode ? 36f : 30f;
+                float maxVelocity = homingVelocity * 1.5f;
+                float accelerationToMaxVelocity = 1.01f;
+
+                if (projectile.timeLeft > spreadOutCutoffTime)
+                    spreadOut = true;
+                else if (projectile.timeLeft > homeInCutoffTime)
+                    homeIn = true;
+
+                if (spreadOut)
+                {
+                    float spreadVelocity = (float)Math.Cos(projectile.whoAmI % 6f / 6f + projectile.position.X / 320f + projectile.position.Y / 160f);
+                    projectile.velocity *= spreadDeceleration;
+                    projectile.velocity = projectile.velocity.RotatedBy(spreadVelocity * MathHelper.TwoPi * 0.125f * 1f / 30f);
+                }
+
+                if (homeIn)
+                {
+                    int playerIndex = (int)projectile.ai[0];
+                    Vector2 velocity = projectile.velocity;
+                    if (Main.player.IndexInRange(playerIndex))
+                    {
+                        Player player = Main.player[playerIndex];
+                        velocity = projectile.DirectionTo(player.Center) * homingVelocity;
+                    }
+
+                    float amount = MathHelper.Lerp(minAcceleration, maxAcceleration, Utils.GetLerpValue(spreadOutCutoffTime, 30f, projectile.timeLeft, clamped: true));
+                    projectile.velocity = Vector2.SmoothStep(projectile.velocity, velocity, amount);
+                }
+                else
+                {
+                    if (projectile.velocity.Length() < maxVelocity)
+                    {
+                        projectile.velocity *= accelerationToMaxVelocity;
+                        if (projectile.velocity.Length() > maxVelocity)
+                        {
+                            projectile.velocity.Normalize();
+                            projectile.velocity *= maxVelocity;
+                        }
+                    }
+                }
+
+                projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
+                projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.CultistBossLightningOrb)
             {
                 if (NPC.AnyNPCs(NPCID.CultistBoss))
@@ -975,7 +1087,7 @@ namespace CalamityMod.Projectiles
 
                         for (int num735 = 0; num735 < num731; num735++)
                         {
-                            Vector2 vector52 = array7[num735] + Main.player[array6[num735]].velocity * 40f - projectile.Center;
+                            Vector2 vector52 = array7[num735] - projectile.Center;
                             float ai = Main.rand.Next(100);
                             Vector2 vector53 = Vector2.Normalize(vector52.RotatedByRandom(MathHelper.PiOver4)) * 7f;
                             Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector53, 466, projectile.damage, 0f, Main.myPlayer, vector52.ToRotation(), ai);
@@ -1554,8 +1666,8 @@ namespace CalamityMod.Projectiles
                     int numDust = 5;
                     int numDust2 = 5;
                     int fadeInTime = 10;
-                    int fadeOutGateValue = 10;
-                    float killGateValue = 20f;
+                    int fadeOutGateValue = masterMode ? 80 : death ? 50 : 10;
+                    float killGateValue = masterMode ? 90f : death ? 60f : 20f;
                     int maxFrames = 5;
 
                     bool fadeIn = projectile.ai[0] < (float)fadeInTime;
@@ -1589,6 +1701,9 @@ namespace CalamityMod.Projectiles
                     if (fadeIn)
                     {
                         projectile.Opacity += 0.1f;
+                        if (projectile.Opacity > 1f)
+                            projectile.Opacity = 1f;
+
                         projectile.scale = projectile.Opacity * projectile.ai[1];
                     }
 
@@ -1642,7 +1757,7 @@ namespace CalamityMod.Projectiles
                         if (projectile.ai[0] == projectile.ai[2])
                         {
                             projectile.velocity *= 100f;
-                            projectile.velocity *= (death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
+                            projectile.velocity *= (masterMode ? 20f : death ? 16f : 12f) + Main.rand.NextFloat() * 2f;
                         }
                     }
 
@@ -2164,49 +2279,6 @@ namespace CalamityMod.Projectiles
                     return false;
                 }
 
-                else if (projectile.type == ProjectileID.HallowBossRainbowStreak && projectile.hostile)
-                {
-                    bool spreadOut = false;
-                    bool homeIn = false;
-                    float spreadOutCutoffTime = 140f;
-                    float homeInCutoffTime = Main.dayTime ? (masterMode ? 45f : 55f) : (masterMode ? 60f : 80f);
-                    float spreadDeceleration = 0.98f;
-                    float minAcceleration = masterMode ? 0.075f : 0.05f;
-                    float maxAcceleration = masterMode ? 0.125f : 0.1f;
-                    float homingVelocity = masterMode ? 36f : 30f;
-
-                    if (projectile.timeLeft > spreadOutCutoffTime)
-                        spreadOut = true;
-                    else if (projectile.timeLeft > homeInCutoffTime)
-                        homeIn = true;
-
-                    if (spreadOut)
-                    {
-                        float spreadVelocity = (float)Math.Cos(projectile.whoAmI % 6f / 6f + projectile.position.X / 320f + projectile.position.Y / 160f);
-                        projectile.velocity *= spreadDeceleration;
-                        projectile.velocity = projectile.velocity.RotatedBy(spreadVelocity * MathHelper.TwoPi * 0.125f * 1f / 30f);
-                    }
-
-                    if (homeIn)
-                    {
-                        int playerIndex = (int)projectile.ai[0];
-                        Vector2 velocity = projectile.velocity;
-                        if (Main.player.IndexInRange(playerIndex))
-                        {
-                            Player player = Main.player[playerIndex];
-                            velocity = projectile.DirectionTo(player.Center) * homingVelocity;
-                        }
-
-                        float amount = MathHelper.Lerp(minAcceleration, maxAcceleration, Utils.GetLerpValue(spreadOutCutoffTime, 30f, projectile.timeLeft, clamped: true));
-                        projectile.velocity = Vector2.SmoothStep(projectile.velocity, velocity, amount);
-                    }
-
-                    projectile.Opacity = Utils.GetLerpValue(240f, 220f, projectile.timeLeft, clamped: true);
-                    projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
-
-                    return false;
-                }
-
                 else if (projectile.type == ProjectileID.AncientDoomProjectile)
                 {
                     if (projectile.velocity.Length() < 8f)
@@ -2634,9 +2706,7 @@ namespace CalamityMod.Projectiles
                             case ProjectileID.FrostBeam:
                             case ProjectileID.CursedFlameHostile:
                             case ProjectileID.Stinger:
-                            case ProjectileID.BloodShot:
                             case ProjectileID.BloodNautilusTears:
-                            case ProjectileID.BloodNautilusShot:
                             case ProjectileID.RockGolemRock:
                             case ProjectileID.IcewaterSpit:
                             case ProjectileID.RocketSkeleton:
@@ -2688,6 +2758,17 @@ namespace CalamityMod.Projectiles
                             case ProjectileID.SaucerLaser:
                             case ProjectileID.SaucerMissile:
                             case ProjectileID.SaucerScrap:
+                            case ProjectileID.DD2GoblinBomb:
+                            case ProjectileID.DD2JavelinHostile:
+                            case ProjectileID.DD2JavelinHostileT3:
+                            case ProjectileID.DD2DarkMageBolt:
+                            case ProjectileID.DD2DrakinShot:
+                            case ProjectileID.DD2OgreSmash:
+                            case ProjectileID.DD2OgreSpit:
+                            case ProjectileID.DD2OgreStomp:
+                            case ProjectileID.DD2LightningBugZap:
+                            case ProjectileID.DD2BetsyFireball:
+                            case ProjectileID.DD2BetsyFlameBreath:
                                 projectile.damage = (int)Math.Round(projectile.damage * CalamityGlobalNPC.MasterModeEnemyDamageMultiplier);
                                 break;
                         }
@@ -2710,9 +2791,7 @@ namespace CalamityMod.Projectiles
                             case ProjectileID.FrostBeam:
                             case ProjectileID.CursedFlameHostile:
                             case ProjectileID.Stinger:
-                            case ProjectileID.BloodShot:
                             case ProjectileID.BloodNautilusTears:
-                            case ProjectileID.BloodNautilusShot:
                             case ProjectileID.RockGolemRock:
                             case ProjectileID.IcewaterSpit:
                             case ProjectileID.RocketSkeleton:
@@ -2851,8 +2930,77 @@ namespace CalamityMod.Projectiles
             // Accelerate for 1.5 seconds to full velocity
             if (projectile.type == ProjectileID.HallowBossLastingRainbow && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
             {
-                if (projectile.timeLeft > 570)
+                int spreadOutTime = 90;
+                if (projectile.timeLeft > EmpressLastingRainbowTotalDuration - spreadOutTime)
                     projectile.velocity *= ((Main.masterMode || BossRushEvent.BossRushActive) ? 1.017078f : 1.015525f);
+            }
+
+            // Golf Balls go nyoom on touching Auric Ore/Repulsers
+            if (ProjectileID.Sets.IsAGolfBall[projectile.type])
+            {
+                int auricOreID = TileType<AuricOre>();
+                int auricRepulserID = TileType<AuricRepulserPanelTile>();
+                // Get a list of tiles that are colliding with the ball.
+                // This is just Collision.GetEntityTiles but with a larger detection square because golf balls are too small and dumb to get detected half the time apparently
+                List<Point> EdgeTiles = new List<Point>();
+                int extraDist = 8;
+                int left = (int)projectile.position.X - extraDist;
+                int up = (int)projectile.position.Y - extraDist;
+                int right = (int)projectile.Right.X + extraDist;
+                int down = (int)projectile.Bottom.Y + extraDist;
+                if (left % 16 == 0)
+                {
+                    left--;
+                }
+
+                if (up % 16 == 0)
+                {
+                    up--;
+                }
+
+                if (right % 16 == 0)
+                {
+                    right++;
+                }
+
+                if (down % 16 == 0)
+                {
+                    down++;
+                }
+
+                int width = right / 16 - left / 16;
+                int height = down / 16 - up / 16;
+                left /= 16;
+                up /= 16;
+                for (int i = left; i <= left + width; i++)
+                {
+                    EdgeTiles.Add(new Point(i, up));
+                    EdgeTiles.Add(new Point(i, up + height));
+                }
+
+                for (int j = up; j < up + height; j++)
+                {
+                    EdgeTiles.Add(new Point(left, j));
+                    EdgeTiles.Add(new Point(left + width, j));
+                }
+                foreach (Point touchedTile in EdgeTiles)
+                {
+                    Tile tile = Framing.GetTileSafely(touchedTile);
+                    if (!tile.HasTile || !tile.HasUnactuatedTile)
+                        continue;
+                    if (tile.TileType == auricOreID || tile.TileType == auricRepulserID)
+                    {
+                        // Force Auric Ore to animate with its crackling electricity
+                        if (tile.TileType == auricOreID)
+                        {
+                            AuricOre.Animate = true;
+                        }
+
+                        var yeetVec = Vector2.Normalize(projectile.Center - touchedTile.ToWorldCoordinates());
+                        projectile.velocity += yeetVec * 40f;
+                        SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/ExoMechs/TeslaShoot1") with { Pitch = 0.4f });
+                    }
+                }
             }
 
             if (projectile.type == ProjectileID.OrnamentFriendly && lineColor == 1) //spawned by Festive Wings
@@ -3397,12 +3545,20 @@ namespace CalamityMod.Projectiles
             if (projectile.hostile && (projectile.damage - flatDR <= 0))
                 return false;
 
+            bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
+            bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
+
+            int dealNoDamageTime = 60;
             switch (projectile.type)
             {
                 // Rev+ Deerclops ice spikes can only deal damage while they're not fading out
                 case ProjectileID.DeerclopsIceSpike:
                     if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
-                        return projectile.ai[0] < 10f;
+                    {
+                        float fadeInTime = 10f;
+                        float fadeOutGateValue = masterMode ? 80f : death ? 50f : 10f;
+                        return (projectile.ai[0] >= fadeInTime && projectile.ai[0] < fadeOutGateValue);
+                    }
                     break;
 
                 // Rev+ Deerclops rubble doesn't deal damage while it's not flying upwards
@@ -3417,14 +3573,26 @@ namespace CalamityMod.Projectiles
                         return projectile.velocity.Length() >= projectile.ai[1];
                     break;
 
-                // Duke Fishron tornadoes don't deal damage for a bit after they spawn
+                // Duke Fishron tornadoes deal no damage for 1 second after spawning
                 case ProjectileID.Sharknado:
-                    if (projectile.timeLeft > 420)
+                    if (projectile.timeLeft > FishronSharknadoTotalDuration - dealNoDamageTime)
                         return false;
                     break;
 
                 case ProjectileID.Cthulunado:
-                    if (projectile.timeLeft > 720)
+                    if (projectile.timeLeft > FishronCthulhunadoTotalDuration - dealNoDamageTime)
+                        return false;
+                    break;
+
+                // Empress Rainbow Streaks deal no damage if they haven't started homing
+                case ProjectileID.HallowBossRainbowStreak:
+                    if (projectile.hostile)
+                        return projectile.timeLeft <= EmpressRainbowStreakSpreadOutCutoff;
+                    break;
+
+                // Empress Lasting Rainbows deal no damage for 1 second after spawning
+                case ProjectileID.HallowBossLastingRainbow:
+                    if (projectile.timeLeft > EmpressLastingRainbowTotalDuration - dealNoDamageTime)
                         return false;
                     break;
 

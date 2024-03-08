@@ -2,6 +2,7 @@
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -96,7 +97,7 @@ namespace CalamityMod.NPCs.Ravager
 
                         // Set damage
                         if (DownedBossSystem.downedProvidence && !BossRushEvent.BossRushActive)
-                            NPC.damage = (int)(NPC.defDamage * 1.5);
+                            NPC.damage = (int)Math.Round(NPC.defDamage * 1.5);
                         else
                             NPC.damage = NPC.defDamage;
 
@@ -112,7 +113,7 @@ namespace CalamityMod.NPCs.Ravager
             {
                 // Set damage
                 if (DownedBossSystem.downedProvidence && !BossRushEvent.BossRushActive)
-                    NPC.damage = (int)(NPC.defDamage * 1.5);
+                    NPC.damage = (int)Math.Round(NPC.defDamage * 1.5);
                 else
                     NPC.damage = NPC.defDamage;
 

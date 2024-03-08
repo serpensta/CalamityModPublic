@@ -40,7 +40,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else if (phase2AI)
             {
                 setDamage = (int)Math.Round(setDamage * 1.44);
-                npc.defense = (int)(npc.defDefense * 0.8f);
+                npc.defense = (int)Math.Round(npc.defDefense * 0.8);
             }
             else
                 npc.defense = npc.defDefense;
@@ -1253,7 +1253,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else if (flag3)
             {
                 setDamage = (int)Math.Round(setDamage * 1.2 * damageScale);
-                npc.defense = (int)((float)npc.defDefense * 0.8f);
+                npc.defense = (int)Math.Round(npc.defDefense * 0.8);
             }
             else
                 npc.defense = npc.defDefense;
@@ -1722,11 +1722,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     Vector2 vector8 = npc.rotation.ToRotationVector2() * (Vector2.UnitX * npc.direction) * (npc.width + 20) / 2f + center;
                     Vector2 sharknadoBoltVelocity = new Vector2(npc.direction * 2, masterMode ? 12f : 8f);
                     Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer);
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -Vector2.UnitX, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer);
+                    sharknadoBoltVelocity = new Vector2(npc.direction * -2, masterMode ? 12f : 8f);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer);
                     if (masterMode)
                     {
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -Vector2.UnitY, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 0f, -1f);
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity * -1f, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 0f, -1f);
+                        sharknadoBoltVelocity = new Vector2(npc.direction * 2, masterMode ? -12f : -8f);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 0f, -1f);
+                        sharknadoBoltVelocity = new Vector2(npc.direction * -2, masterMode ? -12f : -8f);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector8, sharknadoBoltVelocity, ProjectileID.SharknadoBolt, 0, 0f, Main.myPlayer, 0f, -1f);
                     }
                 }
 

@@ -621,6 +621,7 @@ namespace CalamityMod.CalPlayer
             // - Wearing Fearmonger armor
             // - Wearing Gem Tech armor and having the Blue Gem active
             // - Using Profaned Soul Crystal
+            // - Wearing any DD2 armor set
             // - During the Old One's Army event it's disabled by default
             bool isSummon = proj.CountsAsClass<SummonDamageClass>();
             if (isSummon)
@@ -628,10 +629,14 @@ namespace CalamityMod.CalPlayer
                 Item heldItem = Player.ActiveItem();
 
                 bool wearingForbiddenSet = Player.armor[0].type == ItemID.AncientBattleArmorHat && Player.armor[1].type == ItemID.AncientBattleArmorShirt && Player.armor[2].type == ItemID.AncientBattleArmorPants;
+
+                bool wearingDD2Tier2Armor = (Player.armor[0].type == ItemID.ApprenticeHat && Player.armor[1].type == ItemID.ApprenticeRobe && Player.armor[2].type == ItemID.ApprenticeTrousers) || (Player.armor[0].type == ItemID.SquireGreatHelm && Player.armor[1].type == ItemID.SquirePlating && Player.armor[2].type == ItemID.SquireGreaves) || (Player.armor[0].type == ItemID.HuntressWig && Player.armor[1].type == ItemID.HuntressJerkin && Player.armor[2].type == ItemID.HuntressPants) || (Player.armor[0].type == ItemID.MonkBrows && Player.armor[1].type == ItemID.MonkShirt && Player.armor[2].type == ItemID.MonkPants);
+                bool wearingDD2Tier3Armor = (Player.armor[0].type == ItemID.ApprenticeAltHead && Player.armor[1].type == ItemID.ApprenticeAltShirt && Player.armor[2].type == ItemID.ApprenticeAltPants) || (Player.armor[0].type == ItemID.SquireAltHead && Player.armor[1].type == ItemID.SquireAltShirt && Player.armor[2].type == ItemID.SquireAltPants) || (Player.armor[0].type == ItemID.HuntressAltHead && Player.armor[1].type == ItemID.HuntressAltShirt && Player.armor[2].type == ItemID.HuntressAltPants) || (Player.armor[0].type == ItemID.MonkAltHead && Player.armor[1].type == ItemID.MonkAltShirt && Player.armor[2].type == ItemID.MonkAltPants);
+
                 bool forbiddenWithMagicWeapon = wearingForbiddenSet && heldItem.CountsAsClass<MagicDamageClass>();
                 bool gemTechBlueGem = GemTechSet && GemTechState.IsBlueGemActive;
 
-                bool crossClassNerfDisabled = forbiddenWithMagicWeapon || fearmongerSet || gemTechBlueGem || profanedCrystalBuffs || DD2Event.Ongoing;
+                bool crossClassNerfDisabled = forbiddenWithMagicWeapon || fearmongerSet || gemTechBlueGem || profanedCrystalBuffs || wearingDD2Tier2Armor || wearingDD2Tier3Armor || DD2Event.Ongoing;
                 crossClassNerfDisabled |= CalamityLists.DisabledSummonerNerfMinions.Contains(proj.type);
 
                 // If this projectile is a summon, its owner is holding an item, and the cross class nerf isn't disabled from equipment:
@@ -742,9 +747,8 @@ namespace CalamityMod.CalPlayer
 
             if (transformer)
             {
-                if (npc.type == NPCID.BlueJellyfish || npc.type == NPCID.PinkJellyfish || npc.type == NPCID.GreenJellyfish ||
-                    npc.type == NPCID.FungoFish || npc.type == NPCID.BloodJelly || npc.type == NPCID.AngryNimbus || npc.type == NPCID.GigaZapper ||
-                    npc.type == NPCID.MartianTurret || npc.type == ModContent.NPCType<Stormlion>() || npc.type == ModContent.NPCType<GhostBell>() || npc.type == ModContent.NPCType<BoxJellyfish>())
+                if (npc.type == NPCID.BlueJellyfish || npc.type == NPCID.PinkJellyfish || npc.type == NPCID.GreenJellyfish || npc.type == NPCID.FungoFish ||
+                    npc.type == NPCID.BloodJelly || npc.type == ModContent.NPCType<Stormlion>() || npc.type == ModContent.NPCType<GhostBell>() || npc.type == ModContent.NPCType<BoxJellyfish>())
                     contactDamageReduction += 0.5;
             }
 
@@ -1283,27 +1287,44 @@ namespace CalamityMod.CalPlayer
                 }
                 else if (proj.type == ProjectileID.FrostBeam && !Player.frozen && !gState)
                 {
-                    Player.AddBuff(ModContent.BuffType<GlacialState>(), 120);
+                    Player.AddBuff(ModContent.BuffType<GlacialState>(), 60);
                 }
-                else if (proj.type == ProjectileID.DeathLaser || proj.type == ProjectileID.RocketSkeleton)
+                else if (proj.type == ProjectileID.DeathLaser || proj.type == ProjectileID.RocketSkeleton || proj.type == ProjectileID.BombSkeletronPrime)
                 {
-                    Player.AddBuff(BuffID.OnFire, 240);
+                    Player.AddBuff(BuffID.OnFire, 180);
                 }
                 else if (proj.type == ProjectileID.Skull)
                 {
-                    Player.AddBuff(BuffID.Weak, 300);
+                    Player.AddBuff(BuffID.Weak, 180);
                 }
-                else if (proj.type == ProjectileID.CursedFlameHostile)
+                else if (proj.type == ProjectileID.CursedFlameHostile || proj.type == ProjectileID.EyeFire)
                 {
-                    Player.AddBuff(BuffID.CursedInferno, 120);
+                    // Guaranteed Cursed Inferno for 1 second (vanilla also has a 68.75% chance of Cursed Inferno for 2 to 3 seconds)
+                    Player.AddBuff(BuffID.CursedInferno, 60);
+                }
+                else if (proj.type == ProjectileID.Stinger || proj.type == ProjectileID.QueenBeeStinger)
+                {
+                    // 66.6% chance of Poison for 3 seconds, 1 guaranteed second of Poison otherwise (vanilla also has a 33.3% chance of Poison for 10 seconds)
+                    if (Main.rand.Next(3) > 0)
+                        Player.AddBuff(BuffID.Poisoned, 180);
+                    else
+                        Player.AddBuff(BuffID.Poisoned, 60);
+                }
+                else if (proj.type == ProjectileID.PoisonSeedPlantera)
+                {
+                    // 75% chance of Poison for 3 to 5 seconds, guaranteed Poison for 2 seconds (vanilla also has a 50% chance of Poison for 3 to 7 seconds)
+                    if (Main.rand.Next(4) > 0)
+                        Player.AddBuff(BuffID.Poisoned, Main.rand.Next(180, 301));
+                    else
+                        Player.AddBuff(BuffID.Poisoned, 120);
                 }
                 else if (proj.type == ProjectileID.ThornBall)
                 {
-                    Player.AddBuff(BuffID.Poisoned, 480);
+                    Player.AddBuff(BuffID.Poisoned, 300);
                 }
                 else if (proj.type == ProjectileID.CultistBossIceMist)
                 {
-                    Player.AddBuff(BuffID.Frozen, 90);
+                    Player.AddBuff(BuffID.Frozen, 60);
                     Player.AddBuff(BuffID.Chilled, 180);
                 }
                 else if (proj.type == ProjectileID.CultistBossLightningOrbArc)
@@ -1320,35 +1341,35 @@ namespace CalamityMod.CalPlayer
                 }
                 else if (proj.type == ProjectileID.PhantasmalBolt || proj.type == ProjectileID.PhantasmalEye)
                 {
-                    Player.AddBuff(ModContent.BuffType<Nightwither>(), 120);
+                    Player.AddBuff(ModContent.BuffType<Nightwither>(), 60);
                 }
                 else if (proj.type == ProjectileID.PhantasmalSphere)
                 {
-                    Player.AddBuff(ModContent.BuffType<Nightwither>(), 240);
+                    Player.AddBuff(ModContent.BuffType<Nightwither>(), 120);
                 }
                 else if (proj.type == ProjectileID.PhantasmalDeathray)
                 {
-                    Player.AddBuff(ModContent.BuffType<Nightwither>(), 400);
+                    Player.AddBuff(ModContent.BuffType<Nightwither>(), 300);
                 }
                 else if (proj.type == ProjectileID.FairyQueenLance || proj.type == ProjectileID.HallowBossRainbowStreak || proj.type == ProjectileID.HallowBossSplitShotCore)
                 {
-                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 120);
+                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 60);
                 }
                 else if (proj.type == ProjectileID.HallowBossLastingRainbow)
                 {
-                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 160);
+                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 120);
                 }
                 else if (proj.type == ProjectileID.FairyQueenSunDance)
                 {
-                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 200);
+                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 180);
                 }
                 else if (proj.type == ProjectileID.BloodNautilusShot)
                 {
-                    Player.AddBuff(ModContent.BuffType<BurningBlood>(), 240);
+                    Player.AddBuff(ModContent.BuffType<BurningBlood>(), 120);
                 }
                 else if (proj.type == ProjectileID.BloodShot)
                 {
-                    Player.AddBuff(ModContent.BuffType<BurningBlood>(), 180);
+                    Player.AddBuff(ModContent.BuffType<BurningBlood>(), 60);
                 }
                 else if (proj.type == ProjectileID.RuneBlast && Main.zenithWorld)
                 {
@@ -2838,7 +2859,13 @@ namespace CalamityMod.CalPlayer
             // Play a sound from taking defense damage.
             if (hurtSoundTimer == 0 && Main.myPlayer == Player.whoAmI)
             {
-                SoundEngine.PlaySound(DefenseDamageSound with { Volume = DefenseDamageSound.Volume * 0.75f }, Player.Center);
+                double maxVolumeDefenseDamageScalar = Main.masterMode ? 0.7 : CalamityWorld.death ? 0.6 : CalamityWorld.revenge ? 0.55 : Main.expertMode ? 0.5 : 0.4;
+                float maxVolumeDefenseDamage = (float)Math.Round(Player.statDefense * maxVolumeDefenseDamageScalar);
+                float minVolume = 0.5f;
+                float maxVolume = 1f;
+                float lerpAmount = MathHelper.Clamp(defenseDamage / maxVolumeDefenseDamage, 0f, 1f);
+                float defenseDamageSoundVolumeMultiplier = MathHelper.Lerp(minVolume, maxVolume, lerpAmount);
+                SoundEngine.PlaySound(DefenseDamageSound with { Volume = DefenseDamageSound.Volume * defenseDamageSoundVolumeMultiplier }, Player.Center);
                 hurtSoundTimer = 30;
             }
 

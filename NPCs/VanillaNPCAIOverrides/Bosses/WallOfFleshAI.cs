@@ -869,9 +869,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 masterModeVelocityBoost = MathHelper.Lerp(0f, 8f, lerpAmount);
             }
 
-            float num369 = (Main.expertMode ? 3.25f : 2.5f) + masterModeVelocityBoost;
+            float num369 = (Main.expertMode ? 3.5f : 2.5f) + masterModeVelocityBoost;
             if (!Main.expertMode)
             {
+                // 4.7 is the max in classic
                 if ((double)npc.life < (double)npc.lifeMax * 0.75)
                     num369 += 0.4f;
 
@@ -886,23 +887,34 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
             else
             {
-                if ((double)npc.life < (double)npc.lifeMax * 0.66)
+                // 6.5 is the max in expert
+                if ((double)npc.life < (double)npc.lifeMax * 0.8)
                     num369 += 0.3f;
 
-                if ((double)npc.life < (double)npc.lifeMax * 0.33)
+                if ((double)npc.life < (double)npc.lifeMax * 0.6)
                     num369 += 0.3f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.4)
+                    num369 += 0.5f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.2)
+                    num369 += 0.5f;
+
+                if ((double)npc.life < (double)npc.lifeMax * 0.1)
+                    num369 += 0.7f;
 
                 if ((double)npc.life < (double)npc.lifeMax * 0.05)
-                    num369 += 0.6f;
+                    num369 += 0.7f;
 
-                if ((double)npc.life < (double)npc.lifeMax * 0.035)
-                    num369 += 0.6f;
+                // 8.3 is the max in master
+                if (Main.masterMode)
+                {
+                    if ((double)npc.life < (double)npc.lifeMax * 0.025)
+                        num369 += 0.9f;
 
-                if ((double)npc.life < (double)npc.lifeMax * 0.025)
-                    num369 += 0.6f;
-
-                num369 *= 1.35f;
-                num369 += 0.35f;
+                    if ((double)npc.life < (double)npc.lifeMax * 0.01)
+                        num369 += 0.9f;
+                }
             }
 
             if (Main.getGoodWorld)
@@ -940,7 +952,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (npc.velocity.X < 0f)
             {
-                npc.velocity.X = 0f - num369;
+                npc.velocity.X = -num369;
                 npc.direction = -1;
             }
             else

@@ -6,6 +6,7 @@ using CalamityMod.NPCs.CalamityAIs.CalamityRegularEnemyAIs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -85,26 +86,26 @@ namespace CalamityMod.NPCs.SunkenSea
                 }
                 else if (CalamityWorld.revenge)
                 {
-                    NPC.damage = (int)(NPC.defDamage * 2.75);
+                    NPC.damage = (int)Math.Round(NPC.defDamage * 2.75);
                 }
                 else if (Main.expertMode)
                 {
-                    NPC.damage = (int)(NPC.defDamage * 2.5);
+                    NPC.damage = (int)Math.Round(NPC.defDamage * 2.5);
                 }
                 else
                 {
-                    NPC.damage = (int)(NPC.defDamage * 1.25);
+                    NPC.damage = (int)Math.Round(NPC.defDamage * 1.25);
                 }
             }
             else
             {
                 if (CalamityWorld.death)
                 {
-                    NPC.damage = (int)(NPC.defDamage * 2.5);
+                    NPC.damage = (int)Math.Round(NPC.defDamage * 2.5);
                 }
                 else if (CalamityWorld.revenge)
                 {
-                    NPC.damage = (int)(NPC.defDamage * 2.25);
+                    NPC.damage = (int)Math.Round(NPC.defDamage * 2.25);
                 }
                 else if (Main.expertMode)
                 {

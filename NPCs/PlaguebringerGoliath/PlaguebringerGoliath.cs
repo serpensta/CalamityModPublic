@@ -618,12 +618,18 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 NPC.direction = playerLocation < 0 ? 1 : -1;
                 NPC.spriteDirection = NPC.direction;
 
-                float playerXDist = player.Center.X - NPC.Center.X;
-                float playerYDist = player.Center.Y - 200f - NPC.Center.Y;
-                float playerTotalDist = (float)Math.Sqrt(playerXDist * playerXDist + playerYDist * playerYDist);
+                // Move closer
+                bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
+                float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
+                bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
+                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
+                bool tooFar = tooFarX || tooFarY;
 
                 calamityGlobalNPC.newAI[0] += 1f;
-                if (playerTotalDist < 600f || calamityGlobalNPC.newAI[0] >= 180f)
+                if ((Vector2.Distance(NPC.Center, player.Center) < 640f && canHitTarget) || calamityGlobalNPC.newAI[0] >= 180f)
                 {
                     NPC.ai[0] = (phase3 || bossRush) ? 5f : 1f;
                     NPC.ai[1] = 0f;
@@ -640,14 +646,6 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                     return;
                 }
 
-                // Move closer
-                bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
-                float distanceAwayFromTargetX = 100f;
-                float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
-                bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
-                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + 50f || distanceAwayFromTargetY < distanceAboveTarget - 50f;
-                bool tooFar = tooFarX || tooFarY;
                 if (tooFar)
                     Movement(distanceAboveTarget, player, enrageScale);
             }
@@ -662,6 +660,8 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 Vector2 missileSpawnPos = new Vector2(NPC.direction == 1 ? NPC.getRect().BottomLeft().X : NPC.getRect().BottomRight().X, NPC.getRect().Bottom().Y + 20f);
                 missileSpawnPos.X += NPC.direction * 120;
+                Vector2 missileSpawnCollisionLocation = new Vector2(missileSpawnPos.X, missileSpawnPos.Y - 30f);
+                bool canHitTarget = Collision.CanHit(missileSpawnCollisionLocation, 1, 1, player.position, player.width, player.height);
 
                 NPC.ai[1] += 1f;
                 NPC.ai[1] += activePlayers / 2;
@@ -703,12 +703,12 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
-                float distanceAwayFromTargetX = 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
-                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + 50f || distanceAwayFromTargetY < distanceAboveTarget - 50f;
+                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
                 if (tooFar)
                     Movement(distanceAboveTarget, player, enrageScale);
@@ -742,7 +742,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 charging = false;
                 Vector2 missileSpawnPos = new Vector2(NPC.direction == 1 ? NPC.getRect().BottomLeft().X : NPC.getRect().BottomRight().X, NPC.getRect().Bottom().Y + 20f);
                 missileSpawnPos.X += NPC.direction * 120;
-                
+                Vector2 missileSpawnCollisionLocation = new Vector2(missileSpawnPos.X, missileSpawnPos.Y - 30f);
+                bool canHitTarget = Collision.CanHit(missileSpawnCollisionLocation, 1, 1, player.position, player.width, player.height);
+
                 NPC.ai[1] += 1f;
                 NPC.ai[1] += activePlayers / 2;
                 bool shouldSpawnMissiles = false;
@@ -790,12 +792,12 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
-                float distanceAwayFromTargetX = 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
-                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + 50f || distanceAwayFromTargetY < distanceAboveTarget - 50f;
+                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
                 if (tooFar)
                     Movement(distanceAboveTarget, player, enrageScale);
@@ -828,6 +830,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 Vector2 stingerSpawnPos = new Vector2(NPC.direction == 1 ? NPC.getRect().BottomLeft().X : NPC.getRect().BottomRight().X, NPC.getRect().Bottom().Y + 20f);
                 stingerSpawnPos.X += NPC.direction * 120;
+                bool canHitTarget = Collision.CanHit(new Vector2(stingerSpawnPos.X, stingerSpawnPos.Y - 30f), 1, 1, player.position, player.width, player.height);
 
                 NPC.ai[1] += 1f;
                 int stingerFireDelay = phase5 ? 20 : (phase3 ? 25 : 30);
@@ -881,12 +884,12 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 450f;
-                float distanceAwayFromTargetX = 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
-                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + 50f || distanceAwayFromTargetY < distanceAboveTarget - 50f;
+                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
                 if (tooFar)
                     Movement(distanceAboveTarget, player, enrageScale);

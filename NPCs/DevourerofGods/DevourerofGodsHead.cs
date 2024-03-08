@@ -2338,12 +2338,12 @@ namespace CalamityMod.NPCs.DevourerofGods
             float minimalDamageVelocity = segmentVelocity * 0.5f;
             if (NPC.velocity.Length() <= minimalContactDamageVelocity)
             {
-                NPC.damage = (int)(NPC.defDamage * 0.5f);
+                NPC.damage = (int)Math.Round(NPC.defDamage * 0.5);
             }
             else
             {
                 float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
-                NPC.damage = (int)MathHelper.Lerp(NPC.defDamage * 0.5f, NPC.defDamage, velocityDamageScalar);
+                NPC.damage = (int)MathHelper.Lerp((float)Math.Round(NPC.defDamage * 0.5), NPC.defDamage, velocityDamageScalar);
             }
 
             if (NPC.life > Main.npc[(int)NPC.ai[0]].life)
@@ -2654,10 +2654,11 @@ namespace CalamityMod.NPCs.DevourerofGods
                 string key2 = "Mods.CalamityMod.Status.Progression.DoGBossText2";
                 Color messageColor2 = Color.Orange;
                 string key3 = "Mods.CalamityMod.Status.Progression.DargonBossText";
+                Color messageColor3 = Color.Yellow;
 
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
                 CalamityUtils.DisplayLocalizedText(key2, messageColor2);
-                CalamityUtils.DisplayLocalizedText(key3, messageColor2);
+                CalamityUtils.DisplayLocalizedText(key3, messageColor3);
             }
 
             // Mark DoG as dead

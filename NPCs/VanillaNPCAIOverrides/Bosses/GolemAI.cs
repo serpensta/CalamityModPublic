@@ -1193,7 +1193,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 npc.ai[1] = 0f;
 
-                Vector2 freeHeadCenter = new Vector2(npc.Center.X, npc.Center.Y - 10f * npc.scale);
+                Vector2 freeHeadCenter = new Vector2(npc.Center.X, npc.Center.Y + 20f * npc.scale);
                 float freeHeadSpeed = turboEnrage ? 8f : enrage ? 6.5f : 5f;
                 if (masterMode)
                     freeHeadSpeed *= 1.25f;
@@ -1232,7 +1232,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 bool leftLaserIsFast = Main.rand.NextBool();
                 for (int i = 0; i < numLasers; i++)
                 {
-                    Vector2 freeHeadProjSpawn = new Vector2(npc.Center.X, npc.Center.Y - 50f * npc.scale);
+                    Vector2 freeHeadProjSpawn = new Vector2(npc.Center.X, npc.Center.Y - 20f * npc.scale);
                     if (i == 0)
                         freeHeadProjSpawn.X -= 14f * npc.scale;
                     else if (i == 1)
@@ -1970,9 +1970,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.life < npc.lifeMax / 5)
                     npc.ai[2] += num719;
 
-                if (!Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
-                    npc.ai[2] += 4f;
-
                 if (npc.ai[2] > (float)(60 + Main.rand.Next(600)))
                 {
                     npc.ai[2] = 0f;
@@ -2133,7 +2130,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 npc.TargetClosest();
                 npc.ai[1] = 0f;
-                Vector2 vector93 = new Vector2(npc.Center.X, npc.Center.Y - 10f * npc.scale);
+                Vector2 vector93 = new Vector2(npc.Center.X, npc.Center.Y + 20f * npc.scale);
                 float num749 = 8f;
 
                 int type = ProjectileID.Fireball;
@@ -2172,19 +2169,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (Main.npc[NPC.golemBoss].life < Main.npc[NPC.golemBoss].lifeMax / 6)
                 npc.ai[2] += num756;
 
-            bool flag38 = false;
-            if (!Collision.CanHit(Main.npc[NPC.golemBoss].Center, 1, 1, Main.player[npc.target].Center, 1, 1))
-                flag38 = true;
-
-            if (flag38)
-                npc.ai[2] += num756 * 10f;
-
             if (npc.ai[2] > (float)(100 + Main.rand.Next(4800)))
             {
                 npc.ai[2] = 0f;
                 for (int num757 = 0; num757 < 2; num757++)
                 {
-                    Vector2 vector94 = new Vector2(npc.Center.X, npc.Center.Y - 50f * npc.scale);
+                    Vector2 vector94 = new Vector2(npc.Center.X, npc.Center.Y - 20f * npc.scale);
                     switch (num757)
                     {
                         case 0:
@@ -2212,14 +2202,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     float num761 = Main.player[npc.target].Center.X;
                     float num762 = Main.player[npc.target].Center.Y;
-                    if (flag38)
-                    {
-                        damage = (int)((double)damage * 1.5);
-                        num758 *= 2.5f;
-                        num761 += Main.player[npc.target].velocity.X * Main.rand.NextFloat() * 50f;
-                        num762 += Main.player[npc.target].velocity.Y * Main.rand.NextFloat() * 50f;
-                    }
-
                     num761 -= vector94.X;
                     num762 -= vector94.Y;
                     float num763 = (float)Math.Sqrt(num761 * num761 + num762 * num762);

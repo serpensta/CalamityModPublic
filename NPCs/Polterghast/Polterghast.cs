@@ -815,7 +815,7 @@ namespace CalamityMod.NPCs.Polterghast
                 if (!isInChargePhase)
                     NPC.damage = phase2ReducedSetDamage;
 
-                NPC.defense = (int)(NPC.defDefense * 0.8f);
+                NPC.defense = (int)Math.Round(NPC.defDefense * 0.8);
 
                 if (Main.netMode != NetmodeID.MultiplayerClient && !isInChargePhase)
                 {
@@ -971,7 +971,7 @@ namespace CalamityMod.NPCs.Polterghast
                 if (!isInChargePhase)
                     NPC.damage = phase3ReducedSetDamage;
 
-                NPC.defense = (int)(NPC.defDefense * 0.5f);
+                NPC.defense = (int)Math.Round(NPC.defDefense * 0.5);
 
                 NPC.localAI[1] += 1f;
                 if (NPC.localAI[1] >= (getPissed ? 200f : 280f) && Collision.CanHit(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height))
