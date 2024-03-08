@@ -34,14 +34,12 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.DamageType = DamageClass.Melee;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
+            Projectile.extraUpdates = 1;
         }
 
         public override void AI()
         {
-            NPC target = Projectile.FindTargetWithinRange(600f);
-            if (target != null)
-                Projectile.velocity = Projectile.SuperhomeTowardsTarget(target, 24f, 10f);
-
+            CalamityUtils.HomeInOnNPC(Projectile, true, 600f, 24f, 20f);
             Projectile.scale = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true);
         }
 
@@ -52,7 +50,7 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             TargetIndex = target.whoAmI;
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<TerratomereExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<TerratomereExplosion>(), (int)(Projectile.damage * 0.5f), Projectile.knockBack, Projectile.owner);
 
             if (Projectile.timeLeft > 12)
                 Projectile.timeLeft = 12;
