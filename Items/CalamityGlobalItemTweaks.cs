@@ -62,8 +62,6 @@ namespace CalamityMod.Items
                 { ItemID.ChainGuillotines, Do(DamageExact(100)) },
                 { ItemID.ChainGun, Do(PointBlank, DamageExact(35)) },
                 { ItemID.ChainKnife, Do(AutoReuse, DamageRatio(1.34f)) },  // Uses ratios due to remix seed
-                // Charged Blaster Cannon is now an earlier Last Prism-like, so it will probably need careful balance attention.
-                // { ItemID.ChargedBlasterCannon, Do(DamageRatio(1.33f)) },
                 { ItemID.ChlorophyteClaymore, Do(UseMeleeSpeed) },
                 { ItemID.ChlorophytePartisan, Do(AutoReuse, UseMeleeSpeed, UseRatio(0.8f), DamageExact(70)) },
                 { ItemID.ChlorophyteSaber, Do(UseMeleeSpeed, DamageExact(80), UseExact(10)) },
@@ -105,8 +103,8 @@ namespace CalamityMod.Items
                 { ItemID.FairyQueenMagicItem, Do(DamageExact(54)) }, // Nightglow
                 { ItemID.FairyQueenRangedItem, Do(PointBlank, DamageExact(42))}, //Eventide
                 { ItemID.FalconBlade, Do(UseTurn, UseExact(15)) },
-                // Unsure what to do with Celebration. Should it be treated as a serious weapon or not? Currently not changing it from vanilla.
-                // { ItemID.FireworksLauncher, Do(DamageRatio(2f)) }, // Celebration
+                // For now, I think I will balance Celebration like a serious weapon. -CIT
+                { ItemID.FireworksLauncher, Do(DamageExact(50), UseExact(25)) }, // Celebration
                 { ItemID.Flairon, Do(DamageExact(73)) },
                 { ItemID.Flamarang, Do(DamageExact(40)) },
                 { ItemID.Flamelash, Do(DamageExact(40)) },
