@@ -36,7 +36,14 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.localNPCHitCooldown = -1;
         }
 
-        public override void AI() => Projectile.scale = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true);
+        public override void AI()
+        {
+            NPC target = Projectile.FindTargetWithinRange(600f);
+            if (target != null)
+                Projectile.velocity = Projectile.SuperhomeTowardsTarget(target, 24f, 10f);
+
+            Projectile.scale = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true);
+        }
 
         public float SlashWidthFunction(float _) => Projectile.width * Projectile.scale * Utils.GetLerpValue(0f, 0.1f, _, true);
 
@@ -69,6 +76,7 @@ namespace CalamityMod.Projectiles.Melee
 
             for (int i = 0; i < 4; i++)
                 PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(SlashWidthFunction, SlashColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ExobladePierce"]), 30);
+
             return false;
         }
 
