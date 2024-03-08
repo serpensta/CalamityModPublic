@@ -4753,6 +4753,10 @@ namespace CalamityMod.NPCs
             // Fair contact damage
             switch (npc.type)
             {
+                case NPCID.DD2Betsy:
+                    npc.damage = npc.ai[0] == 2f ? npc.defDamage : 0;
+                    break;
+
                 case NPCID.DD2WyvernT1:
                 case NPCID.DD2WyvernT2:
                 case NPCID.DD2WyvernT3:
