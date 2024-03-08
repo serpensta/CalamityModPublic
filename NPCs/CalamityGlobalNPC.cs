@@ -152,6 +152,12 @@ namespace CalamityMod.NPCs
         public const float CatchUpDistance200Tiles = 3200f;
         public const float CatchUpDistance350Tiles = 5600f;
 
+        /// <summary>
+        /// Destroyer laser colors, used for telegraphs
+        /// None = -1, Red = 0, Green = 1, Cyan = 2
+        /// </summary>
+        public int destroyerLaserColor = -1;
+
         // Boss Zen distance
         private const float BossZenDistance = 6400f;
 
@@ -397,6 +403,8 @@ namespace CalamityMod.NPCs
             myClone.canBreakPlayerDefense = canBreakPlayerDefense;
 
             myClone.miscDefenseLoss = miscDefenseLoss;
+
+            myClone.destroyerLaserColor = destroyerLaserColor;
 
             myClone.dashImmunityTime = new int[maxPlayerImmunities];
             for (int i = 0; i < maxPlayerImmunities; ++i)
@@ -6673,6 +6681,125 @@ namespace CalamityMod.NPCs
                 spriteBatch.ExitShaderRegion();
             }
 
+            // Destroyer drawing and laser telegraphs
+            else if (CalamityLists.DestroyerIDs.Contains(npc.type))
+            {
+                Texture2D npcTexture = TextureAssets.Npc[npc.type].Value;
+                int frameHeight = npcTexture.Height / Main.npcFrameCount[npc.type];
+
+                Vector2 halfSize = npc.frame.Size() / 2;
+                SpriteEffects spriteEffects = SpriteEffects.None;
+                if (npc.spriteDirection == 1)
+                    spriteEffects = SpriteEffects.FlipHorizontally;
+
+                if (npc.type == NPCID.TheDestroyerBody)
+                {
+                    if (npc.ai[2] == 0f)
+                        npc.frame.Y = 0;
+                    else
+                        npc.frame.Y = frameHeight;
+                }
+
+                Color segmentDrawColor = npc.GetAlpha(drawColor);
+
+                // Check if Destroyer is behind tiles and, if so, how much of the segment is behind tiles and adjust color accordingly
+                int x = (int)((npc.position.X - 8f) / 16f);
+                int x2 = (int)((npc.position.X + npc.width + 8f) / 16f);
+                int y = (int)((npc.position.Y - 8f) / 16f);
+                int y2 = (int)((npc.position.Y + npc.height + 8f) / 16f);
+                for (int l = x; l <= x2; l++)
+                {
+                    for (int m = y; m <= y2; m++)
+                    {
+                        if (Lighting.Brightness(l, m) == 0f)
+                            segmentDrawColor = Color.Black;
+                    }
+                }
+
+                // Draw segments
+                spriteBatch.Draw(npcTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY),
+                    npc.frame, segmentDrawColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+
+                // Draw lights
+                if (npc.ai[2] == 0f && segmentDrawColor != Color.Black)
+                {
+                    float destroyerLifeRatio = 1f;
+                    if (npc.realLife >= 0)
+                        destroyerLifeRatio = Main.npc[npc.realLife].life / (float)Main.npc[npc.realLife].lifeMax;
+
+                    // Light colors
+                    Color groundColor = new Color(128, 25, 25, 0) * (1f - npc.alpha / 255f);
+                    Color flightColor = new Color(25, 25, 128, 0) * (1f - npc.alpha / 255f);
+                    Color segmentColor = ((newAI[3] >= 900f && destroyerLifeRatio < 0.5f) || (newAI[1] < 600f && newAI[1] > 60f)) ? flightColor : groundColor;
+                    Color telegraphColor = Color.Red;
+
+                    // Telegraph for the laser breath
+                    float telegraphProgress = 0f;
+                    if (npc.type == NPCID.TheDestroyer && (CalamityWorld.death || BossRushEvent.BossRushActive))
+                    {
+                        float telegraphGateValue = DestroyerAI.DeathModeLaserBreathGateValue - DestroyerAI.LaserTelegraphTime;
+                        if (newAI[0] > telegraphGateValue)
+                        {
+                            switch (destroyerLaserColor)
+                            {
+                                default:
+                                case 0:
+                                    break;
+
+                                case 1:
+                                    telegraphColor = Color.Green;
+                                    break;
+
+                                case 2:
+                                    telegraphColor = Color.Cyan;
+                                    break;
+                            }
+                            telegraphProgress = MathHelper.Clamp((newAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                        }
+                    }
+                    else if (npc.type == NPCID.TheDestroyerBody && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
+                    {
+                        float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
+                        float bodySegmentTime = npc.ai[0] * 30f;
+                        float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
+                        if (newAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
+                        {
+                            switch (destroyerLaserColor)
+                            {
+                                default:
+                                case 0:
+                                    break;
+
+                                case 1:
+                                    telegraphColor = Color.Green;
+                                    break;
+
+                                case 2:
+                                    telegraphColor = Color.Cyan;
+                                    break;
+                            }
+                            telegraphProgress = MathHelper.Clamp((newAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                        }
+                    }
+                    else if (npc.type == NPCID.TheDestroyerBody)
+                    {
+                        int laserGateValue = 1800;
+                        if (Main.expertMode)
+                            laserGateValue = (int)(laserGateValue * MathHelper.Lerp(Main.masterMode ? 0.5f : 0.7f, 1f, npc.life / (float)npc.lifeMax));
+
+                        if (npc.localAI[0] > laserGateValue - DestroyerAI.LaserTelegraphTime)
+                            telegraphProgress = MathHelper.Clamp((npc.localAI[0] - laserGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                    }
+
+                    int totalDraws = 3;
+                    for (int i = 0; i < totalDraws; i++)
+                    {
+                        spriteBatch.Draw(TextureAssets.Dest[npc.type - NPCID.TheDestroyer].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
+                            Color.Lerp(segmentColor, telegraphColor, telegraphProgress), npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                    }
+                }
+            }
+
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
             {
                 // Create additional afterimages in the cardinal directions in Rev+
@@ -6905,100 +7032,6 @@ namespace CalamityMod.NPCs
                     }
                     else
                         spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
-                }
-                else if (CalamityLists.DestroyerIDs.Contains(npc.type))
-                {
-                    Texture2D npcTexture = TextureAssets.Npc[npc.type].Value;
-                    int frameHeight = npcTexture.Height / Main.npcFrameCount[npc.type];
-
-                    Vector2 halfSize = npc.frame.Size() / 2;
-                    SpriteEffects spriteEffects = SpriteEffects.None;
-                    if (npc.spriteDirection == 1)
-                        spriteEffects = SpriteEffects.FlipHorizontally;
-
-                    if (npc.type == NPCID.TheDestroyerBody)
-                    {
-                        if (npc.ai[2] == 0f)
-                            npc.frame.Y = 0;
-                        else
-                            npc.frame.Y = frameHeight;
-                    }
-
-                    Color segmentDrawColor = npc.GetAlpha(drawColor);
-
-                    // Check if Destroyer is behind tiles and if so, how much of the segment is behind tiles and adjust color accordingly
-                    int x = (int)((npc.position.X - 8f) / 16f);
-                    int x2 = (int)((npc.position.X + npc.width + 8f) / 16f);
-                    int y = (int)((npc.position.Y - 8f) / 16f);
-                    int y2 = (int)((npc.position.Y + npc.height + 8f) / 16f);
-                    for (int l = x; l <= x2; l++)
-                    {
-                        for (int m = y; m <= y2; m++)
-                        {
-                            if (Lighting.Brightness(l, m) == 0f)
-                                segmentDrawColor = Color.Black;
-                        }
-                    }
-
-                    // Draw segments
-                    spriteBatch.Draw(npcTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY),
-                        npc.frame, segmentDrawColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
-
-                    // Draw lights
-                    if (npc.ai[2] == 0f && segmentDrawColor != Color.Black)
-                    {
-                        float destroyerLifeRatio = 1f;
-                        if (npc.realLife >= 0)
-                            destroyerLifeRatio = Main.npc[npc.realLife].life / (float)Main.npc[npc.realLife].lifeMax;
-
-                        float shootProjectile = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 180 : 300;
-                        float timer = npc.ai[0] * 30f;
-                        float shootProjectileGateValue = timer + shootProjectile;
-                        float glowDuration = 120f;
-                        float startGlowingGateValue = shootProjectileGateValue - glowDuration;
-
-                        if ((newAI[3] >= 900f && destroyerLifeRatio < 0.5f) || (newAI[1] < 600f && newAI[1] > 60f))
-                        {
-                            Color drawColor2 = new Color(50, 50, 255, 0) * (1f - npc.alpha / 255f);
-                            for (int i = 0; i < 3; i++)
-                            {
-                                spriteBatch.Draw(TextureAssets.Dest[npc.type - NPCID.TheDestroyer].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
-                                    drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
-                            }
-
-                            // Glow telegraph for lasers
-                            /*if (newAI[0] > startGlowingGateValue)
-                            {
-                                Texture2D bloomTexture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
-                                Color bloom = drawColor2;
-                                bloom = Main.hslToRgb((Main.rgbToHsl(bloom).X + 0.02f) % 1, Main.rgbToHsl(bloom).Y, Main.rgbToHsl(bloom).Z);
-                                float scalingFactor = (newAI[0] - startGlowingGateValue) / glowDuration;
-                                float opacity = (float)Math.Sin(MathHelper.PiOver2 + scalingFactor * MathHelper.PiOver2);
-                                float properBloomSize = (float)npc.height / (float)bloomTexture.Height;
-                                float scale = scalingFactor;
-                                spriteBatch.Draw(bloomTexture, npc.Center - Main.screenPosition, null, bloom * opacity * 0.5f, 0, bloomTexture.Size() / 2f, scale * 1f * properBloomSize, SpriteEffects.None, 0);
-                            }*/
-                        }
-                        else
-                        {
-                            Color drawColor2 = new Color(255, 255, 255, 0) * (1f - npc.alpha / 255f);
-                            spriteBatch.Draw(TextureAssets.Dest[npc.type - NPCID.TheDestroyer].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
-                                drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
-
-                            // Glow telegraph for lasers
-                            /*if (newAI[0] > startGlowingGateValue)
-                            {
-                                Texture2D bloomTexture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
-                                Color bloom = drawColor2;
-                                bloom = Main.hslToRgb((Main.rgbToHsl(bloom).X + 0.02f) % 1, Main.rgbToHsl(bloom).Y, Main.rgbToHsl(bloom).Z);
-                                float scalingFactor = (newAI[0] - startGlowingGateValue) / glowDuration;
-                                float opacity = (float)Math.Sin(MathHelper.PiOver2 + scalingFactor * MathHelper.PiOver2);
-                                float properBloomSize = (float)npc.height / (float)bloomTexture.Height;
-                                float scale = scalingFactor;
-                                spriteBatch.Draw(bloomTexture, npc.Center - Main.screenPosition, null, bloom * opacity * 0.5f, 0, bloomTexture.Size() / 2f, scale * 1f * properBloomSize, SpriteEffects.None, 0);
-                            }*/
-                        }
-                    }
                 }
             }
         }

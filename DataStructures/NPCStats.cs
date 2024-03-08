@@ -644,7 +644,6 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.TheDestroyerBody, ProjectileID.DeathLaser), new int[] { 44, 96, 116, 128, 150 } },
                 { new Tuple<int, int>(NPCID.TheDestroyerBody, ModContent.ProjectileType<DestroyerCursedLaser>()), new int[] { 46, 108, 128, 140, 186 } },
                 { new Tuple<int, int>(NPCID.TheDestroyerBody, ModContent.ProjectileType<DestroyerElectricLaser>()), new int[] { 48, 116, 136, 152, 210 } },
-                { new Tuple<int, int>(NPCID.TheDestroyerBody, ProjectileID.EyeLaser), new int[] { 40, 88, 100, 112, 132 } },
                 { new Tuple<int, int>(NPCID.Probe, ProjectileID.PinkLaser), new int[] { 50, 88, 100, 112, 132 } },
 
                 { new Tuple<int, int>(ModContent.NPCType<BrimstoneElemental>(), ModContent.ProjectileType<BrimstoneHellfireball>()), new int[] { 80, 140, 160, 176, 234 } },
