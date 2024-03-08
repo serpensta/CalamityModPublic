@@ -4753,6 +4753,18 @@ namespace CalamityMod.NPCs
             // Fair contact damage
             switch (npc.type)
             {
+                case NPCID.DD2WyvernT1:
+                case NPCID.DD2WyvernT2:
+                case NPCID.DD2WyvernT3:
+                    npc.damage = npc.ai[0] == 2f ? npc.defDamage : 0;
+                    break;
+
+                case NPCID.DD2GoblinT1:
+                case NPCID.DD2GoblinT2:
+                case NPCID.DD2GoblinT3:
+                    npc.damage = (npc.ai[0] > 0f && npc.ai[0] < 24f) ? npc.defDamage : 0;
+                    break;
+
                 case NPCID.PumpkingBlade:
                     npc.damage = (npc.ai[2] == 2f || npc.ai[2] == 5f) ? npc.defDamage : 0;
                     break;

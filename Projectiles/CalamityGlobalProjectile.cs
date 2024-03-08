@@ -474,7 +474,7 @@ namespace CalamityMod.Projectiles
             }
 
             // This has 2 extra updates, dust was reduced because of this fact
-            else if (projectile.type == ProjectileID.Shadowflames)
+            else if (projectile.type == ProjectileID.Shadowflames && projectile.ai[1] == 1f)
             {
                 float spawnDustGateValue = 2f * projectile.MaxUpdates;
                 if (projectile.localAI[0] == spawnDustGateValue)
@@ -511,6 +511,11 @@ namespace CalamityMod.Projectiles
             {
                 if (projectile.localAI[0] == 0f)
                 {
+                    if (Main.masterMode && !CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * CalamityGlobalNPC.MasterModeEnemyDamageMultiplier);
+                    if (!CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * 0.65);
+
                     SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
                     projectile.localAI[0] = 1f;
                     for (int i = 0; i < 8; i++)
@@ -539,6 +544,11 @@ namespace CalamityMod.Projectiles
             {
                 if (projectile.localAI[0] == 0f)
                 {
+                    if (Main.masterMode && !CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * CalamityGlobalNPC.MasterModeEnemyDamageMultiplier);
+                    if (!CalamityPlayer.areThereAnyDamnBosses)
+                        projectile.damage = (int)Math.Round(projectile.damage * 0.65);
+
                     SoundEngine.PlaySound(SoundID.Item171, projectile.Center);
                     projectile.localAI[0] = 1f;
                     for (int i = 0; i < 8; i++)
@@ -2693,9 +2703,7 @@ namespace CalamityMod.Projectiles
                             case ProjectileID.FrostBeam:
                             case ProjectileID.CursedFlameHostile:
                             case ProjectileID.Stinger:
-                            case ProjectileID.BloodShot:
                             case ProjectileID.BloodNautilusTears:
-                            case ProjectileID.BloodNautilusShot:
                             case ProjectileID.RockGolemRock:
                             case ProjectileID.IcewaterSpit:
                             case ProjectileID.RocketSkeleton:
@@ -2747,6 +2755,17 @@ namespace CalamityMod.Projectiles
                             case ProjectileID.SaucerLaser:
                             case ProjectileID.SaucerMissile:
                             case ProjectileID.SaucerScrap:
+                            case ProjectileID.DD2GoblinBomb:
+                            case ProjectileID.DD2JavelinHostile:
+                            case ProjectileID.DD2JavelinHostileT3:
+                            case ProjectileID.DD2DarkMageBolt:
+                            case ProjectileID.DD2DrakinShot:
+                            case ProjectileID.DD2OgreSmash:
+                            case ProjectileID.DD2OgreSpit:
+                            case ProjectileID.DD2OgreStomp:
+                            case ProjectileID.DD2LightningBugZap:
+                            case ProjectileID.DD2BetsyFireball:
+                            case ProjectileID.DD2BetsyFlameBreath:
                                 projectile.damage = (int)Math.Round(projectile.damage * CalamityGlobalNPC.MasterModeEnemyDamageMultiplier);
                                 break;
                         }
@@ -2769,9 +2788,7 @@ namespace CalamityMod.Projectiles
                             case ProjectileID.FrostBeam:
                             case ProjectileID.CursedFlameHostile:
                             case ProjectileID.Stinger:
-                            case ProjectileID.BloodShot:
                             case ProjectileID.BloodNautilusTears:
-                            case ProjectileID.BloodNautilusShot:
                             case ProjectileID.RockGolemRock:
                             case ProjectileID.IcewaterSpit:
                             case ProjectileID.RocketSkeleton:

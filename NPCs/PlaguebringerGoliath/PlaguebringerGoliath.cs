@@ -620,16 +620,16 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 // Move closer
                 bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
-                float distanceAwayFromTargetX = !canHitTarget ? 20f : 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
-                float distanceAwayFromTargetYLeeway = !canHitTarget ? 20f : 50f;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
                 bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
 
                 calamityGlobalNPC.newAI[0] += 1f;
-                if ((Vector2.Distance(NPC.Center, player.Center) < 600f && canHitTarget) || calamityGlobalNPC.newAI[0] >= 180f)
+                if ((Vector2.Distance(NPC.Center, player.Center) < 640f && canHitTarget) || calamityGlobalNPC.newAI[0] >= 180f)
                 {
                     NPC.ai[0] = (phase3 || bossRush) ? 5f : 1f;
                     NPC.ai[1] = 0f;
@@ -703,10 +703,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
-                float distanceAwayFromTargetX = !canHitTarget ? 20f : 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
-                float distanceAwayFromTargetYLeeway = !canHitTarget ? 20f : 50f;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
                 bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
@@ -792,10 +792,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
-                float distanceAwayFromTargetX = !canHitTarget ? 20f : 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
-                float distanceAwayFromTargetYLeeway = !canHitTarget ? 20f : 50f;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
                 bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
@@ -884,10 +884,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 450f;
-                float distanceAwayFromTargetX = !canHitTarget ? 20f : 100f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
-                float distanceAwayFromTargetYLeeway = !canHitTarget ? 20f : 50f;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
                 bool tooFarX = Math.Abs(player.Center.X - NPC.Center.X) > distanceAwayFromTargetX;
                 bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
