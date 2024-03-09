@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.CalPlayer;
@@ -12,6 +13,8 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Graphics.Effects;
+using Terraria.GameContent;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -20,10 +23,9 @@ namespace CalamityMod.Projectiles.Boss
         public new string LocalizationCategory => "Projectiles.Boss";
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterSpawn");
         public static readonly SoundStyle DroneSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterDrone");
-
+        public Texture2D screamTex;
         private float speedAdd = 0f;
         private float speedLimit = 0f;
-
         public override void SetDefaults()
         {
             Projectile.Calamity().DealsDefenseDamage = true;
@@ -37,6 +39,7 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.timeLeft = 36000;
             Projectile.Opacity = 0f;
             CooldownSlot = ImmunityCooldownID.Bosses;
+            screamTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ScreamyFace").Value;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -166,22 +169,37 @@ namespace CalamityMod.Projectiles.Boss
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-            lightColor.R = (byte)(255 * Projectile.Opacity);
+            Main.spriteBatch.End();
+            Effect shieldEffect = Filters.Scene["CalamityMod:HellBall"].GetShader().Shader;
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, shieldEffect, Main.GameViewMatrix.TransformationMatrix);
 
-            if (CalamityGlobalNPC.SCal != -1)
-            {
-                if (Main.npc[CalamityGlobalNPC.SCal].active)
-                {
-                    if (Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas>().cirrus)
-                    {
-                        tex = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Boss/BrimstoneMonsterII").Value;
-                        lightColor.B = (byte)(255 * Projectile.Opacity);
-                    }
-                }
-            }
+            float noiseScale = 0.6f;
 
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+            // Define shader parameters
+
+            shieldEffect.Parameters["time"].SetValue(Projectile.timeLeft / 60f * 0.24f);
+            shieldEffect.Parameters["blowUpPower"].SetValue(3.2f);
+            shieldEffect.Parameters["blowUpSize"].SetValue(0.4f);
+            shieldEffect.Parameters["noiseScale"].SetValue(noiseScale);
+
+            float opacity = Projectile.Opacity;
+            shieldEffect.Parameters["shieldOpacity"].SetValue(opacity);
+            shieldEffect.Parameters["shieldEdgeBlendStrenght"].SetValue(4f);
+
+            Color edgeColor = Color.Black * opacity;
+            Color shieldColor = Color.Red * opacity;
+
+            // Define shader parameters for ball color
+            shieldEffect.Parameters["shieldColor"].SetValue(shieldColor.ToVector3());
+            shieldEffect.Parameters["shieldEdgeColor"].SetValue(edgeColor.ToVector3());
+
+            Vector2 pos = Projectile.Center - Main.screenPosition;
+
+            float scale = 0.715f;
+            Main.spriteBatch.Draw(screamTex, pos, null, Color.White, 0, screamTex.Size() * 0.5f, scale * Projectile.scale, 0, 0);
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
 
