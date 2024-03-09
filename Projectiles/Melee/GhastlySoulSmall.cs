@@ -1,7 +1,10 @@
 ﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Items.Ammo;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,13 +16,14 @@ namespace CalamityMod.Projectiles.Melee
     {
         public new string LocalizationCategory => "Projectiles.Melee";
 
-        private const int TimeLeft = 270;
+        private const int TimeLeft = 540;
+        private float HomingBuff = 1;
 
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
         public override void SetDefaults()
@@ -31,11 +35,16 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.penetrate = 1;
+            Projectile.extraUpdates = 1;
             Projectile.timeLeft = TimeLeft;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
+            if (HomingBuff > 0)
+                HomingBuff -= 0.01f;
+
             Projectile.frameCounter++;
             if (Projectile.frameCounter > 6)
             {
@@ -47,12 +56,13 @@ namespace CalamityMod.Projectiles.Melee
 
             Lighting.AddLight(Projectile.Center, 0.5f, 0.2f, 0.9f);
 
-            int ghostlyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.ShadowbeamStaff, 0f, 0f, 0, default, 1f);
-            Main.dust[ghostlyDust].velocity *= 0.1f;
-            Main.dust[ghostlyDust].scale = 1.3f;
-            Main.dust[ghostlyDust].noGravity = true;
+            if (Projectile.timeLeft % 2 == 0 && Projectile.timeLeft < TimeLeft - 10)
+            {
+                SparkParticle spark = new SparkParticle(Projectile.Center + Main.rand.NextVector2Circular(15, 15) - Projectile.velocity.SafeNormalize(Vector2.UnitX) * 10, -Projectile.velocity * Main.rand.NextFloat(0.5f, 1.5f), false, Main.rand.Next(9, 12 + 1), 0.4f, Color.Plum);
+                GeneralParticleHandler.SpawnParticle(spark);
+            }
 
-            float inertia = 30f * Projectile.ai[1];
+            float inertia = MathHelper.Lerp(20, 90, HomingBuff) * Projectile.ai[1];
             float velocity = VoidEdge.ShootSpeed * VoidEdge.SmallSoulStatMultiplier * Projectile.ai[1];
             if (Main.player[Projectile.owner].active && !Main.player[Projectile.owner].dead)
             {
@@ -96,36 +106,37 @@ namespace CalamityMod.Projectiles.Melee
             }
             return new Color(255, 255, 255, 100);
         }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            target.AddBuff(ModContent.BuffType<CrushDepth>(), 60);
+            if (Projectile.numHits > 0)
+                Projectile.damage = (int)(Projectile.damage * 0.88f);
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
-
         public override void OnKill(int timeLeft)
         {
-            Projectile.position = Projectile.Center;
-            Projectile.width = Projectile.height = 80;
-            Projectile.position.X = Projectile.position.X - (float)(Projectile.width / 2);
-            Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
-            Projectile.maxPenetrate = -1;
+            Projectile.damage = (int)(Projectile.damage / VoidEdge.TotalProjectilesPerSwing);
             Projectile.penetrate = -1;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
-            Projectile.damage /= VoidEdge.TotalProjectilesPerSwing;
+            Projectile.ExpandHitboxBy(80);
             Projectile.Damage();
-            SoundEngine.PlaySound(VoidEdge.ProjectileDeathSound, Projectile.Center);
+            SoundEngine.PlaySound(VoidEdge.ProjectileDeathSound with { Pitch = 0.3f }, Projectile.Center);
 
-            int dustAmt = 36;
-            for (int i = 0; i < dustAmt; i++)
+            int points = 15;
+            float radians = MathHelper.TwoPi / points;
+            Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
+            float rotRando = Main.rand.NextFloat(0.1f, 2.5f);
+            for (int k = 0; k < points; k++)
             {
-                Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.15f;
-                rotate = rotate.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
-                Vector2 faceDirection = rotate - Projectile.Center;
-                int killedDust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.ShadowbeamStaff, faceDirection.X, faceDirection.Y, 100, default, 2f);
-                Main.dust[killedDust].noGravity = true;
-                Main.dust[killedDust].noLight = true;
-                Main.dust[killedDust].velocity = faceDirection;
+                Vector2 velocity = spinningPoint.RotatedBy(radians * k).RotatedBy(-0.45f * rotRando);
+                LineParticle subTrail = new LineParticle(Projectile.Center + velocity * 10.5f, velocity * 5, false, 20, 0.55f, Color.Plum);
+                GeneralParticleHandler.SpawnParticle(subTrail);
+            }
+            for (int k = 0; k < 7; k++)
+            {
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center, 66, new Vector2(6, 6).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 1.8f));
+                dust2.scale = Main.rand.NextFloat(0.65f, 0.85f);
+                dust2.noGravity = true;
+                dust2.color = Color.Plum;
             }
         }
     }
