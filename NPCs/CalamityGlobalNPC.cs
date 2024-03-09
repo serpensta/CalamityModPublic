@@ -2439,6 +2439,12 @@ namespace CalamityMod.NPCs
                     npc.damage = (int)Math.Round(npc.damage * 0.5);
                     npc.defDamage = npc.damage;
                 }
+
+                if (npc.type == NPCID.FungiSpore)
+                {
+                    npc.damage = (int)Math.Round(npc.damage * 0.5);
+                    npc.defDamage = npc.damage;
+                }
             }
 
             if (Main.hardMode && CalamityLists.HardmodeNPCNerfList.Contains(npc.type))
@@ -3196,12 +3202,6 @@ namespace CalamityMod.NPCs
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
             if (eaterofWorldsResist)
                 modifiers.FinalDamage *= 0.01f;
-
-            // Large Deus worm takes reduced damage in order to last a long enough time.
-            // TODO -- WHY DOES DEUS HAVE THIS UNDOCUMENTED MULTIPLIER HERE??
-            // this should be in ModifyHitNPC for deus himself
-            if (CalamityLists.AstrumDeusIDs.Contains(npc.type) && newAI[0] == 0f)
-                modifiers.FinalDamage *= 0.8f;
         }
 
         // Directly modifies final damage incoming to an NPC based on their DR (damage reduction) stat added by Calamity.
@@ -6394,23 +6394,23 @@ namespace CalamityMod.NPCs
                     if (npc.shadowFlame)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.ShadowFlame].Value);
                     if (npc.oiled)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.Oiled].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Oiled").Value);
                     if (npc.javelined)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.BoneJavelin].Value);
                     if (npc.daybreak)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.Daybreak].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Daybroken").Value);
                     if (npc.celled)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.StardustMinionBleed].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Celled").Value);
                     if (npc.dryadBane)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.DryadsWardDebuff].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/DryadsBane").Value);
                     if (npc.dryadWard)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.DryadsWard].Value);
                     if (npc.soulDrain && npc.realLife == -1)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.SoulDrain].Value);
                     if (npc.onFire3) // Hellfire
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.OnFire3].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Hellfire").Value);
                     if (npc.onFrostBurn2) // Frostbite
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.Frostburn2].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Frostbite").Value);
                     if (npc.tentacleSpiked)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.TentacleSpike].Value);
 
@@ -6430,7 +6430,7 @@ namespace CalamityMod.NPCs
                     if (npc.stinky)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.Stinky].Value);
                     if (npc.betsysCurse)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.BetsysCurse].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/BetsysCurse").Value);
                     if (npc.dripping)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.Wet].Value);
                     if (npc.drippingSlime)
@@ -6733,62 +6733,64 @@ namespace CalamityMod.NPCs
                     Color segmentColor = ((newAI[3] >= 900f && destroyerLifeRatio < 0.5f) || (newAI[1] < 600f && newAI[1] > 60f)) ? flightColor : groundColor;
                     Color telegraphColor = Color.Red;
 
-                    // Telegraph for the laser breath
+                    // Telegraph for the laser breath and body lasers
                     float telegraphProgress = 0f;
-                    if (npc.type == NPCID.TheDestroyer && (CalamityWorld.death || BossRushEvent.BossRushActive))
+                    if (destroyerLaserColor != -1)
                     {
-                        float telegraphGateValue = DestroyerAI.DeathModeLaserBreathGateValue - DestroyerAI.LaserTelegraphTime;
-                        if (newAI[0] > telegraphGateValue)
+                        if (npc.type == NPCID.TheDestroyer && (CalamityWorld.death || BossRushEvent.BossRushActive))
                         {
-                            switch (destroyerLaserColor)
+                            float telegraphGateValue = DestroyerAI.DeathModeLaserBreathGateValue - DestroyerAI.LaserTelegraphTime;
+                            if (newAI[0] > telegraphGateValue)
                             {
-                                default:
-                                case 0:
-                                    break;
+                                switch (destroyerLaserColor)
+                                {
+                                    default:
+                                    case 0:
+                                        break;
 
-                                case 1:
-                                    telegraphColor = Color.Green;
-                                    break;
+                                    case 1:
+                                        telegraphColor = Color.Green;
+                                        break;
 
-                                case 2:
-                                    telegraphColor = Color.Cyan;
-                                    break;
+                                    case 2:
+                                        telegraphColor = Color.Cyan;
+                                        break;
+                                }
+                                telegraphProgress = MathHelper.Clamp((newAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                             }
-                            telegraphProgress = MathHelper.Clamp((newAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                         }
-                    }
-                    else if (npc.type == NPCID.TheDestroyerBody && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
-                    {
-                        float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
-                        float bodySegmentTime = npc.ai[0] * 30f;
-                        float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                        if (newAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
+                        else if (npc.type == NPCID.TheDestroyerBody && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
                         {
-                            switch (destroyerLaserColor)
+                            float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
+                            float bodySegmentTime = npc.ai[0] * 30f;
+                            float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
+                            if (newAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
                             {
-                                default:
-                                case 0:
-                                    break;
+                                switch (destroyerLaserColor)
+                                {
+                                    default:
+                                    case 0:
+                                        break;
 
-                                case 1:
-                                    telegraphColor = Color.Green;
-                                    break;
+                                    case 1:
+                                        telegraphColor = Color.Green;
+                                        break;
 
-                                case 2:
-                                    telegraphColor = Color.Cyan;
-                                    break;
+                                    case 2:
+                                        telegraphColor = Color.Cyan;
+                                        break;
+                                }
+                                telegraphProgress = MathHelper.Clamp((newAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                             }
-                            telegraphProgress = MathHelper.Clamp((newAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                         }
-                    }
-                    else if (npc.type == NPCID.TheDestroyerBody)
-                    {
-                        int laserGateValue = 1800;
-                        if (Main.expertMode)
-                            laserGateValue = (int)(laserGateValue * MathHelper.Lerp(Main.masterMode ? 0.5f : 0.7f, 1f, npc.life / (float)npc.lifeMax));
-
-                        if (npc.localAI[0] > laserGateValue - DestroyerAI.LaserTelegraphTime)
-                            telegraphProgress = MathHelper.Clamp((npc.localAI[0] - laserGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                        else if (npc.type == NPCID.TheDestroyerBody)
+                        {
+                            float shootProjectileTime = Main.masterMode ? 500f : Main.expertMode ? 700f : 900f;
+                            float bodySegmentTime = npc.ai[0] * 30f;
+                            float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
+                            if (npc.localAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
+                                telegraphProgress = MathHelper.Clamp((npc.localAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                        }
                     }
 
                     int totalDraws = 3;

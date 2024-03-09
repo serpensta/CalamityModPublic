@@ -459,7 +459,7 @@ namespace CalamityMod.NPCs.Abyss
             // Post-Polterghast: Soul Edge, Eidolic Wail, Stardust Staff
             LeadingConditionRule postPolter = npcLoot.DefineConditionalDropSet(DropHelper.PostPolter());
             aewMinionCondition.Add(postPolter);
-            postPolter.Add(ModContent.ItemType<SoulEdge>(), 3);
+            postPolter.Add(ModContent.ItemType<VoidEdge>(), 3);
             postPolter.Add(ModContent.ItemType<EidolicWail>(), 3);
             postPolter.Add(ModContent.ItemType<EidolonStaff>(), 3);
 

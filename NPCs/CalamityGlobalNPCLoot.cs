@@ -120,8 +120,11 @@ namespace CalamityMod.NPCs
 
                 // Wyvern Head
                 // 8-10 Essence of Sunlight @ 100%, 10-12 Expert+
+                // TODO: Move Aero Stone to the upcoming sky structure whenever it's implemented
+                // Aero Stone @ 25% Normal, 33.3% Expert+
                 case NPCID.WyvernHead:
                     npcLoot.Add(DropHelper.NormalVsExpertQuantity(ModContent.ItemType<EssenceofSunlight>(), 1, 8, 10, 10, 12));
+                    npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<AeroStone>(), 4, 3));
                     break;
                 #endregion
 
@@ -1965,7 +1968,7 @@ DukeEditFailed:
                             CalamityNetcode.SyncWorld();
                     }
 
-                    // Spawn Exodium planetoids and send messages about Providence, Bloodstone, Polterplasm, etc. if ML has not been killed yet
+                    // Spawn Exodium planetoids and send messages about Providence, Bloodstone, Necroplasm, etc. if ML has not been killed yet
                     if (!NPC.downedMoonlord)
                     {
                         CalamityUtils.DisplayLocalizedText(key5, messageColor5);

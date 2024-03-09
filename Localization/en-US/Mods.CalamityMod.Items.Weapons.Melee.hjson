@@ -1038,11 +1038,6 @@ SolsticeClaymore: {
 		'''
 }
 
-SoulEdge: {
-	DisplayName: Soul Edge
-	Tooltip: Fires the ghastly souls of long-deceased abyss dwellers
-}
-
 SoulHarvester: {
 	DisplayName: Soul Harvester
 	Tooltip:
@@ -1387,6 +1382,15 @@ Violence: {
 Virulence: {
 	DisplayName: Virulence
 	Tooltip: Fires a plague cloud
+}
+
+VoidEdge: {
+	DisplayName: Void Edge
+	Tooltip:
+		'''
+		Fires the ghastly souls of long-deceased abyss dwellers
+		Striking with the blade summons additional souls from below
+		'''
 }
 
 VulcaniteLance: {

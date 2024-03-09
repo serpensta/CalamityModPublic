@@ -44,7 +44,7 @@ namespace CalamityMod.Items.Accessories
                 AddIngredient(ItemID.MasterNinjaGear).
                 AddIngredient(ItemID.FrogFlipper).
                 AddIngredient<PurifiedGel>(50).
-                AddIngredient<Polterplasm>(5).
+                AddIngredient<Necroplasm>(5).
                 AddTile(TileID.LunarCraftingStation).
                 Register();
 
@@ -53,7 +53,7 @@ namespace CalamityMod.Items.Accessories
                 AddIngredient(ItemID.BlackBelt).
                 AddIngredient(ItemID.FrogGear).
                 AddIngredient<PurifiedGel>(50).
-                AddIngredient<Polterplasm>(5).
+                AddIngredient<Necroplasm>(5).
                 AddTile(TileID.LunarCraftingStation).
                 Register();
         }

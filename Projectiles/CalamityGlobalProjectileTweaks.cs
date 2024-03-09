@@ -204,6 +204,7 @@ namespace CalamityMod.Projectiles
                 { ProjectileID.VenomBullet, standardBulletTweaks },
                 { ProjectileID.VenomFang, Do(LocalIFrames(10)) },
                 { ProjectileID.VortexDrill, standardDrillTweaks },
+                { ProjectileID.Wasp, Do(PiercingExact(2)) },
                 { ProjectileID.YellowCounterweight, counterweightTweaks },
                 #endregion
 
