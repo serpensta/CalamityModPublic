@@ -2552,10 +2552,8 @@ namespace CalamityMod.CalPlayer
 
             if (aeroStone && !Player.slowFall && Player.wingTime < Player.wingTimeMax)
             {
-                if (!Player.controlJump && Player.miscCounter % 5 == 0)
-                {
+                if (!Player.controlJump && Player.miscCounter % 4 == 0)
                     Player.wingTime += 1;
-                }
             }
 
             if (gShell)
