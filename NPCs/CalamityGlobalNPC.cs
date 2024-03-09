@@ -3202,12 +3202,6 @@ namespace CalamityMod.NPCs
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
             if (eaterofWorldsResist)
                 modifiers.FinalDamage *= 0.01f;
-
-            // Large Deus worm takes reduced damage in order to last a long enough time.
-            // TODO -- WHY DOES DEUS HAVE THIS UNDOCUMENTED MULTIPLIER HERE??
-            // this should be in ModifyHitNPC for deus himself
-            if (CalamityLists.AstrumDeusIDs.Contains(npc.type) && newAI[0] == 0f)
-                modifiers.FinalDamage *= 0.8f;
         }
 
         // Directly modifies final damage incoming to an NPC based on their DR (damage reduction) stat added by Calamity.
