@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles
                 { ProjectileID.AdamantiteChainsaw, standardChainsawTweaks },
                 { ProjectileID.AdamantiteDrill, standardDrillTweaks },
                 { ProjectileID.Anchor, Do(ExtraUpdatesExact(1)) },
-                { ProjectileID.Bee, Do(PiercingExact(2)) },
+                { ProjectileID.Bee, Do(LocalIFrames(10), PiercingExact(2)) },
                 { ProjectileID.BlackCounterweight, counterweightTweaks },
                 { ProjectileID.BlueCounterweight, counterweightTweaks },
                 { ProjectileID.BlueMoon, Do(ExtraUpdatesExact(1)) },
@@ -152,7 +152,7 @@ namespace CalamityMod.Projectiles
                 { ProjectileID.FlyingKnife, Do(ExtraUpdatesExact(1)) },
                 { ProjectileID.FrostBoltStaff, Do(ExtraUpdatesExact(1)) },
                 { ProjectileID.FruitcakeChakram, Do(ExtraUpdatesExact(1)) },
-                { ProjectileID.GiantBee, Do(PiercingExact(2)) },
+                { ProjectileID.GiantBee, Do(LocalIFrames(10), PiercingExact(2)) },
                 { ProjectileID.GoldenBullet, standardBulletTweaks },
                 { ProjectileID.GreenCounterweight, counterweightTweaks },
                 { ProjectileID.Hamdrax, standardDrillTweaks }, // Drax (never internally renamed since 1.1)
