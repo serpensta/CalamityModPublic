@@ -2780,7 +2780,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     // Spawn Dragonfollies if Cirrus exists.
                     for (int i = 0; i < 20; i++)
                     {
-                        Dust castFire = Dust.NewDustPerfect(heartSpawnPosition + Main.rand.NextVector2Square(-30f, 30f), cirrus ? (int)CalamityDusts.Polterplasm : (int)CalamityDusts.Brimstone);
+                        Dust castFire = Dust.NewDustPerfect(heartSpawnPosition + Main.rand.NextVector2Square(-30f, 30f), cirrus ? (int)CalamityDusts.Necroplasm : (int)CalamityDusts.Brimstone);
                         castFire.velocity = Vector2.UnitY.RotatedByRandom(0.08f) * -Main.rand.NextFloat(3f, 4.45f);
                         castFire.scale = Main.rand.NextFloat(1.35f, 1.6f);
                         castFire.fadeIn = 1.25f;

@@ -1965,7 +1965,7 @@ DukeEditFailed:
                             CalamityNetcode.SyncWorld();
                     }
 
-                    // Spawn Exodium planetoids and send messages about Providence, Bloodstone, Polterplasm, etc. if ML has not been killed yet
+                    // Spawn Exodium planetoids and send messages about Providence, Bloodstone, Necroplasm, etc. if ML has not been killed yet
                     if (!NPC.downedMoonlord)
                     {
                         CalamityUtils.DisplayLocalizedText(key5, messageColor5);
