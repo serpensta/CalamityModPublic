@@ -1477,13 +1477,26 @@ namespace CalamityMod.CalPlayer
         public override bool ConsumableDodge(Player.HurtInfo info)
         {
             // Vanilla dodges are gated behind the global dodge cooldown
-            if (!Player.HasCooldown(GlobalDodge.ID))
+            // The dodges will only trigger if the player has taken greater than or equal to 5% of their max HP in damage
+            double dodgeDamageGateValuePercent = 0.05;
+            int dodgeDamageGateValue = (int)Math.Round(Player.statLifeMax2 * dodgeDamageGateValuePercent);
+            if (!Player.HasCooldown(GlobalDodge.ID) && info.Damage >= dodgeDamageGateValue)
             {
+                double maxCooldownDurationDamagePercent = 0.5;
+                int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+                
+                // Just in case...
+                if (maxCooldownDurationDamageValue <= 0)
+                    maxCooldownDurationDamageValue = 1;
+
+                float cooldownDurationScalar = MathHelper.Clamp((info.Damage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+
                 // Re-implementation of vanilla item Black Belt as a consumable dodge
                 if (Player.whoAmI == Main.myPlayer && Player.blackBelt)
                 {
                     Player.NinjaDodge();
-                    Player.AddCooldown(GlobalDodge.ID, BalancingConstants.BeltDodgeCooldown);
+                    int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.BeltDodgeCooldownMin, BalancingConstants.BeltDodgeCooldownMax, cooldownDurationScalar);
+                    Player.AddCooldown(GlobalDodge.ID, cooldownDuration);
                     return true;
                 }
 
@@ -1491,7 +1504,9 @@ namespace CalamityMod.CalPlayer
                 if (Player.whoAmI == Main.myPlayer && Player.brainOfConfusionItem != null && !Player.brainOfConfusionItem.IsAir)
                 {
                     Player.BrainOfConfusionDodge();
-                    int cooldownTime = amalgam ? BalancingConstants.AmalgamDodgeCooldown : BalancingConstants.BrainDodgeCooldown;
+                    int cooldownTime = amalgam ?
+                        (int)MathHelper.Lerp(BalancingConstants.AmalgamDodgeCooldownMin, BalancingConstants.AmalgamDodgeCooldownMax, cooldownDurationScalar) :
+                        (int)MathHelper.Lerp(BalancingConstants.BrainDodgeCooldownMin, BalancingConstants.BrainDodgeCooldownMax, cooldownDurationScalar);
                     Player.AddCooldown(GlobalDodge.ID, cooldownTime);
                     return true;
                 }

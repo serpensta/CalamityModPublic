@@ -33,9 +33,12 @@
 
         // Dodge cooldowns (in frames)
         // TODO -- Some of these could be moved to the respective item files
-        internal static readonly int BeltDodgeCooldown = 5400;
-        internal static readonly int BrainDodgeCooldown = 5400;
-        internal static readonly int AmalgamDodgeCooldown = 5400;
+        internal static readonly int BeltDodgeCooldownMin = 900;
+        internal static readonly int BeltDodgeCooldownMax = 5400;
+        internal static readonly int BrainDodgeCooldownMin = 900;
+        internal static readonly int BrainDodgeCooldownMax = 5400;
+        internal static readonly int AmalgamDodgeCooldownMin = 900;
+        internal static readonly int AmalgamDodgeCooldownMax = 5400;
         internal static readonly int MirrorDodgeCooldown = 5400;
         internal static readonly int DaedalusReflectCooldown = 5400;
         internal static readonly int EvolutionReflectCooldown = 5400;
