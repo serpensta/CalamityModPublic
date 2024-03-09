@@ -1448,7 +1448,7 @@ namespace CalamityMod.NPCs.PrimordialWyrm
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ModContent.ItemType<EidolicWail>());
-            npcLoot.Add(ModContent.ItemType<SoulEdge>());
+            npcLoot.Add(ModContent.ItemType<VoidEdge>());
             npcLoot.Add(ModContent.ItemType<HalibutCannon>());
             npcLoot.Add(ModContent.ItemType<AbyssShellFossil>());
             npcLoot.Add(ModContent.ItemType<Voidstone>(), 1, 80, 100);

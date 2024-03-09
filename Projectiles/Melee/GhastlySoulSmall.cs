@@ -12,6 +12,9 @@ namespace CalamityMod.Projectiles.Melee
     public class GhastlySoulSmall : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Melee";
+
+        private const int TimeLeft = 270;
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
@@ -27,9 +30,8 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.extraUpdates = 1;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = TimeLeft;
         }
 
         public override void AI()
@@ -40,42 +42,44 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.frame++;
                 Projectile.frameCounter = 0;
             }
-            if (Projectile.frame > 3)
-            {
+            if (Projectile.frame >= Main.projFrames[Projectile.type])
                 Projectile.frame = 0;
-            }
+
+            Lighting.AddLight(Projectile.Center, 0.5f, 0.2f, 0.9f);
+
             int ghostlyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.ShadowbeamStaff, 0f, 0f, 0, default, 1f);
-            Dust dust = Main.dust[ghostlyDust];
-            dust.velocity *= 0.1f;
+            Main.dust[ghostlyDust].velocity *= 0.1f;
             Main.dust[ghostlyDust].scale = 1.3f;
             Main.dust[ghostlyDust].noGravity = true;
-            float projVelocityFactor = 40f * Projectile.ai[1]; //100
-            float scaleFactor = 8f * Projectile.ai[1]; //5
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - 1.57f;
-            Lighting.AddLight(Projectile.Center, 0.5f, 0.2f, 0.9f);
+
+            float inertia = 30f * Projectile.ai[1];
+            float velocity = VoidEdge.ShootSpeed * VoidEdge.SmallSoulStatMultiplier * Projectile.ai[1];
             if (Main.player[Projectile.owner].active && !Main.player[Projectile.owner].dead)
             {
-                if (Projectile.Distance(Main.player[Projectile.owner].Center) > 900f)
+                float homingDistance = 600f;
+                NPC target = Projectile.FindTargetWithinRange(homingDistance);
+                if (Projectile.timeLeft < TimeLeft - VoidEdge.ProjectileSpreadOutTime && target != null)
+                {
+                    CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, homingDistance, velocity, inertia);
+                }
+                else if (Projectile.Distance(Main.player[Projectile.owner].Center) > homingDistance)
                 {
                     Vector2 moveDirection = Projectile.SafeDirectionTo(Main.player[Projectile.owner].Center, Vector2.UnitY);
-                    Projectile.velocity = (Projectile.velocity * (projVelocityFactor - 1f) + moveDirection * scaleFactor) / projVelocityFactor;
-                    return;
+                    Projectile.velocity = (Projectile.velocity * (inertia - 1f) + moveDirection * velocity) / inertia;
                 }
-
-                CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, 300f, 12f, 20f);
             }
             else
             {
                 if (Projectile.timeLeft > 30)
-                {
                     Projectile.timeLeft = 30;
-                }
             }
+
+            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - MathHelper.PiOver2;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Projectile.timeLeft > 595)
+            if (Projectile.timeLeft > TimeLeft - 5)
                 return false;
 
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
@@ -101,22 +105,24 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnKill(int timeLeft)
         {
             Projectile.position = Projectile.Center;
-            Projectile.width = Projectile.height = 64;
+            Projectile.width = Projectile.height = 80;
             Projectile.position.X = Projectile.position.X - (float)(Projectile.width / 2);
             Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
             Projectile.maxPenetrate = -1;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
+            Projectile.damage /= VoidEdge.TotalProjectilesPerSwing;
             Projectile.Damage();
-            SoundEngine.PlaySound(SoulEdge.ProjectileDeathSound, Projectile.Center);
+            SoundEngine.PlaySound(VoidEdge.ProjectileDeathSound, Projectile.Center);
+
             int dustAmt = 36;
             for (int i = 0; i < dustAmt; i++)
             {
-                Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.75f;
-                rotate = rotate.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * 6.28318548f / (float)dustAmt), default) + Projectile.Center;
+                Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.15f;
+                rotate = rotate.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * MathHelper.TwoPi / (float)dustAmt), default) + Projectile.Center;
                 Vector2 faceDirection = rotate - Projectile.Center;
-                int killedDust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.ShadowbeamStaff, faceDirection.X * 1.5f, faceDirection.Y * 1.5f, 100, default, 2f);
+                int killedDust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.ShadowbeamStaff, faceDirection.X, faceDirection.Y, 100, default, 2f);
                 Main.dust[killedDust].noGravity = true;
                 Main.dust[killedDust].noLight = true;
                 Main.dust[killedDust].velocity = faceDirection;
