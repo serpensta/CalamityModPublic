@@ -100,7 +100,7 @@ namespace CalamityMod.Items.Weapons.Melee
             }
 
             float ai1 = MathHelper.Lerp(0.75f, 1.25f, Main.rand.NextFloat());
-            int soulDamage = (int)(damageDone * 0.5f);
+            int soulDamage = (int)(damageDone / 3);
             Vector2 velocity = new Vector2(0f, -14f).RotatedByRandom(0.65f) * Main.rand.NextFloat(0.9f, 1.1f);
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center + new Vector2(0, 1300f), velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.9f, 1.1f), ModContent.ProjectileType<GhastlySoulLarge>(), soulDamage, 0f, player.whoAmI, 0f, ai1);
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center + new Vector2(0, 1300f), velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.9f, 1.1f), ModContent.ProjectileType<GhastlySoulMedium>(), soulDamage, 0f, player.whoAmI, 0f, ai1);
