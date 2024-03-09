@@ -2439,6 +2439,12 @@ namespace CalamityMod.NPCs
                     npc.damage = (int)Math.Round(npc.damage * 0.5);
                     npc.defDamage = npc.damage;
                 }
+
+                if (npc.type == NPCID.FungiSpore)
+                {
+                    npc.damage = (int)Math.Round(npc.damage * 0.5);
+                    npc.defDamage = npc.damage;
+                }
             }
 
             if (Main.hardMode && CalamityLists.HardmodeNPCNerfList.Contains(npc.type))
