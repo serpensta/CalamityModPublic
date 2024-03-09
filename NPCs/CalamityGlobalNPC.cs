@@ -3627,7 +3627,7 @@ namespace CalamityMod.NPCs
             // Adjust vanilla AI in Classic, Expert and Master
             // Fair contact damage and a few Expert/Master AI edits happen here
             // Deerclops doesn't deserve love so he's not here
-            else
+            else if (!CalamityMod.ExternalFlag_DisableNonRevBossAI)
             {
                 switch (npc.type)
                 {
