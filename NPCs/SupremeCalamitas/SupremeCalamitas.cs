@@ -76,7 +76,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public float bossLife;
         public float uDieLul = 1f;
-        public float passedVar = 0f;
+        public float passedVar = 4f;
 
         public bool protectionBoost = false;
         public bool canDespawn = false;
@@ -1194,8 +1194,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     // TODO -- Resprite Brimstone Monsters to be something else.
                     if (bulletHellCounter2 % divisor == 0 && expertMode) // Giant homing fireballs
                     {
+                        passedVar -= 1f;
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), player.position.X + Main.rand.Next(-1000, 1001), player.position.Y - 1000f, 0f, 1f * uDieLul, ModContent.ProjectileType<BrimstoneMonster>(), monsterDamage, 0f, Main.myPlayer, 0f, passedVar);
-                        passedVar += 1f;
                     }
 
                     bulletHellCounter++;

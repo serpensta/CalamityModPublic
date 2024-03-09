@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.CalPlayer;
 using CalamityMod.Events;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.SupremeCalamitas;
+using CalamityMod.Particles;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -20,9 +23,11 @@ namespace CalamityMod.Projectiles.Boss
         public new string LocalizationCategory => "Projectiles.Boss";
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterSpawn");
         public static readonly SoundStyle DroneSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterDrone");
+        public SlotId RumbleSlot;
 
         private float speedAdd = 0f;
         private float speedLimit = 0f;
+        private int time = 0;
 
         public override void SetDefaults()
         {
@@ -55,6 +60,11 @@ namespace CalamityMod.Projectiles.Boss
 
         public override void AI()
         {
+            time++;
+
+            if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumbleSound) && RumbleSound.IsPlaying)
+                RumbleSound.Position = Projectile.Center;
+
             if (!CalamityPlayer.areThereAnyDamnBosses)
             {
                 Projectile.active = false;
@@ -67,6 +77,8 @@ namespace CalamityMod.Projectiles.Boss
             {
                 Projectile.soundDelay = 1125 - (choice * 225);
                 SoundEngine.PlaySound(SpawnSound, Projectile.Center);
+                if (Projectile.ai[1] == 0f)
+                    RumbleSlot = SoundEngine.PlaySound(DroneSound, Projectile.Center);
                 Projectile.localAI[0] += 1f;
                 switch (choice)
                 {
@@ -90,10 +102,37 @@ namespace CalamityMod.Projectiles.Boss
             if (speedAdd < speedLimit)
                 speedAdd += 0.04f;
 
-            if (Projectile.soundDelay <= 0 && (choice == 0 || choice == 2))
+            float targetDist;
+            if (!Main.player[choice].dead && Main.player[choice].active && Main.player[choice] != null)
+                targetDist = Vector2.Distance(Main.player[choice].Center, Projectile.Center);
+            else
+                targetDist = 2000;
+
+            if (Projectile.ai[1] == 0f)
             {
-                Projectile.soundDelay = 420;
-                SoundEngine.PlaySound(DroneSound, Projectile.Center);
+                if (targetDist <= 1000)
+                {
+                    float targetPitchShift = 1 - targetDist / 1000;
+                    if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumblePitch) && RumblePitch.IsPlaying)
+                    {
+                        RumblePitch.Pitch = MathHelper.Lerp(0f, 0.7f, targetPitchShift);
+                        RumblePitch.Volume = MathHelper.Lerp(1.2f, 1.7f, targetPitchShift);
+                    }
+                }
+
+                Projectile.soundDelay--;
+                if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumblePlaying) && RumblePlaying.IsPlaying)
+                {
+                    Projectile.soundDelay = 1;
+                }
+
+                if (Projectile.soundDelay <= 0)
+                    RumbleSlot = SoundEngine.PlaySound(DroneSound, Projectile.Center);
+
+                if (Projectile.timeLeft < 90)
+                {
+                    RumblePlaying?.Stop();
+                }
             }
 
             bool revenge = CalamityWorld.revenge || BossRushEvent.BossRushActive;
@@ -112,9 +151,13 @@ namespace CalamityMod.Projectiles.Boss
             }
 
             if (Projectile.timeLeft < 90)
+            {
                 Projectile.Opacity = MathHelper.Clamp(Projectile.timeLeft / 90f, 0f, 1f);
+            }
             else
+            {
                 Projectile.Opacity = MathHelper.Clamp(1f - ((Projectile.timeLeft - 35910) / 90f), 0f, 1f);
+            }
 
             int target = (int)Projectile.ai[0];
             if (target >= 0 && Main.player[target].active && !Main.player[target].dead)
@@ -177,11 +220,27 @@ namespace CalamityMod.Projectiles.Boss
                     {
                         tex = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Boss/BrimstoneMonsterII").Value;
                         lightColor.B = (byte)(255 * Projectile.Opacity);
+                        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        Texture2D vortexTexture = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/SoulVortex").Value;
+                        Texture2D centerTexture = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom").Value;
+                        for (int i = 0; i < 10; i++)
+                        {
+                            float angle = MathHelper.TwoPi * i / 15f + Main.GlobalTimeWrappedHourly * MathHelper.TwoPi;
+                            Color outerColor = Color.Lerp(Color.Red, Color.Magenta, i * 0.15f);
+                            Color drawColor = Color.Lerp(outerColor, Color.Black, i * 0.2f) * 0.5f;
+                            drawColor.A = 0;
+                            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+
+                            drawPosition += (angle + Main.GlobalTimeWrappedHourly * i / 16f).ToRotationVector2() * 6f;
+                            Main.EntitySpriteDraw(vortexTexture, drawPosition, null, drawColor * Projectile.Opacity, -angle + MathHelper.PiOver2, vortexTexture.Size() * 0.5f, (Projectile.scale * (1 - i * 0.05f)) * Projectile.Opacity, SpriteEffects.None, 0);
+                        }
+                        Main.EntitySpriteDraw(centerTexture, Projectile.Center - Main.screenPosition, null, Color.Black * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, (Projectile.scale * 0.9f) * Projectile.Opacity, SpriteEffects.None, 0);
                     }
                 }
             }
-
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
 
