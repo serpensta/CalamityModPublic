@@ -1428,9 +1428,21 @@ namespace CalamityMod.CalPlayer
                     }
                 }
 
+                double dodgeDamageGateValuePercent = 0.05;
+                int dodgeDamageGateValue = (int)Math.Round(Player.statLifeMax2 * dodgeDamageGateValuePercent);
+
                 // Reflects count as dodges. They share the timer and can be disabled by global dodge disabling effects.
-                if (!disableAllDodges && !Player.HasCooldown(GlobalDodge.ID))
+                if (!disableAllDodges && !Player.HasCooldown(GlobalDodge.ID) && proj.damage >= dodgeDamageGateValue)
                 {
+                    double maxCooldownDurationDamagePercent = 0.5;
+                    int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+                    // Just in case...
+                    if (maxCooldownDurationDamageValue <= 0)
+                        maxCooldownDurationDamageValue = 1;
+
+                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+
                     if (daedalusReflect && !evolution)
                     {
                         proj.hostile = false;
@@ -1438,7 +1450,9 @@ namespace CalamityMod.CalPlayer
                         proj.velocity *= -1f;
                         proj.penetrate = 1;
                         Player.GiveIFrames(20, false);
-                        Player.AddCooldown(GlobalDodge.ID, BalancingConstants.DaedalusReflectCooldown);
+
+                        int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.DaedalusReflectCooldownMin, BalancingConstants.DaedalusReflectCooldownMax, cooldownDurationScalar);
+                        Player.AddCooldown(GlobalDodge.ID, cooldownDuration);
                     }
                 }
             }
