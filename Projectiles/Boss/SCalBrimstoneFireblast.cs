@@ -102,7 +102,7 @@ namespace CalamityMod.Projectiles.Boss
             }
 
             float targetDist;
-            if (!Main.player[target].dead && Main.player[target].active && Main.player[target] != null)
+            if (target != -1 && !Main.player[target].dead && Main.player[target].active && Main.player[target] != null)
                 targetDist = Vector2.Distance(Main.player[target].Center, Projectile.Center);
             else
                 targetDist = 1000;

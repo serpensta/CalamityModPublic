@@ -70,8 +70,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.HitSound = SoundID.DD2_OgreRoar;
-            NPC.DeathSound = SoundID.NPCDeath52;
+            NPC.HitSound = SupremeCalamitas.BrotherHit;
+            NPC.DeathSound = SupremeCalamitas.BrotherDeath;
             NPC.Calamity().VulnerableToHeat = false;
             NPC.Calamity().VulnerableToCold = true;
         }

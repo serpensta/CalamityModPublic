@@ -76,7 +76,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public float bossLife;
         public float uDieLul = 1f;
-        public float passedVar = 4f;
+        public float passedVar = 0f;
 
         public bool protectionBoost = false;
         public bool canDespawn = false;
@@ -194,6 +194,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SupremeCalamitasSpawn") { Volume = 1.2f };
         public static readonly SoundStyle SepulcherSummonSound = new("CalamityMod/Sounds/Custom/SCalSounds/SepulcherSpawn");
         public static readonly SoundStyle BrimstoneShotSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneShoot");
+        public static readonly SoundStyle BrotherHit = new("CalamityMod/Sounds/Custom/SCalSounds/BrothersHurt", 2);
+        public static readonly SoundStyle BrotherDeath = new("CalamityMod/Sounds/Custom/SCalSounds/BrothersDeath", 2);
         public static readonly SoundStyle BrimstoneBigShotSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot"); // DON'T YOU WANNA BE A [BIG SHOT]
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
         public static readonly SoundStyle HellblastSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
@@ -1191,11 +1193,35 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                     int divisor = revenge ? 225 : expertMode ? 450 : 675;
 
-                    // TODO -- Resprite Brimstone Monsters to be something else.
-                    if (bulletHellCounter2 % divisor == 0 && expertMode) // Giant homing fireballs
+                    Vector2 spawnSpot = safeBox.Center();
+                    passedVar += 1f;
+                    if (passedVar == 180) // Giant homing fireballs
                     {
-                        passedVar -= 1f;
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.position.X + Main.rand.Next(-1000, 1001), player.position.Y - 1000f, 0f, 1f * uDieLul, ModContent.ProjectileType<BrimstoneMonster>(), monsterDamage, 0f, Main.myPlayer, 0f, passedVar);
+                        SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalAltarSummon") with { Pitch = 0.3f }, player.Center);
+                        for (int i = 0; i < 2; i++)
+                        {
+                            Particle bloom = new BloomParticle(spawnSpot, Vector2.Zero, Color.Red, 0f, 1.45f, 260, false);
+                            GeneralParticleHandler.SpawnParticle(bloom);
+                        }
+                        Particle bloom2 = new BloomParticle(spawnSpot, Vector2.Zero, Color.White, 0f, 1.35f, 260, false);
+                        GeneralParticleHandler.SpawnParticle(bloom2);
+                    }
+                    if (passedVar == 420) // Giant homing fireballs
+                    {
+                        for (int i = 0; i < 90; i++)
+                        {
+                            Dust spawnDust = Dust.NewDustPerfect(safeBox.Center(), cirrus ? (int)CalamityDusts.PurpleCosmilite : (int)CalamityDusts.Brimstone, new Vector2(30, 30).RotatedByRandom(100) * Main.rand.NextFloat(0.05f, 1.2f));
+                            spawnDust.noGravity = true;
+                            spawnDust.scale = Main.rand.NextFloat(1.2f, 2.3f);
+                        }
+                        for (int i = 0; i < 40; i++)
+                        {
+                            Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
+                            GlowOrbParticle orb = new GlowOrbParticle(safeBox.Center() + sparkVel * 2, sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f), cirrus ? Color.Magenta : Color.Red, true, true);
+                            GeneralParticleHandler.SpawnParticle(orb);
+                        }
+
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnSpot.X, spawnSpot.Y, 0f, 1f * uDieLul, ModContent.ProjectileType<BrimstoneMonster>(), monsterDamage, 0f, Main.myPlayer, 0f);
                     }
 
                     bulletHellCounter++;

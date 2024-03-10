@@ -1244,11 +1244,13 @@ TheMutilator: {
 
 TheObliterator: {
 	DisplayName: The Obliterator
-	Tooltip:
+	Tooltip: "[GFB]"
+	TooltipNormal:
 		'''
 		Ruins nearby enemies with death lasers
 		An exceptionally agile yoyo
 		'''
+	TooltipGFB: just a slight bit of dust spam on this weapon im afraid
 }
 
 TheOracle: {

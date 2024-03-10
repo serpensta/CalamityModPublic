@@ -193,13 +193,14 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.HitEffect();
                 NPC.active = false;
                 NPC.netUpdate = true;
+                return;
             }
             else
                 NPC.Opacity = MathHelper.Clamp(NPC.Opacity + 0.165f, 0f, 1f);
 
             Vector2 segmentLocation = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
-            float targetX = Main.npc[CalamityGlobalNPC.SCal].position.X + (Main.player[NPC.target].width / 2);
-            float targetY = Main.npc[CalamityGlobalNPC.SCal].position.Y + (Main.player[NPC.target].height / 2);
+            float targetX = CalamityGlobalNPC.SCal < 0 ? 0 : Main.npc[CalamityGlobalNPC.SCal].position.X + (Main.player[NPC.target].width / 2);
+            float targetY = CalamityGlobalNPC.SCal < 0 ? 0 : Main.npc[CalamityGlobalNPC.SCal].position.Y + (Main.player[NPC.target].height / 2);
             float sepMaxSpeed = BossRushEvent.BossRushActive ? 22.5f : 20f;
             float sepAcceleration = (BossRushEvent.BossRushActive ? 0.2f : 0.175f) + (0.37f - AttackCooldown * 0.0015f);
 
