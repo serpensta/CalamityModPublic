@@ -1200,10 +1200,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalAltarSummon") with { Pitch = 0.3f }, player.Center);
                         for (int i = 0; i < 2; i++)
                         {
-                            Particle bloom = new BloomParticle(spawnSpot, Vector2.Zero, Color.Red, 0f, 1.45f, 260, false);
+                            Particle bloom = new BloomParticle(spawnSpot, Vector2.Zero, Color.Red, 0f, 1.45f, 240, false);
                             GeneralParticleHandler.SpawnParticle(bloom);
                         }
-                        Particle bloom2 = new BloomParticle(spawnSpot, Vector2.Zero, Color.White, 0f, 1.35f, 260, false);
+                        Particle bloom2 = new BloomParticle(spawnSpot, Vector2.Zero, Color.White, 0f, 1.35f, 240, false);
                         GeneralParticleHandler.SpawnParticle(bloom2);
                     }
                     if (passedVar == 420) // Giant homing fireballs
@@ -1221,7 +1221,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                             GeneralParticleHandler.SpawnParticle(orb);
                         }
 
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnSpot.X, spawnSpot.Y, 0f, 1f * uDieLul, ModContent.ProjectileType<BrimstoneMonster>(), monsterDamage, 0f, Main.myPlayer, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnSpot, Vector2.Zero, ModContent.ProjectileType<BrimstoneMonster>(), monsterDamage, 0f, Main.myPlayer, 0f);
                     }
 
                     bulletHellCounter++;

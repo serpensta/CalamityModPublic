@@ -15,6 +15,7 @@ using System.IO;
 using Terraria.Audio;
 using CalamityMod.Particles;
 using Steamworks;
+using CalamityMod.Items.Weapons.Summon;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -193,20 +194,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 GeneralParticleHandler.SpawnParticle(pulse);
                 Particle pulse2 = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(2f, 2f), 0, 0.025f, 0.005f, 8);
                 GeneralParticleHandler.SpawnParticle(pulse2);
-                for (int i = 0; i < 4; i++)
-                {
-                    Dust prepShotDust = Dust.NewDustPerfect(NPC.Center, 182);
-                    prepShotDust.noGravity = true;
-                    prepShotDust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.3f);
-                    prepShotDust.scale = Main.rand.NextFloat(1.3f, 2.4f);
-                }
             }
             if (timer >= shootRate - 35)
             {
-                Dust prepShotDust = Dust.NewDustPerfect(NPC.Center, 182);
-                prepShotDust.noGravity = true;
-                prepShotDust.velocity = new Vector2(3, 3).RotatedByRandom(100) * Main.rand.NextFloat(0.3f, 0.8f);
-                prepShotDust.scale = Main.rand.NextFloat(1.2f, 1.9f);
+                for (int i = 0; i < 2; i++)
+                {
+                    Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * 5f;
+                    GlowOrbParticle spark2 = new GlowOrbParticle(NPC.Center + shootVelocity * 7, (shootVelocity * Main.rand.NextFloat(0.6f, 1.1f)) * 3.3f + NPC.velocity, false, 10, Main.rand.NextFloat(0.55f, 0.6f), Color.Red);
+                    GeneralParticleHandler.SpawnParticle(spark2);
+                }
             }
 
             float distanceFromSCal = Main.getGoodWorld ? 300f : 225f;

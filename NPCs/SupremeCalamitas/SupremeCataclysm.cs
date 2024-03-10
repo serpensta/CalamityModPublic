@@ -237,14 +237,14 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         damage /= 2;
                     int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
                     float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = Main.zenithWorld ? 5f : 7f;
+                    float velocity = Main.zenithWorld ? 6f : 3f;
                     Vector2 spinningPoint = new Vector2(0f, -velocity);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f, 2);
                         }
                     }
 

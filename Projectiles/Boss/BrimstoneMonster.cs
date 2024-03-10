@@ -17,6 +17,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
 using Terraria.GameContent;
+using CalamityMod.Dusts;
+using CalamityMod.Items.Weapons.Summon;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -68,12 +70,37 @@ namespace CalamityMod.Projectiles.Boss
             if (time == 0)
             {
                 Projectile.scale = 0.1f;
+                for (int i = 0; i < 2; i++)
+                {
+                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Red, 1.45f, 0, 120, false);
+                    GeneralParticleHandler.SpawnParticle(bloom);
+                }
+                Particle bloom2 = new BloomParticle(Projectile.Center, Vector2.Zero, Color.White, 1.35f, 0, 120, false);
+                GeneralParticleHandler.SpawnParticle(bloom2);
             }
 
             time++;
 
             if (Projectile.scale < 1.9f && Projectile.timeLeft > 90)
+            {
+                if (Projectile.scale < 1.5f)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Vector2 dustVel = new Vector2(30, 30).RotatedByRandom(100) * Main.rand.NextFloat(0.05f, 1.2f);
+                        Dust spawnDust = Dust.NewDustPerfect(Projectile.Center * (Projectile.scale * 5), (int)CalamityDusts.Brimstone, dustVel);
+                        spawnDust.noGravity = true;
+                        spawnDust.scale = Main.rand.NextFloat(1.7f, 2.8f) - Projectile.scale * 1.5f;
+                    }
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
+                        GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center + sparkVel * 2 * (Projectile.scale * 5), sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f) - Projectile.scale * 1.5f, Color.Red, true, true);
+                        GeneralParticleHandler.SpawnParticle(orb);
+                    }
+                }
                 Projectile.scale += 0.01f;
+            }
 
             if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumbleSound) && RumbleSound.IsPlaying)
                 RumbleSound.Position = Projectile.Center;
@@ -109,11 +136,11 @@ namespace CalamityMod.Projectiles.Boss
             {
                 if (targetDist <= 1400)
                 {
-                    float targetPitchShift = 1 - targetDist / 1400;
+                    float targetPitchShift = Utils.GetLerpValue(1400, 700, targetDist);
                     if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumblePitch) && RumblePitch.IsPlaying)
                     {
                         RumblePitch.Pitch = MathHelper.Lerp(Main.zenithWorld ? -0.7f : 0f, Main.zenithWorld ? 0.2f : 0.7f, targetPitchShift);
-                        RumblePitch.Volume = MathHelper.Lerp(0.45f, 1f, targetPitchShift);
+                        RumblePitch.Volume = MathHelper.Lerp(0.3f, 0.8f, targetPitchShift);
                     }
                 }
 
@@ -145,7 +172,7 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.Opacity = MathHelper.Clamp(1f - ((Projectile.timeLeft - 35910) / 90f), 0f, 1f);
             }
 
-            if (Projectile.scale == 1.9f)
+            if (Projectile.scale >= 1.9f)
                 sitStill--;
             if (sitStill > 0)
                 return;

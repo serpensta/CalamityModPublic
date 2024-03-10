@@ -343,7 +343,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     for (int k = 0; k < totalProjectiles; k++)
                     {
                         Vector2 velocity = spinningPoint.RotatedBy(radians * k);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity * 1.2f, type, damage, 0f, Main.myPlayer, 0, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity, type, damage, 0f, Main.myPlayer, 0, 0, 2);
                     }
                     NPC.netUpdate = true;
                 }

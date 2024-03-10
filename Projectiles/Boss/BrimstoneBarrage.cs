@@ -82,15 +82,13 @@ namespace CalamityMod.Projectiles.Boss
             if (Projectile.ai[2] == 2f)
             {
                 if (Projectile.timeLeft > 600)
-                    Projectile.velocity *= 1.01f;
+                    Projectile.velocity *= 1.015f;
                 Projectile.scale = 0.8f;
-                if (Projectile.timeLeft % 3 == 0)
-                {
-                    Dust trailDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5), 182);
-                    trailDust.noGravity = true;
-                    trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
-                    trailDust.scale = Main.rand.NextFloat(0.5f, 0.8f);
-                }
+
+                Dust trailDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(4, 4), 182);
+                trailDust.noGravity = true;
+                trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
+                trailDust.scale = Main.rand.NextFloat(0.2f, 0.6f);
             }
 
             if (Projectile.localAI[0] == 0f)
