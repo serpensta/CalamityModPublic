@@ -173,6 +173,19 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Total segment variable
             int totalSegments = Main.getGoodWorld ? 100 : 80;
 
+            // Calculate aggression based on how many broken segments there are
+            float brokenSegmentAggressionMultiplier = 1f;
+            if (npc.type == NPCID.TheDestroyer)
+            {
+                int numProbeSegments = 0;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    if (Main.npc[i].active && Main.npc[i].type == NPCID.TheDestroyerBody && Main.npc[i].ai[2] == 0f)
+                        numProbeSegments++;
+                }
+                brokenSegmentAggressionMultiplier += (1f - MathHelper.Clamp(numProbeSegments / (float)totalSegments, 0f, 1f)) * 0.25f;
+            }
+
             // Death Mode laser spit bool
             bool spitLaserSpreads = death;
 
@@ -219,6 +232,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     turnSpeed *= 1.2f;
                 }
             }
+
+            speed *= brokenSegmentAggressionMultiplier;
+            turnSpeed *= brokenSegmentAggressionMultiplier;
 
             bool probeLaunched = npc.ai[2] == 1f;
             if (npc.type == NPCID.TheDestroyerBody)
@@ -434,7 +450,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     if (!masterMode)
                     {
-                        calamityGlobalNPC.newAI[0] = 0f;
+                        int numProbeSegments = 0;
+                        for (int i = 0; i < Main.maxNPCs; i++)
+                        {
+                            if (Main.npc[i].active && Main.npc[i].type == npc.type && Main.npc[i].ai[2] == 0f)
+                                numProbeSegments++;
+                        }
+                        float lerpAmount = MathHelper.Clamp(numProbeSegments / (float)totalSegments, 0f, 1f);
+                        float laserShootTimeBonus = (int)MathHelper.Lerp(0f, (shootProjectileTime + bodySegmentTime * lerpAmount) - LaserTelegraphTime, 1f - lerpAmount);
+                        calamityGlobalNPC.newAI[0] = laserShootTimeBonus;
                         npc.SyncExtraAI();
                         npc.TargetClosest();
                     }
@@ -443,7 +467,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         if (masterMode)
                         {
-                            calamityGlobalNPC.newAI[0] = 0f;
+                            int numProbeSegments = 0;
+                            for (int i = 0; i < Main.maxNPCs; i++)
+                            {
+                                if (Main.npc[i].active && Main.npc[i].type == npc.type && Main.npc[i].ai[2] == 0f)
+                                    numProbeSegments++;
+                            }
+                            float lerpAmount = MathHelper.Clamp(numProbeSegments / (float)totalSegments, 0f, 1f);
+                            float laserShootTimeBonus = (int)MathHelper.Lerp(0f, (shootProjectileTime + bodySegmentTime * lerpAmount) - LaserTelegraphTime, 1f - lerpAmount);
+                            calamityGlobalNPC.newAI[0] = laserShootTimeBonus;
                             npc.SyncExtraAI();
                             npc.TargetClosest();
                         }
@@ -496,9 +528,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         npc.netUpdate = true;
+
+                        if (masterMode)
+                        {
+                            calamityGlobalNPC.destroyerLaserColor = -1;
+                            npc.SyncDestroyerLaserColor();
+                        }
                     }
 
-                    if (calamityGlobalNPC.newAI[0] == 0f)
+                    if (!masterMode)
                     {
                         calamityGlobalNPC.destroyerLaserColor = -1;
                         npc.SyncDestroyerLaserColor();
@@ -591,8 +629,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.type != NPCID.TheDestroyerBody || !probeLaunched)
                 Lighting.AddLight((int)(npc.Center.X / 16f), (int)(npc.Center.Y / 16f), flyAtTarget ? 0.05f : 0.3f, 0.1f, flyAtTarget ? 0.3f : 0.05f);
 
-            // Despawn
+            // Max velocity
             float segmentVelocity = masterMode ? 20f : 16f;
+            float segmentVelocityBoost = death ? 6.5f * (1f - lifeRatio) : 5f * (1f - lifeRatio);
+            segmentVelocity += segmentVelocityBoost;
+            segmentVelocity += 4f * enrageScale;
+            segmentVelocity *= brokenSegmentAggressionMultiplier;
+
+            // Despawn
             if (player.dead)
             {
                 shouldFly = false;
@@ -613,11 +657,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
                 }
             }
-
-            // Max velocity
-            float segmentVelocityBoost = death ? 6.5f * (1f - lifeRatio) : 5f * (1f - lifeRatio);
-            segmentVelocity += segmentVelocityBoost;
-            segmentVelocity += 4f * enrageScale;
 
             Vector2 npcCenter = npc.Center;
             float targetTilePosX = player.Center.X;
@@ -984,6 +1023,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
             }
 
+            int destroyerSegmentsCount = NPC.GetDestroyerSegmentsCount();
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (npc.ai[0] == 0f && npc.type == NPCID.TheDestroyer)
@@ -992,7 +1032,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.realLife = npc.whoAmI;
                     int num5 = 0;
                     int num6 = npc.whoAmI;
-                    int destroyerSegmentsCount = NPC.GetDestroyerSegmentsCount();
                     for (int j = 0; j <= destroyerSegmentsCount; j++)
                     {
                         int num7 = NPCID.TheDestroyerBody;
@@ -1041,7 +1080,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 if (npc.localAI[0] >= shootProjectileGateValue && ableToFireLaser)
                 {
-                    npc.localAI[0] = 0f;
+                    int numProbeSegments = 0;
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        if (Main.npc[i].active && Main.npc[i].type == npc.type && Main.npc[i].ai[2] == 0f)
+                            numProbeSegments++;
+                    }
+                    float lerpAmount = MathHelper.Clamp(numProbeSegments / (float)destroyerSegmentsCount, 0f, 1f);
+                    float laserShootTimeBonus = (int)MathHelper.Lerp(0f, (shootProjectileTime + bodySegmentTime * lerpAmount) - LaserTelegraphTime, 1f - lerpAmount);
+                    npc.localAI[0] = laserShootTimeBonus;
                     npc.SyncVanillaLocalAI();
                     npc.TargetClosest();
                     if (Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
@@ -1098,6 +1145,19 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 if (npc.life > Main.npc[(int)npc.ai[1]].life)
                     npc.life = Main.npc[(int)npc.ai[1]].life;
+            }
+
+            // Calculate aggression based on how many broken segments there are
+            float brokenSegmentAggressionMultiplier = 1f;
+            if (npc.type == NPCID.TheDestroyer)
+            {
+                int numProbeSegments = 0;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    if (Main.npc[i].active && Main.npc[i].type == NPCID.TheDestroyerBody && Main.npc[i].ai[2] == 0f)
+                        numProbeSegments++;
+                }
+                brokenSegmentAggressionMultiplier += (1f - MathHelper.Clamp(numProbeSegments / (float)destroyerSegmentsCount, 0f, 1f)) * 0.25f;
             }
 
             int num13 = (int)(npc.position.X / 16f) - 1;
@@ -1173,7 +1233,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else
                 npc.localAI[1] = 0f;
 
-            float num18 = Main.masterMode ? 24f : Main.expertMode ? 20f : 16f;
+            float num18 = (Main.masterMode ? 24f : Main.expertMode ? 20f : 16f) * brokenSegmentAggressionMultiplier;
             if (Main.IsItDay() || Main.player[npc.target].dead)
             {
                 flag2 = false;
@@ -1207,6 +1267,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 num19 *= 1.2f;
                 num20 *= 1.2f;
             }
+
+            num19 *= brokenSegmentAggressionMultiplier;
+            num20 *= brokenSegmentAggressionMultiplier;
 
             Vector2 vector3 = npc.Center;
             float num21 = Main.player[npc.target].Center.X;
