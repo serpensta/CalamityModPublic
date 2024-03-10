@@ -1093,7 +1093,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.TargetClosest();
                     if (Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                     {
-                        float laserVelocity = Main.masterMode ? 9f : Main.expertMode ? 8.5f : 8f;
+                        float laserVelocity = (Main.masterMode ? 3.5f : Main.expertMode ? 3f : 2.5f) + Main.rand.NextFloat() * 1.5f;
                         Vector2 vector = npc.Center;
                         float num8 = Main.player[npc.target].Center.X - vector.X + (float)Main.rand.Next(-2, 3);
                         float num9 = Main.player[npc.target].Center.Y - vector.Y + (float)Main.rand.Next(-2, 3);
@@ -1124,7 +1124,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, num8, num9, type, damage, 0f, Main.myPlayer);
+                            int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, num8, num9, type, damage, 0f, Main.myPlayer, 1f, 0f);
                             Main.projectile[num12].timeLeft = 900;
                         }
 

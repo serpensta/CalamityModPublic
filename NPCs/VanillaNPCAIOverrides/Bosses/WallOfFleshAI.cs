@@ -279,11 +279,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (bossRush)
                 speedMult += 0.2f;
 
+            float masterModeVelocityBoost = 0f;
+            if (masterMode)
+            {
+                float velocityBoostStartDistance = 480f;
+                float velocityBoostMaxDistance = velocityBoostStartDistance * 2f;
+                float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[npc.target].Center.X);
+                float lerpAmount = MathHelper.Clamp((distanceFromTargetX - velocityBoostStartDistance) / velocityBoostMaxDistance, 0f, 1f);
+                masterModeVelocityBoost = MathHelper.Lerp(0f, 8f, lerpAmount);
+            }
+
             // NOTE: Max velocity is 8 in Expert Mode
             // NOTE: Max velocity is 9 in For The Worthy
 
             float velocityBoost = 4f * (1f - lifeRatio);
-            float velocityX = (bossRush ? 7f : death ? 3.5f : 2f) + velocityBoost;
+            float velocityX = (bossRush ? 7f : death ? 3.5f : 2f) + masterModeVelocityBoost + velocityBoost;
             velocityX *= speedMult;
 
             if (masterMode)
@@ -1215,14 +1225,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 if (flag27)
                 {
-                    float num397 = 9f;
+                    float num397 = 4f;
                     int type = ProjectileID.EyeLaser;
                     if ((double)Main.npc[Main.wofNPCIndex].life < (double)Main.npc[Main.wofNPCIndex].lifeMax * 0.5)
                         num397 += 1f;
                     if ((double)Main.npc[Main.wofNPCIndex].life < (double)Main.npc[Main.wofNPCIndex].lifeMax * 0.25)
                         num397 += 1f;
                     if ((double)Main.npc[Main.wofNPCIndex].life < (double)Main.npc[Main.wofNPCIndex].lifeMax * 0.1)
-                        num397 += 2f;
+                        num397 += 1f;
 
                     vector39 = npc.Center;
                     num392 = Main.player[npc.target].Center.X - vector39.X;
@@ -1233,7 +1243,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num393 *= num394;
                     vector39.X += num392;
                     vector39.Y += num393;
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector39.X, vector39.Y, num392, num393, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector39.X, vector39.Y, num392, num393, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, 1f, 0f);
                 }
             }
 

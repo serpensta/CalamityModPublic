@@ -51,7 +51,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.value = CalamityGlobalItem.Rarity12BuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.shoot = ModContent.ProjectileType<TerratomereHoldoutProj>();
-            Item.shootSpeed = 30f;
+            Item.shootSpeed = 60f;
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
