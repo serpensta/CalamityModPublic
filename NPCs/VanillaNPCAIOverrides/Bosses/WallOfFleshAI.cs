@@ -221,7 +221,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             float halfAverageScreenWidth = 960f;
             float distanceBeforeSlowingDown = 400f;
-            float timeBeforeEnrage = (masterMode ? 450f : 600f) - (death ? 390f * (1f - lifeRatio) : 0f);
+            float timeBeforeEnrage = (masterMode ? 150f : 600f) - (death ? (masterMode ? 130f : 390f) * (1f - lifeRatio) : 0f);
             float speedMult = 1f;
 
             if (bossRush)
