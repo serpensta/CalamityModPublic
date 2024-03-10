@@ -1386,7 +1386,11 @@ Virulence: {
 
 VoidEdge: {
 	DisplayName: Void Edge
-	Tooltip: Fires the ghastly souls of long-deceased abyss dwellers
+	Tooltip:
+		'''
+		Fires the ghastly souls of long-deceased abyss dwellers
+		Striking with the blade summons additional souls from below
+		'''
 }
 
 VulcaniteLance: {

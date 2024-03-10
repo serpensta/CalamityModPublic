@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Projectiles.Melee;
+using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         internal const int ProjectileSpreadOutTime = 20;
 
-        internal const float ShootSpeed = 20f;
+        internal const float ShootSpeed = 10f;
 
         internal const float SmallSoulStatMultiplier = 0.8f;
 
@@ -52,9 +53,7 @@ namespace CalamityMod.Items.Weapons.Melee
             int numShots = TotalProjectilesPerSwing;
             for (int i = 0; i < numShots; i++)
             {
-                float speedX = velocity.X + (float)Main.rand.Next(-60, 61) * 0.05f;
-                float speedY = velocity.Y + (float)Main.rand.Next(-60, 61) * 0.05f;
-                velocity = new Vector2(speedX, speedY);
+                velocity = velocity.RotatedByRandom(0.35) * Main.rand.NextFloat(0.9f, 1.1f);
                 float ai1 = MathHelper.Lerp(0.75f, 1.25f, Main.rand.NextFloat());
                 switch (i)
                 {
@@ -64,13 +63,11 @@ namespace CalamityMod.Items.Weapons.Melee
 
                     case 1:
                         type = ModContent.ProjectileType<GhastlySoulMedium>();
-                        velocity *= MediumSoulStatMultiplier;
                         knockback *= MediumSoulStatMultiplier;
                         break;
 
                     case 2:
                         type = ModContent.ProjectileType<GhastlySoulSmall>();
-                        velocity *= SmallSoulStatMultiplier;
                         knockback *= SmallSoulStatMultiplier;
                         break;
                 }
@@ -82,12 +79,32 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
-            if (Main.rand.NextBool(3))
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, MathHelper.Lerp(0.75f, 2.25f, Main.rand.NextFloat()));
+            if (Main.rand.NextBool())
+            {
+                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 66, 0f, 0f, 0, Color.Plum, Main.rand.NextFloat(0.65f, 1.2f));
+                Main.dust[dust].noGravity = true;
+            }
         }
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            SoundStyle sound = new("CalamityMod/Sounds/Item/PhantomSpirit");
+            SoundEngine.PlaySound(sound with { Volume = 0.65f, PitchVariance = 0.3f, Pitch = -0.5f }, target.Center);
+            for (int i = 0; i <= 30; i++)
+            {
+                Dust dust = Dust.NewDustPerfect(target.Center, 66, new Vector2(0, -18).RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.1f, 1.9f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.7f, 1.6f);
+                Dust dust2 = Dust.NewDustPerfect(target.Center, 66, new Vector2(0, -7).RotatedByRandom(MathHelper.ToRadians(35f)) * Main.rand.NextFloat(0.1f, 1.9f));
+                dust2.noGravity = true;
+                dust2.scale = Main.rand.NextFloat(0.7f, 1.6f);
+            }
 
-        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<CrushDepth>(), 300);
-
-        public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo) => target.AddBuff(ModContent.BuffType<CrushDepth>(), 300);
+            float ai1 = MathHelper.Lerp(0.75f, 1.25f, Main.rand.NextFloat());
+            int soulDamage = (int)(damageDone / 3);
+            Vector2 velocity = new Vector2(0f, -14f).RotatedByRandom(0.65f) * Main.rand.NextFloat(0.9f, 1.1f);
+            Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center + new Vector2(0, 1300f), velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.9f, 1.1f), ModContent.ProjectileType<GhastlySoulLarge>(), soulDamage, 0f, player.whoAmI, 0f, ai1);
+            Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center + new Vector2(0, 1300f), velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.9f, 1.1f), ModContent.ProjectileType<GhastlySoulMedium>(), soulDamage, 0f, player.whoAmI, 0f, ai1);
+            Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center + new Vector2(0, 1300f), velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.9f, 1.1f), ModContent.ProjectileType<GhastlySoulSmall>(), soulDamage, 0f, player.whoAmI, 0f, ai1);
+        }
     }
 }

@@ -3627,7 +3627,7 @@ namespace CalamityMod.NPCs
             // Adjust vanilla AI in Classic, Expert and Master
             // Fair contact damage and a few Expert/Master AI edits happen here
             // Deerclops doesn't deserve love so he's not here
-            else
+            else if (!CalamityMod.ExternalFlag_DisableNonRevBossAI)
             {
                 switch (npc.type)
                 {
@@ -6394,23 +6394,23 @@ namespace CalamityMod.NPCs
                     if (npc.shadowFlame)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.ShadowFlame].Value);
                     if (npc.oiled)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.Oiled].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Oiled").Value);
                     if (npc.javelined)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.BoneJavelin].Value);
                     if (npc.daybreak)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.Daybreak].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Daybroken").Value);
                     if (npc.celled)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.StardustMinionBleed].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Celled").Value);
                     if (npc.dryadBane)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.DryadsWardDebuff].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/DryadsBane").Value);
                     if (npc.dryadWard)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.DryadsWard].Value);
                     if (npc.soulDrain && npc.realLife == -1)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.SoulDrain].Value);
                     if (npc.onFire3) // Hellfire
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.OnFire3].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Hellfire").Value);
                     if (npc.onFrostBurn2) // Frostbite
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.Frostburn2].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/Frostbite").Value);
                     if (npc.tentacleSpiked)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.TentacleSpike].Value);
 
@@ -6430,7 +6430,7 @@ namespace CalamityMod.NPCs
                     if (npc.stinky)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.Stinky].Value);
                     if (npc.betsysCurse)
-                        currentDebuffs.Add(TextureAssets.Buff[BuffID.BetsysCurse].Value);
+                        currentDebuffs.Add(Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBuffs/BetsysCurse").Value);
                     if (npc.dripping)
                         currentDebuffs.Add(TextureAssets.Buff[BuffID.Wet].Value);
                     if (npc.drippingSlime)

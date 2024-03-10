@@ -120,6 +120,10 @@ namespace CalamityMod
         // Speedrun timer
         internal static Stopwatch SpeedrunTimer = new Stopwatch();
 
+        // External flag to disable non-Revengeance boss AI edits
+        // This can be edited by other mods using reflection to prevent compatibility issues
+        public static bool ExternalFlag_DisableNonRevBossAI = false;
+
         internal static CalamityMod Instance;
 
         // TODO -- Mod references should be contained in a ModSystem (example name "ModLoadedChecker")

@@ -463,10 +463,10 @@ namespace CalamityMod.NPCs.Abyss
             postPolter.Add(ModContent.ItemType<EidolicWail>(), 3);
             postPolter.Add(ModContent.ItemType<EidolonStaff>(), 3);
 
-            // Post-Clone: 6-8 Lumenyl (8-11 on Expert)
-            LeadingConditionRule postClone = npcLoot.DefineConditionalDropSet(DropHelper.PostCal());
-            aewMinionCondition.Add(postClone);
-            postClone.Add(DropHelper.NormalVsExpertQuantity(ModContent.ItemType<Lumenyl>(), 1, 6, 8, 8, 11));
+            // Post-Leviathan: 6-8 Lumenyl (8-11 on Expert)
+            LeadingConditionRule postLevi = npcLoot.DefineConditionalDropSet(DropHelper.PostLevi());
+            aewMinionCondition.Add(postLevi);
+            postLevi.Add(DropHelper.NormalVsExpertQuantity(ModContent.ItemType<Lumenyl>(), 1, 6, 8, 8, 11));
 
             // Post-Plantera: 8-12 Ectoplasm
             aewMinionCondition.Add(ItemDropRule.ByCondition(new Conditions.DownedPlantera(), ItemID.Ectoplasm, 1, 8, 12));
