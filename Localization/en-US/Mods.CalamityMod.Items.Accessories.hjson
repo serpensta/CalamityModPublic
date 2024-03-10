@@ -1828,8 +1828,10 @@ TheEvolution: {
 	Tooltip:
 		'''
 		You reflect projectiles when they hit you
-		Reflected projectiles deal no damage to you
-		This reflect has a 90 second cooldown which is shared with all other dodges and reflects
+        Reflected projectiles deal no damage to you
+        Projectiles that deal less than 5% of your max life in damage will not be reflected
+        The reflect has a cooldown that ranges between 15 and 90 seconds depending on the reflected projectile's damage
+		This cooldown is shared with all other dodges and reflects
 		After reflecting something, grants +1 HP/s life regen and accelerated life regen for 5 seconds
 		If the same enemy projectile type hits you again you will resist its damage by 15%
 		'''
