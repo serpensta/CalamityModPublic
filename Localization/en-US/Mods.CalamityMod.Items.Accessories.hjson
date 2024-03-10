@@ -124,7 +124,9 @@ AmalgamatedBrain: {
 		10% increased damage
 		Shade rains down when you are hit
 		Grants the ability to dodge attacks
-		The dodge has a 90 second cooldown which is shared with all other dodges and reflects
+		Attacks that deal less than 5% of your max life in damage will not be dodged
+        The dodge has a cooldown that ranges between 15 and 90 seconds depending on the dodged attack's damage
+		This cooldown is shared with all other dodges and reflects
 		Temporarily increases critical strike chance and summon damage after a dodge
 		You will confuse nearby enemies when you are struck
 		'''
@@ -1638,7 +1640,8 @@ StatisNinjaBelt: {
 		Grants the ability to swim
 		Increased fall damage resistance by 35 blocks
 		Can climb walls, dash, and dodge attacks
-		The dodge has a 90 second cooldown
+		Attacks that deal less than 5% of your max life in damage will not be dodged
+        The dodge has a cooldown that ranges between 15 and 90 seconds depending on the dodged attack's damage
 		This cooldown is shared with all other dodges and reflects
 		'''
 }
@@ -1650,7 +1653,8 @@ StatisVoidSash: {
 		12% increased jump speed and allows constant jumping
 		Grants immunity to fall damage
 		Can climb walls, dash, and dodge attacks
-		The dodge has a 90 second cooldown
+		Attacks that deal less than 5% of your max life in damage will not be dodged
+        The dodge has a cooldown that ranges between 15 and 90 seconds depending on the dodged attack's damage
 		This cooldown is shared with all other dodges and reflects
 		Dashes leave homing scythes in your wake
 		'''
@@ -1775,7 +1779,9 @@ TheAmalgam: {
 		15% increased damage
 		Shade rains down when you are hit
 		Grants the ability to dodge attacks
-		The dodge has a 90 second cooldown which is shared with all other dodges and reflects
+        Attacks that deal less than 5% of your max life in damage will not be dodged
+        The dodge has a cooldown that ranges between 15 and 90 seconds depending on the dodged attack's damage
+		This cooldown is shared with all other dodges and reflects
 		Temporarily increases critical strike chance and summon damage after a dodge
 		Nearby enemies receive a variety of sickness-related debuffs when you are hit
 		'''
