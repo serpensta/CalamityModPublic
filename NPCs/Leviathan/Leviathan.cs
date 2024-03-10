@@ -16,6 +16,7 @@ using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.Projectiles.Boss;
+using CalamityMod.Sounds;
 using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -817,6 +818,18 @@ namespace CalamityMod.NPCs.Leviathan
         public static void RealOnKill(NPC npc)
         {
             CalamityGlobalNPC.SetNewBossJustDowned(npc);
+
+            // Abyss awakens after killing Anahita & Leviathan
+            string key = "Mods.CalamityMod.Status.Progression.AbyssDropsText";
+            Color messageColor = Color.RoyalBlue;
+
+            if (!DownedBossSystem.downedLeviathan)
+            {
+                if (!Main.player[Main.myPlayer].dead && Main.player[Main.myPlayer].active)
+                    SoundEngine.PlaySound(CommonCalamitySounds.WyrmScreamSound, Main.player[Main.myPlayer].Center);
+
+                CalamityUtils.DisplayLocalizedText(key, messageColor);
+            }
 
             // Mark Anahita & Leviathan as dead
             DownedBossSystem.downedLeviathan = true;

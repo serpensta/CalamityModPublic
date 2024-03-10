@@ -234,18 +234,6 @@ namespace CalamityMod.NPCs.CalClone
 
             CalamityGlobalNPC.SetNewShopVariable(new int[] { ModContent.NPCType<THIEF>() }, DownedBossSystem.downedCalamitasClone);
 
-            // Abyss awakens after killing Calamitas
-            string key = "Mods.CalamityMod.Status.Progression.PlantBossText";
-            Color messageColor = Color.RoyalBlue;
-
-            if (!DownedBossSystem.downedCalamitasClone)
-            {
-                if (!Main.player[Main.myPlayer].dead && Main.player[Main.myPlayer].active)
-                    SoundEngine.PlaySound(CommonCalamitySounds.WyrmScreamSound, Main.player[Main.myPlayer].Center);
-
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
-            }
-
             // Mark the Calamitas Clone as dead
             DownedBossSystem.downedCalamitasClone = true;
             CalamityNetcode.SyncWorld();
