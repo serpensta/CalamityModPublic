@@ -39,7 +39,8 @@
         internal static readonly int BrainDodgeCooldownMax = 5400;
         internal static readonly int AmalgamDodgeCooldownMin = 900;
         internal static readonly int AmalgamDodgeCooldownMax = 5400;
-        internal static readonly int MirrorDodgeCooldown = 5400;
+        internal static readonly int MirrorDodgeCooldownMin = 900;
+        internal static readonly int MirrorDodgeCooldownMax = 5400;
         internal static readonly int DaedalusReflectCooldown = 5400;
         internal static readonly int EvolutionReflectCooldown = 5400;
         #endregion

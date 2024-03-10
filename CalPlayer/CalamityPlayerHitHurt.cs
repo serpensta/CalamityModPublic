@@ -135,11 +135,21 @@ namespace CalamityMod.CalPlayer
             NetMessage.SendData(MessageID.Dodge, -1, -1, null, Player.whoAmI, 1f, 0f, 0f, 0, 0, 0);
         }
 
-        public void AbyssMirrorDodge()
+        public void AbyssMirrorDodge(double dodgeDamageGateValuePercent, int dodgeDamageGateValue, int hitDamage)
         {
+            double maxCooldownDurationDamagePercent = 0.5;
+            int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+            // Just in case...
+            if (maxCooldownDurationDamageValue <= 0)
+                maxCooldownDurationDamageValue = 1;
+
+            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+
             if (Player.whoAmI == Main.myPlayer && abyssalMirror && !eclipseMirror)
             {
-                Player.AddCooldown(GlobalDodge.ID, BalancingConstants.MirrorDodgeCooldown, true, "abyssmirror");
+                int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.MirrorDodgeCooldownMin, BalancingConstants.MirrorDodgeCooldownMax, cooldownDurationScalar);
+                Player.AddCooldown(GlobalDodge.ID, cooldownDuration, true, "abyssmirror");
 
                 // TODO -- why is this here?
                 Player.noKnockback = true;
@@ -169,11 +179,21 @@ namespace CalamityMod.CalPlayer
             }
         }
 
-        public void EclipseMirrorDodge()
+        public void EclipseMirrorDodge(double dodgeDamageGateValuePercent, int dodgeDamageGateValue, int hitDamage)
         {
+            double maxCooldownDurationDamagePercent = 0.5;
+            int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+            // Just in case...
+            if (maxCooldownDurationDamageValue <= 0)
+                maxCooldownDurationDamageValue = 1;
+
+            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+
             if (Player.whoAmI == Main.myPlayer && eclipseMirror)
             {
-                Player.AddCooldown(GlobalDodge.ID, BalancingConstants.MirrorDodgeCooldown, true, "eclipsemirror");
+                int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.MirrorDodgeCooldownMin, BalancingConstants.MirrorDodgeCooldownMax, cooldownDurationScalar);
+                Player.AddCooldown(GlobalDodge.ID, cooldownDuration, true, "eclipsemirror");
 
                 // TODO -- why is this here?
                 Player.noKnockback = true;
@@ -1530,16 +1550,16 @@ namespace CalamityMod.CalPlayer
                 return true;
 
             // Mirror evades do not work if the global dodge cooldown is active. This cooldown can be triggered by either mirror.
-            if (!Player.HasCooldown(GlobalDodge.ID))
+            if (!Player.HasCooldown(GlobalDodge.ID) && info.Damage >= dodgeDamageGateValue)
             {
                 if (eclipseMirror)
                 {
-                    EclipseMirrorDodge();
+                    EclipseMirrorDodge(dodgeDamageGateValuePercent, dodgeDamageGateValue, info.Damage);
                     return true;
                 }
                 else if (abyssalMirror)
                 {
-                    AbyssMirrorDodge();
+                    AbyssMirrorDodge(dodgeDamageGateValuePercent, dodgeDamageGateValue, info.Damage);
                     return true;
                 }
             }

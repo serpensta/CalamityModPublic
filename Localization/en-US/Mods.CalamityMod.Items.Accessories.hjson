@@ -60,7 +60,9 @@ AbyssalMirror: {
 		Significantly reduces enemy aggression, even in the abyss
 		Stealth generates 25% faster when standing still and 12% faster while moving
 		Grants the ability to evade attacks, releasing a cloud of lumenyl fluid which damages and stuns nearby enemies
-		Evading an attack grants a lot of stealth but has a 90 second cooldown
+        Attacks that deal less than 5% of your max life in damage will not be evaded
+        The evade has a cooldown that ranges between 15 and 90 seconds depending on the evaded attack's damage
+		Evading an attack grants a lot of stealth
 		This cooldown is shared with all other dodges and reflects
 		'Light does not reach the depths of the ocean'
 		'''
@@ -606,7 +608,9 @@ EclipseMirror: {
 		Mobile stealth generation accelerates while not attacking
 		Stealth strikes only expend 50% of your max stealth
 		Grants the ability to evade attacks in a blast of darksun light, which inflicts extreme damage in a wide area
-		Evading an attack grants full stealth but has a 90 second cooldown
+        Attacks that deal less than 5% of your max life in damage will not be evaded
+        The evade has a cooldown that ranges between 15 and 90 seconds depending on the evaded attack's damage
+		Evading an attack grants full stealth
 		This cooldown is shared with all other dodges and reflects
 		'Its reflection shows naught but darkness'
 		'''
