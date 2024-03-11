@@ -258,9 +258,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             int otherCentralProjectile = evenNumberOfProjectiles ? centralProjectile - 1 : -1;
                             float centralScalingAmount = (float)Math.Floor(numProj / (double)centralProjectile) * 0.75f;
                             float amountToAdd = evenNumberOfProjectiles ? 0.5f : 0f;
+                            float originalBaseSpeed = baseSpeed;
                             for (int i = 0; i < numProj; i++)
                             {
                                 float velocityScalar = (evenNumberOfProjectiles && i == otherCentralProjectile) ? 0f : MathHelper.Lerp(0.5f, centralScalingAmount, Math.Abs((i + amountToAdd) - centralProjectile) / (float)centralProjectile);
+                                baseSpeed = originalBaseSpeed;
                                 baseSpeed *= velocityScalar;
                                 offsetAngle = startAngle + deltaAngle * i;
                                 int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), center.X, center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), type, damage, 0f, Main.myPlayer, -2f);
