@@ -348,7 +348,7 @@ namespace CalamityMod.ILEditing
         }
         #endregion
 
-        #region Chlorophyte Bullet Speed Nerfs
+        #region Chlorophyte Bullet Dust Reducing
         private static void AdjustChlorophyteBullets(ILContext il)
         {
             // Reduce dust from 10 to 5 and homing range.
@@ -365,14 +365,6 @@ namespace CalamityMod.ILEditing
             }
             cursor.Remove();
             cursor.Emit(OpCodes.Ldc_I4_5); // Decrease dust to 5.
-
-            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(300f))) // The 300 unit distance required to home in.
-            {
-                LogFailure("Chlorophyte Bullet AI", "Could not locate the homing range.");
-                return;
-            }
-            cursor.Remove();
-            cursor.Emit(OpCodes.Ldc_R4, 150f); // Reduce homing range by 50%.
         }
         #endregion
 
