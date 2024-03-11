@@ -307,11 +307,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Spawn spread of projectiles in Master Mode
                         if (masterMode)
                         {
-                            int numGelProjectiles = phase4 ? Main.rand.Next(9, 12) : phase2 ? Main.rand.Next(6, 9) : 12;
+                            int numGelProjectiles = 12;
                             if (Main.getGoodWorld)
                                 numGelProjectiles = 15;
 
-                            float projectileVelocity = death ? 15f : 12f;
+                            float projectileVelocity = death ? 22.5f : 18f;
                             int type = ProjectileID.QueenSlimeGelAttack;
                             int damage = npc.GetProjectileDamage(type);
 
@@ -324,7 +324,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     if (CalamityWorld.LegendaryMode)
                                         spinningpoint *= Main.rand.NextFloat() + 0.5f;
 
-                                    spinningpoint = spinningpoint.RotatedBy((-j) * ((float)Math.PI * 2f) / numGelProjectiles, Vector2.Zero);
+                                    spinningpoint = spinningpoint.RotatedBy((-j) * MathHelper.TwoPi / numGelProjectiles, Vector2.Zero);
                                     int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, damage, 0f, Main.myPlayer, 0f, -2f);
                                     Main.projectile[proj].timeLeft = 900;
                                 }
@@ -521,7 +521,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 // Eruption of crystals in phase 3
                                 if (npc.ai[0] == 6f && phase3)
                                 {
-                                    float projectileVelocity = masterMode ? 15f : 12f;
+                                    float projectileVelocity = masterMode ? 18f : 12f;
                                     type = ProjectileID.QueenSlimeMinionBlueSpike;
                                     damage = npc.GetProjectileDamage(type);
                                     Vector2 destination = (new Vector2(npc.Center.X, npc.Center.Y - 100f) - npc.Center).SafeNormalize(Vector2.UnitY);
@@ -693,11 +693,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             int numGelProjectiles = phase4 ? Main.rand.Next(9, 12) : phase2 ? Main.rand.Next(6, 9) : 12;
                             if (masterMode)
-                                numGelProjectiles += 2;
+                                numGelProjectiles += 6;
                             if (Main.getGoodWorld)
-                                numGelProjectiles = 15;
+                                numGelProjectiles = 20;
 
-                            float projectileVelocity = death ? (masterMode ? 15f : 12f) : (masterMode ? 13f : 10.5f);
+                            float projectileVelocity = death ? (masterMode ? 18f : 12f) : (masterMode ? 15.75f : 10.5f);
                             int type = ProjectileID.QueenSlimeGelAttack;
                             int damage = npc.GetProjectileDamage(type);
                             if (phase2)
@@ -724,7 +724,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     if (CalamityWorld.LegendaryMode)
                                         spinningpoint *= Main.rand.NextFloat() + 0.5f;
 
-                                    spinningpoint = spinningpoint.RotatedBy((-j) * ((float)Math.PI * 2f) / numGelProjectiles, Vector2.Zero);
+                                    spinningpoint = spinningpoint.RotatedBy((-j) * MathHelper.TwoPi / numGelProjectiles, Vector2.Zero);
                                     int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, damage, 0f, Main.myPlayer, 0f, -2f);
                                     Main.projectile[proj].timeLeft = 900;
                                 }
@@ -1172,9 +1172,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int type = ProjectileID.QueenSlimeGelAttack;
                                 for (int j = 0; j < num14; j++)
                                 {
-                                    Vector2 spinningpoint = new Vector2(9f, 0f);
-                                    spinningpoint = spinningpoint.RotatedBy((float)(-j) * ((float)Math.PI * 2f) / (float)num14, Vector2.Zero);
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X, npc.Center.Y, spinningpoint.X, spinningpoint.Y, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
+                                    Vector2 spinningpoint = new Vector2(15f, 0f);
+                                    spinningpoint = spinningpoint.RotatedBy((float)(-j) * MathHelper.TwoPi / (float)num14, Vector2.Zero);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                                 }
                             }
                         }
@@ -1472,8 +1472,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int type = ProjectileID.QueenSlimeGelAttack;
                                 for (int j = 0; j < num15; j++)
                                 {
-                                    Vector2 spinningpoint = new Vector2(Main.masterMode ? 12f : 9f, 0f);
-                                    spinningpoint = spinningpoint.RotatedBy((float)(-j) * ((float)Math.PI * 2f) / (float)num14, Vector2.Zero);
+                                    Vector2 spinningpoint = new Vector2(Main.masterMode ? 13.5f : 9f, 0f);
+                                    spinningpoint = spinningpoint.RotatedBy((float)(-j) * MathHelper.TwoPi / (float)num14, Vector2.Zero);
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                                 }
                             }
