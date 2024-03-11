@@ -671,6 +671,13 @@ namespace CalamityMod.Projectiles
                     maxHitboxSize = 20f;
 
                 projectile.ai[0] += 1f;
+                if (projectile.ai[0] <= 0f)
+                {
+                    if (projectile.ai[0] == 0f)
+                        SoundEngine.PlaySound(SoundID.Item167, projectile.Center);
+
+                    return false;
+                }
                 if (projectile.ai[0] > 9f)
                 {
                     projectile.Kill();
@@ -3565,6 +3572,12 @@ namespace CalamityMod.Projectiles
                 case ProjectileID.DeerclopsRangedProjectile:
                     if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
                         return projectile.ai[0] > projectile.ai[2];
+                    break;
+
+                // Additional slams in the Master Mode shockwave have a delay before expanding and dealing damage
+                case ProjectileID.QueenSlimeSmash:
+                    if (masterMode)
+                        return projectile.ai[0] > 0f;
                     break;
 
                 // Storm Weaver frost waves don't deal damage unless they're at their max velocity

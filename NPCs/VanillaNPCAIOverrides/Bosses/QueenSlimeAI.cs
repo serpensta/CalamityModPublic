@@ -504,10 +504,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (masterMode)
                                 {
                                     Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * 1000f;
-                                    for (int i = 0; i < 11; i++)
+                                    float expandDelay = 0f;
+                                    int maxSmashes = 11;
+                                    int maxSmashesPerSide = (maxSmashes - 1) / 2;
+                                    float maxExpandDelay = 20f * maxSmashesPerSide;
+                                    for (int i = 0; i < maxSmashes; i++)
                                     {
-                                        if (i != 5)
-                                            Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, damage, 0f, Main.myPlayer);
+                                        expandDelay = MathHelper.Lerp(0f, maxExpandDelay, Math.Abs(i - maxSmashesPerSide) / (float)maxSmashesPerSide);
+                                        if (i != maxSmashesPerSide)
+                                            Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, damage, 0f, Main.myPlayer, -expandDelay);
 
                                         extraSmashPosition -= Vector2.UnitX * 200f;
                                     }
@@ -1320,10 +1325,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     if (Main.masterMode)
                                     {
                                         Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * 1000f;
-                                        for (int i = 0; i < 11; i++)
+                                        float expandDelay = 0f;
+                                        int maxSmashes = 11;
+                                        int maxSmashesPerSide = (maxSmashes - 1) / 2;
+                                        float maxExpandDelay = 20f * maxSmashesPerSide;
+                                        for (int i = 0; i < maxSmashes; i++)
                                         {
-                                            if (i != 5)
-                                                Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
+                                            expandDelay = MathHelper.Lerp(0f, maxExpandDelay, Math.Abs(i - maxSmashesPerSide) / (float)maxSmashesPerSide);
+                                            if (i != maxSmashesPerSide)
+                                                Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, -expandDelay);
 
                                             extraSmashPosition -= Vector2.UnitX * 200f;
                                         }
