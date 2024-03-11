@@ -113,12 +113,32 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         // Get target vector
                         Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * npc.velocity.Length();
-                        Vector2 projectileSpawn = npc.Center + projectileVelocity * 5f;
+                        Vector2 projectileSpawn = npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f;
 
                         int damage = npc.GetProjectileDamage(ProjectileID.DemonSickle);
                         int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, ProjectileID.DemonSickle, damage, 0f, Main.myPlayer, 0f, projectileVelocity.Length() * 3f);
                         Main.projectile[proj].timeLeft = 600;
                         Main.projectile[proj].tileCollide = false;
+
+                        if (masterMode)
+                        {
+                            float fireballVelocity = 3f;
+                            projectileVelocity = projectileVelocity.SafeNormalize(Vector2.UnitY) * (npc.velocity.Length() + fireballVelocity);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                int type = ProjectileID.Fireball;
+                                damage = npc.GetProjectileDamage(type);
+                                int numProj = 3;
+                                int spread = 30;
+                                float rotation = MathHelper.ToRadians(spread);
+                                for (int j = 0; j < numProj; j++)
+                                {
+                                    Vector2 randomVelocity = Main.rand.NextVector2CircularEdge(2f, 2f);
+                                    Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1))) + randomVelocity;
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -522,11 +542,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (Main.npc[Main.wofNPCIndex].life > 0)
                 npc.life = Main.npc[Main.wofNPCIndex].life;
 
+            // Percent life remaining
+            float lifeRatio = Main.npc[Main.wofNPCIndex].life / (float)Main.npc[Main.wofNPCIndex].lifeMax;
+
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
                 npc.TargetClosest();
 
             // Velocity, direction, and position
+            bool shouldFireLasers = true;
             npc.position.X = Main.npc[Main.wofNPCIndex].position.X;
             npc.direction = Main.npc[Main.wofNPCIndex].direction;
             npc.spriteDirection = npc.direction;
@@ -559,14 +583,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             Vector2 eyeLocation = npc.Center;
-            float eyeTargetX = Main.player[npc.target].Center.X - eyeLocation.X;
-            float eyeTargetY = Main.player[npc.target].Center.Y - eyeLocation.Y;
+            float predictionAmount = MathHelper.Lerp(0f, 20f, (float)Math.Sqrt(1f - lifeRatio));
+            Vector2 lookAt = Main.player[npc.target].Center + (masterMode ? (Main.player[npc.target].velocity * predictionAmount) : Vector2.Zero);
+            float eyeTargetX = lookAt.X - eyeLocation.X;
+            float eyeTargetY = lookAt.Y - eyeLocation.Y;
             float wallVelocity = (float)Math.Sqrt(eyeTargetX * eyeTargetX + eyeTargetY * eyeTargetY);
             eyeTargetX *= wallVelocity;
             eyeTargetY *= wallVelocity;
 
             // Rotation based on direction and whether to fire lasers or not
-            bool shouldFireLasers = true;
             if (npc.direction > 0)
             {
                 if (Main.player[npc.target].Center.X > npc.Center.X)
@@ -592,9 +617,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Fire lasers
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                // Percent life remaining
-                float lifeRatio = Main.npc[Main.wofNPCIndex].life / (float)Main.npc[Main.wofNPCIndex].lifeMax;
-
                 bool charging = Main.npc[Main.wofNPCIndex].ai[3] == 1f;
 
                 // Set up enraged laser firing timer
@@ -643,16 +665,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         int projectileType = phase2 ? ProjectileID.DeathLaser : ProjectileID.EyeLaser;
                         int damage = npc.GetProjectileDamage(projectileType);
 
-                        float laserSpawnDistance = fireEnragedLasers ? 30f : 22.5f;
-                        Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
-                        Vector2 projectileSpawn = npc.Center + projectileVelocity * laserSpawnDistance;
+                        Vector2 projectileVelocity = (lookAt - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
+                        Vector2 projectileSpawn = npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 90f;
 
                         int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, projectileType, damage, 0f, Main.myPlayer, 1f, 0f);
                         Main.projectile[proj].timeLeft = 900;
 
                         if (!canHit)
                             Main.projectile[proj].tileCollide = false;
-
                     }
                 }
             }
@@ -1241,9 +1261,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num394 = num397 / num394;
                     num392 *= num394;
                     num393 *= num394;
-                    vector39.X += num392;
-                    vector39.Y += num393;
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector39.X, vector39.Y, num392, num393, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, 1f, 0f);
+                    Vector2 projectileVelocity = new Vector2(num392, num393);
+                    vector39 += projectileVelocity.SafeNormalize(Vector2.UnitY) * 90f;
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector39, projectileVelocity, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, 1f, 0f);
                 }
             }
 

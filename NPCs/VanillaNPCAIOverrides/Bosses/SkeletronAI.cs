@@ -190,11 +190,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Reduce the amount of skulls per spread in later phases due to near-constant teleporting
-            if (!masterMode)
+            if (!masterMode && numProj > 3)
             {
                 if (phase4)
                     numProj--;
-                if (phase5)
+                if (phase5 && numProj > 3)
                     numProj--;
             }
 
@@ -252,8 +252,16 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             double deltaAngle = spread / numProj;
                             double offsetAngle;
 
+                            // Inverse parabolic projectile spreads
+                            bool evenNumberOfProjectiles = numProj % 2 == 0;
+                            int centralProjectile = evenNumberOfProjectiles ? numProj / 2 : (numProj - 1) / 2;
+                            int otherCentralProjectile = evenNumberOfProjectiles ? centralProjectile - 1 : -1;
+                            float centralScalingAmount = (float)Math.Floor(numProj / (double)centralProjectile) * 0.75f;
+                            float amountToAdd = evenNumberOfProjectiles ? 0.5f : 0f;
                             for (int i = 0; i < numProj; i++)
                             {
+                                float velocityScalar = (evenNumberOfProjectiles && i == otherCentralProjectile) ? 0f : MathHelper.Lerp(0.5f, centralScalingAmount, Math.Abs((i + amountToAdd) - centralProjectile) / (float)centralProjectile);
+                                baseSpeed *= velocityScalar;
                                 offsetAngle = startAngle + deltaAngle * i;
                                 int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), center.X, center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), type, damage, 0f, Main.myPlayer, -2f);
                                 Main.projectile[proj].timeLeft = 600;

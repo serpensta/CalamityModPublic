@@ -610,6 +610,7 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.WallofFleshEye, ProjectileID.EyeLaser), new int[] { 26, 52, 68, 76, 102 } },
                 { new Tuple<int, int>(NPCID.WallofFleshEye, ProjectileID.DeathLaser), new int[] { 36, 72, 88, 96, 132 } },
                 { new Tuple<int, int>(NPCID.WallofFlesh, ProjectileID.DemonSickle), new int[] { 52, 92, 112, 124, 168 } },
+                { new Tuple<int, int>(NPCID.WallofFlesh, ProjectileID.Fireball), new int[] { 36, 72, 88, 96, 132 } },
 
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeGelAttack), new int[] { 60, 120, 136, 152, 210 } },
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeSmash), new int[] { 80, 160, 188, 200, 270 } },

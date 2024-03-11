@@ -107,10 +107,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 else if (npc.type == NPCID.EaterofWorldsHead)
                 {
                     if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1))
-                        calamityGlobalNPC.newAI[0] += 1f;
+                        calamityGlobalNPC.newAI[0] += ((npc.justHit && masterMode) ? 10f : 1f);
 
                     float timer = enrageScale > 0f ? 120f : 180f;
-                    float shootBoost = (0.8f - lifeRatio) * 120f;
+                    float shootBoost = lifeRatio * 120f;
                     timer += shootBoost;
 
                     if (enrageScale >= 2f)
@@ -318,6 +318,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
                     }
                 }
+
                 if (freeMoveAnyway)
                     inTiles = true;
             }
@@ -343,8 +344,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (masterMode)
             {
-                segmentVelocity += 2f;
-                segmentAcceleration += 0.04f;
+                segmentVelocity += (npc.justHit ? 8f : 2f);
+                segmentAcceleration += (npc.justHit ? 0.16f : 0.04f);
             }
 
             if (Main.getGoodWorld)
