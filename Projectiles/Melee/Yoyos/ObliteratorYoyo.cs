@@ -57,7 +57,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
             {
                 if (time == 1)
                 {
-                    GFB = SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/BoomBoomKawai") with { IsLooped = true });
+                    GFB = SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/BoomBoomKawaii") with { IsLooped = true });
                     GFBCounter++;
                 }
                 if (time % 30 == 0 && GFBCounter > 0)

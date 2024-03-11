@@ -72,7 +72,7 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.scale = 0.1f;
                 for (int i = 0; i < 2; i++)
                 {
-                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Red, 1.45f, 0, 120, false);
+                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.3f), 1.45f, 0, 120, false);
                     GeneralParticleHandler.SpawnParticle(bloom);
                 }
                 Particle bloom2 = new BloomParticle(Projectile.Center, Vector2.Zero, Color.White, 1.35f, 0, 120, false);
@@ -95,7 +95,7 @@ namespace CalamityMod.Projectiles.Boss
                     for (int i = 0; i < 4; i++)
                     {
                         Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
-                        GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center + sparkVel * 2 * (Projectile.scale * 5), sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f) - Projectile.scale * 1.5f, Color.Red, true, true);
+                        GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center + sparkVel * 2 * (Projectile.scale * 5), sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f) - Projectile.scale * 1.5f, Color.Lerp(Color.Red, Color.Magenta, 0.5f), true, true);
                         GeneralParticleHandler.SpawnParticle(orb);
                     }
                 }

@@ -192,17 +192,14 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             {
                 Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(2f, 2f), 0, 0.03f, 0.005f, 8);
                 GeneralParticleHandler.SpawnParticle(pulse);
-                Particle pulse2 = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(2f, 2f), 0, 0.025f, 0.005f, 8);
+                Particle pulse2 = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.3f), new Vector2(2f, 2f), 0, 0.025f, 0.005f, 8);
                 GeneralParticleHandler.SpawnParticle(pulse2);
             }
             if (timer >= shootRate - 35)
             {
-                for (int i = 0; i < 2; i++)
-                {
-                    Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * 5f;
-                    GlowOrbParticle spark2 = new GlowOrbParticle(NPC.Center + shootVelocity * 7, (shootVelocity * Main.rand.NextFloat(0.6f, 1.1f)) * 3.3f + NPC.velocity, false, 10, Main.rand.NextFloat(0.55f, 0.6f), Color.Red);
-                    GeneralParticleHandler.SpawnParticle(spark2);
-                }
+                Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * 5f;
+                GlowOrbParticle spark2 = new GlowOrbParticle(NPC.Center + shootVelocity * 7, (shootVelocity * Main.rand.NextFloat(0.6f, 1.1f)) * 1.8f + NPC.velocity * 0.5f, false, 15, Main.rand.NextFloat(0.65f, 0.7f), Main.rand.NextBool() ? Color.Lerp(Color.Red, Color.Magenta, 0.3f) : Color.Red);
+                GeneralParticleHandler.SpawnParticle(spark2);
             }
 
             float distanceFromSCal = Main.getGoodWorld ? 300f : 225f;

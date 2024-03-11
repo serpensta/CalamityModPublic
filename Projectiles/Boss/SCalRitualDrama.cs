@@ -36,7 +36,7 @@ namespace CalamityMod.Projectiles.Boss
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Red, 0f, 0.55f, 270, false);
+                    Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.3f), 0f, 0.55f, 270, false);
                     GeneralParticleHandler.SpawnParticle(bloom);
                 }
                 Particle bloom2 = new BloomParticle(Projectile.Center, Vector2.Zero, Color.White, 0f, 0.5f, 270, false);

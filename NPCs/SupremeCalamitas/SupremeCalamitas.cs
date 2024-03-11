@@ -772,7 +772,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     dustSpawnPosition.X += horizontalSpawnOffset;
 
                     Dust magic = Dust.NewDustPerfect(dustSpawnPosition, 264);
-                    magic.color = Color.Lerp(cirrus ? Color.Pink : Color.Red, cirrus ? Color.Violet : new Color(121, 21, 77), Main.rand.NextFloat(0.8f));
+                    magic.color = Color.Lerp(cirrus ? Color.Pink : Color.Red, cirrus ? Color.Violet : Color.Lerp(Color.Red, Color.Magenta, 0.3f), Main.rand.NextFloat(0.8f));
                     magic.noGravity = true;
                     magic.velocity = Vector2.UnitY * -Main.rand.NextFloat(5f, 9f);
                     magic.scale = 1f + NPC.velocity.Y * 0.35f;
@@ -858,7 +858,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                 Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
                 GeneralParticleHandler.SpawnParticle(pulse);
-                Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : new Color(121, 21, 77), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Lerp(Color.Red, Color.Magenta, 0.3f), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
                 GeneralParticleHandler.SpawnParticle(pulse2);
                 for (int i = 0; i < 100; i++)
                 {
@@ -906,7 +906,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
                     GeneralParticleHandler.SpawnParticle(pulse);
-                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : new Color(121, 21, 77), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Lerp(Color.Red, Color.Magenta, 0.3f), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
                     GeneralParticleHandler.SpawnParticle(pulse2);
 
                     SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
@@ -1037,7 +1037,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
                     GeneralParticleHandler.SpawnParticle(pulse);
-                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : new Color(121, 21, 77), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Lerp(Color.Red, Color.Magenta, 0.3f), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
                     GeneralParticleHandler.SpawnParticle(pulse2);
 
                     SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
@@ -1162,7 +1162,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
                     GeneralParticleHandler.SpawnParticle(pulse);
-                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : new Color(121, 21, 77), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Lerp(Color.Red, Color.Magenta, 0.3f), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
                     GeneralParticleHandler.SpawnParticle(pulse2);
 
                     SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
@@ -1200,7 +1200,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalAltarSummon") with { Pitch = 0.3f }, player.Center);
                         for (int i = 0; i < 2; i++)
                         {
-                            Particle bloom = new BloomParticle(spawnSpot, Vector2.Zero, Color.Red, 0f, 1.45f, 240, false);
+                            Particle bloom = new BloomParticle(spawnSpot, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.3f), 0f, 1.45f, 240, false);
                             GeneralParticleHandler.SpawnParticle(bloom);
                         }
                         Particle bloom2 = new BloomParticle(spawnSpot, Vector2.Zero, Color.White, 0f, 1.35f, 240, false);
@@ -1217,7 +1217,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         for (int i = 0; i < 40; i++)
                         {
                             Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
-                            GlowOrbParticle orb = new GlowOrbParticle(safeBox.Center() + sparkVel * 2, sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f), cirrus ? Color.Magenta : Color.Red, true, true);
+                            GlowOrbParticle orb = new GlowOrbParticle(safeBox.Center() + sparkVel * 2, sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f), cirrus ? Color.Magenta : Color.Lerp(Color.Red, Color.Magenta, 0.3f), true, true);
                             GeneralParticleHandler.SpawnParticle(orb);
                         }
 
@@ -1316,7 +1316,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
                     GeneralParticleHandler.SpawnParticle(pulse);
-                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : new Color(121, 21, 77), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
+                    Particle pulse2 = new DirectionalPulseRing(NPC.Center, Vector2.Zero, cirrus ? Color.Pink : Color.Lerp(Color.Red, Color.Magenta, 0.3f), new Vector2(1f, 1f), 0, 0.05f, 4f, 18);
                     GeneralParticleHandler.SpawnParticle(pulse2);
 
                     SoundEngine.PlaySound(BulletHellEndSound, NPC.Center);
@@ -2019,7 +2019,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                 for (int i = 0; i < 9; i++) // fireblasts pre laugh
                                 {
                                     Vector2 velOffset = NPC.DirectionTo(player.Center).RotatedByRandom(0.6) * Main.rand.NextFloat(5f, 13f);
-                                    GlowOrbParticle spark2 = new GlowOrbParticle(projectileSpawn + velOffset * 2f, velOffset * 0.7f, false, 30, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? new Color(121, 21, 77) : Color.Red);
+                                    GlowOrbParticle spark2 = new GlowOrbParticle(projectileSpawn + velOffset * 2f, velOffset * 0.7f, false, 30, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? Color.Lerp(Color.Red, Color.Magenta, 0.3f) : Color.Red);
                                     GeneralParticleHandler.SpawnParticle(spark2);
                                 }
 
@@ -2038,7 +2038,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                 for (int i = 0; i < 9; i++)
                                 {
                                     Vector2 velOffset = NPC.DirectionTo(player.Center).RotatedByRandom(0.6) * Main.rand.NextFloat(5f, 13f);
-                                    GlowOrbParticle spark2 = new GlowOrbParticle(projectileSpawn + velOffset * 2f, velOffset * 0.8f, false, 30, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? new Color(121, 21, 77) : Color.Red);
+                                    GlowOrbParticle spark2 = new GlowOrbParticle(projectileSpawn + velOffset * 2f, velOffset * 0.8f, false, 30, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? Color.Lerp(Color.Red, Color.Magenta, 0.3f) : Color.Red);
                                     GeneralParticleHandler.SpawnParticle(spark2);
                                 }
 
@@ -2060,7 +2060,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                     for (int i = 0; i < 6; i++) // Spread dust for pre laugh floating
                                     {
                                         Vector2 dustVel = (projectileVelocity * 2).RotatedByRandom(0.9) * (Main.rand.NextFloat(0.5f, 1.9f));
-                                        GlowOrbParticle orb = new GlowOrbParticle(projectileSpawn, dustVel, false, 15, Main.rand.NextFloat(0.65f, 0.9f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : new Color(121, 21, 77));
+                                        GlowOrbParticle orb = new GlowOrbParticle(projectileSpawn, dustVel, false, 15, Main.rand.NextFloat(0.65f, 0.9f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.3f));
                                         GeneralParticleHandler.SpawnParticle(orb);
                                     }
 
@@ -2241,7 +2241,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                 for (int i = 0; i < 6; i++)
                                 {
                                     Vector2 velOffset = NPC.DirectionTo(player.Center).RotatedByRandom(0.6) * Main.rand.NextFloat(5f, 13f);
-                                    PointParticle spark2 = new PointParticle(handPosition + velOffset * 2f, velOffset * 1.5f, false, 18, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? new Color(121, 21, 77) : Color.Red);
+                                    PointParticle spark2 = new PointParticle(handPosition + velOffset * 2f, velOffset * 1.5f, false, 18, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? Color.Lerp(Color.Red, Color.Magenta, 0.3f) : Color.Red);
                                     GeneralParticleHandler.SpawnParticle(spark2);
                                 }
 
@@ -2258,7 +2258,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         if (Main.rand.NextBool()) // Hand spray magic
                         {
-                            GlowOrbParticle orb = new GlowOrbParticle(handPosition, new Vector2(0, -6).RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.4f), false, 15, Main.rand.NextFloat(0.85f, 1.2f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : new Color(121, 21, 77), true, true);
+                            GlowOrbParticle orb = new GlowOrbParticle(handPosition, new Vector2(0, -6).RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.4f), false, 15, Main.rand.NextFloat(0.85f, 1.2f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.3f), true, true);
                             GeneralParticleHandler.SpawnParticle(orb);
                         }
 
@@ -2309,7 +2309,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                             for (int i = 0; i < 25; i++)
                             {
                                 Vector2 velOffset = NPC.DirectionTo(player.Center).RotatedByRandom(0.6) * Main.rand.NextFloat(5f, 13f);
-                                GlowOrbParticle spark2 = new GlowOrbParticle(handPosition + velOffset * 2f, velOffset * 1.5f, false, 9, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? new Color(121, 21, 77) : Color.Red);
+                                GlowOrbParticle spark2 = new GlowOrbParticle(handPosition + velOffset * 2f, velOffset * 1.5f, false, 9, Main.rand.NextFloat(0.4f, 0.65f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? Color.Lerp(Color.Red, Color.Magenta, 0.3f) : Color.Red);
                                 GeneralParticleHandler.SpawnParticle(spark2);
                             }
                             NPC.localAI[1] = 0f;
@@ -2627,7 +2627,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                     for (int i = 0; i < 7; i++) // Spred dust while floating post laugh
                                     {
                                         Vector2 dustVel = (projectileVelocity * 2).RotatedByRandom(0.9) * (Main.rand.NextFloat(0.5f, 1.9f));
-                                        GlowOrbParticle orb = new GlowOrbParticle(projectileSpawn, dustVel, false, 15, Main.rand.NextFloat(0.75f, 1f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : new Color(121, 21, 77), true, true);
+                                        GlowOrbParticle orb = new GlowOrbParticle(projectileSpawn, dustVel, false, 15, Main.rand.NextFloat(0.75f, 1f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.3f), true, true);
                                         GeneralParticleHandler.SpawnParticle(orb);
                                     }
 
@@ -2779,7 +2779,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                                 for (int i = 0; i < 9; i++)
                                 {
                                     Vector2 velOffset = NPC.DirectionTo(player.Center).RotatedByRandom(0.6) * Main.rand.NextFloat(5f, 13f);
-                                    PointParticle spark2 = new PointParticle(handPosition + velOffset * 2f, velOffset * 1.5f, false, 9, Main.rand.NextFloat(0.5f, 0.75f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? new Color(121, 21, 77) : Color.Red);
+                                    PointParticle spark2 = new PointParticle(handPosition + velOffset * 2f, velOffset * 1.5f, false, 9, Main.rand.NextFloat(0.5f, 0.75f), cirrus ? Color.HotPink : Main.rand.NextBool(3) ? Color.Lerp(Color.Red, Color.Magenta, 0.3f) : Color.Red);
                                     GeneralParticleHandler.SpawnParticle(spark2);
                                 }
 
@@ -2796,7 +2796,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         if (Main.rand.NextBool()) // Hand visual post laugh
                         {
-                            GlowOrbParticle orb = new GlowOrbParticle(handPosition, new Vector2(0, -6).RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.4f), false, 15, Main.rand.NextFloat(0.95f, 1.45f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : new Color(121, 21, 77), true, true);
+                            GlowOrbParticle orb = new GlowOrbParticle(handPosition, new Vector2(0, -6).RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.4f), false, 15, Main.rand.NextFloat(0.95f, 1.45f), cirrus ? Color.Magenta : Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.3f), true, true);
                             GeneralParticleHandler.SpawnParticle(orb);
                         }
 
@@ -3457,7 +3457,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             if (!NPC.dontTakeDamage && willCharge && NPC.ai[1] != 2f)
             {
                 forcefieldColor = Color.Magenta;
-                secondaryForcefieldColor = Color.Lerp(secondaryForcefieldColor, new Color(121, 21, 77), 0.7f);
+                secondaryForcefieldColor = Color.Lerp(secondaryForcefieldColor, Color.Lerp(Color.Red, Color.Magenta, 0.3f), 0.7f);
             }
             else
                 forcefieldColor = Color.DarkViolet;
