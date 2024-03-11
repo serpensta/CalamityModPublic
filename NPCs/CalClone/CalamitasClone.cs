@@ -184,7 +184,6 @@ namespace CalamityMod.NPCs.CalClone
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CalamitasCloneBag>()));
-            npcLoot.Add(ItemID.BrokenHeroSword);
 
             // Normal drops: Everything that would otherwise be in the bag
             var normalOnly = npcLoot.DefineNormalOnlyDropSet();
