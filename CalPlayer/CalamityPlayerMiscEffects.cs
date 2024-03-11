@@ -1707,15 +1707,17 @@ namespace CalamityMod.CalPlayer
 
             // Raider Talisman bonus
             if (raiderTalisman && !StealthStrikeAvailable())
-            {
                 Player.GetCritChance<ThrowingDamageClass>() += raiderCritBonus;
-            }
 
             if (kamiBoost)
                 Player.GetDamage<GenericDamageClass>() += 0.15f;
 
             if (avertorBonus)
                 Player.GetDamage<GenericDamageClass>() += 0.1f;
+
+            // Reduce Ichor debuff defense reduction from -15 to -10
+            if (Player.ichor)
+                Player.statDefense += 5;
 
             // Fairy Boots bonus
             if (fairyBoots)

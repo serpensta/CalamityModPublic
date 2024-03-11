@@ -3183,9 +3183,13 @@ namespace CalamityMod.NPCs
         #endregion
 
         #region Strike NPC
-        // Incoming defense to this function is already affected by the vanilla debuffs Ichor (-15) and Betsy's Curse (-40), and cannot be below zero.
+        // Incoming defense to this function is already affected by the vanilla debuffs Ichor (-10) and Betsy's Curse (-40), and cannot be below zero.
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
+            // Reduce ichor debuff defense reduction from -15 to -10.
+            if (npc.ichor)
+                modifiers.Defense.Flat += 5;
+
             // Apply armor penetration based on Calamity debuffs. The hit system manages the sequencing.
             // Ozzatron 05JAN2023: fixed doubled armor pen, this time for real
             int defenseReduction = (marked > 0 && DR <= 0f ? MarkedforDeath.DefenseReduction : 0) + (wither > 0 ? WitherDebuff.DefenseReduction : 0) + miscDefenseLoss;
