@@ -1353,7 +1353,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.GolemHeadFree)
             {
-                npc.lifeMax = (int)Math.Round(npc.lifeMax * 2D);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.7);
                 npc.dontTakeDamage = false;
             }
             else if (npc.type == NPCID.HallowBoss)

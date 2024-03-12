@@ -54,8 +54,8 @@ BallisticPoisonBomb: {
 	DisplayName: Ballistic Poison Bomb
 	Tooltip:
 		'''
-		Throws a sticky bomb that explodes into spikes and poison clouds
-		Stealth strikes throw three at once
+		Throws a sticky bomb that explodes into spikes and venomous clouds
+		Stealth strikes erupt into more clouds with a longer lasting venom
 		'''
 }
 
