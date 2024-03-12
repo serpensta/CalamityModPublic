@@ -677,7 +677,7 @@ Serpentine: {
 
 ShadecrystalBarrage: {
 	DisplayName: Shadecrystal Barrage
-	Tooltip: Summons rapid fire shadecrystals, can shoot two crystals at once
+	Tooltip: Summons bursts of shadecrystals that can home in on enemies
 }
 
 ShaderainStaff: {
@@ -737,7 +737,7 @@ StaffofBlushie: {
 
 StarShower: {
 	DisplayName: Star Shower
-	Tooltip: Casts a spread of astral stars at the mouse cursor
+	Tooltip: Casts a spread of astral stars from the sky that converge at the cursor
 }
 
 SubsumingVortex: {
