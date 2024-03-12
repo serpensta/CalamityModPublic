@@ -1594,6 +1594,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                 float spazmatismShadowFireballSpeed = 6f;
                                 spazmatismShadowFireballSpeed += 2f * enrageScale;
+                                float timeForFlamethrowerToReachMaxVelocity = 60f;
+                                float flamethrowerSpeedScalar = MathHelper.Clamp(npc.ai[2] / timeForFlamethrowerToReachMaxVelocity, 0f, 1f);
+                                spazmatismShadowFireballSpeed = MathHelper.Lerp(0.1f, spazmatismShadowFireballSpeed, flamethrowerSpeedScalar);
                                 int type = npc.ai[3] % 2f == 0f ? ProjectileID.EyeFire : ModContent.ProjectileType<Shadowflamethrower>();
                                 int damage = npc.GetProjectileDamage(type);
 
@@ -2313,14 +2316,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(10f, 10f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 9f + Main.rand.NextVector2CircularEdge(1f, 1f);
                             int numProj = 3;
                             int spread = 8;
                             float rotation = MathHelper.ToRadians(spread);
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                Main.projectile[proj].tileCollide = false;
                             }
                         }
                     }
@@ -2955,8 +2959,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(15f, 15f);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 25f + Main.rand.NextVector2CircularEdge(5f, 5f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer);
+                            Main.projectile[proj].tileCollide = false;
                         }
                     }
                 }
@@ -3096,6 +3101,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             npc.localAI[1] = 0f;
                             float num487 = 6f + (Main.expertMode ? MathHelper.Lerp(0f, Main.masterMode ? 3f : 1.5f, 1f - (npc.life / (float)npc.lifeMax) / phase2LifeRatio) : 0f);
+                            float timeForFlamethrowerToReachMaxVelocity = 60f;
+                            float flamethrowerSpeedScalar = MathHelper.Clamp(npc.ai[2] / timeForFlamethrowerToReachMaxVelocity, 0f, 1f);
+                            num487 = MathHelper.Lerp(0.1f, num487, flamethrowerSpeedScalar);
                             int type = ProjectileID.EyeFire;
                             int damage = npc.GetProjectileDamage(type);
 
