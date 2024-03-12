@@ -144,7 +144,7 @@ namespace CalamityMod.CalPlayer
             if (maxCooldownDurationDamageValue <= 0)
                 maxCooldownDurationDamageValue = 1;
 
-            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
             if (Player.whoAmI == Main.myPlayer && abyssalMirror && !eclipseMirror)
             {
@@ -188,7 +188,7 @@ namespace CalamityMod.CalPlayer
             if (maxCooldownDurationDamageValue <= 0)
                 maxCooldownDurationDamageValue = 1;
 
-            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
             if (Player.whoAmI == Main.myPlayer && eclipseMirror)
             {
@@ -909,7 +909,7 @@ namespace CalamityMod.CalPlayer
                     if (maxCooldownDurationDamageValue <= 0)
                         maxCooldownDurationDamageValue = 1;
 
-                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
                     // The Evolution
                     if (evolution)
@@ -1441,7 +1441,7 @@ namespace CalamityMod.CalPlayer
                     if (maxCooldownDurationDamageValue <= 0)
                         maxCooldownDurationDamageValue = 1;
 
-                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
                     if (daedalusReflect && !evolution)
                     {
@@ -1537,7 +1537,7 @@ namespace CalamityMod.CalPlayer
                 if (maxCooldownDurationDamageValue <= 0)
                     maxCooldownDurationDamageValue = 1;
 
-                float cooldownDurationScalar = MathHelper.Clamp((info.Damage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+                float cooldownDurationScalar = MathHelper.Clamp((info.Damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
                 // Re-implementation of vanilla item Black Belt as a consumable dodge
                 if (Player.whoAmI == Main.myPlayer && Player.blackBelt)
