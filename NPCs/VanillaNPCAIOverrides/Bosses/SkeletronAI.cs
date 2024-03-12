@@ -1249,7 +1249,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         numHands++;
                 }
 
-                npc.defense += numHands * (Main.masterMode ? 50 : 25);
+                npc.defense += numHands * (Main.masterMode ? 15 : 10);
                 npc.Calamity().CurrentlyIncreasingDefenseOrDR = numHands > 0;
                 npc.chaseable = numHands == 0;
                 if ((numHands < maxHands || (double)npc.life < (double)npc.lifeMax * 0.75 || Main.masterMode) && npc.ai[1] == 0f)
@@ -1411,7 +1411,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.damage = (int)Math.Round(npc.defDamage * 1.3);
                 if (Main.expertMode)
                 {
-                    num175 = Main.masterMode ? 4f : 3.5f;
+                    num175 = Main.masterMode ? (5f - numHands * 0.5f) : 3.5f;
                     if (num174 > 150f)
                         num175 *= 1.05f;
 

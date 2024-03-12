@@ -2426,7 +2426,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.localAI[0] += 1f;
-                    if (npc.localAI[0] > (Main.masterMode ? 160f : Main.expertMode ? 180f : 200f))
+                    if (npc.localAI[0] > (Main.masterMode ? 80f : Main.expertMode ? 140f : 200f))
                     {
                         npc.localAI[0] = 0f;
                         float num562 = 8f;
@@ -2527,7 +2527,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
                     npc.localAI[0] += 1f;
-                    if (npc.localAI[0] > (Main.masterMode ? 60f : Main.expertMode ? 70f : 80f))
+                    if (npc.localAI[0] > (Main.masterMode ? 40f : Main.expertMode ? 60f : 80f))
                     {
                         npc.localAI[0] = 0f;
                         float num569 = 10f;
@@ -2709,7 +2709,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.localAI[0] += 1f;
-                    if (npc.localAI[0] > (Main.masterMode ? 80f : Main.expertMode ? 110f : 140f))
+                    if (npc.localAI[0] > (Main.masterMode ? 60f : Main.expertMode ? 100f : 140f))
                     {
                         npc.localAI[0] = 0f;
                         float num548 = 12f;
