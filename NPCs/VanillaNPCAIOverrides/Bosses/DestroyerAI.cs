@@ -1353,13 +1353,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 flag2 = false;
                 npc.velocity.Y += 1f;
-                if ((double)npc.position.Y > Main.worldSurface * 16.0)
+                if ((double)npc.position.Y > Main.worldSurface * 16D)
                 {
                     npc.velocity.Y += 1f;
                     num18 *= 2f;
                 }
 
-                if ((double)npc.position.Y > Main.rockLayer * 16.0)
+                if ((double)npc.position.Y > Main.rockLayer * 16D)
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -1373,8 +1373,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float num20 = 0.15f;
             if (Main.expertMode)
             {
-                num19 = Main.masterMode ? 0.15f : 0.125f;
-                num20 = Main.masterMode ? 0.225f : 0.1875f;
+                num19 = Main.masterMode ? 0.2f : 0.15f;
+                num20 = Main.masterMode ? 0.3f : 0.225f;
             }
 
             if (Main.getGoodWorld)
