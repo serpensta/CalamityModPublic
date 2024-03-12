@@ -107,6 +107,7 @@ namespace CalamityMod.Projectiles.Melee
             }
             return new Color(255, 255, 255, 100);
         }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Projectile.numHits > 0)
@@ -114,6 +115,7 @@ namespace CalamityMod.Projectiles.Melee
             if (Projectile.damage < 1)
                 Projectile.damage = 1;
         }
+
         public override void OnKill(int timeLeft)
         {
             Projectile.damage = (int)(Projectile.damage / VoidEdge.TotalProjectilesPerSwing);
