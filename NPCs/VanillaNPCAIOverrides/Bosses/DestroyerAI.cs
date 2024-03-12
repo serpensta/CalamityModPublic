@@ -101,7 +101,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float enrageScale = bossRush ? 1f : 0f;
             if (Main.dayTime || bossRush)
             {
-                npc.Calamity().CurrentlyEnraged = !bossRush;
+                calamityGlobalNPC.CurrentlyEnraged = !bossRush;
                 enrageScale += 2f;
             }
 
@@ -627,7 +627,84 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.localAI[1] = 0f;
 
             if (npc.type != NPCID.TheDestroyerBody || !probeLaunched)
-                Lighting.AddLight((int)(npc.Center.X / 16f), (int)(npc.Center.Y / 16f), flyAtTarget ? 0.05f : 0.3f, 0.1f, flyAtTarget ? 0.3f : 0.05f);
+            {
+                Vector3 lightColor = Color.Red.ToVector3();
+                int x = (int)((npc.position.X - 8f) / 16f);
+                int x2 = (int)((npc.position.X + npc.width + 8f) / 16f);
+                int y = (int)((npc.position.Y - 8f) / 16f);
+                int y2 = (int)((npc.position.Y + npc.height + 8f) / 16f);
+                for (int l = x; l <= x2; l++)
+                {
+                    for (int m = y; m <= y2; m++)
+                    {
+                        if (Lighting.Brightness(l, m) == 0f)
+                            lightColor = Color.Black.ToVector3();
+                    }
+                }
+
+                if (lightColor != Color.Black.ToVector3())
+                {
+                    // Light colors
+                    Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
+                    Vector3 flightColor = new Vector3(0.05f, 0.1f, 0.3f);
+                    Vector3 segmentColor = (flyAtTarget ? flightColor : groundColor) * 0.5f;
+                    Vector3 telegraphColor = groundColor;
+
+                    // Telegraph for the laser breath and body lasers
+                    float telegraphProgress = 0f;
+                    if (calamityGlobalNPC.destroyerLaserColor != -1)
+                    {
+                        if (npc.type == NPCID.TheDestroyer && spitLaserSpreads)
+                        {
+                            float telegraphGateValue = DeathModeLaserBreathGateValue - LaserTelegraphTime;
+                            if (calamityGlobalNPC.newAI[0] > telegraphGateValue)
+                            {
+                                switch (calamityGlobalNPC.destroyerLaserColor)
+                                {
+                                    default:
+                                    case 0:
+                                        break;
+
+                                    case 1:
+                                        telegraphColor = new Vector3(0.1f, 0.3f, 0.05f);
+                                        break;
+
+                                    case 2:
+                                        telegraphColor = new Vector3(0.05f, 0.2f, 0.2f);
+                                        break;
+                                }
+                                telegraphProgress = MathHelper.Clamp((calamityGlobalNPC.newAI[0] - telegraphGateValue) / LaserTelegraphTime, 0f, 1f);
+                            }
+                        }
+                        else if (npc.type == NPCID.TheDestroyerBody)
+                        {
+                            float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
+                            float bodySegmentTime = npc.ai[0] * 30f;
+                            float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
+                            if (calamityGlobalNPC.newAI[0] > shootProjectileGateValue - LaserTelegraphTime)
+                            {
+                                switch (calamityGlobalNPC.destroyerLaserColor)
+                                {
+                                    default:
+                                    case 0:
+                                        break;
+
+                                    case 1:
+                                        telegraphColor = new Vector3(0.1f, 0.3f, 0.05f);
+                                        break;
+
+                                    case 2:
+                                        telegraphColor = new Vector3(0.05f, 0.2f, 0.2f);
+                                        break;
+                                }
+                                telegraphProgress = MathHelper.Clamp((calamityGlobalNPC.newAI[0] - shootProjectileGateValue) / LaserTelegraphTime, 0f, 1f);
+                            }
+                        }
+                    }
+
+                    Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor, telegraphProgress));
+                }
+            }
 
             // Max velocity
             float segmentVelocity = masterMode ? 20f : 16f;
@@ -1201,7 +1278,45 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (!flag2)
             {
                 if (npc.type != NPCID.TheDestroyerBody || npc.ai[2] != 1f)
-                    Lighting.AddLight((int)(npc.Center.X / 16f), (int)(npc.Center.Y / 16f), 0.3f, 0.1f, 0.05f);
+                {
+                    Vector3 lightColor = Color.Red.ToVector3();
+                    int x = (int)((npc.position.X - 8f) / 16f);
+                    int x2 = (int)((npc.position.X + npc.width + 8f) / 16f);
+                    int y = (int)((npc.position.Y - 8f) / 16f);
+                    int y2 = (int)((npc.position.Y + npc.height + 8f) / 16f);
+                    for (int l = x; l <= x2; l++)
+                    {
+                        for (int m = y; m <= y2; m++)
+                        {
+                            if (Lighting.Brightness(l, m) == 0f)
+                                lightColor = Color.Black.ToVector3();
+                        }
+                    }
+
+                    if (lightColor != Color.Black.ToVector3())
+                    {
+                        // Light colors
+                        Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
+                        Vector3 segmentColor = groundColor * 0.5f;
+                        Vector3 telegraphColor = groundColor;
+
+                        // Telegraph for the laser breath and body lasers
+                        float telegraphProgress = 0f;
+                        if (npc.Calamity().destroyerLaserColor != -1)
+                        {
+                            if (npc.type == NPCID.TheDestroyerBody)
+                            {
+                                float shootProjectileTime = Main.masterMode ? 500f : Main.expertMode ? 700f : 900f;
+                                float bodySegmentTime = npc.ai[0] * 30f;
+                                float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
+                                if (npc.localAI[0] > shootProjectileGateValue - LaserTelegraphTime)
+                                    telegraphProgress = MathHelper.Clamp((npc.localAI[0] - shootProjectileGateValue) / LaserTelegraphTime, 0f, 1f);
+                            }
+                        }
+
+                        Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor, telegraphProgress));
+                    }
+                }
 
                 npc.localAI[1] = 1f;
                 if (npc.type == NPCID.TheDestroyer)

@@ -6733,7 +6733,7 @@ namespace CalamityMod.NPCs
 
                     // Light colors
                     Color groundColor = new Color(128, 25, 25, 0) * (1f - npc.alpha / 255f);
-                    Color flightColor = new Color(25, 25, 128, 0) * (1f - npc.alpha / 255f);
+                    Color flightColor = (CalamityWorld.revenge || BossRushEvent.BossRushActive) ? (new Color(25, 25, 128, 0) * (1f - npc.alpha / 255f)) : groundColor;
                     Color segmentColor = ((newAI[3] >= 900f && destroyerLifeRatio < 0.5f) || (newAI[1] < 600f && newAI[1] > 60f)) ? flightColor : groundColor;
                     Color telegraphColor = Color.Red;
 
