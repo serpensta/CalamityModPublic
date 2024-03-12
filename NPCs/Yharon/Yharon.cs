@@ -358,7 +358,7 @@ namespace CalamityMod.NPCs.Yharon
                     safeBox.X = (int)(player.Center.X - (Main.zenithWorld ? 1500f : Main.getGoodWorld ? 1000f : bossRush ? 2000f : revenge ? 3000f : 3500f));
                     safeBox.Y = (int)Main.topWorld;
                     safeBox.Width = Main.zenithWorld ? 3000 : Main.getGoodWorld ? 2000 : bossRush ? 4000 : revenge ? 6000 : 7000;
-                    safeBox.Height = (Main.maxTilesY - 200) * 16;
+                    safeBox.Height = Main.maxTilesY * 16;
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X + (Main.zenithWorld ? 1500f : Main.getGoodWorld ? 1000f : bossRush ? 2000f : revenge ? 3000f : 3500f), player.Center.Y + 100f, 0f, 0f, ModContent.ProjectileType<SkyFlareRevenge>(), 0, 0f, Main.myPlayer);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X - (Main.zenithWorld ? 1500f : Main.getGoodWorld ? 1000f : bossRush ? 2000f : revenge ? 3000f : 3500f), player.Center.Y + 100f, 0f, 0f, ModContent.ProjectileType<SkyFlareRevenge>(), 0, 0f, Main.myPlayer);
                 }
