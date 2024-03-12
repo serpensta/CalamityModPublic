@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.CalPlayer;
+using CalamityMod.Dusts;
 using CalamityMod.Events;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.SupremeCalamitas;
@@ -13,22 +13,26 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Graphics.Effects;
-using Terraria.GameContent;
-using CalamityMod.Dusts;
-using CalamityMod.Items.Weapons.Summon;
 
 namespace CalamityMod.Projectiles.Boss
 {
     public class BrimstoneMonster : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Boss";
+
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterSpawn");
         public static readonly SoundStyle DroneSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterDrone");
         public SlotId RumbleSlot;
         public Texture2D screamTex;
+
+        internal static readonly float CircularHitboxRadius = 170f;
+        public static int MinimumDamagePerFrame = 4;
+        public static int MaximumDamagePerFrame = 16;
+        public static float AdrenalineLossPerFrame = 0.04f;
 
         private float speedAdd = 0f;
         private float speedLimit = 0f;
@@ -241,7 +245,86 @@ namespace CalamityMod.Projectiles.Boss
             }
         }
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, 170f * Projectile.scale * Projectile.Opacity, targetHitbox);
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, CircularHitboxRadius * Projectile.scale * Projectile.Opacity, targetHitbox);
+
+        // This function serves double duty.
+        // It both ensures that Brimstone Monsters cannot deal damage except at full opacity,
+        // and deals their unavoidable overlap damage in lieu of a standard projectile hit.
+        public override bool CanHitPlayer(Player player)
+        {
+            // If the Brimstone Monster is not yet fully formed, do nothing.
+            if (Projectile.Opacity < 1f)
+                return false;
+
+            // If Journey God Mode is active, or any effects which simulate, provide or equivalent to it, do not harm the player.
+            if (player.creativeGodMode)
+                return true;
+
+            // Applies Vulnerability Hex and/or the effects of Supreme Cirrus' HAGE faces.
+            OnHitPlayer_Internal(player);
+
+            // Compute distance for direct health reduction from overlap.
+            float distSQ = Projectile.DistanceSQ(player.Center);
+            float radiusSQ = CircularHitboxRadius * CircularHitboxRadius * Projectile.scale * Projectile.scale;
+            int healthToDrain = (int)MathHelper.Lerp(MaximumDamagePerFrame, MinimumDamagePerFrame, distSQ / radiusSQ);
+            if (healthToDrain < MinimumDamagePerFrame)
+                healthToDrain = MinimumDamagePerFrame;
+
+            player.statLife -= healthToDrain;
+
+            // Drain Adrenaline extremely rapidly. 4% of current Adrenaline is lost per frame.
+            CalamityPlayer modPlayer = player.Calamity();
+            if (modPlayer.AdrenalineEnabled)
+                modPlayer.adrenaline *= 1f - AdrenalineLossPerFrame;
+
+            // If this direct health reduction brings the player's health below zero, claim the Brimstone Monster killed them.
+            if (Main.myPlayer == player.whoAmI && player.statLife <= 0)
+                player.KillMe(PlayerDeathReason.ByProjectile(player.whoAmI, Projectile.whoAmI), 1000, -1);
+
+            // Still do not allow a standard hit, but the player should surely be feeling the pain soon...
+            return false;
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (info.Damage <= 0 || Projectile.Opacity != 1f)
+                return;
+
+            OnHitPlayer_Internal(target);
+        }
+
+        private static void OnHitPlayer_Internal(Player target)
+        {
+            target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 360, true);
+
+            // Remove all positive buffs from the player if they're hit by HAGE while Cirrus is alive.
+            if (CalamityGlobalNPC.SCal != -1)
+            {
+                if (Main.npc[CalamityGlobalNPC.SCal].active)
+                {
+                    if (Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas>().cirrus)
+                    {
+                        for (int l = 0; l < Player.MaxBuffs; l++)
+                        {
+                            int buffType = target.buffType[l];
+                            if (target.buffTime[l] > 0 && CalamityLists.amalgamBuffList.Contains(buffType))
+                            {
+                                target.DelBuff(l);
+                                l--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumblePlaying) && RumblePlaying.IsPlaying)
+            {
+                RumblePlaying?.Stop();
+            }
+        }
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -307,42 +390,6 @@ namespace CalamityMod.Projectiles.Boss
             return false;
         }
 
-        public override bool CanHitPlayer(Player target) => Projectile.Opacity == 1f;
-
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            if (info.Damage <= 0 || Projectile.Opacity != 1f)
-                return;
-
-            target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 300, true);
-
-            // Remove all positive buffs from the player if they're hit by HAGE while Cirrus is alive.
-            if (CalamityGlobalNPC.SCal != -1)
-            {
-                if (Main.npc[CalamityGlobalNPC.SCal].active)
-                {
-                    if (Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas>().cirrus)
-                    {
-                        for (int l = 0; l < Player.MaxBuffs; l++)
-                        {
-                            int buffType = target.buffType[l];
-                            if (target.buffTime[l] > 0 && CalamityLists.amalgamBuffList.Contains(buffType))
-                            {
-                                target.DelBuff(l);
-                                l--;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public override void OnKill(int timeLeft)
-        {
-            if (SoundEngine.TryGetActiveSound(RumbleSlot, out var RumblePlaying) && RumblePlaying.IsPlaying)
-            {
-                RumblePlaying?.Stop();
-            }
-        }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindNPCs.Add(index);
