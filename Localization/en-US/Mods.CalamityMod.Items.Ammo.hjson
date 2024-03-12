@@ -76,7 +76,11 @@ GodSlayerSlug: {
 
 HallowPointRound: {
 	DisplayName: Hallow-Point Round
-	Tooltip: ""
+	Tooltip:
+		'''
+		Gallant light deals 6 bonus damage on hit
+		This effect does not occur if the bullets are converted by special guns
+		'''
 }
 
 HolyFireBullet: {
