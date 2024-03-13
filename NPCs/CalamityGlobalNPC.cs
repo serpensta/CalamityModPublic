@@ -1210,7 +1210,11 @@ namespace CalamityMod.NPCs
                 case NPCID.CultistDragonBody4:
                 case NPCID.CultistDragonHead:
                 case NPCID.CultistDragonTail:
-                    npc.lifeMax = 40000;
+                    npc.lifeMax = 20000;
+                    break;
+
+                case NPCID.AncientCultistSquidhead:
+                    npc.lifeMax = 4000;
                     break;
 
                 case NPCID.DukeFishron:
@@ -1328,7 +1332,7 @@ namespace CalamityMod.NPCs
                 if (npc.type == NPCID.MoonLordCore)
                     npc.npcSlots = 36f;
             }
-            else if (npc.type == NPCID.CultistBoss || (npc.type >= NPCID.CultistDragonHead && npc.type <= NPCID.CultistDragonTail))
+            else if (npc.type == NPCID.CultistBoss || (npc.type >= NPCID.CultistDragonHead && npc.type <= NPCID.CultistDragonTail) || npc.type == NPCID.AncientCultistSquidhead)
             {
                 npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
 

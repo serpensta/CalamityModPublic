@@ -150,6 +150,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.ai[3] += 1f;
                 npc.velocity = Vector2.Zero;
                 npc.netUpdate = true;
+
+                if (!NPC.AnyNPCs(NPCID.AncientCultistSquidhead))
+                    NPC.NewNPC(npc.GetSource_FromAI(), (int)Main.projectile[(int)npc.ai[2]].Center.X, (int)Main.projectile[(int)npc.ai[2]].Center.Y, NPCID.AncientCultistSquidhead);
+
                 Main.projectile[(int)npc.ai[2]].ai[1] = -1f;
                 Main.projectile[(int)npc.ai[2]].netUpdate = true;
             }
@@ -1245,6 +1249,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             int ancientDoomPhaseTime = masterMode ? 30 : 20;
             int ancientDoomAmount = masterMode ? 5 : 3;
 
+            int ritualTimeMax = phase2 ? 240 : 300;
+
             bool flag2 = npc.type == NPCID.CultistBoss;
             bool flag3 = false;
             bool flag4 = false;
@@ -1285,7 +1291,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     flag4 = true;
                 }
             }
-            else if (npc.ai[0] == 5f && npc.ai[1] >= 120f && npc.ai[1] < 420f && npc.justHit)
+            else if (npc.ai[0] == 5f && npc.ai[1] >= 120f && npc.ai[1] < ritualTimeMax && npc.justHit)
             {
                 npc.ai[0] = 0f;
                 npc.ai[1] = 0f;
@@ -1319,6 +1325,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         nPC.HitEffect();
                         nPC.active = false;
                     }
+                }
+
+                if (expertMode)
+                {
+                    if (!NPC.AnyNPCs(NPCID.AncientCultistSquidhead))
+                        NPC.NewNPC(npc.GetSource_FromAI(), (int)Main.projectile[(int)npc.ai[2]].Center.X, (int)Main.projectile[(int)npc.ai[2]].Center.Y, NPCID.AncientCultistSquidhead);
                 }
 
                 Main.projectile[(int)npc.ai[2]].ai[1] = -1f;
@@ -1951,7 +1963,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float num39 = (npc.ai[1] - 90f) / 30f;
                     npc.alpha = 255 - (int)(num39 * 255f);
                 }
-                else if (npc.ai[1] >= 120f && npc.ai[1] < 420f)
+                else if (npc.ai[1] >= 120f && npc.ai[1] < ritualTimeMax)
                 {
                     flag4 = true;
                     npc.alpha = 0;
@@ -1996,7 +2008,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 npc.ai[1] += 1f;
-                if (npc.ai[1] >= 420f)
+                if (npc.ai[1] >= ritualTimeMax)
                 {
                     flag4 = true;
                     npc.ai[0] = 0f;
