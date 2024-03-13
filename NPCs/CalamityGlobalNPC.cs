@@ -6732,8 +6732,8 @@ namespace CalamityMod.NPCs
                         destroyerLifeRatio = Main.npc[npc.realLife].life / (float)Main.npc[npc.realLife].lifeMax;
 
                     // Light colors
-                    Color groundColor = new Color(128, 25, 25, 0) * (1f - npc.alpha / 255f);
-                    Color flightColor = (CalamityWorld.revenge || BossRushEvent.BossRushActive) ? (new Color(25, 25, 128, 0) * (1f - npc.alpha / 255f)) : groundColor;
+                    Color groundColor = new Color(50, 10, 10, 0) * (1f - npc.alpha / 255f);
+                    Color flightColor = (CalamityWorld.revenge || BossRushEvent.BossRushActive) ? (new Color(10, 10, 50, 0) * (1f - npc.alpha / 255f)) : groundColor;
                     Color segmentColor = ((newAI[3] >= 900f && destroyerLifeRatio < 0.5f) || (newAI[1] < 600f && newAI[1] > 60f)) ? flightColor : groundColor;
                     Color telegraphColor = Color.Red;
 
@@ -6768,7 +6768,8 @@ namespace CalamityMod.NPCs
                             float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
                             float bodySegmentTime = npc.ai[0] * 30f;
                             float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                            if (newAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
+                            float telegraphGateValue = shootProjectileGateValue - DestroyerAI.LaserTelegraphTime;
+                            if (newAI[0] > telegraphGateValue)
                             {
                                 switch (destroyerLaserColor)
                                 {
@@ -6784,7 +6785,7 @@ namespace CalamityMod.NPCs
                                         telegraphColor = Color.Cyan;
                                         break;
                                 }
-                                telegraphProgress = MathHelper.Clamp((newAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                                telegraphProgress = MathHelper.Clamp((newAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                             }
                         }
                         else if (npc.type == NPCID.TheDestroyerBody)
@@ -6792,8 +6793,9 @@ namespace CalamityMod.NPCs
                             float shootProjectileTime = Main.masterMode ? 500f : Main.expertMode ? 700f : 900f;
                             float bodySegmentTime = npc.ai[0] * 30f;
                             float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                            if (npc.localAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
-                                telegraphProgress = MathHelper.Clamp((npc.localAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                            float telegraphGateValue = shootProjectileGateValue - DestroyerAI.LaserTelegraphTime;
+                            if (npc.localAI[0] > telegraphGateValue)
+                                telegraphProgress = MathHelper.Clamp((npc.localAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                         }
                     }
 

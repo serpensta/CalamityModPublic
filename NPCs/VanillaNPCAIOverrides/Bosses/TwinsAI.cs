@@ -422,7 +422,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         SoundEngine.PlaySound(SoundID.Item33, npc.Center);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int type = ModContent.ProjectileType<ScavengerLaser>();
+                            int type = npc.ai[1] % 20f == 0f ? ProjectileID.DeathLaser : ModContent.ProjectileType<ScavengerLaser>();
                             int damage = npc.GetProjectileDamage(type);
 
                             // Reduce mech boss projectile damage depending on the new ore progression changes
@@ -436,7 +436,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(12f, 12f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 10f + Main.rand.NextVector2CircularEdge(2f, 2f);
                             int numProj = 2;
                             int spread = 40;
                             float rotation = MathHelper.ToRadians(spread);
@@ -1412,8 +1412,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            float velocity = 16f;
-                            int type = ModContent.ProjectileType<ShadowflameFireball>();
+                            int type = npc.ai[1] % 20f == 0f ? ProjectileID.CursedFlameHostile : ModContent.ProjectileType<ShadowflameFireball>();
                             int damage = npc.GetProjectileDamage(type);
 
                             // Reduce mech boss projectile damage depending on the new ore progression changes
@@ -1427,8 +1426,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(velocity, velocity);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 25f + Main.rand.NextVector2CircularEdge(5f, 5f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Main.projectile[proj].tileCollide = false;
                         }
                     }
                 }
@@ -1512,17 +1512,16 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         spazmatismFlamethrowerFaceDirection = -1;
 
                     Vector2 spazmatismFlamethrowerPos = npc.Center;
-                    float spazmatismFlamethrowerTargetX = Main.player[npc.target].Center.X + (spazmatismFlamethrowerFaceDirection * 180) - spazmatismFlamethrowerPos.X;
+                    int flamethrowerDistance = 180;
+                    float spazmatismFlamethrowerTargetX = Main.player[npc.target].Center.X + (spazmatismFlamethrowerFaceDirection * flamethrowerDistance) - spazmatismFlamethrowerPos.X;
                     float spazmatismFlamethrowerTargetY = Main.player[npc.target].Center.Y - spazmatismFlamethrowerPos.Y;
                     float spazmatismFlamethrowerTargetDist = (float)Math.Sqrt(spazmatismFlamethrowerTargetX * spazmatismFlamethrowerTargetX + spazmatismFlamethrowerTargetY * spazmatismFlamethrowerTargetY);
 
                     if (!NPC.IsMechQueenUp)
                     {
                         // Boost speed if too far from target
-                        if (spazmatismFlamethrowerTargetDist > 300f)
-                            spazmatismFlamethrowerMaxSpeed += 0.5f;
-                        if (spazmatismFlamethrowerTargetDist > 400f)
-                            spazmatismFlamethrowerMaxSpeed += 0.5f;
+                        if (spazmatismFlamethrowerTargetDist > flamethrowerDistance)
+                            spazmatismFlamethrowerMaxSpeed += MathHelper.Lerp(0f, Main.masterMode ? 10f : 6.6f, MathHelper.Clamp((spazmatismFlamethrowerTargetDist - flamethrowerDistance) / 1000f, 0f, 1f));
 
                         if (Main.getGoodWorld)
                         {
@@ -3027,7 +3026,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (!NPC.IsMechQueenUp)
                 {
                     if (num485 > flamethrowerDistance)
-                        num480 += MathHelper.Lerp(0f, Main.masterMode ? 5f : 3.3f, MathHelper.Clamp((num485 - flamethrowerDistance) / 800f, 0f, 1f));
+                        num480 += MathHelper.Lerp(0f, Main.masterMode ? 10f : 6.6f, MathHelper.Clamp((num485 - flamethrowerDistance) / 1000f, 0f, 1f));
 
                     if (Main.getGoodWorld)
                     {

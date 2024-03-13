@@ -647,7 +647,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Light colors
                     Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
                     Vector3 flightColor = new Vector3(0.05f, 0.1f, 0.3f);
-                    Vector3 segmentColor = (flyAtTarget ? flightColor : groundColor) * 0.5f;
+                    Vector3 segmentColor = (flyAtTarget ? flightColor : groundColor) * 0.2f;
                     Vector3 telegraphColor = groundColor;
 
                     // Telegraph for the laser breath and body lasers
@@ -681,7 +681,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
                             float bodySegmentTime = npc.ai[0] * 30f;
                             float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                            if (calamityGlobalNPC.newAI[0] > shootProjectileGateValue - LaserTelegraphTime)
+                            float telegraphGateValue = shootProjectileGateValue - LaserTelegraphTime;
+                            if (calamityGlobalNPC.newAI[0] > telegraphGateValue)
                             {
                                 switch (calamityGlobalNPC.destroyerLaserColor)
                                 {
@@ -697,7 +698,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                         telegraphColor = new Vector3(0.05f, 0.2f, 0.2f);
                                         break;
                                 }
-                                telegraphProgress = MathHelper.Clamp((calamityGlobalNPC.newAI[0] - shootProjectileGateValue) / LaserTelegraphTime, 0f, 1f);
+                                telegraphProgress = MathHelper.Clamp((calamityGlobalNPC.newAI[0] - telegraphGateValue) / LaserTelegraphTime, 0f, 1f);
                             }
                         }
                     }
@@ -1297,7 +1298,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         // Light colors
                         Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
-                        Vector3 segmentColor = groundColor * 0.5f;
+                        Vector3 segmentColor = groundColor * 0.2f;
                         Vector3 telegraphColor = groundColor;
 
                         // Telegraph for the laser breath and body lasers
@@ -1309,8 +1310,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 float shootProjectileTime = Main.masterMode ? 500f : Main.expertMode ? 700f : 900f;
                                 float bodySegmentTime = npc.ai[0] * 30f;
                                 float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                                if (npc.localAI[0] > shootProjectileGateValue - LaserTelegraphTime)
-                                    telegraphProgress = MathHelper.Clamp((npc.localAI[0] - shootProjectileGateValue) / LaserTelegraphTime, 0f, 1f);
+                                float telegraphGateValue = shootProjectileGateValue - LaserTelegraphTime;
+                                if (npc.localAI[0] > telegraphGateValue)
+                                    telegraphProgress = MathHelper.Clamp((npc.localAI[0] - telegraphGateValue) / LaserTelegraphTime, 0f, 1f);
                             }
                         }
 
