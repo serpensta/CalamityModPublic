@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mono.Cecil;
+using ReLogic.Utilities;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
@@ -17,13 +22,23 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override string Texture => "CalamityMod/Items/Weapons/Ranged/TheHive";
 
+        // The type of dust used in the effects and the color of the particles that it'll use depending on the type of rocket used.
+        // It'll carry over to the projectiles that it shoots.
+        public static int DustEffectsID { get; set; }
+        public static Color EffectsColor { get; set; }
+        public static Color StaticEffectsColor = Color.Lime;
         private ref float ShootingTimer => ref Projectile.ai[0];
+        private bool FireNuke;
+        private float PostFireCooldown = 0;
+        private bool HasLetGo = false;
+        private SlotId HiveHum;
 
         private ref float OffsetLength => ref Projectile.localAI[0];
 
         private Player Owner;
 
         private const float MaxOffsetLength = 15f;
+        private const float MaxCharge = 90f;
 
         public override void SetDefaults()
         {
@@ -35,14 +50,28 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void AI()
         {
+            FireNuke = ShootingTimer > MaxCharge;
             Item heldItem = Owner.ActiveItem();
 
-            // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
-            if (Owner.CantUseHoldout() || heldItem.type != ItemType<TheHive>())
+            if (ShootingTimer == 0)
             {
-                Projectile.Kill();
+                SoundStyle charge = new("CalamityMod/Sounds/Item/LowHum");
+                HiveHum = SoundEngine.PlaySound(charge with { Volume = 1.6f, IsLooped = true }, Projectile.Center);
+            }
+            // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
+            if (Owner.CantUseHoldout() && !HasLetGo || heldItem.type != ItemType<TheHive>())
+            {
+                if (SoundEngine.TryGetActiveSound(HiveHum, out var hum) && hum.IsPlaying)
+                {
+                    hum?.Stop();
+                }
+                ShootRocket(heldItem);
                 NetUpdate();
-                return;
+                HasLetGo = true;
+            }
+            if (HasLetGo)
+            {
+                PostFiringCooldown();
             }
 
             // The center of the player, taking into account if they have a mount or not.
@@ -54,17 +83,54 @@ namespace CalamityMod.Projectiles.Ranged
             // Deals with the holdout's rotation and direction, the owner's arms, etc.
             ManageHoldout(ownerPosition, ownerToMouse);
 
-            // If the timer reaches Item.useTime, it'll shoot.
-            // It'll shoot once immediately as the timer reaches.
-            if (ShootingTimer >= heldItem.useAnimation)
-                ShootRocket(heldItem);
-
             // When we change the distance of the gun from the arms for the recoil,
             // recover to the original position smoothly.
             if (OffsetLength != MaxOffsetLength)
                 OffsetLength = MathHelper.Lerp(OffsetLength, MaxOffsetLength, 0.1f);
 
-            ShootingTimer++;
+            if (!HasLetGo)
+            {
+                ShootingTimer++;
+                if (SoundEngine.TryGetActiveSound(HiveHum, out var hum) && hum.IsPlaying)
+                {
+                    hum.Position = Projectile.Center;
+                    hum.Pitch = MathHelper.Lerp(0f, 0.8f, Utils.GetLerpValue(0f, MaxCharge, ShootingTimer, true));
+                }
+            }
+
+            // Inside here go all the things that dedicated servers shouldn't spend resources on.
+            // Like visuals and sounds.
+            if (Main.dedServ)
+                return;
+
+            Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 33f;
+            Vector2 shootDirection = Projectile.velocity.SafeNormalize(Vector2.Zero) * 20;
+            if (ShootingTimer >= MaxCharge && !HasLetGo)
+            {
+                for (int k = 0; k < 2; k++)
+                {
+                    GlowOrbParticle spark = new GlowOrbParticle(tipPosition + Projectile.velocity * 1.5f, Vector2.Zero, false, 2, Main.rand.NextFloat(0.5f, 1.1f), Color.Red);
+                    GeneralParticleHandler.SpawnParticle(spark);
+                }
+                for (int e = 0; e < 2; e++)
+                {
+                    Dust dust2 = Dust.NewDustPerfect(tipPosition + Projectile.velocity * 1.5f, 90, shootDirection * Main.rand.NextFloat(0.01f, 0.8f));
+                    dust2.scale = Main.rand.NextFloat(0.45f, 0.75f);
+                    dust2.noGravity = true;
+                }
+            }
+
+            if (ShootingTimer == MaxCharge && !HasLetGo)
+            {
+                SoundStyle fullCharge = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGAttackSwitchShort");
+                SoundEngine.PlaySound(fullCharge with { Volume = 0.9f}, Projectile.Center);
+                for (int k = 0; k < 15; k++)
+                {
+                    Dust dust2 = Dust.NewDustPerfect(tipPosition, 90, new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.05f, 0.8f));
+                    dust2.scale = Main.rand.NextFloat(0.85f, 1.15f);
+                    dust2.noGravity = true;
+                }
+            }
         }
 
         private void ManageHoldout(Vector2 mountedCenter, Vector2 ownerToMouse)
@@ -92,12 +158,18 @@ namespace CalamityMod.Projectiles.Ranged
             float armRotation = Projectile.rotation - MathHelper.PiOver2; // -Pi/2 because the arms rotation starts with arms pointing down.
             Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Quarter, armRotation);
             Owner.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armRotation + MathHelper.ToRadians(15f) * direction);
+
+            // Rumble (only while channeling)
+            float rumble = Utils.GetLerpValue(0f, MaxCharge, ShootingTimer, true) * ShootingTimer >= MaxCharge ? 2 : 0.8f;
+            if (!Owner.CantUseHoldout())
+                Projectile.Center += Main.rand.NextVector2Circular(rumble, rumble);
         }
 
         private void ShootRocket(Item item)
         {
             // We use the velocity of this projectile as its direction vector.
             Vector2 shootDirection = Projectile.velocity.SafeNormalize(Vector2.Zero);
+            float VelocityMultiplier = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0f, MaxCharge, ShootingTimer, true));
 
             // The position of the tip of the gun.
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 33f;
@@ -106,18 +178,66 @@ namespace CalamityMod.Projectiles.Ranged
             // With this method we also use the item's stats, like the shoot speed, or the type of ammo it was used.
             Owner.PickAmmo(item, out _, out float projSpeed, out int damage, out float knockback, out int rocketType);
 
+            // Decides the color of the effects depending on the type of rocket used.
+            switch (rocketType)
+            {
+                case ItemID.WetRocket:
+                    DustEffectsID = 45;
+                    EffectsColor = Color.RoyalBlue;
+                    break;
+                case ItemID.LavaRocket:
+                    DustEffectsID = DustID.Torch;
+                    EffectsColor = Color.Red;
+                    break;
+                case ItemID.HoneyRocket:
+                    DustEffectsID = DustID.Honey;
+                    EffectsColor = Color.Yellow;
+                    break;
+                default:
+                    DustEffectsID = 131;
+                    EffectsColor = Color.LawnGreen;
+                    break;
+            }
+
             // Spawns the projectile.
-            Projectile.NewProjectileDirect(
+            if (FireNuke)
+            {
+                SoundStyle fire = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGBarrageLaunch");
+                SoundEngine.PlaySound(fire with { Volume = 0.5f, Pitch = 0.1f }, Projectile.Center);
+
+                Projectile.NewProjectileDirect(
                 Projectile.GetSource_FromThis(),
                 tipPosition,
-                shootDirection * projSpeed,
-                ProjectileID.None, // TEMPORARY.
+                shootDirection * projSpeed * 0.3f,
+                ProjectileType<HiveNuke>(),
                 damage,
                 knockback,
                 Projectile.owner,
                 rocketType);
+                PostFireCooldown = 75;
+            }
+            else
+            {
+                SoundStyle fire = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGBarrageLaunch");
+                SoundEngine.PlaySound(fire with { Volume = 0.4f, Pitch = 0.7f }, Projectile.Center);
 
-            ShootingTimer = 0f;
+                int numProj = 4;
+                float rotation = MathHelper.ToRadians(MathHelper.Clamp(25 - VelocityMultiplier * 20, 3, 25));
+                for (int i = 0; i < numProj; i++)
+                {
+                    Vector2 perturbedSpeed = (shootDirection).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                    Projectile.NewProjectileDirect(
+                    Projectile.GetSource_FromThis(),
+                    tipPosition,
+                    perturbedSpeed * projSpeed * VelocityMultiplier,
+                    ProjectileType<HiveMissile>(),
+                    damage / 5,
+                    knockback,
+                    Projectile.owner,
+                    rocketType);
+                }
+                PostFireCooldown = 35;
+            }
 
             NetUpdate();
 
@@ -126,8 +246,59 @@ namespace CalamityMod.Projectiles.Ranged
             if (Main.dedServ)
                 return;
 
+            if (FireNuke)
+            {
+                for (int k = 0; k < 10; k++)
+                {
+                    float pulseScale = Main.rand.NextFloat(0.35f, 0.55f);
+                    DirectionalPulseRing pulse = new DirectionalPulseRing(tipPosition, (shootDirection * 25).RotatedByRandom(0.5f) * Main.rand.NextFloat(0.5f, 1.2f), (Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor) * 0.8f, new Vector2(1, 1), pulseScale - 0.25f, pulseScale, 0f, 20);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                }
+                for (int i = 0; i <= 15; i++)
+                {
+                    Dust dust = Dust.NewDustPerfect(tipPosition, Main.rand.NextBool(3) ? DustEffectsID : 303, (shootDirection * 20).RotatedByRandom(0.3f) * Main.rand.NextFloat(0.5f, 1.2f), 0, default, Main.rand.NextFloat(0.5f, 0.9f));
+                    dust.noGravity = false;
+                    if (dust.type != DustEffectsID)
+                        dust.color = Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor;
+                }
+            }
+            else
+            {
+                for (int k = 0; k < 6; k++)
+                {
+                    float pulseScale = Main.rand.NextFloat(0.2f, 0.4f);
+                    DirectionalPulseRing pulse = new DirectionalPulseRing(tipPosition, (shootDirection * 20).RotatedByRandom(0.25f) * Main.rand.NextFloat(0.5f, 1.2f), (Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor) * 0.8f, new Vector2(1, 1), pulseScale - 0.25f, pulseScale, 0f, 20);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                }
+            }
+
             // By decreasing the offset length of the gun from the arms, we give an effect of recoil.
-            OffsetLength -= 8f;
+            OffsetLength -= FireNuke ? 16f : 6f;
+        }
+        private void PostFiringCooldown()
+        {
+            Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 33f;
+
+            if (PostFireCooldown > 0)
+            {
+                PostFireCooldown--;
+                Vector2 smokeVel = new Vector2(0, -8) * Main.rand.NextFloat(0.1f, 1.1f);
+                Particle smoke = new HeavySmokeParticle(tipPosition, smokeVel, StaticEffectsColor, Main.rand.Next(40, 60 + 1), Main.rand.NextFloat(0.3f, 0.6f), 0.5f, Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextBool(), required: true);
+                GeneralParticleHandler.SpawnParticle(smoke);
+
+                Dust dust = Dust.NewDustPerfect(tipPosition, 303, smokeVel.RotatedByRandom(0.1f), 80, default, Main.rand.NextFloat(0.4f, 1.3f));
+                dust.noGravity = false;
+                dust.color = StaticEffectsColor;
+            }
+            else
+            {
+                if (SoundEngine.TryGetActiveSound(HiveHum, out var hum) && hum.IsPlaying)
+                {
+                    hum?.Stop();
+                }
+                Projectile.Kill();
+                NetUpdate();
+            }
         }
 
         private void NetUpdate()
@@ -150,6 +321,9 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override bool PreDraw(ref Color lightColor)
         {
+            if (ShootingTimer <= 0)
+                return false;
+
             Texture2D texture = Request<Texture2D>(Texture).Value;
             Texture2D glowTexture = Request<Texture2D>(Texture + "_Glow").Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
