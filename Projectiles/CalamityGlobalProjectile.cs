@@ -344,7 +344,7 @@ namespace CalamityMod.Projectiles
                     num133 = Player.FindClosest(projectile.Center, 1, 1);
                     projectile.ai[1] += 1f;
                     float homingStartTime = 30f;
-                    float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 115f : CalamityWorld.death ? 90f : 75f;
+                    float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 150f : CalamityWorld.death ? 105f : 90f;
 
                     // Stop homing when within a certain distance of the target
                     if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)

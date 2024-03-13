@@ -612,16 +612,16 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Shoot shadowflames (giant cursed skull projectiles) while charging in phase 4
                 if (phase4 && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                 {
-                    float shadowFlameGateValue = death ? 16f : 24f;
+                    float shadowFlameGateValue = death ? 30f : 45f;
                     int shadowFlameLimit = death ? 3 : 2;
                     if (calamityGlobalNPC.newAI[1] % shadowFlameGateValue == 0f && calamityGlobalNPC.newAI[1] < shadowFlameGateValue * shadowFlameLimit)
                     {
                         // Spawn projectiles
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > 160f)
+                            if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > 320f)
                             {
-                                float shadowFlameProjectileSpeed = death ? 5f : 4f;
+                                float shadowFlameProjectileSpeed = death ? 8f : 6f;
                                 if (masterMode)
                                     shadowFlameProjectileSpeed *= 1.25f;
 
