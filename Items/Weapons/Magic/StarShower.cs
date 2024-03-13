@@ -13,13 +13,13 @@ namespace CalamityMod.Items.Weapons.Magic
     {
         public new string LocalizationCategory => "Items.Weapons.Magic";
 
-        internal const float ShootSpeed = 24f;
+        internal const float ShootSpeed = 28f;
 
         public override void SetDefaults()
         {
             Item.width = 38;
             Item.height = 40;
-            Item.damage = 57;
+            Item.damage = 60;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 15;
             Item.rare = ItemRarityID.Cyan;

@@ -19,12 +19,12 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             Item.width = 28;
             Item.height = 30;
-            Item.damage = 35;
+            Item.damage = 24;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
             Item.useTime = 7;
             Item.useAnimation = 14;
-            Item.reuseDelay = 30;
+            Item.reuseDelay = 49;
             Item.useLimitPerAnimation = 3;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
@@ -39,14 +39,14 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int projAmt = 8;
+            int projAmt = 6;
             float maxSpread = ShootSpeed * 0.25f;
             Vector2 cachedVelocity = velocity;
             Vector2 newPosition = position + velocity.SafeNormalize(Vector2.UnitY) * 20f;
             for (int index = 0; index < projAmt; index++)
             {
                 velocity += new Vector2(Main.rand.NextFloat(-maxSpread, maxSpread), Main.rand.NextFloat(-maxSpread, maxSpread));
-                Projectile.NewProjectile(source, newPosition, velocity, type, damage, knockback, player.whoAmI, 0f, MathHelper.Lerp(1.01f, 1.05f, index / (float)(projAmt - 1)));
+                Projectile.NewProjectile(source, newPosition, velocity, type, damage, knockback, player.whoAmI, 0f, MathHelper.Lerp(1.04f, 1.09f, index / (float)(projAmt - 1)));
                 velocity = cachedVelocity;
             }
             return false;

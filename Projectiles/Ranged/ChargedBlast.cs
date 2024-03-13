@@ -53,7 +53,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (Projectile.owner == Main.myPlayer)
             {
                 for (int k = 0; k < projectiles; k++)
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextVector2CircularEdge(5f, 5f), ModContent.ProjectileType<ChargedBlast2>(), (int)(Projectile.damage * 0.8), Projectile.knockBack * 0.8f, Main.myPlayer);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextVector2CircularEdge(5f, 5f), ModContent.ProjectileType<ChargedBlast2>(), (int)(Projectile.damage * 0.5), Projectile.knockBack * 0.8f, Main.myPlayer);
             }
         }
     }
