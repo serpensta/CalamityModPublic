@@ -259,9 +259,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             float centralScalingAmount = (float)Math.Floor(numProj / (double)centralProjectile) * 0.75f;
                             float amountToAdd = evenNumberOfProjectiles ? 0.5f : 0f;
                             float originalBaseSpeed = baseSpeed;
+                            float minVelocityMultiplier = 0.5f;
                             for (int i = 0; i < numProj; i++)
                             {
-                                float velocityScalar = (evenNumberOfProjectiles && i == otherCentralProjectile) ? 0f : MathHelper.Lerp(0.5f, centralScalingAmount, Math.Abs((i + amountToAdd) - centralProjectile) / (float)centralProjectile);
+                                float velocityScalar = (evenNumberOfProjectiles && (i == centralProjectile || i == otherCentralProjectile)) ? minVelocityMultiplier : MathHelper.Lerp(minVelocityMultiplier, centralScalingAmount, Math.Abs((i + amountToAdd) - centralProjectile) / (float)centralProjectile);
                                 baseSpeed = originalBaseSpeed;
                                 baseSpeed *= velocityScalar;
                                 offsetAngle = startAngle + deltaAngle * i;
@@ -413,7 +414,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.damage = 0;
 
                 calamityGlobalNPC.newAI[1] += 1f;
-                float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 14f) : phase4 ? (death ? 4f : 3f) : (2f * ((1f - lifeRatio) / (1f - phase4LifeRatio)));
+                float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 14f) : phase4 ? (death ? 8f : 6f) : (4f * ((1f - lifeRatio) / (1f - phase4LifeRatio)));
                 float chargePhaseChangeRate = chargePhaseChangeRateBoost + 1f;
                 npc.ai[2] += chargePhaseChangeRate;
                 npc.localAI[1] += chargePhaseChangeRate;
@@ -422,7 +423,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.localAI[1] = chargePhaseGateValue;
 
                 float forcedMoveAwayTime = death ? 30f : 60f;
-                float canChargeDistance = phase3 ? 800f : 320f; // 20 tile distance, 50 tile distance in phase 3
+                float canChargeDistance = phase3 ? 640f : 320f; // 20 tile distance, 40 tile distance in phase 3
                 bool hasMovedForcedDistance = npc.localAI[2] >= forcedMoveAwayTime;
                 bool canCharge = Vector2.Distance(Main.player[npc.target].Center, npc.Center) >= canChargeDistance;
                 bool charge = npc.ai[2] >= chargePhaseGateValue && canCharge;

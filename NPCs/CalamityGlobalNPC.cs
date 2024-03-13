@@ -6939,10 +6939,9 @@ namespace CalamityMod.NPCs
                         if (npc.spriteDirection == 1)
                             spriteEffects = SpriteEffects.FlipHorizontally;
 
-                        Vector2 glowOffset = Vector2.UnitY * 8f;
                         for (int i = 0; i < 2; i++)
                         {
-                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY) - glowOffset, npc.frame,
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
                                 drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                         }
                     }
