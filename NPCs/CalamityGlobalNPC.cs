@@ -116,7 +116,6 @@ namespace CalamityMod.NPCs
         public bool IncreasedColdEffects_CryoStone = false;
 
         // Transformer effect
-
         public bool IncreasedElectricityEffects_Transformer = false;
 
         // Fireball, Cinnamon Roll and Hellfire Treads effects
@@ -166,7 +165,7 @@ namespace CalamityMod.NPCs
 
         // Used to nerf Master Mode enemies
         public const double MasterModeEnemyHPMultiplier = 0.75;
-        public const double MasterModeEnemyDamageMultiplier = 0.85;
+        public const double MasterModeEnemyDamageMultiplier = 0.9;
 
         // Used to nerf Expert and Master Mode enemies
         public const float ExpertModeEnemyKnockbackMultiplier = 0.05f;
