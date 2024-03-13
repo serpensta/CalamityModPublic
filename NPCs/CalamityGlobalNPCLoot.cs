@@ -80,7 +80,7 @@ namespace CalamityMod.NPCs
             // Progression shortcuts
             LeadingConditionRule postEoC = npcLoot.DefineConditionalDropSet(DropHelper.PostEoC());
             LeadingConditionRule hardmode = npcLoot.DefineConditionalDropSet(DropHelper.Hardmode());
-            LeadingConditionRule postCalPlant = npcLoot.DefineConditionalDropSet(DropHelper.PostCalPlant());
+            LeadingConditionRule postCal = npcLoot.DefineConditionalDropSet(DropHelper.PostCal());
             LeadingConditionRule postLevi = npcLoot.DefineConditionalDropSet(DropHelper.PostLevi());
             LeadingConditionRule postDoG = npcLoot.DefineConditionalDropSet(DropHelper.PostDoG());
 
@@ -586,24 +586,24 @@ namespace CalamityMod.NPCs
                     break;
 
                 // Reaper, Psycho
-                // 2-4 Solar Veil @ 50% IF Clone or Plant dead
+                // 2-4 Solar Veil @ 50% IF Cal Clone dead
                 // Darksun Fragment @ 50% IF Devourer of Gods dead
                 case NPCID.Reaper:
                 case NPCID.Psycho:
-                    postCalPlant.Add(ModContent.ItemType<SolarVeil>(), 2, 2, 4);
+                    postCal.Add(ModContent.ItemType<SolarVeil>(), 2, 2, 4);
                     postDoG.Add(ModContent.ItemType<DarksunFragment>(), 2);
                     break;
 
                 // Vampire / Vampire Bat (same enemy)
                 // Moon Stone @ 15% INSTEAD OF 2.86%
                 // Bat Hook @ 2.5% Normal, 5% Expert+
-                // 2-4 Solar Veil @ 50% IF Clone or Plant dead
+                // 2-4 Solar Veil @ 50% IF Cal Clone dead
                 // Darksun Fragment @ 50% IF Devourer of Gods dead
                 case NPCID.VampireBat:
                 case NPCID.Vampire:
                     npcLoot.ChangeDropRate(ItemID.MoonStone, 3, 20);
                     npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.BatHook, 40, 20));
-                    postCalPlant.Add(ModContent.ItemType<SolarVeil>(), 2, 2, 4);
+                    postCal.Add(ModContent.ItemType<SolarVeil>(), 2, 2, 4);
                     postDoG.Add(ModContent.ItemType<DarksunFragment>(), 2);
                     break;
 
