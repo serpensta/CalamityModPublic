@@ -1707,6 +1707,16 @@ namespace CalamityMod.Projectiles
                 }
             }
 
+            // Making Rocket Launcher, Grenade Launcher, Proximity Mine Launcher, and Cluster Rocket fragments not damage the player.
+            bool isGrenadeLauncherProj = (projectile.type == 133 || projectile.type == 136 || projectile.type == 139 || projectile.type == 142 || projectile.type == 777 || projectile.type == 781 || projectile.type == 785 || projectile.type == 788 || projectile.type == 791 || projectile.type == 794 || projectile.type == 797 || projectile.type == 800);
+            bool isRocketLauncherProj = (projectile.type == 134 || projectile.type == 137 || projectile.type == 140 || projectile.type == 143 || projectile.type == 776 || projectile.type == 780 || projectile.type == 784 || projectile.type == 787 || projectile.type == 790 || projectile.type == 793 || projectile.type == 796 || projectile.type == 799);
+            bool isProximityMineProj = (projectile.type == 135 || projectile.type == 138 || projectile.type == 141 || projectile.type == 144 || projectile.type == 778 || projectile.type == 782 || projectile.type == 786 || projectile.type == 789 || projectile.type == 792 || projectile.type == 795 || projectile.type == 798 || projectile.type == 801);
+
+            if (isGrenadeLauncherProj || isRocketLauncherProj || isProximityMineProj || projectile.type == ProjectileID.ClusterFragmentsI || projectile.type == ProjectileID.ClusterFragmentsII)
+            {
+                ProjectileID.Sets.RocketsSkipDamageForPlayers[projectile.type] = true;
+            }
+
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
             {
                 bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;

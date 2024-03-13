@@ -355,6 +355,7 @@ namespace CalamityMod.CalPlayer
         public bool AdrenalineTrail = false;
         public float adrenaline = 0f;
         public float adrenalineMax = 100f; // 0 to 100% by default
+        public int adrenalinePauseTimer = 0;
         public int AdrenalineDuration = CalamityUtils.SecondsToFrames(5);
         public int AdrenalineChargeTime = CalamityUtils.SecondsToFrames(30);
         public int AdrenalineFadeTime = CalamityUtils.SecondsToFrames(2);
@@ -493,7 +494,6 @@ namespace CalamityMod.CalPlayer
         public bool laudanum = false;
         public bool heartOfDarkness = false;
         public bool draedonsHeart = false;
-        public int nanomachinesLockoutTimer = 0;
         public bool vexation = false;
         public bool dodgeScarf = false;
         public bool evasionScarf = false;
@@ -2401,7 +2401,7 @@ namespace CalamityMod.CalPlayer
             soaring = false;
             bounding = false;
             shadow = false;
-            nanomachinesLockoutTimer = 0;
+            adrenalinePauseTimer = 0;
             photosynthesis = false;
             astralInjection = false;
             gravityNormalizer = false;

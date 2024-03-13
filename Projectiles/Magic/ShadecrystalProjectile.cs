@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
             }
             else
-                CalamityUtils.HomeInOnNPC(Projectile, false, 200f, maxVelocity, 30f);
+                CalamityUtils.HomeInOnNPC(Projectile, false, 224f, maxVelocity * 1.25f, 30f);
 
             Projectile.ai[0] += 1f;
             if (Projectile.ai[0] >= 520f)
