@@ -1355,6 +1355,80 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            else if (projectile.type == ProjectileID.TrueNightsEdge)
+            {
+                float fadeInTime = 50f;
+                float fadeOutTime = 15f;
+                float timeBeforeFadeOut = projectile.ai[1] + fadeInTime;
+                float projectileDuration = timeBeforeFadeOut + fadeOutTime;
+                float stopDealingDamageTime = 80f;
+
+                if (projectile.localAI[0] == 0f)
+                    SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
+
+                projectile.localAI[0] += 1f;
+                if (projectile.damage == 0 && projectile.localAI[0] < MathHelper.Lerp(timeBeforeFadeOut, projectileDuration, 0.5f))
+                    projectile.localAI[0] += 6f;
+
+                projectile.Opacity = Utils.Remap(projectile.localAI[0], 0f, projectile.ai[1], 0f, 1f) * Utils.Remap(projectile.localAI[0], timeBeforeFadeOut, projectileDuration, 1f, 0f);
+                if (projectile.localAI[0] >= projectileDuration)
+                {
+                    projectile.localAI[1] = 1f;
+                    projectile.Kill();
+                    return false;
+                }
+
+                Player player = Main.player[projectile.owner];
+                float fromValue = projectile.localAI[0] / projectile.ai[1];
+                projectile.direction = (projectile.spriteDirection = (int)projectile.ai[0]);
+
+                if (projectile.damage != 0 && projectile.localAI[0] >= stopDealingDamageTime)
+                    projectile.damage = 0;
+
+                if (projectile.damage != 0)
+                {
+                    int size = 80;
+                    bool notInsideTiles = false;
+                    float rotation = projectile.velocity.ToRotation();
+                    for (float i = -1f; i <= 1f; i += 0.5f)
+                    {
+                        Vector2 position = projectile.Center + (rotation + i * MathHelper.PiOver4 * 0.25f).ToRotationVector2() * size * 0.5f * projectile.scale;
+                        Vector2 position2 = projectile.Center + (rotation + i * MathHelper.PiOver4 * 0.25f).ToRotationVector2() * size * projectile.scale;
+                        if (!Collision.SolidTiles(projectile.Center, 0, 0) && Collision.CanHit(position, 0, 0, position2, 0, 0))
+                        {
+                            notInsideTiles = true;
+                            break;
+                        }
+                    }
+
+                    if (!notInsideTiles)
+                        projectile.damage = 0;
+                }
+
+                fromValue = projectile.localAI[0] / projectile.ai[1];
+                projectile.localAI[1] += 1f;
+                projectile.rotation += projectile.ai[0] * MathHelper.TwoPi * (4f + projectile.Opacity * 4f) / 90f;
+                projectile.scale = Utils.Remap(projectile.localAI[0], projectile.ai[1] + 2f, projectileDuration, 1.12f, 1f) * projectile.ai[2];
+                float randomDustSpawnLocation = projectile.rotation + Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7f;
+                Vector2 dustPosition = projectile.Center + randomDustSpawnLocation.ToRotationVector2() * 84f * projectile.scale;
+                if (Main.rand.NextBool(5))
+                {
+                    Dust dust = Dust.NewDustPerfect(dustPosition, 14, null, 150, default, 1.4f);
+                    dust.noLight = (dust.noLightEmittence = true);
+                }
+
+                for (int i = 0; (float)i < 3f * projectile.Opacity; i++)
+                {
+                    Vector2 dustVelocity = projectile.velocity.SafeNormalize(Vector2.UnitX);
+                    int dustType = ((Main.rand.NextFloat() < projectile.Opacity) ? 75 : 27);
+                    Dust dust = Dust.NewDustPerfect(dustPosition, dustType, projectile.velocity * 0.2f + dustVelocity * 3f, 100, default, 1.4f);
+                    dust.noGravity = true;
+                    dust.customData = projectile.Opacity * 0.2f;
+                }
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.NurseSyringeHeal)
             {
                 ref float initialSpeed = ref projectile.localAI[1];
