@@ -1389,25 +1389,43 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num791 = num788 / num791;
                     num789 *= num791;
                     num790 *= num791;
-                    int type = ProjectileID.SeedPlantera;
+                    int type = Main.masterMode ? ProjectileID.PoisonSeedPlantera : ProjectileID.SeedPlantera;
                     int maxValue2 = 4;
-                    int maxValue3 = 8;
+                    int thornBallChance = 8;
                     if (Main.expertMode)
                     {
                         maxValue2 = 2;
-                        maxValue3 = Main.masterMode ? 5 : 6;
+                        thornBallChance = Main.masterMode ? 5 : 6;
                     }
 
-                    if ((double)npc.life < (double)npc.lifeMax * 0.8 && (Main.rand.NextBool(maxValue2) || Main.masterMode))
+                    if ((double)npc.life < npc.lifeMax * 0.8 && Main.rand.NextBool(maxValue2) && !Main.masterMode)
                     {
                         npc.localAI[1] = -30f;
                         type = ProjectileID.PoisonSeedPlantera;
                     }
-                    else if ((double)npc.life < (double)npc.lifeMax * 0.8 && Main.rand.NextBool(maxValue3))
+                    else if ((double)npc.life < npc.lifeMax * 0.8 && Main.rand.NextBool(thornBallChance))
                     {
-                        npc.localAI[1] = -120f;
-                        type = ProjectileID.ThornBall;
+                        bool shootThornBall = true;
+                        int numThornBalls = 0;
+                        int thornBallLimit = 3;
+                        for (int i = 0; i < Main.maxProjectiles; i++)
+                        {
+                            if (Main.projectile[i].active && Main.projectile[i].type == ProjectileID.ThornBall)
+                            {
+                                numThornBalls++;
+                                if (numThornBalls >= thornBallLimit)
+                                {
+                                    shootThornBall = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        npc.localAI[1] = shootThornBall ? -120f : -30f;
+                        type = shootThornBall ? ProjectileID.ThornBall : ProjectileID.PoisonSeedPlantera;
                     }
+                    else if (Main.masterMode)
+                        npc.localAI[1] = -30f;
 
                     int damage = npc.GetProjectileDamage(type);
                     if (flag39)
