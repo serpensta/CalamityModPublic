@@ -872,6 +872,8 @@ namespace CalamityMod.Projectiles
                 }
                 else if (projectile.ai[1] < 0f)
                 {
+                    projectile.timeLeft -= 2;
+
                     float num623 = (float)Math.PI / 15f;
                     float num624 = -2f;
                     float num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;

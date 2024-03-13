@@ -1550,7 +1550,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             NPC nPC2 = Main.npc[item2];
                             Vector2 center2 = nPC2.Center;
-                            float num16 = (float)((num15 + flag5.ToInt() + 1) / 2) * ((float)Math.PI * 2f) * 0.4f / (float)list2.Count;
+                            float num16 = (float)((num15 + flag5.ToInt() + 1) / 2) * MathHelper.TwoPi * 0.4f / (float)list2.Count;
                             if (num15 % 2 == 1)
                                 num16 *= -1f;
 
@@ -1672,9 +1672,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         Vector2 vector4 = npc.Center + new Vector2(npc.direction * 30, 12f);
                         int type = ProjectileID.CultistBossIceMist;
-                        for (int n = 0; n < 1; n++)
+                        int numIceMists = masterMode ? 3 : expertMode ? 2 : 1;
+                        float iceMistVelocity = masterMode ? 8f : expertMode ? 6f : 4f;
+                        for (int n = 0; n < numIceMists; n++)
                         {
-                            Vector2 vector5 = vec * 4f;
+                            Vector2 vector5 = vec * (iceMistVelocity - n * 2f);
                             Projectile.NewProjectile(npc.GetSource_FromAI(), vector4, vector5, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, 1f);
                         }
                     }
@@ -1811,8 +1813,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (masterMode)
                         {
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + 70f, npc.Center.Y - 70f, 0f, 0f, type2, npc.GetProjectileDamage(type2), 0f, Main.myPlayer);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X - 70f, npc.Center.Y - 70f, 0f, 0f, type2, npc.GetProjectileDamage(type2), 0f, Main.myPlayer);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + 210f, npc.Center.Y - 210f, 0f, 0f, type2, npc.GetProjectileDamage(type2), 0f, Main.myPlayer);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X - 210f, npc.Center.Y - 210f, 0f, 0f, type2, npc.GetProjectileDamage(type2), 0f, Main.myPlayer);
                         }
                         else if (expertMode)
                             Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X, npc.Center.Y + 100f, 0f, 0f, type2, npc.GetProjectileDamage(type2), 0f, Main.myPlayer);
@@ -1862,7 +1864,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         int num29 = list6.Count + num28 + 1;
                         float[] array = new float[num29];
                         for (int num30 = 0; num30 < array.Length; num30++)
-                            array[num30] = Vector2.Distance(npc.Center + spinningpoint.RotatedBy((float)num30 * ((float)Math.PI * 2f) / (float)num29 - (float)Math.PI / 2f), player.Center);
+                            array[num30] = Vector2.Distance(npc.Center + spinningpoint.RotatedBy((float)num30 * MathHelper.TwoPi / (float)num29 - (float)Math.PI / 2f), player.Center);
 
                         int num31 = 0;
                         for (int num32 = 1; num32 < array.Length; num32++)
@@ -1877,7 +1879,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             if (num31 != num34)
                             {
-                                Vector2 center6 = npc.Center + spinningpoint.RotatedBy((float)num34 * ((float)Math.PI * 2f) / (float)num29 - (float)Math.PI / 2f);
+                                Vector2 center6 = npc.Center + spinningpoint.RotatedBy((float)num34 * MathHelper.TwoPi / (float)num29 - (float)Math.PI / 2f);
                                 if (num33-- > 0)
                                 {
                                     int num35 = NPC.NewNPC(npc.GetSource_FromAI(), (int)center6.X, (int)center6.Y + npc.height / 2, NPCID.CultistBossClone, npc.whoAmI);
@@ -1895,7 +1897,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         npc.ai[2] = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ProjectileID.CultistRitual, 0, 0f, Main.myPlayer, 0f, npc.whoAmI);
-                        npc.Center += spinningpoint.RotatedBy((float)num31 * ((float)Math.PI * 2f) / (float)num29 - (float)Math.PI / 2f);
+                        npc.Center += spinningpoint.RotatedBy((float)num31 * MathHelper.TwoPi / (float)num29 - (float)Math.PI / 2f);
                         npc.netUpdate = true;
                         list6.Clear();
                     }
@@ -2079,8 +2081,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         for (int i = 0; (float)i < ancientLightLimit; i++)
                         {
                             Vector2 spinningpoint2 = vec3 * velocity;
-                            spinningpoint2 = spinningpoint2.RotatedBy(spread * (float)i - ((float)Math.PI * 2f / ancientLightLimit - spread) / 2f);
-                            float ai = (Main.rand.NextFloat() - 0.5f) * 0.3f * ((float)Math.PI * 2f) / 60f;
+                            spinningpoint2 = spinningpoint2.RotatedBy(spread * (float)i - (MathHelper.TwoPi / ancientLightLimit - spread) / 2f);
+                            float ai = (Main.rand.NextFloat() - 0.5f) * 0.3f * MathHelper.TwoPi / 60f;
                             int num49 = NPC.NewNPC(npc.GetSource_FromAI(), (int)vector15.X, (int)vector15.Y + 7, NPCID.AncientLight, 0, 0f, ai, spinningpoint2.X, spinningpoint2.Y);
                             Main.npc[num49].velocity = spinningpoint2;
                             Main.npc[num49].netUpdate = true;
