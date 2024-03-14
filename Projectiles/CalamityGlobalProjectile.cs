@@ -2772,10 +2772,6 @@ namespace CalamityMod.Projectiles
             {
                 if (projectile.hostile)
                 {
-                    // These projectiles are way too fucking fast so they need to be slower
-                    if ((projectile.type == ProjectileID.QueenSlimeMinionBlueSpike && projectile.ai[1] >= 0f) || projectile.type == ProjectileID.QueenSlimeMinionPinkBall)
-                        projectile.velocity *= ((Main.masterMode || BossRushEvent.BossRushActive) ? 0.8f : 0.5f);
-
                     // Reduce Nail damage from Nailheads because they're stupid
                     if (projectile.type == ProjectileID.Nail && Main.expertMode)
                         projectile.damage /= 2;

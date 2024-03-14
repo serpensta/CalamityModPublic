@@ -4403,6 +4403,12 @@ namespace CalamityMod.NPCs
                 }
             }
 
+            if (npc.type == NPCID.QueenSlimeMinionBlue)
+                return QueenSlimeAI.QueenSlimeCrystalSlimeAI(npc, Mod);
+
+            if (npc.type == NPCID.QueenSlimeMinionPink)
+                return QueenSlimeAI.QueenSlimeBouncySlimeAI(npc, Mod);
+
             if (npc.type == NPCID.FungiBulb)
                 return RevengeanceAndDeathAI.BuffedPlantAI(npc, Mod);
 

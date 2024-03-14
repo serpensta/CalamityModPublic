@@ -182,8 +182,6 @@ namespace CalamityMod
 
                 { NPCID.BrainofCthulhu, 0.9 },
 
-                { NPCID.Deerclops, 1 },
-
                 { ModContent.NPCType<HiveMind>(), 0.9 },
 
                 { ModContent.NPCType<PerforatorHive>(), 0.9 },
@@ -197,8 +195,6 @@ namespace CalamityMod
 
                 { NPCID.WallofFlesh, 1.5 },
                 { NPCID.WallofFleshEye, 1.5 },
-
-                { NPCID.QueenSlimeBoss, 1 },
 
                 { ModContent.NPCType<Cryogen>(), 1.15 },
 
@@ -378,6 +374,9 @@ namespace CalamityMod
                 { NPCID.LeechTail, new int[] { 18, 36, 42, 44, 54 } },
 
                 { NPCID.QueenSlimeBoss, new int[] { 80, 120, 150, 170, 240 } },
+                { NPCID.QueenSlimeMinionBlue, new int[] { 60, 80, 100, 120, 180 } },
+                { NPCID.QueenSlimeMinionPink, new int[] { 60, 80, 100, 120, 180 } },
+                { NPCID.QueenSlimeMinionPurple, new int[] { 70, 100, 120, 140, 210 } },
 
                 { ModContent.NPCType<Cryogen>(), new int[] { 90, 138, 161, 184, 276 } },
                 { ModContent.NPCType<CryogenShield>(), new int[] { 80, 120, 138, 158, 240 } },
@@ -615,6 +614,7 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeGelAttack), new int[] { 60, 120, 136, 152, 210 } },
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeSmash), new int[] { 80, 160, 188, 200, 270 } },
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeMinionBlueSpike), new int[] { 52, 92, 112, 124, 168 } },
+                { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeMinionPinkBall), new int[] { 52, 92, 112, 124, 168 } },
 
                 { new Tuple<int, int>(ModContent.NPCType<Cryogen>(), ModContent.ProjectileType<IceBlast>()), new int[] { 52, 92, 112, 124, 168 } },
                 { new Tuple<int, int>(ModContent.NPCType<Cryogen>(), ModContent.ProjectileType<IceBomb>()), new int[] { 70, 120, 136, 152, 210 } },
