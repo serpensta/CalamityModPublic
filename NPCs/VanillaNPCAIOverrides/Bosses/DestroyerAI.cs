@@ -18,6 +18,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         public const float DRIncraeseTime = 600f;
         public const float DeathModeLaserBreathGateValue = 600f;
         public const float LaserTelegraphTime = 120f;
+        public const float FlightPhaseGateValue = 900f;
+        public const float FlightPhaseResetGateValue = FlightPhaseGateValue * 2f;
+        private const float Phase4FlightPhaseTimerSetValue = FlightPhaseGateValue * 0.5f;
+        private const float Phase5FlightPhaseTimerSetValue = FlightPhaseGateValue;
+        public const float PhaseTransitionTelegraphTime = 180f;
+        public const float GroundTelegraphStartGateValue = FlightPhaseResetGateValue - PhaseTransitionTelegraphTime;
+        public const float FlightTelegraphStartGateValue = FlightPhaseGateValue - PhaseTransitionTelegraphTime;
         private const int OneInXChanceToFireLaser = 200;
 
         public static bool BuffedDestroyerAI(NPC npc, Mod mod)
@@ -73,12 +80,33 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool phase5 = lifeRatio < (death ? 0.2f : 0.1f);
 
             // Flight timer
-            float newAISet = phase5 ? 900f : phase4 ? 450f : 0f;
-            calamityGlobalNPC.newAI[3] += 1f;
-            if (calamityGlobalNPC.newAI[3] >= 1800f)
+            if (startFlightPhase)
+                calamityGlobalNPC.newAI[3] += 1f;
+
+            // Force the timer to be at a certain value in later phases
+            float flightPhaseTimerSetValue = phase5 ? Phase5FlightPhaseTimerSetValue : phase4 ? Phase4FlightPhaseTimerSetValue : 0f;
+            if (calamityGlobalNPC.newAI[3] < flightPhaseTimerSetValue)
+                calamityGlobalNPC.newAI[3] = flightPhaseTimerSetValue;
+
+            // Return to ground phase, with less time spent in later phases
+            if (calamityGlobalNPC.newAI[3] >= FlightPhaseResetGateValue)
             {
-                calamityGlobalNPC.newAI[3] = newAISet;
+                calamityGlobalNPC.newAI[3] = flightPhaseTimerSetValue;
                 npc.TargetClosest();
+            }
+
+            // Spawn DR check
+            bool hasSpawnDR = calamityGlobalNPC.newAI[1] < DRIncraeseTime && calamityGlobalNPC.newAI[1] > 60f;
+
+            // Gradual color transition from ground to flight and vice versa
+            // 0f = Red, 1f = Purple
+            float phaseTransitionColorAmount = (hasSpawnDR || phase5) ? 1f : 0f;
+            if (!hasSpawnDR && !phase5)
+            {
+                if (calamityGlobalNPC.newAI[3] >= GroundTelegraphStartGateValue)
+                    phaseTransitionColorAmount = MathHelper.Clamp(1f - (calamityGlobalNPC.newAI[3] - GroundTelegraphStartGateValue) / PhaseTransitionTelegraphTime, 0f, 1f);
+                else if (calamityGlobalNPC.newAI[3] >= FlightTelegraphStartGateValue)
+                    phaseTransitionColorAmount = MathHelper.Clamp((calamityGlobalNPC.newAI[3] - FlightTelegraphStartGateValue) / PhaseTransitionTelegraphTime, 0f, 1f);
             }
 
             // Set worm variable for worms
@@ -106,7 +134,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Phase for flying at the player
-            bool flyAtTarget = (calamityGlobalNPC.newAI[3] >= 900f && startFlightPhase) || (calamityGlobalNPC.newAI[1] < DRIncraeseTime && calamityGlobalNPC.newAI[1] > 60f);
+            bool flyAtTarget = (calamityGlobalNPC.newAI[3] >= FlightPhaseGateValue && startFlightPhase) || hasSpawnDR;
 
             // Dust on spawn and alpha effects
             if (npc.type == NPCID.TheDestroyer || (npc.type != NPCID.TheDestroyer && Main.npc[(int)npc.ai[1]].alpha < 128))
@@ -175,7 +203,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Calculate aggression based on how many broken segments there are
             float brokenSegmentAggressionMultiplier = 1f;
-            if (npc.type == NPCID.TheDestroyer)
+            if (npc.type == NPCID.TheDestroyer && !oblivionAlive)
             {
                 int numProbeSegments = 0;
                 for (int i = 0; i < Main.maxNPCs; i++)
@@ -196,6 +224,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float speed = masterMode ? 0.125f : 0.1f;
             float turnSpeed = masterMode ? 0.1875f : 0.15f;
 
+            // Max velocity
+            float segmentVelocity = flyAtTarget ? 15f : 20f;
+
+            // Increase velocity based on distance
+            float velocityMultiplier = increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
+
             // If Oblivion is alive, don't fly, don't spit laser spreads, use the default vanilla no fly zone, reduce segment count to 60, use base speed and use base turn speed
             if (oblivionAlive)
             {
@@ -208,14 +242,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 noFlyZoneBoxHeight -= death ? 400 : (int)(400f * (1f - lifeRatio));
 
-                float speedBoost = death ? (0.14f * (1f - lifeRatio)) : (0.1f * (1f - lifeRatio));
-                float turnSpeedBoost = death ? (0.19f * (1f - lifeRatio)) : (0.15f * (1f - lifeRatio));
+                float segmentVelocityBoost = death ? (flyAtTarget ? 4.5f : 6f) * (1f - lifeRatio) : (flyAtTarget ? 3f : 4f) * (1f - lifeRatio);
+                float speedBoost = death ? (flyAtTarget ? 0.1125f : 0.15f) * (1f - lifeRatio) : (flyAtTarget ? 0.075f : 0.1f) * (1f - lifeRatio);
+                float turnSpeedBoost = death ? 0.18f * (1f - lifeRatio) : 0.12f * (1f - lifeRatio);
 
+                segmentVelocity += segmentVelocityBoost;
                 speed += speedBoost;
                 turnSpeed += turnSpeedBoost;
 
-                speed += 0.04f * enrageScale;
-                turnSpeed += 0.06f * enrageScale;
+                segmentVelocity += 5f * enrageScale;
+                speed += 0.05f * enrageScale;
+                turnSpeed += 0.075f * enrageScale;
 
                 if (flyAtTarget)
                 {
@@ -223,18 +260,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     speed *= speedMultiplier;
                 }
 
-                speed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
-                turnSpeed *= increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
+                segmentVelocity *= velocityMultiplier;
+                speed *= velocityMultiplier;
+                turnSpeed *= velocityMultiplier;
+
+                segmentVelocity *= brokenSegmentAggressionMultiplier;
+                speed *= brokenSegmentAggressionMultiplier;
+                turnSpeed *= brokenSegmentAggressionMultiplier;
 
                 if (Main.getGoodWorld)
                 {
+                    segmentVelocity *= 1.2f;
                     speed *= 1.2f;
                     turnSpeed *= 1.2f;
                 }
             }
-
-            speed *= brokenSegmentAggressionMultiplier;
-            turnSpeed *= brokenSegmentAggressionMultiplier;
 
             bool probeLaunched = npc.ai[2] == 1f;
             if (npc.type == NPCID.TheDestroyerBody)
@@ -647,7 +687,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Light colors
                     Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
                     Vector3 flightColor = new Vector3(0.05f, 0.1f, 0.3f);
-                    Vector3 segmentColor = (flyAtTarget ? flightColor : groundColor) * 0.2f;
+                    Vector3 segmentColor = Vector3.Lerp(groundColor, flightColor, phaseTransitionColorAmount) * 0.2f;
                     Vector3 telegraphColor = groundColor;
 
                     // Telegraph for the laser breath and body lasers
@@ -706,13 +746,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor, telegraphProgress));
                 }
             }
-
-            // Max velocity
-            float segmentVelocity = masterMode ? 20f : 16f;
-            float segmentVelocityBoost = death ? 6.5f * (1f - lifeRatio) : 5f * (1f - lifeRatio);
-            segmentVelocity += segmentVelocityBoost;
-            segmentVelocity += 4f * enrageScale;
-            segmentVelocity *= brokenSegmentAggressionMultiplier;
 
             // Despawn
             if (player.dead)
@@ -853,7 +886,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     bool flyWyvernMovement = false;
                     if (flyAtTarget)
                     {
-                        if (((npc.velocity.X > 0f && targetTilePosX < 0f) || (npc.velocity.X < 0f && targetTilePosX > 0f) || (npc.velocity.Y > 0f && targetTilePosY < 0f) || (npc.velocity.Y < 0f && targetTilePosY > 0f)) && Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) > speed / 2f && targetTileDist < 400f)
+                        if (((npc.velocity.X > 0f && targetTilePosX < 0f) || (npc.velocity.X < 0f && targetTilePosX > 0f) || (npc.velocity.Y > 0f && targetTilePosY < 0f) || (npc.velocity.Y < 0f && targetTilePosY > 0f)) && Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) > speed / 2f && targetTileDist < 600f)
                         {
                             flyWyvernMovement = true;
 
