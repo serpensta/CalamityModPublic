@@ -398,7 +398,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 140f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                             NPC.localAI[1] += 1f;

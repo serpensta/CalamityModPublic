@@ -383,7 +383,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 100f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 900;
                             }
                             npc.localAI[1] += 1f;
@@ -819,7 +819,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float topVelocity = acceleration * 100f;
             float deceleration = masterMode ? 0.75f : 0.8f;
 
-            if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 100f)
+            if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 80f)
             {
                 if (npc.velocity.Y > 0f)
                     npc.velocity.Y *= deceleration;
@@ -829,7 +829,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.velocity.Y > topVelocity)
                     npc.velocity.Y = topVelocity;
             }
-            else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 100f)
+            else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 120f)
             {
                 if (npc.velocity.Y < 0f)
                     npc.velocity.Y *= deceleration;
@@ -840,7 +840,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.velocity.Y = -topVelocity;
             }
 
-            if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 180f * npc.ai[0])
+            if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 160f * npc.ai[0])
             {
                 if (npc.velocity.X > 0f)
                     npc.velocity.X *= deceleration;
@@ -850,7 +850,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.velocity.X > topVelocity)
                     npc.velocity.X = topVelocity;
             }
-            if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 180f * npc.ai[0])
+            if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 200f * npc.ai[0])
             {
                 if (npc.velocity.X < 0f)
                     npc.velocity.X *= deceleration;
@@ -903,7 +903,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (!sawAlive)
                         npc.localAI[0] += 1f;
 
-                    if (npc.localAI[0] >= 90f)
+                    if (npc.localAI[0] >= 48f)
                     {
                         npc.localAI[0] = 0f;
                         npc.TargetClosest();
@@ -925,9 +925,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         laserArmTargetDist = laserSpeed / laserArmTargetDist;
                         laserArmTargetX *= laserArmTargetDist;
                         laserArmTargetY *= laserArmTargetDist;
-                        laserArmPosition.X += laserArmTargetX * 30f;
-                        laserArmPosition.Y += laserArmTargetY * 30f;
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), laserArmPosition.X, laserArmPosition.Y, laserArmTargetX, laserArmTargetY, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                        Vector2 laserVelocity = new Vector2(laserArmTargetX, laserArmTargetY);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), laserArmPosition + laserVelocity.SafeNormalize(Vector2.UnitY) * 100f, laserVelocity, type, damage, 0f, Main.myPlayer, 1f, 0f);
                     }
                 }
             }
@@ -976,7 +975,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         npc.localAI[0] = 0f;
                         npc.TargetClosest();
-                        int totalProjectiles = bossRush ? 24 : (masterMode ? 16 : 12);
+                        int totalProjectiles = bossRush ? 32 : (masterMode ? 24 : 16);
                         float radians = MathHelper.TwoPi / totalProjectiles;
                         int type = ProjectileID.DeathLaser;
                         int damage = npc.GetProjectileDamage(type);
@@ -1000,7 +999,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 100f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                             Main.projectile[proj].timeLeft = 900;
                         }
                         npc.localAI[1] += 1f;
@@ -1143,7 +1142,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float topVelocity = acceleration * 100f;
             float deceleration = masterMode ? 0.75f : 0.8f;
 
-            if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 150f)
+            if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y - 130f)
             {
                 if (npc.velocity.Y > 0f)
                     npc.velocity.Y *= deceleration;
@@ -1153,7 +1152,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.velocity.Y > topVelocity)
                     npc.velocity.Y = topVelocity;
             }
-            else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 150f)
+            else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 170f)
             {
                 if (npc.velocity.Y < 0f)
                     npc.velocity.Y *= deceleration;
@@ -1164,7 +1163,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.velocity.Y = -topVelocity;
             }
 
-            if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 200f)
+            if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 160f)
             {
                 if (npc.velocity.X > 0f)
                     npc.velocity.X *= deceleration;
@@ -1174,7 +1173,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.velocity.X > topVelocity)
                     npc.velocity.X = topVelocity;
             }
-            if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X + 160f)
+            if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X + 200f)
             {
                 if (npc.velocity.X < 0f)
                     npc.velocity.X *= deceleration;
@@ -1373,7 +1372,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float topVelocity = acceleration * 100f;
                 float deceleration = masterMode ? 0.75f : 0.8f;
 
-                if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y)
+                if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 20f)
                 {
                     if (npc.velocity.Y > 0f)
                         npc.velocity.Y *= deceleration;
@@ -1383,7 +1382,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (npc.velocity.Y > topVelocity)
                         npc.velocity.Y = topVelocity;
                 }
-                else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y)
+                else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 20f)
                 {
                     if (npc.velocity.Y < 0f)
                         npc.velocity.Y *= deceleration;
@@ -1394,7 +1393,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.velocity.Y = -topVelocity;
                 }
 
-                if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X)
+                if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 20f)
                 {
                     if (npc.velocity.X > 0f)
                         npc.velocity.X *= deceleration;
@@ -1404,7 +1403,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (npc.velocity.X > topVelocity)
                         npc.velocity.X = topVelocity;
                 }
-                if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X)
+                if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 20f)
                 {
                     if (npc.velocity.X < 0f)
                         npc.velocity.X *= deceleration;
@@ -1454,7 +1453,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float topVelocity = acceleration * 100f;
                     float deceleration = masterMode ? 0.75f : 0.8f;
 
-                    if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 300f)
+                    if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 290f)
                     {
                         if (npc.velocity.Y > 0f)
                             npc.velocity.Y *= deceleration;
@@ -1464,7 +1463,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.velocity.Y > topVelocity)
                             npc.velocity.Y = topVelocity;
                     }
-                    else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 230f)
+                    else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 240f)
                     {
                         if (npc.velocity.Y < 0f)
                             npc.velocity.Y *= deceleration;
@@ -1475,7 +1474,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             npc.velocity.Y = -topVelocity;
                     }
 
-                    if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 250f)
+                    if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 150f)
                     {
                         if (npc.velocity.X > 0f)
                             npc.velocity.X *= deceleration;
@@ -1485,7 +1484,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.velocity.X > topVelocity)
                             npc.velocity.X = topVelocity;
                     }
-                    if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X)
+                    if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X + 100f)
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X *= deceleration;
@@ -1730,7 +1729,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float topVelocity = acceleration * 100f;
                 float deceleration = masterMode ? 0.75f : 0.8f;
 
-                if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y)
+                if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 20f)
                 {
                     if (npc.velocity.Y > 0f)
                         npc.velocity.Y *= deceleration;
@@ -1740,7 +1739,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (npc.velocity.Y > topVelocity)
                         npc.velocity.Y = topVelocity;
                 }
-                else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y)
+                else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y - 20f)
                 {
                     if (npc.velocity.Y < 0f)
                         npc.velocity.Y *= deceleration;
@@ -1751,7 +1750,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.velocity.Y = -topVelocity;
                 }
 
-                if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X)
+                if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X + 20f)
                 {
                     if (npc.velocity.X > 0f)
                         npc.velocity.X *= deceleration;
@@ -1761,7 +1760,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (npc.velocity.X > topVelocity)
                         npc.velocity.X = topVelocity;
                 }
-                if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X)
+                if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 20f)
                 {
                     if (npc.velocity.X < 0f)
                         npc.velocity.X *= deceleration;
@@ -1807,7 +1806,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float topVelocity = acceleration * 100f;
                     float deceleration = masterMode ? 0.75f : 0.8f;
 
-                    if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 320f)
+                    if (npc.position.Y > Main.npc[(int)npc.ai[1]].position.Y + 310f)
                     {
                         if (npc.velocity.Y > 0f)
                             npc.velocity.Y *= deceleration;
@@ -1817,7 +1816,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.velocity.Y > topVelocity)
                             npc.velocity.Y = topVelocity;
                     }
-                    else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 260f)
+                    else if (npc.position.Y < Main.npc[(int)npc.ai[1]].position.Y + 270f)
                     {
                         if (npc.velocity.Y < 0f)
                             npc.velocity.Y *= deceleration;
@@ -1828,7 +1827,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             npc.velocity.Y = -topVelocity;
                     }
 
-                    if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X)
+                    if (npc.Center.X > Main.npc[(int)npc.ai[1]].Center.X - 100f)
                     {
                         if (npc.velocity.X > 0f)
                             npc.velocity.X *= deceleration;
@@ -1838,7 +1837,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.velocity.X > topVelocity)
                             npc.velocity.X = topVelocity;
                     }
-                    if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 250f)
+                    if (npc.Center.X < Main.npc[(int)npc.ai[1]].Center.X - 150f)
                     {
                         if (npc.velocity.X < 0f)
                             npc.velocity.X *= deceleration;
@@ -2448,9 +2447,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         num561 = num562 / num561;
                         num559 *= num561;
                         num560 *= num561;
-                        vector68.X += num559 * 8f;
-                        vector68.Y += num560 * 8f;
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector68.X, vector68.Y, num559, num560, type, damage, 0f, Main.myPlayer);
+                        Vector2 laserVelocity = new Vector2(num559, num560);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector68 + laserVelocity.SafeNormalize(Vector2.UnitY) * 100f, laserVelocity, type, damage, 0f, Main.myPlayer);
                     }
                 }
             }
@@ -2549,9 +2547,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         num568 = num569 / num568;
                         num566 *= num568;
                         num567 *= num568;
-                        vector69.X += num566 * 8f;
-                        vector69.Y += num567 * 8f;
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector69.X, vector69.Y, num566, num567, type, damage, 0f, Main.myPlayer);
+                        Vector2 laserVelocity = new Vector2(num566, num567);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector69 + laserVelocity.SafeNormalize(Vector2.UnitY) * 100f, laserVelocity, type, damage, 0f, Main.myPlayer);
                     }
                 }
             }

@@ -412,14 +412,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             Vector2 projectileVelocity = (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
                             int numProj = calamityGlobalNPC.newAI[0] % 60f == 0f ? (masterMode ? 9 : 7) : (masterMode ? 6 : 4);
                             int spread = masterMode ? 75 : 54;
-                            float offset = type == ModContent.ProjectileType<DestroyerElectricLaser>() ? 60f : 30f;
                             float rotation = MathHelper.ToRadians(spread);
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * offset, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 100f, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                     Main.projectile[proj].timeLeft = 900;
                                 }
                             }
@@ -526,7 +525,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         // Set projectile damage and type
                         int projectileType = ProjectileID.DeathLaser;
-                        float laserSpawnDistance = 10f;
                         switch (calamityGlobalNPC.destroyerLaserColor)
                         {
                             default:
@@ -539,13 +537,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             case 2:
                                 projectileType = ModContent.ProjectileType<DestroyerElectricLaser>();
-                                laserSpawnDistance = 20f;
                                 break;
                         }
 
                         // Get target vector
                         Vector2 projectileVelocity = (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * projectileSpeed;
-                        Vector2 projectileSpawn = npc.Center + projectileVelocity * laserSpawnDistance;
+                        Vector2 projectileSpawn = npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 100f;
 
                         // Shoot projectile
                         int damage = npc.GetProjectileDamage(projectileType);
@@ -1229,13 +1226,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 damage = (int)(damage * secondMechMultiplier);
                         }
 
-                        float offset = 5f;
-                        vector.X += num8 * offset;
-                        vector.Y += num9 * offset;
-
+                        Vector2 laserVelocityActual = new Vector2(num8, num9);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, num8, num9, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                            int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector + laserVelocityActual.SafeNormalize(Vector2.UnitY) * 100f, laserVelocityActual, type, damage, 0f, Main.myPlayer, 1f, 0f);
                             Main.projectile[num12].timeLeft = 900;
                         }
 
@@ -1876,7 +1870,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 velocityMultiplier = 0.8f;
                                 break;
                         }
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), probeCenter, npcCenter * velocityMultiplier, type, damage, 0f, Main.myPlayer);
+                        Vector2 laserVelocity = npcCenter * velocityMultiplier;
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), probeCenter + laserVelocity.SafeNormalize(Vector2.UnitY) * 50f, laserVelocity, type, damage, 0f, Main.myPlayer);
                     }
 
                     npc.netUpdate = true;
@@ -2120,7 +2115,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         vector3 = v.SafeNormalize(Vector2.UnitY) * num12;
                     }
 
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, vector3.X, vector3.Y, type, damage, 0f, Main.myPlayer);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector + vector3.SafeNormalize(Vector2.UnitY) * 50f, vector3, type, damage, 0f, Main.myPlayer);
                 }
             }
 
