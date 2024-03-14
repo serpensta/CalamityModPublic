@@ -359,7 +359,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             npc.localAI[0] = 0f;
 
-                            int totalProjectiles = bossRush ? 24 : 12;
+                            int totalProjectiles = bossRush ? 24 : death ? 18 : 12;
                             float radians = MathHelper.TwoPi / totalProjectiles;
                             int type = ProjectileID.DeathLaser;
                             int damage = npc.GetProjectileDamage(type);
@@ -506,7 +506,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                 int type = ProjectileID.Skull;
                                 headCenter += value * 5f;
-                                int enragedSkulls = Projectile.NewProjectile(npc.GetSource_FromAI(), headCenter.X, headCenter.Y, enragedHeadSkullTargetX, enragedHeadSkullTargetY, type, 250, 0f, Main.myPlayer, -1f, 0f);
+                                int enragedSkulls = Projectile.NewProjectile(npc.GetSource_FromAI(), headCenter.X, headCenter.Y, enragedHeadSkullTargetX, enragedHeadSkullTargetY, type, 250, 0f, Main.myPlayer, -3f, 0f);
                                 Main.projectile[enragedSkulls].timeLeft = 300;
                             }
                         }
@@ -638,8 +638,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                             damage = (int)(damage * secondMechMultiplier);
                                     }
 
-                                    headCenter += value * 5f;
-                                    int enragedSkulls = Projectile.NewProjectile(npc.GetSource_FromAI(), headCenter.X, headCenter.Y, enragedHeadSkullTargetX, enragedHeadSkullTargetY, type, damage, 0f, Main.myPlayer, -1f, 0f);
+                                    if (npc.localAI[0] % 3f == 0f)
+                                    {
+                                        int probeLimit = death ? 4 : 2;
+                                        if (NPC.CountNPCS(NPCID.Probe) < probeLimit)
+                                            NPC.NewNPC(npc.GetSource_FromAI(), (int)headCenter.X, (int)headCenter.Y + 30, NPCID.Probe);
+                                    }
+
+                                    int enragedSkulls = Projectile.NewProjectile(npc.GetSource_FromAI(), headCenter.X, headCenter.Y + 30f, enragedHeadSkullTargetX, enragedHeadSkullTargetY, type, damage, 0f, Main.myPlayer, -3f, 0f);
                                     Main.projectile[enragedSkulls].timeLeft = 480;
                                     Main.projectile[enragedSkulls].tileCollide = false;
                                 }
@@ -673,13 +679,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     npc.rotation = npc.velocity.X / 15f;
 
-                    float flightVelocity = bossRush ? 25f : death ? 20f : 15f;
-                    float flightAcceleration = bossRush ? 0.25f : death ? 0.2f : 0.15f;
+                    float flightVelocity = bossRush ? 30f : death ? 24f : 18f;
+                    float flightAcceleration = bossRush ? 0.5f : death ? 0.4f : 0.3f;
 
                     if (masterMode)
                     {
                         flightVelocity += 5f;
-                        flightAcceleration += 0.05f;
+                        flightAcceleration += 0.1f;
                     }
 
                     Vector2 destination = new Vector2(Main.player[npc.target].Center.X, Main.player[npc.target].Center.Y - 500f);
@@ -687,7 +693,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     // Spit homing missiles and then go to floating phase
                     npc.localAI[3] += 1f;
-                    if (Vector2.Distance(npc.Center, destination) < 160f || npc.ai[2] > 0f || npc.localAI[3] > 120f)
+                    if (Vector2.Distance(npc.Center, destination) < 80f || npc.ai[2] > 0f || npc.localAI[3] > 120f)
                     {
                         float missileSpawnDivisor = death ? (masterMode ? 6f : 8f) : (masterMode ? 9f : 12f);
                         float totalMissiles = masterMode ? 12f : 10f;
@@ -698,9 +704,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Vector2 velocity = new Vector2(-1f * (float)Main.rand.NextDouble() * 3f, 1f);
+                                Vector2 velocity = new Vector2(-1f * (float)Main.rand.NextDouble() * 5f, 1f);
                                 velocity = velocity.RotatedBy((Main.rand.NextDouble() - 0.5) * MathHelper.PiOver4);
-                                velocity *= 0.25f;
                                 int type = ProjectileID.RocketSkeleton;
                                 int damage = npc.GetProjectileDamage(type);
 
@@ -715,7 +720,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                         damage = (int)(damage * secondMechMultiplier);
                                 }
 
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + Main.rand.Next(npc.width / 2), npc.Center.Y + 4f, velocity.X, velocity.Y, type, damage, 0f, Main.myPlayer, npc.target, 1f);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center.X + Main.rand.Next(npc.width / 2), npc.Center.Y + 30f, velocity.X, velocity.Y, type, damage, 0f, Main.myPlayer, npc.target, 1f);
                                 Main.projectile[proj].timeLeft = 540;
                             }
 
@@ -1225,12 +1230,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 damage = (int)(damage * secondMechMultiplier);
                         }
 
-                        cannonArmTargetDist = 0.5f / cannonArmTargetDist;
+                        float rocketSpeed = 10f;
+                        cannonArmTargetDist = rocketSpeed / cannonArmTargetDist;
                         cannonArmTargetX *= cannonArmTargetDist;
                         cannonArmTargetY *= cannonArmTargetDist;
-                        cannonArmPosition.X += cannonArmTargetX * 30f;
-                        cannonArmPosition.Y += cannonArmTargetY * 30f;
-                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), cannonArmPosition.X, cannonArmPosition.Y, cannonArmTargetX, cannonArmTargetY, type, damage, 0f, Main.myPlayer, npc.target, 1f);
+
+                        Vector2 rocketVelocity = new Vector2(cannonArmTargetX, cannonArmTargetY);
+                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), cannonArmPosition + rocketVelocity.SafeNormalize(Vector2.UnitY) * 40f, rocketVelocity, type, damage, 0f, Main.myPlayer, npc.target, 1f);
                         Main.projectile[proj].timeLeft = 600;
                     }
                 }
@@ -1272,14 +1278,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 damage = (int)(damage * secondMechMultiplier);
                         }
 
-                        Vector2 cannonSpreadTargetDist = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
-                        cannonSpreadTargetDist *= 0.5f;
+                        float rocketSpeed = 10f;
+                        Vector2 cannonSpreadTargetDist = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * rocketSpeed;
                         int numProj = bossRush ? 5 : 3;
-                        float rotation = MathHelper.ToRadians(bossRush ? 8 : 5);
+                        float rotation = MathHelper.ToRadians(bossRush ? 15 : 9);
                         for (int i = 0; i < numProj; i++)
                         {
                             Vector2 perturbedSpeed = cannonSpreadTargetDist.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 30f, perturbedSpeed, type, damage, 0f, Main.myPlayer, npc.target, 1f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 40f, perturbedSpeed, type, damage, 0f, Main.myPlayer, npc.target, 1f);
                             Main.projectile[proj].timeLeft = 600;
                         }
                     }

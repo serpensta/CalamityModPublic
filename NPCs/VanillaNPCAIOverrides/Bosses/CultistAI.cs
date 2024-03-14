@@ -151,8 +151,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.velocity = Vector2.Zero;
                 npc.netUpdate = true;
 
-                if (!NPC.AnyNPCs(NPCID.AncientCultistSquidhead))
-                    NPC.NewNPC(npc.GetSource_FromAI(), (int)Main.projectile[(int)npc.ai[2]].Center.X, (int)Main.projectile[(int)npc.ai[2]].Center.Y, NPCID.AncientCultistSquidhead);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    if (!NPC.AnyNPCs(NPCID.AncientCultistSquidhead))
+                        NPC.NewNPC(npc.GetSource_FromAI(), (int)Main.projectile[(int)npc.ai[2]].Center.X, (int)Main.projectile[(int)npc.ai[2]].Center.Y, NPCID.AncientCultistSquidhead);
+                }
 
                 Main.projectile[(int)npc.ai[2]].ai[1] = -1f;
                 Main.projectile[(int)npc.ai[2]].netUpdate = true;
@@ -1327,10 +1330,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
                 }
 
-                if (expertMode)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    if (!NPC.AnyNPCs(NPCID.AncientCultistSquidhead))
-                        NPC.NewNPC(npc.GetSource_FromAI(), (int)Main.projectile[(int)npc.ai[2]].Center.X, (int)Main.projectile[(int)npc.ai[2]].Center.Y, NPCID.AncientCultistSquidhead);
+                    if (expertMode)
+                    {
+                        if (!NPC.AnyNPCs(NPCID.AncientCultistSquidhead))
+                            NPC.NewNPC(npc.GetSource_FromAI(), (int)Main.projectile[(int)npc.ai[2]].Center.X, (int)Main.projectile[(int)npc.ai[2]].Center.Y, NPCID.AncientCultistSquidhead);
+                    }
                 }
 
                 Main.projectile[(int)npc.ai[2]].ai[1] = -1f;

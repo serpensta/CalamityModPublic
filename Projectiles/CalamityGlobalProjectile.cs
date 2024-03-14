@@ -285,8 +285,9 @@ namespace CalamityMod.Projectiles
                 bool fromRevSkeletron = projectile.ai[0] < 0f;
                 bool revSkeletronHomingSkull = projectile.ai[0] == -1f;
                 bool revSkeletronAcceleratingSkull = projectile.ai[0] == -2f;
+                bool revSkeletronPrimeHomingSkull = projectile.ai[0] == -3f;
 
-                if (revSkeletronHomingSkull)
+                if (revSkeletronHomingSkull || revSkeletronPrimeHomingSkull)
                     projectile.alpha = 0;
 
                 if (projectile.alpha > 0)
@@ -315,7 +316,7 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                if (!revSkeletronHomingSkull)
+                if (!revSkeletronHomingSkull && !revSkeletronPrimeHomingSkull)
                 {
                     int numDust = revSkeletronAcceleratingSkull ? 1 : 2;
                     int dustType = revSkeletronAcceleratingSkull ? 91 : 6;
@@ -343,8 +344,10 @@ namespace CalamityMod.Projectiles
                     int num133 = 0;
                     num133 = Player.FindClosest(projectile.Center, 1, 1);
                     projectile.ai[1] += 1f;
-                    float homingStartTime = 30f;
+                    float homingStartTime = revSkeletronPrimeHomingSkull ? 10f : 30f;
                     float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 150f : CalamityWorld.death ? 105f : 90f;
+                    if (revSkeletronPrimeHomingSkull)
+                        homingEndTime += 60f;
 
                     // Stop homing when within a certain distance of the target
                     if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)
@@ -356,7 +359,7 @@ namespace CalamityMod.Projectiles
                         Vector2 vector24 = Main.player[num133].Center - projectile.Center;
                         vector24.Normalize();
                         vector24 *= num134;
-                        float inertia = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 25f : 30f;
+                        float inertia = (CalamityWorld.death || BossRushEvent.BossRushActive) ? (revSkeletronPrimeHomingSkull ? 20f : 25f) : (revSkeletronPrimeHomingSkull ? 25f : 30f);
                         projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
                         projectile.velocity.Normalize();
                         projectile.velocity *= num134;
@@ -2177,16 +2180,17 @@ namespace CalamityMod.Projectiles
                 else if (projectile.type == ProjectileID.RocketSkeleton && projectile.ai[1] == 1f)
                 {
                     bool homeIn = false;
-                    float spreadOutCutoffTime = 510f;
-                    float homeInCutoffTime = 420f;
-                    float minAcceleration = masterMode ? 0.1f : 0.05f;
-                    float maxAcceleration = masterMode ? 0.2f : 0.1f;
-                    float homingVelocity = 25f;
+                    float homingTime = masterMode ? 210f : 150f;
+                    float spreadOutCutoffTime = 555f;
+                    float homeInCutoffTime = spreadOutCutoffTime - homingTime;
+                    float minAcceleration = 0.04f;
+                    float maxAcceleration = 0.08f;
+                    float homingVelocity = 24f;
 
                     if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
                         homeIn = true;
                     else if (projectile.velocity.Length() < (masterMode ? 20f : 15f))
-                        projectile.velocity *= 1.1f;
+                        projectile.velocity *= 1.01f;
 
                     if (homeIn)
                     {
