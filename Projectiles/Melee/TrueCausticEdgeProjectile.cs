@@ -161,7 +161,6 @@ namespace CalamityMod.Projectiles.Melee
                 int dustType = Main.rand.NextBool() ? DustID.GreenFairy : DustID.Venom;
                 int dust = Dust.NewDust(new Vector2(Projectile.oldPosition.X - oldXVel * 0.5f, Projectile.oldPosition.Y - oldYVel * 0.5f), 8, 8, dustType, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, Projectile.alpha, default, dustScale);
                 Main.dust[dust].noGravity = true;
-                //Main.dust[dust].velocity *= 0.5f;
                 if (dustType == DustID.Venom)
                     Main.dust[dust].fadeIn = 1.5f;
 
