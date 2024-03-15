@@ -35,11 +35,11 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Vector2 destination = Main.MouseWorld;
-            Vector2 position = destination - (Vector2.UnitY * (Main.MouseWorld.Y - Main.screenPosition.Y + 80f));
+            Vector2 destination = target.Center;
+            Vector2 position = destination - (Vector2.UnitY * (destination.Y - Main.screenPosition.Y + 80f));
             Vector2 cachedPosition = position;
 
-            Vector2 velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
+            Vector2 velocity = (destination - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
             Vector2 cachedVelocity = velocity;
 
             int meteorDamage = player.CalcIntDamage<MeleeDamageClass>((int)(Item.damage * 0.5));
@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Melee
             for (int i = 0; i < TotalMeteors; i++)
             {
                 position += Vector2.UnitX * Main.rand.Next(-320, 321);
-                velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed * Main.rand.NextFloat(0.9f, 1.1f);
+                velocity = (destination - position).SafeNormalize(Vector2.UnitY) * ShootSpeed * Main.rand.NextFloat(0.9f, 1.1f);
                 int proj = Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, ModContent.ProjectileType<CometQuasherMeteor>(), meteorDamage, meteorKnockback, player.whoAmI, 0f, 0.5f + Main.rand.NextFloat() * 0.3f, target.Center.Y);
                 Main.projectile[proj].Calamity().lineColor = Main.rand.Next(3);
                 position = cachedPosition;
@@ -57,11 +57,11 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
-            Vector2 destination = Main.MouseWorld;
-            Vector2 position = destination - (Vector2.UnitY * (Main.MouseWorld.Y - Main.screenPosition.Y + 80f));
+            Vector2 destination = target.Center;
+            Vector2 position = destination - (Vector2.UnitY * (destination.Y - Main.screenPosition.Y + 80f));
             Vector2 cachedPosition = position;
 
-            Vector2 velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
+            Vector2 velocity = (destination - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
             Vector2 cachedVelocity = velocity;
 
             int meteorDamage = player.CalcIntDamage<MeleeDamageClass>((int)(Item.damage * 0.5));

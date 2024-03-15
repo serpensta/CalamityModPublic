@@ -1,5 +1,6 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Melee
 {
     public class AftershockRock : ModProjectile, ILocalizedModType
@@ -8,13 +9,14 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void SetDefaults()
         {
-            Projectile.width = 32;
-            Projectile.height = 34;
+            Projectile.width = 38;
+            Projectile.height = 38;
             Projectile.aiStyle = ProjAIStyleID.GroundProjectile;
             Projectile.friendly = true;
             Projectile.penetrate = 3;
             Projectile.MaxUpdates = 3;
             Projectile.DamageType = DamageClass.Melee;
+            Projectile.timeLeft = 300 * Projectile.MaxUpdates;
             Projectile.ignoreWater = true;
             AIType = ProjectileID.BoulderStaffOfEarth;
             Projectile.usesLocalNPCImmunity = true;

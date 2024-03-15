@@ -43,7 +43,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Vector2 destination = target.Center;
 
-            Vector2 position = destination - (Vector2.UnitY * (Main.MouseWorld.Y - Main.screenPosition.Y + 80f));
+            Vector2 position = destination - (Vector2.UnitY * (destination.Y - Main.screenPosition.Y + 80f));
             Vector2 cachedPosition = position;
             Vector2 secondPosition = cachedPosition + (Vector2.UnitY * (Main.screenHeight + 160f));
             Vector2 secondCachedPosition = secondPosition;
@@ -55,6 +55,8 @@ namespace CalamityMod.Items.Weapons.Melee
 
             int teethDamage = player.CalcIntDamage<MeleeDamageClass>((int)(Item.damage * 0.5));
             float teethKnockback = Item.knockBack * 0.2f;
+            bool evenNumberOfProjectiles = TotalTeeth % 2 == 0;
+            float amountToAdd = evenNumberOfProjectiles ? 0.5f : 0f;
             int centralProjectile = TotalTeeth / 2;
             int otherCentralProjectile = centralProjectile - 1;
             float teethXVelocityReduction = 0.9f;
@@ -66,7 +68,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 bool topTeeth = i == 0;
                 for (int j = 0; j < TotalTeeth; j++)
                 {
-                    velocityAdjustment = (j == centralProjectile || j == otherCentralProjectile) ? minVelocityAdjustment : MathHelper.Lerp(minVelocityAdjustment, maxVelocityAdjustment, Math.Abs((j + 0.5f) - centralProjectile) / (float)centralProjectile);
+                    velocityAdjustment = ((j == centralProjectile || j == otherCentralProjectile) && evenNumberOfProjectiles) ? minVelocityAdjustment : MathHelper.Lerp(minVelocityAdjustment, maxVelocityAdjustment, Math.Abs((j + amountToAdd) - centralProjectile) / (float)centralProjectile);
                     if (topTeeth)
                     {
                         position.X += MathHelper.Lerp(-HalvedTeethSpread, HalvedTeethSpread, j / (float)(TotalTeeth - 1));
@@ -91,20 +93,22 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
-            Vector2 destination = Main.MouseWorld;
+            Vector2 destination = target.Center;
 
-            Vector2 position = destination - (Vector2.UnitY * (Main.MouseWorld.Y - Main.screenPosition.Y + 80f));
+            Vector2 position = destination - (Vector2.UnitY * (destination.Y - Main.screenPosition.Y + 80f));
             Vector2 cachedPosition = position;
             Vector2 secondPosition = cachedPosition + (Vector2.UnitY * (Main.screenHeight + 160f));
             Vector2 secondCachedPosition = secondPosition;
 
-            Vector2 velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
+            Vector2 velocity = (destination - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
             Vector2 cachedVelocity = velocity;
-            Vector2 secondVelocity = (Main.MouseWorld - secondPosition).SafeNormalize(Vector2.UnitY) * ShootSpeed;
+            Vector2 secondVelocity = (destination - secondPosition).SafeNormalize(Vector2.UnitY) * ShootSpeed;
             Vector2 secondCachedVelocity = secondVelocity;
 
             int teethDamage = player.CalcIntDamage<MeleeDamageClass>((int)(Item.damage * 0.5));
             float teethKnockback = Item.knockBack * 0.2f;
+            bool evenNumberOfProjectiles = TotalTeeth % 2 == 0;
+            float amountToAdd = evenNumberOfProjectiles ? 0.5f : 0f;
             int centralProjectile = TotalTeeth / 2;
             int otherCentralProjectile = centralProjectile - 1;
             float teethXVelocityReduction = 0.9f;
@@ -116,20 +120,22 @@ namespace CalamityMod.Items.Weapons.Melee
                 bool topTeeth = i == 0;
                 for (int j = 0; j < TotalTeeth; j++)
                 {
-                    velocityAdjustment = (j == centralProjectile || j == otherCentralProjectile) ? minVelocityAdjustment : MathHelper.Lerp(minVelocityAdjustment, maxVelocityAdjustment, Math.Abs((j + 0.5f) - centralProjectile) / (float)centralProjectile);
+                    velocityAdjustment = ((j == centralProjectile || j == otherCentralProjectile) && evenNumberOfProjectiles) ? minVelocityAdjustment : MathHelper.Lerp(minVelocityAdjustment, maxVelocityAdjustment, Math.Abs((j + amountToAdd) - centralProjectile) / (float)centralProjectile);
                     if (topTeeth)
                     {
                         position.X += MathHelper.Lerp(-HalvedTeethSpread, HalvedTeethSpread, j / (float)(TotalTeeth - 1));
-                        velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
-                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(velocity.X * teethXVelocityReduction, velocity.Y) * velocityAdjustment, ModContent.ProjectileType<GreenWater>(), teethDamage, teethKnockback, player.whoAmI, 0f, i, target.Center.Y);
+                        velocity = CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(position, target, ShootSpeed, 1) * velocityAdjustment;
+                        velocity.X *= teethXVelocityReduction;
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, ModContent.ProjectileType<GreenWater>(), teethDamage, teethKnockback, player.whoAmI, 0f, i, target.Center.Y);
                         position = cachedPosition;
                         velocity = cachedVelocity;
                     }
                     else
                     {
                         secondPosition.X += MathHelper.Lerp(-HalvedTeethSpread, HalvedTeethSpread, j / (float)(TotalTeeth - 1));
-                        secondVelocity = (Main.MouseWorld - secondPosition).SafeNormalize(Vector2.UnitY) * ShootSpeed;
-                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), secondPosition, new Vector2(secondVelocity.X * teethXVelocityReduction, secondVelocity.Y) * velocityAdjustment, ModContent.ProjectileType<GreenWater>(), teethDamage, teethKnockback, player.whoAmI, 0f, i, target.Center.Y);
+                        secondVelocity = CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(secondPosition, target, ShootSpeed, 1) * velocityAdjustment;
+                        secondVelocity.X *= teethXVelocityReduction;
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), secondPosition, secondVelocity, ModContent.ProjectileType<GreenWater>(), teethDamage, teethKnockback, player.whoAmI, 0f, i, target.Center.Y);
                         secondPosition = secondCachedPosition;
                         secondVelocity = secondCachedVelocity;
                     }

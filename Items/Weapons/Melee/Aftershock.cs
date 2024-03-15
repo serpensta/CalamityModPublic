@@ -35,9 +35,9 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<ArmorCrunch>(), 300);
-            Vector2 destination = Main.MouseWorld;
-            Vector2 position = destination - (Vector2.UnitY * (Main.MouseWorld.Y - Main.screenPosition.Y + 80f)) + (Vector2.UnitX * Main.rand.Next(-160, 161));
-            Vector2 velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed * Main.rand.NextFloat(0.9f, 1.1f);
+            Vector2 destination = target.Center;
+            Vector2 position = destination - (Vector2.UnitY * (destination.Y - Main.screenPosition.Y + 80f)) + (Vector2.UnitX * Main.rand.Next(-160, 161));
+            Vector2 velocity = (destination - position).SafeNormalize(Vector2.UnitY) * ShootSpeed * Main.rand.NextFloat(0.9f, 1.1f);
             int rockDamage = player.CalcIntDamage<MeleeDamageClass>(Item.damage);
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, ModContent.ProjectileType<AftershockRock>(), rockDamage, hit.Knockback, player.whoAmI, 0f, (float)Main.rand.Next(10), target.Center.Y);
         }
@@ -45,9 +45,9 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(ModContent.BuffType<ArmorCrunch>(), 300);
-            Vector2 destination = Main.MouseWorld;
-            Vector2 position = destination - (Vector2.UnitY * (Main.MouseWorld.Y - Main.screenPosition.Y + 80f)) + (Vector2.UnitX * Main.rand.Next(-160, 161));
-            Vector2 velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed * Main.rand.NextFloat(0.9f, 1.1f);
+            Vector2 destination = target.Center;
+            Vector2 position = destination - (Vector2.UnitY * (destination.Y - Main.screenPosition.Y + 80f)) + (Vector2.UnitX * Main.rand.Next(-160, 161));
+            Vector2 velocity = (destination - position).SafeNormalize(Vector2.UnitY) * ShootSpeed * Main.rand.NextFloat(0.9f, 1.1f);
             int rockDamage = player.CalcIntDamage<MeleeDamageClass>(Item.damage);
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, ModContent.ProjectileType<AftershockRock>(), rockDamage, Item.knockBack, player.whoAmI, 0f, (float)Main.rand.Next(10), target.Center.Y);
         }
