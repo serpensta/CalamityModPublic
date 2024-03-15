@@ -246,8 +246,6 @@ namespace CalamityMod.NPCs.NormalNPCs
                     if (Main.rand.NextBool(3))
                         target.AddBuff(BuffID.Burning, 60);
                     if (Main.rand.NextBool(3))
-                        target.AddBuff(BuffID.Daybreak, 120);
-                    if (Main.rand.NextBool(3))
                         target.AddBuff(ModContent.BuffType<Shadowflame>(), 120);
                     if (Main.rand.NextBool(3))
                         target.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 120);
@@ -261,7 +259,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 90);
                 }
                 else
-                    target.AddBuff(BuffID.OnFire3, 150, true);
+                    target.AddBuff(BuffID.OnFire, 150, true);
             }
         }
 
