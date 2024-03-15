@@ -35,7 +35,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = -1; // Actually only hits three times, set to infinite so the fade out works still
             Projectile.timeLeft = TimeLeft;
             Projectile.usesIDStaticNPCImmunity = true;
             Projectile.idStaticNPCHitCooldown = 24;
@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Melee
             if (Projectile.timeLeft > FadeOutTime)
             {
                 if (Projectile.velocity.Length() < MaxVelocity)
-                    Projectile.velocity *= 1.05f;
+                    Projectile.velocity *= 1.055f;
             }
             else
                 Projectile.velocity *= 0.95f;
@@ -99,6 +99,9 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn2, 120);
+            if (Projectile.numHits >= 2) // Fades out after the third hit
+                Projectile.timeLeft = FadeOutTime;
+
             int slashCreatorID = ModContent.ProjectileType<DarklightGreatswordSlashCreator>();
             int damage = (int)(Projectile.damage * DarklightGreatsword.SlashProjectileDamageMultiplier);
             float knockback = Projectile.knockBack * DarklightGreatsword.SlashProjectileDamageMultiplier;
