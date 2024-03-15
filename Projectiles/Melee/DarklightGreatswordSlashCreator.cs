@@ -1,5 +1,4 @@
 ﻿using CalamityMod.Items.Weapons.Melee;
-using CalamityMod.NPCs.OldDuke;
 using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Terraria;
