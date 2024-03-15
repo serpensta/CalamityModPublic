@@ -5,7 +5,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Humanizer.In;
 
 namespace CalamityMod.Items.Weapons.Melee
 {
@@ -45,28 +44,27 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            Vector2 offset = new Vector2(Item.width * 0.25f * -player.direction, Item.height * 0.25f);
+            if (player.gravDir == 1f)
+                position -= offset;
+            else
+                position += offset;
+
+            velocity = (Main.MouseWorld - position).SafeNormalize(Vector2.UnitY) * ShootSpeed;
             type = Main.rand.NextBool() ? type : ModContent.ProjectileType<LightBeam>();
             Projectile.NewProjectile(source, position, velocity, type, (int)(damage * ProjectileDamageMultiplier), knockback * ProjectileDamageMultiplier, player.whoAmI);
             return false;
         }
 
-        public override void MeleeEffects(Player player, Rectangle hitbox)
-        {
-            if (Main.rand.NextBool(3))
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, Main.rand.NextBool() ? DustID.BlueFairy : DustID.PinkFairy);
-        }
-
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(Main.rand.NextBool() ? BuffID.Frostburn2 : BuffID.OnFire, 240);
-
-            // Create a slash creator on top of the hit target.
             int slashCreatorID = ModContent.ProjectileType<DarklightGreatswordSlashCreator>();
             int slashDamage = (int)(player.CalcIntDamage<MeleeDamageClass>(Item.damage) * TrueMeleeSlashProjectileDamageMultiplier);
             float slashKnockback = Item.knockBack * TrueMeleeSlashProjectileDamageMultiplier;
             if (player.ownedProjectileCounts[slashCreatorID] < SlashProjectileLimit)
             {
-                Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center, Vector2.Zero, slashCreatorID, slashDamage, slashKnockback, player.whoAmI, target.whoAmI, Main.rand.NextFloat(MathHelper.TwoPi));
+                Projectile.NewProjectile(player.GetSource_ItemUse(Item), target.Center, Vector2.Zero, slashCreatorID, slashDamage, slashKnockback, player.whoAmI, target.whoAmI, player.itemRotation, Main.rand.Next(2));
                 player.ownedProjectileCounts[slashCreatorID]++;
             }
         }

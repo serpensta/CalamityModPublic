@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.NPCs.OldDuke;
 using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -42,7 +43,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             if (Projectile.timeLeft % DarklightGreatsword.SlashCreationRate == 0)
             {
-                SoundEngine.PlaySound(CommonCalamitySounds.SwiftSliceSound, Projectile.Center);
+                SoundEngine.PlaySound(CommonCalamitySounds.SwiftSliceSound with { Volume = CommonCalamitySounds.SwiftSliceSound.Volume * 0.5f }, Projectile.Center);
                 if (Main.myPlayer == Projectile.owner)
                 {
                     float maxOffset = Target.width * 0.4f;
@@ -52,7 +53,8 @@ namespace CalamityMod.Projectiles.Melee
                     Vector2 spawnOffset = SlashDirection.ToRotationVector2() * Main.rand.NextFloatDirection() * maxOffset;
                     Vector2 sliceVelocity = spawnOffset.SafeNormalize(Vector2.UnitY) * 0.1f;
 
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Target.Center + spawnOffset, sliceVelocity, ModContent.ProjectileType<DarklightGreatswordSlash>(), (int)(Projectile.damage * Terratomere.SmallSlashDamageFactor), 0f, Projectile.owner);
+                    int damage = Projectile.damage;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Target.Center + spawnOffset, sliceVelocity, ModContent.ProjectileType<DarklightGreatswordSlash>(), damage, 0f, Projectile.owner, 0f, 0f, Projectile.ai[2]);
                 }
             }
         }
