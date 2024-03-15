@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Items.Weapons.Melee;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,6 +10,15 @@ namespace CalamityMod.Projectiles.Melee
     public class LightBeam : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Melee";
+
+        public Player Owner => Main.player[Projectile.owner];
+
+        private const float MaxVelocity = DarklightGreatsword.ShootSpeed * 12f;
+
+        private const int FadeOutTime = 85;
+
+        private const int TimeLeft = 300 + FadeOutTime;
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
@@ -18,25 +29,30 @@ namespace CalamityMod.Projectiles.Melee
         {
             Projectile.width = 74;
             Projectile.height = 74;
-            Projectile.aiStyle = ProjAIStyleID.Sickle;
             AIType = ProjectileID.DeathSickle;
             Projectile.friendly = true;
+            Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.penetrate = 1;
-            Projectile.timeLeft = 300;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = TimeLeft;
         }
 
         public override void AI()
         {
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.6f / 255f, 0f, (255 - Projectile.alpha) * 0.2f / 255f);
 
-            if (Projectile.velocity.Length() < 18f)
-                Projectile.velocity *= 1.1f;
+            if (Projectile.timeLeft > FadeOutTime)
+            {
+                if (Projectile.velocity.Length() < MaxVelocity)
+                    Projectile.velocity *= 1.025f;
+            }
+            else
+                Projectile.velocity *= 0.925f;
         }
 
         public override Color? GetAlpha(Color lightColor)
         {
-            if (Projectile.timeLeft < 85)
+            if (Projectile.timeLeft < FadeOutTime)
             {
                 byte b2 = (byte)(Projectile.timeLeft * 3);
                 byte a2 = (byte)(100f * (b2 / 255f));
@@ -51,27 +67,29 @@ namespace CalamityMod.Projectiles.Melee
             return false;
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            target.AddBuff(BuffID.OnFire, 240);
+            if (Projectile.timeLeft > FadeOutTime)
+                Projectile.timeLeft = FadeOutTime;
+
+            return false;
         }
 
-        public override void OnKill(int timeLeft)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            for (int i = 0; i < 20; i++)
+            target.AddBuff(BuffID.OnFire, 120);
+            int slashCreatorID = ModContent.ProjectileType<DarklightGreatswordSlashCreator>();
+            int damage = (int)(Projectile.damage * DarklightGreatsword.SlashProjectileDamageMultiplier);
+            float knockback = Projectile.knockBack * DarklightGreatsword.SlashProjectileDamageMultiplier;
+            if (Owner.ownedProjectileCounts[slashCreatorID] < DarklightGreatsword.SlashProjectileLimit)
             {
-                int pinkish = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PinkFairy, 0f, 0f, 0, default, 1f);
-                Main.dust[pinkish].noGravity = true;
-                Main.dust[pinkish].velocity += Projectile.velocity * 0.1f;
-            }
-            if (Projectile.owner == Main.myPlayer)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, Main.rand.Next(-35, 36) * 0.2f, Main.rand.Next(-35, 36) * 0.2f, ModContent.ProjectileType<TinyCrystal>(),
-                    (int)(Projectile.damage * 0.5), Projectile.knockBack * 0.15f, Main.myPlayer, 1f, 0f);
-                }
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, slashCreatorID, damage, knockback, Projectile.owner, target.whoAmI, Main.rand.NextFloat(MathHelper.TwoPi));
+                Owner.ownedProjectileCounts[slashCreatorID]++;
             }
         }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(BuffID.OnFire, 120);
+
+        public override bool? CanDamage() => Projectile.timeLeft < FadeOutTime ? false : null;
     }
 }

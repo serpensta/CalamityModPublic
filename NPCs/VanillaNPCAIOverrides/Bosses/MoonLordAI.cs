@@ -914,7 +914,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.localAI[1] = 1f;
 
                     if (attackTimer == attackTimerComparison - 35f)
-                        SoundEngine.PlaySound(SoundID.NPCDeath6, npc.position);
+                        SoundEngine.PlaySound(SoundID.NPCDeath6, npc.Center);
 
                     if ((shootFirstBolt || shootSecondBolt || shootThirdBolt) && Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -1515,7 +1515,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.localAI[1] = 1f;
 
                     if (handAttackTimer == handAttackTimerComparison - 35f)
-                        SoundEngine.PlaySound(SoundID.NPCDeath6, npc.position);
+                        SoundEngine.PlaySound(SoundID.NPCDeath6, npc.Center);
 
                     if ((shootFirstBolt || shootSecondBolt || shootThirdBolt) && Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -1787,7 +1787,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.localAI[2] = MathHelper.Lerp(npc.localAI[2], 0.4f, 0.2f);
 
                     if (secondAttackTimer == secondAttackPicker - 35f)
-                        SoundEngine.PlaySound(SoundID.NPCDeath6, npc.position);
+                        SoundEngine.PlaySound(SoundID.NPCDeath6, npc.Center);
 
                     if ((secondAttackTimer == secondAttackPicker - 14f || secondAttackTimer == secondAttackPicker - 7f || secondAttackTimer == secondAttackPicker) && Main.netMode != NetmodeID.MultiplayerClient)
                     {

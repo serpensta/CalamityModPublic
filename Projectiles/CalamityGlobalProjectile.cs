@@ -634,7 +634,7 @@ namespace CalamityMod.Projectiles
 
                 if (projectile.localAI[1] == 0f)
                 {
-                    SoundEngine.PlaySound(SoundID.Item33, projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item33, projectile.Center);
                     projectile.localAI[1] = 1f;
                 }
 
@@ -657,7 +657,7 @@ namespace CalamityMod.Projectiles
 
                 if (projectile.localAI[1] == 0f)
                 {
-                    SoundEngine.PlaySound(SoundID.Item33, projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item33, projectile.Center);
                     projectile.localAI[1] = 1f;
                 }
 
@@ -1091,7 +1091,7 @@ namespace CalamityMod.Projectiles
                 {
                     if (projectile.localAI[1] == 0f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item121, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item121, projectile.Center);
                         projectile.localAI[1] = 1f;
                     }
 
@@ -1212,7 +1212,7 @@ namespace CalamityMod.Projectiles
                 if (projectile.soundDelay == 0)
                 {
                     projectile.soundDelay = 20 + Main.rand.Next(40);
-                    SoundEngine.PlaySound(SoundID.Item9, projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item9, projectile.Center);
                 }
 
                 if (projectile.localAI[0] == 0f)
@@ -1502,7 +1502,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.ai[1] == 0f)
                     {
                         projectile.ai[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item34, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item34, projectile.Center);
                     }
                     else if (projectile.ai[1] == 1f && Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -1623,7 +1623,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.localAI[1] == 0f)
                     {
                         projectile.localAI[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item120, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item120, projectile.Center);
                     }
 
                     projectile.ai[0] += 1f;
@@ -1912,7 +1912,7 @@ namespace CalamityMod.Projectiles
                         return true;
 
                     if (projectile.ai[0] == 0f)
-                        SoundEngine.PlaySound(SoundID.Item8, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
 
                     projectile.rotation += projectile.direction * 0.8f;
 
@@ -2167,7 +2167,7 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.localAI[1] == 0f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item33, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item33, projectile.Center);
                         projectile.localAI[1] = 1f;
                     }
 
@@ -2265,7 +2265,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.ai[1] == 0f)
                     {
                         projectile.ai[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item17, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
                     }
 
                     if (projectile.alpha > 0)
@@ -2323,7 +2323,7 @@ namespace CalamityMod.Projectiles
                                 }
                             }
 
-                            SoundEngine.PlaySound(SoundID.Item17, projectile.position);
+                            SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
 
                             for (int i = 0; i < 8; i++)
                             {
@@ -2387,7 +2387,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.localAI[1] == 0f)
                     {
                         projectile.localAI[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item120, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item120, projectile.Center);
                     }
 
                     projectile.ai[0] += 1f;
@@ -2681,7 +2681,7 @@ namespace CalamityMod.Projectiles
                             projectile.velocity = -Vector2.UnitY;
 
                         if (projectile.localAI[0] == 0f)
-                            SoundEngine.PlaySound(SoundID.Zombie104, projectile.position);
+                            SoundEngine.PlaySound(SoundID.Zombie104, projectile.Center);
 
                         float num801 = 1f;
                         projectile.localAI[0] += 1f;
@@ -3891,7 +3891,7 @@ namespace CalamityMod.Projectiles
             {
                 if (masterRevSkeletronPrimeBomb)
                 {
-                    SoundEngine.PlaySound(SoundID.Item14, projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item14, projectile.Center);
                     projectile.position.X += projectile.width / 2;
                     projectile.position.Y += projectile.height / 2;
                     projectile.width = projectile.height = 22;

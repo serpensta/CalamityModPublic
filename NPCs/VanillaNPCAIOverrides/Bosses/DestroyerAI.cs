@@ -870,7 +870,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             soundDelay = 20f;
 
                         npc.soundDelay = (int)soundDelay;
-                        SoundEngine.PlaySound(SoundID.WormDig, npc.position);
+                        SoundEngine.PlaySound(SoundID.WormDig, npc.Center);
                     }
 
                     targetTileDist = (float)Math.Sqrt(targetTilePosX * targetTilePosX + targetTilePosY * targetTilePosY);

@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 Projectile.soundDelay = 20 + Main.rand.Next(40);
                 if (Main.rand.NextBool(5))
-                    SoundEngine.PlaySound(SoundID.Item9, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
             }
 
             Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
@@ -128,7 +128,7 @@ namespace CalamityMod.Projectiles.Magic
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
             return true;
         }
 

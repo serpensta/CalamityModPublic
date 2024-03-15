@@ -488,7 +488,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                         float time = npc.ai[2] + maxTime + turnToStoneTime;
                         if (time == 1f)
                         {
-                            SoundEngine.PlaySound(SoundID.NPCDeath17, npc.position);
+                            SoundEngine.PlaySound(SoundID.NPCDeath17, npc.Center);
                         }
                         if (time < turnToStoneTime)
                         {
@@ -1043,7 +1043,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.RegularEnemies
                 {
                     npc.velocity *= 0f;
                     npc.ai[3] = 0f;
-                    SoundEngine.PlaySound(SoundID.Item8, npc.position);
+                    SoundEngine.PlaySound(SoundID.Item8, npc.Center);
                     float distX = npc.oldPos[2].X + (float)npc.width * 0.5f - npc.Center.X;
                     float distY = npc.oldPos[2].Y + (float)npc.height * 0.5f - npc.Center.Y;
                     float distance = (float)Math.Sqrt((distX * distX + distY * distY));
@@ -1320,31 +1320,31 @@ PrepareToShoot:
             {
                 if ((npcType == NPCID.Zombie || npcType == NPCID.ZombieXmas || npcType == NPCID.ZombieSweater || npcType == NPCID.Skeleton || (npcType >= NPCID.BoneThrowingSkeleton && npcType <= NPCID.BoneThrowingSkeleton4) || npcType == NPCID.AngryBones || npcType == NPCID.AngryBonesBig || npcType == NPCID.AngryBonesBigHelmet || npcType == NPCID.AngryBonesBigMuscle || npcType == NPCID.ArmoredSkeleton || npcType == NPCID.SkeletonArcher || npcType == NPCID.BaldZombie || npcType == NPCID.UndeadViking || npcType == NPCID.ZombieEskimo || npcType == NPCID.Frankenstein || npcType == NPCID.PincushionZombie || npcType == NPCID.SlimedZombie || npcType == NPCID.SwampZombie || npcType == NPCID.TwiggyZombie || npcType == NPCID.ArmoredViking || npcType == NPCID.FemaleZombie || npcType == NPCID.HeadacheSkeleton || npcType == NPCID.MisassembledSkeleton || npcType == NPCID.PantlessSkeleton || npcType == NPCID.ZombieRaincoat || npcType == NPCID.SkeletonSniper || npcType == NPCID.TacticalSkeleton || npcType == NPCID.SkeletonCommando || npcType == NPCID.ZombieSuperman || npcType == NPCID.ZombiePixie || npcType == NPCID.ZombieDoctor || npcType == NPCID.GreekSkeleton) && Main.rand.NextBool(1000))
                 {
-                    SoundEngine.PlaySound(SoundID.ZombieMoan, npc.position);
+                    SoundEngine.PlaySound(SoundID.ZombieMoan, npc.Center);
                 }
                 if (npcType == NPCID.BloodZombie && Main.rand.NextBool(800))
                 {
-                    SoundEngine.PlaySound(SoundID.ZombieMoan, npc.position); //There was a npcType thing afterwards but its not really useable now. Hilarious, frankly
+                    SoundEngine.PlaySound(SoundID.ZombieMoan, npc.Center); //There was a npcType thing afterwards but its not really useable now. Hilarious, frankly
                 }
                 if ((npcType == NPCID.Mummy || npcType == NPCID.DarkMummy || npcType == NPCID.LightMummy) && Main.rand.NextBool(500))
                 {
-                    SoundEngine.PlaySound(SoundID.Mummy, npc.position);
+                    SoundEngine.PlaySound(SoundID.Mummy, npc.Center);
                 }
                 if (npcType == NPCID.Vampire && Main.rand.NextBool(500))
                 {
-                    SoundEngine.PlaySound(SoundID.Zombie7, npc.position);
+                    SoundEngine.PlaySound(SoundID.Zombie7, npc.Center);
                 }
                 if (npcType == NPCID.Frankenstein && Main.rand.NextBool(500))
                 {
-                    SoundEngine.PlaySound(SoundID.Zombie6, npc.position);
+                    SoundEngine.PlaySound(SoundID.Zombie6, npc.Center);
                 }
                 if (npcType == NPCID.FaceMonster && Main.rand.NextBool(500))
                 {
-                    SoundEngine.PlaySound(SoundID.Zombie8, npc.position);
+                    SoundEngine.PlaySound(SoundID.Zombie8, npc.Center);
                 }
                 if (npcType >= 269 && npcType <= 280 && Main.rand.NextBool(1000))
                 {
-                    SoundEngine.PlaySound(SoundID.ZombieMoan, npc.position);
+                    SoundEngine.PlaySound(SoundID.ZombieMoan, npc.Center);
                 }
                 npc.TargetClosest(true);
             }
@@ -3957,7 +3957,7 @@ PrepareToShoot:
 
                 if (npc.ai[1] == 301f)
                 {
-                    SoundEngine.PlaySound(SoundID.Item17, npc.position);
+                    SoundEngine.PlaySound(SoundID.Item17, npc.Center);
                     npc.ai[1] = 0f;
                 }
 
@@ -4100,7 +4100,7 @@ PrepareToShoot:
             if (npc.type == NPCID.LeechHead && npc.localAI[1] == 0f)
             {
                 npc.localAI[1] = 1f;
-                SoundEngine.PlaySound(SoundID.NPCDeath13, npc.position);
+                SoundEngine.PlaySound(SoundID.NPCDeath13, npc.Center);
                 int dustVelocity = 1;
                 if (npc.velocity.X < 0f)
                 {
@@ -4855,7 +4855,7 @@ PrepareToShoot:
                             soundDelay = 20f;
                         }
                         npc.soundDelay = (int)soundDelay;
-                        SoundEngine.PlaySound(SoundID.WormDig, npc.position);
+                        SoundEngine.PlaySound(SoundID.WormDig, npc.Center);
                     }
 
                     wormTargetDist = (float)Math.Sqrt((double)(wormTargetX * wormTargetX + wormTargetY * wormTargetY));
@@ -5085,7 +5085,7 @@ PrepareToShoot:
                 {
                     npc.alpha = 255;
                 }
-                SoundEngine.PlaySound(SoundID.Item8, npc.position);
+                SoundEngine.PlaySound(SoundID.Item8, npc.Center);
                 int dustIncrement;
                 for (int i = 0; i < 50; i = dustIncrement + 1)
                 {
@@ -5156,7 +5156,7 @@ PrepareToShoot:
                 npc.velocity.Y = 0f;
                 npc.ai[2] = 0f;
                 npc.ai[3] = 0f;
-                SoundEngine.PlaySound(SoundID.Item8, npc.position);
+                SoundEngine.PlaySound(SoundID.Item8, npc.Center);
                 for (int j = 0; j < 50; j = dustIncrement + 1)
                 {
                     if (npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.Tim)
@@ -5301,7 +5301,7 @@ PrepareToShoot:
                 {
                     if (npc.ai[1] % 30f == 0f && npc.ai[1] / 30f < 5f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item8, npc.position);
+                        SoundEngine.PlaySound(SoundID.Item8, npc.Center);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Point spiritCenter = npc.Center.ToTileCoordinates();
@@ -5398,7 +5398,7 @@ PrepareToShoot:
                     {
                         if (npc.type != NPCID.RuneWizard)
                         {
-                            SoundEngine.PlaySound(SoundID.Item8, npc.position);
+                            SoundEngine.PlaySound(SoundID.Item8, npc.Center);
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -6553,7 +6553,7 @@ PrepareToShoot:
             {
                 if (npc.ai[0] == 200f)
                 {
-                    SoundEngine.PlaySound(SoundID.NPCDeath13, npc.position);
+                    SoundEngine.PlaySound(SoundID.NPCDeath13, npc.Center);
                 }
                 npc.ai[0] -= 1f;
             }
@@ -6939,7 +6939,7 @@ PrepareToShoot:
 
                 if (Main.rand.NextBool(40))
                 {
-                    SoundEngine.PlaySound(SoundID.Pixie, npc.position);
+                    SoundEngine.PlaySound(SoundID.Pixie, npc.Center);
                 }
             }
             else if (npc.type == NPCID.IceElemental)
@@ -9908,7 +9908,7 @@ PrepareToShoot:
                 npc.ai[1] += 1f;
                 if (npc.ai[1] >= 3f)
                 {
-                    SoundEngine.PlaySound(SoundID.Item14, npc.position);
+                    SoundEngine.PlaySound(SoundID.Item14, npc.Center);
                     npc.life = 0;
                     npc.HitEffect(0, 10.0);
                     npc.active = false;
