@@ -51,11 +51,5 @@ namespace CalamityMod.Items.Weapons.Melee
             int rockDamage = player.CalcIntDamage<MeleeDamageClass>(Item.damage);
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, ModContent.ProjectileType<AftershockRock>(), rockDamage, Item.knockBack, player.whoAmI, 0f, (float)Main.rand.Next(10), target.Center.Y);
         }
-
-        public override void MeleeEffects(Player player, Rectangle hitbox)
-        {
-            if (Main.rand.NextBool(3))
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.Sand);
-        }
     }
 }
