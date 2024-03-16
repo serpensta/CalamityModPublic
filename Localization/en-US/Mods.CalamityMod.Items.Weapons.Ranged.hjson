@@ -1251,8 +1251,8 @@ TheHive: {
 	Tooltip:
 		'''
 		Launches a wide spread of 4 missiles that explode on contact with enemies and tiles
-        Charging the launcher decreases the spread and increases the velocity of the missile barrage
-        Fully charging the launcher will cause it to fire a nuke to decimate a massive area on impact
+		Charging the launcher decreases the spread and increases the velocity of the missile barrage
+		Fully charging the launcher will cause it to fire a nuke to decimate a massive area on impact
 		'''
 }
 

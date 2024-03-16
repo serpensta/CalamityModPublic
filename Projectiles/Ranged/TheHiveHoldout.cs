@@ -222,7 +222,7 @@ namespace CalamityMod.Projectiles.Ranged
                 SoundEngine.PlaySound(fire with { Volume = 0.4f, Pitch = 0.7f }, Projectile.Center);
 
                 int numProj = 4;
-                float rotation = MathHelper.ToRadians(MathHelper.Clamp(25 - VelocityMultiplier * 20, 3, 25));
+                float rotation = MathHelper.ToRadians(MathHelper.Clamp(35 - VelocityMultiplier * 26, 2, 25));
                 for (int i = 0; i < numProj; i++)
                 {
                     Vector2 perturbedSpeed = (shootDirection).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
@@ -236,7 +236,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Projectile.owner,
                     rocketType);
                 }
-                PostFireCooldown = 35;
+                PostFireCooldown = 30;
             }
 
             NetUpdate();
