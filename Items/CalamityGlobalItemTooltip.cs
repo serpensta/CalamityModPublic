@@ -572,9 +572,13 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FrozenShield)
                 EditTooltipByNum(1, (line) => line.Text = "Puts a shell around the owner when below 50% life that reduces damage by 15%");
 
-            // Ale and Sake rebalance.
+            // Ale and Sake rebalance and Alcohol Poisoning.
             if (item.type == ItemID.Ale || item.type == ItemID.Sake)
-                EditTooltipByNum(0, (line) => line.Text = "Increases melee damage by 10% and reduces defense by 5%");
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Increases melee damage by 10% and reduces defense by 5%\n" + 
+                "Counts as an alcohol for Alcohol Poisoning\n" +
+                "Drinking more than 3 different alcohols might not end well with your liver");
+            }
 
             // Hellfire Treads buff.
             if (item.type == ItemID.HellfireTreads)
