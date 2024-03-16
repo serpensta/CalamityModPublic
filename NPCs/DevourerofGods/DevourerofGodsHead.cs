@@ -1373,7 +1373,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                                 NPC.velocity.Y = segmentVelocity;
 
                             // This bool exists to stop the strange wiggle behavior when worms are falling down
-                            bool slowXVelocity = Math.Abs(NPC.velocity.X) > segmentVelocity;
+                            bool slowXVelocity = Math.Abs(NPC.velocity.X) > turnSpeedCopy;
                             if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 2.2)
                             {
                                 if (NPC.velocity.X < 0f)
@@ -2149,7 +2149,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                             NPC.velocity.Y = segmentVelocity;
 
                         // This bool exists to stop the strange wiggle behavior when worms are falling down
-                        bool slowXVelocity = Math.Abs(NPC.velocity.X) > segmentVelocity;
+                        bool slowXVelocity = Math.Abs(NPC.velocity.X) > turnSpeedCopy;
                         if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < segmentVelocity * 2.2)
                         {
                             if (NPC.velocity.X < 0f)

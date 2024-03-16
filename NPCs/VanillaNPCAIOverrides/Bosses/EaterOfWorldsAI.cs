@@ -634,30 +634,33 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = segmentVelocity * 0.25f;
-            float minimalDamageVelocity = segmentVelocity * 0.5f;
+            // This worm requires more velocity to deal damage with the body because it doesn't have spikes or metal bits or etc.
+            float minimalContactDamageHeadVelocity = segmentVelocity * 0.25f;
+            float minimalDamageHeadVelocity = segmentVelocity * 0.5f;
+            float minimalContactDamageBodyVelocity = segmentVelocity * 0.4f;
+            float minimalDamageBodyVelocity = segmentVelocity * 0.8f;
             if (npc.type == NPCID.EaterofWorldsHead)
             {
-                if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                if (npc.velocity.Length() <= minimalContactDamageHeadVelocity)
                 {
                     npc.damage = (int)Math.Round(npc.defDamage * 0.5);
                 }
                 else
                 {
-                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageHeadVelocity) / minimalDamageHeadVelocity, 0f, 1f);
                     npc.damage = (int)MathHelper.Lerp((float)Math.Round(npc.defDamage * 0.5), npc.defDamage, velocityDamageScalar);
                 }
             }
             else
             {
                 float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
-                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                if (bodyAndTailVelocity <= minimalContactDamageBodyVelocity)
                 {
                     npc.damage = 0;
                 }
                 else
                 {
-                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageBodyVelocity) / minimalDamageBodyVelocity, 0f, 1f);
                     npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
                 }
             }
@@ -1140,30 +1143,33 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Calculate contact damage based on velocity
-            float minimalContactDamageVelocity = num52 * 0.25f;
-            float minimalDamageVelocity = num52 * 0.5f;
+            // This worm requires more velocity to deal damage with the body because it doesn't have spikes or metal bits or etc.
+            float minimalContactDamageHeadVelocity = num52 * 0.25f;
+            float minimalDamageHeadVelocity = num52 * 0.5f;
+            float minimalContactDamageBodyVelocity = num52 * 0.4f;
+            float minimalDamageBodyVelocity = num52 * 0.8f;
             if (npc.type == NPCID.EaterofWorldsHead)
             {
-                if (npc.velocity.Length() <= minimalContactDamageVelocity)
+                if (npc.velocity.Length() <= minimalContactDamageHeadVelocity)
                 {
                     npc.damage = (int)Math.Round(npc.defDamage * 0.5);
                 }
                 else
                 {
-                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    float velocityDamageScalar = MathHelper.Clamp((npc.velocity.Length() - minimalContactDamageHeadVelocity) / minimalDamageHeadVelocity, 0f, 1f);
                     npc.damage = (int)MathHelper.Lerp((float)Math.Round(npc.defDamage * 0.5), npc.defDamage, velocityDamageScalar);
                 }
             }
             else
             {
                 float bodyAndTailVelocity = (npc.position - npc.oldPosition).Length();
-                if (bodyAndTailVelocity <= minimalContactDamageVelocity)
+                if (bodyAndTailVelocity <= minimalContactDamageBodyVelocity)
                 {
                     npc.damage = 0;
                 }
                 else
                 {
-                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                    float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageBodyVelocity) / minimalDamageBodyVelocity, 0f, 1f);
                     npc.damage = (int)MathHelper.Lerp(0f, npc.defDamage, velocityDamageScalar);
                 }
             }

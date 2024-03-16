@@ -151,9 +151,10 @@ namespace CalamityMod.NPCs.Perforator
             }
 
             // Calculate contact damage based on velocity
+            // This worm requires more velocity to deal damage with the body because it doesn't have spikes or metal bits or etc.
             float maxChaseSpeed = 16f;
-            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
-            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.4f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.8f;
             float bodyAndTailVelocity = (NPC.position - NPC.oldPosition).Length();
             if (bodyAndTailVelocity <= minimalContactDamageVelocity)
             {
