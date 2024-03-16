@@ -614,7 +614,8 @@ namespace CalamityMod
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeGelAttack), new int[] { 60, 120, 136, 152, 210 } },
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeSmash), new int[] { 80, 160, 188, 200, 270 } },
                 { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeMinionBlueSpike), new int[] { 52, 92, 112, 124, 168 } },
-                { new Tuple<int, int>(NPCID.QueenSlimeBoss, ProjectileID.QueenSlimeMinionPinkBall), new int[] { 52, 92, 112, 124, 168 } },
+                { new Tuple<int, int>(NPCID.QueenSlimeMinionBlue, ProjectileID.QueenSlimeMinionBlueSpike), new int[] { 52, 92, 112, 124, 168 } },
+                { new Tuple<int, int>(NPCID.QueenSlimeMinionPink, ProjectileID.QueenSlimeMinionPinkBall), new int[] { 52, 92, 112, 124, 168 } },
 
                 { new Tuple<int, int>(ModContent.NPCType<Cryogen>(), ModContent.ProjectileType<IceBlast>()), new int[] { 52, 92, 112, 124, 168 } },
                 { new Tuple<int, int>(ModContent.NPCType<Cryogen>(), ModContent.ProjectileType<IceBomb>()), new int[] { 70, 120, 136, 152, 210 } },
