@@ -31,7 +31,11 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shootSpeed = 12f;
         }
 
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) => damage = (int)(damage * 0.75);
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            damage = (int)(damage * 0.75);
+            knockback *= 0.5f;
+        }
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
