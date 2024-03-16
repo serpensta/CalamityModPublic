@@ -44,20 +44,23 @@ namespace CalamityMod.Projectiles.Melee
 
             Vector3 colorOne = new Vector3(0.9f, 0f, 0.9f);
             Vector3 colorTwo = new Vector3(0.6f, 1.2f, 0f);
-            Vector3 lightColor = Vector3.Lerp(colorOne, colorTwo, Math.Abs(Projectile.ai[2]) / ColorAlternateTime);
+            float colorScalar = Math.Abs(Projectile.ai[2]) / ColorAlternateTime;
+            Vector3 lightColor = Vector3.Lerp(colorOne, colorTwo, colorScalar);
             Lighting.AddLight(Projectile.Center, lightColor.X, lightColor.Y, lightColor.Z);
 
             if (Projectile.localAI[1] > 7f)
             {
                 float dustScale = 1.25f * Projectile.scale;
-                int dustType = Main.rand.NextBool() ? DustID.GreenFairy : DustID.Venom;
+                int maxRandom = 10;
+                int chanceOfGreenDust = (int)Math.Round(MathHelper.Lerp(0f, (float)maxRandom, colorScalar));
+                int dustType = Main.rand.Next(maxRandom) < chanceOfGreenDust ? DustID.GreenFairy : DustID.Venom;
                 int dust = Dust.NewDust(new Vector2(Projectile.position.X - Projectile.velocity.X + 2f, Projectile.position.Y + 2f - Projectile.velocity.Y), 8, 8, dustType, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, Projectile.alpha, default, dustScale);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= -0.25f;
                 if (dustType == DustID.Venom)
                     Main.dust[dust].fadeIn = 1.5f;
 
-                dustType = Main.rand.NextBool() ? DustID.GreenFairy : DustID.Venom;
+                dustType = Main.rand.Next(maxRandom) < chanceOfGreenDust ? DustID.GreenFairy : DustID.Venom;
                 dust = Dust.NewDust(new Vector2(Projectile.position.X - Projectile.velocity.X + 2f, Projectile.position.Y + 2f - Projectile.velocity.Y), 8, 8, dustType, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, Projectile.alpha, default, dustScale);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= -0.25f;
@@ -136,7 +139,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 Projectile.velocity *= 0.5f;
 
-                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
             }
 
             return false;
@@ -150,7 +153,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 
             for (int i = 4; i < 31; i++)
             {
