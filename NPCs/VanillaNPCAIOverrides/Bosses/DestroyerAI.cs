@@ -684,7 +684,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Light colors
                     Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
                     Vector3 flightColor = new Vector3(0.05f, 0.1f, 0.3f);
-                    Vector3 segmentColor = Vector3.Lerp(groundColor, flightColor, phaseTransitionColorAmount) * 0.2f;
+                    Vector3 segmentColor = Vector3.Lerp(groundColor, flightColor, phaseTransitionColorAmount);
                     Vector3 telegraphColor = groundColor;
 
                     // Telegraph for the laser breath and body lasers
@@ -740,7 +740,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
                     }
 
-                    Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor, telegraphProgress));
+                    Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor * 2f, telegraphProgress));
                 }
             }
 
@@ -1325,7 +1325,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         // Light colors
                         Vector3 groundColor = new Vector3(0.3f, 0.1f, 0.05f);
-                        Vector3 segmentColor = groundColor * 0.2f;
+                        Vector3 segmentColor = groundColor;
                         Vector3 telegraphColor = groundColor;
 
                         // Telegraph for the laser breath and body lasers
@@ -1343,7 +1343,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             }
                         }
 
-                        Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor, telegraphProgress));
+                        Lighting.AddLight(npc.Center, Vector3.Lerp(segmentColor, telegraphColor * 2f, telegraphProgress));
                     }
                 }
 

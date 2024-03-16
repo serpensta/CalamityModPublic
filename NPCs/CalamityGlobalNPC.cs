@@ -6760,12 +6760,13 @@ namespace CalamityMod.NPCs
                     }
 
                     // Light colors
-                    Color groundColor = new Color(50, 10, 10, 0);
-                    Color flightColor = revenge ? new Color(10, 10, 50, 0) : groundColor;
+                    int alpha = 192;
+                    Color groundColor = new Color(150, 0, 0, alpha);
+                    Color flightColor = revenge ? new Color(0, 0, 150, alpha) : groundColor;
                     Color segmentColor = Color.Lerp(groundColor, flightColor, phaseTransitionColorAmount);
-                    Color telegraphColor_Red = new Color(255, 150, 150);
-                    Color telegraphColor_Green = new Color(150, 255, 150);
-                    Color telegraphColor_Cyan = new Color(50, 255, 255);
+                    Color telegraphColor_Red = new Color(255, 125, 125, alpha);
+                    Color telegraphColor_Green = new Color(125, 255, 125, alpha);
+                    Color telegraphColor_Cyan = new Color(0, 255, 255, alpha);
                     Color telegraphColor = telegraphColor_Red;
 
                     // Telegraph for the laser breath and body lasers
@@ -6830,13 +6831,24 @@ namespace CalamityMod.NPCs
                         }
                     }
 
-                    int totalDraws = 3;
-                    float alphaMultiplier = 1f - npc.alpha / 255f;
-                    for (int i = 0; i < totalDraws; i++)
+                    Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerHeadGlow").Value;
+                    switch (npc.type)
                     {
-                        spriteBatch.Draw(TextureAssets.Dest[npc.type - NPCID.TheDestroyer].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
-                            Color.Lerp(segmentColor, telegraphColor, telegraphProgress) * alphaMultiplier, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        default:
+                        case NPCID.TheDestroyer:
+                            break;
+
+                        case NPCID.TheDestroyerBody:
+                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerBodyGlow").Value;
+                            break;
+
+                        case NPCID.TheDestroyerTail:
+                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerTailGlow").Value;
+                            break;
                     }
+
+                    float alphaMultiplier = 1f - npc.alpha / 255f;
+                    spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, Color.Lerp(segmentColor, telegraphColor, telegraphProgress) * alphaMultiplier, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                 }
             }
 
@@ -7065,9 +7077,11 @@ namespace CalamityMod.NPCs
                     Color eyesColor = new Color(200, 200, 200, 0);
                     if (masterMode && revenge)
                     {
-                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, 0) : new Color(255, 255, 0, 0);
+                        int alpha = 192;
+                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
+                        Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/SkeletronPrimeHeadGlow").Value;
                         for (int i = 0; i < 3; i++)
-                            spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
+                            spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                     }
                     else
                         spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
