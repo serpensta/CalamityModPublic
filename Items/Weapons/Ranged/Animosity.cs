@@ -116,8 +116,8 @@ namespace CalamityMod.Items.Weapons.Ranged
                 Main.projectile[p].CritChance = (int)(Main.projectile[p].CritChance * SniperCritMult); //To support crit mults with decimals
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    // TO DO: Replace with actual bullet shells or used casings
-                    Gore.NewGore(source, position, velocity.RotatedBy(2f * -player.direction) * Main.rand.NextFloat(0.6f, 0.7f), Mod.Find<ModGore>("Polt5").Type);
+                    string goreType = Main.rand.NextBool() ? "EmptyAnimosityShell" : "EmptyAnimosityShell2";
+                    Gore.NewGore(source, position, velocity.RotatedBy(2f * -player.direction) * Main.rand.NextFloat(0.6f, 0.7f), Mod.Find<ModGore>(goreType).Type);
                 }
 
             }
