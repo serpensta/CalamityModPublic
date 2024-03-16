@@ -305,7 +305,7 @@ CrescentMoon: {
 
 DarklightGreatsword: {
 	DisplayName: Darklight Greatsword
-	Tooltip: Fires darklight blades that split on impact
+	Tooltip: Fires darklight blades that slice through enemies, creating additional slashes
 }
 
 DeathsAscension: {
@@ -1315,7 +1315,7 @@ TrueCausticEdge: {
 	Tooltip:
 		'''
 		Fires a bouncing caustic beam
-		Inflicts venom on enemy hits
+		Inflicts acid venom and slows down on enemy hits
 		'''
 }
 
