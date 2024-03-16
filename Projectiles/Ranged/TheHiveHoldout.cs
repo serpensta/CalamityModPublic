@@ -231,7 +231,7 @@ namespace CalamityMod.Projectiles.Ranged
                     tipPosition,
                     perturbedSpeed * projSpeed * VelocityMultiplier,
                     ProjectileType<HiveMissile>(),
-                    damage / 5,
+                    damage / 4,
                     knockback,
                     Projectile.owner,
                     rocketType);

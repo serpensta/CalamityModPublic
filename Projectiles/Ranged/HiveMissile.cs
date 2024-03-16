@@ -2,6 +2,7 @@
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Rogue;
+using CalamityMod.Projectiles.Typeless;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -159,7 +160,7 @@ namespace CalamityMod.Projectiles.Ranged
 
                 for (int k = 0; k < (isClusterRocket ? 3f : 2f); k++)
                 {
-                    int BEES = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(4, 10).RotatedByRandom(4) * Main.rand.NextFloat(0.2f, 0.8f), ModContent.ProjectileType<PlaguenadeBee>(), (int)(Projectile.damage * (isClusterRocket ? 0.1f : 0.2f)), 0f, Projectile.owner, 0f, 0f);
+                    int BEES = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(4, 10).RotatedByRandom(4) * Main.rand.NextFloat(0.2f, 0.8f), ModContent.ProjectileType<BasicPlagueBee>(), (int)(Projectile.damage * (isClusterRocket ? 0.2f : 0.4f)), 0f, Projectile.owner, 0f, 0f, isClusterRocket ? 2f : 1f);
                     if (BEES.WithinBounds(Main.maxProjectiles))
                     {
                         Main.projectile[BEES].penetrate = 1;
