@@ -176,6 +176,7 @@ namespace CalamityMod.Projectiles.Ranged
         }
         public override void OnKill(int timeLeft)
         {
+            bool isClusterRocket = (RocketID == ItemID.ClusterRocketI || RocketID == ItemID.ClusterRocketII);
             if (HasHit == true && !BonusEffectMode)
             {
                 if (Main.zenithWorld)
@@ -232,9 +233,9 @@ namespace CalamityMod.Projectiles.Ranged
                         dust.alpha = Main.rand.Next(90, 220 + 1);
                     }
                 }
-                for (int k = 0; k < (Main.zenithWorld ? 100 : 20); k++)
+                for (int k = 0; k < (int)((Main.zenithWorld ? 100 : 20) * (isClusterRocket ? 1.5f : 1)); k++)
                 {
-                    int BEES = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(10, 10).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 0.8f), ModContent.ProjectileType<PlaguenadeBee>(), (int)(Projectile.damage * 0.1f), 0f, Projectile.owner, 0f, 0f);
+                    int BEES = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(10, 10).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 0.8f), ModContent.ProjectileType<PlaguenadeBee>(), (int)(Projectile.damage * (isClusterRocket ? 0.1f : 0.15f)), 0f, Projectile.owner, 0f, 0f);
                     if (BEES.WithinBounds(Main.maxProjectiles))
                     {
                         Main.projectile[BEES].penetrate = 1;

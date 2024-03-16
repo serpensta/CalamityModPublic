@@ -1,6 +1,7 @@
 ﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Particles;
+using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -118,10 +119,18 @@ namespace CalamityMod.Projectiles.Ranged
         {
             if (HasHit == true)
             {
+                var info = new CalamityUtils.RocketBehaviorInfo((int)RocketID)
+                {
+                    // Since we use our own spawning method for the cluster rockets, we don't need them to shoot anything,
+                    // we'll do it ourselves.
+                    clusterProjectileID = ProjectileID.None,
+                    destructiveClusterProjectileID = ProjectileID.None,
+                };
+
+                bool isClusterRocket = (RocketID == ItemID.ClusterRocketI || RocketID == ItemID.ClusterRocketII);
                 SoundStyle fire = new("CalamityMod/Sounds/Custom/PlagueSounds/PlagueBoom", 4);
                 SoundEngine.PlaySound(fire with { Volume = 0.5f, Pitch = -0.3f }, Projectile.Center);
 
-                var info = new CalamityUtils.RocketBehaviorInfo((int)RocketID);
                 int blastRadius = (int)(Projectile.RocketBehavior(info) * 0.7f);
                 Projectile.ExpandHitboxBy((float)blastRadius);
                 Projectile.damage = (int)(Projectile.damage * 0.5f);
@@ -146,6 +155,16 @@ namespace CalamityMod.Projectiles.Ranged
                     dust2.scale = Main.rand.NextFloat(0.75f, 0.95f);
                     dust2.noGravity = true;
                     dust2.color = Main.rand.NextBool(3) ? EffectsColor : StaticEffectsColor;
+                }
+
+                for (int k = 0; k < (isClusterRocket ? 3f : 2f); k++)
+                {
+                    int BEES = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(4, 10).RotatedByRandom(4) * Main.rand.NextFloat(0.2f, 0.8f), ModContent.ProjectileType<PlaguenadeBee>(), (int)(Projectile.damage * (isClusterRocket ? 0.1f : 0.2f)), 0f, Projectile.owner, 0f, 0f);
+                    if (BEES.WithinBounds(Main.maxProjectiles))
+                    {
+                        Main.projectile[BEES].penetrate = 1;
+                        Main.projectile[BEES].DamageType = DamageClass.Ranged;
+                    }
                 }
             }
         }
