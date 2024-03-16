@@ -121,7 +121,7 @@ namespace CalamityMod.Items
                 { ItemID.Gradient, Do(AutoReuse, DamageExact(39)) },
                 { ItemID.GreenPhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.GreenPhasesaber, Do(DamageExact(60)) },
-                { ItemID.GrenadeLauncher, Do(DamageExact(90)) },
+                { ItemID.GrenadeLauncher, Do(DamageExact(112)) },
                 { ItemID.Gungnir, Do(AutoReuse, TrueMelee, UseRatio(0.8f), DamageExact(92), ShootSpeedRatio(1.25f)) },
                 { ItemID.HallowedRepeater, Do(PointBlank, UseExact(12)) },
                 { ItemID.Handgun, Do(PointBlank, UseExact(22), DamageExact(36)) },
@@ -206,7 +206,8 @@ namespace CalamityMod.Items
                 { ItemID.RedPhaseblade, Do(AutoReuse, UseTurn, DamageExact(32)) },
                 { ItemID.RedPhasesaber, Do(DamageExact(60)) },
                 { ItemID.RedRyder, Do(PointBlank, DamageExact(24)) },
-                { ItemID.RedsYoyo, Do(AutoReuse, DamageExact(48)) }, // Red's throw and valkyrie's yoyo are the same weapon
+                { ItemID.RedsYoyo, Do(AutoReuse, DamageExact(48)) }, // Red's Throw and Valkyrie Yoyo have the same stats
+                { ItemID.RocketLauncher, Do(DamageExact(70)) },
                 { ItemID.Sandgun, Do(PointBlank, DamageExact(22), UseExact(20)) },
                 { ItemID.SapphireStaff, Do(DamageExact(25)) },
                 { ItemID.SDMG, Do(PointBlank, DamageExact(80)) },
@@ -263,7 +264,7 @@ namespace CalamityMod.Items
                 { ItemID.UnholyArrow, Do(DamageExact(11)) },
                 { ItemID.UnholyTrident, Do(ManaRatio(0.78f), DamageRatio(0.91f)) },  // Uses ratios due to remix seed
                 { ItemID.VampireKnives, Do(DamageExact(38)) },
-                { ItemID.ValkyrieYoyo, Do(AutoReuse, DamageExact(48)) }, // Red's Throw and Valkyrie Yoyo are the same weapon basically
+                { ItemID.ValkyrieYoyo, Do(AutoReuse, DamageExact(48)) }, // Red's Throw and Valkyrie Yoyo have the same stats
                 { ItemID.VenomStaff, Do(DamageExact(55)) },
                 { ItemID.WaspGun, Do(UseExact(11), DamageExact(58)) },
                 { ItemID.WaterBolt, Do(DamageExact(23)) },
