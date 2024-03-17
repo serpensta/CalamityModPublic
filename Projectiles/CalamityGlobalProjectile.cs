@@ -3717,7 +3717,7 @@ namespace CalamityMod.Projectiles
         public override Color? GetAlpha(Projectile projectile, Color lightColor)
         {
             if (Main.player[Main.myPlayer].Calamity().trippy)
-                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255 - projectile.alpha);
+                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
 
             if (Main.LocalPlayer.Calamity().omniscience && projectile.hostile && projectile.damage > 0 && projectile.alpha < 255)
             {
@@ -3816,37 +3816,88 @@ namespace CalamityMod.Projectiles
                 if (projectile.spriteDirection == -1)
                     spriteEffects = SpriteEffects.FlipHorizontally;
 
-                Vector2 vector11 = new(texture.Width / 2, texture.Height / Main.projFrames[projectile.type] / 2);
-                Color color9 = new(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255 - projectile.alpha);
-                Color alpha15 = projectile.GetAlpha(color9);
-
-                float offsetX = Main.screenPosition.X + (projectile.width / 2) - texture.Width * projectile.scale / 2f + vector11.X * projectile.scale;
-                float offsetY = Main.screenPosition.Y + projectile.height - texture.Height * projectile.scale / Main.projFrames[projectile.type] + 4f + vector11.Y * projectile.scale + projectile.gfxOffY;
-                for (int num213 = 0; num213 < 4; num213++)
+                Color rainbow = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
+                Color alphaColor = projectile.GetAlpha(rainbow);
+                float RGBMult = 0.99f;
+                alphaColor.R = (byte)(alphaColor.R * RGBMult);
+                alphaColor.G = (byte)(alphaColor.G * RGBMult);
+                alphaColor.B = (byte)(alphaColor.B * RGBMult);
+                alphaColor.A = (byte)(alphaColor.A * RGBMult);
+                int totalAfterimages = 12;
+                for (int i = 0; i < totalAfterimages; i++)
                 {
-                    Vector2 position9 = projectile.position;
-                    float num214 = Math.Abs(projectile.Center.X - Main.player[Main.myPlayer].Center.X);
-                    float num215 = Math.Abs(projectile.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                    Vector2 position = projectile.position;
+                    float distanceFromTargetX = Math.Abs(projectile.Center.X - Main.player[Main.myPlayer].Center.X);
+                    float distanceFromTargetY = Math.Abs(projectile.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                    if (i > 3)
+                    {
+                        distanceFromTargetX *= 0.5f;
+                        distanceFromTargetY *= 0.5f;
+                    }
 
-                    if (num213 == 0 || num213 == 2)
-                        position9.X = Main.player[Main.myPlayer].Center.X + num214;
-                    else
-                        position9.X = Main.player[Main.myPlayer].Center.X - num214;
+                    switch (i)
+                    {
+                        case 0:
+                        case 4:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y;
+                            break;
 
-                    position9.X -= projectile.width / 2;
+                        case 1:
+                        case 5:
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            position.X = Main.player[Main.myPlayer].Center.X;
+                            break;
 
-                    if (num213 == 0 || num213 == 1)
-                        position9.Y = Main.player[Main.myPlayer].Center.Y + num215;
-                    else
-                        position9.Y = Main.player[Main.myPlayer].Center.Y - num215;
+                        case 2:
+                        case 6:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y;
+                            break;
 
-                    int frames = texture.Height / Main.projFrames[projectile.type];
-                    int y = frames * projectile.frame;
-                    position9.Y -= projectile.height / 2;
+                        case 3:
+                        case 7:
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            position.X = Main.player[Main.myPlayer].Center.X;
+                            break;
+
+                        case 8:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
+
+                        case 9:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
+
+                        case 10:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        case 11:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    position.X -= projectile.width / 2;
+                    position.Y -= projectile.height / 2;
+
+                    int frameHeight = texture.Height / Main.projFrames[projectile.type];
+                    int currentframeHeight = frameHeight * projectile.frame;
+                    Rectangle frame = new Rectangle(0, currentframeHeight, texture.Width, frameHeight);
+
+                    Vector2 halfSize = frame.Size() / 2;
 
                     Main.spriteBatch.Draw(texture,
-                        new Vector2(position9.X - offsetX, position9.Y - offsetY),
-                        new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, y, texture.Width, frames)), alpha15, projectile.rotation, vector11, projectile.scale, spriteEffects, 0);
+                        new Vector2(position.X - Main.screenPosition.X + (float)(projectile.width / 2) - (float)TextureAssets.Projectile[projectile.type].Width() * projectile.scale / 2f + halfSize.X * projectile.scale,
+                        position.Y - Main.screenPosition.Y + (float)projectile.height - (float)TextureAssets.Projectile[projectile.type].Height() * projectile.scale / (float)Main.projFrames[projectile.type] + 4f + halfSize.Y * projectile.scale + projectile.gfxOffY),
+                        frame, alphaColor, projectile.rotation, halfSize, projectile.scale, spriteEffects, 0f);
                 }
             }
 

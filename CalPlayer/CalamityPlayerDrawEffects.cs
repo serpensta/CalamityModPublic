@@ -62,7 +62,7 @@ namespace CalamityMod.CalPlayer
                     Rectangle screenArea = new Rectangle((int)Main.screenPosition.X - 500, (int)Main.screenPosition.Y - 50, Main.screenWidth + 1000, Main.screenHeight + 100);
                     int dustDrawn = 0;
                     float maxShroomDust = Main.maxDustToDraw / 2;
-                    Color shroomColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 0);
+                    Color shroomColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
                     for (int i = 0; i < Main.maxDustToDraw; i++)
                     {
                         Dust dust = Main.dust[i];

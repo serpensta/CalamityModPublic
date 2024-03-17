@@ -6306,7 +6306,7 @@ namespace CalamityMod.NPCs
                 return null;
 
             if (Main.LocalPlayer.Calamity().trippy || (npc.type == NPCID.KingSlime && CalamityWorld.LegendaryMode && CalamityWorld.revenge))
-                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255 - npc.alpha);
+                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
 
             if (npc.type == NPCID.QueenBee && Main.zenithWorld)
             {
@@ -6533,41 +6533,83 @@ namespace CalamityMod.NPCs
             {
                 SpriteEffects spriteEffects = SpriteEffects.None;
                 if (npc.spriteDirection == 1)
-                {
                     spriteEffects = SpriteEffects.FlipHorizontally;
-                }
 
-                Vector2 halfSizeTexture = new Vector2(TextureAssets.Npc[npc.type].Value.Width / 2, TextureAssets.Npc[npc.type].Value.Height / Main.npcFrameCount[npc.type] / 2);
-                Color rainbow = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 0);
+                Color rainbow = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
                 Color alphaColor = npc.GetAlpha(rainbow);
                 float RGBMult = 0.99f;
                 alphaColor.R = (byte)(alphaColor.R * RGBMult);
                 alphaColor.G = (byte)(alphaColor.G * RGBMult);
                 alphaColor.B = (byte)(alphaColor.B * RGBMult);
                 alphaColor.A = (byte)(alphaColor.A * RGBMult);
-                float xOffset = screenPos.X + npc.width / 2 - TextureAssets.Npc[npc.type].Value.Width * npc.scale / 2f + halfSizeTexture.X * npc.scale;
-                float yOffset = screenPos.Y + npc.height - TextureAssets.Npc[npc.type].Value.Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + halfSizeTexture.Y * npc.scale + npc.gfxOffY;
-                for (int i = 0; i < 4; i++)
+                int totalAfterimages = 12;
+                for (int i = 0; i < totalAfterimages; i++)
                 {
-                    Vector2 position9 = npc.position;
-                    float num214 = Math.Abs(npc.Center.X - Main.LocalPlayer.Center.X);
-                    float num215 = Math.Abs(npc.Center.Y - Main.LocalPlayer.Center.Y);
+                    Vector2 position = npc.position;
+                    float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                    float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                    if (i > 3)
+                    {
+                        distanceFromTargetX *= 0.5f;
+                        distanceFromTargetY *= 0.5f;
+                    }
 
-                    if (i == 0 || i == 2)
-                        position9.X = Main.LocalPlayer.Center.X + num214;
-                    else
-                        position9.X = Main.LocalPlayer.Center.X - num214;
+                    switch (i)
+                    {
+                        case 0:
+                        case 4:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y;
+                            break;
 
-                    position9.X -= npc.width / 2;
+                        case 1:
+                        case 5:
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            position.X = Main.player[Main.myPlayer].Center.X;
+                            break;
 
-                    if (i == 0 || i == 1)
-                        position9.Y = Main.LocalPlayer.Center.Y + num215;
-                    else
-                        position9.Y = Main.LocalPlayer.Center.Y - num215;
+                        case 2:
+                        case 6:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y;
+                            break;
 
-                    position9.Y -= npc.height / 2;
+                        case 3:
+                        case 7:
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            position.X = Main.player[Main.myPlayer].Center.X;
+                            break;
 
-                    Main.spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position9.X - xOffset, position9.Y - yOffset), new Microsoft.Xna.Framework.Rectangle?(npc.frame), alphaColor, npc.rotation, halfSizeTexture, npc.scale, spriteEffects, 0f);
+                        case 8:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
+
+                        case 9:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
+
+                        case 10:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        case 11:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    position.X -= npc.width / 2;
+                    position.Y -= npc.height / 2;
+
+                    Vector2 halfSize = npc.frame.Size() / 2;
+
+                    spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position.X - screenPos.X + (float)(npc.width / 2) - (float)TextureAssets.Npc[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, position.Y - screenPos.Y + (float)npc.height - (float)TextureAssets.Npc[npc.type].Height() * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + npc.gfxOffY), npc.frame, alphaColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                 }
             }
             else
