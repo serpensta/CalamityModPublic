@@ -3601,7 +3601,7 @@ namespace CalamityMod.CalPlayer
         {
             // True melee damage from various vanilla equipment placed here.
 
-            // Titan Glove and ALL upgrades
+            // Titan Glove and ALL upgrades.
             if (Player.kbGlove)
                 Player.GetDamage<TrueMeleeDamageClass>() += 0.1f;
 
@@ -3611,11 +3611,9 @@ namespace CalamityMod.CalPlayer
             if (gSabatonTempJumpSpeed > 0)
             {
                 gSabatonTempJumpSpeed--;
-                //Only give temporary jump speed if Gravistar Sabaton is equipped, but still decrement the time so that you can't store it for later
+                // Only give temporary jump speed if Gravistar Sabaton is equipped, but still decrement the time so that you can't store it for later.
                 if (gSabaton && Player.whoAmI == Main.myPlayer)
-                {
                     Player.jumpSpeedBoost += 2f;
-                }
             }
         }
         #endregion

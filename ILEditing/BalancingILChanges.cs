@@ -45,7 +45,7 @@ namespace CalamityMod.ILEditing
 
         private static void NerfSoaringInsigniaRunAcceleration(ILContext il)
         {
-            // Nerf the run acceleration boost from 2x to 1.1x.
+            // Nerf the run acceleration boost from 1.75x to 1.1x.
             var cursor = new ILCursor(il);
             if (!cursor.TryGotoNext(MoveType.After, i => i.MatchLdfld<Player>("empressBrooch")))
             {
@@ -109,6 +109,7 @@ namespace CalamityMod.ILEditing
             cursor.Emit(OpCodes.Ldc_R4, 0.5f); // Decrease to 0.5f.
 
             // Find the Frog Leg jump speed bonus and reduce it to 1.2f.
+            // I don't know if this fucking does anything anymore, but I'm leaving it in just in case.
             if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(2.4f)))
             {
                 LogFailure("Jump Height Boost Fixes", "Could not locate Frog Leg jump speed boost value.");

@@ -3717,7 +3717,7 @@ namespace CalamityMod.Projectiles
         public override Color? GetAlpha(Projectile projectile, Color lightColor)
         {
             if (Main.player[Main.myPlayer].Calamity().trippy)
-                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, projectile.alpha);
+                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255 - projectile.alpha);
 
             if (Main.LocalPlayer.Calamity().omniscience && projectile.hostile && projectile.damage > 0 && projectile.alpha < 255)
             {
@@ -3763,10 +3763,9 @@ namespace CalamityMod.Projectiles
                 float startTurningBrownGateValue = 420f;
                 float timeToReachFullBrown = 180f;
                 float timeToReachThornExplosion = startTurningBrownGateValue + timeToReachFullBrown;
-                Color initialColor = Color.White;
-                initialColor.A = (byte)projectile.alpha;
-                Color finalColor = Color.RosyBrown;
-                finalColor.A = (byte)projectile.alpha;
+                Color initialColor = lightColor;
+                Color finalColor = new Color(125, 75, 75);
+                finalColor.A = (byte)(255 - projectile.alpha);
                 if (projectile.ai[1] > startTurningBrownGateValue)
                 {
                     float colorTransitionRatio = (projectile.ai[1] - startTurningBrownGateValue) / timeToReachFullBrown;
@@ -3818,7 +3817,7 @@ namespace CalamityMod.Projectiles
                     spriteEffects = SpriteEffects.FlipHorizontally;
 
                 Vector2 vector11 = new(texture.Width / 2, texture.Height / Main.projFrames[projectile.type] / 2);
-                Color color9 = new(Main.DiscoR, Main.DiscoG, Main.DiscoB, projectile.alpha);
+                Color color9 = new(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255 - projectile.alpha);
                 Color alpha15 = projectile.GetAlpha(color9);
 
                 float offsetX = Main.screenPosition.X + (projectile.width / 2) - texture.Width * projectile.scale / 2f + vector11.X * projectile.scale;

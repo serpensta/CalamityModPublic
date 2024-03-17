@@ -6306,21 +6306,21 @@ namespace CalamityMod.NPCs
                 return null;
 
             if (Main.LocalPlayer.Calamity().trippy || (npc.type == NPCID.KingSlime && CalamityWorld.LegendaryMode && CalamityWorld.revenge))
-                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, npc.alpha);
+                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255 - npc.alpha);
 
             if (npc.type == NPCID.QueenBee && Main.zenithWorld)
             {
                 if (npc.life / (float)npc.lifeMax < 0.5f)
-                    return new Color(0, 255, 0, npc.alpha);
+                    return new Color(0, 255, 0, 255 - npc.alpha);
                 else
-                    return new Color(255, 0, 0, npc.alpha);
+                    return new Color(255, 0, 0, 255 - npc.alpha);
             }
 
             if (npc.HasBuff<Enraged>())
-                return new Color(200, 50, 50, npc.alpha);
+                return new Color(200, 50, 50, 255 - npc.alpha);
 
             if (npc.Calamity().kamiFlu > 0 && !CalamityLists.kamiDebuffColorImmuneList.Contains(npc.type))
-                return new Color(51, 197, 108, npc.alpha);
+                return new Color(51, 197, 108, 255 - npc.alpha);
 
             if (npc.type == NPCID.VileSpit || npc.type == NPCID.VileSpitEaterOfWorlds)
                 return new Color(150, 200, 0, npc.alpha);
