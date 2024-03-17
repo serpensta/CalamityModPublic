@@ -149,8 +149,8 @@
         internal static readonly int RageFadeTime = CalamityUtils.SecondsToFrames(30);
         internal static readonly float DefaultRageDamageBoost = 0.35f; // +35%
 
-        internal static readonly float AdrenalineDamageBoost = 2f; // +200%
-        internal static readonly float AdrenalineDamagePerBooster = 0.15f; // +15%
+        internal static readonly float AdrenalineDamageBoost = 1.5f; // +150%
+        internal static readonly float AdrenalineDamagePerBooster = 0.2f; // +20%
         internal static readonly float FullAdrenalineDR = 0.5f; // 50%
         internal static readonly float AdrenalineDRPerBooster = 0.05f; // +5% per booster
 
