@@ -1,6 +1,7 @@
 ﻿using System;
 using CalamityMod.Events;
 using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
@@ -18,6 +19,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         public const float DRIncraeseTime = 600f;
         public const float DeathModeLaserBreathGateValue = 600f;
         public const float LaserTelegraphTime = 120f;
+        public const float SparkTelegraphTime = 30f;
         public const float FlightPhaseGateValue = 900f;
         public const float FlightPhaseResetGateValue = FlightPhaseGateValue * 2f;
         private const float Phase4FlightPhaseTimerSetValue = FlightPhaseGateValue * 0.5f;
@@ -482,6 +484,43 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Sync newAI every 20 frames for the new telegraph
                 if (calamityGlobalNPC.newAI[0] % 20f == 0f && ableToFireLaser)
                     npc.SyncExtraAI();
+
+                Color telegraphColor = Color.Transparent;
+                switch (calamityGlobalNPC.destroyerLaserColor)
+                {
+                    case 0:
+                        telegraphColor = Color.Red;
+                        break;
+                    case 1:
+                        telegraphColor = Color.Green;
+                        break;
+                    case 2:
+                        telegraphColor = Color.Cyan;
+                        break;
+                }
+
+                if (calamityGlobalNPC.newAI[0] == shootProjectileGateValue - LaserTelegraphTime)
+                {
+                    Particle telegraph = new DestroyerReticleTelegraph(
+                        npc,
+                        telegraphColor,
+                        1.5f,
+                        0.15f,
+                        (int)LaserTelegraphTime);
+                    GeneralParticleHandler.SpawnParticle(telegraph); 
+                }
+
+                if (calamityGlobalNPC.newAI[0] == shootProjectileGateValue - SparkTelegraphTime)
+                {
+                    Particle spark = new DestroyerSparkTelegraph(
+                        npc,
+                        telegraphColor * 2f,
+                        Color.White,
+                        3f,
+                        30,
+                        Main.rand.NextFloat(MathHelper.ToRadians(3f)) * Main.rand.NextBool().ToDirectionInt());
+                    GeneralParticleHandler.SpawnParticle(spark);
+                }
 
                 // Shoot lasers
                 // Shoot nothing if probe has been launched
@@ -1185,6 +1224,43 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Sync newAI every 20 frames for the new telegraph
                 if (npc.localAI[0] % 20f == 0f && ableToFireLaser)
                     npc.SyncVanillaLocalAI();
+
+                Color telegraphColor = Color.Transparent;
+                switch (npc.Calamity().destroyerLaserColor)
+                {
+                    case 0:
+                        telegraphColor = Color.Red;
+                        break;
+                    case 1:
+                        telegraphColor = Color.Green;
+                        break;
+                    case 2:
+                        telegraphColor = Color.Cyan;
+                        break;
+                }
+
+                if (npc.localAI[0] == shootProjectileGateValue - LaserTelegraphTime)
+                {
+                    Particle telegraph = new DestroyerReticleTelegraph(
+                        npc,
+                        telegraphColor,
+                        1.5f,
+                        0.15f,
+                        (int)LaserTelegraphTime);
+                    GeneralParticleHandler.SpawnParticle(telegraph);
+                }
+
+                if (npc.localAI[0] == shootProjectileGateValue - SparkTelegraphTime)
+                {
+                    Particle spark = new DestroyerSparkTelegraph(
+                        npc,
+                        telegraphColor * 2f,
+                        Color.White,
+                        3f,
+                        30,
+                        Main.rand.NextFloat(MathHelper.ToRadians(3f)) * Main.rand.NextBool().ToDirectionInt());
+                    GeneralParticleHandler.SpawnParticle(spark);
+                }
 
                 if (npc.localAI[0] >= shootProjectileGateValue && ableToFireLaser)
                 {
