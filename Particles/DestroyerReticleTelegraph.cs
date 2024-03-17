@@ -33,7 +33,7 @@ namespace CalamityMod.Particles
 
         public override void Update()
         {
-            float pulseProgress = PiecewiseAnimation(LifetimeCompletion, [new(EasingType.PolyOut, 0f, 0f, 1f, 4)]);
+            float pulseProgress = PiecewiseAnimation(LifetimeCompletion, new CurveSegment[] { new(EasingType.PolyOut, 0f, 0f, 1f, 4) });
             Scale = MathHelper.Lerp(OriginalScale, FinalScale, pulseProgress);
             Opacity = pulseProgress;
             Rotation += MathHelper.ToRadians(8f) * (1f - pulseProgress) * RotationDirection;
