@@ -44,7 +44,7 @@ namespace CalamityMod.Items
                 { ItemID.AntlionClaw, Do(UseExact(14)) }, // Mandible Blade
                 { ItemID.Bananarang, Do(DamageExact(76), UseExact(14)) },
                 { ItemID.BatScepter, Do(DamageExact(56)) },
-                { ItemID.BeamSword, Do(UseMeleeSpeed, UseTurn, DamageExact(180), UseAnimationExact(60), ShootSpeedExact(23f)) },
+                { ItemID.BeamSword, Do(UseMeleeSpeed, DamageExact(142), UseAnimationExact(45), ShootSpeedExact(23f), KnockbackExact(8)) },
                 { ItemID.BeeGun, Do(DamageExact(10), ManaExact(4)) },
                 { ItemID.BeesKnees, Do(PointBlank, DamageExact(18), UseExact(38)) },
                 { ItemID.Bladetongue, Do(UseTurn, UseRatio(0.8f), DamageExact(120)) },
