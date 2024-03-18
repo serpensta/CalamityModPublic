@@ -30,6 +30,7 @@ using CalamityMod.Tiles.Ores;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
@@ -114,6 +115,46 @@ namespace CalamityMod.NPCs.Providence
         private const float TimeForStarDespawn = 120f;
         private const float TimeForShieldDespawn = 120f;
 
+        // Every single one of Providence's sprites, both night and day, and their glowmasks
+        #region Textures
+        public static Texture2D TextureAlt;
+        public static Texture2D TextureAltNight;
+        public static Texture2D TextureAttack;
+        public static Texture2D TextureAttackNight;
+        public static Texture2D TextureAttackAlt;
+        public static Texture2D TextureAttackAltNight;
+        public static Texture2D TextureDefense;
+        public static Texture2D TextureDefenseNight;
+        public static Texture2D TextureDefenseAlt;
+        public static Texture2D TextureDefenseAltNight;
+        public static Texture2D TextureNight;
+
+        public static Texture2D Texture_Glow;
+        public static Texture2D TextureAlt_Glow;
+        public static Texture2D TextureAltNight_Glow;
+        public static Texture2D TextureAttack_Glow;
+        public static Texture2D TextureAttackNight_Glow;
+        public static Texture2D TextureAttackAlt_Glow;
+        public static Texture2D TextureAttackAltNight_Glow;
+        public static Texture2D TextureDefense_Glow;
+        public static Texture2D TextureDefenseNight_Glow;
+        public static Texture2D TextureDefenseAlt_Glow;
+        public static Texture2D TextureDefenseAltNight_Glow;
+        public static Texture2D TextureNight_Glow;
+        public static Texture2D Texture_Glow_2;
+        public static Texture2D TextureAlt_Glow_2;
+        public static Texture2D TextureAltNight_Glow_2;
+        public static Texture2D TextureAttack_Glow_2;
+        public static Texture2D TextureAttackNight_Glow_2;
+        public static Texture2D TextureAttackAlt_Glow_2;
+        public static Texture2D TextureAttackAltNight_Glow_2;
+        public static Texture2D TextureDefense_Glow_2;
+        public static Texture2D TextureDefenseNight_Glow_2;
+        public static Texture2D TextureDefenseAlt_Glow_2;
+        public static Texture2D TextureDefenseAltNight_Glow_2;
+        public static Texture2D TextureNight_Glow_2;
+        #endregion
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 3;
@@ -128,6 +169,55 @@ namespace CalamityMod.NPCs.Providence
             value.Position.Y += 6f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+
+            #region Texture Loading
+            if (!Main.dedServ)
+            {
+                string ProviPath = "CalamityMod/NPCs/Providence/Providence";
+                string GlowPath = "CalamityMod/NPCs/Providence/Glowmasks/Providence";
+
+                // Normal textures
+                TextureAlt = ModContent.Request<Texture2D>(ProviPath + "Alt", AssetRequestMode.AsyncLoad).Value;
+                TextureAltNight =  ModContent.Request<Texture2D>(ProviPath + "AltNight", AssetRequestMode.AsyncLoad).Value;
+                TextureAttack =  ModContent.Request<Texture2D>(ProviPath + "Attack", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackNight =  ModContent.Request<Texture2D>(ProviPath + "AttackNight", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackAlt =  ModContent.Request<Texture2D>(ProviPath + "AttackAlt", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackAltNight =  ModContent.Request<Texture2D>(ProviPath + "AttackAltNight", AssetRequestMode.AsyncLoad).Value;
+                TextureDefense =  ModContent.Request<Texture2D>(ProviPath + "Defense", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseNight =  ModContent.Request<Texture2D>(ProviPath + "DefenseNight", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseAlt =  ModContent.Request<Texture2D>(ProviPath + "DefenseAlt", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseAltNight =  ModContent.Request<Texture2D>(ProviPath + "DefenseAltNight", AssetRequestMode.AsyncLoad).Value;
+                TextureNight =  ModContent.Request<Texture2D>(ProviPath + "Night", AssetRequestMode.AsyncLoad).Value;
+
+                // Fire glowmasks
+                Texture_Glow = ModContent.Request<Texture2D>(GlowPath + "Glow", AssetRequestMode.AsyncLoad).Value;
+                TextureAlt_Glow = ModContent.Request<Texture2D>(GlowPath + "AltGlow", AssetRequestMode.AsyncLoad).Value;
+                TextureAltNight_Glow = ModContent.Request<Texture2D>(GlowPath + "AltGlowNight", AssetRequestMode.AsyncLoad).Value;
+                TextureAttack_Glow = ModContent.Request<Texture2D>(GlowPath + "AttackGlow", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackNight_Glow = ModContent.Request<Texture2D>(GlowPath + "AttackGlowNight", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackAlt_Glow = ModContent.Request<Texture2D>(GlowPath + "AttackAltGlow", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackAltNight_Glow = ModContent.Request<Texture2D>(GlowPath + "AttackAltGlowNight", AssetRequestMode.AsyncLoad).Value;
+                TextureDefense_Glow = ModContent.Request<Texture2D>(GlowPath + "DefenseGlow", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseNight_Glow = ModContent.Request<Texture2D>(GlowPath + "DefenseGlowNight", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseAlt_Glow = ModContent.Request<Texture2D>(GlowPath + "DefenseAltGlow", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseAltNight_Glow = ModContent.Request<Texture2D>(GlowPath + "DefenseAltGlowNight", AssetRequestMode.AsyncLoad).Value;
+                TextureNight_Glow = ModContent.Request<Texture2D>(GlowPath + "GlowNight", AssetRequestMode.AsyncLoad).Value;
+
+                // Crystal glowmasks
+                Texture_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "Glow2", AssetRequestMode.AsyncLoad).Value;
+                TextureAlt_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "AltGlow2", AssetRequestMode.AsyncLoad).Value;
+                TextureAltNight_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "AltGlow2Night", AssetRequestMode.AsyncLoad).Value;
+                TextureAttack_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "AttackGlow2", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackNight_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "AttackGlow2Night", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackAlt_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "AttackAltGlow2", AssetRequestMode.AsyncLoad).Value;
+                TextureAttackAltNight_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "AttackAltGlow2Night", AssetRequestMode.AsyncLoad).Value;
+                TextureDefense_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "DefenseGlow2", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseNight_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "DefenseGlow2Night", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseAlt_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "DefenseAltGlow2", AssetRequestMode.AsyncLoad).Value;
+                TextureDefenseAltNight_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "DefenseAltGlow2Night", AssetRequestMode.AsyncLoad).Value;
+                TextureNight_Glow_2 = ModContent.Request<Texture2D>(GlowPath + "Glow2Night", AssetRequestMode.AsyncLoad).Value;
+            }
+            #endregion
         }
 
         public override void SetDefaults()
@@ -2060,67 +2150,51 @@ namespace CalamityMod.NPCs.Providence
                 string baseTextureString = "CalamityMod/NPCs/Providence/";
                 string baseGlowTextureString = baseTextureString + "Glowmasks/";
 
-                string getTextureString = baseTextureString + "Providence";
-                string getTextureGlowString = baseGlowTextureString + "ProvidenceGlow";
-                string getTextureGlow2String = baseGlowTextureString + "ProvidenceGlow2";
+                Texture2D texture = offColor ? TextureNight : TextureAssets.Npc[Type].Value;
+                Texture2D textureGlow = offColor ? TextureNight_Glow : Texture_Glow;
+                Texture2D textureGlow2 = offColor ? TextureNight_Glow_2 : Texture_Glow_2;
 
                 if (AIState == (int)Phase.FlameCocoon || AIState == (int)Phase.SpearCocoon)
                 {
                     if (!useDefenseFrames)
                     {
-                        getTextureString = baseTextureString + "ProvidenceDefense";
-                        getTextureGlowString = baseGlowTextureString + "ProvidenceDefenseGlow";
-                        getTextureGlow2String = baseGlowTextureString + "ProvidenceDefenseGlow2";
+                        texture = offColor ? TextureDefenseNight : TextureDefense;
+                        textureGlow = offColor ? TextureDefenseNight_Glow : TextureDefense_Glow;
+                        textureGlow2 = offColor ? TextureDefenseNight_Glow_2 : TextureDefense_Glow_2;
                     }
                     else
                     {
-                        getTextureString = baseTextureString + "ProvidenceDefenseAlt";
-                        getTextureGlowString = baseGlowTextureString + "ProvidenceDefenseAltGlow";
-                        getTextureGlow2String = baseGlowTextureString + "ProvidenceDefenseAltGlow2";
+                        texture = offColor ? TextureDefenseAltNight : TextureDefenseAlt;
+                        textureGlow = offColor ? TextureDefenseAltNight_Glow : TextureDefenseAlt_Glow;
+                        textureGlow2 = offColor ? TextureDefenseAltNight_Glow_2 : TextureDefenseAlt_Glow_2;
                     }
                 }
                 else
                 {
                     switch (frameUsed)
                     {
-                        case 0:
-                            getTextureGlowString = baseGlowTextureString + "ProvidenceGlow";
-                            getTextureGlow2String = baseGlowTextureString + "ProvidenceGlow2";
-                            break;
-
                         case 1:
-                            getTextureString = baseTextureString + "ProvidenceAlt";
-                            getTextureGlowString = baseGlowTextureString + "ProvidenceAltGlow";
-                            getTextureGlow2String = baseGlowTextureString + "ProvidenceAltGlow2";
+                            texture = offColor ? TextureAltNight : TextureAlt;
+                            textureGlow = offColor ? TextureAltNight_Glow : TextureAlt_Glow;
+                            textureGlow2 = offColor ? TextureAltNight_Glow_2 : TextureAlt_Glow_2;
                             break;
 
                         case 2:
-                            getTextureString = baseTextureString + "ProvidenceAttack";
-                            getTextureGlowString = baseGlowTextureString + "ProvidenceAttackGlow";
-                            getTextureGlow2String = baseGlowTextureString + "ProvidenceAttackGlow2";
+                            texture = offColor ? TextureAttackNight : TextureAttack;
+                            textureGlow = offColor ? TextureAttackNight_Glow : TextureAttack_Glow;
+                            textureGlow2 = offColor ? TextureAttackNight_Glow_2 : TextureAttack_Glow_2;
                             break;
 
                         case 3:
-                            getTextureString = baseTextureString + "ProvidenceAttackAlt";
-                            getTextureGlowString = baseGlowTextureString + "ProvidenceAttackAltGlow";
-                            getTextureGlow2String = baseGlowTextureString + "ProvidenceAttackAltGlow2";
+                            texture = offColor ? TextureAttackAltNight : TextureAttackAlt;
+                            textureGlow = offColor ? TextureAttackAltNight_Glow : TextureAttackAlt_Glow;
+                            textureGlow2 = offColor ? TextureAttackAltNight_Glow_2 : TextureAttackAlt_Glow_2;
                             break;
 
                         default:
                             break;
                     }
                 }
-
-                if (offColor)
-                {
-                    getTextureString += "Night";
-                    getTextureGlowString += "Night";
-                    getTextureGlow2String += "Night";
-                }
-
-                Texture2D texture = ModContent.Request<Texture2D>(getTextureString).Value;
-                Texture2D textureGlow = ModContent.Request<Texture2D>(getTextureGlowString).Value;
-                Texture2D textureGlow2 = ModContent.Request<Texture2D>(getTextureGlow2String).Value;
 
                 SpriteEffects spriteEffects = SpriteEffects.None;
                 if (NPC.spriteDirection == 1)

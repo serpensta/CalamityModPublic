@@ -14,6 +14,7 @@ using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -34,7 +35,7 @@ namespace CalamityMod.NPCs.Abyss
         public float speed = 5f; //10
         public float turnSpeed = 0.1f; //0.15
         bool TailSpawned = false;
-
+        public static Texture2D GlowTexture;
         public override void SetStaticDefaults()
         {
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
@@ -44,6 +45,10 @@ namespace CalamityMod.NPCs.Abyss
             };
             value.Position.X += 40;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
+            }
         }
 
         public override void SetDefaults()
@@ -430,10 +435,10 @@ namespace CalamityMod.NPCs.Abyss
             Vector2 center = new Vector2(NPC.Center.X, NPC.Center.Y);
             Vector2 halfSizeTexture = new Vector2((float)(TextureAssets.Npc[NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
             Vector2 vector = center - screenPos;
-            vector -= new Vector2((float)ModContent.Request<Texture2D>("CalamityMod/NPCs/Abyss/EidolonWyrmHeadGlow").Value.Width, (float)(ModContent.Request<Texture2D>("CalamityMod/NPCs/Abyss/EidolonWyrmHeadGlow").Value.Height / Main.npcFrameCount[NPC.type])) * 1f / 2f;
+            vector -= new Vector2((float)GlowTexture.Width, (float)(GlowTexture.Height / Main.npcFrameCount[NPC.type])) * 1f / 2f;
             vector += halfSizeTexture * 1f + new Vector2(0f, NPC.gfxOffY);
             Color color = new Color(127 - NPC.alpha, 127 - NPC.alpha, 127 - NPC.alpha, 0).MultiplyRGBA(Color.White);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("CalamityMod/NPCs/Abyss/EidolonWyrmHeadGlow").Value, vector,
+            Main.spriteBatch.Draw(GlowTexture, vector,
                 new Microsoft.Xna.Framework.Rectangle?(NPC.frame), color, NPC.rotation, halfSizeTexture, 1f, spriteEffects, 0f);
         }
 

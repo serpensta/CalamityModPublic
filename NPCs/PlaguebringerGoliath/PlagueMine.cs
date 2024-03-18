@@ -5,6 +5,7 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -15,10 +16,15 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 {
     public class PlagueMine : ModNPC
     {
+        public static Texture2D GlowTexture;
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
             Main.npcFrameCount[NPC.type] = 4;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueMineGlow", AssetRequestMode.AsyncLoad).Value;
+            }
         }
 
         public override void SetDefaults()
@@ -125,7 +131,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
             spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
 
-            texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueMineGlow").Value;
+            texture2D15 = GlowTexture;
             Color redLerpColor = Color.Lerp(Color.White, Color.Red, 0.5f);
 
             spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, redLerpColor, NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
