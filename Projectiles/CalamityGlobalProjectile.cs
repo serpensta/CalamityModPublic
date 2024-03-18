@@ -4181,9 +4181,9 @@ namespace CalamityMod.Projectiles
         #region Life Steal
         public static bool CanSpawnLifeStealProjectile(float healMultiplier, float healAmount) => healMultiplier > 0f && (int)healAmount > 0;
 
-        public static void SpawnLifeStealProjectile(NPC target, Projectile projectile, Player player, float healAmount, int healProjectileType, float distanceRequired, float cooldownMultiplier)
+        public static void SpawnLifeStealProjectile(Projectile projectile, Player player, float healAmount, int healProjectileType, float distanceRequired, float cooldownMultiplier)
         {
-            if (Main.player[Main.myPlayer].moonLeech || !target.canGhostHeal)
+            if (Main.player[Main.myPlayer].moonLeech)
                 return;
 
             Main.player[Main.myPlayer].lifeSteal -= healAmount * cooldownMultiplier;

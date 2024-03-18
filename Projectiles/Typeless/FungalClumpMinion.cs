@@ -230,7 +230,7 @@ namespace CalamityMod.Projectiles.Typeless
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!target.canGhostHeal)
+            if (Main.player[Projectile.owner].moonLeech)
                 return;
 
             int heal = (int)Math.Round(damageDone * 0.25);

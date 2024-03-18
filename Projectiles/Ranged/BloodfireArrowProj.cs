@@ -94,7 +94,7 @@ namespace CalamityMod.Projectiles.Ranged
             Player player = Main.player[Projectile.owner];
             player.lifeRegenTime += 2;
 
-            if (!target.canGhostHeal || player.moonLeech)
+            if (player.moonLeech)
                 return;
 
             if (Main.player[Main.myPlayer].lifeSteal <= 0f)

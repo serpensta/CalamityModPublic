@@ -33,7 +33,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (target.life <= (target.lifeMax * 0.2f) && target.canGhostHeal)
+            if (target.life <= (target.lifeMax * 0.2f))
             {
                 if (!CalamityPlayer.areThereAnyDamnBosses || Main.rand.NextBool())
                 {
