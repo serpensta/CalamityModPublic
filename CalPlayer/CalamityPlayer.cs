@@ -3584,8 +3584,10 @@ namespace CalamityMod.CalPlayer
             {
                 float duration = Player.lifeSteal;
                 float baseCooldown = Main.expertMode ? 0.5f : 0.6f;
-                float lifeStealNerf = BossRushEvent.BossRushActive ? 0.25f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f;
-                duration /= baseCooldown - lifeStealNerf;
+                float lifeStealRecoveryRateReduction = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.1f : 0f;
+                if (Main.masterMode)
+                    lifeStealRecoveryRateReduction += 0.1f;
+                duration /= baseCooldown - lifeStealRecoveryRateReduction;
                 duration *= -1f;
 
                 if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))

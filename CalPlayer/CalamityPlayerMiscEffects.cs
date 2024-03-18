@@ -364,11 +364,6 @@ namespace CalamityMod.CalPlayer
         {
             if (CalamityWorld.revenge)
             {
-                // Adjusts the life steal cap in rev/death
-                float lifeStealCap = BossRushEvent.BossRushActive ? 30f : CalamityWorld.death ? 45f : 60f;
-                if (Player.lifeSteal > lifeStealCap)
-                    Player.lifeSteal = lifeStealCap;
-
                 if (Player.whoAmI == Main.myPlayer)
                 {
                     // Hallowed Armor nerf
@@ -891,14 +886,25 @@ namespace CalamityMod.CalPlayer
                 }
             }
 
-            // Life Steal nerf
-            // Reduces Normal Mode life steal recovery rate from 0.6/s to 0.5/s
-            // Reduces Expert Mode life steal recovery rate from 0.5/s to 0.4/s
-            // Revengeance Mode recovery rate is 0.35/s
-            // Death Mode recovery rate is 0.3/s
-            // Boss Rush recovery rate is 0.25/s
-            float lifeStealCooldown = BossRushEvent.BossRushActive ? 0.25f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f;
-            Player.lifeSteal -= lifeStealCooldown;
+            // Life Steal nerf in difficulties above Expert
+            // Reduces the max possible life steal before the cooldown occurs (this mostly just nerfs how much life steal the player can get in bursts)
+            // Master Mode nerfs this by an additional 10
+            float lifeStealCap = BossRushEvent.BossRushActive ? 40f : CalamityWorld.death ? 50f : CalamityWorld.revenge ? 60f : Main.expertMode ? 70f : 80f;
+            if (Main.masterMode)
+                lifeStealCap -= 10f;
+            if (Player.lifeSteal > lifeStealCap)
+                Player.lifeSteal = lifeStealCap;
+
+            // Normal Mode life steal recovery rate is 0.6/s
+            // Expert Mode life steal recovery rate is 0.5/s
+            // Revengeance Mode life steal recovery rate is 0.4/s
+            // Death Mode life steal recovery rate is 0.3/s
+            // Boss Rush life steal recovery rate is 0.2/s
+            // Master Mode life steal recovery rate is nerfed by an additional 0.1/s
+            float lifeStealRecoveryRateReduction = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.1f : 0f;
+            if (Main.masterMode)
+                lifeStealRecoveryRateReduction += 0.1f;
+            Player.lifeSteal -= lifeStealRecoveryRateReduction;
 
             // Bool for drawing boss health bar small text or not
             if (Main.myPlayer == Player.whoAmI)
