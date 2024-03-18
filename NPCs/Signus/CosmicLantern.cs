@@ -36,7 +36,6 @@ namespace CalamityMod.NPCs.Signus
             NPC.noGravity = true;
             NPC.dontTakeDamage = true;
             NPC.chaseable = false;
-            NPC.canGhostHeal = false;
             NPC.noTileCollide = true;
             NPC.HitSound = SoundID.NPCHit53;
             NPC.DeathSound = SoundID.NPCDeath44;

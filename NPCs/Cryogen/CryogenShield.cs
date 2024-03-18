@@ -25,7 +25,6 @@ namespace CalamityMod.NPCs.Cryogen
             NPC.Calamity().canBreakPlayerDefense = true;
             NPC.aiStyle = -1;
             AIType = -1;
-            NPC.canGhostHeal = false;
             NPC.noTileCollide = true;
             NPC.coldDamage = true;
             NPC.GetNPCDamage();

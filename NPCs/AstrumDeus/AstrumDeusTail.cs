@@ -52,7 +52,6 @@ namespace CalamityMod.NPCs.AstrumDeus
             NPC.behindTiles = true;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.canGhostHeal = false;
             NPC.HitSound = AstrumDeusHead.HitSound;
             NPC.DeathSound = AstrumDeusHead.DeathSound;
             NPC.netAlways = true;

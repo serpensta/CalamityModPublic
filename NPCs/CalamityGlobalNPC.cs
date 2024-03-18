@@ -1489,11 +1489,6 @@ namespace CalamityMod.NPCs
             {
                 npc.knockBackResist = 0f;
             }
-
-            if (CalamityLists.revengeanceLifeStealExceptionList.Contains(npc.type))
-            {
-                npc.canGhostHeal = false;
-            }
         }
         #endregion
 

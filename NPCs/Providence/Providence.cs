@@ -182,7 +182,6 @@ namespace CalamityMod.NPCs.Providence
             writer.Write(flightPath);
             writer.Write(NPC.dontTakeDamage);
             writer.Write(NPC.chaseable);
-            writer.Write(NPC.canGhostHeal);
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
             writer.Write(NPC.localAI[2]);
@@ -209,7 +208,6 @@ namespace CalamityMod.NPCs.Providence
             flightPath = reader.ReadInt32();
             NPC.dontTakeDamage = reader.ReadBoolean();
             NPC.chaseable = reader.ReadBoolean();
-            NPC.canGhostHeal = reader.ReadBoolean();
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
@@ -523,7 +521,6 @@ namespace CalamityMod.NPCs.Providence
 
             // Whether the boss can be homed in on or healed off of
             NPC.chaseable = normalAttackRate;
-            NPC.canGhostHeal = NPC.chaseable;
 
             // Prevent lag by stopping rain
             if (CalamityConfig.Instance.BossesStopWeather)

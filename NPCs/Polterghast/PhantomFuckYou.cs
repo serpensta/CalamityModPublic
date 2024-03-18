@@ -32,7 +32,6 @@ namespace CalamityMod.NPCs.Polterghast
             NPC.DR_NERD(0.1f);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.canGhostHeal = false;
             NPC.damage = 50;
             NPC.lifeMax = 20000;
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;

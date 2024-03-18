@@ -47,7 +47,6 @@ namespace CalamityMod.NPCs.ProfanedGuardians
             NPC.noGravity = true;
             NPC.chaseable = false;
             NPC.noTileCollide = true;
-            NPC.canGhostHeal = false;
             NPC.HitSound = SoundID.NPCHit52;
             NPC.DeathSound = SoundID.NPCDeath55;
             NPC.Calamity().VulnerableToHeat = false;

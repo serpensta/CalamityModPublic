@@ -33,7 +33,6 @@ namespace CalamityMod.NPCs.CalClone
             NPC.height = 40;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.canGhostHeal = false;
             NPC.damage = 40;
             NPC.defense = 10;
             NPC.DR_NERD(0.1f);

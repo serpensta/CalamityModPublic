@@ -101,7 +101,6 @@ namespace CalamityMod
         public static List<int> revengeanceProjectileBuffList25Percent;
         public static List<int> revengeanceProjectileBuffList20Percent;
         public static List<int> revengeanceProjectileBuffList15Percent;
-        public static List<int> revengeanceLifeStealExceptionList;
         public static List<int> noRageWormSegmentList;
         public static List<int> needsDebuffIconDisplayList;
         public static List<int> scopedWeaponList;
@@ -1510,36 +1509,6 @@ namespace CalamityMod
                 ProjectileType<PearlRain>()
             };
 
-            revengeanceLifeStealExceptionList = new List<int>()
-            {
-                NPCID.Probe,
-                NPCID.CultistDragonHead,
-                NPCID.CultistDragonBody1,
-                NPCID.CultistDragonBody2,
-                NPCID.CultistDragonBody3,
-                NPCID.CultistDragonBody4,
-                NPCID.CultistDragonTail,
-                NPCID.AncientCultistSquidhead,
-                NPCID.AncientLight,
-                NPCID.Sharkron,
-                NPCID.Sharkron2,
-                NPCID.PlanterasTentacle,
-                NPCType<PlanterasFreeTentacle>(),
-                NPCID.Spore,
-                NPCID.TheHungryII,
-                NPCID.LeechHead,
-                NPCID.LeechBody,
-                NPCID.LeechTail,
-                NPCID.QueenSlimeMinionBlue,
-                NPCID.QueenSlimeMinionPink,
-                NPCID.QueenSlimeMinionPurple,
-                NPCID.TheDestroyerBody,
-                NPCID.TheDestroyerTail,
-                NPCID.EaterofWorldsBody,
-                NPCID.EaterofWorldsTail,
-                NPCID.MoonLordCore
-            };
-
             noRageWormSegmentList = new List<int>()
             {
                 NPCType<DesertScourgeBody>(),
@@ -2812,7 +2781,6 @@ namespace CalamityMod
             revengeanceProjectileBuffList25Percent = null;
             revengeanceProjectileBuffList20Percent = null;
             revengeanceProjectileBuffList15Percent = null;
-            revengeanceLifeStealExceptionList = null;
             noRageWormSegmentList = null;
             needsDebuffIconDisplayList = null;
             scopedWeaponList = null;

@@ -245,7 +245,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.dontTakeDamage = false;
             NPC.chaseable = true;
             NPC.boss = true;
-            NPC.canGhostHeal = false;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.Calamity().VulnerableToHeat = false;

@@ -71,7 +71,6 @@ namespace CalamityMod.NPCs.ExoMechs.Thanatos
             AIType = -1;
             NPC.knockBackResist = 0f;
             NPC.Opacity = 0f;
-            NPC.canGhostHeal = false;
             NPC.behindTiles = true;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
