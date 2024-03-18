@@ -1432,6 +1432,20 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            // Adjust dust to avoid lag.
+            else if (projectile.type == ProjectileID.VampireHeal)
+            {
+                projectile.HealingProjectile((int)projectile.ai[1], (int)projectile.ai[0], 4f, 15f);
+
+                int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.VampireHeal, 0f, 0f, 100);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].velocity *= 0f;
+                Main.dust[dust].position.X -= projectile.velocity.X * 0.2f;
+                Main.dust[dust].position.Y += projectile.velocity.Y * 0.2f;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.NurseSyringeHeal)
             {
                 ref float initialSpeed = ref projectile.localAI[1];
