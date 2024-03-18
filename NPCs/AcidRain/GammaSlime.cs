@@ -32,7 +32,7 @@ namespace CalamityMod.NPCs.AcidRain
             Main.npcFrameCount[NPC.type] = 2;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

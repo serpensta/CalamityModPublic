@@ -52,7 +52,7 @@ namespace CalamityMod.NPCs.Leviathan
             Main.npcFrameCount[NPC.type] = 3;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             if (!Main.dedServ)
-                AttackTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/LeviathanAttack", AssetRequestMode.AsyncLoad).Value;
+                AttackTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/LeviathanAttack", AssetRequestMode.ImmediateLoad).Value;
         }
 
         public override void SetDefaults()

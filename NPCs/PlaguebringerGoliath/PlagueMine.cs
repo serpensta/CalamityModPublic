@@ -23,7 +23,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             Main.npcFrameCount[NPC.type] = 4;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueMineGlow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueMineGlow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

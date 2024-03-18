@@ -25,7 +25,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueHomingMissileGlow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueHomingMissileGlow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

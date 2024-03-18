@@ -40,9 +40,9 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             if (!Main.dedServ)
             {
-                BodyTexture = ModContent.Request<Texture2D>(Texture + "Body", AssetRequestMode.AsyncLoad);
-                TailTexture = ModContent.Request<Texture2D>(Texture + "Tail", AssetRequestMode.AsyncLoad).Value;
-                BestiaryTexture = ModContent.Request<Texture2D>(Texture + "Bestiary", AssetRequestMode.AsyncLoad).Value;
+                BodyTexture = ModContent.Request<Texture2D>(Texture + "Body", AssetRequestMode.ImmediateLoad);
+                TailTexture = ModContent.Request<Texture2D>(Texture + "Tail", AssetRequestMode.ImmediateLoad).Value;
+                BestiaryTexture = ModContent.Request<Texture2D>(Texture + "Bestiary", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

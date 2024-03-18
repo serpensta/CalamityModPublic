@@ -34,7 +34,7 @@ namespace CalamityMod.NPCs.Abyss
             Main.npcFrameCount[NPC.type] = 8;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

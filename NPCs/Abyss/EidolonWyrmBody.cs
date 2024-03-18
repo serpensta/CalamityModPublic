@@ -18,7 +18,7 @@ namespace CalamityMod.NPCs.Abyss
             this.HideFromBestiary();
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

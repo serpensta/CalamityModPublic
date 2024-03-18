@@ -75,9 +75,9 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             if (!Main.dedServ)
             {
-                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTex", AssetRequestMode.AsyncLoad).Value;
-                Texture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathGlow", AssetRequestMode.AsyncLoad).Value;
-                ChargeTexture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTexGlow", AssetRequestMode.AsyncLoad).Value;
+                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTex", AssetRequestMode.ImmediateLoad).Value;
+                Texture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathGlow", AssetRequestMode.ImmediateLoad).Value;
+                ChargeTexture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTexGlow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

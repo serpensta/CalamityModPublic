@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.TrailCacheLength[NPC.type] = 6;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

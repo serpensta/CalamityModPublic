@@ -63,7 +63,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glowmask", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

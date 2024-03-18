@@ -73,14 +73,14 @@ namespace CalamityMod.NPCs.AstrumAureus
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             if (!Main.dedServ)
             {
-                Texture_Glow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad).Value;
-                JumpTexture = ModContent.Request<Texture2D>(Texture + "Jump", AssetRequestMode.AsyncLoad).Value;
-                RechargeTexture = ModContent.Request<Texture2D>(Texture + "Recharge", AssetRequestMode.AsyncLoad).Value;
-                StompTexture = ModContent.Request<Texture2D>(Texture + "Stomp", AssetRequestMode.AsyncLoad).Value;
-                WalkTexture = ModContent.Request<Texture2D>(Texture + "Walk", AssetRequestMode.AsyncLoad).Value;
-                JumpTexture_Glow = ModContent.Request<Texture2D>(Texture + "JumpGlow", AssetRequestMode.AsyncLoad).Value;
-                StompTexture_Glow = ModContent.Request<Texture2D>(Texture + "StompGlow", AssetRequestMode.AsyncLoad).Value;
-                WalkTexture_Glow = ModContent.Request<Texture2D>(Texture + "WalkGlow", AssetRequestMode.AsyncLoad).Value;
+                Texture_Glow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+                JumpTexture = ModContent.Request<Texture2D>(Texture + "Jump", AssetRequestMode.ImmediateLoad).Value;
+                RechargeTexture = ModContent.Request<Texture2D>(Texture + "Recharge", AssetRequestMode.ImmediateLoad).Value;
+                StompTexture = ModContent.Request<Texture2D>(Texture + "Stomp", AssetRequestMode.ImmediateLoad).Value;
+                WalkTexture = ModContent.Request<Texture2D>(Texture + "Walk", AssetRequestMode.ImmediateLoad).Value;
+                JumpTexture_Glow = ModContent.Request<Texture2D>(Texture + "JumpGlow", AssetRequestMode.ImmediateLoad).Value;
+                StompTexture_Glow = ModContent.Request<Texture2D>(Texture + "StompGlow", AssetRequestMode.ImmediateLoad).Value;
+                WalkTexture_Glow = ModContent.Request<Texture2D>(Texture + "WalkGlow", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

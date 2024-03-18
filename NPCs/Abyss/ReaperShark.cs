@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.Abyss
             Main.npcFrameCount[NPC.type] = 4;
             if (!Main.dedServ)
             {
-                ManTexture = ModContent.Request<Texture2D>(Texture + "Man", AssetRequestMode.AsyncLoad);
+                ManTexture = ModContent.Request<Texture2D>(Texture + "Man", AssetRequestMode.ImmediateLoad);
             }
         }
 

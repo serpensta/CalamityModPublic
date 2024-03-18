@@ -50,7 +50,7 @@ namespace CalamityMod.NPCs.Leviathan
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             if (!Main.dedServ)
             {
-                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/AnahitaStabbing", AssetRequestMode.AsyncLoad).Value;
+                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/AnahitaStabbing", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 

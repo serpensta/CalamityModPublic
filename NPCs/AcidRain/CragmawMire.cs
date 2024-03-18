@@ -61,7 +61,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             if (!Main.dedServ)
             {
-                Phase2Texture = ModContent.Request<Texture2D>(Texture + "2", AssetRequestMode.AsyncLoad).Value;
+                Phase2Texture = ModContent.Request<Texture2D>(Texture + "2", AssetRequestMode.ImmediateLoad).Value;
             }
         }
 
