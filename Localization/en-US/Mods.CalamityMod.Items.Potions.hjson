@@ -302,7 +302,8 @@ OddMushroom: {
 	Tooltip:
 		'''
 		Causes you to see many fake, vibrant copies of all nearby entities
-		[c/C4232C:These visual effects may be nauseating or otherwise bad for some]
+		These effects become more potent as you consume more shrooms
+		[c/FF232C:These visual effects may be nauseating or otherwise bad for some]
 		'Trippy'
 		'''
 }
