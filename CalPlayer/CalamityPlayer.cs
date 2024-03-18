@@ -4667,7 +4667,7 @@ namespace CalamityMod.CalPlayer
             return rogueStealth >= rogueStealthMax * consumptionMult;
         }
 
-        internal void ConsumeStealthByAttacking()
+        public void ConsumeStealthByAttacking()
         {
             stealthStrikeThisFrame = true;
             stealthAcceleration = 1f; // Reset acceleration when you attack
