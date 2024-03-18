@@ -4165,13 +4165,7 @@ namespace CalamityMod.Projectiles
         #endregion
 
         #region Life Steal
-        public static bool CanSpawnLifeStealProjectile(float healMultiplier, float healAmount)
-        {
-            if (healMultiplier <= 0f || (int)healAmount <= 0)
-                return false;
-
-            return true;
-        }
+        public static bool CanSpawnLifeStealProjectile(float healMultiplier, float healAmount) => healMultiplier > 0f && (int)healAmount > 0;
 
         public static void SpawnLifeStealProjectile(Projectile projectile, Player player, float healAmount, int healProjectileType, float distanceRequired, float cooldownMultiplier)
         {

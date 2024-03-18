@@ -114,9 +114,6 @@ namespace CalamityMod
         // Boss Kill Time data structure
         public static SortedDictionary<int, int> bossKillTimes;
 
-        // Life steal cap
-        public const int lifeStealCap = 10;
-
         // Speedrun timer
         internal static Stopwatch SpeedrunTimer = new Stopwatch();
 

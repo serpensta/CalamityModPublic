@@ -233,17 +233,11 @@ namespace CalamityMod.Projectiles.Typeless
             if (!target.canGhostHeal)
                 return;
 
-            float healAmt = damageDone * 0.25f;
-            if ((int)healAmt == 0)
+            int heal = (int)Math.Round(damageDone * 0.25);
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f)
-                return;
-
-            if (healAmt > CalamityMod.lifeStealCap)
-                healAmt = CalamityMod.lifeStealCap;
-
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], healAmt, ModContent.ProjectileType<FungalHeal>(), 1200f, 3f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<FungalHeal>(), 1200f, 4f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity) => false;

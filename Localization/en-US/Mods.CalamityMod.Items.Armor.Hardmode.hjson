@@ -497,10 +497,10 @@ ReaverHeadTank: {
 		+10 defense and +1.5 HP/s life regen
 		Enemies are more likely to target you
 		Reduces the life regen lost from damage over time debuffs by 20%
-		All attacks have a small chance to steal life and speed up the rate of life regen
-		20% decreased movement speed and flight time
+		All attacks steal life and speed up the rate of life regen
+		30% decreased movement speed and flight time
 		Enemy damage is reflected and summons a thorn spike
-		Reaver Rage has a 25% chance to activate when you are damaged
+		Reaver Rage activates when you are damaged
 		'''
 }
 

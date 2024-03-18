@@ -893,11 +893,11 @@ namespace CalamityMod.CalPlayer
 
             // Life Steal nerf
             // Reduces Normal Mode life steal recovery rate from 0.6/s to 0.5/s
-            // Reduces Expert Mode life steal recovery rate from 0.5/s to 0.35/s
-            // Revengeance Mode recovery rate is 0.3/s
-            // Death Mode recovery rate is 0.25/s
-            // Boss Rush recovery rate is 0.2/s
-            float lifeStealCooldown = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.25f : CalamityWorld.revenge ? 0.2f : Main.expertMode ? 0.15f : 0.1f;
+            // Reduces Expert Mode life steal recovery rate from 0.5/s to 0.4/s
+            // Revengeance Mode recovery rate is 0.35/s
+            // Death Mode recovery rate is 0.3/s
+            // Boss Rush recovery rate is 0.25/s
+            float lifeStealCooldown = BossRushEvent.BossRushActive ? 0.25f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f;
             Player.lifeSteal -= lifeStealCooldown;
 
             // Bool for drawing boss health bar small text or not
@@ -1364,8 +1364,6 @@ namespace CalamityMod.CalPlayer
                 bloodflareMageCooldown--;
             if (silvaMageCooldown > 0)
                 silvaMageCooldown--;
-            if (tarraMageHealCooldown > 0)
-                tarraMageHealCooldown--;
             if (scuttlerCooldown > 0)
                 scuttlerCooldown--;
             if (rogueCrownCooldown > 0)
@@ -2497,7 +2495,7 @@ namespace CalamityMod.CalPlayer
 
             if (rRage)
             {
-                Player.GetDamage<GenericDamageClass>() += 0.3f;
+                Player.GetDamage<GenericDamageClass>() += 0.1f;
                 Player.statDefense += 5;
             }
 
@@ -2817,7 +2815,7 @@ namespace CalamityMod.CalPlayer
 
             // Reaver Tank set nuke flight time
             if (reaverDefense)
-                flightTimeMult -= 0.2f;
+                flightTimeMult -= 0.3f;
 
             // Increase wing time
             if (Player.wingTimeMax > 0)

@@ -2254,8 +2254,7 @@ namespace CalamityMod.CalPlayer
 
                 if (tarraMelee)
                 {
-                    if (Main.rand.NextBool(4))
-                        Player.AddBuff(ModContent.BuffType<TarraLifeRegen>(), 120);
+                    Player.AddBuff(ModContent.BuffType<TarraLifeRegen>(), 120);
                 }
                 else if (xerocSet)
                 {
@@ -2264,8 +2263,7 @@ namespace CalamityMod.CalPlayer
                 }
                 else if (reaverDefense)
                 {
-                    if (Main.rand.NextBool(4))
-                        Player.AddBuff(ModContent.BuffType<ReaverRage>(), 180);
+                    Player.AddBuff(ModContent.BuffType<ReaverRage>(), 180);
                 }
 
                 if ((fBarrier || (aquaticHeart && NPC.downedBoss3)) && !areThereAnyDamnBosses)

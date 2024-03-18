@@ -723,7 +723,6 @@ namespace CalamityMod.CalPlayer
         public bool tarragonCloak = false;
         public int tarraDefenseTime = 600;
         public bool tarraMage = false;
-        public int tarraMageHealCooldown = 0;
         public int tarraCrits = 0;
         public bool tarraRanged = false;
         public int tarraRangedCooldown = 0;
@@ -2280,7 +2279,6 @@ namespace CalamityMod.CalPlayer
             silvaMageCooldown = 0;
             bloodflareMageCooldown = 0;
             tarraRangedCooldown = 0;
-            tarraMageHealCooldown = 0;
             hideOfDeusMeleeBoostTimer = 0;
             externalAbyssLight = 0;
             externalColdImmunity = externalHeatImmunity = false;
@@ -3586,7 +3584,7 @@ namespace CalamityMod.CalPlayer
             {
                 float duration = Player.lifeSteal;
                 float baseCooldown = Main.expertMode ? 0.5f : 0.6f;
-                float lifeStealNerf = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.25f : CalamityWorld.revenge ? 0.2f : Main.expertMode ? 0.15f : 0.1f;
+                float lifeStealNerf = BossRushEvent.BossRushActive ? 0.25f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.15f : 0.1f;
                 duration /= baseCooldown - lifeStealNerf;
                 duration *= -1f;
 
