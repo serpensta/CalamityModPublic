@@ -2181,17 +2181,26 @@ namespace CalamityMod.Projectiles
                 {
                     bool primeCannonProjectile = projectile.ai[1] == 2f;
                     bool homeIn = false;
-                    float homingTime = masterMode ? 210f : 150f;
+                    float homingTime = masterMode ? 240f : 180f;
                     float spreadOutCutoffTime = 555f;
                     float homeInCutoffTime = spreadOutCutoffTime - homingTime;
-                    float minAcceleration = 0.05f;
-                    float maxAcceleration = 0.1f;
-                    float homingVelocity = 27f;
+                    float minAcceleration = masterMode ? 0.096f : 0.08f;
+                    float maxAcceleration = masterMode ? 0.144f : 0.12f;
+                    float homingVelocity = masterMode ? 30f : 25f;
+                    float maxVelocity = masterMode ? 18f : 15f;
 
-                    if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime && !primeCannonProjectile)
-                        homeIn = true;
-                    else if (projectile.velocity.Length() < (masterMode ? 20f : 15f))
-                        projectile.velocity *= 1.01f;
+                    if (!primeCannonProjectile)
+                    {
+                        if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
+                            homeIn = true;
+                        else if (projectile.velocity.Length() < maxVelocity)
+                            projectile.velocity *= 1.01f;
+                    }
+                    else
+                    {
+                        if (projectile.velocity.Length() < maxVelocity)
+                            projectile.velocity *= 1.01f;
+                    }
 
                     if (homeIn)
                     {
@@ -2209,10 +2218,8 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.timeLeft <= 3)
                     {
-                        projectile.position.X += projectile.width / 2;
-                        projectile.position.Y += projectile.height / 2;
-                        projectile.width = 128;
-                        projectile.height = 128;
+                        projectile.position = projectile.Center;
+                        projectile.width = projectile.height = 128;
                         projectile.position.X -= projectile.width / 2;
                         projectile.position.Y -= projectile.height / 2;
                     }
@@ -2253,6 +2260,14 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.SeedPlantera || projectile.type == ProjectileID.PoisonSeedPlantera)
                 {
+                    // For Plantera's shotgun spread.
+                    // Make the seeds faster until they hit the intended velocity to avoid unfair hits after charges.
+                    if (projectile.ai[2] > 0f)
+                    {
+                        if (projectile.velocity.Length() < projectile.ai[2])
+                            projectile.velocity *= 1.025f;
+                    }
+
                     projectile.frameCounter++;
                     if (projectile.frameCounter > 1)
                     {
@@ -2925,7 +2940,7 @@ namespace CalamityMod.Projectiles
                     if (CalamityLists.dungeonProjectileBuffList.Contains(projectile.type))
                     {
                         // ai[1] being set to 1 is done only by the Calamity usages of these projectiles in Skeletron and Skeletron Prime boss fights
-                        bool isSkeletronBossProjectile = (projectile.type == ProjectileID.RocketSkeleton || projectile.type == ProjectileID.Shadowflames) && projectile.ai[1] == 1f;
+                        bool isSkeletronBossProjectile = (projectile.type == ProjectileID.RocketSkeleton || projectile.type == ProjectileID.Shadowflames) && projectile.ai[1] > 0f;
 
                         // These projectiles will not be buffed if Golem is alive
                         bool isGolemBossProjectile = NPC.golemBoss > 0 && (projectile.type == ProjectileID.InfernoHostileBolt || projectile.type == ProjectileID.InfernoHostileBlast);

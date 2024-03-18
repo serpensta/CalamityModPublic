@@ -7128,6 +7128,66 @@ namespace CalamityMod.NPCs
                     else
                         spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                 }
+
+                else if (npc.type == NPCID.Plantera)
+                {
+                    // Percent life remaining
+                    float lifeRatio = npc.life / (float)npc.lifeMax;
+
+                    Texture2D npcTexture = TextureAssets.Npc[npc.type].Value;
+
+                    SpriteEffects spriteEffects = SpriteEffects.None;
+                    if (npc.spriteDirection == 1)
+                        spriteEffects = SpriteEffects.FlipHorizontally;
+
+                    Color originalColor = npc.GetAlpha(drawColor);
+                    Color newColor = new Color(100, 255, 100, 255);
+                    Vector2 glowOffset = Vector2.UnitY * -4f;
+                    Vector2 drawPosition = npc.Center - screenPos + new Vector2(0, npc.gfxOffY) + glowOffset;
+                    Vector2 origin = npc.frame.Size() / 2;
+
+                    bool phase2 = lifeRatio <= 0.5f;
+                    if (!phase2)
+                    {
+                        float telegraphTimer = Math.Abs(npc.ai[1]);
+                        bool startSeedGatlingSporeGasTelegraph = npc.ai[1] > PlanteraAI.SeedGatlingColorChangeGateValue;
+                        bool endSeedGatlingSporeGasTelegraph = npc.ai[1] < -PlanteraAI.SeedGatlingDuration + PlanteraAI.SeedGatlingColorChangeDuration;
+                        if (startSeedGatlingSporeGasTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((telegraphTimer - PlanteraAI.SeedGatlingColorChangeGateValue) / PlanteraAI.SeedGatlingColorChangeDuration, 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+
+                        // -300 to -120
+                        else if (endSeedGatlingSporeGasTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((telegraphTimer - (PlanteraAI.SeedGatlingDuration - PlanteraAI.SeedGatlingColorChangeDuration)) / PlanteraAI.SeedGatlingColorChangeDuration, 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+                    }
+                    else
+                    {
+                        float telegraphTimer = Math.Abs(npc.ai[3]);
+                        bool startChargeTelegraph = npc.ai[3] > PlanteraAI.ChargeTelegraphColorChangeGateValue;
+                        bool endChargeTelegraph = npc.ai[3] <= -2f;
+                        if (startChargeTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((telegraphTimer - PlanteraAI.ChargeTelegraphColorChangeGateValue) / PlanteraAI.SeedGatlingColorChangeDuration, 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+
+                        // -195 to -2
+                        else if (endChargeTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((Math.Abs(PlanteraAI.StopChargeGateValue) - telegraphTimer) / Math.Abs(PlanteraAI.StopChargeGateValue), 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+                    }
+                }
             }
         }
 

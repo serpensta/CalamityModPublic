@@ -9399,7 +9399,7 @@ PrepareToShoot:
         public static bool BuffedSporeAI(NPC npc, Mod mod)
         {
             if (npc.type == NPCID.Spore)
-                Lighting.AddLight(npc.Center, 0.2f, 0.1f, 0.2f);
+                Lighting.AddLight(npc.Center, 0.5f, 0.2f, 0.5f);
 
             if (npc.timeLeft > 5)
                 npc.timeLeft = 5;
