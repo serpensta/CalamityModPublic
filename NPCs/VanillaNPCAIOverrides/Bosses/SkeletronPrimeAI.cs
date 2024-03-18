@@ -679,13 +679,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     npc.rotation = npc.velocity.X / 15f;
 
-                    float flightVelocity = bossRush ? 30f : death ? 24f : 18f;
-                    float flightAcceleration = bossRush ? 0.5f : death ? 0.4f : 0.3f;
+                    float flightVelocity = bossRush ? 28f : death ? 24f : 20f;
+                    float flightAcceleration = bossRush ? 1.12f : death ? 0.96f : 0.8f;
 
                     if (masterMode)
                     {
-                        flightVelocity += 5f;
-                        flightAcceleration += 0.1f;
+                        flightVelocity += 4f;
+                        flightAcceleration += 0.16f;
                     }
 
                     Vector2 destination = new Vector2(Main.player[npc.target].Center.X, Main.player[npc.target].Center.Y - 500f);
