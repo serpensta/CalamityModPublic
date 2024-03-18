@@ -104,6 +104,10 @@ namespace CalamityMod.CalPlayer
                     }
                 }
             }
+            else // This is such a stupid way to reset this but you can't just put it in ResetEffects
+            {
+                calamityPlayer.trippyLevel = 1;
+            }
 
             // TODO -- rogue stealth visuals are an utter catastrophe and should be fully destroyed on next stealth rework
             if (calamityPlayer.rogueStealth > 0f && calamityPlayer.rogueStealthMax > 0f && Player.townNPCs < 3f && CalamityConfig.Instance.StealthInvisibility)

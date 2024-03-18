@@ -963,6 +963,7 @@ namespace CalamityMod.CalPlayer
         public double pinkCandleHealFraction = 0D;
         public bool yellowCandle = false;
         public bool trippy = false;
+        public int trippyLevel = 1;
         public bool amidiasBlessing = false;
         public bool bloodfinBoost = false;
         public int bloodfinTimer = 30;
@@ -2450,6 +2451,7 @@ namespace CalamityMod.CalPlayer
             pinkCandleHealFraction = 0D;
             yellowCandle = false;
             trippy = false;
+            trippyLevel = 1;
             amidiasBlessing = false;
             bloodfinBoost = false;
             bloodfinTimer = 0;
