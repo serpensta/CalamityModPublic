@@ -2265,7 +2265,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.ai[2] > 0f)
                     {
                         if (projectile.velocity.Length() < projectile.ai[2])
-                            projectile.velocity *= 1.025f;
+                            projectile.velocity *= 1.012f;
                     }
 
                     projectile.frameCounter++;

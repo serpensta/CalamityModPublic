@@ -1119,6 +1119,13 @@ namespace CalamityMod.NPCs
         #endregion
 
         #region Set Defaults
+        public override void SetStaticDefaults()
+        {
+            // Set Plantera to be able to update oldPos[x]
+            // This is only used for her Rev+ AI charge attacks
+            NPCID.Sets.TrailingMode[NPCID.Plantera] = 1;
+        }
+
         public override void SetDefaults(NPC npc)
         {
             ShouldFallThroughPlatforms = false;
@@ -7184,6 +7191,24 @@ namespace CalamityMod.NPCs
                         {
                             float telegraphScalar = MathHelper.Clamp((Math.Abs(PlanteraAI.StopChargeGateValue) - telegraphTimer) / Math.Abs(PlanteraAI.StopChargeGateValue), 0f, 1f);
                             Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+
+                            if (CalamityConfig.Instance.Afterimages)
+                            {
+                                int afterimageAmount = 10;
+                                int afterImageIncrement = 2;
+                                for (int j = 0; j < afterimageAmount; j += afterImageIncrement)
+                                {
+                                    Color afterimageColor = telegraphColor;
+                                    afterimageColor = Color.Lerp(afterimageColor, originalColor, 0.5f);
+                                    afterimageColor = npc.GetAlpha(afterimageColor);
+                                    afterimageColor *= (afterimageAmount - j) / 15f;
+                                    Vector2 afterimagePos = npc.oldPos[j] + new Vector2(npc.width, npc.height) / 2f - screenPos;
+                                    afterimagePos -= new Vector2(npcTexture.Width, npcTexture.Height / Main.npcFrameCount[npc.type]) * npc.scale / 2f;
+                                    afterimagePos += origin * npc.scale + new Vector2(0f, npc.gfxOffY) + glowOffset;
+                                    spriteBatch.Draw(npcTexture, afterimagePos, npc.frame, afterimageColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                                }
+                            }
+
                             spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
                         }
                     }

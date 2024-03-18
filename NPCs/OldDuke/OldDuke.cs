@@ -127,9 +127,7 @@ namespace CalamityMod.NPCs.OldDuke
         public override void ModifyTypeName(ref string typeName)
         {
             if (Main.zenithWorld)
-            {
                 typeName = CalamityUtils.GetTextValue("NPCs.BoomerDuke");
-            }
         }
 
         public override void FindFrame(int frameHeight)
@@ -139,9 +137,8 @@ namespace CalamityMod.NPCs.OldDuke
             {
                 int frameChangeFrequency = tired ? 14 : 7;
                 if (NPC.ai[0] == 5f || NPC.ai[0] == 12f)
-                {
                     frameChangeFrequency = tired ? 12 : 6;
-                }
+
                 NPC.frameCounter += 1D;
                 if (NPC.frameCounter > frameChangeFrequency)
                 {
@@ -149,18 +146,15 @@ namespace CalamityMod.NPCs.OldDuke
                     NPC.frame.Y += frameHeight;
                 }
                 if (NPC.frame.Y >= frameHeight * 6)
-                {
                     NPC.frame.Y = 0;
-                }
             }
+
             if (NPC.ai[0] == 1f || NPC.ai[0] == 6f || NPC.ai[0] == 11f)
-            {
                 NPC.frame.Y = frameHeight * 2;
-            }
+
             if (NPC.ai[0] == 2f || NPC.ai[0] == 7f || NPC.ai[0] == 14f)
-            {
                 NPC.frame.Y = frameHeight * 6;
-            }
+
             if (NPC.ai[0] == 3f || NPC.ai[0] == 8f || NPC.ai[0] == 13f || NPC.ai[0] == -1f)
             {
                 int frameChangeGateValue = 120;
@@ -173,19 +167,16 @@ namespace CalamityMod.NPCs.OldDuke
                         NPC.frame.Y += frameHeight;
                     }
                     if (NPC.frame.Y >= frameHeight * 6)
-                    {
                         NPC.frame.Y = 0;
-                    }
                 }
                 else
                 {
                     NPC.frame.Y = frameHeight * 5;
                     if (NPC.ai[2] > (frameChangeGateValue - 40) && NPC.ai[2] < (frameChangeGateValue - 15))
-                    {
                         NPC.frame.Y = frameHeight * 6;
-                    }
                 }
             }
+
             if (NPC.ai[0] == 4f || NPC.ai[0] == 9f)
             {
                 int secondFrameChangeGateValue = 180;
@@ -198,17 +189,13 @@ namespace CalamityMod.NPCs.OldDuke
                         NPC.frame.Y += frameHeight;
                     }
                     if (NPC.frame.Y >= frameHeight * 6)
-                    {
                         NPC.frame.Y = 0;
-                    }
                 }
                 else
                 {
                     NPC.frame.Y = frameHeight * 5;
                     if (NPC.ai[2] > (secondFrameChangeGateValue - 50) && NPC.ai[2] < (secondFrameChangeGateValue - 25))
-                    {
                         NPC.frame.Y = frameHeight * 6;
-                    }
                 }
             }
         }
