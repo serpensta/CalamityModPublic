@@ -45,7 +45,7 @@ namespace CalamityMod.NPCs.AcidRain
             set => NPC.localAI[0] = value;
         }
 
-        public static Texture2D GlowTexture;
+        public static Asset<Texture2D> GlowTexture;
 
         public static readonly SoundStyle RoarSound = new("CalamityMod/Sounds/Custom/MaulerRoar");
 
@@ -63,7 +63,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glowmask", AssetRequestMode.ImmediateLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glowmask", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -424,7 +424,7 @@ namespace CalamityMod.NPCs.AcidRain
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Texture2D glowmask = GlowTexture;
+            Texture2D glowmask = GlowTexture.Value;
             Vector2 drawPosition = NPC.Center - screenPos + Vector2.UnitY * NPC.gfxOffY;
             Vector2 origin = NPC.frame.Size() * 0.5f;
             SpriteEffects direction = NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;

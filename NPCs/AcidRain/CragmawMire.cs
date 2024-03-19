@@ -53,7 +53,7 @@ namespace CalamityMod.NPCs.AcidRain
                 return NPC.life / (float)NPC.lifeMax < phase2CeilingRatio && DownedBossSystem.downedPolterghast;
             }
         }
-        public static Texture2D Phase2Texture;
+        public static Asset<Texture2D> Phase2Texture;
 
         public override void SetStaticDefaults()
         {
@@ -61,7 +61,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             if (!Main.dedServ)
             {
-                Phase2Texture = ModContent.Request<Texture2D>(Texture + "2", AssetRequestMode.ImmediateLoad).Value;
+                Phase2Texture = ModContent.Request<Texture2D>(Texture + "2", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -474,7 +474,7 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D texture = InPhase2 ? Phase2Texture : TextureAssets.Npc[Type].Value;
+            Texture2D texture = InPhase2 ? Phase2Texture.Value : TextureAssets.Npc[Type].Value;
             Main.EntitySpriteDraw(texture, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, 0, 0);
             return false;
         }

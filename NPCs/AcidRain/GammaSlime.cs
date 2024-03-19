@@ -25,14 +25,14 @@ namespace CalamityMod.NPCs.AcidRain
         public float LaserTelegraphOpacity => MathHelper.Lerp(0.3f, 0.9f, LaserTelegraphPower);
         public ref float GammaAcidShootTimer => ref NPC.ai[0];
         public ref float LaserShootCountdown => ref NPC.ai[1];
-        public static Texture2D GlowTexture;
+        public static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 2;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -213,7 +213,7 @@ namespace CalamityMod.NPCs.AcidRain
                 Vector2 laserTop = laserBottom - Vector2.UnitY * LaserTelegraphLength;
                 Utils.DrawLine(spriteBatch, laserBottom, laserTop, Color.Lerp(Color.Lime, Color.Transparent, LaserTelegraphOpacity));
             }
-            CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture);
+            CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture.Value);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)

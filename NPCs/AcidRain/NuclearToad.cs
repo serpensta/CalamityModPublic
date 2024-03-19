@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.AcidRain
 
         public const float ExplosionTelegraphTime = 120f;
 
-        public static Texture2D GlowTexture;
+        public static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
         {
@@ -48,7 +48,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -213,6 +213,6 @@ namespace CalamityMod.NPCs.AcidRain
                 target.AddBuff(ModContent.BuffType<Irradiated>(), 120);
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture, true);
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture.Value, true);
     }
 }

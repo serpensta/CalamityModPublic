@@ -20,7 +20,7 @@ namespace CalamityMod.NPCs.AstrumAureus
 {
     public class AureusSpawn : ModNPC
     {
-        public static Texture2D GlowTexture;
+        public static Asset<Texture2D> GlowTexture;
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -28,7 +28,7 @@ namespace CalamityMod.NPCs.AstrumAureus
             NPCID.Sets.TrailingMode[NPC.type] = 1;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -269,7 +269,7 @@ namespace CalamityMod.NPCs.AstrumAureus
             drawLocation += originalDrawSize * NPC.scale + new Vector2(0f, NPC.gfxOffY);
             spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, originalDrawSize, NPC.scale, spriteEffects, 0f);
 
-            texture2D15 = GlowTexture;
+            texture2D15 = GlowTexture.Value;
             Color afterimageColorLerp = Color.Lerp(Color.White, Color.Orange, 0.5f) * NPC.Opacity;
 
             if (CalamityConfig.Instance.Afterimages)

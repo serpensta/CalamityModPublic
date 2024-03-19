@@ -24,8 +24,8 @@ namespace CalamityMod.NPCs.AcidRain
     {
         public Player Target => Main.player[NPC.target];
         public static Asset<Texture2D> BodyTexture;
-        public static Texture2D TailTexture;
-        public static Texture2D BestiaryTexture;
+        public static Asset<Texture2D> TailTexture;
+        public static Asset<Texture2D> BestiaryTexture;
 
         public override void SetStaticDefaults()
         {
@@ -41,8 +41,8 @@ namespace CalamityMod.NPCs.AcidRain
             if (!Main.dedServ)
             {
                 BodyTexture = ModContent.Request<Texture2D>(Texture + "Body", AssetRequestMode.ImmediateLoad);
-                TailTexture = ModContent.Request<Texture2D>(Texture + "Tail", AssetRequestMode.ImmediateLoad).Value;
-                BestiaryTexture = ModContent.Request<Texture2D>(Texture + "Bestiary", AssetRequestMode.ImmediateLoad).Value;
+                TailTexture = ModContent.Request<Texture2D>(Texture + "Tail", AssetRequestMode.AsyncLoad);
+                BestiaryTexture = ModContent.Request<Texture2D>(Texture + "Bestiary", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -194,14 +194,14 @@ namespace CalamityMod.NPCs.AcidRain
             Vector2 headDrawPosition = NPC.Center - screenPos;
             if (NPC.IsABestiaryIconDummy)
             {
-                Texture2D texture = BestiaryTexture;
+                Texture2D texture = BestiaryTexture.Value;
                 Rectangle eelArea = NPC.frame with { Width = 74 };
                 Main.EntitySpriteDraw(texture, headDrawPosition, eelArea, NPC.GetAlpha(Color.White), NPC.rotation, eelArea.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
                 return false;
             }
 
             Texture2D headTexture = ModContent.Request<Texture2D>(Texture).Value;
-            Texture2D tailTexture = TailTexture;
+            Texture2D tailTexture = TailTexture.Value;
             Vector2[] segmentPositions = (Vector2[])NPC.oldPos.Clone();
 
             Vector2 segmentAreaTopLeft = Vector2.One * 999999f;

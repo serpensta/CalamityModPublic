@@ -28,7 +28,7 @@ namespace CalamityMod.NPCs.AcidRain
 
         public const int JumpDelay = 64;
 
-        public static Texture2D GlowTexture;
+        public static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
         {
@@ -37,7 +37,7 @@ namespace CalamityMod.NPCs.AcidRain
             NPCID.Sets.TrailCacheLength[NPC.type] = 6;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -236,7 +236,7 @@ namespace CalamityMod.NPCs.AcidRain
             if (!NPC.IsABestiaryIconDummy)
             {
                 CalamityGlobalNPC.DrawAfterimage(NPC, spriteBatch, drawColor, Color.Transparent, directioning: true, invertedDirection: true);
-                CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture, true);
+                CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture.Value, true);
             }
         }
 

@@ -15,14 +15,14 @@ namespace CalamityMod.NPCs.AcidRain
     public class IrradiatedSlime : ModNPC
     {
         public bool Falling = true;
-        public static Texture2D GlowTexture;
+        public static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 2;
             if (!Main.dedServ)
             {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -132,7 +132,7 @@ namespace CalamityMod.NPCs.AcidRain
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture);
+            CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture.Value);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)

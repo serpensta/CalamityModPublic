@@ -44,14 +44,14 @@ namespace CalamityMod.NPCs.AstrumAureus
         public static readonly SoundStyle JumpSound = new("CalamityMod/Sounds/Custom/AstrumAureus/AureusJump");
         public static readonly SoundStyle TeleportSound = new("CalamityMod/Sounds/Custom/AstrumAureus/AureusTeleport");
 
-        public static Texture2D JumpTexture;
-        public static Texture2D RechargeTexture;
-        public static Texture2D StompTexture;
-        public static Texture2D WalkTexture;
-        public static Texture2D Texture_Glow;
-        public static Texture2D JumpTexture_Glow;
-        public static Texture2D StompTexture_Glow;
-        public static Texture2D WalkTexture_Glow;
+        public static Asset<Texture2D> JumpTexture;
+        public static Asset<Texture2D> RechargeTexture;
+        public static Asset<Texture2D> StompTexture;
+        public static Asset<Texture2D> WalkTexture;
+        public static Asset<Texture2D> Texture_Glow;
+        public static Asset<Texture2D> JumpTexture_Glow;
+        public static Asset<Texture2D> StompTexture_Glow;
+        public static Asset<Texture2D> WalkTexture_Glow;
 
         private bool stomping = false;
         public int slimeProjCounter = 0;
@@ -73,14 +73,14 @@ namespace CalamityMod.NPCs.AstrumAureus
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             if (!Main.dedServ)
             {
-                Texture_Glow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
-                JumpTexture = ModContent.Request<Texture2D>(Texture + "Jump", AssetRequestMode.ImmediateLoad).Value;
-                RechargeTexture = ModContent.Request<Texture2D>(Texture + "Recharge", AssetRequestMode.ImmediateLoad).Value;
-                StompTexture = ModContent.Request<Texture2D>(Texture + "Stomp", AssetRequestMode.ImmediateLoad).Value;
-                WalkTexture = ModContent.Request<Texture2D>(Texture + "Walk", AssetRequestMode.ImmediateLoad).Value;
-                JumpTexture_Glow = ModContent.Request<Texture2D>(Texture + "JumpGlow", AssetRequestMode.ImmediateLoad).Value;
-                StompTexture_Glow = ModContent.Request<Texture2D>(Texture + "StompGlow", AssetRequestMode.ImmediateLoad).Value;
-                WalkTexture_Glow = ModContent.Request<Texture2D>(Texture + "WalkGlow", AssetRequestMode.ImmediateLoad).Value;
+                Texture_Glow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+                JumpTexture = ModContent.Request<Texture2D>(Texture + "Jump", AssetRequestMode.AsyncLoad);
+                RechargeTexture = ModContent.Request<Texture2D>(Texture + "Recharge", AssetRequestMode.AsyncLoad);
+                StompTexture = ModContent.Request<Texture2D>(Texture + "Stomp", AssetRequestMode.AsyncLoad);
+                WalkTexture = ModContent.Request<Texture2D>(Texture + "Walk", AssetRequestMode.AsyncLoad);
+                JumpTexture_Glow = ModContent.Request<Texture2D>(Texture + "JumpGlow", AssetRequestMode.AsyncLoad);
+                StompTexture_Glow = ModContent.Request<Texture2D>(Texture + "StompGlow", AssetRequestMode.AsyncLoad);
+                WalkTexture_Glow = ModContent.Request<Texture2D>(Texture + "WalkGlow", AssetRequestMode.AsyncLoad);
             }
         }
 
@@ -258,33 +258,33 @@ namespace CalamityMod.NPCs.AstrumAureus
             if (NPC.ai[0] == 0f || (slimePhaseHP && Main.zenithWorld))
             {
                 NPCTexture = TextureAssets.Npc[NPC.type].Value;
-                GlowMaskTexture = Texture_Glow;
+                GlowMaskTexture = Texture_Glow.Value;
             }
             else if (NPC.ai[0] == 1f) //nothing special done here
             {
-                NPCTexture = RechargeTexture;
+                NPCTexture = RechargeTexture.Value;
             }
             else if (NPC.ai[0] == 2f) //nothing special done here
             {
-                NPCTexture = WalkTexture;
-                GlowMaskTexture = WalkTexture_Glow;
+                NPCTexture = WalkTexture.Value;
+                GlowMaskTexture = WalkTexture_Glow.Value;
             }
             else if (NPC.ai[0] == 3f || NPC.ai[0] == 4f) //needs to have an in-air frame
             {
                 if (NPC.velocity.Y == 0f && NPC.ai[1] >= 0f && NPC.ai[0] == 3f) //idle before jump
                 {
                     NPCTexture = TextureAssets.Npc[NPC.type].Value; //idle frames
-                    GlowMaskTexture = Texture_Glow;
+                    GlowMaskTexture = Texture_Glow.Value;
                 }
                 else if (NPC.velocity.Y <= 0f || NPC.ai[1] < 0f) //jump frames if flying upward or if about to jump
                 {
-                    NPCTexture = JumpTexture;
-                    GlowMaskTexture = JumpTexture_Glow;
+                    NPCTexture = JumpTexture.Value;
+                    GlowMaskTexture = JumpTexture_Glow.Value;
                 }
                 else //stomping
                 {
-                    NPCTexture = StompTexture;
-                    GlowMaskTexture = StompTexture_Glow;
+                    NPCTexture = StompTexture.Value;
+                    GlowMaskTexture = StompTexture_Glow.Value;
                 }
             }
             else if (NPC.ai[0] >= 5f) //needs to have an in-air frame
@@ -292,12 +292,12 @@ namespace CalamityMod.NPCs.AstrumAureus
                 if (NPC.velocity.Y == 0f) //idle before teleport
                 {
                     NPCTexture = TextureAssets.Npc[NPC.type].Value; //idle frames
-                    GlowMaskTexture = Texture_Glow;
+                    GlowMaskTexture = Texture_Glow.Value;
                 }
                 else //in-air frames
                 {
-                    NPCTexture = JumpTexture;
-                    GlowMaskTexture = JumpTexture_Glow;
+                    NPCTexture = JumpTexture.Value;
+                    GlowMaskTexture = JumpTexture_Glow.Value;
                 }
             }
 
