@@ -324,7 +324,7 @@ namespace CalamityMod.NPCs.ProfanedGuardians
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             int npcType = (int)MathHelper.Clamp(NPC.ai[2], 1f, 6f);
-            Texture2D texture = Textures[npcType + 1].Value;
+            Texture2D texture = Textures[npcType - 1].Value;
             Vector2 drawOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
             Vector2 drawPos = NPC.Center - screenPos;
             drawPos -= new Vector2(texture.Width, texture.Height) * NPC.scale / 2f;

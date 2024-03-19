@@ -237,7 +237,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             {
                 HoodedTexture = ModContent.Request<Texture2D>(Texture + "Hooded", AssetRequestMode.AsyncLoad);
                 CirrusTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeCirrus", AssetRequestMode.AsyncLoad);
-                CirrusTexture2 = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeCirrusShimmered", AssetRequestMode.AsyncLoad);
+                CirrusTexture2 = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeCirrus_Shimmered", AssetRequestMode.AsyncLoad);
                 ShieldTopTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeShieldTop", AssetRequestMode.AsyncLoad);
                 ShieldBottomTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeShieldBottom", AssetRequestMode.AsyncLoad);
                 ForcefieldTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/ForcefieldTexture", AssetRequestMode.AsyncLoad);

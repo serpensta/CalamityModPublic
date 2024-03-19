@@ -159,6 +159,8 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
         #region Textures
         public static Asset<Texture2D> GlowTexture;
+        public static Asset<Texture2D> NeuronTexture;
+        public static Asset<Texture2D> NeuronTexture_Glow;
 
         public static Asset<Texture2D> ArmTopTexture;
         public static Asset<Texture2D> ArmTopTexture2;
@@ -193,7 +195,8 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             {
                 string AresPath = "CalamityMod/NPCs/ExoMechs/Ares/Ares";
                 GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
-
+                NeuronTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/ExoMechs/AergiaNeuron", AssetRequestMode.AsyncLoad);
+                NeuronTexture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/ExoMechs/AergiaNeuron_Glow", AssetRequestMode.AsyncLoad);
 
                 ArmTopTexture = ModContent.Request<Texture2D>(AresPath + "ArmTopPart1", AssetRequestMode.AsyncLoad);
                 ArmTopTexture2 = ModContent.Request<Texture2D>(AresPath + "ArmTopPart2", AssetRequestMode.AsyncLoad);
@@ -1256,7 +1259,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
             Vector2 center = NPC.Center - screenPos;
             spriteBatch.Draw(texture, center, frame, NPC.GetAlpha(drawColor), NPC.rotation, vector, NPC.scale, SpriteEffects.None, 0f);
 
-            texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/ExoMechs/Ares/AresBodyGlow").Value;
+            texture = GlowTexture.Value;
 
             if (CalamityConfig.Instance.Afterimages)
             {
@@ -1335,7 +1338,7 @@ namespace CalamityMod.NPCs.ExoMechs.Ares
 
                 Texture2D shoulderGlowmask = ArmTopShoulderTexture_Glow.Value;
                 Texture2D armSegmentGlowmask = ArmSegmentTexture_Glow.Value;
-                Texture2D armGlowmask2 = ArmTopTexture2.Value;
+                Texture2D armGlowmask2 = ArmTopTexture2_Glow.Value;
 
                 Vector2 shoulderDrawPosition = NPC.Center + NPC.scale * new Vector2(direction * 176f, -100f);
                 Vector2 arm1DrawPosition = shoulderDrawPosition + NPC.scale * new Vector2(direction * (shoulderTexture.Width + 16f), 10f);
