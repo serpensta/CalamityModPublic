@@ -86,7 +86,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<TransfusionTrail>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<TransfusionTrail>(), BalancingConstants.LifeStealRange);
         }
     }
 }

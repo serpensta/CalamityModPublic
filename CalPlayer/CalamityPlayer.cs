@@ -3579,19 +3579,33 @@ namespace CalamityMod.CalPlayer
                 }
             }
 
-            // Add a cooldown display for the vanilla lifesteal cooldown, which is active when negative
-            if (Player.whoAmI == Main.myPlayer && Player.lifeSteal < 0f)
+            // Add a cooldown display for the vanilla lifesteal cooldown, which is active when negative.
+            if (Player.whoAmI == Main.myPlayer)
             {
-                float duration = Player.lifeSteal;
-                float baseCooldown = Main.expertMode ? 0.5f : 0.6f;
-                float lifeStealRecoveryRateReduction = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.1f : 0f;
-                if (Main.masterMode)
-                    lifeStealRecoveryRateReduction += 0.1f;
-                duration /= baseCooldown - lifeStealRecoveryRateReduction;
-                duration *= -1f;
+                float baseRecoveryRate = Main.expertMode ? BalancingConstants.LifeStealRecoveryRate_Expert : BalancingConstants.LifeStealRecoveryRate_Classic;
 
-                if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))
-                    Player.AddCooldown(LifeSteal.ID, (int)duration);
+                float lifeStealRecoveryRateReduction =
+                    CalamityWorld.death ? BalancingConstants.LifeStealRecoveryRateReduction_Death :
+                    CalamityWorld.revenge ? BalancingConstants.LifeStealRecoveryRateReduction_Revengeance :
+                    Main.expertMode ? BalancingConstants.LifeStealRecoveryRateReduction_Expert :
+                    BalancingConstants.LifeStealRecoveryRateReduction_Classic;
+
+                if (Main.masterMode)
+                    lifeStealRecoveryRateReduction += BalancingConstants.LifeStealRecoveryRateReduction_Master;
+
+                float lifeStealRecoveryRate = baseRecoveryRate - lifeStealRecoveryRateReduction;
+
+                // This value is here to somewhat prevent the rapid cooldown flashing that happens sometimes.
+                float cooldownDisplayGateValue = 12f;
+                float displayLifeStealCooldownGateValue = lifeStealRecoveryRate * cooldownDisplayGateValue;
+                if (Player.lifeSteal < -displayLifeStealCooldownGateValue)
+                {
+                    float duration = Math.Abs(Player.lifeSteal);
+                    duration /= lifeStealRecoveryRate;
+
+                    if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))
+                        Player.AddCooldown(LifeSteal.ID, (int)duration);
+                }
             }
 
             ForceVariousEffects();

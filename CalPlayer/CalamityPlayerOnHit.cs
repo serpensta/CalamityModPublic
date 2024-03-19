@@ -1154,17 +1154,6 @@ namespace CalamityMod.CalPlayer
                         cooldownMult = 0f;
 
                     float cooldown = damage * cooldownMult;
-                    Main.player[Main.myPlayer].lifeSteal -= cooldown * BalancingConstants.LifeStealSpectreHoodCooldownMultiplier;
-                }
-
-                // Increases the degree to which Vampire Knives contribute to the lifesteal cap
-                if (proj.type == ProjectileID.VampireKnife)
-                {
-                    // This doesn't use Math.Round because it doesn't in vanilla
-                    float cooldown = damage * 0.075f;
-                    if (cooldown < 0f)
-                        cooldown = 0f;
-
                     Main.player[Main.myPlayer].lifeSteal -= cooldown;
                 }
 

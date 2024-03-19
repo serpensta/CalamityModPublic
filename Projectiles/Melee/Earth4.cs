@@ -99,7 +99,7 @@ namespace CalamityMod.Projectiles.Melee
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<EarthHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<EarthHealOrb>(), BalancingConstants.LifeStealRange);
         }
     }
 }
