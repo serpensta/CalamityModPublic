@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -98,7 +99,7 @@ namespace CalamityMod.Projectiles.Melee
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<EarthHealOrb>(), 1200f, 2f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<EarthHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
         }
     }
 }

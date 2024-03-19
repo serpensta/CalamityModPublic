@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.CalPlayer;
 using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
@@ -237,7 +238,7 @@ namespace CalamityMod.Projectiles.Typeless
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<FungalHeal>(), 1200f, 4f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<FungalHeal>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealAccessoryCooldownMultiplier);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity) => false;

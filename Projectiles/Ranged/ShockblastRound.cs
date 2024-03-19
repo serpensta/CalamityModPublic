@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -85,7 +86,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<TransfusionTrail>(), 1200f, 3f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<TransfusionTrail>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
         }
     }
 }

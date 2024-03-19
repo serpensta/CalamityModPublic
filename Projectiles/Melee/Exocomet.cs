@@ -1,4 +1,5 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod.Balancing;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
 using System;
@@ -90,7 +91,7 @@ namespace CalamityMod.Projectiles.Melee
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<Exoheal>(), 1200f, 2f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<Exoheal>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -101,7 +102,7 @@ namespace CalamityMod.Projectiles.Melee
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<Exoheal>(), 1200f, 2f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<Exoheal>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
         }
 
         public override bool PreDraw(ref Color lightColor)

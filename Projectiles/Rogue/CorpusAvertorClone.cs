@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -74,7 +75,7 @@ namespace CalamityMod.Projectiles.Rogue
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, 1200f, 3f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -83,7 +84,7 @@ namespace CalamityMod.Projectiles.Rogue
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, 1200f, 3f);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange, BalancingConstants.LifeStealWeaponCooldownMultiplier);
         }
     }
 }

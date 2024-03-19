@@ -85,6 +85,23 @@
         // nothing here yet
         #endregion
 
+        #region Life Steal
+        // Life steal accessories require a more strict cooldown due to their ease of use and global application
+        internal static readonly float LifeStealAccessoryCooldownMultiplier = 6f;
+
+        // Life steal cooldown multiplier used for armor set bonuses
+        internal static readonly float LifeStealSetBonusCooldownMultiplier = 4f;
+
+        // Life steal cooldown multiplier used for Spectre Hood (this is 3f because vanilla already applies a slight cooldown)
+        internal static readonly float LifeStealSpectreHoodCooldownMultiplier = 3f;
+
+        // Life steal cooldown multiplier used for weapons
+        internal static readonly float LifeStealWeaponCooldownMultiplier = 2f;
+
+        // The range was buffed in vanilla from 1200 to 3000 in 1.4.4, and I agree with that decision
+        internal static readonly float LifeStealRange = 3000f;
+        #endregion
+
         #region Rogue Base Stats
         // If stealth is too weak, increase this number. If stealth is too strong, decrease this number.
         // This value is intentionally not readonly.
