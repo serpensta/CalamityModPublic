@@ -4195,7 +4195,7 @@ namespace CalamityMod.CalPlayer
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
-                if (npc is null || !npc.active)
+                if (npc is null || !npc.active || npc.type != ModContent.NPCType<AndroombaFriendly>())
                     return;
 
                 bool holdingsol = ((Player.HeldItem.type >= ItemID.GreenSolution && Player.HeldItem.type <= ItemID.RedSolution) || (Player.HeldItem.type >= ItemID.SandSolution && Player.HeldItem.type <= ItemID.DirtSolution) || Player.HeldItem.type == ModContent.ItemType<AstralSolution>());
