@@ -185,14 +185,17 @@ namespace CalamityMod.Balancing
             // 50% resist to Aegis Blade's explosions because the true melee resist ain't enough.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<AegisBlast>()))));
 
-            // 40% resist to Flying Dragon.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.6f, ProjectileID.DD2SquireSonicBoom))));
+            // 35% resist to Flying Dragon.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileID.DD2SquireSonicBoom))));
 
             // 30% resist to Aurora Blazer.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<AuroraFire>()))));
 
             // 30% resist to Flak Kraken.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<FlakKrakenProjectile>()))));
+
+            // 25% resist to Lucrecia.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<DNA>()))));
             #endregion
 
             #region Duke Fishron

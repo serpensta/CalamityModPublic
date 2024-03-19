@@ -184,7 +184,6 @@ namespace CalamityMod.NPCs.CalClone
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CalamitasCloneBag>()));
-            npcLoot.Add(ItemID.BrokenHeroSword);
 
             // Normal drops: Everything that would otherwise be in the bag
             var normalOnly = npcLoot.DefineNormalOnlyDropSet();
@@ -233,18 +232,6 @@ namespace CalamityMod.NPCs.CalClone
             CalamityGlobalNPC.SetNewBossJustDowned(NPC);
 
             CalamityGlobalNPC.SetNewShopVariable(new int[] { ModContent.NPCType<THIEF>() }, DownedBossSystem.downedCalamitasClone);
-
-            // Abyss awakens after killing Calamitas
-            string key = "Mods.CalamityMod.Status.Progression.PlantBossText";
-            Color messageColor = Color.RoyalBlue;
-
-            if (!DownedBossSystem.downedCalamitasClone)
-            {
-                if (!Main.player[Main.myPlayer].dead && Main.player[Main.myPlayer].active)
-                    SoundEngine.PlaySound(CommonCalamitySounds.WyrmScreamSound, Main.player[Main.myPlayer].Center);
-
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
-            }
 
             // Mark the Calamitas Clone as dead
             DownedBossSystem.downedCalamitasClone = true;

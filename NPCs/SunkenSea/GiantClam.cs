@@ -266,7 +266,7 @@ namespace CalamityMod.NPCs.SunkenSea
                                 NPC.netUpdate = true;
                                 NPC.noGravity = false;
                                 attack = -1;
-                                SoundEngine.PlaySound(SlamSound, NPC.position);
+                                SoundEngine.PlaySound(SlamSound, NPC.Center);
                                 if (Main.netMode != NetmodeID.Server)
                                 {
                                     for (int stompDustArea = (int)NPC.position.X - 30; stompDustArea < (int)NPC.position.X + NPC.width + 60; stompDustArea += 30)
@@ -363,7 +363,7 @@ namespace CalamityMod.NPCs.SunkenSea
                     }
                     else if (attack == 2)
                     {
-                        SoundEngine.PlaySound(SoundID.Item67, NPC.position);
+                        SoundEngine.PlaySound(SoundID.Item67, NPC.Center);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Vector2 clamPosition = new Vector2(NPC.position.X + (float)NPC.width * 0.5f, NPC.position.Y + (float)NPC.height * 0.5f);
@@ -394,7 +394,7 @@ namespace CalamityMod.NPCs.SunkenSea
                     }
                     else if (attack == 3)
                     {
-                        SoundEngine.PlaySound(SoundID.Item68, NPC.position);
+                        SoundEngine.PlaySound(SoundID.Item68, NPC.Center);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int damage = Main.masterMode ? 23 : Main.expertMode ? 28 : 35;

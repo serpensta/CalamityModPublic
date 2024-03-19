@@ -319,7 +319,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.TargetClosest();
 
                     // Play sound
-                    SoundEngine.PlaySound(SoundID.Item14, npc.position);
+                    SoundEngine.PlaySound(SoundID.Item14, npc.Center);
 
                     npc.ai[0] = 0f;
                     calamityGlobalNPC.newAI[1] = 0f;

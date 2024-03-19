@@ -116,7 +116,6 @@ namespace CalamityMod.NPCs
         public bool IncreasedColdEffects_CryoStone = false;
 
         // Transformer effect
-
         public bool IncreasedElectricityEffects_Transformer = false;
 
         // Fireball, Cinnamon Roll and Hellfire Treads effects
@@ -166,7 +165,7 @@ namespace CalamityMod.NPCs
 
         // Used to nerf Master Mode enemies
         public const double MasterModeEnemyHPMultiplier = 0.75;
-        public const double MasterModeEnemyDamageMultiplier = 0.85;
+        public const double MasterModeEnemyDamageMultiplier = 0.9;
 
         // Used to nerf Expert and Master Mode enemies
         public const float ExpertModeEnemyKnockbackMultiplier = 0.05f;
@@ -1210,7 +1209,11 @@ namespace CalamityMod.NPCs
                 case NPCID.CultistDragonBody4:
                 case NPCID.CultistDragonHead:
                 case NPCID.CultistDragonTail:
-                    npc.lifeMax = 40000;
+                    npc.lifeMax = 20000;
+                    break;
+
+                case NPCID.AncientCultistSquidhead:
+                    npc.lifeMax = 4000;
                     break;
 
                 case NPCID.DukeFishron:
@@ -1328,7 +1331,7 @@ namespace CalamityMod.NPCs
                 if (npc.type == NPCID.MoonLordCore)
                     npc.npcSlots = 36f;
             }
-            else if (npc.type == NPCID.CultistBoss || (npc.type >= NPCID.CultistDragonHead && npc.type <= NPCID.CultistDragonTail))
+            else if (npc.type == NPCID.CultistBoss || (npc.type >= NPCID.CultistDragonHead && npc.type <= NPCID.CultistDragonTail) || npc.type == NPCID.AncientCultistSquidhead)
             {
                 npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.2);
 
@@ -1353,7 +1356,7 @@ namespace CalamityMod.NPCs
             }
             else if (npc.type == NPCID.GolemHeadFree)
             {
-                npc.lifeMax = (int)Math.Round(npc.lifeMax * 2D);
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * 1.7);
                 npc.dontTakeDamage = false;
             }
             else if (npc.type == NPCID.HallowBoss)
@@ -3183,9 +3186,13 @@ namespace CalamityMod.NPCs
         #endregion
 
         #region Strike NPC
-        // Incoming defense to this function is already affected by the vanilla debuffs Ichor (-15) and Betsy's Curse (-40), and cannot be below zero.
+        // Incoming defense to this function is already affected by the vanilla debuffs Ichor (-10) and Betsy's Curse (-40), and cannot be below zero.
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
+            // Reduce ichor debuff defense reduction from -15 to -10.
+            if (npc.ichor)
+                modifiers.Defense.Flat += 5;
+
             // Apply armor penetration based on Calamity debuffs. The hit system manages the sequencing.
             // Ozzatron 05JAN2023: fixed doubled armor pen, this time for real
             int defenseReduction = (marked > 0 && DR <= 0f ? MarkedforDeath.DefenseReduction : 0) + (wither > 0 ? WitherDebuff.DefenseReduction : 0) + miscDefenseLoss;
@@ -3627,7 +3634,7 @@ namespace CalamityMod.NPCs
             // Adjust vanilla AI in Classic, Expert and Master
             // Fair contact damage and a few Expert/Master AI edits happen here
             // Deerclops doesn't deserve love so he's not here
-            else
+            else if (!CalamityMod.ExternalFlag_DisableNonRevBossAI)
             {
                 switch (npc.type)
                 {
@@ -4395,6 +4402,12 @@ namespace CalamityMod.NPCs
                         break;
                 }
             }
+
+            if (npc.type == NPCID.QueenSlimeMinionBlue)
+                return QueenSlimeAI.QueenSlimeCrystalSlimeAI(npc, Mod);
+
+            if (npc.type == NPCID.QueenSlimeMinionPink)
+                return QueenSlimeAI.QueenSlimeBouncySlimeAI(npc, Mod);
 
             if (npc.type == NPCID.FungiBulb)
                 return RevengeanceAndDeathAI.BuffedPlantAI(npc, Mod);
@@ -6622,6 +6635,10 @@ namespace CalamityMod.NPCs
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
+            bool revenge = CalamityWorld.revenge || BossRushEvent.BossRushActive;
+            bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
+
             // Energy shield
             if (npc.type == NPCID.CultistBoss || npc.type == NPCID.CultistBossClone)
             {
@@ -6723,21 +6740,40 @@ namespace CalamityMod.NPCs
                 // Draw lights
                 if (npc.ai[2] == 0f && segmentDrawColor != Color.Black)
                 {
-                    float destroyerLifeRatio = 1f;
-                    if (npc.realLife >= 0)
-                        destroyerLifeRatio = Main.npc[npc.realLife].life / (float)Main.npc[npc.realLife].lifeMax;
+                    // This life ratio is fine now because all Destroyer segments update to have the same amount of life every frame
+                    float destroyerLifeRatio = npc.life / (float)npc.lifeMax;
+
+                    bool phase5 = destroyerLifeRatio < (death ? 0.2f : 0.1f);
+
+                    // Spawn DR check
+                    bool hasSpawnDR = newAI[1] < DestroyerAI.DRIncraeseTime && newAI[1] > 60f;
+
+                    // Gradual color transition from ground to flight and vice versa
+                    // 0f = Red, 1f = Purple
+                    float phaseTransitionColorAmount = (hasSpawnDR || phase5) ? 1f : 0f;
+                    if (!hasSpawnDR && !phase5)
+                    {
+                        if (newAI[3] >= DestroyerAI.GroundTelegraphStartGateValue)
+                            phaseTransitionColorAmount = MathHelper.Clamp(1f - (newAI[3] - DestroyerAI.GroundTelegraphStartGateValue) / DestroyerAI.PhaseTransitionTelegraphTime, 0f, 1f);
+                        else if (newAI[3] >= DestroyerAI.FlightTelegraphStartGateValue)
+                            phaseTransitionColorAmount = MathHelper.Clamp((newAI[3] - DestroyerAI.FlightTelegraphStartGateValue) / DestroyerAI.PhaseTransitionTelegraphTime, 0f, 1f);
+                    }
 
                     // Light colors
-                    Color groundColor = new Color(128, 25, 25, 0) * (1f - npc.alpha / 255f);
-                    Color flightColor = new Color(25, 25, 128, 0) * (1f - npc.alpha / 255f);
-                    Color segmentColor = ((newAI[3] >= 900f && destroyerLifeRatio < 0.5f) || (newAI[1] < 600f && newAI[1] > 60f)) ? flightColor : groundColor;
-                    Color telegraphColor = Color.Red;
+                    int alpha = 192;
+                    Color groundColor = new Color(150, 0, 0, alpha);
+                    Color flightColor = revenge ? new Color(0, 0, 150, alpha) : groundColor;
+                    Color segmentColor = Color.Lerp(groundColor, flightColor, phaseTransitionColorAmount);
+                    Color telegraphColor_Red = new Color(255, 125, 125, alpha);
+                    Color telegraphColor_Green = new Color(125, 255, 125, alpha);
+                    Color telegraphColor_Cyan = new Color(0, 255, 255, alpha);
+                    Color telegraphColor = telegraphColor_Red;
 
                     // Telegraph for the laser breath and body lasers
                     float telegraphProgress = 0f;
                     if (destroyerLaserColor != -1)
                     {
-                        if (npc.type == NPCID.TheDestroyer && (CalamityWorld.death || BossRushEvent.BossRushActive))
+                        if (npc.type == NPCID.TheDestroyer && death)
                         {
                             float telegraphGateValue = DestroyerAI.DeathModeLaserBreathGateValue - DestroyerAI.LaserTelegraphTime;
                             if (newAI[0] > telegraphGateValue)
@@ -6749,22 +6785,23 @@ namespace CalamityMod.NPCs
                                         break;
 
                                     case 1:
-                                        telegraphColor = Color.Green;
+                                        telegraphColor = telegraphColor_Green;
                                         break;
 
                                     case 2:
-                                        telegraphColor = Color.Cyan;
+                                        telegraphColor = telegraphColor_Cyan;
                                         break;
                                 }
                                 telegraphProgress = MathHelper.Clamp((newAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                             }
                         }
-                        else if (npc.type == NPCID.TheDestroyerBody && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
+                        else if (npc.type == NPCID.TheDestroyerBody && revenge)
                         {
-                            float shootProjectileTime = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 270f : 450f;
+                            float shootProjectileTime = death ? 270f : 450f;
                             float bodySegmentTime = npc.ai[0] * 30f;
                             float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                            if (newAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
+                            float telegraphGateValue = shootProjectileGateValue - DestroyerAI.LaserTelegraphTime;
+                            if (newAI[0] > telegraphGateValue)
                             {
                                 switch (destroyerLaserColor)
                                 {
@@ -6773,14 +6810,14 @@ namespace CalamityMod.NPCs
                                         break;
 
                                     case 1:
-                                        telegraphColor = Color.Green;
+                                        telegraphColor = telegraphColor_Green;
                                         break;
 
                                     case 2:
-                                        telegraphColor = Color.Cyan;
+                                        telegraphColor = telegraphColor_Cyan;
                                         break;
                                 }
-                                telegraphProgress = MathHelper.Clamp((newAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                                telegraphProgress = MathHelper.Clamp((newAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                             }
                         }
                         else if (npc.type == NPCID.TheDestroyerBody)
@@ -6788,21 +6825,34 @@ namespace CalamityMod.NPCs
                             float shootProjectileTime = Main.masterMode ? 500f : Main.expertMode ? 700f : 900f;
                             float bodySegmentTime = npc.ai[0] * 30f;
                             float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
-                            if (npc.localAI[0] > shootProjectileGateValue - DestroyerAI.LaserTelegraphTime)
-                                telegraphProgress = MathHelper.Clamp((npc.localAI[0] - shootProjectileGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
+                            float telegraphGateValue = shootProjectileGateValue - DestroyerAI.LaserTelegraphTime;
+                            if (npc.localAI[0] > telegraphGateValue)
+                                telegraphProgress = MathHelper.Clamp((npc.localAI[0] - telegraphGateValue) / DestroyerAI.LaserTelegraphTime, 0f, 1f);
                         }
                     }
 
-                    int totalDraws = 3;
-                    for (int i = 0; i < totalDraws; i++)
+                    Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerHeadGlow").Value;
+                    switch (npc.type)
                     {
-                        spriteBatch.Draw(TextureAssets.Dest[npc.type - NPCID.TheDestroyer].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
-                            Color.Lerp(segmentColor, telegraphColor, telegraphProgress), npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        default:
+                        case NPCID.TheDestroyer:
+                            break;
+
+                        case NPCID.TheDestroyerBody:
+                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerBodyGlow").Value;
+                            break;
+
+                        case NPCID.TheDestroyerTail:
+                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerTailGlow").Value;
+                            break;
                     }
+
+                    float alphaMultiplier = 1f - npc.alpha / 255f;
+                    spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, Color.Lerp(segmentColor, telegraphColor, telegraphProgress) * alphaMultiplier, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                 }
             }
 
-            if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
+            if (revenge)
             {
                 // Create additional afterimages in the cardinal directions in Rev+
                 if (npc.type == NPCID.BrainofCthulhu)
@@ -6819,7 +6869,7 @@ namespace CalamityMod.NPCs
                         currentColor.G = (byte)((float)(int)currentColor.G * opacity);
                         currentColor.B = (byte)((float)(int)currentColor.B * opacity);
                         currentColor.A = (byte)((float)(int)currentColor.A * opacity);
-                        int totalAfterimages = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 12 : 4;
+                        int totalAfterimages = death ? 12 : 4;
                         for (int i = 0; i < totalAfterimages; i++)
                         {
                             Vector2 position = npc.position;
@@ -6929,10 +6979,9 @@ namespace CalamityMod.NPCs
                         if (npc.spriteDirection == 1)
                             spriteEffects = SpriteEffects.FlipHorizontally;
 
-                        Vector2 glowOffset = Vector2.UnitY * 8f;
                         for (int i = 0; i < 2; i++)
                         {
-                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY) - glowOffset, npc.frame,
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
                                 drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                         }
                     }
@@ -7026,11 +7075,13 @@ namespace CalamityMod.NPCs
                     spriteBatch.Draw(npcTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, npc.GetAlpha(drawColor), npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
 
                     Color eyesColor = new Color(200, 200, 200, 0);
-                    if ((Main.masterMode || BossRushEvent.BossRushActive) && CalamityWorld.revenge)
+                    if (masterMode && revenge)
                     {
-                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, 0) : new Color(255, 255, 0, 0);
+                        int alpha = 192;
+                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
+                        Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/SkeletronPrimeHeadGlow").Value;
                         for (int i = 0; i < 3; i++)
-                            spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
+                            spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                     }
                     else
                         spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);

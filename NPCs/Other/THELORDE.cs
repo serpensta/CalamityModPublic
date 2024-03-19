@@ -161,7 +161,7 @@ namespace CalamityMod.NPCs.Other
             {
                 // old was zombie 1 - zombie 62
                 // ideally would be collaborative inferal screeches of various devs
-                SoundEngine.PlaySound(Polterghast.Polterghast.creepySounds[Main.rand.Next(1, Polterghast.Polterghast.creepySounds.Count)] with { PitchVariance = 2 }, NPC.position);
+                SoundEngine.PlaySound(Polterghast.Polterghast.creepySounds[Main.rand.Next(1, Polterghast.Polterghast.creepySounds.Count)] with { PitchVariance = 2 }, NPC.Center);
             }
             Player playerLOL = Main.player[NPC.target];
             playerLOL.velocity.X *= 0.99f;

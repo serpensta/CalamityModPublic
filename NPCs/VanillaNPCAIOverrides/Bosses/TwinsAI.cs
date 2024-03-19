@@ -312,10 +312,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 retinazerTargetDist = retinazerSpeed / retinazerTargetDist;
                                 retinazerTargetX *= retinazerTargetDist;
                                 retinazerTargetY *= retinazerTargetDist;
-                                retinazerPosition.X += retinazerTargetX * 15f;
-                                retinazerPosition.Y += retinazerTargetY * 15f;
 
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPosition.X, retinazerPosition.Y, retinazerTargetX, retinazerTargetY, type, damage, 0f, Main.myPlayer);
+                                Vector2 laserVelocity = new Vector2(retinazerTargetX, retinazerTargetY);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPosition + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -349,12 +348,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.damage = npc.defDamage;
 
                     npc.ai[2] += 1f;
-                    if (npc.ai[2] >= 25f)
+                    float decelerateGateValue = 32f + (death ? 12f * ((1f - lifeRatio) / (1f - phase2LifeRatio)) : 0f);
+                    if (npc.ai[2] >= decelerateGateValue)
                     {
                         // Avoid cheap bullshit
                         npc.damage = 0;
 
-                        npc.velocity *= 0.96f;
+                        float decelerationMultiplier = 0.92f - (death ? 0.32f * ((1f - lifeRatio) / (1f - phase2LifeRatio)) : 0f);
+                        npc.velocity *= decelerationMultiplier;
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                             npc.velocity.X = 0f;
                         if (npc.velocity.Y > -0.1 && npc.velocity.Y < 0.1)
@@ -363,13 +364,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     else
                         npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - MathHelper.PiOver2;
 
-                    if (npc.ai[2] >= 70f)
+                    float delayBeforeChargingAgain = 56f - (death ? 6f * ((1f - lifeRatio) / (1f - phase2LifeRatio)) : 0f);
+                    if (npc.ai[2] >= delayBeforeChargingAgain)
                     {
                         npc.ai[3] += 1f;
                         npc.ai[2] = 0f;
                         npc.TargetClosest();
                         npc.rotation = retinazerHoverRotation;
-                        if (npc.ai[3] >= 3f)
+                        float totalCharges = death ? 6f : 5f;
+                        if (npc.ai[3] >= totalCharges)
                         {
                             npc.ai[1] = 0f;
                             npc.ai[3] = 0f;
@@ -422,7 +425,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         SoundEngine.PlaySound(SoundID.Item33, npc.Center);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            int type = ModContent.ProjectileType<ScavengerLaser>();
+                            bool shootLaser = npc.ai[1] % 20f == 0f;
+                            int type = shootLaser ? ProjectileID.DeathLaser : ModContent.ProjectileType<ScavengerLaser>();
                             int damage = npc.GetProjectileDamage(type);
 
                             // Reduce mech boss projectile damage depending on the new ore progression changes
@@ -436,14 +440,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(12f, 12f);
-                            int numProj = 2;
-                            int spread = 40;
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 10f + Main.rand.NextVector2CircularEdge(2f, 2f);
+                            int numProj = shootLaser ? 6 : 2;
+                            int spread = shootLaser ? 20 : 80;
                             float rotation = MathHelper.ToRadians(spread);
+                            float offset = shootLaser ? 150f : 50f;
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * offset, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -588,7 +593,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
                     }
 
-                    npc.ai[2] += spazAlive ? 1f : 1.25f;
+                    npc.ai[2] += spazAlive ? 1f : 1.5f;
                     float phaseGateValue = NPC.IsMechQueenUp ? 900f : 300f - (death ? 120f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                     if (npc.ai[2] >= phaseGateValue)
                     {
@@ -607,7 +612,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         npc.localAI[1] += 1f + (death ? (phase2LifeRatio - lifeRatio) / phase2LifeRatio : 0f);
-                        if (npc.localAI[1] >= (spazAlive ? 72f : 24f))
+                        if (npc.localAI[1] >= (spazAlive ? 52f : 26f))
                         {
                             bool canHit = Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
                             if (canHit || !spazAlive || finalPhase)
@@ -633,16 +638,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 retinazerPhase2TargetDist = retinazerPhase2LaserSpeed / retinazerPhase2TargetDist;
                                 retinazerPhase2TargetX *= retinazerPhase2TargetDist;
                                 retinazerPhase2TargetY *= retinazerPhase2TargetDist;
-                                eyePosition.X += retinazerPhase2TargetX * 15f;
-                                eyePosition.Y += retinazerPhase2TargetY * 15f;
 
+                                Vector2 laserVelocity = new Vector2(retinazerPhase2TargetX, retinazerPhase2TargetY);
                                 if (canHit)
                                 {
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), eyePosition.X, eyePosition.Y, retinazerPhase2TargetX, retinazerPhase2TargetY, type, damage, 0f, Main.myPlayer);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), eyePosition + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                                 }
                                 else
                                 {
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), eyePosition.X, eyePosition.Y, retinazerPhase2TargetX, retinazerPhase2TargetY, type, damage, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), eyePosition + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                                     Main.projectile[proj].tileCollide = false;
                                     Main.projectile[proj].timeLeft = 300;
                                 }
@@ -720,7 +724,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             npc.localAI[1] += 1f + (death ? (phase2LifeRatio - lifeRatio) / phase2LifeRatio : 0f);
-                            if (npc.localAI[1] > (spazAlive ? 24f : 8f))
+                            if (npc.localAI[1] > (spazAlive ? 20f : 10f))
                             {
                                 bool canHit = Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
                                 if (canHit || !spazAlive || finalPhase)
@@ -744,16 +748,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     retinazerPhase2RapidFireTargetDist = 9f / retinazerPhase2RapidFireTargetDist;
                                     retinazerPhase2RapidFireTargetX *= retinazerPhase2RapidFireTargetDist;
                                     retinazerPhase2RapidFireTargetY *= retinazerPhase2RapidFireTargetDist;
-                                    retinazerPhase2RapidFirePos.X += retinazerPhase2RapidFireTargetX * 15f;
-                                    retinazerPhase2RapidFirePos.Y += retinazerPhase2RapidFireTargetY * 15f;
 
+                                    Vector2 laserVelocity = new Vector2(retinazerPhase2RapidFireTargetX, retinazerPhase2RapidFireTargetY);
                                     if (canHit)
                                     {
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPhase2RapidFirePos.X, retinazerPhase2RapidFirePos.Y, retinazerPhase2RapidFireTargetX, retinazerPhase2RapidFireTargetY, type, damage, 0f, Main.myPlayer);
+                                        Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPhase2RapidFirePos + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                                     }
                                     else
                                     {
-                                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPhase2RapidFirePos.X, retinazerPhase2RapidFirePos.Y, retinazerPhase2RapidFireTargetX, retinazerPhase2RapidFireTargetY, type, damage, 0f, Main.myPlayer);
+                                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPhase2RapidFirePos + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                                         Main.projectile[proj].tileCollide = false;
                                         Main.projectile[proj].timeLeft = 300;
                                     }
@@ -857,17 +860,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                                 damage = (int)(damage * secondMechMultiplier);
                                         }
 
+                                        float laserDartVelocity = (death ? 9f : 6f) * (spazAlive ? 1f : 1.5f);
                                         retinazerPhase3ChargeLaserPos = npc.Center;
                                         retinazerPhase3ChargeLaserTargetX = Main.player[npc.target].Center.X - retinazerPhase3ChargeLaserPos.X;
                                         retinazerPhase3ChargeLaserTargetY = Main.player[npc.target].Center.Y - retinazerPhase3ChargeLaserPos.Y;
                                         retinazerPhase3ChargeLaserTargetDist = (float)Math.Sqrt(retinazerPhase3ChargeLaserTargetX * retinazerPhase3ChargeLaserTargetX + retinazerPhase3ChargeLaserTargetY * retinazerPhase3ChargeLaserTargetY);
-                                        retinazerPhase3ChargeLaserTargetDist = 6f / retinazerPhase3ChargeLaserTargetDist;
+                                        retinazerPhase3ChargeLaserTargetDist = laserDartVelocity / retinazerPhase3ChargeLaserTargetDist;
                                         retinazerPhase3ChargeLaserTargetX *= retinazerPhase3ChargeLaserTargetDist;
                                         retinazerPhase3ChargeLaserTargetY *= retinazerPhase3ChargeLaserTargetDist;
-                                        retinazerPhase3ChargeLaserPos.X += retinazerPhase3ChargeLaserTargetX;
-                                        retinazerPhase3ChargeLaserPos.Y += retinazerPhase3ChargeLaserTargetY;
 
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPhase3ChargeLaserPos.X, retinazerPhase3ChargeLaserPos.Y, retinazerPhase3ChargeLaserTargetX, retinazerPhase3ChargeLaserTargetY, type, damage, 0f, Main.myPlayer);
+                                        Vector2 laserVelocity = new Vector2(retinazerPhase3ChargeLaserTargetX, retinazerPhase3ChargeLaserTargetY);
+                                        Projectile.NewProjectile(npc.GetSource_FromAI(), retinazerPhase3ChargeLaserPos + npc.velocity.SafeNormalize(Vector2.UnitY) * 50f, laserVelocity, type, damage, 0f, Main.myPlayer);
                                     }
                                 }
                             }
@@ -1286,10 +1289,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 spazmatismFireballTargetY *= spazmatismFireballTargetDist;
                                 spazmatismFireballTargetX += Main.rand.Next(-10, 11) * 0.05f;
                                 spazmatismFireballTargetY += Main.rand.Next(-10, 11) * 0.05f;
-                                spazmatismFireballPos.X += spazmatismFireballTargetX * 4f;
-                                spazmatismFireballPos.Y += spazmatismFireballTargetY * 4f;
 
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFireballPos.X, spazmatismFireballPos.Y, spazmatismFireballTargetX, spazmatismFireballTargetY, type, damage, 0f, Main.myPlayer);
+                                Vector2 fireballVelocity = new Vector2(spazmatismFireballTargetX, spazmatismFireballTargetY);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFireballPos + fireballVelocity.SafeNormalize(Vector2.UnitY) * 50f, fireballVelocity, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -1303,7 +1305,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     // Rotation and velocity
                     npc.rotation = spazmatismRotation;
-                    float spazmatismPhase1ChargeSpeed = 16f;
+                    float spazmatismPhase1ChargeSpeed = 18f;
                     spazmatismPhase1ChargeSpeed += 8f * enrageScale;
                     if (death)
                         spazmatismPhase1ChargeSpeed += phase1MaxChargeSpeedIncrease * ((1f - lifeRatio) / (1f - phase2LifeRatio));
@@ -1326,14 +1328,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     npc.ai[2] += 1f;
 
-                    float timeBeforeSlowDown = 12f;
+                    float timeBeforeSlowDown = 10f;
                     if (npc.ai[2] >= timeBeforeSlowDown)
                     {
                         // Avoid cheap bullshit
                         npc.damage = 0;
 
                         // Slow down
-                        npc.velocity *= 0.9f;
+                        npc.velocity *= 0.8f;
 
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                             npc.velocity.X = 0f;
@@ -1344,7 +1346,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - MathHelper.PiOver2;
 
                     // Charge 8 times
-                    float chargeTime = 38f;
+                    float chargeTime = 25f;
                     if (npc.ai[2] >= chargeTime)
                     {
                         // Reset AI array and go to cursed fireball phase
@@ -1412,8 +1414,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            float velocity = 16f;
-                            int type = ModContent.ProjectileType<ShadowflameFireball>();
+                            int type = npc.ai[1] % 20f == 0f ? ProjectileID.CursedFlameHostile : ModContent.ProjectileType<ShadowflameFireball>();
                             int damage = npc.GetProjectileDamage(type);
 
                             // Reduce mech boss projectile damage depending on the new ore progression changes
@@ -1427,8 +1428,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(velocity, velocity);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 25f + Main.rand.NextVector2CircularEdge(5f, 5f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Main.projectile[proj].tileCollide = false;
                         }
                     }
                 }
@@ -1512,17 +1514,16 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         spazmatismFlamethrowerFaceDirection = -1;
 
                     Vector2 spazmatismFlamethrowerPos = npc.Center;
-                    float spazmatismFlamethrowerTargetX = Main.player[npc.target].Center.X + (spazmatismFlamethrowerFaceDirection * 180) - spazmatismFlamethrowerPos.X;
+                    int flamethrowerDistance = 180;
+                    float spazmatismFlamethrowerTargetX = Main.player[npc.target].Center.X + (spazmatismFlamethrowerFaceDirection * flamethrowerDistance) - spazmatismFlamethrowerPos.X;
                     float spazmatismFlamethrowerTargetY = Main.player[npc.target].Center.Y - spazmatismFlamethrowerPos.Y;
                     float spazmatismFlamethrowerTargetDist = (float)Math.Sqrt(spazmatismFlamethrowerTargetX * spazmatismFlamethrowerTargetX + spazmatismFlamethrowerTargetY * spazmatismFlamethrowerTargetY);
 
                     if (!NPC.IsMechQueenUp)
                     {
                         // Boost speed if too far from target
-                        if (spazmatismFlamethrowerTargetDist > 300f)
-                            spazmatismFlamethrowerMaxSpeed += 0.5f;
-                        if (spazmatismFlamethrowerTargetDist > 400f)
-                            spazmatismFlamethrowerMaxSpeed += 0.5f;
+                        if (spazmatismFlamethrowerTargetDist > flamethrowerDistance)
+                            spazmatismFlamethrowerMaxSpeed += MathHelper.Lerp(0f, Main.masterMode ? 10f : 6.6f, MathHelper.Clamp((spazmatismFlamethrowerTargetDist - flamethrowerDistance) / 1000f, 0f, 1f));
 
                         if (Main.getGoodWorld)
                         {
@@ -1594,6 +1595,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                 float spazmatismShadowFireballSpeed = 6f;
                                 spazmatismShadowFireballSpeed += 2f * enrageScale;
+                                float timeForFlamethrowerToReachMaxVelocity = 60f;
+                                float flamethrowerSpeedScalar = MathHelper.Clamp(npc.ai[2] / timeForFlamethrowerToReachMaxVelocity, 0f, 1f);
+                                spazmatismShadowFireballSpeed = MathHelper.Lerp(0.1f, spazmatismShadowFireballSpeed, flamethrowerSpeedScalar);
                                 int type = npc.ai[3] % 2f == 0f ? ProjectileID.EyeFire : ModContent.ProjectileType<Shadowflamethrower>();
                                 int damage = npc.GetProjectileDamage(type);
 
@@ -1619,8 +1623,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 spazmatismFlamethrowerTargetX += Main.rand.Next(-10, 11) * 0.01f;
                                 spazmatismFlamethrowerTargetY += npc.velocity.Y * 0.5f;
                                 spazmatismFlamethrowerTargetX += npc.velocity.X * 0.5f;
-                                spazmatismFlamethrowerPos.X -= spazmatismFlamethrowerTargetX * 1f;
-                                spazmatismFlamethrowerPos.Y -= spazmatismFlamethrowerTargetY * 1f;
 
                                 if (NPC.IsMechQueenUp)
                                 {
@@ -1630,13 +1632,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     spazmatismFlamethrowerPos = npc.Center - mechdusaSpazShadowFireballPos * 3f;
                                 }
 
+                                Vector2 flamethrowerVelocity = new Vector2(spazmatismFlamethrowerTargetX, spazmatismFlamethrowerTargetY);
                                 if (canHit)
                                 {
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFlamethrowerPos.X, spazmatismFlamethrowerPos.Y, spazmatismFlamethrowerTargetX, spazmatismFlamethrowerTargetY, type, damage, 0f, Main.myPlayer);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFlamethrowerPos + flamethrowerVelocity.SafeNormalize(Vector2.UnitY) * 25f, flamethrowerVelocity, type, damage, 0f, Main.myPlayer);
                                 }
                                 else
                                 {
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFlamethrowerPos.X, spazmatismFlamethrowerPos.Y, spazmatismFlamethrowerTargetX, spazmatismFlamethrowerTargetY, type, damage, 0f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFlamethrowerPos + flamethrowerVelocity.SafeNormalize(Vector2.UnitY) * 25f, flamethrowerVelocity, type, damage, 0f, Main.myPlayer);
                                     Main.projectile[proj].tileCollide = false;
                                 }
                             }
@@ -1697,7 +1700,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         npc.ai[2] += retAlive ? 1f : 1.25f;
 
-                        float chargeTime = 50f - (death ? 12f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                        float chargeTime = 30f - (death ? 10f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
 
                         // Slow down
                         if (npc.ai[2] >= chargeTime)
@@ -1705,7 +1708,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             // Avoid cheap bullshit
                             npc.damage = reducedSetDamage;
 
-                            npc.velocity *= 0.93f;
+                            float deceleration = 0.85f - (death ? 0.1f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                            npc.velocity *= deceleration;
                             if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                                 npc.velocity.X = 0f;
                             if (npc.velocity.Y > -0.1 && npc.velocity.Y < 0.1)
@@ -1715,7 +1719,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - MathHelper.PiOver2;
 
                         // Charges 5 times
-                        if (npc.ai[2] >= chargeTime + 30f)
+                        if (npc.ai[2] >= chargeTime * 1.6f)
                         {
                             npc.ai[3] += 1f;
                             npc.ai[2] = 0f;
@@ -1793,6 +1797,39 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                         npc.velocity.Y = absoluteSpazXVel;
                                     }
                                 }
+                            }
+
+                            if (death)
+                            {
+                                float velocity = spazmatismPhase3ChargeSpeed + 3f;
+                                int type = (!retAlive && npc.ai[3] % 2f == 0f) ? ModContent.ProjectileType<ShadowflameFireball>() : ProjectileID.CursedFlameHostile;
+                                int damage = npc.GetProjectileDamage(type);
+
+                                // Reduce mech boss projectile damage depending on the new ore progression changes
+                                if (CalamityConfig.Instance.EarlyHardmodeProgressionRework && !BossRushEvent.BossRushActive)
+                                {
+                                    double firstMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkFirstMechStatMultiplier_Expert;
+                                    double secondMechMultiplier = CalamityGlobalNPC.EarlyHardmodeProgressionReworkSecondMechStatMultiplier_Expert;
+                                    if (!NPC.downedMechBossAny)
+                                        damage = (int)(damage * firstMechMultiplier);
+                                    else if ((!NPC.downedMechBoss1 && !NPC.downedMechBoss2) || (!NPC.downedMechBoss2 && !NPC.downedMechBoss3) || (!NPC.downedMechBoss3 && !NPC.downedMechBoss1))
+                                        damage = (int)(damage * secondMechMultiplier);
+                                }
+
+                                Vector2 projectileVelocity = (Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
+                                if (type == ProjectileID.CursedFlameHostile)
+                                {
+                                    int numProj = 3;
+                                    int spread = 30;
+                                    float rotation = MathHelper.ToRadians(spread);
+                                    for (int i = 0; i < numProj; i++)
+                                    {
+                                        Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 25f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                    }
+                                }
+                                else
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 25f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
                             }
 
                             npc.ai[1] = 4f;
@@ -1934,7 +1971,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 }
 
                                 Vector2 projectileVelocity = (Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 4f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, retAlive ? 0f : 1f);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 25f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, retAlive ? 0f : 1f);
                             }
                         }
 
@@ -2187,9 +2224,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int inaccuracy = Main.masterMode ? 3 : Main.expertMode ? 6 : 9;
                                 num422 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.08f;
                                 num423 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.08f;
-                                vector43.X += num422 * 15f;
-                                vector43.Y += num423 * 15f;
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), vector43.X, vector43.Y, num422, num423, type, damage, 0f, Main.myPlayer);
+
+                                Vector2 laserVelocity = new Vector2(num422, num423);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), vector43 + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -2313,14 +2350,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(10f, 10f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 9f + Main.rand.NextVector2CircularEdge(1f, 1f);
                             int numProj = 3;
-                            int spread = 8;
+                            int spread = 10;
                             float rotation = MathHelper.ToRadians(spread);
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 150f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
+                                Main.projectile[proj].tileCollide = false;
                             }
                         }
                     }
@@ -2492,9 +2530,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num442 = num444 / num442;
                     num440 *= num442;
                     num441 *= num442;
-                    vector45.X += num440 * 15f;
-                    vector45.Y += num441 * 15f;
-                    int num446 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector45.X, vector45.Y, num440, num441, type, damage, 0f, Main.myPlayer);
+
+                    Vector2 laserVelocity = new Vector2(num440, num441);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector45 + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                 }
 
                 return false;
@@ -2583,9 +2621,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     num452 = num453 / num452;
                     num450 *= num452;
                     num451 *= num452;
-                    vector46.X += num450 * 15f;
-                    vector46.Y += num451 * 15f;
-                    int num455 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector46.X, vector46.Y, num450, num451, type, damage, 0f, Main.myPlayer);
+
+                    Vector2 laserVelocity = new Vector2(num450, num451);
+                    Projectile.NewProjectile(npc.GetSource_FromAI(), vector46 + laserVelocity.SafeNormalize(Vector2.UnitY) * 150f, laserVelocity, type, damage, 0f, Main.myPlayer);
                 }
             }
 
@@ -2828,9 +2866,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int inaccuracy = Main.masterMode ? 10 : Main.expertMode ? 15 : 20;
                                 num466 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.05f;
                                 num467 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.05f;
-                                vector49.X += num466 * 4f;
-                                vector49.Y += num467 * 4f;
-                                int num473 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector49.X, vector49.Y, num466, num467, type, damage, 0f, Main.myPlayer);
+
+                                Vector2 fireballVelocity = new Vector2(num466, num467);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), vector49 + fireballVelocity.SafeNormalize(Vector2.UnitY) * 50f, fireballVelocity, type, damage, 0f, Main.myPlayer);
                             }
                         }
                     }
@@ -2844,7 +2882,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float num474 = 13f;
 
                     if (Main.expertMode)
-                        num474 += MathHelper.Lerp(0f, Main.masterMode ? 5.6f : 2.8f, 1f - (npc.life / (float)npc.lifeMax - phase2LifeRatio) / (1f - phase2LifeRatio));
+                        num474 += MathHelper.Lerp(0f, Main.masterMode ? 11.2f : 5.6f, 1f - (npc.life / (float)npc.lifeMax - phase2LifeRatio) / (1f - phase2LifeRatio));
 
                     if (Main.getGoodWorld)
                         num474 *= 1.2f;
@@ -2955,8 +2993,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = Main.rand.NextVector2CircularEdge(15f, 15f);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 25f + Main.rand.NextVector2CircularEdge(5f, 5f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f, projectileVelocity, type, damage, 0f, Main.myPlayer);
+                            Main.projectile[proj].tileCollide = false;
                         }
                     }
                 }
@@ -3022,7 +3061,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (!NPC.IsMechQueenUp)
                 {
                     if (num485 > flamethrowerDistance)
-                        num480 += MathHelper.Lerp(0f, Main.masterMode ? 5f : 3.3f, MathHelper.Clamp((num485 - flamethrowerDistance) / 800f, 0f, 1f));
+                        num480 += MathHelper.Lerp(0f, Main.masterMode ? 10f : 6.6f, MathHelper.Clamp((num485 - flamethrowerDistance) / 1000f, 0f, 1f));
 
                     if (Main.getGoodWorld)
                     {
@@ -3096,6 +3135,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             npc.localAI[1] = 0f;
                             float num487 = 6f + (Main.expertMode ? MathHelper.Lerp(0f, Main.masterMode ? 3f : 1.5f, 1f - (npc.life / (float)npc.lifeMax) / phase2LifeRatio) : 0f);
+                            float timeForFlamethrowerToReachMaxVelocity = 60f;
+                            float flamethrowerSpeedScalar = MathHelper.Clamp(npc.ai[2] / timeForFlamethrowerToReachMaxVelocity, 0f, 1f);
+                            num487 = MathHelper.Lerp(0.1f, num487, flamethrowerSpeedScalar);
                             int type = ProjectileID.EyeFire;
                             int damage = npc.GetProjectileDamage(type);
 
@@ -3122,8 +3164,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             num483 += (float)Main.rand.Next(-inaccuracy, inaccuracy + 1) * 0.01f;
                             num484 += npc.velocity.Y * 0.5f;
                             num483 += npc.velocity.X * 0.5f;
-                            vector51.X -= num483 * 1f;
-                            vector51.Y -= num484 * 1f;
+                            
                             if (NPC.IsMechQueenUp)
                             {
                                 Vector2 vector52 = (npc.rotation + (float)Math.PI / 2f).ToRotationVector2() * num487 + npc.velocity * 0.5f;
@@ -3132,7 +3173,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 vector51 = npc.Center - vector52 * 3f;
                             }
 
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), vector51.X, vector51.Y, num483, num484, type, damage, 0f, Main.myPlayer);
+                            Vector2 flamethrowerVelocity = new Vector2(num483, num484);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), vector51 + flamethrowerVelocity.SafeNormalize(Vector2.UnitY) * 25f, flamethrowerVelocity, type, damage, 0f, Main.myPlayer);
                         }
                     }
                 }

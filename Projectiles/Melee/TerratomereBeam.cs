@@ -35,7 +35,7 @@ namespace CalamityMod.Projectiles.Melee
         public override void AI()
         {
             Projectile.Opacity = Utils.GetLerpValue(0f, 26f, Projectile.timeLeft, true);
-            Projectile.velocity *= 0.94f;
+            Projectile.velocity *= 0.91f;
             Projectile.scale *= 1.01f;
         }
 

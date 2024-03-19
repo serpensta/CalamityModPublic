@@ -39,9 +39,12 @@
         internal static readonly int BrainDodgeCooldownMax = 5400;
         internal static readonly int AmalgamDodgeCooldownMin = 900;
         internal static readonly int AmalgamDodgeCooldownMax = 5400;
-        internal static readonly int MirrorDodgeCooldown = 5400;
-        internal static readonly int DaedalusReflectCooldown = 5400;
-        internal static readonly int EvolutionReflectCooldown = 5400;
+        internal static readonly int MirrorDodgeCooldownMin = 900;
+        internal static readonly int MirrorDodgeCooldownMax = 5400;
+        internal static readonly int DaedalusReflectCooldownMin = 900;
+        internal static readonly int DaedalusReflectCooldownMax = 5400;
+        internal static readonly int EvolutionReflectCooldownMin = 900;
+        internal static readonly int EvolutionReflectCooldownMax = 5400;
         #endregion
 
         #region Damage
@@ -150,6 +153,12 @@
         internal static readonly float AdrenalineDamagePerBooster = 0.15f; // +15%
         internal static readonly float FullAdrenalineDR = 0.5f; // 50%
         internal static readonly float AdrenalineDRPerBooster = 0.05f; // +5% per booster
+
+        internal static readonly int AdrenalinePauseAfterDamage = CalamityUtils.SecondsToFrames(1);
+        internal static readonly float MinimumAdrenalineLoss = 0.1f; // No matter how small a hit, you will always lose at least 10% current Adrenaline
+        internal static readonly float AdrenalineFalloffTinyHitHealthRatio = 0.05f; // Hits for 5% max HP or less result in less Adrenaline loss
+
+        internal static readonly float TrueMeleeRipperReductionFactor = 0.5f; // True melee benefits less from rippers to prevent excessive melting.
         #endregion
 
         // TODO -- NPC classification is not done consistently with predictable thresholds.

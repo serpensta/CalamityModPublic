@@ -135,11 +135,21 @@ namespace CalamityMod.CalPlayer
             NetMessage.SendData(MessageID.Dodge, -1, -1, null, Player.whoAmI, 1f, 0f, 0f, 0, 0, 0);
         }
 
-        public void AbyssMirrorDodge()
+        public void AbyssMirrorDodge(double dodgeDamageGateValuePercent, int dodgeDamageGateValue, int hitDamage)
         {
+            double maxCooldownDurationDamagePercent = 0.5;
+            int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+            // Just in case...
+            if (maxCooldownDurationDamageValue <= 0)
+                maxCooldownDurationDamageValue = 1;
+
+            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
+
             if (Player.whoAmI == Main.myPlayer && abyssalMirror && !eclipseMirror)
             {
-                Player.AddCooldown(GlobalDodge.ID, BalancingConstants.MirrorDodgeCooldown, true, "abyssmirror");
+                int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.MirrorDodgeCooldownMin, BalancingConstants.MirrorDodgeCooldownMax, cooldownDurationScalar);
+                Player.AddCooldown(GlobalDodge.ID, cooldownDuration, true, "abyssmirror");
 
                 // TODO -- why is this here?
                 Player.noKnockback = true;
@@ -169,11 +179,21 @@ namespace CalamityMod.CalPlayer
             }
         }
 
-        public void EclipseMirrorDodge()
+        public void EclipseMirrorDodge(double dodgeDamageGateValuePercent, int dodgeDamageGateValue, int hitDamage)
         {
+            double maxCooldownDurationDamagePercent = 0.5;
+            int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+            // Just in case...
+            if (maxCooldownDurationDamageValue <= 0)
+                maxCooldownDurationDamageValue = 1;
+
+            float cooldownDurationScalar = MathHelper.Clamp((hitDamage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
+
             if (Player.whoAmI == Main.myPlayer && eclipseMirror)
             {
-                Player.AddCooldown(GlobalDodge.ID, BalancingConstants.MirrorDodgeCooldown, true, "eclipsemirror");
+                int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.MirrorDodgeCooldownMin, BalancingConstants.MirrorDodgeCooldownMax, cooldownDurationScalar);
+                Player.AddCooldown(GlobalDodge.ID, cooldownDuration, true, "eclipsemirror");
 
                 // TODO -- why is this here?
                 Player.noKnockback = true;
@@ -876,9 +896,21 @@ namespace CalamityMod.CalPlayer
             // This should probably be changed so that when the evolution reflects it gives you 1 frame of guaranteed free dodging everything.
             if (CalamityLists.projectileDestroyExceptionList.TrueForAll(x => proj.type != x) && proj.active && !proj.friendly && proj.hostile && proj.damage > 0)
             {
+                double dodgeDamageGateValuePercent = 0.05;
+                int dodgeDamageGateValue = (int)Math.Round(Player.statLifeMax2 * dodgeDamageGateValuePercent);
+
                 // Reflects count as dodges. They share the timer and can be disabled by Armageddon right click.
-                if (!disableAllDodges && !Player.HasCooldown(GlobalDodge.ID))
+                if (!disableAllDodges && !Player.HasCooldown(GlobalDodge.ID) && proj.damage >= dodgeDamageGateValue)
                 {
+                    double maxCooldownDurationDamagePercent = 0.5;
+                    int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+                    // Just in case...
+                    if (maxCooldownDurationDamageValue <= 0)
+                        maxCooldownDurationDamageValue = 1;
+
+                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
+
                     // The Evolution
                     if (evolution)
                     {
@@ -893,7 +925,9 @@ namespace CalamityMod.CalPlayer
                         evolutionLifeRegenCounter = 300;
                         projTypeJustHitBy = proj.type;
 
-                        Player.AddCooldown(GlobalDodge.ID, BalancingConstants.EvolutionReflectCooldown);
+                        int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.EvolutionReflectCooldownMin, BalancingConstants.EvolutionReflectCooldownMax, cooldownDurationScalar);
+                        Player.AddCooldown(GlobalDodge.ID, cooldownDuration);
+
                         return;
                     }
                 }
@@ -1394,9 +1428,21 @@ namespace CalamityMod.CalPlayer
                     }
                 }
 
+                double dodgeDamageGateValuePercent = 0.05;
+                int dodgeDamageGateValue = (int)Math.Round(Player.statLifeMax2 * dodgeDamageGateValuePercent);
+
                 // Reflects count as dodges. They share the timer and can be disabled by global dodge disabling effects.
-                if (!disableAllDodges && !Player.HasCooldown(GlobalDodge.ID))
+                if (!disableAllDodges && !Player.HasCooldown(GlobalDodge.ID) && proj.damage >= dodgeDamageGateValue)
                 {
+                    double maxCooldownDurationDamagePercent = 0.5;
+                    int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
+
+                    // Just in case...
+                    if (maxCooldownDurationDamageValue <= 0)
+                        maxCooldownDurationDamageValue = 1;
+
+                    float cooldownDurationScalar = MathHelper.Clamp((proj.damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
+
                     if (daedalusReflect && !evolution)
                     {
                         proj.hostile = false;
@@ -1404,7 +1450,9 @@ namespace CalamityMod.CalPlayer
                         proj.velocity *= -1f;
                         proj.penetrate = 1;
                         Player.GiveIFrames(20, false);
-                        Player.AddCooldown(GlobalDodge.ID, BalancingConstants.DaedalusReflectCooldown);
+
+                        int cooldownDuration = (int)MathHelper.Lerp(BalancingConstants.DaedalusReflectCooldownMin, BalancingConstants.DaedalusReflectCooldownMax, cooldownDurationScalar);
+                        Player.AddCooldown(GlobalDodge.ID, cooldownDuration);
                     }
                 }
             }
@@ -1423,21 +1471,14 @@ namespace CalamityMod.CalPlayer
             if (info.Damage < 1 /* || (godSlayerDamage && info.Damage <= 80) */)
                 return true;
 
-            // If this hit was marked to be completely ignored due to shield absorption, then ignore it.
+            // If this hit was marked to be completely ignored due to shield absorption, then process Adrenaline changes and ignore it.
             if (freeDodgeFromShieldAbsorption)
             {
                 freeDodgeFromShieldAbsorption = false;
 
                 // 20FEB2024: Ozzatron: Hits fully absorbed by shields remove half of your current Adrenaline.
-                if (AdrenalineEnabled)
-                {
-                    // Draedon's Heart instead pauses for half the usual duration.
-                    if (draedonsHeart)
-                        nanomachinesLockoutTimer += DraedonsHeart.NanomachinePauseAfterShieldDamage;
-                    else if (adrenaline >= 0f)
-                        adrenaline /= 2f;
-                }
-
+                // If using Draedon's Heart, it pauses for half the typical duration.
+                LoseAdrenalineOnHurt(info, true);
                 return true;
             }
 
@@ -1489,7 +1530,7 @@ namespace CalamityMod.CalPlayer
                 if (maxCooldownDurationDamageValue <= 0)
                     maxCooldownDurationDamageValue = 1;
 
-                float cooldownDurationScalar = MathHelper.Clamp((info.Damage - dodgeDamageGateValue) / maxCooldownDurationDamageValue, 0f, 1f);
+                float cooldownDurationScalar = MathHelper.Clamp((info.Damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
                 // Re-implementation of vanilla item Black Belt as a consumable dodge
                 if (Player.whoAmI == Main.myPlayer && Player.blackBelt)
@@ -1530,16 +1571,16 @@ namespace CalamityMod.CalPlayer
                 return true;
 
             // Mirror evades do not work if the global dodge cooldown is active. This cooldown can be triggered by either mirror.
-            if (!Player.HasCooldown(GlobalDodge.ID))
+            if (!Player.HasCooldown(GlobalDodge.ID) && info.Damage >= dodgeDamageGateValue)
             {
                 if (eclipseMirror)
                 {
-                    EclipseMirrorDodge();
+                    EclipseMirrorDodge(dodgeDamageGateValuePercent, dodgeDamageGateValue, info.Damage);
                     return true;
                 }
                 else if (abyssalMirror)
                 {
-                    AbyssMirrorDodge();
+                    AbyssMirrorDodge(dodgeDamageGateValuePercent, dodgeDamageGateValue, info.Damage);
                     return true;
                 }
             }
@@ -2089,21 +2130,7 @@ namespace CalamityMod.CalPlayer
                 // Lose adrenaline on hit, unless using Draedon's Heart.
                 if (AdrenalineEnabled)
                 {
-                    // Being hit for zero from Paladin's Shield damage share does not cancel Adrenaline.
-                    // Adrenaline is not lost when hit if using Draedon's Heart.
-                    // Adrenaline is not lost when an empowered parry is performed with blazing core (reduces damage to 1, but not 0)
-                    if (!draedonsHeart && !blazingCoreEmpoweredParry && !adrenalineModeActive && hurtInfo.Damage > 0)
-                    {
-                        if (adrenaline >= adrenalineMax)
-                        {
-                            SoundEngine.PlaySound(AdrenalineHurtSound, Player.Center);
-                        }
-                        adrenaline = 0f;
-                    }
-
-                    // If using Draedon's Heart and not actively healing with Nanomachines, pause generation briefly.
-                    if (draedonsHeart && !adrenalineModeActive)
-                        nanomachinesLockoutTimer += DraedonsHeart.NanomachinePauseAfterDamage;
+                    LoseAdrenalineOnHurt(hurtInfo, false);
                 }
 
                 if (evilSmasherBoost > 0)
@@ -2889,6 +2916,64 @@ namespace CalamityMod.CalPlayer
             Color messageColor = Color.LightGray;
             Rectangle location = new Rectangle((int)Player.position.X, (int)Player.position.Y - 16, Player.width, Player.height);
             CombatText.NewText(location, messageColor, Language.GetTextValue(text));
+        }
+        #endregion
+
+        #region Adrenaline Loss Function
+        /// <summary>
+        /// Causes the player to lose Adrenaline based on an incoming hit. The behavior differs based on energy shields or Draedon's Heart.
+        /// </summary>
+        /// <param name="hurtInfo">The incoming damage event to the player.</param>
+        /// <param name="fullyAbsorbedByShield">Whether or not the hit was fully absorbed by one or more energy shields. Tends to halve Adrenaline loss.</param>
+        private void LoseAdrenalineOnHurt(Player.HurtInfo hurtInfo, bool fullyAbsorbedByShield = false)
+        {
+            // Being hit for zero from Paladin's Shield damage share has no effects on Adrenaline, regardless of all other circumstances.
+            // Likewise, being struck while Adrenaline is actively burning has no effects on Adrenaline.
+            if (hurtInfo.Damage <= 0 || adrenalineModeActive)
+                return;
+
+            // Draedon's Heart pauses for half the usual duration on a shield hit.
+            // Otherwise, nothing happens here because no Adrenaline is actually lost.
+            if (draedonsHeart)
+            {
+                int pauseTime = fullyAbsorbedByShield ? DraedonsHeart.NanomachinePauseAfterShieldDamage : DraedonsHeart.NanomachinePauseAfterDamage;
+                adrenalinePauseTimer += pauseTime;
+            }
+
+            // Standard Adrenaline behavior
+            else
+            {
+                // Regular Adrenaline pauses on any hit, even if you lose all Adrenaline.
+                adrenalinePauseTimer += BalancingConstants.AdrenalinePauseAfterDamage;
+
+                // Play a sound if Adrenaline was lost from full (this means Adrenaline DR helped mitigate the hit).
+                // If this occurs, since Adrenaline DR helped mitigate the hit's damage, we can't allow the amount of Adrenaline lost to actually be reduced.
+                bool hitAtFullAdrenaline = adrenaline >= adrenalineMax;
+                if (hitAtFullAdrenaline)
+                {
+                    SoundEngine.PlaySound(AdrenalineHurtSound, Player.Center);
+                    adrenaline = 0f;
+                    return;
+                }
+
+                // Calculate the amount of Adrenaline to lose. This is done in 3 steps:
+                // 1. Find out how much %HP the player lost (or was absorbed by a shield).
+                // 2. Use an inverse lerp to calculate the Adrenaline loss scaling down for very small hits (5% HP or less).
+                // 3. Re-scale the lerp result into a % of Adrenaline loss from 10% (min loss) to 100%.
+                float damageMaxHPRatio = (float)hurtInfo.Damage / Player.statLifeMax2;
+                float smallHitAdrenalineLossRatio = (float)Utils.GetLerpValue(0f, BalancingConstants.AdrenalineFalloffTinyHitHealthRatio, damageMaxHPRatio, true);
+                float adrenalineLossFraction = MathHelper.Lerp(BalancingConstants.MinimumAdrenalineLoss, 1f, smallHitAdrenalineLossRatio);
+                float adrenalineToLose = adrenaline * adrenalineLossFraction;
+
+                // If the hit was fully absorbed by a shield, then lose half that much instead.
+                if (fullyAbsorbedByShield)
+                    adrenalineToLose /= 2f;
+
+                // Actually subtract Adrenaline.
+                adrenaline -= adrenalineToLose;
+                if (adrenaline < 0f)
+                    adrenaline = 0f;
+            }
         }
         #endregion
     }

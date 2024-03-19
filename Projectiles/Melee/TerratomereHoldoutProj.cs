@@ -158,7 +158,7 @@ namespace CalamityMod.Projectiles.Melee
             bool createBeams = Time == (int)(Terratomere.SwingTime * RecoveryCompletionRatio) + 5f;
             if (Main.myPlayer == Projectile.owner && Time == (int)(Terratomere.SwingTime * (SwingCompletionRatio + 0.34f)))
             {
-                Vector2 bigSlashVelocity = Projectile.SafeDirectionTo(Main.MouseWorld) * Owner.ActiveItem().shootSpeed;
+                Vector2 bigSlashVelocity = Projectile.SafeDirectionTo(Main.MouseWorld) * Owner.ActiveItem().shootSpeed / 2f;
                 if (bigSlashVelocity.AngleBetween(InitialRotation.ToRotationVector2()) > 1.456f)
                     bigSlashVelocity = InitialRotation.ToRotationVector2() * bigSlashVelocity.Length();
 
@@ -174,7 +174,7 @@ namespace CalamityMod.Projectiles.Melee
             // This is a slash, not a beam.
             if (Main.myPlayer == Projectile.owner && Time == (int)(Terratomere.SwingTime * RecoveryCompletionRatio) + 5f)
             {
-                Vector2 bigSlashVelocity = InitialRotation.ToRotationVector2() * Owner.ActiveItem().shootSpeed / 2f;
+                Vector2 bigSlashVelocity = InitialRotation.ToRotationVector2() * Owner.ActiveItem().shootSpeed / 6f;
                 Vector2 bigSlashSpawnPosition = Projectile.Center + bigSlashVelocity.SafeNormalize(Vector2.UnitY) * 64f;
 
                 int slash = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bigSlashSpawnPosition, bigSlashVelocity, ModContent.ProjectileType<TerratomereBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner);

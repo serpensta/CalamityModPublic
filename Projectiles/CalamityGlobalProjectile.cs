@@ -285,8 +285,9 @@ namespace CalamityMod.Projectiles
                 bool fromRevSkeletron = projectile.ai[0] < 0f;
                 bool revSkeletronHomingSkull = projectile.ai[0] == -1f;
                 bool revSkeletronAcceleratingSkull = projectile.ai[0] == -2f;
+                bool revSkeletronPrimeHomingSkull = projectile.ai[0] == -3f;
 
-                if (revSkeletronHomingSkull)
+                if (revSkeletronHomingSkull || revSkeletronPrimeHomingSkull)
                     projectile.alpha = 0;
 
                 if (projectile.alpha > 0)
@@ -315,7 +316,7 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                if (!revSkeletronHomingSkull)
+                if (!revSkeletronHomingSkull && !revSkeletronPrimeHomingSkull)
                 {
                     int numDust = revSkeletronAcceleratingSkull ? 1 : 2;
                     int dustType = revSkeletronAcceleratingSkull ? 91 : 6;
@@ -343,8 +344,10 @@ namespace CalamityMod.Projectiles
                     int num133 = 0;
                     num133 = Player.FindClosest(projectile.Center, 1, 1);
                     projectile.ai[1] += 1f;
-                    float homingStartTime = 30f;
-                    float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 115f : CalamityWorld.death ? 90f : 75f;
+                    float homingStartTime = revSkeletronPrimeHomingSkull ? 10f : 30f;
+                    float homingEndTime = (Main.masterMode || BossRushEvent.BossRushActive) ? 150f : CalamityWorld.death ? 105f : 90f;
+                    if (revSkeletronPrimeHomingSkull)
+                        homingEndTime += 60f;
 
                     // Stop homing when within a certain distance of the target
                     if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)
@@ -356,7 +359,7 @@ namespace CalamityMod.Projectiles
                         Vector2 vector24 = Main.player[num133].Center - projectile.Center;
                         vector24.Normalize();
                         vector24 *= num134;
-                        float inertia = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 25f : 30f;
+                        float inertia = (CalamityWorld.death || BossRushEvent.BossRushActive) ? (revSkeletronPrimeHomingSkull ? 20f : 25f) : (revSkeletronPrimeHomingSkull ? 25f : 30f);
                         projectile.velocity = (projectile.velocity * (inertia - 1f) + vector24) / inertia;
                         projectile.velocity.Normalize();
                         projectile.velocity *= num134;
@@ -618,6 +621,52 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            else if (projectile.type == ProjectileID.EyeLaser && projectile.ai[0] == 1f)
+            {
+                projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                Lighting.AddLight(projectile.Center, (255 - projectile.alpha) * 0.3f / 255f, 0f, (255 - projectile.alpha) * 0.3f / 255f);
+
+                if (projectile.alpha > 0)
+                    projectile.alpha -= 125;
+                if (projectile.alpha < 0)
+                    projectile.alpha = 0;
+
+                if (projectile.localAI[1] == 0f)
+                {
+                    SoundEngine.PlaySound(SoundID.Item33, projectile.Center);
+                    projectile.localAI[1] = 1f;
+                }
+
+                if (projectile.velocity.Length() < 12f)
+                    projectile.velocity *= 1.0025f;
+
+                return false;
+            }
+
+            else if (projectile.type == ProjectileID.DeathLaser && projectile.ai[0] == 1f)
+            {
+                projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                Lighting.AddLight(projectile.Center, (255 - projectile.alpha) * 0.75f / 255f, 0f, 0f);
+
+                if (projectile.alpha > 0)
+                    projectile.alpha -= 125;
+                if (projectile.alpha < 0)
+                    projectile.alpha = 0;
+
+                if (projectile.localAI[1] == 0f)
+                {
+                    SoundEngine.PlaySound(SoundID.Item33, projectile.Center);
+                    projectile.localAI[1] = 1f;
+                }
+
+                if (projectile.velocity.Length() < 12f)
+                    projectile.velocity *= 1.0025f;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.DD2OgreSmash || projectile.type == ProjectileID.QueenSlimeSmash)
             {
                 float maxHitboxSize = 30f;
@@ -625,6 +674,13 @@ namespace CalamityMod.Projectiles
                     maxHitboxSize = 20f;
 
                 projectile.ai[0] += 1f;
+                if (projectile.ai[0] <= 0f)
+                {
+                    if (projectile.ai[0] == 0f)
+                        SoundEngine.PlaySound(SoundID.Item167, projectile.Center);
+
+                    return false;
+                }
                 if (projectile.ai[0] > 9f)
                 {
                     projectile.Kill();
@@ -819,6 +875,8 @@ namespace CalamityMod.Projectiles
                 }
                 else if (projectile.ai[1] < 0f)
                 {
+                    projectile.timeLeft -= 2;
+
                     float num623 = (float)Math.PI / 15f;
                     float num624 = -2f;
                     float num625 = (float)(Math.Cos(num623 * projectile.ai[0]) - 0.5) * num624;
@@ -1033,7 +1091,7 @@ namespace CalamityMod.Projectiles
                 {
                     if (projectile.localAI[1] == 0f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item121, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item121, projectile.Center);
                         projectile.localAI[1] = 1f;
                     }
 
@@ -1154,7 +1212,7 @@ namespace CalamityMod.Projectiles
                 if (projectile.soundDelay == 0)
                 {
                     projectile.soundDelay = 20 + Main.rand.Next(40);
-                    SoundEngine.PlaySound(SoundID.Item9, projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item9, projectile.Center);
                 }
 
                 if (projectile.localAI[0] == 0f)
@@ -1300,6 +1358,80 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            else if (projectile.type == ProjectileID.TrueNightsEdge)
+            {
+                float fadeInTime = 50f;
+                float fadeOutTime = 15f;
+                float timeBeforeFadeOut = projectile.ai[1] + fadeInTime;
+                float projectileDuration = timeBeforeFadeOut + fadeOutTime;
+                float stopDealingDamageTime = 80f;
+
+                if (projectile.localAI[0] == 0f)
+                    SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
+
+                projectile.localAI[0] += 1f;
+                if (projectile.damage == 0 && projectile.localAI[0] < MathHelper.Lerp(timeBeforeFadeOut, projectileDuration, 0.5f))
+                    projectile.localAI[0] += 6f;
+
+                projectile.Opacity = Utils.Remap(projectile.localAI[0], 0f, projectile.ai[1], 0f, 1f) * Utils.Remap(projectile.localAI[0], timeBeforeFadeOut, projectileDuration, 1f, 0f);
+                if (projectile.localAI[0] >= projectileDuration)
+                {
+                    projectile.localAI[1] = 1f;
+                    projectile.Kill();
+                    return false;
+                }
+
+                Player player = Main.player[projectile.owner];
+                float fromValue = projectile.localAI[0] / projectile.ai[1];
+                projectile.direction = (projectile.spriteDirection = (int)projectile.ai[0]);
+
+                if (projectile.damage != 0 && projectile.localAI[0] >= stopDealingDamageTime)
+                    projectile.damage = 0;
+
+                if (projectile.damage != 0)
+                {
+                    int size = 80;
+                    bool notInsideTiles = false;
+                    float rotation = projectile.velocity.ToRotation();
+                    for (float i = -1f; i <= 1f; i += 0.5f)
+                    {
+                        Vector2 position = projectile.Center + (rotation + i * MathHelper.PiOver4 * 0.25f).ToRotationVector2() * size * 0.5f * projectile.scale;
+                        Vector2 position2 = projectile.Center + (rotation + i * MathHelper.PiOver4 * 0.25f).ToRotationVector2() * size * projectile.scale;
+                        if (!Collision.SolidTiles(projectile.Center, 0, 0) && Collision.CanHit(position, 0, 0, position2, 0, 0))
+                        {
+                            notInsideTiles = true;
+                            break;
+                        }
+                    }
+
+                    if (!notInsideTiles)
+                        projectile.damage = 0;
+                }
+
+                fromValue = projectile.localAI[0] / projectile.ai[1];
+                projectile.localAI[1] += 1f;
+                projectile.rotation += projectile.ai[0] * MathHelper.TwoPi * (4f + projectile.Opacity * 4f) / 90f;
+                projectile.scale = Utils.Remap(projectile.localAI[0], projectile.ai[1] + 2f, projectileDuration, 1.12f, 1f) * projectile.ai[2];
+                float randomDustSpawnLocation = projectile.rotation + Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7f;
+                Vector2 dustPosition = projectile.Center + randomDustSpawnLocation.ToRotationVector2() * 84f * projectile.scale;
+                if (Main.rand.NextBool(5))
+                {
+                    Dust dust = Dust.NewDustPerfect(dustPosition, 14, null, 150, default, 1.4f);
+                    dust.noLight = (dust.noLightEmittence = true);
+                }
+
+                for (int i = 0; (float)i < 3f * projectile.Opacity; i++)
+                {
+                    Vector2 dustVelocity = projectile.velocity.SafeNormalize(Vector2.UnitX);
+                    int dustType = ((Main.rand.NextFloat() < projectile.Opacity) ? 75 : 27);
+                    Dust dust = Dust.NewDustPerfect(dustPosition, dustType, projectile.velocity * 0.2f + dustVelocity * 3f, 100, default, 1.4f);
+                    dust.noGravity = true;
+                    dust.customData = projectile.Opacity * 0.2f;
+                }
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.NurseSyringeHeal)
             {
                 ref float initialSpeed = ref projectile.localAI[1];
@@ -1370,7 +1502,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.ai[1] == 0f)
                     {
                         projectile.ai[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item34, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item34, projectile.Center);
                     }
                     else if (projectile.ai[1] == 1f && Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -1491,7 +1623,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.localAI[1] == 0f)
                     {
                         projectile.localAI[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item120, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item120, projectile.Center);
                     }
 
                     projectile.ai[0] += 1f;
@@ -1654,6 +1786,16 @@ namespace CalamityMod.Projectiles
                 }
             }
 
+            // Making Rocket Launcher, Grenade Launcher, Proximity Mine Launcher, and Cluster Rocket fragments not damage the player.
+            bool isGrenadeLauncherProj = (projectile.type == 133 || projectile.type == 136 || projectile.type == 139 || projectile.type == 142 || projectile.type == 777 || projectile.type == 781 || projectile.type == 785 || projectile.type == 788 || projectile.type == 791 || projectile.type == 794 || projectile.type == 797 || projectile.type == 800);
+            bool isRocketLauncherProj = (projectile.type == 134 || projectile.type == 137 || projectile.type == 140 || projectile.type == 143 || projectile.type == 776 || projectile.type == 780 || projectile.type == 784 || projectile.type == 787 || projectile.type == 790 || projectile.type == 793 || projectile.type == 796 || projectile.type == 799);
+            bool isProximityMineProj = (projectile.type == 135 || projectile.type == 138 || projectile.type == 141 || projectile.type == 144 || projectile.type == 778 || projectile.type == 782 || projectile.type == 786 || projectile.type == 789 || projectile.type == 792 || projectile.type == 795 || projectile.type == 798 || projectile.type == 801);
+
+            if (isGrenadeLauncherProj || isRocketLauncherProj || isProximityMineProj || projectile.type == ProjectileID.ClusterFragmentsI || projectile.type == ProjectileID.ClusterFragmentsII)
+            {
+                ProjectileID.Sets.RocketsSkipDamageForPlayers[projectile.type] = true;
+            }
+
             if (CalamityWorld.revenge || BossRushEvent.BossRushActive)
             {
                 bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
@@ -1770,7 +1912,7 @@ namespace CalamityMod.Projectiles
                         return true;
 
                     if (projectile.ai[0] == 0f)
-                        SoundEngine.PlaySound(SoundID.Item8, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item8, projectile.Center);
 
                     projectile.rotation += projectile.direction * 0.8f;
 
@@ -1803,29 +1945,6 @@ namespace CalamityMod.Projectiles
                         Dust shflame = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, DustID.Shadowflame, 0f, 0f, 100);
                         shflame.noGravity = true;
                     }
-
-                    return false;
-                }
-
-                else if (projectile.type == ProjectileID.EyeLaser && projectile.ai[0] == 1f)
-                {
-                    projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
-
-                    Lighting.AddLight(projectile.Center, (255 - projectile.alpha) * 0.3f / 255f, 0f, (255 - projectile.alpha) * 0.3f / 255f);
-
-                    if (projectile.alpha > 0)
-                        projectile.alpha -= 125;
-                    if (projectile.alpha < 0)
-                        projectile.alpha = 0;
-
-                    if (projectile.localAI[1] == 0f)
-                    {
-                        SoundEngine.PlaySound(SoundID.Item33, projectile.position);
-                        projectile.localAI[1] = 1f;
-                    }
-
-                    if (projectile.velocity.Length() < 12f)
-                        projectile.velocity *= 1.0025f;
 
                     return false;
                 }
@@ -1903,29 +2022,6 @@ namespace CalamityMod.Projectiles
 
                         return false;
                     }
-                }
-
-                else if (projectile.type == ProjectileID.DeathLaser && projectile.ai[0] == 1f)
-                {
-                    projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
-
-                    Lighting.AddLight(projectile.Center, (255 - projectile.alpha) * 0.75f / 255f, 0f, 0f);
-
-                    if (projectile.alpha > 0)
-                        projectile.alpha -= 125;
-                    if (projectile.alpha < 0)
-                        projectile.alpha = 0;
-
-                    if (projectile.localAI[1] == 0f)
-                    {
-                        SoundEngine.PlaySound(SoundID.Item33, projectile.position);
-                        projectile.localAI[1] = 1f;
-                    }
-
-                    if (projectile.velocity.Length() < 12f)
-                        projectile.velocity *= 1.0025f;
-
-                    return false;
                 }
 
                 else if (projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && masterMode)
@@ -2071,7 +2167,7 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.localAI[1] == 0f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item33, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item33, projectile.Center);
                         projectile.localAI[1] = 1f;
                     }
 
@@ -2083,17 +2179,19 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.RocketSkeleton && projectile.ai[1] == 1f)
                 {
+                    bool primeCannonProjectile = projectile.ai[1] == 2f;
                     bool homeIn = false;
-                    float spreadOutCutoffTime = 510f;
-                    float homeInCutoffTime = 420f;
-                    float minAcceleration = masterMode ? 0.1f : 0.05f;
-                    float maxAcceleration = masterMode ? 0.2f : 0.1f;
-                    float homingVelocity = 25f;
+                    float homingTime = masterMode ? 210f : 150f;
+                    float spreadOutCutoffTime = 555f;
+                    float homeInCutoffTime = spreadOutCutoffTime - homingTime;
+                    float minAcceleration = 0.05f;
+                    float maxAcceleration = 0.1f;
+                    float homingVelocity = 27f;
 
-                    if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
+                    if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime && !primeCannonProjectile)
                         homeIn = true;
                     else if (projectile.velocity.Length() < (masterMode ? 20f : 15f))
-                        projectile.velocity *= 1.1f;
+                        projectile.velocity *= 1.01f;
 
                     if (homeIn)
                     {
@@ -2168,7 +2266,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.ai[1] == 0f)
                     {
                         projectile.ai[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item17, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
                     }
 
                     if (projectile.alpha > 0)
@@ -2226,7 +2324,7 @@ namespace CalamityMod.Projectiles
                                 }
                             }
 
-                            SoundEngine.PlaySound(SoundID.Item17, projectile.position);
+                            SoundEngine.PlaySound(SoundID.Item17, projectile.Center);
 
                             for (int i = 0; i < 8; i++)
                             {
@@ -2290,7 +2388,7 @@ namespace CalamityMod.Projectiles
                     if (projectile.localAI[1] == 0f)
                     {
                         projectile.localAI[1] = 1f;
-                        SoundEngine.PlaySound(SoundID.Item120, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item120, projectile.Center);
                     }
 
                     projectile.ai[0] += 1f;
@@ -2584,7 +2682,7 @@ namespace CalamityMod.Projectiles
                             projectile.velocity = -Vector2.UnitY;
 
                         if (projectile.localAI[0] == 0f)
-                            SoundEngine.PlaySound(SoundID.Zombie104, projectile.position);
+                            SoundEngine.PlaySound(SoundID.Zombie104, projectile.Center);
 
                         float num801 = 1f;
                         projectile.localAI[0] += 1f;
@@ -2675,10 +2773,6 @@ namespace CalamityMod.Projectiles
             {
                 if (projectile.hostile)
                 {
-                    // These projectiles are way too fucking fast so they need to be slower
-                    if ((projectile.type == ProjectileID.QueenSlimeMinionBlueSpike && projectile.ai[1] >= 0f) || projectile.type == ProjectileID.QueenSlimeMinionPinkBall)
-                        projectile.velocity *= 0.5f;
-
                     // Reduce Nail damage from Nailheads because they're stupid
                     if (projectile.type == ProjectileID.Nail && Main.expertMode)
                         projectile.damage /= 2;
@@ -3567,6 +3661,12 @@ namespace CalamityMod.Projectiles
                         return projectile.ai[0] > projectile.ai[2];
                     break;
 
+                // Additional slams in the Master Mode shockwave have a delay before expanding and dealing damage
+                case ProjectileID.QueenSlimeSmash:
+                    if (masterMode)
+                        return projectile.ai[0] > 0f;
+                    break;
+
                 // Storm Weaver frost waves don't deal damage unless they're at their max velocity
                 case ProjectileID.FrostWave:
                     if (projectile.ai[1] > 0f)
@@ -3792,7 +3892,7 @@ namespace CalamityMod.Projectiles
             {
                 if (masterRevSkeletronPrimeBomb)
                 {
-                    SoundEngine.PlaySound(SoundID.Item14, projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item14, projectile.Center);
                     projectile.position.X += projectile.width / 2;
                     projectile.position.Y += projectile.height / 2;
                     projectile.width = projectile.height = 22;

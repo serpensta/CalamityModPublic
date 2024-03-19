@@ -348,34 +348,6 @@ namespace CalamityMod.ILEditing
         }
         #endregion
 
-        #region Chlorophyte Bullet Speed Nerfs
-        private static void AdjustChlorophyteBullets(ILContext il)
-        {
-            // Reduce dust from 10 to 5 and homing range.
-            var cursor = new ILCursor(il);
-            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(ProjectileID.ChlorophyteBullet)))
-            {
-                LogFailure("Chlorophyte Bullet AI", "Could not locate the bullet ID.");
-                return;
-            }
-            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(10))) // The number of dust spawned by the bullet.
-            {
-                LogFailure("Chlorophyte Bullet AI", "Could not locate the dust quantity.");
-                return;
-            }
-            cursor.Remove();
-            cursor.Emit(OpCodes.Ldc_I4_5); // Decrease dust to 5.
-
-            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(300f))) // The 300 unit distance required to home in.
-            {
-                LogFailure("Chlorophyte Bullet AI", "Could not locate the homing range.");
-                return;
-            }
-            cursor.Remove();
-            cursor.Emit(OpCodes.Ldc_R4, 150f); // Reduce homing range by 50%.
-        }
-        #endregion
-
         #region Terrarian Projectile Limitation for Extra Updates
         private static void LimitTerrarianProjectiles(ILContext il)
         {

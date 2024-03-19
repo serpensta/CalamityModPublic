@@ -374,7 +374,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                         {
                             NPC.localAI[0] = 0f;
 
-                            int totalProjectiles = bossRush ? 20 : 10;
+                            int totalProjectiles = bossRush ? 20 : death ? 15 : 10;
                             float radians = MathHelper.TwoPi / totalProjectiles;
                             int type = ProjectileID.FrostBeam;
                             int damage = NPC.GetProjectileDamage(type);
@@ -398,7 +398,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 laserFireDirection = spinningPoint.RotatedBy(radians * k);
-                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 30f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + laserFireDirection.SafeNormalize(Vector2.UnitY) * 140f, laserFireDirection, type, damage, 0f, Main.myPlayer, 1f, 0f);
                                 Main.projectile[proj].timeLeft = 600;
                             }
                             NPC.localAI[1] += 1f;

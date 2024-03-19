@@ -287,7 +287,7 @@ namespace CalamityMod.NPCs.Perforator
                     NPC.velocity.Y = maxChargeSpeed;
 
                 // This bool exists to stop the strange wiggle behavior when worms are falling down
-                bool slowXVelocity = Math.Abs(NPC.velocity.X) > maxChargeSpeed;
+                bool slowXVelocity = Math.Abs(NPC.velocity.X) > turnSpeedCopy;
                 if ((Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < maxChargeSpeed * 0.4)
                 {
                     if (NPC.velocity.X < 0f)

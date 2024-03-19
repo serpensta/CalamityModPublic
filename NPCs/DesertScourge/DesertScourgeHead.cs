@@ -487,7 +487,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.velocity.Y = maxChaseSpeed;
 
                 // This bool exists to stop the strange wiggle behavior when worms are falling down
-                bool slowXVelocity = Math.Abs(NPC.velocity.X) > maxChaseSpeed;
+                bool slowXVelocity = Math.Abs(NPC.velocity.X) > speedCopy;
                 if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.4)
                 {
                     if (NPC.velocity.X < 0f)

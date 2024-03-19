@@ -576,7 +576,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         npc.velocity.Y = segmentVelocity;
 
                     // This bool exists to stop the strange wiggle behavior when worms are falling down
-                    bool slowXVelocity = Math.Abs(npc.velocity.X) > segmentVelocity;
+                    bool slowXVelocity = Math.Abs(npc.velocity.X) > speed;
                     if ((Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < segmentVelocity * 0.4)
                     {
                         if (npc.velocity.X < 0f)

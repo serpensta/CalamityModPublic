@@ -1629,10 +1629,8 @@ namespace CalamityMod.NPCs.Providence
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), crystalSpawnPos, Vector2.Zero, ModContent.ProjectileType<ProvidenceCrystal>(), crystalDamage, 0f, Main.myPlayer, lifeRatio, 0f);
-
-                                if (nightAI)
-                                    Main.projectile[proj].timeLeft = getFuckedAI ? gfbCrystalTime : nightCrystalTime;
+                                float timeLeft = nightAI ? (float)(getFuckedAI ? gfbCrystalTime : nightCrystalTime) : 0f;
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), crystalSpawnPos, Vector2.Zero, ModContent.ProjectileType<ProvidenceCrystal>(), crystalDamage, 0f, Main.myPlayer, lifeRatio, 0f, timeLeft);
                             }
                         }
 

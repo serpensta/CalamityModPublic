@@ -759,10 +759,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             totalProjectiles += 5f;
                             lanceSpacing += 50f;
                             lanceWallSize *= (masterMode ? 0.75f : 0.5f);
-
                             float direction = 1f;
-                            if (phase3)
-                                direction *= (Main.rand.NextBool() ? 1f : -1f);
 
                             int randomLanceWallType;
                             do randomLanceWallType = Main.rand.Next(numLanceWalls);
@@ -996,7 +993,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     break;
 
-                // Spawn Ethereal Lances around the target in seemingly random places (they will be made slower to make this easier to deal with).
+                // Spawn Ethereal Lances ahead of the target.
                 case 11:
 
                     // Avoid cheap bullshit.
@@ -1038,7 +1035,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             if (npc.Distance(targetCenter) > 2400f)
                                 continue;
 
-                            Vector2 straightLanceSpawnPredict = targetCenter + targetData6.Velocity * 90;
+                            Vector2 straightLanceSpawnPredict = targetCenter + (oppositeLance ? -targetData6.Velocity : targetData6.Velocity) * 90;
                             Vector2 straightLanceSpawnDirection = targetCenter + inverseTargetVel * spawnDistance;
                             if (straightLanceSpawnDirection.Distance(targetCenter) < spawnDistance)
                             {
@@ -1069,7 +1066,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 inverseTargetVel = oppositeLance ? player.velocity : -player.velocity;
                                 inverseTargetVel.SafeNormalize(-Vector2.UnitY);
                                 targetCenter = player.Center;
-                                Vector2 extraPlayerLancePredict = targetCenter + player.velocity * 90;
+                                Vector2 extraPlayerLancePredict = targetCenter + (oppositeLance ? -player.velocity : player.velocity) * 90;
                                 straightLanceSpawnDirection = targetCenter + inverseTargetVel * spawnDistance;
                                 if (straightLanceSpawnDirection.Distance(targetCenter) < spawnDistance)
                                 {
@@ -1845,7 +1842,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Increase durability.
                         calamityGlobalNPC.DR = shouldBeInPhase2ButIsStillInPhase1 ? 0.99f : (BossRushEvent.BossRushActive ? 0.99f : 0.575f);
 
-                        float extraPhaseTime = (masterMode ? 90 : expertMode ? 105 : 120) - reducedAttackCooldown;
+                        float extraPhaseTime = (masterMode ? 105 : expertMode ? 120 : 135) - reducedAttackCooldown;
                         Vector2 offset = new Vector2(0f, -100f);
                         Vector2 sunDanceSpawnLocation = npc.Center + offset;
                         NPCAimedTarget targetData = npc.GetTargetData();
@@ -1917,13 +1914,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 {
                                     numLances += 5f;
                                     distanceBetweenLances += 50f;
-
-                                    if (phase3)
-                                        num79 *= (Main.rand.NextBool() ? 1f : -1f);
-
                                     lanceWallLength *= (masterMode ? 0.75f : 0.5f);
                                 }
-
 
                                 switch (lanceWallType)
                                 {
@@ -2115,7 +2107,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     continue;
 
                                 int targetVelocityOffset = 90;
-                                Vector2 vector14 = targetCenter + targetData.Velocity * targetVelocityOffset;
+                                Vector2 vector14 = targetCenter + (oppositeLance ? -targetData.Velocity : targetData.Velocity) * targetVelocityOffset;
                                 Vector2 lanceSpawnLocation = targetCenter + vector13 * lanceSpawnOffset;
                                 if (lanceSpawnLocation.Distance(targetCenter) < lanceSpawnOffset)
                                 {
@@ -2145,7 +2137,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     lanceSpawnOffset = 100f;
                                     targetCenter = player.Center;
                                     targetVelocityOffset = 90;
-                                    Vector2 lanceDestination = targetCenter + player.velocity * targetVelocityOffset;
+                                    Vector2 lanceDestination = targetCenter + (oppositeLance ? -player.velocity : player.velocity) * targetVelocityOffset;
                                     lanceSpawnLocation = targetCenter + vector13 * lanceSpawnOffset;
                                     if (lanceSpawnLocation.Distance(targetCenter) < lanceSpawnOffset)
                                     {
@@ -2229,6 +2221,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         break;
                     }
+
                 case 13:
                     {
                         // Avoid cheap bullshit.
