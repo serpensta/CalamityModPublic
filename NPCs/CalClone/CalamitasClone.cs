@@ -20,6 +20,7 @@ using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -33,6 +34,8 @@ namespace CalamityMod.NPCs.CalClone
     [AutoloadBossHead]
     public class CalamitasClone : ModNPC
     {
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
@@ -46,6 +49,10 @@ namespace CalamityMod.NPCs.CalClone
             value.Position.Y -= 10f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -155,7 +162,7 @@ namespace CalamityMod.NPCs.CalClone
             npcOffset += origin * NPC.scale + new Vector2(0f, NPC.gfxOffY);
             spriteBatch.Draw(texture, npcOffset, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
 
-            texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/CalClone/CalamitasCloneGlow").Value;
+            texture = GlowTexture.Value;
             Color color = Color.Lerp(Color.White, Color.Red, 0.5f);
             if (Main.zenithWorld)
             {
