@@ -119,7 +119,10 @@ namespace CalamityMod.World
                     "Depthice",
                 };
                 foreach (string tileName in aaTileNames)
-                    aaTilesToAvoid.Add(ancientsAwakened.Find<ModTile>(tileName).Type);
+                {
+                    if (ancientsAwakened.TryFind(tileName, out ModTile value))
+                        aaTilesToAvoid.Add(value.Type);
+                }
             }
 
             while (!meteorDropped)
