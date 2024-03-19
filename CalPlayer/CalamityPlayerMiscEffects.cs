@@ -889,20 +889,32 @@ namespace CalamityMod.CalPlayer
             // Life Steal nerf in difficulties above Expert
             // Reduces the max possible life steal before the cooldown occurs (this mostly just nerfs how much life steal the player can get in bursts)
             // Master Mode nerfs this by an additional 10
-            float lifeStealCap = CalamityWorld.death ? 50f : CalamityWorld.revenge ? 60f : Main.expertMode ? 70f : 80f;
+            float lifeStealCap =
+                CalamityWorld.death ? BalancingConstants.LifeStealCap_Death :
+                CalamityWorld.revenge ? BalancingConstants.LifeStealCap_Revengeance :
+                Main.expertMode ? BalancingConstants.LifeStealCap_Expert :
+                BalancingConstants.LifeStealCap_Classic;
+
             if (Main.masterMode)
-                lifeStealCap -= 10f;
+                lifeStealCap -= BalancingConstants.LifeStealCapReduction_Master;
+
             if (Player.lifeSteal > lifeStealCap)
                 Player.lifeSteal = lifeStealCap;
 
-            // Normal Mode life steal recovery rate is 0.6/s
-            // Expert Mode life steal recovery rate is 0.5/s
-            // Revengeance Mode life steal recovery rate is 0.4/s
-            // Death Mode life steal recovery rate is 0.3/s
-            // Master Mode life steal recovery rate is nerfed by an additional 0.1/s
-            float lifeStealRecoveryRateReduction = CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.1f : 0f;
+            // Normal Mode life steal recovery rate is 0.4/s
+            // Expert Mode life steal recovery rate is 0.35/s
+            // Revengeance Mode life steal recovery rate is 0.3/s
+            // Death Mode life steal recovery rate is 0.25/s
+            // Master Mode life steal recovery rate is nerfed by an additional 0.05/s
+            float lifeStealRecoveryRateReduction =
+                    CalamityWorld.death ? BalancingConstants.LifeStealRecoveryRateReduction_Death :
+                    CalamityWorld.revenge ? BalancingConstants.LifeStealRecoveryRateReduction_Revengeance :
+                    Main.expertMode ? BalancingConstants.LifeStealRecoveryRateReduction_Expert :
+                    BalancingConstants.LifeStealRecoveryRateReduction_Classic;
+
             if (Main.masterMode)
-                lifeStealRecoveryRateReduction += 0.1f;
+                lifeStealRecoveryRateReduction += BalancingConstants.LifeStealRecoveryRateReduction_Master;
+
             Player.lifeSteal -= lifeStealRecoveryRateReduction;
 
             // Bool for drawing boss health bar small text or not

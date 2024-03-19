@@ -87,19 +87,41 @@
 
         #region Life Steal
         // Life steal accessories require a more strict cooldown due to their ease of use and global application
-        internal static readonly float LifeStealAccessoryCooldownMultiplier = 6f;
+        internal static readonly float LifeStealAccessoryCooldownMultiplier = 3f;
 
         // Life steal cooldown multiplier used for armor set bonuses
-        internal static readonly float LifeStealSetBonusCooldownMultiplier = 4f;
-
-        // Life steal cooldown multiplier used for Spectre Hood (this is 3f because vanilla already applies a slight cooldown)
-        internal static readonly float LifeStealSpectreHoodCooldownMultiplier = 3f;
-
-        // Life steal cooldown multiplier used for weapons
-        internal static readonly float LifeStealWeaponCooldownMultiplier = 2f;
+        internal static readonly float LifeStealSetBonusCooldownMultiplier = 2f;
 
         // The range was buffed in vanilla from 1200 to 3000 in 1.4.4, and I agree with that decision
         internal static readonly float LifeStealRange = 3000f;
+
+        // Life steal caps (aka, how much life steal the player is allowed before it goes on cooldown)
+        internal static readonly float LifeStealCap_Classic = 80f;
+        internal static readonly float LifeStealCap_Expert = 70f;
+        internal static readonly float LifeStealCap_Revengeance = 60f;
+        internal static readonly float LifeStealCap_Death = 50f;
+
+        // Master nerfs the life steal cap by 10, resulting in 60 in non-Rev Master, 50 in Rev Master, and 40 in Death Master
+        internal static readonly float LifeStealCapReduction_Master = 10f;
+
+        // The base life steal cooldowns from vanilla
+        internal static readonly float LifeStealRecoveryRate_Classic = 0.8f;
+        internal static readonly float LifeStealRecoveryRate_Expert = 0.7f;
+
+        // Nerfs the life steal recovery rate in Classic from 0.8/s to 0.4/s
+        internal static readonly float LifeStealRecoveryRateReduction_Classic = 0.4f;
+
+        // Nerfs the life steal recovery rate in Expert from 0.7/s to 0.35/s
+        internal static readonly float LifeStealRecoveryRateReduction_Expert = 0.35f;
+
+        // Nerfs the life steal recovery rate in Revengeance from 0.7/s to 0.3/s
+        internal static readonly float LifeStealRecoveryRateReduction_Revengeance = 0.4f;
+
+        // Nerfs the life steal recovery rate in Death from 0.7/s to 0.25/s
+        internal static readonly float LifeStealRecoveryRateReduction_Death = 0.45f;
+
+        // Nerfs the life steal recovery rate in Master by 0.05/s, resulting in 0.3/s in non-Rev Master, 0.25/s in Rev Master, and 0.2/s in Death Master
+        internal static readonly float LifeStealRecoveryRateReduction_Master = 0.05f;
         #endregion
 
         #region Rogue Base Stats
