@@ -22,6 +22,7 @@ using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
@@ -42,6 +43,8 @@ namespace CalamityMod.NPCs.OldDuke
 
         public SlotId RoarSoundSlot;
 
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -54,6 +57,10 @@ namespace CalamityMod.NPCs.OldDuke
             };
             value.Position.X += 14f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -327,7 +334,7 @@ namespace CalamityMod.NPCs.OldDuke
 
             if (NPC.ai[0] >= 4f && NPC.Calamity().newAI[1] != 1f)
             {
-                texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/OldDuke/OldDukeGlow").Value;
+                texture2D15 = GlowTexture.Value;
                 Color yellowLerpColor = Color.Lerp(Color.White, Color.Yellow, 0.5f);
                 drawLerpColor = Color.Yellow;
 

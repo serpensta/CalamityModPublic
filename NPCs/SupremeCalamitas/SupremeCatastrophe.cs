@@ -8,6 +8,7 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -32,6 +33,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public ref float ElapsedVerticalDistance => ref NPC.ai[3];
         public ref float AttackDelayTimer => ref NPC.localAI[0];
 
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
@@ -43,6 +46,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 PortraitPositionYOverride = 56f,
             };
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -272,7 +279,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             Vector2 mainDrawPosition = NPC.Center - screenPos;
             spriteBatch.Draw(texture, mainDrawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
 
-            texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/SupremeCatastropheGlow").Value;
+            texture = GlowTexture.Value;
             Color baseGlowmaskColor = Color.Lerp(Color.White, Color.Cyan, 0.35f);
 
             if (CalamityConfig.Instance.Afterimages)

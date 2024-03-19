@@ -580,6 +580,17 @@ namespace CalamityMod.NPCs.Astral
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            Item sole = null;
+            for (int i = 0; i < Main.maxItems; i++)
+            {
+                if (Main.item[i].type == ItemID.SoulofLight)
+                {
+                    sole = Main.item[i];
+                    break;
+                }
+            }
+            Vector2 itemPos = sole.position;
+
             Vector2 position = NPC.position - new Vector2(30, 48) - screenPos;
             SpriteEffects effect = NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
