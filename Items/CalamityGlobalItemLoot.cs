@@ -132,6 +132,7 @@ namespace CalamityMod.Items
 
                 case ItemID.QueenSlimeBossBag:
                     loot.Add(ItemID.SoulofLight, 1, 15, 20); // 100% 15-20 Soul of Light
+                    loot.Add(ItemID.PinkGel, 1, 15, 20); // 100% 15-20 Pink Gel
                     loot.AddRevBagAccessories();
                     loot.Add(ModContent.ItemType<ThankYouPainting>(), ThankYouPainting.DropInt);
                     break;
