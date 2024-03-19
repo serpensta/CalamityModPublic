@@ -889,7 +889,7 @@ namespace CalamityMod.CalPlayer
             // Life Steal nerf in difficulties above Expert
             // Reduces the max possible life steal before the cooldown occurs (this mostly just nerfs how much life steal the player can get in bursts)
             // Master Mode nerfs this by an additional 10
-            float lifeStealCap = BossRushEvent.BossRushActive ? 40f : CalamityWorld.death ? 50f : CalamityWorld.revenge ? 60f : Main.expertMode ? 70f : 80f;
+            float lifeStealCap = CalamityWorld.death ? 50f : CalamityWorld.revenge ? 60f : Main.expertMode ? 70f : 80f;
             if (Main.masterMode)
                 lifeStealCap -= 10f;
             if (Player.lifeSteal > lifeStealCap)
@@ -899,9 +899,8 @@ namespace CalamityMod.CalPlayer
             // Expert Mode life steal recovery rate is 0.5/s
             // Revengeance Mode life steal recovery rate is 0.4/s
             // Death Mode life steal recovery rate is 0.3/s
-            // Boss Rush life steal recovery rate is 0.2/s
             // Master Mode life steal recovery rate is nerfed by an additional 0.1/s
-            float lifeStealRecoveryRateReduction = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.1f : 0f;
+            float lifeStealRecoveryRateReduction = CalamityWorld.death ? 0.2f : CalamityWorld.revenge ? 0.1f : 0f;
             if (Main.masterMode)
                 lifeStealRecoveryRateReduction += 0.1f;
             Player.lifeSteal -= lifeStealRecoveryRateReduction;
