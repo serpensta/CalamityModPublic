@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Ranged
             dustAngle += (growing ? 0.07f * variance : -0.07f * variance);
 
             Projectile.localAI[0] += 1f;
-            if (Projectile.localAI[0] > 12f && targetDist < 1400f)
+            if (Projectile.localAI[0] > 16f && targetDist < 1200f)
             {
                 GlowOrbParticle orb = new GlowOrbParticle((Projectile.Center + Projectile.velocity.RotatedBy((dustWave ? 1 : -1) * dustAngle) * 4.5f) - Projectile.velocity * 5, Vector2.Zero, false, 5, 0.55f + MathF.Abs(dustAngle * 0.5f), currentColor, true, true);
                 GeneralParticleHandler.SpawnParticle(orb);
@@ -137,7 +137,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnKill(int timeLeft)
         {
-            for (int b = 0; b < 9; b++)
+            for (int b = 0; b < 4; b++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, 66, new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1.5f));
                 dust.noGravity = true;
