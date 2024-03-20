@@ -7,6 +7,7 @@ using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -24,6 +25,7 @@ namespace CalamityMod.NPCs.Leviathan
         private bool forceChargeFrames = false;
         private int frameUsed = 0;
         public bool HasBegunSummoningLeviathan = false;
+        public static Asset<Texture2D> ChargeTexture;
         public bool WaitingForLeviathan
         {
             get
@@ -46,6 +48,10 @@ namespace CalamityMod.NPCs.Leviathan
                 Scale = 0.5f
             };
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/AnahitaStabbing", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -885,7 +891,7 @@ namespace CalamityMod.NPCs.Leviathan
                     texture = TextureAssets.Npc[NPC.type].Value;
                     break;
                 case 1:
-                    texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/AnahitaStabbing").Value;
+                    texture = ChargeTexture.Value;
                     break;
             }
 

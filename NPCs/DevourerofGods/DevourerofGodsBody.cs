@@ -9,6 +9,7 @@ using CalamityMod.Projectiles.Melee.Yoyos;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -35,10 +36,24 @@ namespace CalamityMod.NPCs.DevourerofGods
         private bool setOpacity = false;
         private bool phase2Started = false;
         public int SegmentIndex;
+
+        public static Asset<Texture2D> Texture_Glow;
+        public static Asset<Texture2D> Phase2Texture;
+        public static Asset<Texture2D> Phase2Texture_Glow;
+        public static Asset<Texture2D> Phase2Texture_Glow2;
+
         public override LocalizedText DisplayName => CalamityUtils.GetText("NPCs.DevourerofGodsHead.DisplayName");
+
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
+            if (!Main.dedServ)
+            {
+                Texture_Glow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+                Phase2Texture = ModContent.Request<Texture2D>(Texture + "S", AssetRequestMode.AsyncLoad);
+                Phase2Texture_Glow = ModContent.Request<Texture2D>(Texture + "SGlow", AssetRequestMode.AsyncLoad);
+                Phase2Texture_Glow2 = ModContent.Request<Texture2D>(Texture + "SGlow2", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -387,7 +402,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                 spriteEffects = SpriteEffects.FlipHorizontally;
 
             bool useOtherTextures = phase2Started && Main.npc[(int)NPC.ai[2]].localAI[2] <= 60f;
-            Texture2D texture2D15 = useOtherTextures ? ModContent.Request<Texture2D>("CalamityMod/NPCs/DevourerofGods/DevourerofGodsBodyS").Value : TextureAssets.Npc[NPC.type].Value;
+            Texture2D texture2D15 = useOtherTextures ? Phase2Texture.Value : TextureAssets.Npc[NPC.type].Value;
             Vector2 halfSizeTexture = new Vector2(texture2D15.Width / 2, texture2D15.Height / 2);
 
             Vector2 drawLocation = NPC.Center - screenPos;
@@ -399,13 +414,13 @@ namespace CalamityMod.NPCs.DevourerofGods
             {
                 if (useOtherTextures)
                 {
-                    texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/DevourerofGods/DevourerofGodsBodySGlow").Value;
+                    texture2D15 = Phase2Texture_Glow.Value;
                     Color glowmaskColor = Color.Lerp(Color.White, Color.Fuchsia, 0.5f);
 
                     spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, glowmaskColor, NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
                 }
 
-                texture2D15 = useOtherTextures ? ModContent.Request<Texture2D>("CalamityMod/NPCs/DevourerofGods/DevourerofGodsBodySGlow2").Value : ModContent.Request<Texture2D>("CalamityMod/NPCs/DevourerofGods/DevourerofGodsBodyGlow").Value;
+                texture2D15 = useOtherTextures ? Phase2Texture_Glow2.Value : Texture_Glow.Value;
                 Color glowmaskColor2 = Color.Lerp(Color.White, Color.Cyan, 0.5f);
 
                 spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, glowmaskColor2, NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);

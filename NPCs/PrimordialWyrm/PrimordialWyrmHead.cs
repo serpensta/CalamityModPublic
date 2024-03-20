@@ -17,6 +17,7 @@ using CalamityMod.Sounds;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -81,6 +82,8 @@ namespace CalamityMod.NPCs.PrimordialWyrm
         public static readonly SoundStyle ChargeSound = new("CalamityMod/Sounds/Custom/PrimordialWyrmCharge");
         public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/PrimordialWyrmDeath");
 
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -94,6 +97,10 @@ namespace CalamityMod.NPCs.PrimordialWyrm
             value.Position.X += 55;
             value.Position.Y += 5;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -1434,7 +1441,7 @@ namespace CalamityMod.NPCs.PrimordialWyrm
             center += vector * NPC.scale + new Vector2(0f, NPC.gfxOffY);
             spriteBatch.Draw(texture, center, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, vector, NPC.scale, spriteEffects, 0f);
 
-            texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PrimordialWyrm/PrimordialWyrmHeadGlow").Value;
+            texture = GlowTexture.Value;
             spriteBatch.Draw(texture, center, NPC.frame, Color.White * NPC.Opacity, NPC.rotation, vector, NPC.scale, spriteEffects, 0f);
 
             return false;

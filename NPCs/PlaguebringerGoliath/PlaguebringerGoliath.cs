@@ -22,6 +22,7 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -47,6 +48,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
         private bool flyingFrame2 = false;
         private int curTex = 1;
 
+        public static Asset<Texture2D> ChargeTexture;
+        public static Asset<Texture2D> Texture_Glow;
+        public static Asset<Texture2D> ChargeTexture_Glow;
+
         public static readonly SoundStyle NukeWarningSound = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGNukeWarning");
         public static readonly SoundStyle AttackSwitchSound = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGAttackSwitch", 2);
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGDash");
@@ -68,6 +73,12 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             value.Position.X -= 48f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+            if (!Main.dedServ)
+            {
+                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTex", AssetRequestMode.AsyncLoad);
+                Texture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathGlow", AssetRequestMode.AsyncLoad);
+                ChargeTexture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTexGlow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -1232,7 +1243,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Texture2D glowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathGlow").Value;
+            Texture2D glowTexture = Texture_Glow.Value;
             if (curTex != (charging ? 2 : 1))
             {
                 NPC.frame.X = 0;
@@ -1241,8 +1252,8 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             if (charging)
             {
                 curTex = 2;
-                texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTex").Value;
-                glowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTexGlow").Value;
+                texture = ChargeTexture.Value;
+                glowTexture = ChargeTexture_Glow.Value;
             }
             else
                 curTex = 1;

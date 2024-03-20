@@ -6833,7 +6833,7 @@ namespace CalamityMod.NPCs
                 intensity *= intensityAndOpacityMult;
                 opacity *= intensityAndOpacityMult;
 
-                Texture2D forcefieldTexture = Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/ForcefieldTexture").Value;
+                Texture2D forcefieldTexture = SupremeCalamitas.SupremeCalamitas.ForcefieldTexture.Value;
 
                 if (npc.type == NPCID.CultistBoss)
                     GameShaders.Misc["CalamityMod:SupremeShield"].SetShaderTexture(Request<Texture2D>("CalamityMod/ExtraTextures/GreyscaleGradients/EternityStreak"));
@@ -6993,7 +6993,7 @@ namespace CalamityMod.NPCs
                         }
                     }
 
-                    Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerHeadGlow").Value;
+                    Texture2D glowTexture = CalamityMod.DestroyerGlowmasks[0].Value;
                     switch (npc.type)
                     {
                         default:
@@ -7001,11 +7001,11 @@ namespace CalamityMod.NPCs
                             break;
 
                         case NPCID.TheDestroyerBody:
-                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerBodyGlow").Value;
+                            glowTexture = CalamityMod.DestroyerGlowmasks[1].Value;
                             break;
 
                         case NPCID.TheDestroyerTail:
-                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerTailGlow").Value;
+                            glowTexture = CalamityMod.DestroyerGlowmasks[2].Value;
                             break;
                     }
 
@@ -7240,8 +7240,8 @@ namespace CalamityMod.NPCs
                     if (masterMode && revenge)
                     {
                         int alpha = 192;
-                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
-                        Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/SkeletronPrimeHeadGlow").Value;
+                        eyesColor = npc.type == NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
+                        Texture2D glowTexture = SkeletronPrime2.EyeTexture.Value;
                         for (int i = 0; i < 3; i++)
                             spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                     }
