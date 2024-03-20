@@ -84,12 +84,15 @@ namespace CalamityMod.Items.Weapons.Melee
             if (target.Calamity().miscDefenseLoss < target.defense)
                 target.Calamity().miscDefenseLoss += 1;
 
-            if (player.moonLeech)
+            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                 return;
 
             int heal = Main.rand.Next(1, 70);
+            Main.player[Main.myPlayer].lifeSteal -= heal;
             player.statLife += heal;
             player.HealEffect(heal);
+            if (player.statLife > player.statLifeMax2)
+                player.statLife = player.statLifeMax2;
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
@@ -140,12 +143,15 @@ namespace CalamityMod.Items.Weapons.Melee
                 Projectile.NewProjectile(source, realPlayerPos.X, realPlayerPos.Y, speedX4, speedY5, ModContent.ProjectileType<EarthProj>(), earthDamage, Item.knockBack, player.whoAmI, 0f, (float)Main.rand.Next(10));
             }
 
-            if (player.moonLeech)
+            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                 return;
 
-            int heal = Main.rand.Next(1, 69);
+            int heal = Main.rand.Next(1, 70);
+            Main.player[Main.myPlayer].lifeSteal -= heal;
             player.statLife += heal;
             player.HealEffect(heal);
+            if (player.statLife > player.statLifeMax2)
+                player.statLife = player.statLifeMax2;
         }
 
         public override void AddRecipes()

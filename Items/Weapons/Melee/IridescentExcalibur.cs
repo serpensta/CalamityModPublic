@@ -167,12 +167,15 @@ namespace CalamityMod.Items.Weapons.Melee
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
 
-            if (player.moonLeech)
+            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                 return;
 
-            int healAmount = Main.rand.Next(3) + 10;
-            player.statLife += healAmount;
-            player.HealEffect(healAmount);
+            int heal = Main.rand.Next(3) + 10;
+            Main.player[Main.myPlayer].lifeSteal -= heal;
+            player.statLife += heal;
+            player.HealEffect(heal);
+            if (player.statLife > player.statLifeMax2)
+                player.statLife = player.statLifeMax2;
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
@@ -180,12 +183,15 @@ namespace CalamityMod.Items.Weapons.Melee
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
 
-            if (player.moonLeech)
+            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                 return;
 
-            int healAmount = Main.rand.Next(3) + 10;
-            player.statLife += healAmount;
-            player.HealEffect(healAmount);
+            int heal = Main.rand.Next(3) + 10;
+            Main.player[Main.myPlayer].lifeSteal -= heal;
+            player.statLife += heal;
+            player.HealEffect(heal);
+            if (player.statLife > player.statLifeMax2)
+                player.statLife = player.statLifeMax2;
         }
 
         public override void AddRecipes()

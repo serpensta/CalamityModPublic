@@ -39,20 +39,28 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (player.moonLeech)
+            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                 return;
 
-            player.statLife += 5;
-            player.HealEffect(5);
+            int heal = 5;
+            Main.player[Main.myPlayer].lifeSteal -= heal;
+            player.statLife += heal;
+            player.HealEffect(heal);
+            if (player.statLife > player.statLifeMax2)
+                player.statLife = player.statLifeMax2;
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
-            if (player.moonLeech)
+            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                 return;
 
-            player.statLife += 5;
-            player.HealEffect(5);
+            int heal = 5;
+            Main.player[Main.myPlayer].lifeSteal -= heal;
+            player.statLife += heal;
+            player.HealEffect(heal);
+            if (player.statLife > player.statLifeMax2)
+                player.statLife = player.statLifeMax2;
         }
 
         public override void AddRecipes()

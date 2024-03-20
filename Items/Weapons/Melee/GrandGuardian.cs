@@ -38,13 +38,20 @@ namespace CalamityMod.Items.Weapons.Melee
             if (target.Calamity().miscDefenseLoss < target.defense)
                 target.Calamity().miscDefenseLoss += 1;
 
-            if (target.Calamity().miscDefenseLoss >= target.defense && !player.moonLeech)
-            {
-                player.statLife += 4;
-                player.HealEffect(4);
-            }
-
             OnHitEffects(player, target.Center, target.life, target.lifeMax, Item.knockBack, Item.damage);
+
+            if (target.Calamity().miscDefenseLoss >= target.defense)
+            {
+                if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
+                    return;
+
+                int heal = 4;
+                Main.player[Main.myPlayer].lifeSteal -= heal;
+                player.statLife += heal;
+                player.HealEffect(heal);
+                if (player.statLife > player.statLifeMax2)
+                    player.statLife = player.statLifeMax2;
+            }
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)

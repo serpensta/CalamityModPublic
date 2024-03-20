@@ -69,12 +69,6 @@ namespace CalamityMod.Projectiles.Healing
 
         public void HealHome()
         {
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f)
-            {
-                Projectile.Kill();
-                return;
-            }
-
             Player player = Main.player[target];
             //Code snippet taken from the HealingProjectile utility, to do what I want with it easier.
             Vector2 playerVector = player.Center - Projectile.Center;
@@ -82,7 +76,6 @@ namespace CalamityMod.Projectiles.Healing
             if (playerDist < 50f && Projectile.position.X < player.position.X + player.width && Projectile.position.X + Projectile.width > player.position.X && Projectile.position.Y < player.position.Y + player.height && Projectile.position.Y + Projectile.height > player.position.Y)
             {
                 int heal = 10;
-                Main.player[Main.myPlayer].lifeSteal -= heal * BalancingConstants.LifeStealAccessoryCooldownMultiplier;
                 player.HealEffect(heal, false);
                 player.statLife += heal;
                 if (player.statLife > player.statLifeMax2)

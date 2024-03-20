@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalamityMod.Balancing;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Projectiles.VanillaProjectileOverrides;
 using Microsoft.Xna.Framework;
@@ -14,8 +13,11 @@ namespace CalamityMod.Projectiles.Typeless
     public class ChlorophyteLifePulse : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Typeless";
+
         public const int Lifetime = 60;
+
         public float LifetimeCompletion => 1f - Projectile.timeLeft / (float)Lifetime;
+
         public override void SetDefaults()
         {
             Projectile.width = 96;
@@ -30,6 +32,7 @@ namespace CalamityMod.Projectiles.Typeless
         }
 
         public override bool? CanHitNPC(NPC target) => !target.CountsAsACritter && !target.friendly && target.chaseable;
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => Projectile.damage = (int)(Projectile.damage * 0.8f);
 
         public override void AI()
@@ -50,11 +53,10 @@ namespace CalamityMod.Projectiles.Typeless
 
                 foreach (Player player in membersOfSameTeam)
                 {
-                    if (player.Calamity().ChlorophyteHealDelay > 0 || Main.player[Main.myPlayer].lifeSteal <= 0f)
+                    if (player.Calamity().ChlorophyteHealDelay > 0)
                         continue;
 
                     int healQuantity = (int)owner.GetBestClassDamage().ApplyTo(ChlorophyteArmorSetChange.AmountToHealPerPulse);
-                    Main.player[Main.myPlayer].lifeSteal -= healQuantity * BalancingConstants.LifeStealSetBonusCooldownMultiplier;
                     player.statLife += healQuantity;
                     player.HealEffect(healQuantity);
                     player.Calamity().ChlorophyteHealDelay = ChlorophyteArmorSetChange.DelayBetweenHeals;
@@ -82,10 +84,7 @@ namespace CalamityMod.Projectiles.Typeless
             return false;
         }
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            return CalamityUtils.CircularHitboxCollision(Projectile.Center, Projectile.scale * 48f, targetHitbox);
-        }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, Projectile.scale * 48f, targetHitbox);
 
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
     }

@@ -111,10 +111,17 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ItemID.CandyCaneSword:
-                    if (Player.moonLeech)
+
+                    if (Player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                         return;
-                    Player.statLife += 2;
-                    Player.HealEffect(2);
+
+                    int heal = 2;
+                    Main.player[Main.myPlayer].lifeSteal -= heal;
+                    Player.statLife += heal;
+                    Player.HealEffect(heal);
+                    if (Player.statLife > Player.statLifeMax2)
+                        Player.statLife = Player.statLifeMax2;
+
                     break;
 
                 case ItemID.DeathSickle:
@@ -233,10 +240,17 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ProjectileID.FruitcakeChakram:
-                    if (Player.moonLeech)
+
+                    if (Player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
                         return;
-                    Player.statLife += 2;
-                    Player.HealEffect(2);
+
+                    int heal = 2;
+                    Main.player[Main.myPlayer].lifeSteal -= heal;
+                    Player.statLife += heal;
+                    Player.HealEffect(heal);
+                    if (Player.statLife > Player.statLifeMax2)
+                        Player.statLife = Player.statLifeMax2;
+
                     break;
 
                 case ProjectileID.ObsidianSwordfish:
