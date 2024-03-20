@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CalamityMod.Balancing;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -275,13 +277,13 @@ namespace CalamityMod.Projectiles.Melee
 
         #region Hit Effects and Collision
 
-        public void OnHitHealEffect()
+        public void OnHitHealEffect(int damage)
         {
-            if (Owner.moonLeech)
+            int heal = (int)Math.Round(damage * 0.025);
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
-            
-            Owner.statLife += Terratomere.TrueMeleeHitHeal;
-            Owner.HealEffect(Terratomere.TrueMeleeHitHeal);
+
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -295,7 +297,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             target.AddBuff(ModContent.BuffType<GlacialState>(), Terratomere.TrueMeleeGlacialStateTime);
             if (!Owner.moonLeech)
-                OnHitHealEffect();
+                OnHitHealEffect(hit.Damage);
 
             // Create a slash creator on top of the hit target.
             int slashCreatorID = ModContent.ProjectileType<TerratomereSlashCreator>();
@@ -309,7 +311,7 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<GlacialState>(), Terratomere.TrueMeleeGlacialStateTime);
-            OnHitHealEffect();
+            OnHitHealEffect(info.Damage);
         }
         #endregion Hit Effects and Collision
     }

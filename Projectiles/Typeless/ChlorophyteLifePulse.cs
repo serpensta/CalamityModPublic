@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CalamityMod.Balancing;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Projectiles.VanillaProjectileOverrides;
 using Microsoft.Xna.Framework;
@@ -49,10 +50,11 @@ namespace CalamityMod.Projectiles.Typeless
 
                 foreach (Player player in membersOfSameTeam)
                 {
-                    if (player.Calamity().ChlorophyteHealDelay > 0)
+                    if (player.Calamity().ChlorophyteHealDelay > 0 || Main.player[Main.myPlayer].lifeSteal <= 0f)
                         continue;
 
                     int healQuantity = (int)owner.GetBestClassDamage().ApplyTo(ChlorophyteArmorSetChange.AmountToHealPerPulse);
+                    Main.player[Main.myPlayer].lifeSteal -= healQuantity * BalancingConstants.LifeStealSetBonusCooldownMultiplier;
                     player.statLife += healQuantity;
                     player.HealEffect(healQuantity);
                     player.Calamity().ChlorophyteHealDelay = ChlorophyteArmorSetChange.DelayBetweenHeals;

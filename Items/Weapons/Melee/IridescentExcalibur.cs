@@ -6,6 +6,7 @@ using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -49,6 +50,11 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shoot = ModContent.ProjectileType<GayBeam>();
             Item.shootSpeed = ShootSpeed;
             Item.rare = ModContent.RarityType<Rainbow>();
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Item.DrawItemGlowmaskSingleFrame(spriteBatch, rotation, ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/IridescentExcaliburGlow").Value);
         }
 
         // Terraria seems to really dislike high crit values in SetDefaults
@@ -101,7 +107,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool())
             {
-                Color rainbowColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
+                Color rainbowColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Alpha);
                 Color color = Color.White;
                 int dustChoice = player.altFunctionUse == 2 ? Main.rand.Next(12) : BeamType;
                 switch (dustChoice)

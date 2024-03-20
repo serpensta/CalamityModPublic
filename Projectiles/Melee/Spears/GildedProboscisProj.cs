@@ -1,4 +1,6 @@
-﻿using CalamityMod.Items.Weapons.Melee;
+﻿using CalamityMod.Balancing;
+using System;
+using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Terraria;
 using Terraria.ID;
@@ -40,12 +42,11 @@ namespace CalamityMod.Projectiles.Melee.Spears
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Main.player[Projectile.owner].moonLeech)
+            int heal = (int)Math.Round(hit.Damage * 0.01);
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            Player player = Main.player[Projectile.owner];
-            player.statLife += 1;
-            player.HealEffect(1);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace CalamityMod.Projectiles.Typeless
     public class BlazingStarHeal : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Typeless";
+
         public override string Texture => "CalamityMod/Projectiles/StarProj";
 
         public override void SetDefaults()
@@ -27,6 +28,12 @@ namespace CalamityMod.Projectiles.Typeless
 
         public override void AI()
         {
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f)
+            {
+                Projectile.Kill();
+                return;
+            }
+
             if (Projectile.timeLeft % 4 == 0) //only once per 4 frames
                 Lighting.AddLight(Projectile.Center, 0f, 0.6f, 0f);
             if (Projectile.timeLeft > 190)
@@ -45,13 +52,14 @@ namespace CalamityMod.Projectiles.Typeless
             if (!player.immune && playerDist < 50f && !player.dead && Projectile.position.X < player.position.X + player.width && Projectile.position.X + Projectile.width > player.position.X && Projectile.position.Y < player.position.Y + player.height && Projectile.position.Y + Projectile.height > player.position.Y)
             {
                 int healAmt = Utils.Clamp((200 - Projectile.timeLeft) / 10, 1, 10); //min heal is 5, max heal is 10, achievable after 2 seconds
+                Main.player[Main.myPlayer].lifeSteal -= healAmt;
                 player.HealEffect(healAmt, false);
                 player.statLife += healAmt;
                 if (player.statLife > player.statLifeMax2)
-                {
                     player.statLife = player.statLifeMax2;
-                }
+
                 NetMessage.SendData(MessageID.SpiritHeal, -1, -1, null, index, healAmt);
+
                 Projectile.Kill();
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Weapons.Ranged;
@@ -110,10 +111,7 @@ namespace CalamityMod.Projectiles.Ranged
             bool bonusHeal = Main.rand.NextFloat() < chanceOfOneMoreHP;
             int finalHeal = guaranteedHeal + (bonusHeal ? 1 : 0);
             if (finalHeal > 0)
-            {
-                player.HealEffect(finalHeal);
-                player.statLife += finalHeal;
-            }
+                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], finalHeal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
         }
 
         public override bool PreDraw(ref Color lightColor)

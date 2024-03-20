@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
@@ -94,12 +95,11 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Main.player[Projectile.owner].moonLeech)
+            int heal = (int)Math.Round(hit.Damage * 0.025);
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
-            Player player = Main.player[Projectile.owner];
-            player.statLife += 1;
-            player.HealEffect(1);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
         }
 
         public override bool PreDraw(ref Color lightColor)
