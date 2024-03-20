@@ -900,8 +900,8 @@ Viscera: {
 	DisplayName: Viscera
 	Tooltip:
 		'''
-		Fires a rapid barrage piercing of blood beams
-The last beam of the barrage explodes upon hitting an enemy
+		Fires a rapid barrage of piercing blood beams
+		The last beam of the barrage instead explodes upon hitting an enemy
 		Blood beams heal you on enemy hit
 		'''
 }
