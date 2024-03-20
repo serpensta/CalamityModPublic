@@ -33,6 +33,7 @@ namespace CalamityMod.Projectiles.Boss
         public static int MinimumDamagePerFrame = 4;
         public static int MaximumDamagePerFrame = 16;
         public static float AdrenalineLossPerFrame = 0.04f;
+        public static float SpeedToForceMaxDamage = 25f;
 
         private float speedAdd = 0f;
         private float speedLimit = 0f;
@@ -257,7 +258,9 @@ namespace CalamityMod.Projectiles.Boss
                 return false;
 
             // If Journey God Mode is active, or any effects which simulate, provide or equivalent to it, do not harm the player.
-            if (player.creativeGodMode)
+            // Likewise, if the player has immunity frames, do not harm them.
+            bool cannotBeHurt = player.HasIFrames() || player.creativeGodMode;
+            if (cannotBeHurt)
                 return true;
 
             // Applies Vulnerability Hex and/or the effects of Supreme Cirrus' HAGE faces.
@@ -266,7 +269,16 @@ namespace CalamityMod.Projectiles.Boss
             // Compute distance for direct health reduction from overlap.
             float distSQ = Projectile.DistanceSQ(player.Center);
             float radiusSQ = CircularHitboxRadius * CircularHitboxRadius * Projectile.scale * Projectile.scale;
-            int healthToDrain = (int)MathHelper.Lerp(MaximumDamagePerFrame, MinimumDamagePerFrame, distSQ / radiusSQ);
+            float radiusRatio = distSQ / radiusSQ;
+
+            // Check the player's speed. If they are moving fast enough, damage them more severely; this prevents trying to rush straight through the vortex.
+            float playerSpeed = player.velocity.LengthSquared();
+            float speedRatio = playerSpeed / SpeedToForceMaxDamage * SpeedToForceMaxDamage;
+
+            // Take the higher of the two to determine the damage application ratio.
+            float damageApplicationRatio = MathHelper.Max(radiusRatio, speedRatio);
+
+            int healthToDrain = (int)MathHelper.Lerp(MaximumDamagePerFrame, MinimumDamagePerFrame, damageApplicationRatio);
             if (healthToDrain < MinimumDamagePerFrame)
                 healthToDrain = MinimumDamagePerFrame;
 
