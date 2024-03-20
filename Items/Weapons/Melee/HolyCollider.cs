@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using Terraria;
@@ -28,6 +29,11 @@ namespace CalamityMod.Items.Weapons.Melee
 
             Item.value = CalamityGlobalItem.Rarity12BuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
+        }
+
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            player.itemLocation += new Vector2(5f * player.direction, 13f * player.gravDir).RotatedBy(player.itemRotation);
         }
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
