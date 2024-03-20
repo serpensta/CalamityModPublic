@@ -51,6 +51,7 @@ using CalamityMod.Particles;
 using CalamityMod.Projectiles;
 using CalamityMod.Projectiles.Magic;
 using CalamityMod.Projectiles.Melee;
+using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
@@ -245,6 +246,11 @@ namespace CalamityMod.NPCs
         public int pFlames = 0;
         public int aCrunch = 0;
         public int crumble = 0;
+
+        public const int veriumDoomTime = 90;
+        public int veriumDoomTimer = 0;
+        public int veriumDoomStacks = 0;
+        public bool veriumDoomMarked = false;
 
         // Soma Prime Shred deals damage with DirectStrikes instead of with direct debuff damage
         // It also stacks, scales with ranged damage, and can crit, meaning it needs to know who applied it most recently
@@ -455,6 +461,10 @@ namespace CalamityMod.NPCs
             myClone.pFlames = pFlames;
             myClone.aCrunch = aCrunch;
             myClone.crumble = crumble;
+
+            myClone.veriumDoomTimer = veriumDoomTimer;
+            myClone.veriumDoomStacks = veriumDoomStacks;
+            myClone.veriumDoomMarked = veriumDoomMarked;
 
             myClone.somaShredStacks = somaShredStacks;
             myClone.somaShredApplicator = somaShredApplicator;
@@ -5088,6 +5098,19 @@ namespace CalamityMod.NPCs
             if (RancorBurnTime > 0)
                 RancorBurnTime--;
 
+            if (veriumDoomTimer > 0)
+                veriumDoomTimer--;
+            if (veriumDoomTimer == 0 && veriumDoomMarked)
+            {
+                for (int d = 0; d < 20; d++)
+                {
+                    Dust.NewDustPerfect(npc.Center, Main.rand.NextBool() ? 226 : 223, new Vector2(Main.rand.NextFloat(-12f, 12f), Main.rand.NextFloat(-12f, 12f)));
+                }
+                Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), 100 + (10 * veriumDoomStacks), 0, Main.myPlayer, 200f);
+                veriumDoomMarked = false;
+                veriumDoomStacks = 0;
+            }
+
             // Queen Bee is completely immune to having her movement impaired if not in a high difficulty mode.
             if (npc.type == NPCID.QueenBee && !CalamityWorld.revenge && !BossRushEvent.BossRushActive)
                 return;
@@ -5449,6 +5472,17 @@ namespace CalamityMod.NPCs
                     // As such, only 50% damage is added per supercrit layer here.
                     modifiers.SourceDamage *= 1f + 0.5f * supercritLayers;
                 }
+            }
+
+            // Verium Bolt Doom effect
+            if (projectile.type == ModContent.ProjectileType<VeriumBoltProj>())
+            {
+                if (!veriumDoomMarked)
+                {
+                    veriumDoomMarked = true;
+                    veriumDoomTimer = veriumDoomTime;
+                }
+                veriumDoomStacks++;
             }
 
             //
@@ -6306,6 +6340,12 @@ namespace CalamityMod.NPCs
 
             if (vaporfied > 0)
                 Vaporfied.DrawEffects(npc, ref drawColor);
+
+            if (veriumDoomTimer > 0)
+            {
+                if (Main.rand.NextBool())
+                    Dust.NewDustPerfect(npc.Center, Main.rand.NextBool(4) ? 223 : 226, new Vector2(Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-4f, 4f)));
+            }
 
             // TODO -- These debuff visuals cannot be moved because they correspond to vanilla debuffs
             if (electrified > 0)
