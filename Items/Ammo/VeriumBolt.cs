@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Ammo
 {
+    [LegacyName("VeriumBullet")]
     public class VeriumBolt : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Ammo";
