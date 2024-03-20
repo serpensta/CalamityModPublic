@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Magic;
+using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -18,7 +19,8 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.staff[Item.type] = true;
         }
 
-        public const int BoomLifetime = 30;
+        public const int BoomLifetime = 40;
+        public int Counter = 0;
 
         public override void SetDefaults()
         {
@@ -27,12 +29,12 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.damage = 200;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 18;
-            Item.useTime = 9;
-            Item.useAnimation = 28;
-            Item.reuseDelay = 30;
+            Item.useTime = 7;
+            Item.useAnimation = 22;
+            Item.reuseDelay = 45;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
-            Item.knockBack = 6f;
+            Item.knockBack = 5f;
             Item.value = CalamityGlobalItem.Rarity12BuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.autoReuse = true;
@@ -42,8 +44,16 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            SoundEngine.PlaySound(SoundID.Item20, position);
-            return true;
+            Counter++;
+            SoundStyle fire = new("CalamityMod/Sounds/Item/MagnaCannonShot");
+            SoundEngine.PlaySound(fire with { Volume = 0.2f, Pitch = 0.95f }, position);
+            position = position + velocity.RotatedBy(-0.75f * player.direction) * 1.8f;
+
+            Projectile.NewProjectile(source, position, velocity.RotatedByRandom(0.025f), type, damage, knockback, player.whoAmI, 0f, Counter == 4 ? 1 : 0);
+            if (Counter >= 4)
+                Counter = 0;
+            
+            return false;
         }
 
         public override void AddRecipes()
