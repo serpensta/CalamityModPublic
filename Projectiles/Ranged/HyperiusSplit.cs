@@ -24,12 +24,11 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = false;
             Projectile.penetrate = 2;
             Projectile.timeLeft = 500;
-            Projectile.extraUpdates = 8;
+            Projectile.extraUpdates = 4;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10 * Projectile.extraUpdates;
             Projectile.alpha = 255;
             Projectile.ignoreWater = true;
-
             AIType = ProjectileID.Bullet;
         }
 

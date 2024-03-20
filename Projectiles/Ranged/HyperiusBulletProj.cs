@@ -30,7 +30,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 1200;
-            Projectile.extraUpdates = 10;
+            Projectile.extraUpdates = 5;
             AIType = ProjectileID.Bullet;
             Projectile.ignoreWater = true;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Ranged
             dustAngle += (growing ? 0.07f * variance : -0.07f * variance);
 
             Projectile.localAI[0] += 1f;
-            if (Projectile.localAI[0] > 16f && targetDist < 1200f)
+            if (Projectile.localAI[0] > 12f && targetDist < 1200f)
             {
                 GlowOrbParticle orb = new GlowOrbParticle((Projectile.Center + Projectile.velocity.RotatedBy((dustWave ? 1 : -1) * dustAngle) * 4.5f) - Projectile.velocity * 5, Vector2.Zero, false, 5, 0.55f + MathF.Abs(dustAngle * 0.5f), currentColor, true, true);
                 GeneralParticleHandler.SpawnParticle(orb);
@@ -108,7 +108,7 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 for (int b = 0; b < 3; b++)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, -oldVelocity.RotatedByRandom(0.5f) * 0.7f, ModContent.ProjectileType<HyperiusSplit>(), (int)(Projectile.damage * 0.1), 0f, Projectile.owner, 0f, 0f, Main.rand.Next(0, 4 + 1));
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, -oldVelocity.RotatedByRandom(0.5f) * 0.7f, ModContent.ProjectileType<HyperiusSplit>(), (int)(Projectile.damage * 0.35), 0f, Projectile.owner, 0f, 0f, Main.rand.Next(0, 4 + 1));
                 }
             }
             return true;
