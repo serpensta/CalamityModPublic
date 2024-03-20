@@ -24,12 +24,11 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.tileCollide = false;
             Projectile.penetrate = 2;
             Projectile.timeLeft = 500;
-            Projectile.extraUpdates = 8;
+            Projectile.extraUpdates = 4;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10 * Projectile.extraUpdates;
             Projectile.alpha = 255;
             Projectile.ignoreWater = true;
-
             AIType = ProjectileID.Bullet;
         }
 
@@ -64,7 +63,7 @@ namespace CalamityMod.Projectiles.Ranged
                         break;
                 }
             }
-            if (targetDist < 1400f)
+            if (targetDist < 1200f)
             {
                 GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center - Projectile.velocity, -Projectile.velocity * Main.rand.NextFloat(0.3f, 0.9f), false, 3, 0.55f, currentColor, true, true);
                 GeneralParticleHandler.SpawnParticle(orb);
@@ -86,7 +85,7 @@ namespace CalamityMod.Projectiles.Ranged
         }
         public override void OnKill(int timeLeft)
         {
-            for (int b = 0; b < 3; b++)
+            for (int b = 0; b < 2; b++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, 66, new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1.5f));
                 dust.noGravity = true;
