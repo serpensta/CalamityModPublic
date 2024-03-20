@@ -5217,7 +5217,7 @@ namespace CalamityMod.NPCs
                         npc.SimpleStrikeNPC((int)(npc.lifeMax * 0.2f), 0);
                         npc.AddBuff(BuffID.Electrified, 300);
                     }
-                    SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/ExoMechs/TeslaShoot1"));
+                    SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/ExoMechs/TeslaShoot1"), npc.Center);
                     break;
                 }
             }
