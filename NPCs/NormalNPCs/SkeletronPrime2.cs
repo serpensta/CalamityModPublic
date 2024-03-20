@@ -656,8 +656,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                             damage = (int)(damage * secondMechMultiplier);
                                     }
 
-                                    headCenter += value * 5f;
-                                    int enragedBombs = Projectile.NewProjectile(NPC.GetSource_FromAI(), headCenter.X, headCenter.Y, enragedHeadBombTargetX, enragedHeadBombTargetY, type, damage, 0f, Main.myPlayer, -1f);
+                                    int enragedBombs = Projectile.NewProjectile(NPC.GetSource_FromAI(), headCenter.X, headCenter.Y + 30f, enragedHeadBombTargetX, enragedHeadBombTargetY, type, damage, 0f, Main.myPlayer, -1f);
                                     Main.projectile[enragedBombs].timeLeft = 600;
                                     Main.projectile[enragedBombs].tileCollide = false;
                                 }
@@ -691,8 +690,8 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                     NPC.rotation = NPC.velocity.X / 15f;
 
-                    float flightVelocity = bossRush ? 30f : death ? 25f : 20f;
-                    float flightAcceleration = bossRush ? 0.3f : death ? 0.25f : 0.2f;
+                    float flightVelocity = bossRush ? 32f : death ? 28f : 24f;
+                    float flightAcceleration = bossRush ? 1.28f : death ? 1.12f : 0.96f;
 
                     Vector2 destination = new Vector2(Main.player[NPC.target].Center.X, Main.player[NPC.target].Center.Y - 500f);
                     NPC.SimpleFlyMovement((destination - NPC.Center).SafeNormalize(Vector2.UnitY) * flightVelocity, flightAcceleration);
@@ -735,7 +734,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 for (int k = 0; k < totalProjectiles; k++)
                                 {
                                     Vector2 bombVelocity = spinningPoint.RotatedBy(radians * k);
-                                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + bombVelocity.SafeNormalize(Vector2.UnitY) * 30f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
+                                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitY * 30f + bombVelocity.SafeNormalize(Vector2.UnitY) * 15f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
                                     Main.projectile[proj].timeLeft = 900;
                                     Main.projectile[proj].tileCollide = false;
                                 }

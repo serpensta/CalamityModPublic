@@ -723,7 +723,6 @@ namespace CalamityMod.CalPlayer
         public bool tarragonCloak = false;
         public int tarraDefenseTime = 600;
         public bool tarraMage = false;
-        public int tarraMageHealCooldown = 0;
         public int tarraCrits = 0;
         public bool tarraRanged = false;
         public int tarraRangedCooldown = 0;
@@ -963,6 +962,7 @@ namespace CalamityMod.CalPlayer
         public double pinkCandleHealFraction = 0D;
         public bool yellowCandle = false;
         public bool trippy = false;
+        public int trippyLevel = 1;
         public bool amidiasBlessing = false;
         public bool bloodfinBoost = false;
         public int bloodfinTimer = 30;
@@ -2279,7 +2279,6 @@ namespace CalamityMod.CalPlayer
             silvaMageCooldown = 0;
             bloodflareMageCooldown = 0;
             tarraRangedCooldown = 0;
-            tarraMageHealCooldown = 0;
             hideOfDeusMeleeBoostTimer = 0;
             externalAbyssLight = 0;
             externalColdImmunity = externalHeatImmunity = false;
@@ -2450,6 +2449,7 @@ namespace CalamityMod.CalPlayer
             pinkCandleHealFraction = 0D;
             yellowCandle = false;
             trippy = false;
+            trippyLevel = 1;
             amidiasBlessing = false;
             bloodfinBoost = false;
             bloodfinTimer = 0;
@@ -3579,17 +3579,33 @@ namespace CalamityMod.CalPlayer
                 }
             }
 
-            // Add a cooldown display for the vanilla lifesteal cooldown, which is active when negative
-            if (Player.whoAmI == Main.myPlayer && Player.lifeSteal < 0f)
+            // Add a cooldown display for the vanilla lifesteal cooldown, which is active when negative.
+            if (Player.whoAmI == Main.myPlayer)
             {
-                float duration = Player.lifeSteal;
-                float baseCooldown = Main.expertMode ? 0.5f : 0.6f;
-                float lifeStealNerf = BossRushEvent.BossRushActive ? 0.3f : CalamityWorld.death ? 0.25f : CalamityWorld.revenge ? 0.2f : Main.expertMode ? 0.15f : 0.1f;
-                duration /= baseCooldown - lifeStealNerf;
-                duration *= -1f;
+                float baseRecoveryRate = Main.expertMode ? BalancingConstants.LifeStealRecoveryRate_Expert : BalancingConstants.LifeStealRecoveryRate_Classic;
 
-                if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))
-                    Player.AddCooldown(LifeSteal.ID, (int)duration);
+                float lifeStealRecoveryRateReduction =
+                    CalamityWorld.death ? BalancingConstants.LifeStealRecoveryRateReduction_Death :
+                    CalamityWorld.revenge ? BalancingConstants.LifeStealRecoveryRateReduction_Revengeance :
+                    Main.expertMode ? BalancingConstants.LifeStealRecoveryRateReduction_Expert :
+                    BalancingConstants.LifeStealRecoveryRateReduction_Classic;
+
+                if (Main.masterMode)
+                    lifeStealRecoveryRateReduction += BalancingConstants.LifeStealRecoveryRateReduction_Master;
+
+                float lifeStealRecoveryRate = baseRecoveryRate - lifeStealRecoveryRateReduction;
+
+                // This value is here to somewhat prevent the rapid cooldown flashing that happens sometimes.
+                float cooldownDisplayGateValue = 12f;
+                float displayLifeStealCooldownGateValue = lifeStealRecoveryRate * cooldownDisplayGateValue;
+                if (Player.lifeSteal < -displayLifeStealCooldownGateValue)
+                {
+                    float duration = Math.Abs(Player.lifeSteal);
+                    duration /= lifeStealRecoveryRate;
+
+                    if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))
+                        Player.AddCooldown(LifeSteal.ID, (int)duration);
+                }
             }
 
             ForceVariousEffects();
@@ -3601,7 +3617,7 @@ namespace CalamityMod.CalPlayer
         {
             // True melee damage from various vanilla equipment placed here.
 
-            // Titan Glove and ALL upgrades
+            // Titan Glove and ALL upgrades.
             if (Player.kbGlove)
                 Player.GetDamage<TrueMeleeDamageClass>() += 0.1f;
 
@@ -3611,11 +3627,9 @@ namespace CalamityMod.CalPlayer
             if (gSabatonTempJumpSpeed > 0)
             {
                 gSabatonTempJumpSpeed--;
-                //Only give temporary jump speed if Gravistar Sabaton is equipped, but still decrement the time so that you can't store it for later
+                // Only give temporary jump speed if Gravistar Sabaton is equipped, but still decrement the time so that you can't store it for later.
                 if (gSabaton && Player.whoAmI == Main.myPlayer)
-                {
                     Player.jumpSpeedBoost += 2f;
-                }
             }
         }
         #endregion
@@ -4669,7 +4683,7 @@ namespace CalamityMod.CalPlayer
             return rogueStealth >= rogueStealthMax * consumptionMult;
         }
 
-        internal void ConsumeStealthByAttacking()
+        public void ConsumeStealthByAttacking()
         {
             stealthStrikeThisFrame = true;
             stealthAcceleration = 1f; // Reset acceleration when you attack

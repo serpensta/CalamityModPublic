@@ -200,7 +200,7 @@ namespace CalamityMod.Projectiles.Typeless
         {
             target.AddBuff(ModContent.BuffType<MarkedforDeath>(), 480);
 
-            if (!target.canGhostHeal || Main.player[Projectile.owner].moonLeech)
+            if (Main.player[Projectile.owner].moonLeech)
                 return;
 
             Player player = Main.player[Projectile.owner];

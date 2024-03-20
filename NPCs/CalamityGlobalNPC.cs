@@ -1119,6 +1119,13 @@ namespace CalamityMod.NPCs
         #endregion
 
         #region Set Defaults
+        public override void SetStaticDefaults()
+        {
+            // Set Plantera to be able to update oldPos[x]
+            // This is only used for her Rev+ AI charge attacks
+            NPCID.Sets.TrailingMode[NPCID.Plantera] = 1;
+        }
+
         public override void SetDefaults(NPC npc)
         {
             ShouldFallThroughPlatforms = false;
@@ -1481,11 +1488,6 @@ namespace CalamityMod.NPCs
             else if ((npc.type == NPCID.Wraith || npc.type == NPCID.Mimic || npc.type == NPCID.Reaper || npc.type == NPCID.PresentMimic || npc.type == NPCID.SandElemental || npc.type == NPCID.Ghost) && CalamityWorld.LegendaryMode)
             {
                 npc.knockBackResist = 0f;
-            }
-
-            if (CalamityLists.revengeanceLifeStealExceptionList.Contains(npc.type))
-            {
-                npc.canGhostHeal = false;
             }
         }
         #endregion
@@ -6306,21 +6308,21 @@ namespace CalamityMod.NPCs
                 return null;
 
             if (Main.LocalPlayer.Calamity().trippy || (npc.type == NPCID.KingSlime && CalamityWorld.LegendaryMode && CalamityWorld.revenge))
-                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, npc.alpha);
+                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
 
             if (npc.type == NPCID.QueenBee && Main.zenithWorld)
             {
                 if (npc.life / (float)npc.lifeMax < 0.5f)
-                    return new Color(0, 255, 0, npc.alpha);
+                    return new Color(0, 255, 0, 255 - npc.alpha);
                 else
-                    return new Color(255, 0, 0, npc.alpha);
+                    return new Color(255, 0, 0, 255 - npc.alpha);
             }
 
             if (npc.HasBuff<Enraged>())
-                return new Color(200, 50, 50, npc.alpha);
+                return new Color(200, 50, 50, 255 - npc.alpha);
 
             if (npc.Calamity().kamiFlu > 0 && !CalamityLists.kamiDebuffColorImmuneList.Contains(npc.type))
-                return new Color(51, 197, 108, npc.alpha);
+                return new Color(51, 197, 108, 255 - npc.alpha);
 
             if (npc.type == NPCID.VileSpit || npc.type == NPCID.VileSpitEaterOfWorlds)
                 return new Color(150, 200, 0, npc.alpha);
@@ -6533,41 +6535,119 @@ namespace CalamityMod.NPCs
             {
                 SpriteEffects spriteEffects = SpriteEffects.None;
                 if (npc.spriteDirection == 1)
-                {
                     spriteEffects = SpriteEffects.FlipHorizontally;
-                }
 
-                Vector2 halfSizeTexture = new Vector2(TextureAssets.Npc[npc.type].Value.Width / 2, TextureAssets.Npc[npc.type].Value.Height / Main.npcFrameCount[npc.type] / 2);
-                Color rainbow = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 0);
+                Color rainbow = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
                 Color alphaColor = npc.GetAlpha(rainbow);
                 float RGBMult = 0.99f;
                 alphaColor.R = (byte)(alphaColor.R * RGBMult);
                 alphaColor.G = (byte)(alphaColor.G * RGBMult);
                 alphaColor.B = (byte)(alphaColor.B * RGBMult);
                 alphaColor.A = (byte)(alphaColor.A * RGBMult);
-                float xOffset = screenPos.X + npc.width / 2 - TextureAssets.Npc[npc.type].Value.Width * npc.scale / 2f + halfSizeTexture.X * npc.scale;
-                float yOffset = screenPos.Y + npc.height - TextureAssets.Npc[npc.type].Value.Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + halfSizeTexture.Y * npc.scale + npc.gfxOffY;
-                for (int i = 0; i < 4; i++)
+                int totalAfterimages = Main.player[Main.myPlayer].Calamity().trippyLevel == 3 ? 16 : (Main.player[Main.myPlayer].Calamity().trippyLevel == 2 ? 12 : 4);
+                for (int i = 0; i < totalAfterimages; i++)
                 {
-                    Vector2 position9 = npc.position;
-                    float num214 = Math.Abs(npc.Center.X - Main.LocalPlayer.Center.X);
-                    float num215 = Math.Abs(npc.Center.Y - Main.LocalPlayer.Center.Y);
+                    Vector2 position = npc.position;
+                    float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                    float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
 
-                    if (i == 0 || i == 2)
-                        position9.X = Main.LocalPlayer.Center.X + num214;
-                    else
-                        position9.X = Main.LocalPlayer.Center.X - num214;
+                    float smallDistanceMult = 0.48f;
+                    float largeDistanceMult = 1.33f;
+                    bool whatTheFuck = Main.player[Main.myPlayer].Calamity().trippyLevel == 3;
 
-                    position9.X -= npc.width / 2;
+                    switch (i)
+                    {
+                        case 0:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
 
-                    if (i == 0 || i == 1)
-                        position9.Y = Main.LocalPlayer.Center.Y + num215;
-                    else
-                        position9.Y = Main.LocalPlayer.Center.Y - num215;
+                        case 1:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
 
-                    position9.Y -= npc.height / 2;
+                        case 2:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
 
-                    Main.spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position9.X - xOffset, position9.Y - yOffset), new Microsoft.Xna.Framework.Rectangle?(npc.frame), alphaColor, npc.rotation, halfSizeTexture, npc.scale, spriteEffects, 0f);
+                        case 3:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        case 4: // 1 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 1f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 0f : largeDistanceMult));
+                            break;
+
+                        case 5: // 4 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 0f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 1f : smallDistanceMult));
+                            break;
+
+                        case 6: // 7 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 1f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 0f : largeDistanceMult));
+                            break;
+
+                        case 7: // 10 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 0f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 1f : smallDistanceMult));
+                            break;
+
+                        case 8: // 11 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 0f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            break;
+
+                        case 9: // 2 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 0f : smallDistanceMult));
+                            break;
+
+                        case 10: // 5 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 0f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            break;
+
+                        case 11: // 8 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 0f : smallDistanceMult));
+                            break;
+
+                        case 12:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY * 0.5f;
+                            break;
+
+                        case 13:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY * 0.5f;
+                            break;
+
+                        case 14:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY * 0.5f;
+                            break;
+
+                        case 15:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY * 0.5f;
+                            break;
+
+
+                        default:
+                            break;
+                    }
+
+                    position.X -= npc.width / 2;
+                    position.Y -= npc.height / 2;
+
+                    Vector2 halfSize = npc.frame.Size() / 2;
+
+                    spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position.X - screenPos.X + (float)(npc.width / 2) - (float)TextureAssets.Npc[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, position.Y - screenPos.Y + (float)npc.height - (float)TextureAssets.Npc[npc.type].Height() * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + npc.gfxOffY), npc.frame, alphaColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                 }
             }
             else
@@ -7085,6 +7165,84 @@ namespace CalamityMod.NPCs
                     }
                     else
                         spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
+                }
+
+                else if (npc.type == NPCID.Plantera)
+                {
+                    // Percent life remaining
+                    float lifeRatio = npc.life / (float)npc.lifeMax;
+
+                    Texture2D npcTexture = TextureAssets.Npc[npc.type].Value;
+
+                    SpriteEffects spriteEffects = SpriteEffects.None;
+                    if (npc.spriteDirection == 1)
+                        spriteEffects = SpriteEffects.FlipHorizontally;
+
+                    Color originalColor = npc.GetAlpha(drawColor);
+                    Color newColor = new Color(100, 255, 100, 255);
+                    Vector2 glowOffset = Vector2.UnitY * -4f;
+                    Vector2 drawPosition = npc.Center - screenPos + new Vector2(0, npc.gfxOffY) + glowOffset;
+                    Vector2 origin = npc.frame.Size() / 2;
+
+                    bool phase2 = lifeRatio <= 0.5f;
+                    if (!phase2)
+                    {
+                        float telegraphTimer = Math.Abs(npc.ai[1]);
+                        bool startSeedGatlingSporeGasTelegraph = npc.ai[1] > PlanteraAI.SeedGatlingColorChangeGateValue;
+                        bool endSeedGatlingSporeGasTelegraph = npc.ai[1] < -PlanteraAI.SeedGatlingDuration + PlanteraAI.SeedGatlingColorChangeDuration;
+                        if (startSeedGatlingSporeGasTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((telegraphTimer - PlanteraAI.SeedGatlingColorChangeGateValue) / PlanteraAI.SeedGatlingColorChangeDuration, 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+
+                        // -300 to -120
+                        else if (endSeedGatlingSporeGasTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((telegraphTimer - (PlanteraAI.SeedGatlingDuration - PlanteraAI.SeedGatlingColorChangeDuration)) / PlanteraAI.SeedGatlingColorChangeDuration, 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+                    }
+                    else
+                    {
+                        float telegraphTimer = Math.Abs(npc.ai[3]);
+                        bool startChargeTelegraph = npc.ai[3] > PlanteraAI.ChargeTelegraphColorChangeGateValue;
+                        bool endChargeTelegraph = npc.ai[3] <= -2f;
+                        if (startChargeTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((telegraphTimer - PlanteraAI.ChargeTelegraphColorChangeGateValue) / PlanteraAI.SeedGatlingColorChangeDuration, 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+
+                        // -195 to -2
+                        else if (endChargeTelegraph)
+                        {
+                            float telegraphScalar = MathHelper.Clamp((Math.Abs(PlanteraAI.StopChargeGateValue) - telegraphTimer) / Math.Abs(PlanteraAI.StopChargeGateValue), 0f, 1f);
+                            Color telegraphColor = Color.Lerp(originalColor, newColor, telegraphScalar);
+
+                            if (CalamityConfig.Instance.Afterimages)
+                            {
+                                int afterimageAmount = 10;
+                                int afterImageIncrement = 2;
+                                for (int j = 0; j < afterimageAmount; j += afterImageIncrement)
+                                {
+                                    Color afterimageColor = telegraphColor;
+                                    afterimageColor = Color.Lerp(afterimageColor, originalColor, 0.5f);
+                                    afterimageColor = npc.GetAlpha(afterimageColor);
+                                    afterimageColor *= (afterimageAmount - j) / 15f;
+                                    Vector2 afterimagePos = npc.oldPos[j] + new Vector2(npc.width, npc.height) / 2f - screenPos;
+                                    afterimagePos -= new Vector2(npcTexture.Width, npcTexture.Height / Main.npcFrameCount[npc.type]) * npc.scale / 2f;
+                                    afterimagePos += origin * npc.scale + new Vector2(0f, npc.gfxOffY) + glowOffset;
+                                    spriteBatch.Draw(npcTexture, afterimagePos, npc.frame, afterimageColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                                }
+                            }
+
+                            spriteBatch.Draw(npcTexture, drawPosition, npc.frame, telegraphColor, npc.rotation, origin, npc.scale, spriteEffects, 0f);
+                        }
+                    }
                 }
             }
         }

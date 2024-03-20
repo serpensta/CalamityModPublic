@@ -85,7 +85,7 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            OnHitEffects(!target.canGhostHeal || Main.player[Projectile.owner].moonLeech);
+            OnHitEffects(Main.player[Projectile.owner].moonLeech);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -112,7 +112,7 @@ namespace CalamityMod.Projectiles.Rogue
                 }
             }
 
-            if (cannotLifesteal || Main.rand.NextBool()) //canGhostHeal be like lol
+            if (cannotLifesteal)
                 return;
 
             Player player = Main.player[Projectile.owner];

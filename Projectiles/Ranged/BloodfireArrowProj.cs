@@ -15,6 +15,7 @@ namespace CalamityMod.Projectiles.Ranged
     public class BloodfireArrowProj : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
+
         public override string Texture => "CalamityMod/Items/Ammo/BloodfireArrow";
 
         public override void SetStaticDefaults()
@@ -35,6 +36,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.timeLeft = 1200;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -94,7 +96,7 @@ namespace CalamityMod.Projectiles.Ranged
             Player player = Main.player[Projectile.owner];
             player.lifeRegenTime += 2;
 
-            if (!target.canGhostHeal || player.moonLeech)
+            if (player.moonLeech)
                 return;
 
             if (Main.player[Main.myPlayer].lifeSteal <= 0f)

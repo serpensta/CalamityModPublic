@@ -54,7 +54,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!target.canGhostHeal || Main.player[Projectile.owner].moonLeech)
+            if (Main.player[Projectile.owner].moonLeech)
                 return;
 
             Player player = Main.player[Projectile.owner];

@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Buffs.StatBuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -80,17 +81,11 @@ namespace CalamityMod.Projectiles.Rogue
                 Main.LocalPlayer.AddBuff(ModContent.BuffType<AvertorBonus>(), CalamityUtils.SecondsToFrames(20f), true);
                 player.AddBuff(ModContent.BuffType<AvertorBonus>(), CalamityUtils.SecondsToFrames(20f), true);
 
-                float heal = damage * 0.025f;
-                if ((int)heal == 0)
+                int heal = (int)Math.Round(damage * 0.025);
+                if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                     return;
 
-                if (Main.player[Main.myPlayer].lifeSteal <= 0f)
-                    return;
-
-                if (heal > CalamityMod.lifeStealCap)
-                    heal = CalamityMod.lifeStealCap;
-
-                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, player, heal, ProjectileID.VampireHeal, 1200f, 3f);
+                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, player, heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
             }
         }
     }

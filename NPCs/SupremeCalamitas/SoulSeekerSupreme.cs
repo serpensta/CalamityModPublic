@@ -57,7 +57,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.height = 40;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.canGhostHeal = false;
             NPC.damage = 50;
             NPC.defense = 60;
             NPC.DR_NERD(NormalDR);

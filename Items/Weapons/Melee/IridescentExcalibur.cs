@@ -142,7 +142,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
 
-            if (!target.canGhostHeal || player.moonLeech)
+            if (player.moonLeech)
                 return;
 
             int healAmount = Main.rand.Next(3) + 10;

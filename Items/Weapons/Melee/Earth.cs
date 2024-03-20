@@ -84,10 +84,10 @@ namespace CalamityMod.Items.Weapons.Melee
             if (target.Calamity().miscDefenseLoss < target.defense)
                 target.Calamity().miscDefenseLoss += 1;
 
-            if (!target.canGhostHeal || player.moonLeech)
+            if (player.moonLeech)
                 return;
 
-            int heal = Main.rand.Next(1, 69);
+            int heal = Main.rand.Next(1, 70);
             player.statLife += heal;
             player.HealEffect(heal);
         }

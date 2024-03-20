@@ -1636,7 +1636,7 @@ StatisNinjaBelt: {
 	DisplayName: Statis' Ninja Belt
 	Tooltip:
 		'''
-		6% increased jump speed and allows constant jumping
+		32% increased jump speed and allows constant jumping
 		Grants the ability to swim
 		Increased fall damage resistance by 35 blocks
 		Can climb walls, dash, and dodge attacks
@@ -1650,7 +1650,7 @@ StatisVoidSash: {
 	DisplayName: Statis' Void Sash
 	Tooltip:
 		'''
-		12% increased jump speed and allows constant jumping
+		32% increased jump speed and allows constant jumping
 		Grants immunity to fall damage
 		Can climb walls, dash, and dodge attacks
 		Attacks that deal less than 5% of your max life in damage will not be dodged

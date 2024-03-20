@@ -200,6 +200,10 @@ namespace CalamityMod.Items
                     break;
             }
 
+            // Allow Beam Sword to change direction when it fires, because vanilla disables it for some reason.
+            if (item.type == ItemID.BeamSword)
+                item.ChangePlayerDirectionOnShoot = true;
+
             // Apply Calamity Global Item Tweaks.
             SetDefaults_ApplyTweaks(item);
 

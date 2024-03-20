@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.autoJump = true;
-            player.jumpSpeedBoost += 0.3f;
+            player.jumpSpeedBoost += 1.6f;
             player.extraFall += 35;
             player.blackBelt = true;
             player.dashType = 1;

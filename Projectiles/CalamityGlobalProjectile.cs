@@ -1432,6 +1432,20 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            // Adjust dust to avoid lag.
+            else if (projectile.type == ProjectileID.VampireHeal)
+            {
+                projectile.HealingProjectile((int)projectile.ai[1], (int)projectile.ai[0], 4f, 15f);
+
+                int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.VampireHeal, 0f, 0f, 100);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].velocity *= 0f;
+                Main.dust[dust].position.X -= projectile.velocity.X * 0.2f;
+                Main.dust[dust].position.Y += projectile.velocity.Y * 0.2f;
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.NurseSyringeHeal)
             {
                 ref float initialSpeed = ref projectile.localAI[1];
@@ -2181,17 +2195,26 @@ namespace CalamityMod.Projectiles
                 {
                     bool primeCannonProjectile = projectile.ai[1] == 2f;
                     bool homeIn = false;
-                    float homingTime = masterMode ? 210f : 150f;
+                    float homingTime = masterMode ? 240f : 180f;
                     float spreadOutCutoffTime = 555f;
                     float homeInCutoffTime = spreadOutCutoffTime - homingTime;
-                    float minAcceleration = 0.05f;
-                    float maxAcceleration = 0.1f;
-                    float homingVelocity = 27f;
+                    float minAcceleration = masterMode ? 0.096f : 0.08f;
+                    float maxAcceleration = masterMode ? 0.144f : 0.12f;
+                    float homingVelocity = masterMode ? 30f : 25f;
+                    float maxVelocity = masterMode ? 18f : 15f;
 
-                    if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime && !primeCannonProjectile)
-                        homeIn = true;
-                    else if (projectile.velocity.Length() < (masterMode ? 20f : 15f))
-                        projectile.velocity *= 1.01f;
+                    if (!primeCannonProjectile)
+                    {
+                        if (projectile.timeLeft > homeInCutoffTime && projectile.timeLeft <= spreadOutCutoffTime)
+                            homeIn = true;
+                        else if (projectile.velocity.Length() < maxVelocity)
+                            projectile.velocity *= 1.01f;
+                    }
+                    else
+                    {
+                        if (projectile.velocity.Length() < maxVelocity)
+                            projectile.velocity *= 1.01f;
+                    }
 
                     if (homeIn)
                     {
@@ -2209,10 +2232,8 @@ namespace CalamityMod.Projectiles
 
                     if (projectile.timeLeft <= 3)
                     {
-                        projectile.position.X += projectile.width / 2;
-                        projectile.position.Y += projectile.height / 2;
-                        projectile.width = 128;
-                        projectile.height = 128;
+                        projectile.position = projectile.Center;
+                        projectile.width = projectile.height = 128;
                         projectile.position.X -= projectile.width / 2;
                         projectile.position.Y -= projectile.height / 2;
                     }
@@ -2253,6 +2274,14 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.SeedPlantera || projectile.type == ProjectileID.PoisonSeedPlantera)
                 {
+                    // For Plantera's shotgun spread.
+                    // Make the seeds faster until they hit the intended velocity to avoid unfair hits after charges.
+                    if (projectile.ai[2] > 0f)
+                    {
+                        if (projectile.velocity.Length() < projectile.ai[2])
+                            projectile.velocity *= 1.012f;
+                    }
+
                     projectile.frameCounter++;
                     if (projectile.frameCounter > 1)
                     {
@@ -2925,7 +2954,7 @@ namespace CalamityMod.Projectiles
                     if (CalamityLists.dungeonProjectileBuffList.Contains(projectile.type))
                     {
                         // ai[1] being set to 1 is done only by the Calamity usages of these projectiles in Skeletron and Skeletron Prime boss fights
-                        bool isSkeletronBossProjectile = (projectile.type == ProjectileID.RocketSkeleton || projectile.type == ProjectileID.Shadowflames) && projectile.ai[1] == 1f;
+                        bool isSkeletronBossProjectile = (projectile.type == ProjectileID.RocketSkeleton || projectile.type == ProjectileID.Shadowflames) && projectile.ai[1] > 0f;
 
                         // These projectiles will not be buffed if Golem is alive
                         bool isGolemBossProjectile = NPC.golemBoss > 0 && (projectile.type == ProjectileID.InfernoHostileBolt || projectile.type == ProjectileID.InfernoHostileBlast);
@@ -3717,7 +3746,7 @@ namespace CalamityMod.Projectiles
         public override Color? GetAlpha(Projectile projectile, Color lightColor)
         {
             if (Main.player[Main.myPlayer].Calamity().trippy)
-                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, projectile.alpha);
+                return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
 
             if (Main.LocalPlayer.Calamity().omniscience && projectile.hostile && projectile.damage > 0 && projectile.alpha < 255)
             {
@@ -3763,10 +3792,9 @@ namespace CalamityMod.Projectiles
                 float startTurningBrownGateValue = 420f;
                 float timeToReachFullBrown = 180f;
                 float timeToReachThornExplosion = startTurningBrownGateValue + timeToReachFullBrown;
-                Color initialColor = Color.White;
-                initialColor.A = (byte)projectile.alpha;
-                Color finalColor = Color.RosyBrown;
-                finalColor.A = (byte)projectile.alpha;
+                Color initialColor = lightColor;
+                Color finalColor = new Color(125, 75, 75);
+                finalColor.A = (byte)(255 - projectile.alpha);
                 if (projectile.ai[1] > startTurningBrownGateValue)
                 {
                     float colorTransitionRatio = (projectile.ai[1] - startTurningBrownGateValue) / timeToReachFullBrown;
@@ -3817,37 +3845,123 @@ namespace CalamityMod.Projectiles
                 if (projectile.spriteDirection == -1)
                     spriteEffects = SpriteEffects.FlipHorizontally;
 
-                Vector2 vector11 = new(texture.Width / 2, texture.Height / Main.projFrames[projectile.type] / 2);
-                Color color9 = new(Main.DiscoR, Main.DiscoG, Main.DiscoB, projectile.alpha);
-                Color alpha15 = projectile.GetAlpha(color9);
-
-                float offsetX = Main.screenPosition.X + (projectile.width / 2) - texture.Width * projectile.scale / 2f + vector11.X * projectile.scale;
-                float offsetY = Main.screenPosition.Y + projectile.height - texture.Height * projectile.scale / Main.projFrames[projectile.type] + 4f + vector11.Y * projectile.scale + projectile.gfxOffY;
-                for (int num213 = 0; num213 < 4; num213++)
+                Color rainbow = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
+                Color alphaColor = projectile.GetAlpha(rainbow);
+                float RGBMult = 0.99f;
+                alphaColor.R = (byte)(alphaColor.R * RGBMult);
+                alphaColor.G = (byte)(alphaColor.G * RGBMult);
+                alphaColor.B = (byte)(alphaColor.B * RGBMult);
+                alphaColor.A = (byte)(alphaColor.A * RGBMult);
+                int totalAfterimages = Main.player[Main.myPlayer].Calamity().trippyLevel == 3 ? 16 : (Main.player[Main.myPlayer].Calamity().trippyLevel == 2 ? 12 : 4);
+                for (int i = 0; i < totalAfterimages; i++)
                 {
-                    Vector2 position9 = projectile.position;
-                    float num214 = Math.Abs(projectile.Center.X - Main.player[Main.myPlayer].Center.X);
-                    float num215 = Math.Abs(projectile.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                    Vector2 position = projectile.position;
+                    float distanceFromTargetX = Math.Abs(projectile.Center.X - Main.player[Main.myPlayer].Center.X);
+                    float distanceFromTargetY = Math.Abs(projectile.Center.Y - Main.player[Main.myPlayer].Center.Y);
 
-                    if (num213 == 0 || num213 == 2)
-                        position9.X = Main.player[Main.myPlayer].Center.X + num214;
-                    else
-                        position9.X = Main.player[Main.myPlayer].Center.X - num214;
+                    float smallDistanceMult = 0.48f;
+                    float largeDistanceMult = 1.33f;
+                    bool whatTheFuck = Main.player[Main.myPlayer].Calamity().trippyLevel == 3;
 
-                    position9.X -= projectile.width / 2;
+                    switch (i)
+                    {
+                        case 0:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
 
-                    if (num213 == 0 || num213 == 1)
-                        position9.Y = Main.player[Main.myPlayer].Center.Y + num215;
-                    else
-                        position9.Y = Main.player[Main.myPlayer].Center.Y - num215;
+                        case 1:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                            break;
 
-                    int frames = texture.Height / Main.projFrames[projectile.type];
-                    int y = frames * projectile.frame;
-                    position9.Y -= projectile.height / 2;
+                        case 2:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        case 3:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            break;
+
+                        case 4: // 1 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 1f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 0f : largeDistanceMult));
+                            break;
+
+                        case 5: // 4 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 0f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 1f : smallDistanceMult));
+                            break;
+
+                        case 6: // 7 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 1f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 0f : largeDistanceMult));
+                            break;
+
+                        case 7: // 10 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 0f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 1f : smallDistanceMult));
+                            break;
+
+                        case 8: // 11 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 0f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            break;
+
+                        case 9: // 2 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y - (distanceFromTargetY * (whatTheFuck ? 0f : smallDistanceMult));
+                            break;
+
+                        case 10: // 5 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X + (distanceFromTargetX * (whatTheFuck ? 0f : smallDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            break;
+
+                        case 11: // 8 o'clock position
+                            position.X = Main.player[Main.myPlayer].Center.X - (distanceFromTargetX * (whatTheFuck ? 0.5f : largeDistanceMult));
+                            position.Y = Main.player[Main.myPlayer].Center.Y + (distanceFromTargetY * (whatTheFuck ? 0f : smallDistanceMult));
+                            break;
+
+                        case 12:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY * 0.5f;
+                            break;
+
+                        case 13:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY * 0.5f;
+                            break;
+
+                        case 14:
+                            position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY * 0.5f;
+                            break;
+
+                        case 15:
+                            position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX * 0.5f;
+                            position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY * 0.5f;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    position.X -= projectile.width / 2;
+                    position.Y -= projectile.height / 2;
+
+                    int frameHeight = texture.Height / Main.projFrames[projectile.type];
+                    int currentframeHeight = frameHeight * projectile.frame;
+                    Rectangle frame = new Rectangle(0, currentframeHeight, texture.Width, frameHeight);
+
+                    Vector2 halfSize = frame.Size() / 2;
 
                     Main.spriteBatch.Draw(texture,
-                        new Vector2(position9.X - offsetX, position9.Y - offsetY),
-                        new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, y, texture.Width, frames)), alpha15, projectile.rotation, vector11, projectile.scale, spriteEffects, 0);
+                        new Vector2(position.X - Main.screenPosition.X + (float)(projectile.width / 2) - (float)TextureAssets.Projectile[projectile.type].Width() * projectile.scale / 2f + halfSize.X * projectile.scale,
+                        position.Y - Main.screenPosition.Y + (float)projectile.height - (float)TextureAssets.Projectile[projectile.type].Height() * projectile.scale / (float)Main.projFrames[projectile.type] + 4f + halfSize.Y * projectile.scale + projectile.gfxOffY),
+                        frame, alphaColor, projectile.rotation, halfSize, projectile.scale, spriteEffects, 0f);
                 }
             }
 
@@ -4065,15 +4179,9 @@ namespace CalamityMod.Projectiles
         #endregion
 
         #region Life Steal
-        public static bool CanSpawnLifeStealProjectile(float healMultiplier, float healAmount)
-        {
-            if (healMultiplier <= 0f || (int)healAmount <= 0)
-                return false;
+        public static bool CanSpawnLifeStealProjectile(double healMultiplier, float healAmount) => healMultiplier > 0D && (int)healAmount > 0;
 
-            return true;
-        }
-
-        public static void SpawnLifeStealProjectile(Projectile projectile, Player player, float healAmount, int healProjectileType, float distanceRequired, float cooldownMultiplier)
+        public static void SpawnLifeStealProjectile(Projectile projectile, Player player, float healAmount, int healProjectileType, float distanceRequired, float cooldownMultiplier = 1f)
         {
             if (Main.player[Main.myPlayer].moonLeech)
                 return;

@@ -1,4 +1,5 @@
-﻿using CalamityMod.Projectiles.Healing;
+﻿using CalamityMod.Balancing;
+using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -61,13 +62,13 @@ namespace CalamityMod.Projectiles.Rogue
             }
 
             if (target.life <= 0)
-                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], 10, ModContent.ProjectileType<ShinobiHealOrb>(), 1200f, 0f);
+                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], 10, ModContent.ProjectileType<ShinobiHealOrb>(), BalancingConstants.LifeStealRange, 0f);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (target.statLife <= 0)
-                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], 10, ModContent.ProjectileType<ShinobiHealOrb>(), 1200f, 0f);
+                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], 10, ModContent.ProjectileType<ShinobiHealOrb>(), BalancingConstants.LifeStealRange, 0f);
         }
 
         public override void OnKill(int timeLeft)
