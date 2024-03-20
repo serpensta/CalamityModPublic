@@ -79,7 +79,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            int heal = (int)Math.Round(hit.Damage * 0.0075);
+            int heal = (int)Math.Round(hit.Damage * 0.015);
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
