@@ -551,7 +551,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                 }
 
                 // Dialogue the moment the second phase starts
-                if (NPC.localAI[2] == 60f)
+                if (NPC.localAI[2] == 60f && !bossRush)
                 {
                     string key = "Mods.CalamityMod.Status.Boss.EdgyBossText5";
                     Color messageColor = Color.Cyan;
@@ -727,9 +727,12 @@ namespace CalamityMod.NPCs.DevourerofGods
                                     calamityGlobalNPC.newAI[3] = 0f;
 
                                     // Anger message
-                                    string key = "Mods.CalamityMod.Status.Boss.EdgyBossText6";
-                                    Color messageColor = Color.Cyan;
-                                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                                    if (!bossRush)
+                                    {
+                                        string key = "Mods.CalamityMod.Status.Boss.EdgyBossText6";
+                                        Color messageColor = Color.Cyan;
+                                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                                    }
 
                                     // Summon Cosmic Guardians
                                     SoundEngine.PlaySound(AttackSound with { Pitch = AttackSound.Pitch + extrapitch }, player.Center);
@@ -1578,9 +1581,12 @@ namespace CalamityMod.NPCs.DevourerofGods
                         if (revenge)
                             spawnDoGCountdown = 10;
 
-                        string key = "Mods.CalamityMod.Status.Boss.EdgyBossText";
-                        Color messageColor = Color.Cyan;
-                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                        if (!bossRush)
+                        {
+                            string key = "Mods.CalamityMod.Status.Boss.EdgyBossText";
+                            Color messageColor = Color.Cyan;
+                            CalamityUtils.DisplayLocalizedText(key, messageColor);
+                        }
 
                         NPC.TargetClosest();
                         spawnedGuardians = true;
@@ -2885,7 +2891,7 @@ namespace CalamityMod.NPCs.DevourerofGods
             target.AddBuff(ModContent.BuffType<GodSlayerInferno>(), 200, true);
             target.AddBuff(ModContent.BuffType<WhisperingDeath>(), 600, true);
 
-            if (target.Calamity().dogTextCooldown <= 0)
+            if (target.Calamity().dogTextCooldown <= 0 && !BossRushEvent.BossRushActive)
             {
                 string text = Utils.SelectRandom(Main.rand, new string[]
                 {
