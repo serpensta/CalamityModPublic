@@ -218,8 +218,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     CurrentFrame = 0;
                 }
 
-                // Shoot dart spreads.
-                fireRate = BossRushEvent.BossRushActive ? 3f : MathHelper.Lerp(1f, 4f, 1f - totalLifeRatio);
+                // Shoot dart spreads. (Can shoot faster and more darts on death)
+                fireRate = BossRushEvent.BossRushActive ? 3f : MathHelper.Lerp(1f, death ? 3.5f : 3f, 1f - totalLifeRatio);
                 DartBurstCounter += fireRate;
                 if (DartBurstCounter >= DartBurstCounterLimit)
                 {
@@ -232,7 +232,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         damage /= 2;
                     int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
                     float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = Main.zenithWorld ? 6f : 3f;
+                    float velocity = Main.zenithWorld ? 6f : 2.5f;
                     Vector2 spinningPoint = new Vector2(0f, -velocity);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {

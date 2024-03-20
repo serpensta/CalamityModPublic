@@ -2840,7 +2840,6 @@ namespace CalamityMod.CalPlayer
 
             if (vHex)
             {
-                Player.blind = true;
                 Player.statDefense -= 20;
 
                 if (Player.wingTimeMax < 0)

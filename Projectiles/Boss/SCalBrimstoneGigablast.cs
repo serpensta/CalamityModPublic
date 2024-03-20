@@ -173,7 +173,7 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0 || Projectile.Opacity != 1f)
                 return;
 
-            target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 180, true);
+            target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 300, true);
         }
 
         public override void OnKill(int timeLeft)
