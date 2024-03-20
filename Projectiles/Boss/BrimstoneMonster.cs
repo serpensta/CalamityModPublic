@@ -23,6 +23,7 @@ namespace CalamityMod.Projectiles.Boss
     public class BrimstoneMonster : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Boss";
+        public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
 
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterSpawn");
         public static readonly SoundStyle DroneSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterDrone");
@@ -123,7 +124,7 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.soundDelay = 1125 - (choice * 225);
                 SoundEngine.PlaySound(SpawnSound, Projectile.Center);
                 if (Projectile.ai[1] == 0f && Projectile.timeLeft >= 90)
-                    RumbleSlot = Main.zenithWorld ? SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalSounds/GFBDrone") with { IsLooped = true }, Projectile.Center) : SoundEngine.PlaySound(DroneSound with { IsLooped = true }, Projectile.Center);
+                    RumbleSlot = Main.zenithWorld ? SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalSounds/GFBDrone") with { IsLooped = true }, Projectile.Center, _ => new ProjectileAudioTracker(Projectile).IsActiveAndInGame()) : SoundEngine.PlaySound(DroneSound with { IsLooped = true }, Projectile.Center, _ => new ProjectileAudioTracker(Projectile).IsActiveAndInGame());
                 Projectile.localAI[0] += 1f;
                 speedLimit = 23;
             }
@@ -156,7 +157,7 @@ namespace CalamityMod.Projectiles.Boss
                 }
 
                 if (Projectile.soundDelay <= 0 && Projectile.timeLeft >= 90)
-                    RumbleSlot = Main.zenithWorld ? SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalSounds/GFBDrone") with { IsLooped = true }, Projectile.Center) : SoundEngine.PlaySound(DroneSound with { IsLooped = true }, Projectile.Center);
+                    RumbleSlot = Main.zenithWorld ? SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/SCalSounds/GFBDrone") with { IsLooped = true }, Projectile.Center, _ => new ProjectileAudioTracker(Projectile).IsActiveAndInGame()) : SoundEngine.PlaySound(DroneSound with { IsLooped = true }, Projectile.Center, _ => new ProjectileAudioTracker(Projectile).IsActiveAndInGame());
 
                 if (Projectile.timeLeft < 90)
                 {
@@ -273,7 +274,7 @@ namespace CalamityMod.Projectiles.Boss
 
             // Check the player's speed. If they are moving fast enough, damage them more severely; this prevents trying to rush straight through the vortex.
             float playerSpeed = player.velocity.LengthSquared();
-            float speedRatio = playerSpeed / SpeedToForceMaxDamage * SpeedToForceMaxDamage;
+            float speedRatio = playerSpeed / (SpeedToForceMaxDamage * SpeedToForceMaxDamage);
 
             // Take the higher of the two to determine the damage application ratio.
             float damageApplicationRatio = MathHelper.Max(radiusRatio, speedRatio);
