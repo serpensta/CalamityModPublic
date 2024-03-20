@@ -577,6 +577,7 @@ namespace CalamityMod.CalPlayer
         public bool chaliceOfTheBloodGod = false;
         public double chaliceBleedoutBuffer = 0D;
         public double chaliceDamagePointPartialProgress = 0D;
+        public int chaliceHitOriginalDamage = 0;
         public bool elementalHeart = false;
         public bool crownJewel = false;
         public bool infectedJewel = false;
@@ -2611,6 +2612,7 @@ namespace CalamityMod.CalPlayer
 
             chaliceBleedoutBuffer = 0D;
             chaliceDamagePointPartialProgress = 0D;
+            chaliceHitOriginalDamage = 0;
 
             if (BossRushEvent.BossRushActive)
             {
