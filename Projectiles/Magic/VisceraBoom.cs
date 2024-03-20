@@ -1,13 +1,9 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Magic;
-using CalamityMod.Particles;
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
-using static System.TimeZoneInfo;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -39,12 +35,12 @@ namespace CalamityMod.Projectiles.Magic
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(ModContent.BuffType<BurningBlood>(), 90);
+            target.AddBuff(ModContent.BuffType<BurningBlood>(), 180);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(ModContent.BuffType<BurningBlood>(), 90);
+            target.AddBuff(ModContent.BuffType<BurningBlood>(), 180);
         }
     }
 }

@@ -26,12 +26,12 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             Item.width = 50;
             Item.height = 52;
-            Item.damage = 200;
+            Item.damage = 229;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 18;
             Item.useTime = 7;
             Item.useAnimation = 22;
-            Item.reuseDelay = 45;
+            Item.reuseDelay = 40;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 5f;
@@ -49,7 +49,7 @@ namespace CalamityMod.Items.Weapons.Magic
             SoundEngine.PlaySound(fire with { Volume = 0.2f, Pitch = 0.95f }, position);
             position = position + velocity.RotatedBy(-0.75f * player.direction) * 1.8f;
 
-            Projectile.NewProjectile(source, position, velocity.RotatedByRandom(0.025f), type, damage, knockback, player.whoAmI, 0f, Counter == 4 ? 1 : 0);
+            Projectile.NewProjectile(source, position, velocity.RotatedByRandom(0.025f), type, (int)(damage * (1 + (Counter - 1) * 0.2)), knockback, player.whoAmI, 0f, Counter == 4 ? 1 : 0);
             if (Counter >= 4)
                 Counter = 0;
             

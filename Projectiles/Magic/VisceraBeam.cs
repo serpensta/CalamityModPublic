@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.ignoreWater = true;
-            Projectile.penetrate = 6;
+            Projectile.penetrate = 7;
             Projectile.MaxUpdates = 100;
             Projectile.timeLeft = 900;
             Projectile.usesLocalNPCImmunity = true;
@@ -67,7 +67,7 @@ namespace CalamityMod.Projectiles.Magic
                     GeneralParticleHandler.SpawnParticle(blood);
                 }
 
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<VisceraBoom>(), (int)(Projectile.damage * 0.85f), Projectile.knockBack * 4, Projectile.owner, 0f, Projectile.ai[1]);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<VisceraBoom>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack * 4, Projectile.owner, 0f, Projectile.ai[1]);
 
                 Particle bloodsplosion = new CustomPulse(Projectile.Center, Vector2.Zero, Color.DarkRed, "CalamityMod/Particles/DetailedExplosion", Vector2.One, Main.rand.NextFloat(-15f, 15f), 0.16f, 0.87f, (int)(Viscera.BoomLifetime * 0.38f), false);
                 GeneralParticleHandler.SpawnParticle(bloodsplosion);
