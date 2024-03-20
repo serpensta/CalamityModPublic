@@ -55,12 +55,16 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Systems;
+using CalamityMod.Tiles.FurnitureAuric;
+using CalamityMod.Tiles.Ores;
 using CalamityMod.UI;
 using CalamityMod.Walls.DraedonStructures;
 using CalamityMod.World;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -5138,6 +5142,84 @@ namespace CalamityMod.NPCs
             {
                 if (pearlAura > 0)
                     npc.velocity *= 0.9f;
+            }
+
+            // Auric Ore/Repulsers reject Town NPCs and dummies
+            if ((NPCID.Sets.ActsLikeTownNPC[npc.type] || npc.townNPC) && !npc.dontTakeDamage || npc.type == NPCType<SuperDummyNPC>())
+            {
+                int auricOreID = TileType<AuricOre>();
+                int auricRepulserID = TileType<AuricRepulserPanelTile>();
+
+                // Get a list of tiles near the npc
+                // This is just Collision.GetEntityTiles but with a larger detection square because the sheer speed from auric boosts causes the detection to fail at higher speeds
+                List<Point> EdgeTiles = new List<Point>();
+                int extraDist = (int)(8 * npc.velocity.Length() / 6) + 1;
+                int left = (int)npc.position.X - extraDist;
+                int up = (int)npc.position.Y - extraDist;
+                int right = (int)npc.Right.X + extraDist;
+                int down = (int)npc.Bottom.Y + extraDist;
+                if (left % 16 == 0)
+                {
+                    left--;
+                }
+
+                if (up % 16 == 0)
+                {
+                    up--;
+                }
+
+                if (right % 16 == 0)
+                {
+                    right++;
+                }
+
+                if (down % 16 == 0)
+                {
+                    down++;
+                }
+
+                int width = right / 16 - left / 16;
+                int height = down / 16 - up / 16;
+                left /= 16;
+                up /= 16;
+                for (int i = left; i <= left + width; i++)
+                {
+                    EdgeTiles.Add(new Point(i, up));
+                    EdgeTiles.Add(new Point(i, up + height));
+                }
+
+                for (int j = up; j < up + height; j++)
+                {
+                    EdgeTiles.Add(new Point(left, j));
+                    EdgeTiles.Add(new Point(left + width, j));
+                }
+                foreach (Point touchedTile in EdgeTiles)
+                {
+                    Tile tile = Framing.GetTileSafely(touchedTile);
+                    if (!tile.HasTile || !tile.HasUnactuatedTile)
+                        continue;
+                    if (tile.TileType != auricOreID && tile.TileType != auricRepulserID)
+                        continue;
+
+                    // Force Auric Ore to animate with its crackling electricity
+                    if (tile.TileType == auricOreID)
+                    {
+                        AuricOre.Animate = true;
+                    }
+
+                    var yeetVec = Vector2.Normalize(npc.Center - touchedTile.ToWorldCoordinates());
+                    npc.velocity += yeetVec * 20f;
+                    // Speed must be clamped or they start clipping through tiles very easily
+                    float clampedSpeed = MathHelper.Clamp(npc.velocity.Length(), -40, 40);
+                    npc.velocity = npc.velocity.SafeNormalize(Vector2.Zero) * clampedSpeed;
+                    if (tile.TileType == auricOreID)
+                    {
+                        npc.SimpleStrikeNPC((int)(npc.lifeMax * 0.2f), 0);
+                        npc.AddBuff(BuffID.Electrified, 300);
+                    }
+                    SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/ExoMechs/TeslaShoot1"), npc.Center);
+                    break;
+                }
             }
         }
         #endregion
