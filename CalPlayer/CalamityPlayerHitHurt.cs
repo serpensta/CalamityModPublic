@@ -1978,6 +1978,7 @@ namespace CalamityMod.CalPlayer
             {
                 int bleedoutToApply = info.Damage - ChaliceOfTheBloodGod.MinAllowedDamage;
                 chaliceBleedoutBuffer += bleedoutToApply;
+                chaliceHitOriginalDamage = info.Damage;
                 info.Damage = ChaliceOfTheBloodGod.MinAllowedDamage;
 
                 // Defense damage is applied here.
@@ -2954,11 +2955,20 @@ namespace CalamityMod.CalPlayer
                     return;
                 }
 
+                // 19MAR2024: Ozzatron: Chalice makes you lose adrenaline based on the damage you would have suffered in total.
+                int damageToUse = hurtInfo.Damage;
+                if (chaliceOfTheBloodGod && chaliceHitOriginalDamage > 0)
+                {
+                    damageToUse = chaliceHitOriginalDamage;
+                    // Maybe at some point in the future, tracking this value will be useful elsewhere. Until then, it's only used here, so it is reset here.
+                    chaliceHitOriginalDamage = 0;
+                }
+
                 // Calculate the amount of Adrenaline to lose. This is done in 3 steps:
                 // 1. Find out how much %HP the player lost (or was absorbed by a shield).
                 // 2. Use an inverse lerp to calculate the Adrenaline loss scaling down for very small hits (5% HP or less).
                 // 3. Re-scale the lerp result into a % of Adrenaline loss from 10% (min loss) to 100%.
-                float damageMaxHPRatio = (float)hurtInfo.Damage / Player.statLifeMax2;
+                float damageMaxHPRatio = (float)damageToUse / Player.statLifeMax2;
                 float smallHitAdrenalineLossRatio = (float)Utils.GetLerpValue(0f, BalancingConstants.AdrenalineFalloffTinyHitHealthRatio, damageMaxHPRatio, true);
                 float adrenalineLossFraction = MathHelper.Lerp(BalancingConstants.MinimumAdrenalineLoss, 1f, smallHitAdrenalineLossRatio);
                 float adrenalineToLose = adrenaline * adrenalineLossFraction;
