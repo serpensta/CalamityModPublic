@@ -5104,9 +5104,15 @@ namespace CalamityMod.NPCs
             {
                 for (int d = 0; d < 20; d++)
                 {
-                    Dust.NewDustPerfect(npc.Center, Main.rand.NextBool() ? 226 : 223, new Vector2(Main.rand.NextFloat(-12f, 12f), Main.rand.NextFloat(-12f, 12f)));
+                    Particle sparks = new AltSparkParticle(npc.Center, new Vector2(Main.rand.NextFloat(-9f, 9f), Main.rand.NextFloat(-9f, 9f)), false, 45, 0.9f, Main.rand.NextBool() ? Color.Cyan : Color.SkyBlue);
+                    GeneralParticleHandler.SpawnParticle(sparks);
                 }
+                Particle boop = new CustomPulse(npc.Center, Vector2.Zero, new Color(206, 95, 212), "CalamityMod/Particles/Sparkle2", Vector2.One, Main.rand.NextFloat(-5f, 5f), 0.75f + (float)(0.04 * veriumDoomStacks), 1.5f + (float)(0.08 * veriumDoomStacks), 30);
+                GeneralParticleHandler.SpawnParticle(boop);
+
+                SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/RoverDriveBreak") { Volume = 0.6f}, npc.Center);
                 Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), 100 + (10 * veriumDoomStacks), 0, Main.myPlayer, 200f);
+                
                 veriumDoomMarked = false;
                 veriumDoomStacks = 0;
             }
