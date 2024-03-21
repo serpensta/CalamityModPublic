@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Magic
             int dustType = (int)Projectile.ai[0];
             for (int i = 0; i < 3; i = inc + 1)
             {
-                int ghostlyRed = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 60, Projectile.velocity.X, Projectile.velocity.Y, dustType, default, 1.2f);
+                int ghostlyRed = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.RedTorch, Projectile.velocity.X, Projectile.velocity.Y, dustType, default, 1.2f);
                 Main.dust[ghostlyRed].position = (Main.dust[ghostlyRed].position + Projectile.Center) / 2f;
                 Main.dust[ghostlyRed].noGravity = true;
                 Dust dust = Main.dust[ghostlyRed];
@@ -36,7 +36,7 @@ namespace CalamityMod.Projectiles.Magic
             }
             for (int j = 0; j < 2; j = inc + 1)
             {
-                int ghostlyRed = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 60, Projectile.velocity.X, Projectile.velocity.Y, dustType, default, 0.4f);
+                int ghostlyRed = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.RedTorch, Projectile.velocity.X, Projectile.velocity.Y, dustType, default, 0.4f);
                 if (j == 0)
                 {
                     Main.dust[ghostlyRed].position = (Main.dust[ghostlyRed].position + Projectile.Center * 5f) / 6f;
@@ -56,7 +56,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.Item50, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Item50, Projectile.Center);
             int inc;
             for (int i = 0; i < 20; i = inc + 1)
             {

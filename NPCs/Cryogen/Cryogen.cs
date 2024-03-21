@@ -1,4 +1,6 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Effects;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
@@ -24,16 +26,15 @@ using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
+using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityMod.NPCs.Cryogen
 {
@@ -52,6 +53,12 @@ namespace CalamityMod.NPCs.Cryogen
         public static readonly SoundStyle TransitionSound = new("CalamityMod/Sounds/NPCHit/CryogenPhaseTransitionCrack");
         public static readonly SoundStyle ShieldRegenSound = new("CalamityMod/Sounds/Custom/CryogenShieldRegenerate");
         public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/CryogenDeath");
+
+        public static Asset<Texture2D> Phase2Texture;
+        public static Asset<Texture2D> Phase3Texture;
+        public static Asset<Texture2D> Phase4Texture;
+        public static Asset<Texture2D> Phase5Texture;
+        public static Asset<Texture2D> Phase6Texture;
 
         public FireParticleSet FireDrawer = null;
 
@@ -73,7 +80,15 @@ namespace CalamityMod.NPCs.Cryogen
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
+            if (!Main.dedServ)
+            {
+                Phase2Texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Cryogen/Cryogen_Phase2", AssetRequestMode.AsyncLoad);
+                Phase3Texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Cryogen/Cryogen_Phase3", AssetRequestMode.AsyncLoad);
+                Phase4Texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Cryogen/Cryogen_Phase4", AssetRequestMode.AsyncLoad);
+                Phase5Texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Cryogen/Cryogen_Phase5", AssetRequestMode.AsyncLoad);
+                Phase6Texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Cryogen/Cryogen_Phase6", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -127,10 +142,10 @@ namespace CalamityMod.NPCs.Cryogen
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cryogen")
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cryogen")
             });
         }
 
@@ -212,7 +227,7 @@ namespace CalamityMod.NPCs.Cryogen
             bool phase7 = lifeRatio < (death ? 0.25f : 0.15f) && revenge;
 
             // Projectile and sound variables
-            int iceBlast = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneBarrage>() :  ModContent.ProjectileType<IceBlast>();
+            int iceBlast = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneBarrage>() : ModContent.ProjectileType<IceBlast>();
             int iceBomb = Main.zenithWorld ? ModContent.ProjectileType<SCalBrimstoneFireblast>() : ModContent.ProjectileType<IceBomb>();
             int iceRain = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneBarrage>() : ModContent.ProjectileType<IceRain>();
             int dustType = Main.zenithWorld ? 235 : 67;
@@ -850,7 +865,7 @@ namespace CalamityMod.NPCs.Cryogen
                             teleportLocationX = playerTileX;
                             calamityGlobalNPC.newAI[2] = playerTileY;
                             NPC.netUpdate = true;
-                            Block:
+Block:
                             ;
                         }
                     }
@@ -1230,8 +1245,29 @@ namespace CalamityMod.NPCs.Cryogen
             else
                 FireDrawer = null;
 
-            string phase = "CalamityMod/NPCs/Cryogen/Cryogen_Phase" + currentPhase;
-            Texture2D texture = ModContent.Request<Texture2D>(phase).Value;
+
+            Texture2D texture = TextureAssets.Npc[NPC.type].Value;
+            switch (currentPhase)
+            {
+                case 2:
+                    texture = Phase2Texture.Value;
+                    break;
+                case 3:
+                    texture = Phase3Texture.Value;
+                    break;
+                case 4:
+                    texture = Phase4Texture.Value;
+                    break;
+                case 5:
+                    texture = Phase5Texture.Value;
+                    break;
+                case 6:
+                    texture = Phase6Texture.Value;
+                    break;
+                default:
+                    texture = TextureAssets.Npc[NPC.type].Value;
+                    break;
+            }
 
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
@@ -1251,7 +1287,7 @@ namespace CalamityMod.NPCs.Cryogen
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
             NPC.damage = (int)(NPC.damage * NPC.GetExpertDamageMultiplier());
         }
 

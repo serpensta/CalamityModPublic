@@ -54,8 +54,8 @@ BallisticPoisonBomb: {
 	DisplayName: Ballistic Poison Bomb
 	Tooltip:
 		'''
-		Throws a sticky bomb that explodes into spikes and poison clouds
-		Stealth strikes throw three at once
+		Throws a sticky bomb that explodes into spikes and venomous clouds
+		Stealth strikes erupt into more clouds with a longer lasting venom
 		'''
 }
 
@@ -415,18 +415,6 @@ FeatherKnife: {
 		'''
 }
 
-FinalDawn: {
-	DisplayName: The Final Dawn
-	Tooltip:
-		'''
-		Attack enemies with a giant scythe swing to replenish stealth
-		Press up and attack to throw the scythe 
-		Stealth strikes perform a horizontal swing that leaves a lingering fire aura
-		Stealth strikes performed while pressing up fling yourself at the enemy and slice through them, causing homing fireballs to emerge
-		'We shall ride into the sunrise once more'
-		'''
-}
-
 FishboneBoomerang: {
 	DisplayName: Fishbone Boomerang
 	Tooltip:
@@ -630,7 +618,8 @@ JawsOfOblivion: {
 	DisplayName: Jaws of Oblivion
 	Tooltip:
 		'''
-		Throws a tight spread of six venomous reaper fangs that stick in enemies
+		Throws a tight spread of six venomous reaper teeth that stick in enemies
+		This venom can stack when more teeth are stuck in an enemy
 		Stealth strikes cause the teeth to emit a crushing shockwave on impact
 		'You're gonna need a bigger boat'
 		'''
@@ -678,6 +667,7 @@ LeviathanTeeth: {
 	Tooltip:
 		'''
 		Rapidly throws a spread of venomous teeth that stick to enemies
+		This venom can stack when more teeth are stuck in an enemy
 		Stealth strikes cause 6 very fast teeth to be thrown, ignoring gravity and spawning water blasts on hit
 		'''
 }
@@ -686,8 +676,9 @@ Lionfish: {
 	DisplayName: Lionfish
 	Tooltip:
 		'''
-		Sticks to enemies and injects a potent toxin
-		Stealth strikes are trailed by homing urchin spikes
+		Sticks to enemies and injects a potent venom
+		This venom can stack when more lionfish are stuck in an enemy
+		Stealth strikes spawn homing urchin spikes as they travel
 		'''
 }
 
@@ -881,7 +872,7 @@ ProfanedPartisan: {
 	DisplayName: Profaned Partisan
 	Tooltip:
 		'''
-		Fires an unholy spear that explodes on death
+		Fires an unholy spear that explodes on enemy hits
 		Stealth strikes spawn smaller spears to fly along side it
 		'''
 }
@@ -973,8 +964,8 @@ ScourgeoftheSeas: {
 	DisplayName: Scourge of the Seas
 	Tooltip:
 		'''
-		Snaps apart into poisonous clouds upon striking an enemy
-		Stealth strikes are additionally coated with venomous toxins
+		Snaps apart into irradiated clouds upon striking an enemy
+		Stealth strikes irradiate for longer and are additionally coated with venomous toxins
 		'''
 }
 
@@ -1217,6 +1208,18 @@ TheAtomSplitter: {
 		'''
 		Throws a quantum-superimposed javelin that strikes from numerous timelines at once
 		Stealth strikes perform far more simultaneous strikes
+		'''
+}
+
+TheFinalDawn: {
+	DisplayName: The Final Dawn
+	Tooltip:
+		'''
+		Attack enemies with a giant scythe swing to replenish stealth
+		Press up and attack to throw the scythe 
+		Stealth strikes perform a horizontal swing that leaves a lingering fire aura
+		Stealth strikes performed while pressing up fling yourself at the enemy and slice through them, causing homing fireballs to emerge
+		'We shall ride into the sunrise once more'
 		'''
 }
 

@@ -14,7 +14,7 @@ namespace CalamityMod.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-           
+
             ItemID.Sets.ExtractinatorMode[Item.type] = Item.type;
         }
 

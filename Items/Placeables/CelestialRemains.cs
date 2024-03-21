@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Placeables
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 200;
-			ItemID.Sets.SortingPriorityExtractibles[Type] = 3; // Desert Fossil
+            ItemID.Sets.SortingPriorityExtractibles[Type] = 3; // Desert Fossil
         }
 
         public override void SetDefaults()

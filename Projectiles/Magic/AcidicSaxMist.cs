@@ -1,5 +1,5 @@
+﻿using System;
 using CalamityMod.Buffs.StatDebuffs;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Magic
             if (Projectile.ai[1] == 0f)
             {
                 Projectile.ai[1] = 1f;
-                SoundEngine.PlaySound(SoundID.Item111, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item111, Projectile.Center);
             }
             if (Projectile.velocity.X < 0f)
             {

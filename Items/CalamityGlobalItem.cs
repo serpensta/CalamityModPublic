@@ -1,12 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.Potions;
+﻿using System;
+using System.IO;
 using CalamityMod.Buffs.StatBuffs;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.CalPlayer;
 using CalamityMod.Enums;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables;
-using CalamityMod.Items.Potions;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Summon;
@@ -25,9 +25,6 @@ using CalamityMod.UI.CalamitasEnchants;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using CalamityMod.Buffs.StatDebuffs;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -36,7 +33,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
-using CalamityMod.Items.Potions.Alcohol;
 
 namespace CalamityMod.Items
 {
@@ -203,6 +199,10 @@ namespace CalamityMod.Items
                     item.expert = false;
                     break;
             }
+
+            // Allow Beam Sword to change direction when it fires, because vanilla disables it for some reason.
+            if (item.type == ItemID.BeamSword)
+                item.ChangePlayerDirectionOnShoot = true;
 
             // Apply Calamity Global Item Tweaks.
             SetDefaults_ApplyTweaks(item);
@@ -503,7 +503,7 @@ namespace CalamityMod.Items
                             if (i != 0)
                             {
                                 Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(i));
-                                int rocket = Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<MiniRocket>(), (int)(damage * 0.25), 2f, player.whoAmI);
+                                int rocket = Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<ScorpioRocket>(), (int)(damage * 0.25), 2f, player.whoAmI);
                                 if (rocket.WithinBounds(Main.maxProjectiles))
                                     Main.projectile[rocket].DamageType = DamageClass.Generic;
                             }
@@ -511,14 +511,14 @@ namespace CalamityMod.Items
                     }
                 }
             }
-            if (modPlayer.harpyWingBoost && modPlayer.harpyRing)
+            if (modPlayer.harpyWingBoost && (modPlayer.harpyRing || modPlayer.angelTreads))
             {
                 if (Main.rand.NextBool(5) && !item.channel)
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
                         float spreadX = velocity.X + Main.rand.NextFloat(-0.75f, 0.75f);
-                        float spreadY = velocity.X + Main.rand.NextFloat(-0.75f, 0.75f);
+                        float spreadY = velocity.Y + Main.rand.NextFloat(-0.75f, 0.75f);
                         int feather = Projectile.NewProjectile(source, position, new Vector2(spreadX, spreadY) * 1.25f, ModContent.ProjectileType<TradewindsProjectile>(), (int)(damage * 0.3), 2f, player.whoAmI);
                         if (feather.WithinBounds(Main.maxProjectiles))
                         {
@@ -1036,6 +1036,10 @@ namespace CalamityMod.Items
             }
             else if (set == "SolarFlare")
             {
+                // Cancel out the base 12% DR
+                player.endurance -= 0.12f;
+
+                // Solar Flare armor dash overrides modded dashes by default
                 if (player.solarShields > 0)
                     modPlayer.DashID = string.Empty;
             }
@@ -1057,7 +1061,7 @@ namespace CalamityMod.Items
 
                 case ItemID.TopazRobe:
                     player.statManaMax2 -= 20;
-                    player.manaCost += 0.02f ; // 7% to 5%
+                    player.manaCost += 0.02f; // 7% to 5%
                     break;
 
                 case ItemID.SapphireRobe:
@@ -1140,6 +1144,15 @@ namespace CalamityMod.Items
                     player.GetDamage<SummonDamageClass>() -= 0.1f;
                     player.GetCritChance<MagicDamageClass>() -= 15;
                     break;
+
+                case ItemID.SolarFlareHelmet:
+                    player.GetCritChance<MeleeDamageClass>() -= 6;
+                    break;
+
+                case ItemID.VortexHelmet:
+                    player.GetDamage<RangedDamageClass>() -= 0.06f;
+                    player.GetCritChance<RangedDamageClass>() -= 2;
+                    break;
             }
         }
         #endregion
@@ -1186,9 +1199,13 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FairyBoots)
                 modPlayer.fairyBoots = true;
 
-            // Arcane and Magnet Flower buffs
-            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
+            // Mana Flower tinker buffs
+            if (item.type == ItemID.MagnetFlower)
+                player.manaCost -= 0.02f;
+            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.ManaCloak)
                 player.manaCost -= 0.04f;
+            if (item.type == ItemID.ArcaneFlower)
+                player.GetDamage<MagicDamageClass>() += 0.05f;
 
             if (item.type == ItemID.SniperScope)
             {
@@ -1206,7 +1223,7 @@ namespace CalamityMod.Items
             {
                 player.GetDamage<MeleeDamageClass>() += 0.02f;
             }
-            
+
             // Feral Claws line melee speed adjustments and nonstacking
             // First removes all their melee speed so it can be given based on which you wear without stacking
             if (item.type == ItemID.FeralClaws)
@@ -1244,39 +1261,39 @@ namespace CalamityMod.Items
             if (item.type == ItemID.SunStone)
             {
                 if (Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.MoonStone)
             {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.CelestialStone)
             {
                 player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.CelestialShell)
             {
                 player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             //Moon Charm and Moon Shell melee speed removal
-            
+
             if (item.type == ItemID.MoonCharm)
-            {    
+            {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.MoonShell)
-            {    
+            {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.TerrasparkBoots)
@@ -1556,11 +1573,11 @@ namespace CalamityMod.Items
                 /* Prehardmode = 2
                  * Hardmode = 3
                  * Post-Moon Lord = 4
-                 * Post-DoG = 6
+                 * Post-DoG = 5
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 4;
+                    player.statDefense += 3;
                 else if (NPC.downedMoonlord)
                     player.statDefense += 2;
                 else if (Main.hardMode)
@@ -1571,34 +1588,34 @@ namespace CalamityMod.Items
             if (item.prefix == PrefixID.Armored)
             {
                 /* Prehardmode = 3
-                 * Hardmode = 5
-                 * Post-Moon Lord = 6
-                 * Post-DoG = 8
+                 * Hardmode = 4
+                 * Post-Moon Lord = 5
+                 * Post-DoG = 6
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 5;
-                else if (NPC.downedMoonlord)
                     player.statDefense += 3;
-                else if (Main.hardMode)
+                else if (NPC.downedMoonlord)
                     player.statDefense += 2;
+                else if (Main.hardMode)
+                    player.statDefense += 1;
 
                 player.endurance += 0.0075f;
             }
             if (item.prefix == PrefixID.Warding)
             {
                 /* Prehardmode = 4
-                 * Hardmode = 6
-                 * Post-Moon Lord = 8
-                 * Post-DoG = 10
+                 * Hardmode = 5
+                 * Post-Moon Lord = 6
+                 * Post-DoG = 7
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 6;
+                    player.statDefense += 3;
                 else if (NPC.downedMoonlord)
-                    player.statDefense += 4;
-                else if (Main.hardMode)
                     player.statDefense += 2;
+                else if (Main.hardMode)
+                    player.statDefense += 1;
 
                 player.endurance += 0.01f;
             }
@@ -1798,8 +1815,8 @@ namespace CalamityMod.Items
         #region On Create
         public override void OnCreated(Item item, ItemCreationContext context)
         {
-			// ChoosePrefix also happens on craft so go reset it here too
-			storedPrefix = -1;
+            // ChoosePrefix also happens on craft so go reset it here too
+            storedPrefix = -1;
         }
         #endregion
 
@@ -1817,14 +1834,14 @@ namespace CalamityMod.Items
         // removed data saved on items; reforging is now a coalescing flowchart that has no RNG
         public override int ChoosePrefix(Item item, UnifiedRandom rand)
         {
-			if (storedPrefix == -1 && item.CountsAsClass<RogueDamageClass>() && (item.maxStack == 1 || item.AllowReforgeForStackableItem))
-			{
-				// Crafting (or first reforge of) a rogue weapon has a 75% chance for a random modifier, this check is done by vanilla
-				// Negative modifiers have a 66.66% chance of being voided, Annoying modifier is intentionally ignored by vanilla
-				int prefix = CalamityUtils.RandomRoguePrefix();
-				bool keepPrefix = !CalamityUtils.NegativeRoguePrefix(prefix) || Main.rand.NextBool(3);
-				return keepPrefix ? prefix : 0;
-			}
+            if (storedPrefix == -1 && item.CountsAsClass<RogueDamageClass>() && (item.maxStack == 1 || item.AllowReforgeForStackableItem))
+            {
+                // Crafting (or first reforge of) a rogue weapon has a 75% chance for a random modifier, this check is done by vanilla
+                // Negative modifiers have a 66.66% chance of being voided, Annoying modifier is intentionally ignored by vanilla
+                int prefix = CalamityUtils.RandomRoguePrefix();
+                bool keepPrefix = !CalamityUtils.NegativeRoguePrefix(prefix) || Main.rand.NextBool(3);
+                return keepPrefix ? prefix : 0;
+            }
 
             if (!CalamityConfig.Instance.RemoveReforgeRNG || Main.gameMenu || storedPrefix == -1)
                 return -1;
@@ -1896,43 +1913,43 @@ namespace CalamityMod.Items
             switch (rarity)
             {
                 case 0:
-					return Rarity0BuyPrice;
+                    return Rarity0BuyPrice;
                 case 1:
-					return Rarity1BuyPrice;
+                    return Rarity1BuyPrice;
                 case 2:
-					return Rarity2BuyPrice;
+                    return Rarity2BuyPrice;
                 case 3:
-					return Rarity3BuyPrice;
+                    return Rarity3BuyPrice;
                 case 4:
-					return Rarity4BuyPrice;
+                    return Rarity4BuyPrice;
                 case 5:
-					return Rarity5BuyPrice;
+                    return Rarity5BuyPrice;
                 case 6:
-					return Rarity6BuyPrice;
+                    return Rarity6BuyPrice;
                 case 7:
-					return Rarity7BuyPrice;
+                    return Rarity7BuyPrice;
                 case 8:
-					return Rarity8BuyPrice;
+                    return Rarity8BuyPrice;
                 case 9:
-					return Rarity9BuyPrice;
+                    return Rarity9BuyPrice;
                 case 10:
-					return Rarity10BuyPrice;
+                    return Rarity10BuyPrice;
                 case 11:
-					return Rarity11BuyPrice;
+                    return Rarity11BuyPrice;
             }
-			if (rarity == ModContent.RarityType<Turquoise>())
-				return RarityTurquoiseBuyPrice;
-			if (rarity == ModContent.RarityType<PureGreen>())
-				return RarityPureGreenBuyPrice;
-			if (rarity == ModContent.RarityType<DarkBlue>())
-				return RarityDarkBlueBuyPrice;
-			if (rarity == ModContent.RarityType<Violet>())
-				return RarityVioletBuyPrice;
-			if (rarity == ModContent.RarityType<HotPink>())
-				return RarityHotPinkBuyPrice;
+            if (rarity == ModContent.RarityType<Turquoise>())
+                return RarityTurquoiseBuyPrice;
+            if (rarity == ModContent.RarityType<PureGreen>())
+                return RarityPureGreenBuyPrice;
+            if (rarity == ModContent.RarityType<DarkBlue>())
+                return RarityDarkBlueBuyPrice;
+            if (rarity == ModContent.RarityType<Violet>())
+                return RarityVioletBuyPrice;
+            if (rarity == ModContent.RarityType<HotPink>())
+                return RarityHotPinkBuyPrice;
 
-			// Return 0 if it's not a progression based or other mod's rarity
-			return 0;
+            // Return 0 if it's not a progression based or other mod's rarity
+            return 0;
         }
 
         public static int GetBuyPrice(Item item)

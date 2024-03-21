@@ -5,8 +5,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CalamityMod.Balancing;
-using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.CalPlayer;
 using CalamityMod.CalPlayer.Dashes;
 using CalamityMod.Cooldowns;
@@ -14,6 +12,7 @@ using CalamityMod.DataStructures;
 using CalamityMod.Effects;
 using CalamityMod.Events;
 using CalamityMod.FluidSimulation;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Items.Dyes.HairDye;
 using CalamityMod.Items.VanillaArmorChanges;
@@ -34,7 +33,6 @@ using CalamityMod.NPCs.ExoMechs.Artemis;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.NPCs.Leviathan;
-using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.OldDuke;
 using CalamityMod.NPCs.Perforator;
 using CalamityMod.NPCs.PlaguebringerGoliath;
@@ -110,17 +108,21 @@ namespace CalamityMod
         public static Texture2D SulphurSeaSkyFront;
         public static Texture2D SulphurSeaSurface;
 
+        //Destroyer glowmasks
+        public static Asset<Texture2D>[] DestroyerGlowmasks = new Asset<Texture2D>[3];
+
         // DR data structure
         public static SortedDictionary<int, float> DRValues;
 
         // Boss Kill Time data structure
         public static SortedDictionary<int, int> bossKillTimes;
 
-        // Life steal cap
-        public const int lifeStealCap = 10;
-
         // Speedrun timer
         internal static Stopwatch SpeedrunTimer = new Stopwatch();
+
+        // External flag to disable non-Revengeance boss AI edits
+        // This can be edited by other mods using reflection to prevent compatibility issues
+        public static bool ExternalFlag_DisableNonRevBossAI = false;
 
         internal static CalamityMod Instance;
 
@@ -207,14 +209,15 @@ namespace CalamityMod
             Mount.drillPickPower = 225;
 
             // Make Graveyard biomes require more Gravestones
-            SceneMetrics.GraveyardTileMax = 88;
-            SceneMetrics.GraveyardTileMin = 68;
-            SceneMetrics.GraveyardTileThreshold = 80;
+            SceneMetrics.GraveyardTileMax = 60;
+            SceneMetrics.GraveyardTileMin = 40;
+            SceneMetrics.GraveyardTileThreshold = 52;
 
             if (!Main.dedServ)
             {
                 LoadClient();
                 GeneralParticleHandler.Load();
+                PrimitiveRenderer.Initialize();
                 ForegroundDrawing.ForegroundManager.Load();
 
                 // Wikithis support
@@ -285,6 +288,11 @@ namespace CalamityMod
             SulphurSeaSky = ModContent.Request<Texture2D>("CalamityMod/Skies/SulphurSeaSky", AssetRequestMode.ImmediateLoad).Value;
             SulphurSeaSkyFront = ModContent.Request<Texture2D>("CalamityMod/Skies/SulphurSeaSkyFront", AssetRequestMode.ImmediateLoad).Value;
             SulphurSeaSurface = ModContent.Request<Texture2D>("CalamityMod/Skies/SulphurSeaSurface", AssetRequestMode.ImmediateLoad).Value;
+
+            //Destroyer glowmasks
+            DestroyerGlowmasks[0] = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerHeadGlow", AssetRequestMode.AsyncLoad);
+            DestroyerGlowmasks[1] = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerBodyGlow", AssetRequestMode.AsyncLoad);
+            DestroyerGlowmasks[2] = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerTailGlow", AssetRequestMode.AsyncLoad);
 
             // TODO -- Sky shaders should probably be loaded in a ModSystem
             Filters.Scene["CalamityMod:DevourerofGodsHead"] = new Filter(new DoGScreenShaderData("FilterMiniTower").UseColor(0.4f, 0.1f, 1.0f).UseOpacity(0.5f), EffectPriority.VeryHigh);

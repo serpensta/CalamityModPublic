@@ -15,7 +15,7 @@ namespace CalamityMod.Items.Tools
 
         public override void SetStaticDefaults()
         {
-                       ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         public override void SetDefaults()
@@ -29,8 +29,6 @@ namespace CalamityMod.Items.Tools
             Item.hammer = HammerPower;
             Item.axe = AxePower;
             Item.tileBoost += 5;
-
-            Item.scale = 1.5f;
             Item.DamageType = DamageClass.Melee;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;

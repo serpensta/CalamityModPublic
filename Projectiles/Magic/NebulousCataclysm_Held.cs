@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items.Weapons.Magic;
+﻿using System;
+using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Magic
 
             bool shoot = CurrentFrame == ShootFrame && Projectile.ai[0] == 0f;
             bool ableToShoot = true;
-            bool weaponInUse = Owner.channel && !Owner.noItems && !Owner.CCed;
+            bool weaponInUse = !Owner.CantUseHoldout();
             int manaCost = (int)(30f * Owner.manaCost);
             Vector2 halvedSize = Projectile.Size / 2f;
             Vector2 staffOffset = halvedSize + new Vector2(24f, 24f);
@@ -104,7 +104,7 @@ namespace CalamityMod.Projectiles.Magic
                     }
 
                     if (ableToShoot)
-                        SoundEngine.PlaySound(SoundID.Item117, Projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item117, Projectile.Center);
                 }
 
                 if (Main.myPlayer == Projectile.owner && ableToShoot)

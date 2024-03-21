@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System;
+using CalamityMod.Items.Materials;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -18,7 +18,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.width = 60;
             Item.height = 26;
             Item.damage = 150;
-            Item.DamageType = DamageClass.Ranged;          
+            Item.DamageType = DamageClass.Ranged;
             Item.useTime = 2;
             Item.useAnimation = 24;
             Item.reuseDelay = 10;

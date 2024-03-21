@@ -42,11 +42,11 @@ namespace CalamityMod.Projectiles.Melee
 
             // Determine frames. Once the maximum frame is reached the projectile dies.
             Projectile.frameCounter++;
-            if (Projectile.frameCounter % 8 == 7)
+            if (Projectile.frameCounter % 5 == 4)
                 Projectile.frame++;
             if (Projectile.frame >= 18)
                 Projectile.Kill();
-            
+
             // Exponentially accelerate.
             Projectile.scale *= Terratomere.ExplosionExpandFactor;
             Projectile.Opacity = Utils.GetLerpValue(5f, 36f, Projectile.timeLeft, true);

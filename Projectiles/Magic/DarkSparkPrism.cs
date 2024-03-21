@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -120,14 +120,13 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.soundDelay = 10;
                 Projectile.soundDelay *= 2;
                 if (Projectile.ai[0] != 1f)
-                    SoundEngine.PlaySound(SoundID.Item15, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item15, Projectile.Center);
             }
 
             if (shouldHitChargedUp && Main.myPlayer == Projectile.owner)
             {
                 bool hasMana = !shouldHitNotCharged || player.CheckMana(player.ActiveItem(), -1, true, false);
-                bool canUseItem = player.channel && hasMana && !player.noItems && !player.CCed;
-                if (canUseItem)
+                if (!player.CantUseHoldout() && hasMana)
                 {
                     if (Projectile.ai[0] == 1f)
                     {

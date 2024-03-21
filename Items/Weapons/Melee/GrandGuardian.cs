@@ -38,13 +38,20 @@ namespace CalamityMod.Items.Weapons.Melee
             if (target.Calamity().miscDefenseLoss < target.defense)
                 target.Calamity().miscDefenseLoss += 1;
 
-            if (target.Calamity().miscDefenseLoss >= target.defense && target.canGhostHeal && !player.moonLeech)
-            {
-                player.statLife += 4;
-                player.HealEffect(4);
-            }
-
             OnHitEffects(player, target.Center, target.life, target.lifeMax, Item.knockBack, Item.damage);
+
+            if (target.Calamity().miscDefenseLoss >= target.defense)
+            {
+                if (player.moonLeech || player.lifeSteal <= 0f || target.lifeMax <= 5)
+                    return;
+
+                int heal = 6;
+                player.lifeSteal -= heal;
+                player.statLife += heal;
+                player.HealEffect(heal);
+                if (player.statLife > player.statLifeMax2)
+                    player.statLife = player.statLifeMax2;
+            }
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
@@ -60,7 +67,7 @@ namespace CalamityMod.Items.Weapons.Melee
             StatModifier playerMeleeDmg = player.GetTotalDamage<MeleeDamageClass>();
             int rainbowBoomDamage = (int)playerMeleeDmg.ApplyTo(damage * 0.5f);
             int rainBoltDamage = (int)playerMeleeDmg.ApplyTo(damage * 0.75f);
-            
+
             Projectile.NewProjectile(source, targetPos, Vector2.Zero, ModContent.ProjectileType<RainbowBoom>(), rainbowBoomDamage, 0f, player.whoAmI);
 
             if (targetLife <= (targetMaxLife * 0.5f) && player.ownedProjectileCounts[ModContent.ProjectileType<RainBolt>()] < 3)
@@ -85,7 +92,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool(3))
             {
-                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, 66, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
+                int dust = Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, DustID.RainbowTorch, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
                 Main.dust[dust].noGravity = true;
             }
         }

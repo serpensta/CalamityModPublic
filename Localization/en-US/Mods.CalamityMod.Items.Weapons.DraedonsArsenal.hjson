@@ -68,6 +68,7 @@ HydraulicVoltCrasher: {
 	Tooltip:
 		'''
 		An electrically charged jackhammer which shocks all nearby foes on hit
+		Press <right> to use without hammering down walls
 		[c/1FFBFF:'A device made to electrically stamp metal plates, instantly fusing them.]
 		[c/1FFBFF:Naturally, it can also function as a devastating weapon.']
 		'''

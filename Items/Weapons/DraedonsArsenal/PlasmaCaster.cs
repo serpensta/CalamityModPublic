@@ -1,10 +1,10 @@
-﻿using CalamityMod.CustomRecipes;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.DraedonsArsenal;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         public const int BaseDamage = 705;
         public override void SetStaticDefaults()
         {
-           
+
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 

@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Diagnostics.Metrics;
+using System.Security.Policy;
+using CalamityMod.Buffs.StatDebuffs;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.Buffs.StatDebuffs;
-using System.Security.Policy;
-using System;
-using System.Diagnostics.Metrics;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -130,7 +130,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             for (int index1 = 0; index1 < 3; ++index1)
             {
-                int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 76);
+                int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Snow);
                 Main.dust[index2].noGravity = true;
                 Main.dust[index2].noLight = true;
                 Main.dust[index2].scale = 0.7f;

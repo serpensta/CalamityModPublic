@@ -1,7 +1,7 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 namespace CalamityMod.Projectiles.Melee
@@ -99,7 +99,7 @@ namespace CalamityMod.Projectiles.Melee
             }
             if (Projectile.ai[0] <= 0f)
             {
-                float swaySize = 0.104719758f;
+                float swaySize = MathHelper.Pi / 30f;
                 float smolWidth = (float)Projectile.width / 5f;
                 smolWidth *= 2f;
                 float projXChange = (float)(Math.Cos((double)(swaySize * -(double)Projectile.ai[0])) - 0.5) * smolWidth;

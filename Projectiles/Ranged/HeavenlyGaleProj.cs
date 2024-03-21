@@ -1,14 +1,14 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Particles;
+using CalamityMod.Projectiles.BaseProjectiles;
+using CalamityMod.Sounds;
 using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using CalamityMod.Sounds;
-using CalamityMod.Projectiles.BaseProjectiles;
-using CalamityMod.Particles;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Ranged
 {

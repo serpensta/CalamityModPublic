@@ -1,11 +1,11 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
 {
-    public class CosmicShivAura : ModProjectile
+    public class CosmicShivAura : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Melee";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
@@ -36,10 +36,11 @@ namespace CalamityMod.Projectiles.Melee
         public override void AI()
         {
             // Unexist with target
-            if (target is null || !target.active) {
+            if (target is null || !target.active)
+            {
                 Projectile.Kill();
             }
- 
+
             Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center;     // Stay with target
 
             if (Projectile.ai[1] == CurrentSwordTimer)

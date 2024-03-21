@@ -12,7 +12,7 @@ namespace CalamityMod.Items.Armor.Victide
         public new string LocalizationCategory => "Items.Armor.PreHardmode";
         public override void SetStaticDefaults()
         {
-           
+
             if (Main.netMode != NetmodeID.Server)
             {
                 var equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Legs);

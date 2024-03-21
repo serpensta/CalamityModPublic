@@ -31,7 +31,7 @@ namespace CalamityMod.Items
                     return false;
                 return (NPC.downedMechBoss1.ToInt() + NPC.downedMechBoss2.ToInt() + NPC.downedMechBoss3.ToInt()) >= 2;
             }
-            
+
             switch (item.type)
             {
                 #region Boss Treasure Bags
@@ -132,6 +132,7 @@ namespace CalamityMod.Items
 
                 case ItemID.QueenSlimeBossBag:
                     loot.Add(ItemID.SoulofLight, 1, 15, 20); // 100% 15-20 Soul of Light
+                    loot.Add(ItemID.PinkGel, 1, 15, 20); // 100% 15-20 Pink Gel
                     loot.AddRevBagAccessories();
                     loot.Add(ModContent.ItemType<ThankYouPainting>(), ThankYouPainting.DropInt);
                     break;
@@ -309,7 +310,7 @@ namespace CalamityMod.Items
                 case ItemID.DungeonFishingCrate:
                 case ItemID.DungeonFishingCrateHard:
                     loot.AddIf(() => NPC.downedPlantBoss, ItemID.Ectoplasm, 10, 1, 5); // 10% 1-5 Ectoplasm
-                    loot.AddIf(() => DownedBossSystem.downedPolterghast, ModContent.ItemType<Polterplasm>(), 10, 1, 5); // 10% 1-5 Polterplasm
+                    loot.AddIf(() => DownedBossSystem.downedPolterghast, ModContent.ItemType<Necroplasm>(), 10, 1, 5); // 10% 1-5 Necroplasm
                     break;
 
                 case ItemID.JungleFishingCrate:
@@ -362,7 +363,7 @@ namespace CalamityMod.Items
                 case ItemID.GoodieBag:
                     RemoveBatHookFromGoodieBag(loot);
                     break;
-                #endregion
+                    #endregion
             }
         }
         #endregion

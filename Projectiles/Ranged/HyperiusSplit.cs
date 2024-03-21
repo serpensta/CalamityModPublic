@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,69 +9,91 @@ namespace CalamityMod.Projectiles.Ranged
     public class HyperiusSplit : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Ranged";
-        public override string Texture => "CalamityMod/Projectiles/Ranged/HyperiusBulletProj";
+        public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
         private Color currentColor = Color.Black;
-
-        public override void SetStaticDefaults()
-        {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-        }
-
+        private int rotDirection = 1;
+        private float rotIntensity;
+        private bool rotPhase2 = false;
         public override void SetDefaults()
         {
-            // Intentionally large bullet hitbox to make Hyperius swarm more forgiving with hits
-            Projectile.width = 8;
-            Projectile.height = 8;
+            Projectile.width = 12;
+            Projectile.height = 12;
             Projectile.aiStyle = ProjAIStyleID.Arrow;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.tileCollide = false;
-            Projectile.penetrate = 1;
-            Projectile.timeLeft = 360;
-            Projectile.extraUpdates = 1;
+            Projectile.penetrate = 2;
+            Projectile.timeLeft = 500;
+            Projectile.extraUpdates = 4;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 10 * Projectile.extraUpdates;
+            Projectile.alpha = 255;
+            Projectile.ignoreWater = true;
             AIType = ProjectileID.Bullet;
         }
 
         public override void AI()
         {
+            Player Owner = Main.player[Projectile.owner];
+            float targetDist = Vector2.Distance(Owner.Center, Projectile.Center);
+
+            Projectile.localAI[0]++;
             if (currentColor == Color.Black)
             {
-                int startPoint = Main.rand.Next(6);
-                Projectile.localAI[0] = startPoint;
-                currentColor = HyperiusBulletProj.GetStartingColor(startPoint);
+                Projectile.alpha = 255;
+                rotDirection = Main.rand.NextBool() ? 1 : -1;
+                rotIntensity = Main.rand.NextFloat(0.5f, 1.5f);
+                Projectile.timeLeft = Main.rand.Next(250, 300 + 1);
+                switch (Projectile.ai[2])
+                {
+                    case 4: // Yellow shot
+                        currentColor = Color.Yellow * 0.65f;
+                        break;
+                    case 3: // Magenta shot
+                        currentColor = Color.Magenta * 0.65f;
+                        break;
+                    case 2: // Red shot
+                        currentColor = Color.Red * 0.65f;
+                        break;
+                    case 1: // Blue shot
+                        currentColor = Color.Cyan * 0.65f;
+                        break;
+                    default: // Green shot
+                        currentColor = Color.Lime * 0.65f;
+                        break;
+                }
             }
-            HyperiusBulletProj.Visuals(Projectile, ref currentColor);
-        }
+            if (targetDist < 1200f)
+            {
+                GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center - Projectile.velocity, -Projectile.velocity * Main.rand.NextFloat(0.3f, 0.9f), false, 3, 0.55f, currentColor, true, true);
+                GeneralParticleHandler.SpawnParticle(orb);
+            }
 
-        // This projectile is always fullbright.
-        public override Color? GetAlpha(Color lightColor)
-        {
-            return currentColor;
-        }
+            if (Projectile.timeLeft == 180)
+                rotPhase2 = true;
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            if (Projectile.timeLeft == 360)
-                return false;
-            CalamityUtils.DrawAfterimagesFromEdge(Projectile, 0, lightColor);
-            return false;
+            if (rotPhase2)
+            {
+                rotIntensity *= 1.001f;
+                Projectile.velocity *= 0.997f;
+                Projectile.velocity = Projectile.velocity.RotatedBy(-0.025f * rotIntensity * rotDirection);
+            }
+            else
+            {
+                Projectile.velocity = Projectile.velocity.RotatedBy(0.015f * rotIntensity * rotDirection);
+            }
         }
-
         public override void OnKill(int timeLeft)
         {
-            const int killDust = 3;
-            int[] dustTypes = new int[] { 60, 61, 59 };
-            for (int i = 0; i < killDust; ++i)
+            for (int b = 0; b < 2; b++)
             {
-                int dustType = dustTypes[Main.rand.Next(3)];
-                float scale = Main.rand.NextFloat(0.4f, 0.9f);
-                float velScale = Main.rand.NextFloat(3f, 5.5f);
-                int dustID = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
-                Main.dust[dustID].noGravity = true;
-                Main.dust[dustID].scale = scale;
-                Main.dust[dustID].velocity *= velScale;
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, 66, new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.2f, 1.5f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.5f, 1.1f);
+                dust.color = currentColor;
+                dust.fadeIn = 0;
             }
         }
+        public override bool? CanDamage() => Projectile.localAI[0] < 20 ? false : null;
     }
 }

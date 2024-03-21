@@ -3,13 +3,13 @@ AdamAcceleratorBeam.DisplayName: Adamantite Particle Beam
 AMR2.DisplayName: AMR
 AMRShot.DisplayName: AMR
 AngelicBeam.DisplayName: Angelic Beam
+AnimosityBullet.DisplayName: Brimstone Round
 AquaBlast.DisplayName: Aqua Blast
 AquaBlastToxic.DisplayName: Aqua Blast Toxic
 Aquashard.DisplayName: Aquashard
 AquashardSplit.DisplayName: Aquashard
 ArcherfishRing.DisplayName: Archerfish Ring
 ArcherfishShot.DisplayName: Water Round
-ArcticArrowProj.DisplayName: Arctic Arrow
 AstralCannonProjectile.DisplayName: Astral Crystal
 AstralRound.DisplayName: Astral Round
 AstralSandgun.DisplayName: Astral Sandgun
@@ -22,7 +22,6 @@ BallistaGreatArrow.DisplayName: Ballista Great Arrow
 BarinadeArrow.DisplayName: Fin Arrow
 BeeRPG.DisplayName: Bee RPG
 BigCoral.DisplayName: Big Coral
-BigNuke.DisplayName: Big Nuke
 BlightFlames.DisplayName: Blight Flames
 BlissfulBombardierDustProjectile.DisplayName: Holy Flare Dust
 BloodBoilerFire.DisplayName: Blood Fire
@@ -45,6 +44,7 @@ ChargedBlast.DisplayName: Blast
 ChargedBlast2.DisplayName: Blast
 ChickenExplosion.DisplayName: Kentucky Fried Explosion
 ChickenRocket.DisplayName: Chicken Rocket
+CinderArrowProj.DisplayName: Cinder Arrow
 ClamorRifleProj.DisplayName: Clamor Bolt
 ClamorRifleProjSplit.DisplayName: Clamor Bolt
 ClaretCannonProj.DisplayName: Claret Cannon
@@ -68,8 +68,8 @@ DWArrow.DisplayName: Death's Arrow
 ElementalFire.DisplayName: Elemental Fire
 ElementalFlare.DisplayName: Elemental Flare
 ElysianArrowProj.DisplayName: Elysian Arrow
+ElysianArrowRain.DisplayName: Elysian Light
 EmesisGore.DisplayName: Rotten Gore
-EnhancedNanoRoundProj.DisplayName: Enhanced Nano Round
 EssenceFire.DisplayName: God Slayer Fire
 ExoCrystalArrow.DisplayName: Exo Crystal
 ExoFire.DisplayName: Exo Flames
@@ -100,6 +100,7 @@ HeavenlyGaleProj.DisplayName: Heavenly Gale
 HighExplosivePeanutShell.DisplayName: High Explosive Peanut Shell
 HiveBomb.DisplayName: Hive Bomb
 HiveMissile.DisplayName: Hive Missile
+HiveNuke.DisplayName: Hive Nuke
 HolyFireBulletProj.DisplayName: Holy Fire Bullet
 HydraHead.DisplayName: Hydra Head
 HydraHeadLaunch.DisplayName: Hydra Head
@@ -107,8 +108,8 @@ HydrasBlood.DisplayName: Hydra's Blood
 HyperiusBulletProj.DisplayName: Hyperius Bullet
 HyperiusSplit.DisplayName: Hyperius Bad Time
 IcicleArrowProj.DisplayName: Icicle Arrow
-IcyBulletProj.DisplayName: Icy Bullet
-IlluminatedBullet.DisplayName: Illuminated Bullet
+HailstormBulletProj.DisplayName: Hailstorm Bullet
+HallowPointRoundProj.DisplayName: Hallow-Point Round
 ImpactRound.DisplayName: Impact Round
 KarasawaShot.DisplayName: Karasawa Shot
 LeafArrow.DisplayName: Leaf Arrow
@@ -126,12 +127,9 @@ MeowCreature.DisplayName: the creature :3
 MeowFire.DisplayName: Purr Fire
 MineralMortarProjectile.DisplayName: Onyx Bomb
 MiniatureFolly.DisplayName: Miniature Folly
-MiniRocket.DisplayName: Rocket
 MiniSharkron.DisplayName: Mini Sharkron
 MistArrow.DisplayName: Mist Arrow
 MortarRoundProj.DisplayName: Mortar
-Nanomachine.DisplayName: Nanomachine
-NapalmArrowProj.DisplayName: Napalm Arrow
 NeedlerProj.DisplayName: Needle
 NorfleetComet.DisplayName: Comet
 NorfleetExplosion.DisplayName: Explosion
@@ -176,6 +174,8 @@ SandstormBullet.DisplayName: Sandstorm
 ScorchedEarthBlast.DisplayName: Earth Scorcher
 ScorchedEarthClusterBomb.DisplayName: Cluster Bomb
 ScorchedEarthRocket.DisplayName: Rocket
+ScorpioRocket.DisplayName: Nano Missile
+ScorpioLargeRocket.DisplayName: Nano Nuke
 SeaDragonMuzzleBlast.DisplayName: Seadragon Muzzle Blast
 SeaDragonRocket.DisplayName: Seadragon RPG
 SeasSearingBubble.DisplayName: Searing Bubble
@@ -244,3 +244,6 @@ WaterSpout.DisplayName: Spout
 WulfrumScrapBullet.DisplayName: High Speed Scrap
 DragonsBreathFlames.DisplayName: Draconic Flames
 DragonsBreathMag.DisplayName: Dragons Breath Cartridge
+FlakKrakenProjectile.DisplayName: Flak Kraken
+FlakToxicannonProjectile.DisplayName: Flak Toxicannon
+VanquisherArrowProj.DisplayName: Vanquisher Arrow Proj

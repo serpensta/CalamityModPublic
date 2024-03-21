@@ -1,10 +1,10 @@
-﻿using Terraria.DataStructures;
+﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
-using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -24,7 +24,6 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = Item.height = 52;
             Item.damage = 70;
             Item.DamageType = DamageClass.Melee;
-            Item.scale = 1.5f;
             Item.useAnimation = Item.useTime = 28;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;

@@ -1,5 +1,7 @@
 ﻿using CalamityMod.CalPlayer;
+using CalamityMod.CalPlayer.Dashes;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ID;
 using CalamityMod.CalPlayer.Dashes;

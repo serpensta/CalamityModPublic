@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.Graphics.Shaders;
+﻿using System.Collections.Generic;
+using CalamityMod.Graphics.Primitives;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+using Terraria;
+using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
 {
@@ -11,8 +12,6 @@ namespace CalamityMod.Projectiles.Melee
     {
         public new string LocalizationCategory => "Projectiles.Melee";
         public Vector2[] ControlPoints;
-        
-        public PrimitiveTrail SlashDrawer = null;
 
         public bool Flipped => Projectile.ai[0] == 1f;
 
@@ -46,9 +45,6 @@ namespace CalamityMod.Projectiles.Melee
         
         public override bool PreDraw(ref Color lightColor)
         {
-            // Initialize the primitive drawer.
-            SlashDrawer ??= new(SlashWidthFunction, SlashColorFunction, null, GameShaders.Misc["CalamityMod:ExobladeSlash"]);
-
             // Draw the slash effect.
             Main.spriteBatch.EnterShaderRegion();
             
@@ -59,7 +55,7 @@ namespace CalamityMod.Projectiles.Melee
                 points.Add(ControlPoints[i] + ControlPoints[i].SafeNormalize(Vector2.Zero) * (Projectile.scale - 1f) * 40f);
 
             for (int i = 0; i < 3; i++)
-                SlashDrawer.Draw(points, Projectile.Center - Main.screenPosition, 65);
+                PrimitiveRenderer.RenderTrail(points, new(SlashWidthFunction, SlashColorFunction, (_) => Projectile.Center, shader: GameShaders.Misc["CalamityMod:ExobladeSlash"]), 65);
 
             Main.spriteBatch.ExitShaderRegion();
             return false;

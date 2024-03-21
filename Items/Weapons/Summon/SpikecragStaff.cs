@@ -1,10 +1,10 @@
-﻿using Terraria.DataStructures;
+﻿using System.Collections.Generic;
 using CalamityMod.Projectiles.Summon;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 
 namespace CalamityMod.Items.Weapons.Summon
 {

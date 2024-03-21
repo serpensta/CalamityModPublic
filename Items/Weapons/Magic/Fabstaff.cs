@@ -40,12 +40,12 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.shootSpeed = 13.5f;
         }
 
-        
+
         public override void AddRecipes()
         {
             CreateRecipe().
                 AddIngredient(ItemID.RainbowRod).
-                AddIngredient<Polterplasm>(10).
+                AddIngredient<Necroplasm>(10).
                 AddIngredient<ShadowspecBar>(5).
                 AddTile<DraedonsForge>().
                 Register();

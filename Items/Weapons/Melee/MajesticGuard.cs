@@ -11,7 +11,6 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 100;
             Item.height = 100;
-            Item.scale = 1.5f;
             Item.damage = 70;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 22;
@@ -30,14 +29,17 @@ namespace CalamityMod.Items.Weapons.Melee
             if (target.Calamity().miscDefenseLoss < target.defense)
                 target.Calamity().miscDefenseLoss += 1;
 
-            // Healing effect does not trigger versus dummies
-            if (player.moonLeech)
-                return;
-
-            if (target.Calamity().miscDefenseLoss >= target.defense && target.canGhostHeal)
+            if (target.Calamity().miscDefenseLoss >= target.defense)
             {
-                player.statLife += 3;
-                player.HealEffect(3);
+                if (player.moonLeech || player.lifeSteal <= 0f || target.lifeMax <= 5)
+                    return;
+
+                int heal = 3;
+                player.lifeSteal -= heal;
+                player.statLife += heal;
+                player.HealEffect(heal);
+                if (player.statLife > player.statLifeMax2)
+                    player.statLife = player.statLifeMax2;
             }
         }
 

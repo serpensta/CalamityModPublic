@@ -42,7 +42,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             SoundEngine.PlaySound(SoundID.Item38, player.Center);
-            
+
             // Really jammed in GFB
             if (Main.zenithWorld)
                 return Main.rand.NextBool(5);

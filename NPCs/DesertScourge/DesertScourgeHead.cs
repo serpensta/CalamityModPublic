@@ -1,4 +1,6 @@
-﻿using CalamityMod.Events;
+﻿using System;
+using System.IO;
+using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Vanity;
 using CalamityMod.Items.LoreItems;
@@ -18,15 +20,13 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace CalamityMod.NPCs.DesertScourge
 {
@@ -36,6 +36,10 @@ namespace CalamityMod.NPCs.DesertScourge
         private int biomeEnrageTimer = CalamityGlobalNPC.biomeEnrageTimerMax;
         private bool TailSpawned = false;
         public bool playRoarSound = false;
+
+        public const float SegmentVelocity_Normal = 8f;
+        public const float SegmentVelocity_Expert = 10f;
+        public const float SegmentVelocity_Master = 12f;
 
         public static readonly SoundStyle RoarSound = new("CalamityMod/Sounds/Custom/DesertScourgeRoar");
 
@@ -53,7 +57,7 @@ namespace CalamityMod.NPCs.DesertScourge
             value.Position.X += 95;
             value.Position.Y += 45;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
-			NPCID.Sets.MPAllowedEnemies[Type] = true;
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
         public override void SetDefaults()
@@ -107,10 +111,10 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] 
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-				new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DesertScourge")
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.DesertScourge")
             });
         }
 
@@ -134,6 +138,7 @@ namespace CalamityMod.NPCs.DesertScourge
         {
             bool bossRush = BossRushEvent.BossRushActive;
             bool expertMode = Main.expertMode || bossRush;
+            bool masterMode = Main.masterMode || bossRush;
             bool revenge = CalamityWorld.revenge || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
@@ -177,19 +182,19 @@ namespace CalamityMod.NPCs.DesertScourge
             bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
             bool quickFall = NPC.Calamity().newAI[1] == 2f;
 
-            float speed = 0.09f;
-            float turnSpeed = 0.06f;
+            float speed = death ? 0.15f : 0.12f;
+            float turnSpeed = death ? 0.1f : 0.08f;
 
-            if (expertMode)
+            if (revenge)
             {
-                float velocityScale = death ? 0.12f : 0.06f;
+                float velocityScale = death ? 0.08f : 0.06f;
                 speed += velocityScale * (1f - lifeRatio);
-                float accelerationScale = death ? 0.075f : 0.05f;
+                float accelerationScale = death ? 0.05f : 0.04f;
                 turnSpeed += accelerationScale * (1f - lifeRatio);
             }
 
-            speed += 0.12f * enrageScale;
-            turnSpeed += 0.06f * enrageScale;
+            speed += 0.1f * enrageScale;
+            turnSpeed += 0.05f * enrageScale;
 
             if (Main.getGoodWorld)
             {
@@ -215,7 +220,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                // become moist if in an aquatic biome
+                // Become moist if in an aquatic biome
                 if (Main.zenithWorld && (player.ZoneBeach || player.Calamity().ZoneAbyss || player.Calamity().ZoneSunkenSea || player.Calamity().ZoneSulphur) && NPC.CountNPCS(ModContent.NPCType<AquaticScourgeHead>()) < 1)
                 {
                     NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + (NPC.width / 2), (int)NPC.position.Y + (NPC.height / 2), ModContent.NPCType<AquaticScourgeHead>());
@@ -236,13 +241,10 @@ namespace CalamityMod.NPCs.DesertScourge
                     {
                         int lol;
                         if (i >= 0 && i < minLength)
-                        {
                             lol = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + (NPC.width / 2), (int)NPC.position.Y + (NPC.height / 2), ModContent.NPCType<DesertScourgeBody>(), NPC.whoAmI);
-                        }
                         else
-                        {
                             lol = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + (NPC.width / 2), (int)NPC.position.Y + (NPC.height / 2), ModContent.NPCType<DesertScourgeTail>(), NPC.whoAmI);
-                        }
+
                         Main.npc[lol].ai[2] = NPC.whoAmI;
                         Main.npc[lol].realLife = NPC.whoAmI;
                         Main.npc[lol].ai[1] = Previous;
@@ -250,9 +252,13 @@ namespace CalamityMod.NPCs.DesertScourge
                         NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, lol, 0f, 0f, 0f, 0);
                         Previous = lol;
                     }
+
                     TailSpawned = true;
                 }
             }
+
+            if (NPC.life > Main.npc[(int)NPC.ai[0]].life)
+                NPC.life = Main.npc[(int)NPC.ai[0]].life;
 
             if (expertMode)
             {
@@ -283,7 +289,7 @@ namespace CalamityMod.NPCs.DesertScourge
                                 perturbedSpeed *= Main.rand.NextFloat() + 0.5f;
 
                             for (int k = 0; k < 10; k++)
-                                Dust.NewDust(NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, 10, 10, 85, perturbedSpeed.X, perturbedSpeed.Y);
+                                Dust.NewDust(NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, 10, 10, DustID.UnusedBrown, perturbedSpeed.X, perturbedSpeed.Y);
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -305,21 +311,14 @@ namespace CalamityMod.NPCs.DesertScourge
             int tilePositionY = (int)(NPC.position.Y / 16f) - 1;
             int tileWidthPosY = (int)((NPC.position.Y + (float)NPC.height) / 16f) + 2;
             if (tilePositionX < 0)
-            {
                 tilePositionX = 0;
-            }
             if (tileWidthPosX > Main.maxTilesX)
-            {
                 tileWidthPosX = Main.maxTilesX;
-            }
             if (tilePositionY < 0)
-            {
                 tilePositionY = 0;
-            }
             if (tileWidthPosY > Main.maxTilesY)
-            {
                 tileWidthPosY = Main.maxTilesY;
-            }
+
             bool shouldFly = lungeUpward;
             if (!shouldFly)
             {
@@ -341,6 +340,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     }
                 }
             }
+
             if (!shouldFly)
             {
                 NPC.localAI[1] = 1f;
@@ -354,7 +354,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 {
                     int rectWidth = directChaseDistance * 2;
                     int rectHeight = directChaseDistance * 2;
-                    for (int m = 0; m < 255; m++)
+                    for (int m = 0; m < Main.maxPlayers; m++)
                     {
                         if (Main.player[m].active)
                         {
@@ -368,36 +368,34 @@ namespace CalamityMod.NPCs.DesertScourge
                             }
                         }
                     }
+
                     if (shouldDirectlyChase)
-                    {
                         shouldFly = true;
-                    }
                 }
             }
             else
-            {
                 NPC.localAI[1] = 0f;
-            }
 
-            float maxChaseSpeed = 16f;
+            float maxChaseSpeed = masterMode ? SegmentVelocity_Master : expertMode ? SegmentVelocity_Expert : SegmentVelocity_Normal;
+            if (expertMode)
+                maxChaseSpeed += 5f * (1f - lifeRatio);
+
             if (player.dead)
             {
                 shouldFly = false;
                 NPC.velocity.Y += 1f;
-                if ((double)NPC.position.Y > Main.worldSurface * 16.0)
+                if ((double)NPC.position.Y > Main.worldSurface * 16D)
                 {
                     NPC.velocity.Y += 1f;
                     maxChaseSpeed = 32f;
                 }
-                if ((double)NPC.position.Y > Main.rockLayer * 16.0)
+
+                if ((double)NPC.position.Y > Main.rockLayer * 16D)
                 {
                     for (int a = 0; a < Main.maxNPCs; a++)
                     {
-                        if (Main.npc[a].type == ModContent.NPCType<DesertScourgeHead>() || Main.npc[a].type == ModContent.NPCType<DesertScourgeBody>() ||
-                            Main.npc[a].type == ModContent.NPCType<DesertScourgeTail>())
-                        {
+                        if (Main.npc[a].type == ModContent.NPCType<DesertScourgeHead>() || Main.npc[a].type == ModContent.NPCType<DesertScourgeBody>() || Main.npc[a].type == ModContent.NPCType<DesertScourgeTail>())
                             Main.npc[a].active = false;
-                        }
                     }
                 }
             }
@@ -450,7 +448,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
 
                     for (int k = 0; k < 10; k++)
-                        Dust.NewDust(NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, 10, 10, 85, perturbedSpeed.X, perturbedSpeed.Y);
+                        Dust.NewDust(NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, 10, 10, DustID.UnusedBrown, perturbedSpeed.X, perturbedSpeed.Y);
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.Normalize(perturbedSpeed) * 5f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
@@ -484,43 +482,42 @@ namespace CalamityMod.NPCs.DesertScourge
             if (!shouldFly)
             {
                 NPC.TargetClosest();
-                NPC.velocity.Y = NPC.velocity.Y + 0.15f;
+                NPC.velocity.Y += 0.15f;
                 if (NPC.velocity.Y > maxChaseSpeed)
-                {
                     NPC.velocity.Y = maxChaseSpeed;
-                }
+
+                // This bool exists to stop the strange wiggle behavior when worms are falling down
+                bool slowXVelocity = Math.Abs(NPC.velocity.X) > speedCopy;
                 if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.4)
                 {
                     if (NPC.velocity.X < 0f)
-                    {
-                        NPC.velocity.X = NPC.velocity.X - speedCopy * 1.1f;
-                    }
+                        NPC.velocity.X -= speedCopy * 1.1f;
                     else
-                    {
-                        NPC.velocity.X = NPC.velocity.X + speedCopy * 1.1f;
-                    }
+                        NPC.velocity.X += speedCopy * 1.1f;
                 }
                 else if (NPC.velocity.Y == maxChaseSpeed)
                 {
-                    if (NPC.velocity.X < playerX)
+                    if (slowXVelocity)
                     {
-                        NPC.velocity.X = NPC.velocity.X + speedCopy;
+                        if (NPC.velocity.X < playerX)
+                            NPC.velocity.X += speedCopy;
+                        else if (NPC.velocity.X > playerX)
+                            NPC.velocity.X -= speedCopy;
                     }
-                    else if (NPC.velocity.X > playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X - speedCopy;
-                    }
+                    else
+                        NPC.velocity.X = 0f;
                 }
                 else if (NPC.velocity.Y > 4f)
                 {
-                    if (NPC.velocity.X < 0f)
+                    if (slowXVelocity)
                     {
-                        NPC.velocity.X = NPC.velocity.X + speedCopy * 0.9f;
+                        if (NPC.velocity.X < 0f)
+                            NPC.velocity.X += speedCopy * 0.9f;
+                        else
+                            NPC.velocity.X -= speedCopy * 0.9f;
                     }
                     else
-                    {
-                        NPC.velocity.X = NPC.velocity.X - speedCopy * 0.9f;
-                    }
+                        NPC.velocity.X = 0f;
                 }
             }
             else
@@ -529,148 +526,126 @@ namespace CalamityMod.NPCs.DesertScourge
                 {
                     float soundDelay = targetDistance / 40f;
                     if (soundDelay < 10f)
-                    {
                         soundDelay = 10f;
-                    }
                     if (soundDelay > 20f)
-                    {
                         soundDelay = 20f;
-                    }
+
                     NPC.soundDelay = (int)soundDelay;
                     SoundEngine.PlaySound(SoundID.WormDig, NPC.Center);
                 }
+
                 targetDistance = (float)Math.Sqrt((double)(playerX * playerX + targettingPosition * targettingPosition));
                 float absolutePlayerX = Math.Abs(playerX);
                 float absoluteTargetPos = Math.Abs(targettingPosition);
                 float timeToReachTarget = maxChaseSpeed / targetDistance;
                 playerX *= timeToReachTarget;
                 targettingPosition *= timeToReachTarget;
+
                 if (((NPC.velocity.X > 0f && playerX > 0f) || (NPC.velocity.X < 0f && playerX < 0f)) && ((NPC.velocity.Y > 0f && targettingPosition > 0f) || (NPC.velocity.Y < 0f && targettingPosition < 0f)))
                 {
                     if (NPC.velocity.X < playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X + turnSpeedCopy;
-                    }
+                        NPC.velocity.X += turnSpeedCopy;
                     else if (NPC.velocity.X > playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X - turnSpeedCopy;
-                    }
+                        NPC.velocity.X -= turnSpeedCopy;
+
                     if (NPC.velocity.Y < targettingPosition)
-                    {
-                        NPC.velocity.Y = NPC.velocity.Y + turnSpeedCopy;
-                    }
+                        NPC.velocity.Y += turnSpeedCopy;
                     else if (NPC.velocity.Y > targettingPosition)
-                    {
-                        NPC.velocity.Y = NPC.velocity.Y - turnSpeedCopy;
-                    }
+                        NPC.velocity.Y -= turnSpeedCopy;
                 }
+
                 if ((NPC.velocity.X > 0f && playerX > 0f) || (NPC.velocity.X < 0f && playerX < 0f) || (NPC.velocity.Y > 0f && targettingPosition > 0f) || (NPC.velocity.Y < 0f && targettingPosition < 0f))
                 {
                     if (NPC.velocity.X < playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X + speedCopy;
-                    }
+                        NPC.velocity.X += speedCopy;
                     else if (NPC.velocity.X > playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X - speedCopy;
-                    }
+                        NPC.velocity.X -= speedCopy;
+
                     if (NPC.velocity.Y < targettingPosition)
-                    {
-                        NPC.velocity.Y = NPC.velocity.Y + speedCopy;
-                    }
+                        NPC.velocity.Y += speedCopy;
                     else if (NPC.velocity.Y > targettingPosition)
-                    {
-                        NPC.velocity.Y = NPC.velocity.Y - speedCopy;
-                    }
+                        NPC.velocity.Y -= speedCopy;
+
                     if ((double)Math.Abs(targettingPosition) < (double)maxChaseSpeed * 0.2 && ((NPC.velocity.X > 0f && playerX < 0f) || (NPC.velocity.X < 0f && playerX > 0f)))
                     {
                         if (NPC.velocity.Y > 0f)
-                        {
-                            NPC.velocity.Y = NPC.velocity.Y + speedCopy * 2f;
-                        }
+                            NPC.velocity.Y += speedCopy * 2f;
                         else
-                        {
-                            NPC.velocity.Y = NPC.velocity.Y - speedCopy * 2f;
-                        }
+                            NPC.velocity.Y -= speedCopy * 2f;
                     }
+
                     if ((double)Math.Abs(playerX) < (double)maxChaseSpeed * 0.2 && ((NPC.velocity.Y > 0f && targettingPosition < 0f) || (NPC.velocity.Y < 0f && targettingPosition > 0f)))
                     {
                         if (NPC.velocity.X > 0f)
-                        {
-                            NPC.velocity.X = NPC.velocity.X + speedCopy * 2f;
-                        }
+                            NPC.velocity.X += speedCopy * 2f;
                         else
-                        {
-                            NPC.velocity.X = NPC.velocity.X - speedCopy * 2f;
-                        }
+                            NPC.velocity.X -= speedCopy * 2f;
                     }
                 }
                 else if (absolutePlayerX > absoluteTargetPos)
                 {
                     if (NPC.velocity.X < playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X + speedCopy * 1.1f;
-                    }
+                        NPC.velocity.X += speedCopy * 1.1f;
                     else if (NPC.velocity.X > playerX)
-                    {
-                        NPC.velocity.X = NPC.velocity.X - speedCopy * 1.1f;
-                    }
+                        NPC.velocity.X -= speedCopy * 1.1f;
+
                     if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.5)
                     {
                         if (NPC.velocity.Y > 0f)
-                        {
-                            NPC.velocity.Y = NPC.velocity.Y + speedCopy;
-                        }
+                            NPC.velocity.Y += speedCopy;
                         else
-                        {
-                            NPC.velocity.Y = NPC.velocity.Y - speedCopy;
-                        }
+                            NPC.velocity.Y -= speedCopy;
                     }
                 }
                 else
                 {
                     if (NPC.velocity.Y < targettingPosition)
-                    {
-                        NPC.velocity.Y = NPC.velocity.Y + speedCopy * 1.1f;
-                    }
+                        NPC.velocity.Y += speedCopy * 1.1f;
                     else if (NPC.velocity.Y > targettingPosition)
-                    {
-                        NPC.velocity.Y = NPC.velocity.Y - speedCopy * 1.1f;
-                    }
+                        NPC.velocity.Y -= speedCopy * 1.1f;
+
                     if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.5)
                     {
                         if (NPC.velocity.X > 0f)
-                        {
-                            NPC.velocity.X = NPC.velocity.X + speedCopy;
-                        }
+                            NPC.velocity.X += speedCopy;
                         else
-                        {
-                            NPC.velocity.X = NPC.velocity.X - speedCopy;
-                        }
+                            NPC.velocity.X -= speedCopy;
                     }
                 }
             }
-            NPC.rotation = (float)Math.Atan2((double)NPC.velocity.Y, (double)NPC.velocity.X) + 1.57f;
+
+            // Calculate contact damage based on velocity
+            float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
+            float minimalDamageVelocity = maxChaseSpeed * 0.5f;
+            if (NPC.velocity.Length() <= minimalContactDamageVelocity)
+            {
+                NPC.damage = (int)Math.Round(NPC.defDamage * 0.5);
+            }
+            else
+            {
+                float velocityDamageScalar = MathHelper.Clamp((NPC.velocity.Length() - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
+                NPC.damage = (int)MathHelper.Lerp((float)Math.Round(NPC.defDamage * 0.5), NPC.defDamage, velocityDamageScalar);
+            }
+
+            NPC.rotation = (float)Math.Atan2((double)NPC.velocity.Y, (double)NPC.velocity.X) + MathHelper.PiOver2;
+
             if (shouldFly)
             {
                 if (NPC.localAI[0] != 1f)
-                {
                     NPC.netUpdate = true;
-                }
+
                 NPC.localAI[0] = 1f;
             }
             else
             {
                 if (NPC.localAI[0] != 0f)
-                {
                     NPC.netUpdate = true;
-                }
+
                 NPC.localAI[0] = 0f;
             }
+
             if (((NPC.velocity.X > 0f && NPC.oldVelocity.X < 0f) || (NPC.velocity.X < 0f && NPC.oldVelocity.X > 0f) || (NPC.velocity.Y > 0f && NPC.oldVelocity.Y < 0f) || (NPC.velocity.Y < 0f && NPC.oldVelocity.Y > 0f)) && !NPC.justHit)
-            {
                 NPC.netUpdate = true;
-            }
         }
 
         public override void BossLoot(ref string name, ref int potionType)
@@ -718,7 +693,7 @@ namespace CalamityMod.NPCs.DesertScourge
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<DesertScourgeBag>()));
 
             // Extraneous potions
-			npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.LesserHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
+            npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.LesserHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
 
             // Normal drops: Everything that would otherwise be in the bag
             var normalOnly = npcLoot.DefineNormalOnlyDropSet();
@@ -746,7 +721,6 @@ namespace CalamityMod.NPCs.DesertScourge
 
                 // Equipment
                 normalOnly.Add(DropHelper.PerPlayer(ModContent.ItemType<OceanCrest>()));
-                normalOnly.Add(ModContent.ItemType<AeroStone>(), DropHelper.NormalWeaponDropRateFraction);
                 normalOnly.Add(ModContent.ItemType<SandCloak>(), DropHelper.NormalWeaponDropRateFraction);
 
                 // Fishing
@@ -769,9 +743,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 3; k++)
-            {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f, 0, default, 1f);
-            }
+
             if (NPC.life <= 0)
             {
                 if (Main.netMode != NetmodeID.Server)
@@ -779,10 +752,9 @@ namespace CalamityMod.NPCs.DesertScourge
                     Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("ScourgeHead").Type, NPC.scale);
                     Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("ScourgeHead2").Type, NPC.scale);
                 }
+
                 for (int k = 0; k < 10; k++)
-                {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f, 0, default, 1f);
-                }
             }
         }
 
@@ -790,12 +762,13 @@ namespace CalamityMod.NPCs.DesertScourge
         {
             if (NPC.IsABestiaryIconDummy)
                 NPC.Opacity = 1f;
+
             return true;
         }
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
             NPC.damage = (int)(NPC.damage * NPC.GetExpertDamageMultiplier());
         }
 

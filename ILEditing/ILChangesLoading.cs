@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using CalamityMod.Graphics.Renderers.CalamityRenderers;
-using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Armor.LunicCorps;
 using CalamityMod.Tiles.DraedonStructures;
 using CalamityMod.Tiles.FurnitureExo;
 using Terraria;
@@ -98,6 +96,9 @@ namespace CalamityMod.ILEditing
             IL_Projectile.AI_001 += AdjustChlorophyteBullets;
             IL_Projectile.AI_099_2 += LimitTerrarianProjectiles;
             IL_Player.UpdateBuffs += NerfSharpeningStation;
+            IL_Player.UpdateBuffs += NerfBeetleScaleMail;
+            IL_Player.UpdateBuffs += NerfNebulaArmorBaseLifeRegenAndDamage;
+            IL_Player.ApplyVanillaHurtEffectModifiers += RemoveBeetleAndSolarFlareMultiplicativeDR;
 
             // Movement speed balance
             IL_Player.UpdateJumpHeight += FixJumpHeightBoosts;
@@ -108,10 +109,12 @@ namespace CalamityMod.ILEditing
 
             // Life regen balance
             IL_Player.UpdateLifeRegen += PreventWellFedFromBeingRequiredInExpertModeForFullLifeRegen;
+            IL_Player.UpdateLifeRegen += RemoveNebulaLifeBoosterDoTImmunity;
 
             // Mana regen balance
             IL_Player.Update += ManaRegenDelayAdjustment;
             IL_Player.UpdateManaRegen += ManaRegenAdjustment;
+            IL_Player.UpdateManaRegen += NerfNebulaArmorManaRegen;
 
             // Debuff balancing
             IL_Projectile.StatusPlayer += RemoveFrozenInflictionFromDeerclopsIceSpikes;
@@ -150,6 +153,9 @@ namespace CalamityMod.ILEditing
 
             // Fix vanilla not accounting for spritebatch modification in held projectile drawing
             On_PlayerDrawLayers.DrawHeldProj += FixHeldProjectileBlendState;
+
+            // Fix vanilla not accounting for multiple bobbers when fishing with truffle worm
+            IL_Player.ItemCheck_CheckFishingBobbers += FixTruffleWormFishing;
 
             //Additional detours that are in their own item files given they are only relevant to these specific items:
             //Rover drive detours on Player.DrawInfernoRings to draw its shield

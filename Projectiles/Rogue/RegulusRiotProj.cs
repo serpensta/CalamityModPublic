@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Dusts;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.Dusts;
-using CalamityMod.Buffs.DamageOverTime;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Rogue
 {
@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (behaviorInt == 0)
             {
-                Projectile.rotation -= 0.104719758f;
+                Projectile.rotation -= MathHelper.Pi / 30f;
 
                 if (Projectile.ai[0] >= 30f)
                 {
@@ -79,7 +79,7 @@ namespace CalamityMod.Projectiles.Rogue
             }
             else if (behaviorInt == 1)
             {
-                Projectile.rotation -= 0.104719758f;
+                Projectile.rotation -= MathHelper.Pi / 30f;
                 Vector2 targetCenter = Projectile.Center;
                 float homingRange = 300f;
                 bool homeIn = false;

@@ -48,7 +48,7 @@ namespace CalamityMod.Projectiles.Rogue
                 if (Projectile.ai[1] == 3)
                 {
                     Projectile.friendly = true;
-                    SoundEngine.PlaySound(FinalDawn.UseSound, Projectile.position);
+                    SoundEngine.PlaySound(TheFinalDawn.UseSound, Projectile.position);
 
                     if (Projectile.owner == Main.myPlayer)
                     {

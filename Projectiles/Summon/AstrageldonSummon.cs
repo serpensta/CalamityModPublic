@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Dusts;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
+using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -54,7 +54,7 @@ namespace CalamityMod.Projectiles.Summon
 
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];;
+            Player player = Main.player[Projectile.owner]; ;
             CalamityPlayer modPlayer = player.Calamity();
             CalamityGlobalProjectile modProj = Projectile.Calamity();
 

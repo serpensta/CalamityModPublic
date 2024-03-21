@@ -2,9 +2,9 @@
 using CalamityMod.CalPlayer;
 using CalamityMod.Events;
 using CalamityMod.NPCs;
-using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.NPCs.ExoMechs;
 using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Tiles;
 using CalamityMod.Tiles.Abyss;
@@ -16,8 +16,8 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static CalamityMod.World.CalamityWorld;
 using Terraria.WorldBuilding;
+using static CalamityMod.World.CalamityWorld;
 
 namespace CalamityMod.Systems
 {
@@ -320,7 +320,7 @@ namespace CalamityMod.Systems
 
         public static bool CanPlaceBasedOnProximity(int x, int y, int tileType)
         {
-            if (tileType == ModContent.TileType<LumenylCrystals>() && !DownedBossSystem.downedCalamitasClone)
+            if (tileType == ModContent.TileType<LumenylCrystals>() && !DownedBossSystem.downedLeviathan)
                 return false;
 
             int minDistanceFromOtherTiles = 10;

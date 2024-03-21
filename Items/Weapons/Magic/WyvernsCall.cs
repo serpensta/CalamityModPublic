@@ -1,6 +1,6 @@
-﻿using CalamityMod.Projectiles.Magic;
+﻿using System;
+using CalamityMod.Projectiles.Magic;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -110,7 +110,7 @@ namespace CalamityMod.Items.Weapons.Magic
             CreateRecipe().
                 AddIngredient<SkyGlaze>().
                 AddRecipeGroup("AnyMythrilBar", 5).
-                AddIngredient(ItemID.SoulofFlight, 15). 
+                AddIngredient(ItemID.SoulofFlight, 15).
                 AddTile(TileID.MythrilAnvil).
                 Register();
         }

@@ -1,4 +1,8 @@
-﻿using CalamityMod.Balancing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using CalamityMod.Balancing;
 using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Demonshade;
@@ -12,10 +16,6 @@ using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -405,14 +405,18 @@ namespace CalamityMod.Items
             // Brain of Confusion, Black Belt and Master Ninja Gear have guaranteed dodges with a fixed cooldown.
             #region Guaranteed Dodge Tooltips
             string beltDodgeLine = "Grants the ability to dodge attacks\n" +
-                $"The dodge has a {BalancingConstants.BeltDodgeCooldown / 60} second cooldown which is shared with all other dodges and reflects";
+                "Attacks that deal less than 5% of your max life in damage will not be dodged\n" +
+                $"The dodge has a cooldown that ranges between {BalancingConstants.BeltDodgeCooldownMin / 60 } and {BalancingConstants.BeltDodgeCooldownMax / 60} seconds depending on the dodged attack's damage\n" +
+                "The cooldown is shared with all other dodges and reflects";
             if (item.type == ItemID.BlackBelt)
                 EditTooltipByNum(0, (line) => line.Text = beltDodgeLine);
             if (item.type == ItemID.MasterNinjaGear)
                 EditTooltipByNum(1, (line) => line.Text = beltDodgeLine);
 
             string brainDodgeLine = "Grants the ability to dodge attacks\n" +
-                $"The dodge has a {BalancingConstants.BrainDodgeCooldown / 60} second cooldown which is shared with all other dodges and reflects";
+                "Attacks that deal less than 5% of your max life in damage will not be dodged\n" +
+                $"The dodge has a cooldown that ranges between {BalancingConstants.BrainDodgeCooldownMin / 60} and {BalancingConstants.BrainDodgeCooldownMax / 60} seconds depending on the dodged attack's damage\n" +
+                "The cooldown is shared with all other dodges and reflects";
             if (item.type == ItemID.BrainOfConfusion)
                 EditTooltipByNum(0, (line) => line.Text = brainDodgeLine);
             #endregion
@@ -568,9 +572,13 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FrozenShield)
                 EditTooltipByNum(1, (line) => line.Text = "Puts a shell around the owner when below 50% life that reduces damage by 15%");
 
-            // Ale and Sake rebalance.
+            // Ale and Sake rebalance and Alcohol Poisoning.
             if (item.type == ItemID.Ale || item.type == ItemID.Sake)
-                EditTooltipByNum(0, (line) => line.Text = "Increases melee damage by 10% and reduces defense by 5%");
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Increases melee damage by 10% and reduces defense by 5%\n" + 
+                "Counts as an alcohol for Alcohol Poisoning\n" +
+                "Drinking more than 3 different alcohols might not end well with your liver");
+            }
 
             // Hellfire Treads buff.
             if (item.type == ItemID.HellfireTreads)
@@ -608,9 +616,13 @@ namespace CalamityMod.Items
                 EditTooltipByNum(2, (line) => line.Text = line.Text.Replace(" melee speed,", ""));
             }
 
-            // Arcane and Magnet Flower buffs.
-            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
-                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
+            // Mana Flower tinker buffs.
+            if (item.type == ItemID.MagnetFlower)
+                EditTooltipByNum(0, (line) => line.Text = "10% reduced mana cost");
+            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.ManaCloak)
+                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana cost");
+            if (item.type == ItemID.ArcaneFlower)
+                EditTooltipByNum(2, (line) => line.Text += "\n5% increased magic damage");
 
             // Magiluminescence nerf and clear explanation of what it actually does.
             if (item.type == ItemID.Magiluminescence)
@@ -737,7 +749,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(3, (line) => line.Text += "\nImmunity to the On Fire! debuff");
 
             // Ozzatron 23NOV2023: Removed tooltip edits for Magma Skull and Molten Skull Rose, as they were invalid after vanilla tooltip changes.
-            
+
             // Yoyo Glove/Bag apply a 0.5x damage multiplier on the second yoyo
             if (item.type == ItemID.YoyoBag || item.type == ItemID.YoYoGlove)
                 EditTooltipByNum(0, (line) => line.Text += "\nSecondary yoyos will do 50% less damage");
@@ -813,10 +825,8 @@ namespace CalamityMod.Items
             if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
             {
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
             }
-            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "5%"));
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
@@ -827,8 +837,9 @@ namespace CalamityMod.Items
             // Crimson
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
-                EditTooltipByNum(0, (line) => {
-                    string newTooltip = line.Text.Replace("2%", "5%");
+                EditTooltipByNum(0, (line) =>
+                {
+                    string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });
@@ -839,7 +850,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("9%", "8%"));
             #endregion
 
-            // Hardmode ore armor tooltip edits
+            // Hardmode armor tooltip edits
             #region Hardmode Ore Armor
             // Cobalt
             if (item.type == ItemID.CobaltHat)
@@ -866,6 +877,17 @@ namespace CalamityMod.Items
             // Titanium
             if (item.type == ItemID.TitaniumMask)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("9", "14"));
+
+            // Solar Flare
+            if (item.type == ItemID.SolarFlareHelmet)
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("26%", "20%"));
+
+            // Vortex
+            if (item.type == ItemID.VortexHelmet)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("16%", "10%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("7%", "5%"));
+            }
             #endregion
 
             // DD2 armor tooltip edits
@@ -1336,7 +1358,7 @@ namespace CalamityMod.Items
         #endregion
 
         #region Speed Tooltips
-        
+
         // TODO: Investigate using a SortedDictionary instead? May be slower, but removes the need for carefully adding KVPs.
         /// <summary>
         /// This dictionary handles easily retrieving tooltip text based on a numerical threshold. <br />

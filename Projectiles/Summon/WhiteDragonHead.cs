@@ -1,9 +1,9 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.Buffs.Summon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -117,7 +117,7 @@ namespace CalamityMod.Projectiles.Summon
                 if (i < segments.Count)
                 {
                     if (segments.ContainsKey(i))
-                    segments[i].ModProjectile<WhiteDragonBody>().SegmentMove();
+                        segments[i].ModProjectile<WhiteDragonBody>().SegmentMove();
                 }
                 else
                 {

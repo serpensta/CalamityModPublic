@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.Audio;
+using Terraria.ModLoader;
 namespace CalamityMod.Projectiles.Magic
 {
     public class AcidicReed : ModProjectile, ILocalizedModType
@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             if (Projectile.ai[0] == 1f)
             {
-                SoundEngine.PlaySound(SaxSound, Projectile.position);
+                SoundEngine.PlaySound(SaxSound, Projectile.Center);
                 Projectile.ai[0] = 0f;
             }
             if (Projectile.velocity.Y < 10f)

@@ -1,9 +1,9 @@
-﻿using CalamityMod.Items.Materials;
+﻿using System.Linq;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -24,10 +24,9 @@ namespace CalamityMod.Items.Weapons.Melee
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Item/ExobladeDash") { Volume = 0.6f };
         public static readonly SoundStyle DashHitSound = new("CalamityMod/Sounds/Item/ExobladeDashImpact") { Volume = 0.85f };
 
-
         public static int BeamNoHomeTime = 24;
 
-        public static float NotTrueMeleeDamagePenalty = 0.46f;
+        public static float NotTrueMeleeDamagePenalty = 0.35f;
 
         public static float ExplosionDamageFactor = 1.8f;
 
@@ -50,7 +49,7 @@ namespace CalamityMod.Items.Weapons.Melee
         public static int DashTime = 49;
 
         public static int BaseUseTime = 49;
-        public static int BeamsPerSwing = 3;
+        public static int BeamsPerSwing = 4;
 
         public override void SetDefaults()
         {
@@ -79,7 +78,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 return !Main.projectile.Any(n => n.active && n.owner == player.whoAmI && n.type == ProjectileType<ExobladeProj>());
 
 
-            return !Main.projectile.Any(n => n.active && n.owner == player.whoAmI && n.type == ProjectileType<ExobladeProj>() &&         
+            return !Main.projectile.Any(n => n.active && n.owner == player.whoAmI && n.type == ProjectileType<ExobladeProj>() &&
             !(n.ai[0] == 1 && n.ai[1] == 1)); //Ignores exoblades in post bonk stasis.
         }
 

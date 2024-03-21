@@ -180,6 +180,7 @@ Rotdog.DisplayName: Rotdog
 ScornEater.DisplayName: Scorn Eater
 SeaUrchin.DisplayName: Sea Urchin
 ShockstormShuttle.DisplayName: Shockstorm Shuttle
+SkeletronPrime2.DisplayName: Skeletron Prime
 Stormlion.DisplayName: Stormlion
 Sunskater.DisplayName: Sunskater
 SuperDummyNPC.DisplayName: Super Dummy
@@ -218,9 +219,6 @@ Plagueshell.DisplayName: Plagueshell
 Viruling.DisplayName: Viruling
 PhantomFuckYou.DisplayName: Phantom
 Polterghast.DisplayName: Polterghast
-Necroghast: Necroghast
-Necroplasm: Necroplasm
-Polterplasm: Polterplasm
 PolterghastHook.DisplayName: Polterghast Hook
 PolterPhantom.DisplayName: Polterghast
 PrimordialWyrmHead.DisplayName: Primordial Wyrm

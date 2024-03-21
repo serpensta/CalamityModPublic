@@ -1,8 +1,8 @@
-﻿using CalamityMod.Items;
+﻿using System;
+using CalamityMod.Items;
 using CalamityMod.Items.Weapons.DraedonsArsenal;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -58,7 +58,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     {
                         fireLasers = true;
                         Projectile.soundDelay *= 6;
-                        gatlingLaserLoopID = SoundEngine.PlaySound(GatlingLaser.FireLoopSound, Projectile.position);
+                        gatlingLaserLoopID = SoundEngine.PlaySound(GatlingLaser.FireLoopSound, Projectile.Center);
                     }
                 }
                 if (shootThisFrame && Main.myPlayer == Projectile.owner && fireLasers)
@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     // This grabs the weapon's current damage, taking current charge level into account.
                     int currentDamage = player.GetWeaponDamage(gatling);
 
-                    bool stillInUse = player.channel && !player.noItems && !player.CCed;
+                    bool stillInUse = !player.CantUseHoldout();
 
                     // This both checks if the player has sufficient mana and consumes it if they do.
                     // If this is false, the Gatling Laser stops functioning.
@@ -130,7 +130,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                         if (SoundEngine.TryGetActiveSound(gatlingLaserLoopID, out result))
                             result.Stop();
 
-                        SoundEngine.PlaySound(GatlingLaser.FireEndSound, Projectile.position);
+                        SoundEngine.PlaySound(GatlingLaser.FireEndSound, Projectile.Center);
                         Projectile.Kill();
                     }
                 }

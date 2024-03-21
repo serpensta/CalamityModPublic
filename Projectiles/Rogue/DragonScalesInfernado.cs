@@ -1,10 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Rogue
 {
     public class DragonScalesInfernado : ModProjectile, ILocalizedModType
@@ -46,7 +48,7 @@ namespace CalamityMod.Projectiles.Rogue
 
             if (Main.rand.NextBool(25))
             {
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 244, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.CopperCoin, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             }
             if (Projectile.velocity.X != 0f)
             {
@@ -116,7 +118,7 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (Projectile.ai[0] <= 0f)
             {
-                float constant = 0.104719758f;
+                float constant = MathHelper.Pi / 30f;
                 float smallWidth = (float)Projectile.width / 5f;
                 smallWidth *= 2f;
                 float xFluctuation = (float)(Math.Cos((double)(constant * -(double)Projectile.ai[0])) - 0.5) * smallWidth;

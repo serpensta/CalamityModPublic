@@ -1,10 +1,10 @@
 ﻿using CalamityMod.Items.Materials;
+using CalamityMod.NPCs.Yharon;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityMod.NPCs.Yharon;
 
 namespace CalamityMod.Items.Weapons.Melee
 {

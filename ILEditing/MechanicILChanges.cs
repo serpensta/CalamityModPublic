@@ -512,13 +512,15 @@ namespace CalamityMod.ILEditing
                 return;
             }
 
-            // Load the player onto the stack for use in the following delegate.
+            // Load the player and the healing potion used onto the stack for use in the following delegate.
             cursor.Emit(OpCodes.Ldarg_0);
+            cursor.Emit(OpCodes.Ldarg_1);
 
             // Insert a delegate which applies Chalice of the Blood God's function as appropriate.
-            cursor.EmitDelegate<Action<Player>>(player =>
+            cursor.EmitDelegate<Action<Player, Item>>((player, potion) =>
             {
-                if (!player.active || player.dead)
+                // If the consumed item heals 0 health, don't bother.
+                if (!player.active || player.dead || potion.healLife <= 0)
                     return;
 
                 CalamityPlayer modPlayer = player.Calamity();
@@ -527,10 +529,13 @@ namespace CalamityMod.ILEditing
 
                 if (modPlayer.chaliceOfTheBloodGod && modPlayer.chaliceBleedoutBuffer > 0D)
                 {
-                    int amountOfBleedToClear = (int)(modPlayer.chaliceBleedoutBuffer * (1f - ChaliceOfTheBloodGod.HealingPotionBufferClear));
+                    // 20FEB2024: Ozzatron: to prevent abuse, buffer clearing is now 50% of the potion instead of 50% of your buffer
+                    float amountOfBleedToClear = ChaliceOfTheBloodGod.HealingPotionRatioForBufferClear * player.GetHealLife(potion, true);
+
+                    // Actually clear the buffer
                     modPlayer.chaliceBleedoutBuffer -= amountOfBleedToClear;
 
-                    // Display text indicating that damage was transferred to bleedout.
+                    // Display text indicating that healing was applied to the bleedout buffer.
                     if (Main.netMode != NetmodeID.Server)
                     {
                         string text = $"(+{amountOfBleedToClear})";
@@ -785,7 +790,7 @@ namespace CalamityMod.ILEditing
             cachedLavaStyle = default;
             orig(self);
         }
-        
+
         private static void DrawCustomLava(Terraria.GameContent.Drawing.On_TileDrawing.orig_DrawPartialLiquid orig, TileDrawing self, bool behindBlocks, Tile tileCache, ref Vector2 position, ref Rectangle liquidSize, int liquidType, ref VertexColors colors)
         {
             if (liquidType != 1)
@@ -856,7 +861,7 @@ namespace CalamityMod.ILEditing
             cursor.Emit(OpCodes.Ldloc, 8);
             cursor.Emit(OpCodes.Ldloc, 3);
             cursor.Emit(OpCodes.Ldloc, 4);
-            
+
             // Caching these values can save a LOT of overhead at runtime.
             ModWaterStyle sunkenSeaWater = ModContent.GetInstance<SunkenSeaWater>();
             ModWaterStyle sulphuricWater = ModContent.GetInstance<SulphuricWater>();
@@ -864,7 +869,7 @@ namespace CalamityMod.ILEditing
             ModWaterStyle upperAbyssWater = ModContent.GetInstance<UpperAbyssWater>();
             ModWaterStyle middleAbyssWater = ModContent.GetInstance<MiddleAbyssWater>();
             ModWaterStyle voidWater = ModContent.GetInstance<VoidWater>();
-            
+
             cursor.EmitDelegate<Func<VertexColors, Texture2D, int, int, int, VertexColors>>((initialColor, initialTexture, liquidType, x, y) =>
             {
                 // Don't bother changing the color if the cached drawing style is null.
@@ -1178,6 +1183,26 @@ namespace CalamityMod.ILEditing
 
             // couldn't find the right place to insert
             throw new Exception("Hook location not found, switch(*) { case 54: ...");
+        }
+        #endregion
+
+        #region Chlorophyte Bullet Dust Reducing
+        private static void AdjustChlorophyteBullets(ILContext il)
+        {
+            // Reduce dust from 10 to 5 and homing range.
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(ProjectileID.ChlorophyteBullet)))
+            {
+                LogFailure("Chlorophyte Bullet AI", "Could not locate the bullet ID.");
+                return;
+            }
+            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(10))) // The number of dust spawned by the bullet.
+            {
+                LogFailure("Chlorophyte Bullet AI", "Could not locate the dust quantity.");
+                return;
+            }
+            cursor.Remove();
+            cursor.Emit(OpCodes.Ldc_I4_5); // Decrease dust to 5.
         }
         #endregion
 

@@ -1,11 +1,11 @@
-﻿using CalamityMod.CalPlayer;
-using System;
+﻿using System;
+using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Pets
 {
@@ -360,7 +360,7 @@ namespace CalamityMod.Projectiles.Pets
             for (int itemIndex = 0; itemIndex < Main.maxItems; itemIndex++)
             {
                 Item item = Main.item[itemIndex];
-                if (item.active && item.noGrabDelay == 0 && item.playerIndexTheItemIsReservedFor == Projectile.owner && 
+                if (item.active && item.noGrabDelay == 0 && item.playerIndexTheItemIsReservedFor == Projectile.owner &&
                     ItemLoader.CanPickup(item, Main.player[item.playerIndexTheItemIsReservedFor]) && Main.player[item.playerIndexTheItemIsReservedFor].ItemSpace(item).CanTakeItemToPersonalInventory)
                 {
                     if (ItemID.Sets.NebulaPickup[item.type])
