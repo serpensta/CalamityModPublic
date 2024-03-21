@@ -105,22 +105,30 @@
         internal static readonly float LifeStealCapReduction_Master = 10f;
 
         // The base life steal cooldowns from vanilla
-        internal static readonly float LifeStealRecoveryRate_Classic = 0.8f;
-        internal static readonly float LifeStealRecoveryRate_Expert = 0.7f;
+        internal static readonly float LifeStealRecoveryRate_Classic = 0.6f;
+        internal static readonly float LifeStealRecoveryRate_Expert = 0.5f;
 
-        // Nerfs the life steal recovery rate in Classic from 0.8/s to 0.4/s
-        internal static readonly float LifeStealRecoveryRateReduction_Classic = 0.4f;
+        // The calculations below show the time (in frames) for 10 life steal cooldown to recover in each difficulty
+        // Classic: 10 / 0.3 = 33.333
+        // Expert: 10 / 0.2 = 50
+        // Revengeance: 10 / 0.15 = 66.667
+        // Death: 10 / 0.125 = 80
+        // Master: 10 / 0.15 = 66.667
+        // Revengeance Master: 10 / 0.1 = 100
+        // Death Master: 10 / 0.075 = 133.333
+        // Nerfs the life steal recovery rate in Classic from 0.6/s to 0.3/s
+        internal static readonly float LifeStealRecoveryRateReduction_Classic = 0.3f;
 
-        // Nerfs the life steal recovery rate in Expert from 0.7/s to 0.35/s
-        internal static readonly float LifeStealRecoveryRateReduction_Expert = 0.35f;
+        // Nerfs the life steal recovery rate in Expert from 0.5/s to 0.2/s
+        internal static readonly float LifeStealRecoveryRateReduction_Expert = 0.3f;
 
-        // Nerfs the life steal recovery rate in Revengeance from 0.7/s to 0.3/s
-        internal static readonly float LifeStealRecoveryRateReduction_Revengeance = 0.4f;
+        // Nerfs the life steal recovery rate in Revengeance from 0.5/s to 0.15/s
+        internal static readonly float LifeStealRecoveryRateReduction_Revengeance = 0.35f;
 
-        // Nerfs the life steal recovery rate in Death from 0.7/s to 0.25/s
-        internal static readonly float LifeStealRecoveryRateReduction_Death = 0.45f;
+        // Nerfs the life steal recovery rate in Death from 0.5/s to 0.125/s
+        internal static readonly float LifeStealRecoveryRateReduction_Death = 0.375f;
 
-        // Nerfs the life steal recovery rate in Master by 0.05/s, resulting in 0.3/s in non-Rev Master, 0.25/s in Rev Master, and 0.2/s in Death Master
+        // Nerfs the life steal recovery rate in Master by 0.05/s, resulting in 0.2/s in non-Rev Master, 0.15/s in Rev Master, and 0.1/s in Death Master (10 / 0.1 = 100)
         internal static readonly float LifeStealRecoveryRateReduction_Master = 0.05f;
         #endregion
 

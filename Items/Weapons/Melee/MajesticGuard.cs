@@ -31,11 +31,11 @@ namespace CalamityMod.Items.Weapons.Melee
 
             if (target.Calamity().miscDefenseLoss >= target.defense)
             {
-                if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
+                if (player.moonLeech || player.lifeSteal <= 0f)
                     return;
 
                 int heal = 3;
-                Main.player[Main.myPlayer].lifeSteal -= heal;
+                player.lifeSteal -= heal;
                 player.statLife += heal;
                 player.HealEffect(heal);
                 if (player.statLife > player.statLifeMax2)

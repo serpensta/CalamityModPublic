@@ -112,11 +112,11 @@ namespace CalamityMod.CalPlayer
 
                 case ItemID.CandyCaneSword:
 
-                    if (Player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
+                    if (Player.moonLeech || Player.lifeSteal <= 0f)
                         return;
 
                     int heal = 2;
-                    Main.player[Main.myPlayer].lifeSteal -= heal;
+                    Player.lifeSteal -= heal;
                     Player.statLife += heal;
                     Player.HealEffect(heal);
                     if (Player.statLife > Player.statLifeMax2)

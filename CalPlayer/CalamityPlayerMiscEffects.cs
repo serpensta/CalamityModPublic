@@ -901,10 +901,10 @@ namespace CalamityMod.CalPlayer
             if (Player.lifeSteal > lifeStealCap)
                 Player.lifeSteal = lifeStealCap;
 
-            // Normal Mode life steal recovery rate is 0.4/s
-            // Expert Mode life steal recovery rate is 0.35/s
-            // Revengeance Mode life steal recovery rate is 0.3/s
-            // Death Mode life steal recovery rate is 0.25/s
+            // Normal Mode life steal recovery rate is 0.3/s
+            // Expert Mode life steal recovery rate is 0.2/s
+            // Revengeance Mode life steal recovery rate is 0.15/s
+            // Death Mode life steal recovery rate is 0.125/s
             // Master Mode life steal recovery rate is nerfed by an additional 0.05/s
             float lifeStealRecoveryRateReduction =
                     CalamityWorld.death ? BalancingConstants.LifeStealRecoveryRateReduction_Death :
@@ -915,7 +915,8 @@ namespace CalamityMod.CalPlayer
             if (Main.masterMode)
                 lifeStealRecoveryRateReduction += BalancingConstants.LifeStealRecoveryRateReduction_Master;
 
-            Player.lifeSteal -= lifeStealRecoveryRateReduction;
+            if (Player.lifeSteal < lifeStealCap)
+                Player.lifeSteal -= lifeStealRecoveryRateReduction;
 
             // Bool for drawing boss health bar small text or not
             if (Main.myPlayer == Player.whoAmI)

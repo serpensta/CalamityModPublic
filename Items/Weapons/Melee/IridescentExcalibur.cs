@@ -52,6 +52,11 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.rare = ModContent.RarityType<Rainbow>();
         }
 
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            player.itemLocation += new Vector2(-12f * player.direction, 2f * player.gravDir).RotatedBy(player.itemRotation);
+        }
+
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Item.DrawItemGlowmaskSingleFrame(spriteBatch, rotation, ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/IridescentExcaliburGlow").Value);
@@ -167,11 +172,11 @@ namespace CalamityMod.Items.Weapons.Melee
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
 
-            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
+            if (player.moonLeech || player.lifeSteal <= 0f)
                 return;
 
             int heal = Main.rand.Next(3) + 10;
-            Main.player[Main.myPlayer].lifeSteal -= heal;
+            player.lifeSteal -= heal;
             player.statLife += heal;
             player.HealEffect(heal);
             if (player.statLife > player.statLifeMax2)
@@ -183,11 +188,11 @@ namespace CalamityMod.Items.Weapons.Melee
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
 
-            if (player.moonLeech || Main.player[Main.myPlayer].lifeSteal <= 0f)
+            if (player.moonLeech || player.lifeSteal <= 0f)
                 return;
 
             int heal = Main.rand.Next(3) + 10;
-            Main.player[Main.myPlayer].lifeSteal -= heal;
+            player.lifeSteal -= heal;
             player.statLife += heal;
             player.HealEffect(heal);
             if (player.statLife > player.statLifeMax2)

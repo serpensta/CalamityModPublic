@@ -3598,17 +3598,11 @@ namespace CalamityMod.CalPlayer
                     lifeStealRecoveryRateReduction += BalancingConstants.LifeStealRecoveryRateReduction_Master;
 
                 float lifeStealRecoveryRate = baseRecoveryRate - lifeStealRecoveryRateReduction;
-
-                // This value is here to somewhat prevent the rapid cooldown flashing that happens sometimes.
-                float cooldownDisplayGateValue = 12f;
-                float displayLifeStealCooldownGateValue = lifeStealRecoveryRate * cooldownDisplayGateValue;
-                if (Player.lifeSteal < -displayLifeStealCooldownGateValue)
+                if (Player.lifeSteal < -lifeStealRecoveryRate)
                 {
-                    float duration = Math.Abs(Player.lifeSteal);
-                    duration /= lifeStealRecoveryRate;
-
-                    if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))
-                        Player.AddCooldown(LifeSteal.ID, (int)duration);
+                    int duration = (int)Math.Ceiling(Math.Abs(Player.lifeSteal) / lifeStealRecoveryRate);
+                    if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < duration))
+                        Player.AddCooldown(LifeSteal.ID, duration);
                 }
             }
 
