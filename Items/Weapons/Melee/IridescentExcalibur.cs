@@ -172,7 +172,7 @@ namespace CalamityMod.Items.Weapons.Melee
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
 
-            if (player.moonLeech || player.lifeSteal <= 0f)
+            if (player.moonLeech || player.lifeSteal <= 0f || target.lifeMax <= 5)
                 return;
 
             int heal = Main.rand.Next(3) + 10;

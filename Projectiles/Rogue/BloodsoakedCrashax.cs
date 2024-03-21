@@ -87,7 +87,8 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            OnHitEffects(hit.Damage);
+            if (target.lifeMax > 5)
+                OnHitEffects(hit.Damage);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

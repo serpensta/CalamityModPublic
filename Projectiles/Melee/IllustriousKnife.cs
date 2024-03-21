@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Melee
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 180);
 
             int heal = (int)Math.Round(hit.Damage * 0.015);
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<RoyalHeal>(), BalancingConstants.LifeStealRange);

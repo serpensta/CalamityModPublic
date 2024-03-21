@@ -296,7 +296,9 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<GlacialState>(), Terratomere.TrueMeleeGlacialStateTime);
-            OnHitHealEffect(hit.Damage);
+
+            if (target.lifeMax > 5)
+                OnHitHealEffect(hit.Damage);
 
             // Create a slash creator on top of the hit target.
             int slashCreatorID = ModContent.ProjectileType<TerratomereSlashCreator>();

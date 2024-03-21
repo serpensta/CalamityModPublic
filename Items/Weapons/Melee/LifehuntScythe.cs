@@ -39,7 +39,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (player.moonLeech || player.lifeSteal <= 0f)
+            if (player.moonLeech || player.lifeSteal <= 0f || target.lifeMax <= 5)
                 return;
 
             int heal = 5;

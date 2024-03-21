@@ -84,7 +84,7 @@ namespace CalamityMod.Items.Weapons.Melee
             if (target.Calamity().miscDefenseLoss < target.defense)
                 target.Calamity().miscDefenseLoss += 1;
 
-            if (player.moonLeech || player.lifeSteal <= 0f)
+            if (player.moonLeech || player.lifeSteal <= 0f || target.lifeMax <= 5)
                 return;
 
             int heal = Main.rand.Next(1, 70);

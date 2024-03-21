@@ -207,7 +207,7 @@ namespace CalamityMod.Projectiles.Typeless
             player.ManaEffect(25);
 
             int heal = (int)Math.Round(hit.Damage * 0.1);
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<RoyalHeal>(), BalancingConstants.LifeStealRange);

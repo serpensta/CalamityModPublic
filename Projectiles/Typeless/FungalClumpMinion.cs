@@ -235,7 +235,7 @@ namespace CalamityMod.Projectiles.Typeless
                 return;
 
             int heal = (int)Math.Round(damageDone * 0.25);
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<FungalHeal>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealAccessoryCooldownMultiplier);

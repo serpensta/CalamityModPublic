@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Rogue
                 echo.Calamity().stealthStrike = true;
             }
 
-            if (target.life <= 0)
+            if (target.life <= 0 && target.lifeMax > 5)
                 CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], 10, ModContent.ProjectileType<ShinobiHealOrb>(), BalancingConstants.LifeStealRange, 0f);
         }
 
