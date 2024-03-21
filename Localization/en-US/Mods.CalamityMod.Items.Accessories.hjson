@@ -521,7 +521,7 @@ DeepDiver: {
 	DisplayName: Deep Diver
 	Tooltip:
 		'''
-		Allows the ability to do a small ram dash
+		Allows the ability to do a short ram dash
 		This dash can slam through enemies without taking damage and can be used quickly in succession
 		Provides greatly improved water mobility
 		'''

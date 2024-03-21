@@ -66,7 +66,7 @@ namespace CalamityMod.CalPlayer.Dashes
                 GeneralParticleHandler.SpawnParticle(spark2);
             }
 
-            player.velocity.X *= 0.97f;
+            player.velocity.X *= 0.967f;
 
             // Dash at a faster speed than the default value.
             dashSpeed = 25f;
@@ -76,9 +76,9 @@ namespace CalamityMod.CalPlayer.Dashes
         {
             SoundStyle hit = new("CalamityMod/Sounds/NPCHit/PerfSmallHit3");
             SoundEngine.PlaySound(hit with { Pitch = 0.7f, Volume = 0.4f }, player.Center);
-            for (int i = 0; i <= 12; i++)
+            for (int i = 0; i <= 6; i++)
             {
-                Dust dust = Dust.NewDustPerfect(player.Center, Main.rand.NextBool() ? 278 : 132, player.velocity.RotatedByRandom(0.7f) * Main.rand.NextFloat(0.5f, 1f));
+                Dust dust = Dust.NewDustPerfect(player.Center, Main.rand.NextBool() ? 278 : 132, player.velocity.RotatedByRandom(0.7f) * Main.rand.NextFloat(0.5f, 1f) + new Vector2(0, -3f));
                 if (dust.type == 278)
                 {
                     dust.scale = 1.2f;

@@ -321,11 +321,6 @@ namespace CalamityMod.CalPlayer
                     HasReducedDashFirstFrame = false;
             }
 
-            if (deepDiver)
-            {
-
-            }
-
             if (tortShell)
             {
                 //reduce player dash velocity as long as you didn't just get hit
