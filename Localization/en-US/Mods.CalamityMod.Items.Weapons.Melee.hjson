@@ -679,7 +679,7 @@ IridescentExcalibur: {
 	DisplayName: Iridescent Excalibur
 	Tooltip:
 		'''
-		Freezes enemies and heals the player on hit
+		True melee strikes freeze enemies
 		Fires rainbow beams that change their behavior based on their color
 		Press <right> for true melee
 		'''
