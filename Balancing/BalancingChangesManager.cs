@@ -174,8 +174,8 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Astrum Aureus
-            // 35% resist to The Ballista's greatarrows.
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<AstrumAureus>(), Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<BallistaGreatArrow>()))));
+            // 30% resist to The Ballista's greatarrows.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<AstrumAureus>(), Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<BallistaGreatArrow>()))));
             #endregion
 
             #region Ravager
