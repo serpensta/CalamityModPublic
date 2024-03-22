@@ -24,7 +24,7 @@ namespace CalamityMod.Items.Ammo
             Item.consumable = true;
             Item.knockBack = 1.5f;
             Item.value = Item.sellPrice(copper: 16);
-            Item.rare = ItemRarityID.Cyan;
+            Item.rare = ItemRarityID.Yellow;
             Item.shoot = ModContent.ProjectileType<HyperiusBulletProj>();
             Item.shootSpeed = 5f;
             Item.ammo = AmmoID.Bullet;
