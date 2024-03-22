@@ -65,7 +65,7 @@ namespace CalamityMod.NPCs.Ravager
             if (!Main.dedServ)
             {
                 GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
-                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Ravager/RavagerChain", AssetRequestMode.AsyncLoad);
+                ChainTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Ravager/RavagerChain", AssetRequestMode.AsyncLoad);
             }
         }
 
