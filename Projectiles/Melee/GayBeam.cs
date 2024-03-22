@@ -21,7 +21,11 @@ namespace CalamityMod.Projectiles.Melee
 
         private const int TimeLeft = 600;
 
-        private const int TrailLength = 42;
+        private const int TrailLength = 36;
+
+        private const int TotalAfterimages = 12;
+
+        private const int AfterimageOffset = TrailLength / TotalAfterimages;
 
         private const float MaxVelocity = 24f;
 
@@ -339,10 +343,10 @@ namespace CalamityMod.Projectiles.Melee
             if (CalamityConfig.Instance.Afterimages)
             {
                 Vector2 centerOffset = Projectile.Size / 2f;
-                int totalAfterimages = 10;
+                int totalAfterimages = TotalAfterimages;
                 for (int i = 0; i < totalAfterimages; i++)
                 {
-                    int arrayPos = i * 4;
+                    int arrayPos = i * AfterimageOffset;
                     float afterimageRot = Projectile.oldRot[arrayPos];
                     SpriteEffects sfxForThisAfterimage = Projectile.oldSpriteDirection[arrayPos] == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                     Vector2 drawPos = Projectile.oldPos[arrayPos] + centerOffset - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);

@@ -67,7 +67,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int proj = Projectile.NewProjectile(source, position, velocity, type, (int)Math.Round(damage * 0.5), knockback * 0.5f, player.whoAmI, (float)BeamType, 0f);
+            int proj = Projectile.NewProjectile(source, position, velocity, type, (int)Math.Round(damage * 0.5), knockback * 0.5f, player.whoAmI, (float)BeamType);
             if (BeamType == 7)
                 Main.projectile[proj].penetrate = 3;
 
