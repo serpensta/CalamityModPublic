@@ -1446,6 +1446,90 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            // Adjust dust to avoid lag.
+            else if (projectile.type == ProjectileID.SpectreWrath)
+            {
+                projectile.ai[1] += 1f;
+                if (projectile.ai[1] >= 60f)
+                {
+                    projectile.friendly = true;
+                    int target = (int)projectile.ai[0];
+                    if (Main.myPlayer == projectile.owner && (target == -1 || !Main.npc[target].CanBeChasedBy(projectile)))
+                    {
+                        target = -1;
+                        int[] array = new int[Main.maxNPCs];
+                        int randomTargets = 0;
+                        float homingDistance = 800f;
+                        for (int i = 0; i < Main.maxNPCs; i++)
+                        {
+                            if (Main.npc[i].CanBeChasedBy(projectile))
+                            {
+                                float distanceFromTarget = Math.Abs(Main.npc[i].Center.X - projectile.Center.X) + Math.Abs(Main.npc[i].Center.Y - projectile.Center.Y);
+                                if (distanceFromTarget < homingDistance)
+                                {
+                                    array[randomTargets] = i;
+                                    randomTargets++;
+                                }
+                            }
+                        }
+
+                        if (randomTargets == 0)
+                        {
+                            projectile.Kill();
+                            return false;
+                        }
+
+                        target = array[Main.rand.Next(randomTargets)];
+                        projectile.ai[0] = target;
+                        projectile.netUpdate = true;
+                    }
+
+                    if (target != -1)
+                    {
+                        int inertia = 30;
+                        float homingSpeed = 4f;
+                        Vector2 homeDirection = (Main.npc[target].Center - projectile.Center).SafeNormalize(Vector2.UnitY);
+                        projectile.velocity = (projectile.velocity * inertia + homeDirection * homingSpeed) / (inertia + 1f);
+                    }
+                }
+
+                int maxDust = 3;
+                float dustOffsetMultiplier = 1f / (float)maxDust;
+                for (int i = 0; i < maxDust; i++)
+                {
+                    float dustOffsetX = projectile.velocity.X * dustOffsetMultiplier * (float)i;
+                    float dustOffsetY = (0f - projectile.velocity.Y * dustOffsetMultiplier) * (float)i;
+                    int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SpectreStaff, 0f, 0f, 100, default, 1.3f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].velocity *= 0f;
+                    Main.dust[dust].position.X -= dustOffsetX;
+                    Main.dust[dust].position.Y -= dustOffsetY;
+                }
+
+                return false;
+            }
+
+            // Adjust dust to avoid lag.
+            else if (projectile.type == ProjectileID.SpiritHeal)
+            {
+                projectile.HealingProjectile((int)projectile.ai[1], (int)projectile.ai[0], 4f, 15f);
+
+                int maxDust = 3;
+                float dustOffsetMultiplier = 1f / (float)maxDust;
+                for (int i = 0; i < maxDust; i++)
+                {
+                    float dustOffsetX = projectile.velocity.X * dustOffsetMultiplier * (float)i;
+                    float dustOffsetY = (0f - projectile.velocity.Y * dustOffsetMultiplier) * (float)i;
+                    int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SpectreStaff, 0f, 0f, 100, default, 1.3f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].velocity *= 0f;
+                    Main.dust[dust].position.X -= dustOffsetX;
+                    Main.dust[dust].position.Y -= dustOffsetY;
+                }
+
+                return false;
+            }
+
             else if (projectile.type == ProjectileID.NurseSyringeHeal)
             {
                 ref float initialSpeed = ref projectile.localAI[1];
