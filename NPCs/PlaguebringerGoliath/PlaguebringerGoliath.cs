@@ -631,7 +631,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 // Move closer
                 bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -714,7 +714,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -803,7 +803,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -895,7 +895,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;

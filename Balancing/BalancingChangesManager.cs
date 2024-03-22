@@ -157,6 +157,15 @@ namespace CalamityMod.Balancing
             // 50% resist to Dormant Brimseeker.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<DormantBrimseekerBab>()))));
 
+            // 50% resist to Aftershock Rocks.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<AftershockRock>()))));
+
+            // 50% resist to Avalanche Ice Bombs.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<IceBombFriendly>()))));
+
+            // 50% resist to Avalanche Frost Shards.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<FrostShardFriendly>()))));
+
             // 45% resist to Mounted Scanner.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.DestroyerIDs, Do(new ProjectileResistBalancingRule(0.55f, ProjectileType<MountedScannerLaser>()))));
 
