@@ -41,7 +41,7 @@ BubonicRound: {
 	Tooltip:
 		'''
 		Spreads the plague on hit
-		Ignores 20% of enemy defense
+		Ignores 10% of enemy defense
 		'''
 }
 
