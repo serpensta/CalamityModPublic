@@ -46,7 +46,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
             // Fire either the bullet or the water jet, depending on cadence.
             int projectileToFire = fireWater ? Item.shoot : type;
-            Projectile.NewProjectile(source, newPos, newVel, projectileToFire, (int)(damage * 0.85f), knockback, player.whoAmI);
+            Projectile.NewProjectile(source, newPos, newVel, projectileToFire, (int)(damage * 0.8f), knockback, player.whoAmI);
 
             // Always fires a close range water blast.
             // It goes in the same direction as the main shot but has a minor velocity variation to be less monotonous.
