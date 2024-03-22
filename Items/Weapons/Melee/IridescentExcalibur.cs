@@ -171,32 +171,12 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
-
-            if (player.moonLeech || player.lifeSteal <= 0f || target.lifeMax <= 5 || player.altFunctionUse != 2)
-                return;
-
-            int heal = Main.rand.Next(3) + 10;
-            player.lifeSteal -= heal;
-            player.statLife += heal;
-            player.HealEffect(heal);
-            if (player.statLife > player.statLifeMax2)
-                player.statLife = player.statLifeMax2;
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
-
-            if (player.moonLeech || player.lifeSteal <= 0f || player.altFunctionUse != 2)
-                return;
-
-            int heal = Main.rand.Next(3) + 10;
-            player.lifeSteal -= heal;
-            player.statLife += heal;
-            player.HealEffect(heal);
-            if (player.statLife > player.statLifeMax2)
-                player.statLife = player.statLifeMax2;
         }
 
         public override void AddRecipes()
