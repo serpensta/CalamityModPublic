@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.Ranged
             return new Color(1f, 1f, 1f, 0f);
         }
 
-        // Ignores 20% of armor
+        // Ignores 10% of armor
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.ScalingArmorPenetration += 0.1f;
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) => modifiers.ScalingArmorPenetration += 0.1f;
 
