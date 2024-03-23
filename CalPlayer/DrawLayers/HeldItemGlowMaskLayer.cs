@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CalamityMod.Items.SummonItems;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
@@ -76,6 +77,12 @@ namespace CalamityMod.CalPlayer.DrawLayers
                 glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/GreatswordofJudgementGlow").Value;
             else if (itemType == ModContent.ItemType<Orderbringer>())
                 glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/OrderbringerGlow").Value;
+            else if (itemType == ModContent.ItemType<MajesticGuard>())
+                glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/MajesticGuardGlow").Value;
+            else if (itemType == ModContent.ItemType<GrandGuardian>())
+                glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/GrandGuardianGlow").Value;
+            else if (itemType == ModContent.ItemType<NecroplasmicBeacon>())
+                glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/SummonItems/NecroplasmicBeaconGlow").Value;
 
             if (glowMask == default)
                 return;
@@ -154,6 +161,11 @@ namespace CalamityMod.CalPlayer.DrawLayers
                 case ItemID.DyeTradersScimitar:
                     originOffset = new Vector2(2f, -2f) * drawPlayer.Directions;
                     break;*/
+            }
+
+            if (itemType == ModContent.ItemType<GrandGuardian>())
+            {
+                color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, heldItem.alpha);
             }
 
             Vector2 origin = new Vector2((float)itemDrawFrame.Width * 0.5f - (float)itemDrawFrame.Width * 0.5f * (float)drawPlayer.direction, itemDrawFrame.Height);

@@ -158,7 +158,7 @@ SetBonus: {
 		'''
 	SpectreHealing:
 		'''
-		Reduces Magic damage by 20% and converts it to healing force
+		Converts magic damage to healing force
 		Magic damage done to enemies heals the player with lowest health
 		'''
 }

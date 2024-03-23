@@ -14,6 +14,7 @@ namespace CalamityMod.Items.SummonItems
     public class NecroplasmicBeacon : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.SummonItems";
+
         public override void SetStaticDefaults()
         {
             ItemID.Sets.SortingPriorityBossSpawns[Type] = 19; // Celestial Sigil

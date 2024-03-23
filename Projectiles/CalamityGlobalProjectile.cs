@@ -1432,6 +1432,105 @@ namespace CalamityMod.Projectiles
                 return false;
             }
 
+            else if (projectile.type == ProjectileID.ChlorophyteBullet)
+            {
+                if (projectile.alpha < 170)
+                {
+                    int totalDust = 5;
+                    for (int i = 0; i < totalDust; i++)
+                    {
+                        float x2 = projectile.position.X - projectile.velocity.X / (float)totalDust * (float)i;
+                        float y2 = projectile.position.Y - projectile.velocity.Y / (float)totalDust * (float)i;
+                        int dust = Dust.NewDust(new Vector2(x2, y2), 1, 1, 75);
+                        Main.dust[dust].alpha = projectile.alpha;
+                        Main.dust[dust].position.X = x2;
+                        Main.dust[dust].position.Y = y2;
+                        Main.dust[dust].velocity *= 0f;
+                        Main.dust[dust].noGravity = true;
+                    }
+                }
+
+                float velocityLength = (float)Math.Sqrt(projectile.velocity.X * projectile.velocity.X + projectile.velocity.Y * projectile.velocity.Y);
+                float cachedVelocityLength = projectile.localAI[0];
+                if (cachedVelocityLength == 0f)
+                {
+                    projectile.localAI[0] = velocityLength;
+                    cachedVelocityLength = velocityLength;
+                }
+
+                if (projectile.alpha > 0)
+                    projectile.alpha -= 25;
+
+                if (projectile.alpha < 0)
+                    projectile.alpha = 0;
+
+                float posX = projectile.position.X;
+                float posY = projectile.position.Y;
+                float homingDistance = 300f;
+                bool homeIn = false;
+                int target = 0;
+                if (projectile.ai[1] == 0f)
+                {
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        if (Main.npc[i].CanBeChasedBy(this) && (projectile.ai[1] == 0f || projectile.ai[1] == (float)(i + 1)))
+                        {
+                            float targetCenterX = Main.npc[i].Center.X;
+                            float targetCenterY = Main.npc[i].Center.Y;
+                            float targetDistance = Math.Abs(projectile.Center.X - targetCenterX) + Math.Abs(projectile.Center.Y - targetCenterY);
+                            if (targetDistance < homingDistance && Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].position, Main.npc[i].width, Main.npc[i].height))
+                            {
+                                homingDistance = targetDistance;
+                                posX = targetCenterX;
+                                posY = targetCenterY;
+                                homeIn = true;
+                                target = i;
+                            }
+                        }
+                    }
+
+                    if (homeIn)
+                        projectile.ai[1] = target + 1;
+
+                    homeIn = false;
+                }
+
+                if (projectile.ai[1] > 0f)
+                {
+                    int targetIndex = (int)(projectile.ai[1] - 1f);
+                    if (Main.npc[targetIndex].active && Main.npc[targetIndex].CanBeChasedBy(this, ignoreDontTakeDamage: true) && !Main.npc[targetIndex].dontTakeDamage)
+                    {
+                        float targetCenterX = Main.npc[targetIndex].Center.X;
+                        float targetCenterY = Main.npc[targetIndex].Center.Y;
+                        float homingCutOffDistance = 1000f;
+                        if (Math.Abs(projectile.Center.X - targetCenterX) + Math.Abs(projectile.Center.Y - targetCenterY) < homingCutOffDistance)
+                        {
+                            homeIn = true;
+                            posX = Main.npc[targetIndex].Center.X;
+                            posY = Main.npc[targetIndex].Center.Y;
+                        }
+                    }
+                    else
+                        projectile.ai[1] = 0f;
+                }
+
+                if (!projectile.friendly)
+                    homeIn = false;
+
+                if (homeIn)
+                {
+                    int inertia = 8;
+                    float homingSpeed = cachedVelocityLength;
+                    Vector2 destination = new Vector2(posX, posY);
+                    Vector2 homeDirection = (destination - projectile.Center).SafeNormalize(Vector2.UnitY);
+                    projectile.velocity = (projectile.velocity * inertia + homeDirection * homingSpeed) / (inertia + 1f);
+                }
+
+                projectile.rotation = (float)Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + MathHelper.PiOver2;
+
+                return false;
+            }
+
             // Adjust dust to avoid lag.
             else if (projectile.type == ProjectileID.VampireHeal)
             {
