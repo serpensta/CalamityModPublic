@@ -219,6 +219,7 @@ namespace CalamityMod.NPCs.Leviathan
                         float moveDirection = 1f;
                         if (Math.Abs(NPC.Center.X - Main.maxTilesX * 16f) > Math.Abs(NPC.Center.X))
                             moveDirection = -1f;
+
                         NPC.velocity.X = moveDirection * 6f;
                         NPC.spriteDirection = (int)-moveDirection;
                         NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y + 0.2f, -3f, 16f);
@@ -245,6 +246,13 @@ namespace CalamityMod.NPCs.Leviathan
 
                         NPC.velocity *= 0.9f;
                     }
+                    else
+                    {
+                        NPC.alpha -= 5;
+                        if (NPC.alpha < 0)
+                            NPC.alpha = 0;
+                    }
+
                     NPC.dontTakeDamage = true;
                     return;
                 }
@@ -308,8 +316,10 @@ namespace CalamityMod.NPCs.Leviathan
                 ChargeRotation(player, vector);
                 ChargeLocation(player, vector, false, true);
 
-                NPC.alpha += 3;
-                if (NPC.alpha >= 255)
+                if (NPC.alpha < 255)
+                    NPC.alpha += 3;
+
+                if (NPC.alpha > 255)
                 {
                     NPC.alpha = 255;
                 }
@@ -337,9 +347,8 @@ namespace CalamityMod.NPCs.Leviathan
                 return;
             }
 
-            // Alpha
             NPC.alpha -= 5;
-            if (NPC.alpha <= 0)
+            if (NPC.alpha < 0)
                 NPC.alpha = 0;
 
             // Play sound
