@@ -73,7 +73,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) => modifiers.ScalingArmorPenetration += 0.1f;
 
         // Inflicts Plague for 0.75 seconds
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Plague>(), 45);
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => target.AddBuff(ModContent.BuffType<Plague>(), 60);
 
         public override void OnKill(int timeLeft)
         {
