@@ -101,7 +101,7 @@
         internal static readonly float LifeStealCap_Revengeance = 40f;
         internal static readonly float LifeStealCap_Death = 30f;
 
-        // Master nerfs the life steal cap by 10, resulting in 60 in non-Rev Master, 50 in Rev Master, and 40 in Death Master
+        // Master nerfs the life steal cap by 10, resulting in 40 in non-Rev Master, 30 in Rev Master, and 20 in Death Master
         internal static readonly float LifeStealCapReduction_Master = 10f;
 
         // The base life steal cooldowns from vanilla
