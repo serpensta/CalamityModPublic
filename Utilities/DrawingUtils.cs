@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using CalamityMod.Graphics;
+using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -398,7 +399,12 @@ namespace CalamityMod
         public static void DrawItemGlowmaskSingleFrame(this Item item, SpriteBatch spriteBatch, float rotation, Texture2D glowmaskTexture)
         {
             Vector2 origin = new Vector2(glowmaskTexture.Width / 2f, glowmaskTexture.Height / 2f);
-            spriteBatch.Draw(glowmaskTexture, item.Center - Main.screenPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 0f);
+
+            Color color = new Color(250, 250, 250, item.alpha);
+            if (item.type == ModContent.ItemType<GrandGuardian>())
+                color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, item.alpha);
+
+            spriteBatch.Draw(glowmaskTexture, item.Center - Main.screenPosition, null, color, rotation, origin, 1f, SpriteEffects.None, 0f);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
