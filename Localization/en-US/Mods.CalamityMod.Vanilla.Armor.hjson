@@ -130,14 +130,8 @@ SetBonus: {
 		15% increased minion damage and 10% increased melee critical strike chance
 		Negates the summon damage penalty while wielding non-summon weapons
 		'''
-	HuntressTier2:
-		'''
-		10% increased minion and ranged damage
-		'''
-	ApprenticeTier2:
-		'''
-		5% increased minion damage and 15% increased magic critical strike chance
-		'''
+	HuntressTier2: 10% increased minion and ranged damage
+	ApprenticeTier2: 5% increased minion damage and 15% increased magic critical strike chance
 	MonkTier3:
 		'''
 		10% increased melee damage, melee critical strike chance and melee speed
@@ -148,14 +142,8 @@ SetBonus: {
 		Massively increased life regeneration
 		10% increased minion damage and melee critical strike chance
 		'''
-	HuntressTier3:
-		'''
-		10% increased minion and ranged damage
-		'''
-	ApprenticeTier3:
-		'''
-		10% increased minion damage and 15% increased magic critical strike chance
-		'''
+	HuntressTier3: 10% increased minion and ranged damage
+	ApprenticeTier3: 10% increased minion damage and 15% increased magic critical strike chance
 	SpectreHealing:
 		'''
 		Converts magic damage to healing force
