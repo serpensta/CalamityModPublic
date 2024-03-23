@@ -10,6 +10,7 @@ using CalamityMod.Particles;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
@@ -28,7 +29,7 @@ namespace CalamityMod.Projectiles.Boss
         public static readonly SoundStyle SpawnSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterSpawn");
         public static readonly SoundStyle DroneSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneMonsterDrone");
         public SlotId RumbleSlot;
-        public Texture2D screamTex;
+        public static Asset<Texture2D> screamTex;
 
         internal static readonly float CircularHitboxRadius = 170f;
         public static int MinimumDamagePerFrame = 4;
@@ -40,6 +41,14 @@ namespace CalamityMod.Projectiles.Boss
         private float speedLimit = 0f;
         private int time = 0;
         private int sitStill = 90;
+
+        public override void SetStaticDefaults()
+        {
+            if (!Main.dedServ)
+            {
+                screamTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ScreamyFace", AssetRequestMode.AsyncLoad);
+            }
+        }
 
         public override void SetDefaults()
         {
@@ -54,7 +63,6 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.timeLeft = 36000;
             Projectile.Opacity = 0f;
             CooldownSlot = ImmunityCooldownID.Bosses;
-            screamTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ScreamyFace").Value;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -370,7 +378,7 @@ namespace CalamityMod.Projectiles.Boss
             Vector2 pos = Projectile.Center - Main.screenPosition;
 
             float scale = 0.715f;
-            Main.spriteBatch.Draw(screamTex, pos, null, Color.White, 0, screamTex.Size() * 0.5f, scale * Projectile.scale * Projectile.Opacity, 0, 0);
+            Main.spriteBatch.Draw(screamTex.Value, pos, null, Color.White, 0, screamTex.Size() * 0.5f, scale * Projectile.scale * Projectile.Opacity, 0, 0);
 
             //Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, tex.Size() / 2f, Projectile.scale * 0.3f, SpriteEffects.None, 0);
             Main.spriteBatch.End();
