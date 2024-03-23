@@ -830,3 +830,8 @@ HarvestStaff: {
 		'No thoughts behind those eyes'
 		'''
 }
+
+LiliesOfFinality: {
+	DisplayName: Lilies of Finality
+	Tooltip: ""
+}
