@@ -866,6 +866,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float chargeGateValue = 40f;
                     float playChargeSoundTime = 20f;
                     float chargeDuration = phase3 ? 40f : 50f;
+                    float slowDownTime = 30f;
+                    float totalPhaseTime = chargeGateValue + chargeDuration + slowDownTime;
                     float chargeStartDistance = phase3 ? 1000f : 800f;
                     float chargeVelocity = phase3 ? 100f : 70f;
                     float chargeAcceleration = phase3 ? 0.1f : 0.07f;
@@ -947,8 +949,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     npc.ai[1] += 1f;
-                    extraPhaseTime = (dayTimeEnrage ? 48f : 96f) * lessTimeSpentPerPhaseMultiplier;
-                    if (npc.ai[1] >= 150f + extraPhaseTime)
+                    extraPhaseTime = (dayTimeEnrage ? 24f : 48f) * lessTimeSpentPerPhaseMultiplier;
+                    if (npc.ai[1] >= totalPhaseTime + extraPhaseTime)
                     {
                         npc.ai[0] = 1f;
                         npc.ai[1] = 0f;

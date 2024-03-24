@@ -2589,6 +2589,91 @@ namespace CalamityMod.Projectiles
                     return false;
                 }
 
+                else if (projectile.type == ProjectileID.InfernoHostileBolt && projectile.ai[2] > 0f)
+                {
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item20, projectile.position);
+                        projectile.localAI[0] += 1f;
+                    }
+
+                    bool killX = false;
+                    bool killY = false;
+                    if (projectile.velocity.X < 0f && projectile.position.X < projectile.ai[0])
+                        killX = true;
+
+                    if (projectile.velocity.X > 0f && projectile.position.X > projectile.ai[0])
+                        killX = true;
+
+                    if (projectile.velocity.Y < 0f && projectile.position.Y < projectile.ai[1])
+                        killY = true;
+
+                    if (projectile.velocity.Y > 0f && projectile.position.Y > projectile.ai[1])
+                        killY = true;
+
+                    if (killX && killY)
+                        projectile.Kill();
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.IchorTorch, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default, 1.6f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].velocity *= 0.3f;
+                        Main.dust[dust].velocity += projectile.velocity * 0.1f;
+                        if (Main.getGoodWorld)
+                            Main.dust[dust].noLight = true;
+                    }
+
+                    return false;
+                }
+
+                else if (projectile.type == ProjectileID.InfernoHostileBlast && projectile.ai[2] > 0f)
+                {
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item74, projectile.position);
+                        projectile.localAI[0] += 1f;
+                    }
+
+                    projectile.ai[0] += 1f;
+
+                    float totalDust = 25f;
+                    if (projectile.ai[0] > 540f)
+                        totalDust -= (projectile.ai[0] - 180f) / 2f;
+
+                    if (totalDust <= 0f)
+                    {
+                        totalDust = 0f;
+                        projectile.Kill();
+                    }
+
+                    float maxDustVelocityX = 10f;
+                    float maxDustVelocityY = 10f;
+                    float minDustSpeed = 3f;
+                    float maxDustSpeed = 8f;
+
+                    for (int i = 0; i < (int)totalDust; i++)
+                    {
+                        float dustVelocityX = Main.rand.NextFloat(-maxDustVelocityX, maxDustVelocityX);
+                        float dustVelocityY = Main.rand.NextFloat(-maxDustVelocityY, maxDustVelocityY);
+                        float randomDustSpeed = Main.rand.NextFloat(minDustSpeed, maxDustSpeed);
+                        float velocityLength = (float)Math.Sqrt(dustVelocityX * dustVelocityX + dustVelocityY * dustVelocityY);
+                        velocityLength = randomDustSpeed / velocityLength;
+                        dustVelocityX *= velocityLength;
+                        dustVelocityY *= velocityLength;
+                        Vector2 dustVelocity = new Vector2(dustVelocityX, dustVelocityY);
+                        Vector2 dustPosition = projectile.Center + new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f));
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.IchorTorch, 0f, 0f, 100, default, 1.8f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].position = dustPosition;
+                        Main.dust[dust].velocity = dustVelocity;
+                        if (Main.getGoodWorld)
+                            Main.dust[dust].noLight = true;
+                    }
+
+                    return false;
+                }
+
                 else if (projectile.type == ProjectileID.AncientDoomProjectile)
                 {
                     if (projectile.velocity.Length() < 8f)
@@ -3139,8 +3224,8 @@ namespace CalamityMod.Projectiles
                         // ai[1] being set to 1 is done only by the Calamity usages of these projectiles in Skeletron and Skeletron Prime boss fights
                         bool isSkeletronBossProjectile = (projectile.type == ProjectileID.RocketSkeleton || projectile.type == ProjectileID.Shadowflames) && projectile.ai[1] > 0f;
 
-                        // These projectiles will not be buffed if Golem is alive
-                        bool isGolemBossProjectile = NPC.golemBoss > 0 && (projectile.type == ProjectileID.InfernoHostileBolt || projectile.type == ProjectileID.InfernoHostileBlast);
+                        // These projectiles will not be buffed if Golem fires them
+                        bool isGolemBossProjectile = (projectile.type == ProjectileID.InfernoHostileBolt || projectile.type == ProjectileID.InfernoHostileBlast) && projectile.ai[2] > 0f;
 
                         if (!isSkeletronBossProjectile && !isGolemBossProjectile)
                             projectile.damage += 30;
@@ -4168,6 +4253,7 @@ namespace CalamityMod.Projectiles
         {
             bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && (Main.masterMode || BossRushEvent.BossRushActive);
             bool revQueenBeeBeeHive = projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet;
+            bool revGolemInferno = projectile.type == ProjectileID.InfernoHostileBolt && projectile.ai[2] > 0f;
 
             if (revQueenBeeBeeHive)
             {
@@ -4296,9 +4382,17 @@ namespace CalamityMod.Projectiles
                     if (Main.netMode != NetmodeID.SinglePlayer)
                         NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
                 }
+
+                else if (revGolemInferno)
+                {
+                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileID.InfernoHostileBlast, projectile.damage, projectile.knockBack, projectile.owner, 0f, 0f, projectile.ai[2]);
+
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
+                }
             }
 
-            if (masterRevSkeletronPrimeBomb || revQueenBeeBeeHive)
+            if (masterRevSkeletronPrimeBomb || revQueenBeeBeeHive || revGolemInferno)
             {
                 projectile.active = false;
                 return false;
