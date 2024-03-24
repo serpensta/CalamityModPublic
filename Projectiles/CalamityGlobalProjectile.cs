@@ -2637,7 +2637,7 @@ namespace CalamityMod.Projectiles
 
                     projectile.ai[0] += 1f;
 
-                    float totalDust = 25f;
+                    float totalDust = 20f;
                     if (projectile.ai[0] > 540f)
                         totalDust -= (projectile.ai[0] - 180f) / 2f;
 
@@ -2670,6 +2670,22 @@ namespace CalamityMod.Projectiles
                         if (Main.getGoodWorld)
                             Main.dust[dust].noLight = true;
                     }
+
+                    float maxSparkVelocityX = 10f;
+                    float maxSparkVelocityY = 10f;
+                    float minSparkSpeed = 3f;
+                    float maxSparkSpeed = 7f;
+
+                    float sparkVelocityX = Main.rand.NextFloat(-maxSparkVelocityX, maxSparkVelocityX);
+                    float sparkVelocityY = Main.rand.NextFloat(-maxSparkVelocityY, maxSparkVelocityY);
+                    float randSparkSpeed = Main.rand.NextFloat(minSparkSpeed, maxSparkSpeed);
+                    float sparkLength = (float)Math.Sqrt(sparkVelocityX * sparkVelocityX + sparkVelocityY * sparkVelocityY);
+                    sparkLength = randSparkSpeed / sparkLength;
+                    sparkVelocityX *= sparkLength;
+                    sparkVelocityY *= sparkLength;
+
+                    Particle theSpark = new AltSparkParticle(projectile.Center, new Vector2(sparkVelocityX, sparkVelocityY), false, 40, 1f, new Color(255, 255, 100));
+                    GeneralParticleHandler.SpawnParticle(theSpark);
 
                     return false;
                 }

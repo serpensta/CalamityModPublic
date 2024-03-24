@@ -1168,8 +1168,8 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
         private void Movement(float distanceAboveTarget, Player player, float enrageScale)
         {
-            float acceleration = (NPC.ai[0] == 1f || NPC.ai[0] == 5f) ? 0.28f : 0.48f;
-            float velocity = (NPC.ai[0] == 1f || NPC.ai[0] == 5f) ? 16f : 24f;
+            float acceleration = (NPC.ai[0] == 1f || NPC.ai[0] == 5f) ? 0.24f : 0.48f; // Reduce acceleration while spawning minions
+            float velocity = (NPC.ai[0] == 1f || NPC.ai[0] == 5f) ? 12f : (NPC.ai[0] == 2f ? 18f : 24f); // Reduce velocity while preparing to spawn minions and spawning minions
             acceleration *= 0.5f * enrageScale + 1f;
             velocity *= 1f + enrageScale * 0.5f;
             Vector2 hoverDestination = player.Center - Vector2.UnitY * distanceAboveTarget;
