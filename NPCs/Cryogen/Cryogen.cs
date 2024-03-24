@@ -942,7 +942,7 @@ Block:
                 {
                     NPC.TargetClosest();
                     NPC.ai[0] = 4f;
-                    NPC.ai[1] = 120f;
+                    NPC.ai[1] = 150f;
                     NPC.ai[3] = 0f;
                     NPC.localAI[0] = 0f;
                     NPC.localAI[2] = 0f;
@@ -1035,7 +1035,7 @@ Block:
                     else if (NPC.ai[1] > 60f) // Only used for when phase 6 first starts to prevent insta-charges
                     {
                         NPC.velocity *= 0.98f;
-                        NPC.rotation = NPC.velocity.X * 0.15f;
+                        NPC.rotation += (150f - NPC.ai[1]) * 0.01f * NPC.direction;
                     }
                     else // Charge
                     {
