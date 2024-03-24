@@ -467,7 +467,8 @@ Exoblade: {
 		Press <left> to release multiple energy beams that home in on enemies and slice them on hit
 		Press <right> to dash in the direction of the cursor with the blade
 		Enemy hits from the blade during the dash result in massive damage and a rebound
-		Press <left> immediately after a rebound to perform a powerful slash that explodes on enemy hits
+		Press <left> immediately after a rebound to perform a powerful slash
+		Powerful slashes are larger, heal you, and create a large explosion
 		'''
 }
 
