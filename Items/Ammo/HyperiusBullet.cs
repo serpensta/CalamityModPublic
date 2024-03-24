@@ -9,6 +9,9 @@ namespace CalamityMod.Items.Ammo
     public class HyperiusBullet : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Ammo";
+
+        public static int SplitBulletBonusDamage = 10;
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;
