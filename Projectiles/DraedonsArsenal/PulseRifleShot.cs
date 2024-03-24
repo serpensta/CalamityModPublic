@@ -25,6 +25,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
         private NPC closestTarget = null;
         private NPC lastTarget = null;
         private float distance;
+        private int timesItCanHit = 3;
         public override void SetDefaults()
         {
             Projectile.width = 16;
@@ -40,6 +41,9 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
         public override void AI()
         {
+            if (timesItCanHit <= 0)
+                Projectile.Kill();
+
             notSplit = Projectile.ai[1] == 0f;
 
             Lighting.AddLight(Projectile.Center, 0.3f, 0f, 0.5f);
@@ -54,9 +58,8 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             {
                 Projectile.extraUpdates = 1;
                 Projectile.timeLeft = 1240;
-                Projectile.penetrate = 3;
                 if (Projectile.ai[1] == 1)
-                    SoundEngine.PlaySound(SoundID.DD2_DarkMageCastHeal with { Volume = 1.4f, Pitch = 0.6f }, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.DD2_DarkMageCastHeal with { Volume = 1.7f, Pitch = 0.3f }, Projectile.Center);
             }
             if (notSplit)
             {
@@ -113,11 +116,9 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     {
                         doDamage = true;
                         distance = 1500;
-                        if (Projectile.ai[1] == 1)
-                        {
-                            SoundStyle fire = new("CalamityMod/Sounds/Item/OpalFire");
-                            SoundEngine.PlaySound(fire with { Volume = 0.35f, Pitch = 1f }, Projectile.Center);
-                        }
+
+                        SoundStyle fire = new("CalamityMod/Sounds/Item/OpalFire");
+                        SoundEngine.PlaySound(fire with { Volume = 0.35f, Pitch = 1f }, Projectile.Center);
                             
 
                         Particle pulse = new DirectionalPulseRing(Projectile.Center, Vector2.Zero, mainColor, new Vector2(1f, 1f), Main.rand.NextFloat(12f, 25f), 0f, 0.5f, 15);
@@ -135,8 +136,25 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     }
                     if (Projectile.localAI[0] > 120)
                     {
-                        Projectile.extraUpdates = 5;
-                        NPC prevTarg = null;
+                        float projectileSpeed = 9.5f;
+                        if (closestTarget is not null && closestTarget.active)
+                        {
+                            float targetDirectionRotation = Projectile.SafeDirectionTo(closestTarget.Center).ToRotation();
+                            float turningRate = 10f + Projectile.localAI[0] * 0.00008f;
+                            Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetDirectionRotation, turningRate).ToRotationVector2() * projectileSpeed;
+                        }
+                        else
+                        {
+                            Projectile.velocity = Projectile.rotation.ToRotationVector2() * projectileSpeed;
+                            Projectile.velocity *= 0.998f;
+                        }
+                        if (closestTarget is not null && Vector2.Distance(Projectile.Center, closestTarget.Center) < 10)
+                        {
+                            closestTarget = null;
+                            distance = 1500;
+                        }
+
+                        Projectile.extraUpdates = 5 + (int)(Projectile.numHits * 0.3f);
                         {
                             for (int index = 0; index < Main.npc.Length; index++)
                             {
@@ -146,29 +164,11 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
                                     if (Vector2.Distance(Projectile.Center, Main.npc[index].Center) < (distance + extraDistance))
                                     {
-                                        closestTarget = prevTarg == null ? Main.npc[index] : Main.npc[index] == lastTarget ? prevTarg : Main.npc[index];
-                                        if (closestTarget == prevTarg && closestTarget == lastTarget)
-                                            closestTarget = null;
-                                        prevTarg = closestTarget;
-
+                                        closestTarget = Main.npc[index];
                                         distance = Vector2.Distance(Projectile.Center, Main.npc[index].Center);
                                     }
                                 }
                             }
-                        }
-
-                        float projectileSpeed = 9.5f;
-                        if (closestTarget is not null)
-                        {
-                            float targetDirectionRotation = Projectile.SafeDirectionTo(closestTarget.Center).ToRotation();
-                            float turningRate = 10f + Projectile.localAI[0] * 0.00008f;
-                            Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetDirectionRotation, turningRate).ToRotationVector2() * projectileSpeed;
-                        }
-                        else
-                        {
-                            Projectile.velocity = Projectile.rotation.ToRotationVector2() * projectileSpeed;
-                            Projectile.velocity *= 0.99f;
-                            Projectile.timeLeft--;
                         }
                     }
                 }
@@ -238,13 +238,14 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     GeneralParticleHandler.SpawnParticle(energy);
                 }
 
+                if (hit.Damage > 2 && target == closestTarget)
+                    timesItCanHit--;
+
                 if (onKill)
                 {
-                    Projectile.penetrate++;
+                    timesItCanHit += 1;
+                    Projectile.timeLeft += 90;
                 }
-
-                if (hit.Damage <= 2)
-                    Projectile.penetrate++;
             }
         }
 

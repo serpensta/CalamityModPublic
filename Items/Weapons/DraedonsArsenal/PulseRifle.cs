@@ -19,7 +19,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         public new string LocalizationCategory => "Items.Weapons.DraedonsArsenal";
         public static readonly SoundStyle FireSound = new("CalamityMod/Sounds/Item/PulseRifleFire");
 
-        private int BaseDamage = 2000;
+        private int BaseDamage = 1700;
         public int FiringTimer = 30;
 
         public override void SetDefaults()
@@ -52,7 +52,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            SoundEngine.PlaySound(FireSound with { Pitch = 0.2f });
+            SoundEngine.PlaySound(FireSound with { Volume = 0.7f, Pitch = 0.3f });
             Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<PulseRifleShot>(), damage, knockback, player.whoAmI, 0f, 0f);
 
             return false;
