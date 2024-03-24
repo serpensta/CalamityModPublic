@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CalamityMod.Balancing;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Dusts;
 using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Particles;
+using CalamityMod.Projectiles.Healing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -615,6 +617,12 @@ namespace CalamityMod.Projectiles.Melee
                     int explosionDamage = (int)(Projectile.damage * Exoblade.ExplosionDamageFactor);
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<Exoboom>(), explosionDamage, 0f, Projectile.owner);
                 }
+
+                if (target.lifeMax <= 5 || Owner.lifeSteal <= 0)
+                    return;
+
+                int healAmt = (int)Math.Round(hit.Damage * 0.04);
+                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Owner, healAmt, ModContent.ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange);
             }
         }
 
