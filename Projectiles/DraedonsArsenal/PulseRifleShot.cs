@@ -41,6 +41,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
         public override void AI()
         {
+            // If it's hit targeted enemies enough, kill it
             if (timesItCanHit <= 0)
                 Projectile.Kill();
 
@@ -70,6 +71,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > createDustVar && notSplit)
             {
+                // Main projectile visual
                 float sizeBonus = MathHelper.Clamp(Projectile.localAI[0] * 0.009f, 0, 3.5f);
                 if (targetDist < 1400f)
                 {
@@ -83,6 +85,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     GeneralParticleHandler.SpawnParticle(spark);
                 }
 
+                // A lingering trail of dust you can see after the particle trail disipates
                 if (Projectile.localAI[0] > 20)
                 {
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5), 66);
@@ -97,6 +100,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             #region Split Projectile AI
             if (!notSplit)
             {
+                // Split projectile visuals
                 if (targetDist < 1400f)
                 {
                     GlowOrbParticle spark = new GlowOrbParticle(Projectile.Center, -Projectile.velocity * Main.rand.NextFloat(-0.01f, 0.01f), false, 5, 1.7f - Projectile.ai[1] * 0.18f, Main.rand.NextBool(3) ? Color.DarkViolet : mainColor);
@@ -107,14 +111,16 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     GlowOrbParticle spark = new GlowOrbParticle(Projectile.Center + Projectile.velocity * Main.rand.NextFloat(-2f, 2f), -Projectile.velocity * Main.rand.NextFloat(-0.01f, 0.01f), false, 5, 1.7f - Projectile.ai[1] * 0.18f, Main.rand.NextBool(3) ? Color.DarkViolet : mainColor);
                     GeneralParticleHandler.SpawnParticle(spark);
                 }
+
                 if (Projectile.localAI[0] > 90)
                 {
+                    // Velocity must look like it has stoped, but can't actually be zero otherwise homing code doesn't work
                     if (Projectile.localAI[0] == 91)
                         Projectile.velocity *= 0.001f;
 
+                    // When they begin the homing after a hit of spawning, do a few visuals
                     if (Projectile.localAI[0] == 120)
                     {
-                        doDamage = true;
                         distance = 1500;
 
                         SoundStyle fire = new("CalamityMod/Sounds/Item/OpalFire");
@@ -134,8 +140,17 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                             dust.noLight = true;
                         }
                     }
+                    // Homing code
                     if (Projectile.localAI[0] > 120)
                     {
+                        // Do damage if it's near its target otherwise don't, this is to prevent excessive hits as orbs rail through worm bosses and such
+                        if (closestTarget is not null)
+                            doDamage = Vector2.Distance(Projectile.Center, closestTarget.Center) < 10;
+                        else
+                            doDamage = false;
+
+                        // Tracking code, originally was going to try only tracking the closest target not including the last target you hit, but I couldn't make it work
+                        // Eventually I settled on how it works now and it seems to home consistently so I'm happy enough there
                         float projectileSpeed = 9.5f;
                         if (closestTarget is not null && closestTarget.active)
                         {
@@ -146,7 +161,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                         else
                         {
                             Projectile.velocity = Projectile.rotation.ToRotationVector2() * projectileSpeed;
-                            Projectile.velocity *= 0.998f;
+                            Projectile.velocity *= 0.999f;
                         }
                         if (closestTarget is not null && Vector2.Distance(Projectile.Center, closestTarget.Center) < 10)
                         {
@@ -154,8 +169,10 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                             distance = 1500;
                         }
 
+                        // Add extra updates as it hits more times, this smoothy increases the speed without destroying velocity based visual effects
                         Projectile.extraUpdates = 5 + (int)(Projectile.numHits * 0.3f);
                         {
+                            // Actual homing movement
                             for (int index = 0; index < Main.npc.Length; index++)
                             {
                                 if (Main.npc[index].CanBeChasedBy(null, false) || Main.npc[index] == lastTarget)
@@ -174,6 +191,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 }
                 else
                 {
+                    // Minor dust trail for when they first spawn
                     if (Main.rand.NextBool(3))
                     {
                         Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5), 66);
@@ -212,6 +230,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     dust.noLight = true;
                 }
 
+                // Since the beam looks wider as it travels, these hit particles scale a bit to fit that
                 float sizeBonus = MathHelper.Clamp(Projectile.localAI[0] * 0.01f, 0, 3.5f);
                 for (int k = 0; k < 9; k++)
                 {
@@ -219,14 +238,19 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     GeneralParticleHandler.SpawnParticle(spark);
                 }
 
+                // Spawn the 4 energy orbs
+                // These should do a large fraction of the beam's damage so they will easily kill even some decently bulky enemies regular enemies in one hit
+                // This is so it can better proc its on kill effect
                 int numProj = 4;
                 for (int i = 0; i < numProj; i++)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, (Projectile.velocity.SafeNormalize(Vector2.Zero) * (14f - i * 0.7f)) * ((i + 1) * 0.25f), ModContent.ProjectileType<PulseRifleShot>(), (int)(Projectile.damage * 0.35), Projectile.knockBack, Projectile.owner, 0f, 1f + i);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, (Projectile.velocity.SafeNormalize(Vector2.Zero) * (14f - i * 0.7f)) * ((i + 1) * 0.25f), ModContent.ProjectileType<PulseRifleShot>(), (int)(Projectile.damage * 0.5), Projectile.knockBack, Projectile.owner, 0f, 1f + i);
                 }
             }
+            // Split projectile on hit effects
             else
             {
+                // Set some values to get ready foir it to home again for its next hit
                 lastTarget = target;
                 distance = 1500;
                 Projectile.localAI[0] = 60;
@@ -248,19 +272,6 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 }
             }
         }
-
-        public override void OnKill(int timeLeft)
-        {
-            if (notSplit)
-            {
-
-            }
-            else
-            {
-                //SoundEngine.PlaySound(SoundID.Item93, Projectile.Center);
-            }
-        }
-
         private void PulseBurst(float speed1, float speed2)
         {
             for (int i = 0; i <= 25; i++)
