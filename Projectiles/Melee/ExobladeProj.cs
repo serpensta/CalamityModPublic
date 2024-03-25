@@ -335,7 +335,7 @@ namespace CalamityMod.Projectiles.Melee
 
             // Create a bunch of homing beams.
             int beamShootStart = (int)(SwingTime * 0.6f);
-            int beamShootPeriod = (int)(SwingTime * 0.35f);
+            int beamShootPeriod = (int)(SwingTime * 0.4f);
             int beamShootEnd = beamShootStart + beamShootPeriod;
             beamShootPeriod /= (Exoblade.BeamsPerSwing - 1);
 
