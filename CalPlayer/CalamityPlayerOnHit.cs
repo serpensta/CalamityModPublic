@@ -1236,7 +1236,7 @@ namespace CalamityMod.CalPlayer
                     healMult -= proj.numHits * healMult * 0.5;
                     int heal = (int)Math.Round(damage * healMult);
                     if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
-                        CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealSetBonusCooldownMultiplier);
+                        CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealReaverTankCooldownMultiplier);
                 }
 
                 if (proj.CountsAsClass<ThrowingDamageClass>())
@@ -1310,7 +1310,7 @@ namespace CalamityMod.CalPlayer
                     int heal = (int)Math.Round(damage * healMult);
                     if (heal > 0 && !Main.player[Main.myPlayer].moonLeech)
                     {
-                        Main.player[Main.myPlayer].lifeSteal -= heal * BalancingConstants.LifeStealSetBonusCooldownMultiplier;
+                        Main.player[Main.myPlayer].lifeSteal -= heal * BalancingConstants.LifeStealReaverTankCooldownMultiplier;
 
                         float lowestHealthCheck = 0f;
                         int healTarget = Player.whoAmI;
