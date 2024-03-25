@@ -394,7 +394,7 @@ namespace CalamityMod.UI.DraedonSummoning
             {
                 // Skip/isolate the introduction text as needed.
                 string inquiry = dialog.Inquiry;
-                if (!Main.LocalPlayer.Calamity().HasTalkedAtCodebreaker && !DialogOptions[0].HasBeenSeen)
+                if (!Main.LocalPlayer.Calamity().HasCraftedDraedonsForge)
                 {
                     if (inquiry != DialogOptions[0].Inquiry)
                         continue;

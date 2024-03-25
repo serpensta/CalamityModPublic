@@ -110,7 +110,7 @@ Cooldowns: {
 	SandsmokeBombActive: Sandsmoke Bomb Duration
 	SandsmokeBombCooldown: Sandsmoke Bomb Cooldown
 	SilvaRevive: Silva Revive Cooldown
-    SpeedBlasterBoost: Speed Blaster Boost
+	SpeedBlasterBoost: Speed Blaster Boost
 	SpongeDurability: Sponge Barrier Durability
 	SpongeRecharge: Sponge Barrier Recharge
 	TarragonCloak: Tarragon Cloak Cooldown
@@ -154,7 +154,7 @@ Communication: {
 	}
 
 	WhoAreYouPart2: {
-		Inquiry: Introduction 2
+		Inquiry: Task Complete
 		Response:
 			'''
 			Excellent. I can tell that you have successfully taken advantage of the Exo Prisms. Before you waste your breath asking me how I know, Exo Prisms, along with many other parts of my machines, have tracking devices embedded within to both monitor my creations and prevent theft.\n\n

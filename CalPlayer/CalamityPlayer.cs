@@ -1179,6 +1179,7 @@ namespace CalamityMod.CalPlayer
         #region Draedon Summoning
         public bool AbleToSelectExoMech = false;
         public bool HasTalkedAtCodebreaker = false;
+        public bool HasCraftedDraedonsForge = false;
         public List<ulong> SeenDraedonDialogs = new();
         #endregion Draedon Summoning
 
@@ -1313,6 +1314,7 @@ namespace CalamityMod.CalPlayer
             boost.AddWithCondition("newCalamitasInventory", newCalamitasInventory);
             boost.AddWithCondition("GivenBrimstoneLocus", GivenBrimstoneLocus);
             boost.AddWithCondition("HasTalkedAtCodebreaker", HasTalkedAtCodebreaker);
+            boost.AddWithCondition("HasCraftedDraedonsForge", HasCraftedDraedonsForge);
 
             // Calculate the new total time of all sessions at the instant of this player save.
             TimeSpan newSessionTotal = previousSessionTotal.Add(CalamityMod.SpeedrunTimer.Elapsed);
@@ -1403,6 +1405,7 @@ namespace CalamityMod.CalPlayer
             newCalamitasInventory = boost.Contains("newCalamitasInventory");
             GivenBrimstoneLocus = boost.Contains("GivenBrimstoneLocus");
             HasTalkedAtCodebreaker = boost.Contains("HasTalkedAtCodebreaker");
+            HasCraftedDraedonsForge = boost.Contains("HasCraftedDraedonsForge");
 
             // Load rage if it's there, which it will be for any players saved with 1.5.
             // Older players have "stress" instead, which will be ignored. This is intentional.
