@@ -49,6 +49,9 @@ namespace CalamityMod.Projectiles
         // Source variables.
         public bool CreatedByPlayerDash = false;
 
+        // Speed cap for accelerating boss laser projectiles with 2 extraUpdates.
+        public const float AcceleratingBossLaserVelocityCap = 10f;
+
         // Damage Adjusters
         public const float PierceResistHarshness = 0.12f;
         public const float PierceResistCap = 0.8f;
@@ -638,7 +641,7 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[1] = 1f;
                 }
 
-                if (projectile.velocity.Length() < 12f)
+                if (projectile.velocity.Length() < AcceleratingBossLaserVelocityCap)
                     projectile.velocity *= 1.0025f;
 
                 return false;
@@ -661,7 +664,7 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[1] = 1f;
                 }
 
-                if (projectile.velocity.Length() < 12f)
+                if (projectile.velocity.Length() < AcceleratingBossLaserVelocityCap)
                     projectile.velocity *= 1.0025f;
 
                 return false;
@@ -2368,7 +2371,7 @@ namespace CalamityMod.Projectiles
                         projectile.localAI[1] = 1f;
                     }
 
-                    if (projectile.velocity.Length() < 12f)
+                    if (projectile.velocity.Length() < AcceleratingBossLaserVelocityCap)
                         projectile.velocity *= 1.0025f;
 
                     return false;
@@ -2623,6 +2626,9 @@ namespace CalamityMod.Projectiles
                         if (Main.getGoodWorld)
                             Main.dust[dust].noLight = true;
                     }
+
+                    Particle theSpark = new AltSparkParticle(projectile.Center, projectile.velocity * 0.06f + projectile.velocity * 0.1f, false, 40, 1f, new Color(255, 255, 100));
+                    GeneralParticleHandler.SpawnParticle(theSpark);
 
                     return false;
                 }

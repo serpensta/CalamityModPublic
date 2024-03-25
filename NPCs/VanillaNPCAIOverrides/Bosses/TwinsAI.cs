@@ -1801,7 +1801,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             if (death)
                             {
-                                float velocity = spazmatismPhase3ChargeSpeed + 3f;
+                                float velocity = spazmatismPhase3ChargeSpeed * 0.75f;
                                 int type = (!retAlive && npc.ai[3] % 2f == 0f) ? ModContent.ProjectileType<ShadowflameFireball>() : ProjectileID.CursedFlameHostile;
                                 int damage = npc.GetProjectileDamage(type);
 
@@ -1817,19 +1817,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 }
 
                                 Vector2 projectileVelocity = (Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
-                                if (type == ProjectileID.CursedFlameHostile)
+                                int numProj = 3;
+                                int spread = 15;
+                                float rotation = MathHelper.ToRadians(spread);
+                                for (int i = 0; i < numProj; i++)
                                 {
-                                    int numProj = 3;
-                                    int spread = 30;
-                                    float rotation = MathHelper.ToRadians(spread);
-                                    for (int i = 0; i < numProj; i++)
-                                    {
-                                        Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 25f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
-                                    }
+                                    Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 25f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                                 }
-                                else
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 25f, projectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
                             }
 
                             npc.ai[1] = 4f;
@@ -1849,7 +1844,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.ai[2] == 0f)
                             SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);
 
-                        float spazmatismRetDeadChargeSpeed = ((!retAlive && npc.ai[3] == 4f) ? 75f : 50f) - (float)Math.Round(death ? 14f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                        float spazmatismRetDeadChargeSpeed = ((!retAlive && npc.ai[3] == 4f) ? 75f : 50f) - (float)Math.Round(death ? ((!retAlive && npc.ai[3] == 4f) ? 15f : 10f) * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
 
                         npc.ai[2] += 1f;
 

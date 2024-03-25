@@ -621,7 +621,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > 320f)
                             {
-                                float shadowFlameProjectileSpeed = death ? 8f : 6f;
+                                float shadowFlameProjectileSpeed = death ? 5f : 4f;
                                 if (masterMode)
                                     shadowFlameProjectileSpeed *= 1.25f;
 
@@ -629,7 +629,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int type = ProjectileID.Shadowflames;
                                 int damage = npc.GetProjectileDamage(type);
                                 int shadowFlameProjectile = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, initialProjectileVelocity, type, damage, 0f, Main.myPlayer, 0f, 1f);
-                                Main.projectile[shadowFlameProjectile].timeLeft = 300;
+                                Main.projectile[shadowFlameProjectile].timeLeft = 600;
                             }
                         }
                     }
@@ -727,7 +727,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         headSpinVelocityMult += velocityBoost;
                 }
 
-                float altDashStopDistance = death ? (masterMode ? 210f : 240f) : (masterMode ? 320f : 400f);
+                float altDashStopDistance = death ? (masterMode ? 280f : 360f) : (masterMode ? 320f : 400f);
                 float headSpeedIncreaseDist = phase3 ? altDashStopDistance : 160f;
                 if (headSpinTargetDist > headSpeedIncreaseDist)
                 {
@@ -898,9 +898,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Attack far more often if still alive
             bool phase3 = skeletronLifeRatio < 0.3f;
 
-            float velocityMultiplier = MathHelper.Lerp(death ? 0.5f : 0.7f, 1f, skeletronLifeRatio);
-            float velocityIncrement = MathHelper.Lerp(0.2f, death ? 0.6f : 0.45f, 1f - skeletronLifeRatio);
-            float handSwipeVelocity = MathHelper.Lerp(16f, death ? 28f : 22f, 1f - skeletronLifeRatio);
+            float velocityMultiplier = MathHelper.Lerp(death ? 0.6f : 0.7f, 1f, skeletronLifeRatio);
+            float velocityIncrement = MathHelper.Lerp(0.2f, death ? 0.4f : 0.3f, 1f - skeletronLifeRatio);
+            float handSwipeVelocity = MathHelper.Lerp(16f, death ? 24f : 20f, 1f - skeletronLifeRatio);
             float deceleration = Main.getGoodWorld ? 0.78f : Main.masterMode ? 0.82f : Main.expertMode ? 0.86f : 0.9f;
 
             float handSwipeDuration = HandSwipeDistance / handSwipeVelocity;
@@ -908,7 +908,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             float slapTimerIncrement = MathHelper.Lerp(1f, 2f, 1f - skeletronLifeRatio);
             if (phase3)
-                slapTimerIncrement *= (death ? 3f : 2f);
+                slapTimerIncrement *= (death ? 2.5f : 2f);
             else if (phase2)
                 slapTimerIncrement *= (death ? 2f : 1.5f);
 
