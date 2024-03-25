@@ -62,6 +62,10 @@ namespace CalamityMod.Balancing
 
             UniversalBalancingChanges = new List<IBalancingRule[]>()
             {
+                // Nerf Crystal bullet shards by 45%
+                // Currently crystal bullet projectiles deal 50% of the bullet's damage which is absurd in vanilla, this nerfs them to 27.5%
+                Do(new ProjectileResistBalancingRule(0.55f, ProjectileID.CrystalShard)),
+
                 // Nerf Luminite Arrow trails by 50%.
                 Do(new ProjectileResistBalancingRule(0.5f, ProjectileID.MoonlordArrowTrail)),
                 
@@ -76,6 +80,7 @@ namespace CalamityMod.Balancing
 
                 // Nerf Spectre Mask set bonus projectiles by 30%.
                 Do(new ProjectileSpecificRequirementBalancingRule(0.7f, SpectreMaskSetBonusFilter)),
+
             };
 
             NPCSpecificBalancingChanges = new List<NPCBalancingChange>();
