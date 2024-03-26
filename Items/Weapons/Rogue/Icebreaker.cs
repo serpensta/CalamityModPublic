@@ -22,7 +22,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.useTime = 14;
             Item.knockBack = 6.75f;
             Item.UseSound = SoundID.Item1;
-            Item.DamageType = DamageClass.Melee;
             Item.value = CalamityGlobalItem.Rarity5BuyPrice;
             Item.rare = ItemRarityID.Pink;
             Item.shoot = ModContent.ProjectileType<IcebreakerHammer>();
