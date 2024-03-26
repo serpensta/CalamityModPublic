@@ -218,7 +218,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Teleport while not despawning
             if (npc.ai[1] != 3f)
             {
-                int dustType = 91;
+                int dustType = DustID.GemDiamond;
 
                 // Post-teleport
                 if (npc.ai[3] == -60f)
@@ -868,7 +868,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         int teleportDust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.GemDiamond, 0f, 0f, 200, default, 3f);
                         Main.dust[teleportDust].noGravity = true;
-                        Main.dust[teleportDust].velocity.X = Main.dust[teleportDust].velocity.X * 2f;
+                        Main.dust[teleportDust].velocity.X *= 2f;
                     }
 
                     // New location
@@ -891,6 +891,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
             else
                 skeletronLifeRatio = Main.npc[(int)npc.ai[1]].life / (float)Main.npc[(int)npc.ai[1]].lifeMax;
+
+            // This bool exists for fairness so the hands don't slap when Skeletron is in phase 3 and getting ready to do the new charge
+            bool cancelSlap = Main.npc[(int)npc.ai[1]].ai[2] >= ChargeGateValue;
 
             // Fire skulls from hands at the end of each slap phase (master mode only)
             bool phase2 = skeletronLifeRatio < 0.5f;
@@ -920,7 +923,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.npc[(int)npc.ai[1]].ai[1] == 3f && npc.timeLeft > 10)
                     npc.timeLeft = 10;
 
-                if (Main.npc[(int)npc.ai[1]].ai[1] != 0f)
+                if (Main.npc[(int)npc.ai[1]].ai[1] != 0f || cancelSlap)
                 {
                     float maxX = velocityIncrement * 100f * velocityMultiplier;
                     float maxY = velocityIncrement * 100f * velocityMultiplier;
@@ -1070,14 +1073,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.damage = npc.defDamage;
 
                 npc.ai[3] += 1f;
-                if (npc.ai[3] >= handSwipeDuration || Vector2.Distance(Main.npc[(int)npc.ai[1]].Center, npc.Center) > HandSwipeDistance)
+                if (npc.ai[3] >= handSwipeDuration || Vector2.Distance(Main.npc[(int)npc.ai[1]].Center, npc.Center) > HandSwipeDistance || cancelSlap)
                 {
                     npc.ai[2] = 3f;
                     npc.ai[3] = 0f;
                     npc.netUpdate = true;
 
                     // Spawn projectiles
-                    if (masterMode && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
+                    if (masterMode && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && !cancelSlap)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -1130,14 +1133,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.damage = npc.defDamage;
 
                 npc.ai[3] += 1f;
-                if (npc.ai[3] >= handSwipeDuration || Vector2.Distance(Main.npc[(int)npc.ai[1]].Center, npc.Center) > HandSwipeDistance)
+                if (npc.ai[3] >= handSwipeDuration || Vector2.Distance(Main.npc[(int)npc.ai[1]].Center, npc.Center) > HandSwipeDistance || cancelSlap)
                 {
                     npc.ai[2] = 0f;
                     npc.ai[3] = 0f;
                     npc.netUpdate = true;
 
                     // Spawn projectiles
-                    if (masterMode && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
+                    if (masterMode && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && !cancelSlap)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
