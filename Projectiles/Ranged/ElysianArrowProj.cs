@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (target == null)
                 velocity = (targetPosition - spawnSpot).SafeNormalize(Vector2.UnitX) * 20;
             else
-                velocity = CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(spawnSpot, target, 20f, 7);
+                velocity = CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(spawnSpot, target, 20f, ElysianArrowRain.MaxUpdate);
 
             if (targetDist < 1400f)
             {
