@@ -86,10 +86,10 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 }
 
                 // A lingering trail of dust you can see after the particle trail disipates
-                if (Projectile.localAI[0] > 20)
+                if (Projectile.localAI[0] > 20 && Main.rand.NextBool())
                 {
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5), 66);
-                    dust.scale = Main.rand.NextFloat(0.9f, 1.7f);
+                    dust.scale = Main.rand.NextFloat(0.7f, 1.5f);
                     dust.velocity = Projectile.velocity * Main.rand.NextFloat(-3, 3);
                     dust.noGravity = true;
                     dust.color = Main.rand.NextBool(3) ? Color.DarkViolet : mainColor;
@@ -121,7 +121,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     // When they begin the homing after a hit of spawning, do a few visuals
                     if (Projectile.localAI[0] == 120)
                     {
-                        distance = 1500;
+                        distance = 3000;
 
                         SoundStyle fire = new("CalamityMod/Sounds/Item/OpalFire");
                         SoundEngine.PlaySound(fire with { Volume = 0.35f, Pitch = 1f }, Projectile.Center);
@@ -166,7 +166,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                         if (closestTarget is not null && Vector2.Distance(Projectile.Center, closestTarget.Center) < 10)
                         {
                             closestTarget = null;
-                            distance = 1500;
+                            distance = 3000;
                         }
 
                         // Add extra updates as it hits more times, this smoothy increases the speed without destroying velocity based visual effects
@@ -192,7 +192,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 else
                 {
                     // Minor dust trail for when they first spawn
-                    if (Main.rand.NextBool(3))
+                    if (Main.rand.NextBool(5))
                     {
                         Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5), 66);
                         dust.scale = Main.rand.NextFloat(0.8f, 1.4f);
@@ -220,7 +220,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             {
                 Projectile.Kill();
 
-                for (int i = 0; i <= 15; i++)
+                for (int i = 0; i <= 9; i++)
                 {
                     Dust dust = Dust.NewDustPerfect(Projectile.Center, 66);
                     dust.scale = Main.rand.NextFloat(0.4f, 1.1f);
@@ -252,13 +252,13 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             {
                 // Set some values to get ready foir it to home again for its next hit
                 lastTarget = target;
-                distance = 1500;
+                distance = 3000;
                 Projectile.localAI[0] = 60;
                 Projectile.velocity *= MathHelper.Clamp(1.5f - Projectile.numHits * 0.5f, 1f, 1.5f);
 
-                for (int i = 0; i <= 3; i++)
+                for (int i = 0; i <= 2; i++)
                 {
-                    SquishyLightParticle energy = new SquishyLightParticle(Projectile.Center, (Projectile.velocity * 2).RotatedByRandom(0.7f) * Main.rand.NextFloat(0.1f, 0.4f), Main.rand.NextFloat(0.2f, 0.5f), Main.rand.NextBool(3) ? Color.DarkViolet : mainColor, Main.rand.Next(20, 30 + 1), 0.25f, 2f);
+                    SquishyLightParticle energy = new SquishyLightParticle(Projectile.Center, (Projectile.velocity * 2).RotatedByRandom(0.7f) * Main.rand.NextFloat(0.1f, 0.4f), Main.rand.NextFloat(0.1f, 0.25f), Main.rand.NextBool(3) ? Color.DarkViolet : mainColor, Main.rand.Next(20, 30 + 1), 0.25f, 2f);
                     GeneralParticleHandler.SpawnParticle(energy);
                 }
 
@@ -274,7 +274,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
         }
         private void PulseBurst(float speed1, float speed2)
         {
-            for (int i = 0; i <= 25; i++)
+            for (int i = 0; i <= 15; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, 66);
                 dust.scale = Main.rand.NextFloat(0.4f, 1.4f);
