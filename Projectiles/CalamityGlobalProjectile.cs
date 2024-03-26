@@ -353,7 +353,7 @@ namespace CalamityMod.Projectiles
                         homingEndTime += 60f;
 
                     // Stop homing when within a certain distance of the target
-                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)
+                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 96f && projectile.ai[1] < homingEndTime)
                         projectile.ai[1] = homingEndTime;
 
                     if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
@@ -2414,6 +2414,10 @@ namespace CalamityMod.Projectiles
 
                         float amount = MathHelper.Lerp(minAcceleration, maxAcceleration, Utils.GetLerpValue(spreadOutCutoffTime, 30f, projectile.timeLeft, clamped: true));
                         projectile.velocity = Vector2.SmoothStep(projectile.velocity, velocity, amount);
+
+                        // Stop homing when within a certain distance of the target
+                        if (Vector2.Distance(projectile.Center, Main.player[playerIndex].Center) < 96f && projectile.timeLeft > homeInCutoffTime)
+                            projectile.timeLeft = (int)homeInCutoffTime;
                     }
 
                     if (projectile.timeLeft <= 3)
