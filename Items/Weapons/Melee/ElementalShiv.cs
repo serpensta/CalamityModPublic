@@ -19,7 +19,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noUseGraphic = true;
             Item.autoReuse = true;
             Item.useStyle = ItemUseStyleID.Rapier;
-            Item.damage = 190;
+            Item.damage = 138;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = Item.useTime = 13;
             Item.shoot = ModContent.ProjectileType<ElementalShivProj>();
