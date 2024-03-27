@@ -124,7 +124,7 @@ AstralBlade: {
 
 AstralPike: {
 	DisplayName: Astral Pike
-	Tooltip: Summons astral star swarms on critical hits
+	Tooltip: Summons astral star swarms on hit
 }
 
 AstralScythe: {
