@@ -13,13 +13,12 @@ namespace CalamityMod.Items.Weapons.Summon
     public class YharonsKindleStaff : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Summon";
-        public const int Damage = 300;
         public const float ReboundRamDamageFactor = 2f;
         public override void SetDefaults()
         {
             Item.width = 80;
             Item.height = 74;
-            Item.damage = Damage;
+            Item.damage = 300;
             Item.mana = 10;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTime = Item.useAnimation = 10;

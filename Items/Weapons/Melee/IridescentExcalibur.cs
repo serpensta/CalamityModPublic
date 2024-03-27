@@ -19,8 +19,6 @@ namespace CalamityMod.Items.Weapons.Melee
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
 
-        private static int BaseDamage = 3000;
-
         private int MaxBeamTypes = 12;
 
         private int BeamType = 0;
@@ -38,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 112;
             Item.height = 112;
-            Item.damage = BaseDamage;
+            Item.damage = 3000;
             Item.useAnimation = Item.useTime = 15;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
