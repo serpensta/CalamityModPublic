@@ -64,12 +64,13 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.ai[0] += 1f;
                 if (Projectile.ai[0] >= 60f)
                 {
-                    if (Projectile.ai[0] < (eaterOfWorlds ? 120f : 240f))
+                    if (Projectile.ai[0] < (eaterOfWorlds ? 180f : 240f))
                     {
+                        float inertia = eaterOfWorlds ? 30f : 25f;
                         float scaleFactor = Projectile.velocity.Length();
                         playerDirection.Normalize();
                         playerDirection *= scaleFactor;
-                        Projectile.velocity = (Projectile.velocity * 24f + playerDirection) / 25f;
+                        Projectile.velocity = (Projectile.velocity * (inertia - 1f) + playerDirection) / inertia;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= scaleFactor;
                     }

@@ -19,8 +19,6 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         public new string LocalizationCategory => "Items.Weapons.DraedonsArsenal";
         public static readonly SoundStyle FireSound = new("CalamityMod/Sounds/Item/PulseRifleFire");
 
-        private int BaseDamage = 1200;
-
         public override void SetDefaults()
         {
             CalamityGlobalItem modItem = Item.Calamity();
@@ -28,7 +26,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
             Item.width = 62;
             Item.height = 22;
             Item.DamageType = DamageClass.Ranged;
-            Item.damage = BaseDamage;
+            Item.damage = 1200;
             Item.knockBack = 0f;
             Item.useTime = 35;
             Item.useAnimation = 35;

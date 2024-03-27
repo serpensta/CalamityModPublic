@@ -404,7 +404,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     calamityGlobalNPC.newAI[1] += 1f;
 
                     // Set velocity for when a new head spawns
-                    npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * (segmentVelocity * (death ? 0.75f : 0.5f));
+                    // Only set this if the head is far enough away from the player, to avoid unfair hits
+                    if (npc.Distance(Main.player[npc.target].Center) > segmentVelocity * 20f)
+                        npc.velocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * (segmentVelocity * (death ? 0.75f : 0.5f));
                 }
 
                 if (!inTiles)
@@ -585,7 +587,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         float pushDistanceLowerLimit = 16f - numHeads;
                         float pushDistanceUpperLimit = 160f - numHeads * 10f;
                         float pushDistance = MathHelper.Lerp(pushDistanceLowerLimit, pushDistanceUpperLimit, 1f - lifeRatio) * npc.scale;
-                        float pushVelocity = 0.5f + enrageScale * 0.25f;
+                        float pushVelocity = 0.25f + enrageScale * 0.125f;
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             if (Main.npc[i].active)

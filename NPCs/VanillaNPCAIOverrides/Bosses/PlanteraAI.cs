@@ -783,7 +783,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             Vector2 spawnOffset = npc.Center + projectileVelocity * 50f;
 
                             if (Main.netMode != NetmodeID.MultiplayerClient)
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), spawnOffset, projectileVelocity * projectileSpeed, type, damage, 0f, Main.myPlayer);
+                            {
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), spawnOffset, projectileVelocity * projectileSpeed, type, damage, 0f, Main.myPlayer);
+                                if (Main.rand.NextBool() || !Main.zenithWorld)
+                                    Main.projectile[proj].tileCollide = false;
+                            }
                         }
 
                         if (masterMode && Main.netMode != NetmodeID.MultiplayerClient)

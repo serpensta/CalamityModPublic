@@ -17,7 +17,6 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
-            Item.DamageType = DamageClass.Melee;
             Item.useAnimation = 26;
             Item.useTime = 26;
             Item.useStyle = ItemUseStyleID.Swing;

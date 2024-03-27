@@ -14,7 +14,6 @@ namespace CalamityMod.Items.Weapons.Melee
     public class TheOracle : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        public const int YoyoBaseDamage = 170;
         public const int AuraBaseDamage = 100;
         public const int AuraMaxDamage = 220;
 
@@ -30,7 +29,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = 58;
             Item.height = 50;
             Item.DamageType = DamageClass.MeleeNoSpeed;
-            Item.damage = YoyoBaseDamage;
+            Item.damage = 170;
             Item.knockBack = 4f;
             Item.useTime = 20;
             Item.useAnimation = 20;

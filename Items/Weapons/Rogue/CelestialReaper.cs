@@ -9,13 +9,12 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class CelestialReaper : RogueWeapon
     {
-        public const int BaseDamage = 140;
 
         public override void SetDefaults()
         {
             Item.width = 66;
             Item.height = 76;
-            Item.damage = BaseDamage;
+            Item.damage = 140;
             Item.useAnimation = 31;
             Item.useTime = 31;
             Item.noMelee = true;

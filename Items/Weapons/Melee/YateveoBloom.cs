@@ -11,7 +11,6 @@ namespace CalamityMod.Items.Weapons.Melee
     public class YateveoBloom : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        public static int BaseDamage = 30; //Spear is 20 damage, Flail is 30 damage
         public static float ShootSpeed = 12f;
         public static float SpearSpeed = 4.5f;
 
@@ -24,7 +23,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 42;
             Item.height = 62;
-            Item.damage = BaseDamage;
+            Item.damage = 30; // Spear is 20 damage, Flail is 30 damage
             Item.knockBack = 5f;
             Item.useAnimation = Item.useTime = 22;
 

@@ -89,8 +89,9 @@
         // Life steal accessories require a more strict cooldown due to their ease of use and global application
         internal static readonly float LifeStealAccessoryCooldownMultiplier = 3f;
 
-        // Life steal cooldown multiplier used for armor set bonuses
+        // Life steal cooldown multipliers used for armor set bonuses
         internal static readonly float LifeStealSetBonusCooldownMultiplier = 2f;
+        internal static readonly float LifeStealReaverTankCooldownMultiplier = 4f;
 
         // The range was buffed in vanilla from 1200 to 3000 in 1.4.4, and I agree with that decision
         internal static readonly float LifeStealRange = 3000f;
