@@ -210,11 +210,17 @@ namespace CalamityMod.Balancing
 
             // 25% resist to Lucrecia.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<DNA>()))));
+
+            // 20% resist to The Hive.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<HiveNuke>(), ProjectileType<HiveMissile>()))));
             #endregion
 
             #region Duke Fishron
             // 35% vulnerability to Resurrection Butterfly.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.DukeFishron, Do(new ProjectileResistBalancingRule(1.35f, ProjectileType<SakuraBullet>(), ProjectileType<PurpleButterfly>()))));
+
+            // 20% vulnerability to The Hive's bees.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.DukeFishron, Do(new ProjectileResistBalancingRule(1.20f, ProjectileType<BasicPlagueBee>()))));
             #endregion
 
             #region Empress of Light
@@ -268,6 +274,9 @@ namespace CalamityMod.Balancing
             #region Moon Lord
             // 20% resist to Mercurial Tides (True Biome Blade).
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<MercurialTides>(), ProjectileType<MercurialTidesMonolith>(), ProjectileType<MercurialTidesBlast>()))));
+
+            // 15% resist to The Hive.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCID.MoonLordCore, Do(new ProjectileResistBalancingRule(0.85f, ProjectileType<HiveNuke>()))));
             #endregion
 
             #region Profaned Guardians
