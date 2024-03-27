@@ -10,14 +10,13 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class PoisonPack : RogueWeapon
     {
-        private static int baseDamage = 20;
         private static float baseKnockback = 1.8f;
 
         public override void SetDefaults()
         {
             Item.width = 14;
             Item.height = 14;
-            Item.damage = baseDamage;
+            Item.damage = 20;
             Item.DamageType = RogueDamageClass.Instance;
             Item.noMelee = true;
             Item.noUseGraphic = true;
