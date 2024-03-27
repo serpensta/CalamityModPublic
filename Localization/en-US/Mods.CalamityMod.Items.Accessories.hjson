@@ -1281,6 +1281,7 @@ ProfanedSoulArtifact: {
 		'''
 		Summons a healer guardian, which heals for 15 health every few seconds
 		Summons a defensive guardian, which provides a weak shield reinforced by profaned rocks
+		[ADREN]
 		Upon being depleted, the barrier implodes sending the profaned rocks hurtling outwards
 		The barrier starts recharging 5 seconds after being hit
 		Recharging from zero to full charge takes 2 seconds
@@ -1289,6 +1290,7 @@ ProfanedSoulArtifact: {
 		The offensive guardian will occasionally fire spears on hit
 		Purity
 		'''
+	ShieldAdren: Halves Adrenaline lost on hit if the shield fully absorbs the hit
 }
 
 ProfanedSoulCrystal: {
@@ -1433,11 +1435,13 @@ RoverDrive: {
 	Tooltip:
 		'''
 		Projects an energy shield that absorbs up to 20 damage
+		[ADREN]
 		The shield grants 10 defense while active
 		After the shield is broken, it takes 10 seconds to charge back up
 		Being hit again while recharging restarts the charge timer
 		Can also be scrapped at an extractinator
 		'''
+	ShieldAdren: Halves Adrenaline lost on hit if the shield fully absorbs the hit
 }
 
 RuinMedallion: {
@@ -1858,11 +1862,13 @@ TheSponge: {
 	Tooltip:
 		'''
 		Projects a quantum foam barrier that absorbs up to 180 damage
+		[ADREN]
 		The barrier grants 30 defense and reduces damage taken by 10% while active
 		The barrier starts recharging 9 seconds after being hit
 		Recharging from zero to full charge takes 6 seconds
 		Being hit again while recharging restarts the charge timer
 		'''
+	ShieldAdren: Halves Adrenaline lost on hit if the barrier fully absorbs the hit
 }
 
 TheTransformer: {
