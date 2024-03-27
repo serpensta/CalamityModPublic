@@ -2584,7 +2584,7 @@ namespace CalamityMod.CalPlayer
 
                 if (giantShellPostHit > 0)
                 {
-                    Player.statDefense -= 5;
+                    Player.statDefense -= 3;
                     giantShellPostHit--;
                 }
                 if (giantShellPostHit < 0)

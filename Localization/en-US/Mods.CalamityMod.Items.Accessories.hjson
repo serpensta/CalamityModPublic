@@ -310,7 +310,7 @@ BloodyWormScarf: {
 	DisplayName: Bloody Worm Scarf
 	Tooltip:
 		'''
-		7% increased damage reduction
+		12% increased damage reduction
 		10% increased melee damage
 		'''
 }

@@ -1538,9 +1538,6 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FleshKnuckles || item.type == ItemID.BerserkerGlove || item.type == ItemID.HeroShield)
                 modPlayer.fleshKnuckles = true;
 
-            if (item.type == ItemID.WormScarf)
-                player.endurance -= 0.07f;
-
             if (item.type == ItemID.RoyalGel)
                 modPlayer.royalGel = true;
 
