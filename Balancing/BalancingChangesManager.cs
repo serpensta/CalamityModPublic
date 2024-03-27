@@ -211,8 +211,8 @@ namespace CalamityMod.Balancing
             // 25% resist to Lucrecia.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<DNA>()))));
 
-            // 20% resist to The Hive.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.8f, ProjectileType<HiveNuke>(), ProjectileType<HiveMissile>()))));
+            // 25% resist to The Hive.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.75f, ProjectileType<HiveNuke>(), ProjectileType<HiveMissile>()))));
             #endregion
 
             #region Duke Fishron
