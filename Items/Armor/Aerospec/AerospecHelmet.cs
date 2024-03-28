@@ -64,7 +64,7 @@ namespace CalamityMod.Items.Armor.Aerospec
         public override void UpdateEquip(Player player)
         {
             player.moveSpeed += 0.05f;
-            player.GetDamage<SummonDamageClass>() += 0.05f;
+            player.GetDamage<SummonDamageClass>() += 0.1f;
         }
 
         public override void AddRecipes()
