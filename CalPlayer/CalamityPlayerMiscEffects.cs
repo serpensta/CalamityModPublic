@@ -2535,8 +2535,7 @@ namespace CalamityMod.CalPlayer
 
             if (brutalCarnage)
             {
-                Player.GetDamage<MeleeDamageClass>() += 0.25f;
-                Player.GetCritChance<MeleeDamageClass>() += 10;
+                Player.GetDamage<MeleeDamageClass>() += 0.2f;
             }
 
             // Trinket of Chi bonus
