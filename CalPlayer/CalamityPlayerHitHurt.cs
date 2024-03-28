@@ -1243,7 +1243,7 @@ namespace CalamityMod.CalPlayer
             if (!hasIFrames && !Player.creativeGodMode)
                 nextHitDealsDefenseDamage |= proj.Calamity().DealsDefenseDamage;
 
-            if (sulfurSet && !proj.friendly && hurtInfo.Damage > 0)
+            if (sulphurSet && !proj.friendly && hurtInfo.Damage > 0)
             {
                 if (Main.player[proj.owner] is null)
                 {

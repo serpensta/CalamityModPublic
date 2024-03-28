@@ -35,7 +35,7 @@ namespace CalamityMod.Projectiles.Summon
             }
             else if (randomDust == 2)
             {
-                randomDust = (int)CalamityDusts.SulfurousSeaAcid;
+                randomDust = (int)CalamityDusts.SulphurousSeaAcid;
             }
             else
             {

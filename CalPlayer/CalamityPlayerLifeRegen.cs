@@ -92,7 +92,7 @@ namespace CalamityMod.CalPlayer
             ApplyDoTDebuff(wDeath, 0);
 
             ApplyDoTDebuff(irradiated, 4, purity);
-            int sulphurDoT = 6 - (sulfurSet ? 2 : 0) - (sulphurskin ? 2 : 0);
+            int sulphurDoT = 6 - (sulphurSet ? 2 : 0) - (sulphurskin ? 2 : 0);
             ApplyDoTDebuff(sulphurPoison, sulphurDoT, purity);
             ApplyDoTDebuff(rTide, 6, purity);
             ApplyDoTDebuff(weakBrimstoneFlames, 7);
@@ -142,7 +142,7 @@ namespace CalamityMod.CalPlayer
                     increment *= 4f + (8f * ASPoisonLevel);
                 if (sulphurskin && !ASPoisoning)
                     increment *= 0.5f;
-                if (sulfurSet && !ASPoisoning)
+                if (sulphurSet && !ASPoisoning)
                     increment *= 0.5f;
 
                 SulphWaterPoisoningLevel = MathHelper.Clamp(SulphWaterPoisoningLevel + increment, 0f, 1f);

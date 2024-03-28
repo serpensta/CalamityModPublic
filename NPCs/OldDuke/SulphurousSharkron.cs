@@ -286,12 +286,12 @@ namespace CalamityMod.NPCs.OldDuke
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 5; k++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
 
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 20; k++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
 
                 SoundEngine.PlaySound(SoundID.NPCDeath12, NPC.Center);
 
@@ -303,7 +303,7 @@ namespace CalamityMod.NPCs.OldDuke
 
                 for (int i = 0; i < 15; i++)
                 {
-                    int toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, 0f, 0f, 100, default, 2f);
+                    int toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 100, default, 2f);
                     Main.dust[toxicDust].velocity.Y *= 6f;
                     Main.dust[toxicDust].velocity.X *= 3f;
                     if (Main.rand.NextBool())
