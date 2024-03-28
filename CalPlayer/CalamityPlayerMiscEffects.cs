@@ -7,7 +7,6 @@ using CalamityMod.Buffs.Potions;
 using CalamityMod.Buffs.StatBuffs;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Buffs.Summon;
-using CalamityMod.CalPlayer.Dashes;
 using CalamityMod.Cooldowns;
 using CalamityMod.CustomRecipes;
 using CalamityMod.DataStructures;
@@ -295,15 +294,15 @@ namespace CalamityMod.CalPlayer
                     for (int i = 0; i < numberOfDusts; i++)
                     {
                         float rot = MathHelper.ToRadians(i * rotFactor);
-                        Vector2 offset = new Vector2(Player.velocity.X * Player.direction * 0.7f + 8f, 0).RotatedBy(rot * Main.rand.NextFloat(4f, 5f));
+                        Vector2 offset = new Vector2(MathF.Min(Player.velocity.X * Player.direction * 0.7f + 8f, 20f), 0).RotatedBy(rot * Main.rand.NextFloat(4f, 5f));
                         Vector2 velOffset = Vector2.Zero;
                         Dust dust = Dust.NewDustPerfect(Player.Center + offset + Player.velocity, Main.rand.NextBool() ? 35 : 127, new Vector2(velOffset.X, velOffset.Y));
                         dust.noGravity = true;
                         dust.velocity = velOffset;
                         dust.alpha = 100;
-                        dust.scale = (Player.velocity.X * Player.direction * 0.08f);
+                        dust.scale = MathF.Min(Player.velocity.X * Player.direction * 0.08f, 1.2f);
                     }
-                    float sparkscale = (Player.velocity.X * Player.direction * 0.08f);
+                    float sparkscale = MathF.Min(Player.velocity.X * Player.direction * 0.08f, 1.2f);
                     Vector2 SparkVelocity1 = Player.velocity.RotatedBy(Player.direction * -3, default) * 0.1f - Player.velocity / 2f;
                     SparkParticle spark = new SparkParticle(Player.Center + Player.velocity.RotatedBy(2f * Player.direction) * 1.5f, SparkVelocity1, false, Main.rand.Next(11, 13), sparkscale, Main.rand.NextBool() ? Color.DarkOrange : Color.OrangeRed);
                     GeneralParticleHandler.SpawnParticle(spark);
