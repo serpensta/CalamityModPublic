@@ -43,7 +43,7 @@ AerospecHelmet: {
 	Tooltip: 10% increased summon damage and 5% increased movement speed
 	SetBonus:
 		'''
-		10% increased summon damage and +1 max minion
+		11% increased summon damage and +1 max minion
 		Summons a valkyrie to protect you
 		'''
 }
