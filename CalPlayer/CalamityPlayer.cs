@@ -714,8 +714,8 @@ namespace CalamityMod.CalPlayer
         public bool frostSet = false; //vanilla armor
         public bool victideSet = false;
         public bool victideSummoner = false;
-        public bool sulfurSet = false;
-        public bool sulfurJump = false;
+        public bool sulphurSet = false;
+        public bool sulphurJump = false;
         public int sulphurBubbleCooldown = 0;
         public bool aeroSet = false;
         public bool statigelSet = false;
@@ -1824,7 +1824,7 @@ namespace CalamityMod.CalPlayer
             victideSet = false;
             victideSummoner = false;
 
-            sulfurSet = false;
+            sulphurSet = false;
 
             aeroSet = false;
 
@@ -2552,7 +2552,7 @@ namespace CalamityMod.CalPlayer
             frostSet = false; //vanilla armor
             victideSet = false;
             aeroSet = false;
-            sulfurSet = false;
+            sulphurSet = false;
             statigelSet = false;
             tarraSet = false;
             tarraMelee = false;

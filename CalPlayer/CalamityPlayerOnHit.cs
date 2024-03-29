@@ -1110,7 +1110,7 @@ namespace CalamityMod.CalPlayer
                 CalamityUtils.Inflict246DebuffsNPC(target, BuffID.Frostburn2);
             if (omegaBlueChestplate)
                 target.AddBuff(BuffType<CrushDepth>(), 180);
-            if (sulfurSet)
+            if (sulphurSet)
                 target.AddBuff(BuffID.Poisoned, 120);
             if (abyssalAmulet)
             {
