@@ -5104,14 +5104,14 @@ namespace CalamityMod.NPCs
             {
                 for (int d = 0; d < 20; d++)
                 {
-                    Particle sparks = new AltSparkParticle(npc.Center, new Vector2(Main.rand.NextFloat(-9f, 9f), Main.rand.NextFloat(-9f, 9f)), false, 45, 0.9f, Main.rand.NextBool() ? Color.Cyan : Color.SkyBlue);
+                    Particle sparks = new LineParticle(npc.Center, new Vector2(Main.rand.NextFloat(-9f, 9f), Main.rand.NextFloat(-9f, 9f)), false, 45, 0.9f, Main.rand.NextBool() ? Color.Cyan : Color.SkyBlue);
                     GeneralParticleHandler.SpawnParticle(sparks);
                 }
-                Particle boop = new CustomPulse(npc.Center, Vector2.Zero, new Color(206, 95, 212), "CalamityMod/Particles/Sparkle2", Vector2.One, Main.rand.NextFloat(-5f, 5f), 0.75f + (float)(0.04 * veriumDoomStacks), 1.5f + (float)(0.08 * veriumDoomStacks), 30);
+                Particle boop = new CustomPulse(npc.Center, Vector2.Zero, new Color(206, 95, 212), "CalamityMod/Particles/Sparkle2", Vector2.One, Main.rand.NextFloat(-5f, 5f), 0.75f + (float)(0.04 * veriumDoomStacks), 1.5f + (float)(0.08 * veriumDoomStacks), 40);
                 GeneralParticleHandler.SpawnParticle(boop);
 
-                SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/RoverDriveBreak") { Volume = 0.6f}, npc.Center);
-                Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), 100 + (10 * veriumDoomStacks), 0, Main.myPlayer, 200f);
+                SoundEngine.PlaySound(new("CalamityMod/Sounds/NPCHit/CryogenHit", 3) { Volume = 0.6f}, npc.Center);
+                Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), 100 + (15 * veriumDoomStacks), 0, Main.myPlayer, 200f);
                 
                 veriumDoomMarked = false;
                 veriumDoomStacks = 0;
@@ -5478,17 +5478,6 @@ namespace CalamityMod.NPCs
                     // As such, only 50% damage is added per supercrit layer here.
                     modifiers.SourceDamage *= 1f + 0.5f * supercritLayers;
                 }
-            }
-
-            // Verium Bolt Doom effect
-            if (projectile.type == ModContent.ProjectileType<VeriumBoltProj>())
-            {
-                if (!veriumDoomMarked)
-                {
-                    veriumDoomMarked = true;
-                    veriumDoomTimer = veriumDoomTime;
-                }
-                veriumDoomStacks++;
             }
 
             //
@@ -6349,8 +6338,14 @@ namespace CalamityMod.NPCs
 
             if (veriumDoomTimer > 0)
             {
-                if (Main.rand.NextBool())
-                    Dust.NewDustPerfect(npc.Center, Main.rand.NextBool(4) ? 223 : 226, new Vector2(Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-4f, 4f)));
+                int sparkleChance = Math.Max(2, 8 - (veriumDoomStacks / 2));
+                if (veriumDoomTimer % sparkleChance == 0)
+                {
+                    float veriumRatio = (float)veriumDoomTimer / (float)veriumDoomTime;
+                    Vector2 randPosition = new Vector2(npc.position.X + Main.rand.Next(0, npc.width), npc.position.Y + Main.rand.Next(0, npc.height));
+                    Particle markedSparkle = new CustomPulse(randPosition, Vector2.Zero, Color.Lerp(new Color(103, 230, 240), new Color(255, 110, 220), 1 - veriumRatio), "CalamityMod/Particles/Sparkle", Vector2.One, Main.rand.NextFloat(-0.75f, 0.75f), 0.9f, 1.1f, 35);
+                    GeneralParticleHandler.SpawnParticle(markedSparkle);
+                }
             }
 
             // TODO -- These debuff visuals cannot be moved because they correspond to vanilla debuffs

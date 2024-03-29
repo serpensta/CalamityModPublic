@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.NPCs;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -58,6 +59,18 @@ namespace CalamityMod.Projectiles.Ranged
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            // Handles giving the NPC the doom effect
+            CalamityGlobalNPC modNPC = target.Calamity();
+            if (!modNPC.veriumDoomMarked)
+            {
+                modNPC.veriumDoomMarked = true;
+                modNPC.veriumDoomTimer = CalamityGlobalNPC.veriumDoomTime;
+            }
+            modNPC.veriumDoomStacks++;
+        }
+
+        public override void OnKill(int timeLeft)
         {
             for (int k = 0; k < 4; k++)
             {

@@ -177,9 +177,8 @@ VeriumBolt: {
 	DisplayName: Verium Bolt
 	Tooltip:
 		'''
-		There is no escape!
-		Marks enemies with a frosty sigil on hit
-		After a short time, the sigil will deal extra damage
-		This damage stacks based on how many projectiles hit the enemy
+		Marks enemies on hit, dealing extra damage after a short time
+		This damage stacks based on how many bolts hit the enemy
+		'There is no escape...'
 		'''
 }
