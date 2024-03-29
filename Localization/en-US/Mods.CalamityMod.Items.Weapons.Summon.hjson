@@ -833,5 +833,11 @@ HarvestStaff: {
 
 LiliesOfFinality: {
 	DisplayName: Lilies of Finality
-	Tooltip: ""
+	Tooltip:
+		'''
+		Grows a pumpkin patch that sprouts pumpkins nearby
+		Requires 2 minion slots to use
+		Can only be summoned once
+		'Wake up'
+		'''
 }
