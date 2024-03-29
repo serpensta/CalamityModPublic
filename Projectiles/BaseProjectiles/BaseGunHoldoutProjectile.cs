@@ -9,6 +9,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Projectiles.BaseProjectiles
 {
+    /// <summary>
+    /// An abstract class dedicated to ease the making of gun-like holdouts, regarding of the weapon class.<br/>
+    /// All the AI code goes to <see cref="HoldoutAI"/>.<br/>
+    /// Sets the texture, localization and SetDefaults automatically.<br/>
+    /// You also have convenient properties for offsets, arm visuals and the tip of the gun.<br/>
+    /// <b>You must name your holdout's class the name of the item's class plus "Holdout" at the end</b>, you'll get errors otherwise.
+    /// </summary>
     public abstract class BaseGunHoldoutProjectile : ModProjectile, ILocalizedModType
     {
         #region Overridable Properties
