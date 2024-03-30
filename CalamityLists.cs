@@ -2566,6 +2566,7 @@ namespace CalamityMod
 
                 { NPCID.EyeofCthulhu, 450000 }, // 30 seconds
                 { NPCID.ServantofCthulhu, 6000 },
+                { NPCType<BloodlettingServant>(), 12000 },
 
                 { NPCID.EaterofWorldsHead, 10000 }, // 30 seconds + immunity timer at start
                 { NPCID.EaterofWorldsBody, 10000 },

@@ -15,6 +15,7 @@ namespace CalamityMod.NPCs.HiveMind
     public class HiveBlob2 : ModNPC
     {
         public override LocalizedText DisplayName => CalamityUtils.GetText("NPCs.HiveBlob.DisplayName");
+        public override string Texture => "CalamityMod/NPCs/HiveMind/HiveBlob";
 
         public override void SetStaticDefaults()
         {

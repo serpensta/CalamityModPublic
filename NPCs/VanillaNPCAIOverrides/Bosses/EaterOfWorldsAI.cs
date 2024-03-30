@@ -12,6 +12,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
     public static class EaterOfWorldsAI
     {
+        private const int TotalMasterModeWorms = 4;
+
         public static bool BuffedEaterofWorldsAI(NPC npc, Mod mod)
         {
             CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
@@ -37,9 +39,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Despawn safety, make sure to target another player if the current player target is too far away
             if (Vector2.Distance(Main.player[npc.target].Center, npc.Center) > CalamityGlobalNPC.CatchUpDistance200Tiles && npc.type == NPCID.EaterofWorldsHead)
                 npc.TargetClosest();
-
-            // Fade in.
-            npc.Opacity = MathHelper.Clamp(npc.Opacity + 0.08f, 0f, 1f);
 
             bool enrage = true;
             int targetTileX = (int)Main.player[npc.target].Center.X / 16;
@@ -68,7 +67,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float segmentCount = NPC.CountNPCS(NPCID.EaterofWorldsBody);
 
             // Percent body segments remaining
-            float lifeRatio = segmentCount / totalSegments;
+            float lifeRatio = MathHelper.Clamp(segmentCount / totalSegments, 0f, 1f);
 
             // 10 seconds of resistance to prevent spawn killing
             if (calamityGlobalNPC.newAI[1] < 600f && bossRush)
@@ -163,8 +162,29 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // A head sets the length variable (npc.ai[2]) and then sets its next segment to a freshly spawned body.
                     if (npc.type == NPCID.EaterofWorldsHead)
                     {
+                        // Amount of segments to spawn.
+                        int segmentSpawnAmount = (int)(masterMode ? (totalSegments / TotalMasterModeWorms) : totalSegments);
+
+                        // Spawn additional worms of reduced length in Master Mode.
+                        if (masterMode)
+                        {
+                            Vector2 additionalWormSpawnLocation = new Vector2(spawnX, spawnY);
+                            int randomXLimit = 80;
+                            int randomYLimit = 80;
+                            for (int i = 1; i < TotalMasterModeWorms; i++)
+                            {
+                                additionalWormSpawnLocation += new Vector2((Main.rand.Next(randomXLimit + 1) + randomXLimit) * (Main.rand.NextBool() ? -1f : 1f), Main.rand.Next(randomYLimit + 1) + randomYLimit);
+                                int wormHead = NPC.NewNPC(npc.GetSource_FromAI(), (int)additionalWormSpawnLocation.X, (int)additionalWormSpawnLocation.Y, NPCID.EaterofWorldsHead, npc.whoAmI + segmentSpawnAmount * i + 1);
+                                Main.npc[wormHead].ai[2] = segmentSpawnAmount;
+                                Main.npc[wormHead].ai[0] = NPC.NewNPC(Main.npc[wormHead].GetSource_FromAI(), (int)additionalWormSpawnLocation.X, (int)additionalWormSpawnLocation.Y, NPCID.EaterofWorldsBody, Main.npc[wormHead].whoAmI);
+                                Main.npc[(int)Main.npc[wormHead].ai[0]].ai[1] = Main.npc[wormHead].whoAmI;
+                                Main.npc[(int)Main.npc[wormHead].ai[0]].ai[2] = Main.npc[wormHead].ai[2] - 1f;
+                                Main.npc[wormHead].netUpdate = true;
+                            }
+                        }
+
                         // Set head's "length beyond this point" to be the total length of the worm.
-                        npc.ai[2] = totalSegments;
+                        npc.ai[2] = segmentSpawnAmount;
 
                         // Body spawn
                         npc.ai[0] = NPC.NewNPC(npc.GetSource_FromAI(), spawnX, spawnY, NPCID.EaterofWorldsBody, npc.whoAmI);
@@ -1208,8 +1228,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         public static int GetEaterOfWorldsSegmentsCountRevDeath()
         {
             return CalamityWorld.LegendaryMode ? 100 :
-                (CalamityWorld.death || BossRushEvent.BossRushActive) ? ((Main.masterMode || BossRushEvent.BossRushActive) ? 62 : 57) :
-                ((Main.masterMode || BossRushEvent.BossRushActive) ? 67 : 62);
+                (CalamityWorld.death || BossRushEvent.BossRushActive) ? ((Main.masterMode || BossRushEvent.BossRushActive) ? 60 : 57) :
+                ((Main.masterMode || BossRushEvent.BossRushActive) ? 68 : 62);
         }
 
         public static int GetEaterOfWorldsSegmentsCountVanilla()

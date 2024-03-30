@@ -65,7 +65,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
             // Bee spawn limit
-            int beeLimit = 15;
+            int beeLimit = masterMode ? 9 : 15;
 
             // Queen Bee Bee count
             int totalBees = 0;
@@ -84,6 +84,33 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
                 }
             }
+
+            // Hornet spawn limit
+            int hornetLimit = 3;
+            bool hornetLimitReached = false;
+
+            // Only run this when necessary
+            if (masterMode)
+            {
+                // Queen Bee Hornet count
+                int totalHornets = 0;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC hornet = Main.npc[i];
+                    bool isQueenBeeHornet = hornet.ai[3] == 1f;
+                    if (hornet.active && (hornet.type == NPCID.LittleHornetHoney || hornet.type == NPCID.HornetHoney || hornet.type == NPCID.BigHornetHoney) && isQueenBeeHornet)
+                    {
+                        totalHornets++;
+                        if (totalHornets >= hornetLimit)
+                        {
+                            hornetLimitReached = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+                hornetLimitReached = true;
 
             // Phases
 
@@ -181,7 +208,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     int phase;
                     int maxRandom = phase4 ? 5 : 4;
                     do phase = Main.rand.Next(maxRandom);
-                    while (phase == npc.ai[1] || phase == 1 || (phase == 2 && phase4));
+                    while (phase == npc.ai[1] || phase == 1 || (phase == 2 && phase4) || (masterMode && phase6 && phase == 3));
 
                     bool charging = phase == 0;
 
@@ -252,7 +279,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (death)
                         chargeDistanceY += MathHelper.Lerp(0f, 100f, 1f - lifeRatio);
                     if (masterMode)
-                        chargeDistanceY *= 1.5f;
+                        chargeDistanceY *= 2f;
 
                     float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[npc.target].Center.X);
                     float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[npc.target].Center.Y);
@@ -291,6 +318,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float chargeVelocityY = (phase4 ? 18f : phase2 ? 15f : 12f) + 6f * enrageScale;
                     float chargeAccelerationX = (phase4 ? 0.9f : phase2 ? 0.7f : 0.5f) + 0.5f * enrageScale;
                     float chargeAccelerationY = (phase4 ? 0.45f : phase2 ? 0.35f : 0.25f) + 0.25f * enrageScale;
+
+                    if (masterMode)
+                    {
+                        chargeVelocityX += 2f;
+                        chargeVelocityY += 4f;
+                        chargeAccelerationX += 0.15f;
+                        chargeAccelerationY += 0.3f;
+                    }
 
                     // Velocity calculations
                     if (npc.Center.Y < Main.player[npc.target].Center.Y - chargeDistanceY)
@@ -361,7 +396,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         shouldCharge = true;
                     }
                     if (enrageScale > 0f && shouldCharge)
-                        npc.velocity *= MathHelper.Lerp(0.3f, 1f, 1f - enrageScale / maxEnrageScale);
+                        npc.velocity *= MathHelper.Lerp(0.3f, masterMode ? 0.8f : 1f, 1f - enrageScale / maxEnrageScale);
 
                     // Keep moving
                     if (npc.ai[2] != 1f)
@@ -402,8 +437,38 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     else
                                         spawnType = NPCID.Hellbat;
                                 }
+                                else if (masterMode)
+                                {
+                                    int random = hornetLimitReached ? 0 : beeLimitReached ? Main.rand.Next(6, 12) : Main.rand.Next(12);
+                                    switch (random)
+                                    {
+                                        default:
+                                        case 0:
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 4:
+                                        case 5:
+                                            break;
 
-                                if (!beeLimitReached)
+                                        case 6:
+                                        case 7:
+                                        case 8:
+                                            spawnType = NPCID.LittleHornetHoney;
+                                            break;
+
+                                        case 9:
+                                        case 10:
+                                            spawnType = NPCID.HornetHoney;
+                                            break;
+
+                                        case 11:
+                                            spawnType = NPCID.BigHornetHoney;
+                                            break;
+                                    }
+                                }
+
+                                if (!beeLimitReached || !hornetLimitReached)
                                 {
                                     int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, spawnType);
                                     Vector2 beeVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY);
@@ -480,8 +545,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 if (masterMode)
                 {
-                    beeAttackAccel *= 1.4f;
-                    beeAttackSpeed *= 1.2f;
+                    beeAttackAccel *= 2f;
+                    beeAttackSpeed *= 1.5f;
                 }
 
                 bool canHitTarget = Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
@@ -491,7 +556,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 // Go to bee spawn phase
                 calamityGlobalNPC.newAI[0] += 1f;
-                if ((Vector2.Distance(npc.Center, hoverDestination) < 400f && canHitTarget) || calamityGlobalNPC.newAI[0] >= 180f)
+                if ((Vector2.Distance(npc.Center, hoverDestination) < 400f && canHitTarget) || calamityGlobalNPC.newAI[0] >= (masterMode ? 90f : 180f))
                 {
                     npc.ai[0] = 1f;
                     npc.ai[1] = 0f;
@@ -518,8 +583,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 if (masterMode)
                 {
-                    beeAttackHoverAccel *= 1.4f;
-                    beeAttackHoverSpeed *= 1.2f;
+                    beeAttackHoverAccel *= 2f;
+                    beeAttackHoverSpeed *= 1.5f;
                 }
 
                 Vector2 beeSpawnLocation = new Vector2(npc.Center.X + (Main.rand.Next(20) * npc.direction), npc.position.Y + npc.height * 0.8f);
@@ -550,7 +615,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 // Spawn bees
-                if (Collision.CanHit(beeSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee && !beeLimitReached)
+                if (Collision.CanHit(beeSpawnLocation, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && spawnBee && (!beeLimitReached || !hornetLimitReached))
                 {
                     if (!phase3 || Main.zenithWorld)
                         SoundEngine.PlaySound(SoundID.NPCHit1, beeSpawnLocation);
@@ -559,7 +624,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        if (phase3 && !Main.zenithWorld)
+                        if (phase3)
                         {
                             Projectile.NewProjectile(npc.GetSource_FromAI(), beeSpawnLocation, (Main.player[npc.target].Center - beeSpawnLocation).SafeNormalize(Vector2.UnitY), ProjectileID.BeeHive, 0, 0f, Main.myPlayer, 0f, 0f, 1f);
                         }
@@ -572,6 +637,36 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     spawnType = Main.rand.NextBool(3) ? ModContent.NPCType<PlagueChargerLarge>() : ModContent.NPCType<PlagueCharger>();
                                 else
                                     spawnType = NPCID.Hellbat;
+                            }
+                            else if (masterMode)
+                            {
+                                int random = hornetLimitReached ? 0 : beeLimitReached ? Main.rand.Next(6, 12) : Main.rand.Next(12);
+                                switch (random)
+                                {
+                                    default:
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                        break;
+
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                        spawnType = NPCID.LittleHornetHoney;
+                                        break;
+
+                                    case 9:
+                                    case 10:
+                                        spawnType = NPCID.HornetHoney;
+                                        break;
+
+                                    case 11:
+                                        spawnType = NPCID.BigHornetHoney;
+                                        break;
+                                }
                             }
 
                             int spawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)beeSpawnLocation.X, (int)beeSpawnLocation.Y, spawnType);
@@ -601,7 +696,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 // Go to a random phase
                 float numSpawns = phase3 ? (masterMode ? 1f : 2f) : (masterMode ? 3f : 5f);
-                if (npc.ai[2] > numSpawns || beeLimitReached)
+                if (npc.ai[2] > numSpawns || (beeLimitReached && hornetLimitReached))
                 {
                     npc.ai[0] = -1f;
                     npc.ai[1] = 2f;

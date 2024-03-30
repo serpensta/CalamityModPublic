@@ -6392,6 +6392,9 @@ namespace CalamityMod.NPCs
             if (Main.LocalPlayer.Calamity().trippy || (npc.type == NPCID.KingSlime && CalamityWorld.LegendaryMode && CalamityWorld.revenge))
                 return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
 
+            if (npc.type == NPCID.KingSlime && Main.masterMode && CalamityWorld.revenge)
+                return NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel2>()) ? Color.Lerp(new Color(0, 0, 150, npc.alpha), new Color(125, 125, 255, npc.alpha), (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f) : null;
+
             if (npc.type == NPCID.QueenBee && Main.zenithWorld)
             {
                 if (npc.life / (float)npc.lifeMax < 0.5f)
