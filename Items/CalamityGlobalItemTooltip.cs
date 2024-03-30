@@ -263,7 +263,7 @@ namespace CalamityMod.Items
 
             // Lilies of Finality 512 edit
             if (item.type == ModContent.ItemType<LiliesOfFinality>())
-                EditTooltipByName("Damage", (line) => line.Text = LiliesOfFinality.TheNumber + " damage");
+                EditTooltipByName("Damage", (line) => line.Text = LiliesOfFinality.TheNumber + " summon damage");
 
             // Master Mode items also drop in Revengeance
             // Only affects vanilla and Calamity items

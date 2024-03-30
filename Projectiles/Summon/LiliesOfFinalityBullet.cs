@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Graphics.Primitives;
+using CalamityMod.Items.Weapons.Summon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -30,6 +31,7 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.penetrate = -1;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
+            Projectile.MaxUpdates = LiliesOfFinality.Elster_BulletMaxUpdates;
             Projectile.usesLocalNPCImmunity = true;
         }
 

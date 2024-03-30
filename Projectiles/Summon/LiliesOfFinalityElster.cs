@@ -277,11 +277,13 @@ namespace CalamityMod.Projectiles.Summon
                 return;
 
             Vector2 bulletSpawnPosition = Projectile.Center - Vector2.UnitX * 15f * Projectile.spriteDirection;
+            Vector2 bulletVelocity = CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(bulletSpawnPosition, Target, Elster_BulletProjectileSpeed, Elster_BulletMaxUpdates);
 
             Projectile.NewProjectileDirect(
                 Projectile.GetSource_FromThis(),
                 bulletSpawnPosition,
-                Vector2.UnitX * Elster_BulletProjectileSpeed * Projectile.spriteDirection,
+                //Vector2.UnitX * Elster_BulletProjectileSpeed * Projectile.spriteDirection,
+                bulletVelocity,
                 ProjectileType<LiliesOfFinalityBullet>(),
                 Projectile.damage,
                 Projectile.knockBack,

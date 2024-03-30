@@ -20,7 +20,8 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public static float Elster_DistanceFromTarget = 280f;
         public static float Elster_TargettingFlySpeed = 35f;
-        public static float Elster_BulletProjectileSpeed = 40f;
+        public static float Elster_BulletProjectileSpeed = 20f;
+        public static int Elster_BulletMaxUpdates = 2;
 
         public static float Ariane_BoltFireRate = 60f;
         public static float Ariane_TargettingFlySpeed = 20f;
