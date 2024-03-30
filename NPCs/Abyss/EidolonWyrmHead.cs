@@ -199,7 +199,7 @@ namespace CalamityMod.NPCs.Abyss
                 if (NPC.position.Y > Main.worldSurface * 16.0)
                     NPC.velocity.Y += 3f;
 
-                if (NPC.position.Y > (Main.maxTilesY - 200) * 16.0)
+                if (NPC.position.Y > Main.UnderworldLayer * 16.0)
                 {
                     for (int a = 0; a < Main.maxNPCs; a++)
                     {

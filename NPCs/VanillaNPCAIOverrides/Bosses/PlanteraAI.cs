@@ -132,7 +132,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float chargeDeceleration = bossRush ? 0.85f : phase4 ? 0.92f : phase3 ? 0.95f : 0.96f;
 
             // Enrage if target is on the surface
-            if (!bossRush && (surface || Main.player[npc.target].position.Y > ((Main.maxTilesY - 200) * 16)))
+            if (!bossRush && (surface || Main.player[npc.target].position.Y > Main.UnderworldLayer * 16))
             {
                 enrage = true;
                 velocity += 8f;
@@ -897,7 +897,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 despawn = true;
 
             // Enrage if Plantera's target is on the surface
-            if (!enrage && ((Main.player[Main.npc[NPC.plantBoss].target].position.Y < Main.worldSurface * 16.0 || Main.player[Main.npc[NPC.plantBoss].target].position.Y > ((Main.maxTilesY - 200) * 16)) | despawn))
+            if (!enrage && ((Main.player[Main.npc[NPC.plantBoss].target].position.Y < Main.worldSurface * 16.0 || Main.player[Main.npc[NPC.plantBoss].target].position.Y > Main.UnderworldLayer * 16) | despawn))
             {
                 npc.localAI[0] -= 4f;
                 enrage = true;

@@ -7434,7 +7434,7 @@ PrepareToShoot:
             if (npc.ai[3] == 0f)
             {
                 npc.position.X += 8f;
-                if (npc.position.Y / 16f > Main.maxTilesY - 200f)
+                if (npc.position.Y / 16f > Main.UnderworldLayer)
                 {
                     npc.ai[3] = 3f;
                 }

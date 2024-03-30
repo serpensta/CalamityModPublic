@@ -93,6 +93,8 @@ namespace CalamityMod.Items
         private void ApplyRarityColor(Item item, TooltipLine nameLine)
         {
             #region Uniquely Colored Developer Items
+            if (item.type == ModContent.ItemType<LiliesOfFinality>())
+                nameLine.OverrideColor = Color.Lerp(Color.Red, Color.White, (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f);
             if (item.type == ModContent.ItemType<Fabstaff>())
                 nameLine.OverrideColor = new Color(Main.DiscoR, 100, 255);
             if (item.type == ModContent.ItemType<StaffofBlushie>())
@@ -258,6 +260,10 @@ namespace CalamityMod.Items
 
             // Numerous random tooltip edits which don't fit into another category
             #region Various Tooltip Edits
+
+            // Lilies of Finality 512 edit
+            if (item.type == ModContent.ItemType<LiliesOfFinality>())
+                EditTooltipByName("Damage", (line) => line.Text = LiliesOfFinality.TheNumber + " damage");
 
             // Master Mode items also drop in Revengeance
             // Only affects vanilla and Calamity items

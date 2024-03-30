@@ -316,7 +316,7 @@ namespace CalamityMod.Systems
                             }
                         }
 
-                        if (growthTile.LiquidAmount == 0)
+                        if (growthTile.LiquidAmount == 0 && y > Main.UnderworldLayer)
                         {
                             bool isCragsTile = tileType == TileType<BrimstoneSlag>() ||
                                 tileType == TileType<BrimstoneSlab>() ||

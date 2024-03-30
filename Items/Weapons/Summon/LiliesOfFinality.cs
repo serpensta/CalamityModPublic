@@ -31,11 +31,13 @@ namespace CalamityMod.Items.Weapons.Summon
         public static int Ariane_AoESize = 1000;
         public static float Ariane_AoEDMGMultiplier = 0.1f;
 
+        public const int TheNumber = 512;
+
         #endregion
 
         public override void SetDefaults()
         {
-            Item.damage = 550;
+            Item.damage = TheNumber;
             Item.DamageType = DamageClass.Summon;
             Item.shoot = ProjectileType<LiliesOfFinalityElster>();
             Item.knockBack = 5f;
