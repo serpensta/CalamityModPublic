@@ -90,9 +90,9 @@ namespace CalamityMod.NPCs.NormalNPCs
                 DemonEyeAI.DemonEyeBatMovement(NPC, maxSpeedX, maxSpeedY, xAccel, xAccelBoost1, xAccelBoost2, yAccel, yAccelBoost1, yAccelBoost2);
 
             if (phase2)
-                NPC.damage = NPC.defDamage;
+                NPC.damage = (int)Math.Round(NPC.defDamage * 1.3);
             else
-                NPC.damage = 0;
+                NPC.damage = NPC.defDamage;
 
             if (!target.dead)
                 NPC.ai[3] += enrageScale;
