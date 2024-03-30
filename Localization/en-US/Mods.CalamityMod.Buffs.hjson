@@ -1520,3 +1520,8 @@ YoungDukeBuff: {
 	DisplayName: Young Duke Buff
 	Description: Mods.CalamityMod.Buffs.YoungDukeBuff.Description
 }
+
+LiliesOfFinalityBuff: {
+	DisplayName: Finality
+	Description: Remember our promise
+}

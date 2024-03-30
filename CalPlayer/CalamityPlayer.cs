@@ -1079,6 +1079,7 @@ namespace CalamityMod.CalPlayer
         public bool celestialDragons = false;
         public bool KalandraMirror = false;
         public bool StellarTorus = false;
+        public bool LiliesOfFinalityBool = false;
         #endregion
 
         #region Biome
@@ -2121,6 +2122,7 @@ namespace CalamityMod.CalPlayer
             celestialDragons = false;
             KalandraMirror = false;
             StellarTorus = false;
+            LiliesOfFinalityBool = false;
 
             disableVoodooSpawns = false;
             disablePerfCystSpawns = false;
