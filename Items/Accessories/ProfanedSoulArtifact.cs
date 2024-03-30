@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CalamityMod.CalPlayer;
 using CalamityMod.DataStructures;
@@ -6,6 +7,7 @@ using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Ores;
 using CalamityMod.Items.Placeables.Plates;
 using CalamityMod.Rarities;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -88,6 +90,12 @@ namespace CalamityMod.Items.Accessories
         public override void UpdateVanity(Player player)
         {
             player.Calamity().pSoulShieldVisible = true;
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            string adrenTooltip = CalamityWorld.revenge ? this.GetLocalizedValue("ShieldAdren") : "";
+            tooltips.FindAndReplace("[ADREN]", adrenTooltip);
         }
 
         public override void AddRecipes()

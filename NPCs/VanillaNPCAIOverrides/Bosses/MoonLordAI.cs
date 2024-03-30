@@ -185,7 +185,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.dontTakeDamage = true;
                     npc.TargetClosest(false);
 
-                    Vector2 targetDistance = Main.player[npc.target].Center - npc.Center + new Vector2(0f, 130f);
+                    Vector2 targetDistance = Main.player[npc.target].Center - npc.Center;
                     if (targetDistance.Length() > 20f)
                     {
                         float velocity = death ? 9.5f : 9.25f;
@@ -211,8 +211,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             default:
                                 break;
                         }
+                        // Move slower if the head is doing the phantasmal deathray
                         if (Main.npc[(int)npc.localAI[2]].ai[0] == 1f)
-                            velocity -= 2f;
+                            velocity -= 2.25f;
 
                         Vector2 desiredVelocity = Vector2.Normalize(targetDistance - npc.velocity) * velocity;
                         Vector2 velocity2 = npc.velocity;
@@ -264,7 +265,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.dontTakeDamage = false;
                     npc.TargetClosest(false);
 
-                    Vector2 targetDistanceVulnerable = Main.player[npc.target].Center - npc.Center + new Vector2(0f, 130f);
+                    Vector2 targetDistanceVulnerable = Main.player[npc.target].Center - npc.Center;
                     if (targetDistanceVulnerable.Length() > 20f)
                     {
                         float velocity = death ? 9.5f : 9.25f;
@@ -290,6 +291,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             default:
                                 break;
                         }
+                        // Move slower if the head is doing the phantasmal deathray
                         if (Main.npc[(int)npc.localAI[2]].ai[0] == 1f)
                             velocity -= 2f;
 

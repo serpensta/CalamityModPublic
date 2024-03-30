@@ -158,7 +158,7 @@ namespace CalamityMod.Projectiles.Magic
             int inc;
             for (int i = 0; i < 25; i = inc + 1)
             {
-                int toxicDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, (int)CalamityDusts.SulfurousSeaAcid, 0f, 0f, 0, default, 1f);
+                int toxicDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 0, default, 1f);
                 Main.dust[toxicDust].position = (Main.dust[toxicDust].position + Projectile.position) / 2f;
                 Main.dust[toxicDust].velocity = new Vector2((float)Main.rand.Next(-100, 101), (float)Main.rand.Next(-100, 101));
                 Main.dust[toxicDust].velocity.Normalize();

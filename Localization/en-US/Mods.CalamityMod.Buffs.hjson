@@ -690,7 +690,7 @@ BrimflameFrenzyBuff: {
 
 BrutalCarnage: {
 	DisplayName: Brutal Carnage
-	Description: 25% increased melee damage and 10% increased melee crit chance
+	Description: 20% increased melee damage
 }
 
 ChiBuff: {

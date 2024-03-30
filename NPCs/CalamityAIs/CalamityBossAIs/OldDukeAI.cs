@@ -448,7 +448,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                     {
                         Vector2 dust = (Vector2.Normalize(npc.velocity) * new Vector2(npc.width / 2f, npc.height) * 0.75f * 0.5f).RotatedBy((i - (dustAmt / 2 - 1)) * MathHelper.TwoPi / dustAmt) + npc.Center;
                         Vector2 vector2 = dust - npc.Center;
-                        int toxicDust = Dust.NewDust(dust + vector2, 0, 0, (int)CalamityDusts.SulfurousSeaAcid, vector2.X * 2f, vector2.Y * 2f, 100, default, 1.4f);
+                        int toxicDust = Dust.NewDust(dust + vector2, 0, 0, (int)CalamityDusts.SulphurousSeaAcid, vector2.X * 2f, vector2.Y * 2f, 100, default, 1.4f);
                         Main.dust[toxicDust].noGravity = true;
                         Main.dust[toxicDust].noLight = true;
                         Main.dust[toxicDust].velocity = Vector2.Normalize(vector2) * 3f;
@@ -632,7 +632,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 {
                     Vector2 arg_E1C_0 = (Vector2.Normalize(npc.velocity) * new Vector2((npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((j - (chargeDustAmt / 2 - 1)) * pie / chargeDustAmt) + npc.Center;
                     Vector2 vector4 = ((float)(Main.rand.NextDouble() * pie) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int chargeDust = Dust.NewDust(arg_E1C_0 + vector4, 0, 0, (int)CalamityDusts.SulfurousSeaAcid, vector4.X * 2f, vector4.Y * 2f, 100, default, 1.4f);
+                    int chargeDust = Dust.NewDust(arg_E1C_0 + vector4, 0, 0, (int)CalamityDusts.SulphurousSeaAcid, vector4.X * 2f, vector4.Y * 2f, 100, default, 1.4f);
                     Main.dust[chargeDust].noGravity = true;
                     Main.dust[chargeDust].noLight = true;
                     Main.dust[chargeDust].velocity /= 4f;
@@ -693,7 +693,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             case 1:
                             case 2:
                             case 3:
-                                dustID = (int)CalamityDusts.SulfurousSeaAcid;
+                                dustID = (int)CalamityDusts.SulphurousSeaAcid;
                                 break;
                             default:
                                 dustID = DustID.Blood;
@@ -1011,7 +1011,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 {
                     Vector2 arg_1A97_0 = (Vector2.Normalize(npc.velocity) * new Vector2((npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((k - (phase2ChargeDustAmt / 2 - 1)) * pie / phase2ChargeDustAmt) + npc.Center;
                     Vector2 vector9 = ((float)(Main.rand.NextDouble() * pie) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int phase2ChargeDust = Dust.NewDust(arg_1A97_0 + vector9, 0, 0, (int)CalamityDusts.SulfurousSeaAcid, vector9.X * 2f, vector9.Y * 2f, 100, default, 1.4f);
+                    int phase2ChargeDust = Dust.NewDust(arg_1A97_0 + vector9, 0, 0, (int)CalamityDusts.SulphurousSeaAcid, vector9.X * 2f, vector9.Y * 2f, 100, default, 1.4f);
                     Main.dust[phase2ChargeDust].noGravity = true;
                     Main.dust[phase2ChargeDust].noLight = true;
                     Main.dust[phase2ChargeDust].velocity /= 4f;
@@ -1075,7 +1075,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             case 1:
                             case 2:
                             case 3:
-                                dustID = (int)CalamityDusts.SulfurousSeaAcid;
+                                dustID = (int)CalamityDusts.SulphurousSeaAcid;
                                 break;
                             default:
                                 dustID = DustID.Blood;
@@ -1417,7 +1417,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                 {
                     Vector2 arg_2444_0 = (Vector2.Normalize(npc.velocity) * new Vector2((npc.width + 50) / 2f, npc.height) * 0.75f).RotatedBy((m - (phase3ChargeDustAmt / 2 - 1)) * pie / phase3ChargeDustAmt) + npc.Center;
                     Vector2 vector11 = ((float)(Main.rand.NextDouble() * pie) - MathHelper.PiOver2).ToRotationVector2() * Main.rand.Next(3, 8);
-                    int phase3ChargeDust = Dust.NewDust(arg_2444_0 + vector11, 0, 0, (int)CalamityDusts.SulfurousSeaAcid, vector11.X * 2f, vector11.Y * 2f, 100, default, 1.4f);
+                    int phase3ChargeDust = Dust.NewDust(arg_2444_0 + vector11, 0, 0, (int)CalamityDusts.SulphurousSeaAcid, vector11.X * 2f, vector11.Y * 2f, 100, default, 1.4f);
                     Main.dust[phase3ChargeDust].noGravity = true;
                     Main.dust[phase3ChargeDust].noLight = true;
                     Main.dust[phase3ChargeDust].velocity /= 4f;
@@ -1617,7 +1617,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             case 1:
                             case 2:
                             case 3:
-                                dustID = (int)CalamityDusts.SulfurousSeaAcid;
+                                dustID = (int)CalamityDusts.SulphurousSeaAcid;
                                 break;
                             default:
                                 dustID = DustID.Blood;

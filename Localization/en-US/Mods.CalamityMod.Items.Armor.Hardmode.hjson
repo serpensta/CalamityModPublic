@@ -327,7 +327,7 @@ LunicCorpsHelmet: {
 	SetBonus:
 		'''
 		'Finish the fight'
-		Projects a bubble shield that absorbs up to 50 damage
+		Projects a bubble shield that absorbs up to 50 damage {0}
 		The shield starts recharging 5 seconds after being hit
 		Recharging from zero to full charge takes 2 seconds
 		Being hit again while recharging restarts the charge timer
@@ -336,6 +336,7 @@ LunicCorpsHelmet: {
 		These are launchers, dartguns, or anything else that doesn't shoot arrows/bullets
 		20% increased jump speed
 		'''
+	ShieldAdren: Halves Adrenaline lost on hit if the shield fully absorbs the hit
 }
 
 LunicCorpsVest: {

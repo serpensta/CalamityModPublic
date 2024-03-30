@@ -5230,7 +5230,7 @@ namespace CalamityMod.NPCs
             if (hurtInfo.Damage <= 0)
                 return;
 
-            if (target.Calamity().sulfurSet)
+            if (target.Calamity().sulphurSet)
                 npc.AddBuff(BuffID.Poisoned, 120);
 
             if (target.Calamity().snowman)

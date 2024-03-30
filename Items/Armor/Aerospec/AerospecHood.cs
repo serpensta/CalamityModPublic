@@ -41,7 +41,7 @@ namespace CalamityMod.Items.Armor.Aerospec
 
         public override void UpdateEquip(Player player)
         {
-            player.GetDamage<RangedDamageClass>() += 0.08f;
+            player.GetDamage<RangedDamageClass>() += 0.1f;
         }
 
         public override void AddRecipes()

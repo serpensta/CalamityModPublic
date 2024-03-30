@@ -20,7 +20,11 @@ namespace CalamityMod.Items.Armor.Aerospec
             Item.defense = 7;
         }
 
-        public override void UpdateEquip(Player player) => player.GetCritChance<GenericDamageClass>() += 3;
+        public override void UpdateEquip(Player player)
+        {
+            player.GetDamage<GenericDamageClass>() += 0.03f;
+            player.GetCritChance<GenericDamageClass>() += 3;
+        }
 
         public override void AddRecipes()
         {

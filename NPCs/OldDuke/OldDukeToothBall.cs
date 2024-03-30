@@ -234,12 +234,12 @@ namespace CalamityMod.NPCs.OldDuke
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 3; k++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
 
             if (NPC.life <= 0)
             {
                 for (int k = 0; k < 15; k++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
 
                 NPC.position.X = NPC.position.X + NPC.width / 2;
                 NPC.position.Y = NPC.position.Y + NPC.height / 2;
@@ -261,10 +261,10 @@ namespace CalamityMod.NPCs.OldDuke
 
                 for (int j = 0; j < 30; j++)
                 {
-                    int toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, 0f, 0f, 100, default, 3f);
+                    int toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 100, default, 3f);
                     Main.dust[toxicDust].noGravity = true;
                     Main.dust[toxicDust].velocity *= 5f;
-                    toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, 0f, 0f, 100, default, 2f);
+                    toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 100, default, 2f);
                     Main.dust[toxicDust].velocity *= 2f;
                     Main.dust[toxicDust].noGravity = true;
                 }
