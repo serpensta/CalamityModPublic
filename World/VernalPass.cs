@@ -31,12 +31,12 @@ namespace CalamityMod.World
             //continously place up/down until it is far enough from the temple to not destroy it
             while (!foundValidPosition && attempts++ < 100000)
             {
-                while (!NoTempleNearby(startPosX, startPosY))
+                while (!NoTempleNearby(placementPositionX, placementPositionY))
                 {
                     //increase the actual y-position the vernal pass will place at based on the starting location, if the jungle temple is too close to the initial starting location
                     placementPositionY += (initialPlacementPositionY < (Main.maxTilesX / 2) ? -10 : 10);
                 }
-                if (NoTempleNearby(startPosX, startPosY))
+                if (NoTempleNearby(placementPositionX, placementPositionY))
                 {
                     foundValidPosition = true;
                 }
@@ -48,6 +48,7 @@ namespace CalamityMod.World
             SchematicAnchor anchorType = SchematicAnchor.Center;
 
             bool firstItem = false;
+
             PlaceSchematic(mapKey, placementPoint, anchorType, ref firstItem, new Action<Chest, int, bool>(FillVernalPassChests));
 
             // Add the Vernal Pass as a protected structure.
@@ -92,9 +93,9 @@ namespace CalamityMod.World
         //determine if theres no snow blocks nearby so the biome doesnt place in the snow biome
         public static bool NoTempleNearby(int X, int Y)
         {
-            for (int i = X - 200; i < X + 200; i++)
+            for (int i = X - 140; i < X + 140; i++)
             {
-                for (int j = Y - 200; j < Y + 200; j++)
+                for (int j = Y - 140; j < Y + 140; j++)
                 {
                     if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == TileID.LihzahrdBrick)
                     {
