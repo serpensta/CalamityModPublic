@@ -835,7 +835,6 @@ LiliesOfFinality: {
 	DisplayName: Lilies of Finality
 	Tooltip:
 		'''
-		Grows a pumpkin patch that sprouts pumpkins nearby
 		Requires 2 minion slots to use
 		Can only be summoned once
 		'Wake up'
