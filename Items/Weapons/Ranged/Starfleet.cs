@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.noMelee = true;
             Item.knockBack = 15f;
             Item.value = CalamityGlobalItem.Rarity10BuyPrice;
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ItemRarityID.Purple;
             Item.UseSound = SoundID.Item92;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<PlasmaBlast>();
