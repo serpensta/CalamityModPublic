@@ -285,7 +285,7 @@ namespace CalamityMod.Projectiles.Summon
                 //Vector2.UnitX * Elster_BulletProjectileSpeed * Projectile.spriteDirection,
                 bulletVelocity,
                 ProjectileType<LiliesOfFinalityBullet>(),
-                (int)(Projectile.damage * 1.25f),
+                (int)(Projectile.damage * 1.2f),
                 Projectile.knockBack,
                 Projectile.owner);
 
