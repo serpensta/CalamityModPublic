@@ -57,8 +57,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (phase3)
             {
                 crystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel>());
-                blueCrystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel2>());
-                greenCrystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel3>());
+                if (masterMode)
+                {
+                    blueCrystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel2>());
+                    greenCrystalAlive = NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel3>());
+                }
             }
 
             // Sapphire Crystal buffs

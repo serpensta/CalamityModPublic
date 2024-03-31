@@ -100,7 +100,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     bool isQueenBeeHornet = hornet.ai[3] == 1f;
                     if (hornet.active && (hornet.type == NPCID.LittleHornetHoney || hornet.type == NPCID.HornetHoney || hornet.type == NPCID.BigHornetHoney) && isQueenBeeHornet)
                     {
-                        totalHornets++;
+                        int hornetCountIncrement = hornet.type == NPCID.BigHornetHoney ? 3 : hornet.type == NPCID.HornetHoney ? 2 : 1;
+                        totalHornets += hornetCountIncrement;
                         if (totalHornets >= hornetLimit)
                         {
                             hornetLimitReached = true;
