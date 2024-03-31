@@ -25,12 +25,12 @@ namespace CalamityMod.Items.Weapons.Summon
 
         public static float Ariane_BoltFireRate = 60f;
         public static float Ariane_TargettingFlySpeed = 20f;
-        public static float Ariane_BoltProjectileSpeed = 15f;
-        public static int Ariane_BoltTimeHoming = 300;
+        public static float Ariane_BoltProjectileSpeed = 25f;
+        public static int Ariane_BoltTimeHoming = 600;
         public static float Ariane_MinTurnRate = 0.05f;
         public static float Ariane_MaxTurnRate = 0.2f;
-        public static int Ariane_AoESize = 1000;
-        public static float Ariane_AoEDMGMultiplier = 0.1f;
+        public static int Ariane_AoESize = 1050;
+        public static float Ariane_AoEDMGMultiplier = 0.4f;
 
         public const int TheNumber = 512;
 
