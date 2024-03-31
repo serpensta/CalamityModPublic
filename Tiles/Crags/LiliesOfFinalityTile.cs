@@ -25,6 +25,7 @@ namespace CalamityMod.Tiles.Crags
             TileID.Sets.DisableSmartCursor[Type] = true;
             RegisterItemDrop(ModContent.ItemType<LiliesOfFinality>());
             FlexibleTileWand.RubblePlacementLarge.AddVariations(ModContent.ItemType<LiliesOfFinality>(), Type, 0);
+            HitSound = new("CalamityMod/Sounds/Custom/LiliesOfFinalityTileHitSound");
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => r = g = b = 0.5f;
