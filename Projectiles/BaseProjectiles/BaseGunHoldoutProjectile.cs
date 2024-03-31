@@ -32,6 +32,13 @@ namespace CalamityMod.Projectiles.BaseProjectiles
         public virtual Vector2 GunTipPosition => Projectile.Center + Vector2.UnitX.RotatedBy(Projectile.rotation) * Projectile.width * 0.5f;
 
         /// <summary>
+        /// How fast <see cref="OffsetLengthFromArm"/> returns back to <see cref="MaxOffsetLengthFromArm"/>.<br/>
+        /// In consequence, this is how fast the holdout goes back to its position.<br/>
+        /// Defaults to 0.3f.
+        /// </summary>
+        public virtual float RecoilResolveSpeed => 0.3f;
+
+        /// <summary>
         /// The distance of the holdout to the arm.<br/>
         /// Used to properly position the weapon to be held on the player's arms.
         /// </summary>
@@ -176,25 +183,27 @@ namespace CalamityMod.Projectiles.BaseProjectiles
         /// </summary>
         public virtual void ManageHoldout()
         {
-            if (OffsetLengthFromArm != MaxOffsetLengthFromArm)
-                OffsetLengthFromArm = MathHelper.Lerp(OffsetLengthFromArm, MaxOffsetLengthFromArm, 0.3f);
-
             // The center of the player, taking into account if they have a mount or not.
             Vector2 armPosition = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
 
-            // The vector between the player and the mouse.
+            // The vector between the player and the mouse, used for pointing the holdout.
             Vector2 ownerToMouse = Owner.Calamity().mouseWorld - armPosition;
 
-            Vector2 rotationVector = Projectile.rotation.ToRotationVector2();
-            float velocityRotation = Projectile.velocity.ToRotation();
+            // The direction this holdout's pointing at.
+            float holdoutDirection = Projectile.velocity.ToRotation();
+            Main.NewText(MathHelper.ToDegrees(holdoutDirection));
+
+            // A range from -1 to 1 for when the holdout is pointing downards of upwards, respectively.
+            // Used for the offsets.
             float proximityLookingUpwards = Vector2.Dot(ownerToMouse.SafeNormalize(Vector2.Zero), -Vector2.UnitY);
+
             int direction = MathF.Sign(ownerToMouse.X);
 
-            Vector2 lengthOffset = rotationVector * OffsetLengthFromArm;
+            Vector2 lengthOffset = Projectile.rotation.ToRotationVector2() * OffsetLengthFromArm;
             Vector2 armOffset = new Vector2(Utils.Remap(MathF.Abs(proximityLookingUpwards), 0f, 1f, 0f, proximityLookingUpwards > 0f ? OffsetXUpwards : OffsetXDownwards) * direction, BaseOffsetY + Utils.Remap(MathF.Abs(proximityLookingUpwards), 0f, 1f, 0f, proximityLookingUpwards > 0f ? OffsetYUpwards : OffsetYDownwards));
             Projectile.Center = armPosition + lengthOffset + armOffset;
-            Projectile.velocity = velocityRotation.AngleTowards(ownerToMouse.ToRotation(), 0.2f).ToRotationVector2();
-            Projectile.rotation = velocityRotation;
+            Projectile.velocity = holdoutDirection.AngleTowards(ownerToMouse.ToRotation(), 0.2f).ToRotationVector2();
+            Projectile.rotation = holdoutDirection;
 
             Projectile.spriteDirection = direction;
             Owner.ChangeDir(direction);
@@ -210,6 +219,9 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
             if (KeepRefreshingLifetime)
                 Projectile.timeLeft = 2;
+
+            if (OffsetLengthFromArm != MaxOffsetLengthFromArm)
+                OffsetLengthFromArm = MathHelper.Lerp(OffsetLengthFromArm, MaxOffsetLengthFromArm, RecoilResolveSpeed);
         }
 
         /// <summary>
