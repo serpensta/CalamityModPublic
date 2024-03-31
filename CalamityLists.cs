@@ -2065,6 +2065,7 @@ namespace CalamityMod
                 ProjectileType<InsidiousHarpoon>(),
                 ProjectileType<JawsProjectile>(),
                 ProjectileType<LeviathanTooth>(),
+                ProjectileType<LiliesOfFinalityAoE>(),
                 ProjectileType<LionfishProj>(),
                 ProjectileType<MechanicalBarracuda>(),
                 ProjectileType<MetalShard>(),
