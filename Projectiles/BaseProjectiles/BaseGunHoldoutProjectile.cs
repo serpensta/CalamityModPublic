@@ -191,7 +191,6 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
             // The direction this holdout's pointing at.
             float holdoutDirection = Projectile.velocity.ToRotation();
-            Main.NewText(MathHelper.ToDegrees(holdoutDirection));
 
             // A range from -1 to 1 for when the holdout is pointing downards of upwards, respectively.
             // Used for the offsets.
