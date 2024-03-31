@@ -877,7 +877,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.TargetClosest();
                         calamityGlobalNPC.newAI[0] += ((masterMode && calamityGlobalNPC.newAI[0] % 2f != 0f) ? Main.rand.Next(2) + 1f : 1f);
                         if (calamityGlobalNPC.newAI[0] > 3f)
-                            calamityGlobalNPC.newAI[0] = 0f;
+                            calamityGlobalNPC.newAI[0] = masterMode ? Main.rand.Next(2) : 0f;
 
                         npc.SyncExtraAI();
                     }

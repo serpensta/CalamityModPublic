@@ -412,6 +412,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                             spread = death ? 30 : 20;
                                         }
 
+                                        if (masterMode)
+                                        {
+                                            numProj += 3;
+                                            spread += 10;
+                                        }
+
                                         float rotation = MathHelper.ToRadians(spread);
                                         for (int j = 0; j < numProj; j++)
                                         {
@@ -451,7 +457,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             }
 
                             if (masterMode)
-                                numProj += 2;
+                            {
+                                numProj += 4;
+                                spread += 15;
+                            }
 
                             float rotation = MathHelper.ToRadians(spread);
                             for (int i = 0; i < numProj; i++)

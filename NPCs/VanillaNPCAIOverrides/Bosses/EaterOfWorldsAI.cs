@@ -84,6 +84,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Boost velocity by 50% phase
             bool phase4 = lifeRatio < (masterMode ? 0.5f : 0.2f);
 
+            // Go fucking crazy in Master Mode
+            bool phase5 = lifeRatio < 0.15f && masterMode;
+            bool phase6 = lifeRatio < 0.05f && masterMode;
+
             // Fire projectiles
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -351,7 +355,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float segmentVelocity = 12f + velocityBoost;
             float segmentAcceleration = 0.15f + accelerationBoost;
 
-            if (phase4)
+            if (phase6)
+            {
+                segmentVelocity += 8f * (enrageScale + 1f);
+                segmentAcceleration += 0.4f * (enrageScale + 1f);
+            }
+            else if (phase5)
+            {
+                segmentVelocity += 4f * (enrageScale + 1f);
+                segmentAcceleration += 0.2f * (enrageScale + 1f);
+            }
+            else if (phase4)
             {
                 segmentVelocity += 2f * (enrageScale + 1f);
                 segmentAcceleration += 0.1f * (enrageScale + 1f);
@@ -517,14 +531,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                 while (segmentAmt > 0 && segmentAmt < Main.maxNPCs && Main.npc[segmentAmt].active && Main.npc[segmentAmt].aiStyle == npc.aiStyle)
                                 {
-                                    int arg_2853_0 = (int)Main.npc[segmentAmt].ai[0];
+                                    int attachedSegments = (int)Main.npc[segmentAmt].ai[0];
                                     Main.npc[segmentAmt].active = false;
                                     npc.life = 0;
 
                                     if (Main.netMode == NetmodeID.Server)
                                         NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, segmentAmt, 0f, 0f, 0f, 0, 0, 0);
 
-                                    segmentAmt = arg_2853_0;
+                                    segmentAmt = attachedSegments;
                                 }
 
                                 if (Main.netMode == NetmodeID.Server)
