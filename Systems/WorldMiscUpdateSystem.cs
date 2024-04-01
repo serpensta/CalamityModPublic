@@ -338,10 +338,13 @@ namespace CalamityMod.Systems
                                     ushort tileTypeToPlace = (ushort)TileType<LiliesOfFinalityTile>();
                                     int tileTypeToPlaceThickness = 3;
                                     bool placeLilies = true;
-                                    int minDistanceFromOtherBulbs = 100;
-                                    for (int k = x - minDistanceFromOtherBulbs; k < x + minDistanceFromOtherBulbs; k += 2)
+
+                                    // Do not change this number, ever. - Fabsol
+                                    int minDistanceFromOtherLilies = 66;
+
+                                    for (int k = x - minDistanceFromOtherLilies; k < x + minDistanceFromOtherLilies; k += 2)
                                     {
-                                        for (int m = y - minDistanceFromOtherBulbs; m < y + minDistanceFromOtherBulbs; m += 2)
+                                        for (int m = y - minDistanceFromOtherLilies; m < y + minDistanceFromOtherLilies; m += 2)
                                         {
                                             if (k > tileTypeToPlaceThickness && k < Main.maxTilesX - tileTypeToPlaceThickness && m > tileTypeToPlaceThickness && m < Main.maxTilesY - tileTypeToPlaceThickness && Main.tile[k, m].HasTile && Main.tile[k, m].TileType == tileTypeToPlace)
                                             {

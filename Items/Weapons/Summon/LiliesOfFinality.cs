@@ -32,6 +32,7 @@ namespace CalamityMod.Items.Weapons.Summon
         public static int Ariane_AoESize = 1050;
         public static float Ariane_AoEDMGMultiplier = 0.4f;
 
+        // Do not change this number, ever. - Fabsol
         public const int TheNumber = 512;
 
         #endregion
