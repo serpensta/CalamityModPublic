@@ -295,6 +295,9 @@ namespace CalamityMod.Balancing
             #region Ceaseless Void: Dark Energies
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<DarkEnergy>(), ResistTrueMelee(0.5f)));
+
+            // 40% resist to Stellar Torus Staff.
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<DarkEnergy>(), new ProjectileResistBalancingRule(0.6f, ProjectileType<StellarTorusBeam>())));
             #endregion
 
             #region Storm Weaver
@@ -389,6 +392,9 @@ namespace CalamityMod.Balancing
             #region Exo Mechs: Thanatos
             // 65% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(ResistTrueMelee(0.35f))));
+
+            // 65% resist to Stellar Torus Staff.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.35f, ProjectileType<StellarTorusBeam>()))));
 
             // 65% resist to The Enforcer's projectiles.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.35f, ProjectileType<EssenceFlame2>()))));
