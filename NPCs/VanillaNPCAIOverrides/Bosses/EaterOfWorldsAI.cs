@@ -324,7 +324,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 noFlyZone -= (int)(enrageScale * 200f);
 
                 if (masterMode)
-                    noFlyZone -= 200;
+                    noFlyZone -= phase5 ? 400 : 200;
 
                 if (noFlyZone < 100)
                     noFlyZone = 100;
@@ -357,8 +357,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (phase6)
             {
-                segmentVelocity += 8f * (enrageScale + 1f);
-                segmentAcceleration += 0.4f * (enrageScale + 1f);
+                segmentVelocity += 6f * (enrageScale + 1f);
+                segmentAcceleration += 0.3f * (enrageScale + 1f);
             }
             else if (phase5)
             {
@@ -389,8 +389,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             Vector2 segmentDirection = npc.Center;
-            float targetPosX = Main.player[npc.target].Center.X;
-            float targetPosY = Main.player[npc.target].Center.Y;
+            Vector2 destination = Main.player[npc.target].Center + (phase6 ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
+            float targetPosX = destination.X;
+            float targetPosY = destination.Y;
 
             targetPosX = (int)(targetPosX / 16f) * 16;
             targetPosY = (int)(targetPosY / 16f) * 16;

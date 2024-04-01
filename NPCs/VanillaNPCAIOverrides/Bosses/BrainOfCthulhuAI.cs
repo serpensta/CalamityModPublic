@@ -198,8 +198,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (!despawn)
                         {
                             Vector2 brainCenter = npc.Center;
-                            float targetXDist = Main.player[npc.target].Center.X - brainCenter.X;
-                            float targetYDist = Main.player[npc.target].Center.Y - brainCenter.Y;
+                            Vector2 destination = Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
+                            float targetXDist = destination.X - brainCenter.X;
+                            float targetYDist = destination.Y - brainCenter.Y;
                             float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
                             float velocityScale = death ? 6f : 4.5f;
                             float velocityBoost = velocityScale * (1f - lifeRatio);
@@ -265,7 +266,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             SoundEngine.PlaySound(SoundID.ForceRoarPitched, npc.Center);
 
                             // Velocity
-                            npc.velocity = (Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
+                            npc.velocity = (Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
                             if (Main.getGoodWorld)
                                 npc.velocity *= 1.15f;
                         }
@@ -925,7 +926,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 float chargeVelocity = (death ? (masterMode ? 12f : 9f) : (masterMode ? 9f : 6f)) + chargeAggressionScale;
                 chargeVelocity += 2f * enrageScale;
-                Vector2 targetDirection = Main.player[npc.target].Center - npc.Center;
+                Vector2 destination = Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
+                Vector2 targetDirection = destination - npc.Center;
                 targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
                 if (Main.getGoodWorld)
                 {
