@@ -29,11 +29,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
             // Phases
-            float phase2LifeRatio = 0.85f;
-            float phase3LifeRatio = 0.7f;
+            float phase2LifeRatio = masterMode ? 1f : 0.85f;
+            float phase3LifeRatio = masterMode ? 0.9f : 0.7f;
             float respawnHandsLifeRatio = 0.5f;
-            float phase4LifeRatio = 0.3f;
-            float phase5LifeRatio = 0.1f;
+            float phase4LifeRatio = masterMode ? 0.4f : 0.3f;
+            float phase5LifeRatio = masterMode ? 0.2f : 0.1f;
 
             // Begin firing spreads of skulls phase
             bool phase2 = lifeRatio < phase2LifeRatio;
@@ -450,7 +450,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float headYTopSpeed = headYAcceleration * 100f;
                 float headXAcceleration = (Main.getGoodWorld ? 0.21f : masterMode ? 0.16f : 0.08f) + (death ? 0.08f * (1f - lifeRatio) : 0f);
                 float headXTopSpeed = headXAcceleration * 100f;
-                float deceleration = Main.getGoodWorld ? 0.83f : Main.masterMode ? 0.86f : Main.expertMode ? 0.89f : 0.92f;
+                float deceleration = Main.getGoodWorld ? 0.83f : masterMode ? 0.86f : 0.89f;
 
                 if (bossRush)
                 {
@@ -904,7 +904,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float velocityMultiplier = MathHelper.Lerp(death ? 0.6f : 0.7f, 1f, skeletronLifeRatio);
             float velocityIncrement = MathHelper.Lerp(0.2f, death ? 0.4f : 0.3f, 1f - skeletronLifeRatio);
             float handSwipeVelocity = MathHelper.Lerp(16f, death ? 24f : 20f, 1f - skeletronLifeRatio);
-            float deceleration = Main.getGoodWorld ? 0.78f : Main.masterMode ? 0.82f : Main.expertMode ? 0.86f : 0.9f;
+            float deceleration = Main.getGoodWorld ? 0.78f : masterMode ? 0.82f : 0.86f;
 
             float handSwipeDuration = HandSwipeDistance / handSwipeVelocity;
             float slapGateValue = HandSlapGateValue;

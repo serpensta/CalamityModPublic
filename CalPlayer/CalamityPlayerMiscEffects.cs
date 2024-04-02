@@ -551,7 +551,7 @@ namespace CalamityMod.CalPlayer
             #region Adrenaline
             // This is how much Adrenaline will be changed by this frame.
             float adrenalineDiff = 0;
-            bool wofAndNotHell = Main.wofNPCIndex >= 0 && Player.position.Y < (float)((Main.maxTilesY - 200) * 16);
+            bool wofAndNotHell = Main.wofNPCIndex >= 0 && Player.position.Y < (float)(Main.UnderworldLayer * 16);
 
             // If Adrenaline Mode is currently active, you smoothly lose all adrenaline over the duration.
             if (adrenalineModeActive)
@@ -3119,7 +3119,7 @@ namespace CalamityMod.CalPlayer
                     for (int i = 0; i < Main.maxNPCs; ++i)
                     {
                         NPC npc = Main.npc[i];
-                        if (!npc.active || npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
+                        if (!npc.active || npc.friendly || npc.dontTakeDamage)
                             continue;
 
                         if (Vector2.Distance(Player.Center, npc.Center) <= range)

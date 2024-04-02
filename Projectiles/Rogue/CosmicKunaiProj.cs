@@ -17,6 +17,8 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.ignoreWater = true;
             Projectile.penetrate = 1;
             Projectile.DamageType = RogueDamageClass.Instance;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
 
         public override void AI()

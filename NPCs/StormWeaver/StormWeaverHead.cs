@@ -51,6 +51,9 @@ namespace CalamityMod.NPCs.StormWeaver
         private const float BoltAngleSpread = 280;
         private bool tail = false;
 
+        public static readonly SoundStyle ArmorShedSound = new("CalamityMod/Sounds/Custom/WeaverArmorShed");
+        public static readonly SoundStyle DeathSound = new("CalamityMod/Sounds/NPCKilled/WeaverDeath");
+
         // Lightning flash variables
         public float lightning = 0f;
         private float lightningDecay = 1f;
@@ -98,7 +101,7 @@ namespace CalamityMod.NPCs.StormWeaver
             global.unbreakableDR = true;
             NPC.chaseable = false;
             NPC.HitSound = SoundID.NPCHit4;
-            NPC.DeathSound = SoundID.NPCDeath14;
+            NPC.DeathSound = DeathSound;
 
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
@@ -202,7 +205,7 @@ namespace CalamityMod.NPCs.StormWeaver
                     if (Main.netMode != NetmodeID.Server)
                         Gore.NewGore(NPC.GetSource_FromAI(), NPC.position, NPC.velocity, Mod.Find<ModGore>("SWArmorHead1").Type, NPC.scale);
 
-                    SoundEngine.PlaySound(SoundID.NPCDeath14, NPC.Center);
+                    SoundEngine.PlaySound(ArmorShedSound, NPC.Center);
 
                     CalamityGlobalNPC global = NPC.Calamity();
                     NPC.defense = 20;
@@ -210,7 +213,6 @@ namespace CalamityMod.NPCs.StormWeaver
                     global.unbreakableDR = false;
                     NPC.chaseable = true;
                     NPC.HitSound = SoundID.NPCHit13;
-                    NPC.DeathSound = SoundID.NPCDeath13;
                     NPC.frame = new Rectangle(0, 0, 62, 86);
                 }
             }

@@ -10,6 +10,7 @@ using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.PlagueEnemies;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Melee;
@@ -4507,6 +4508,40 @@ namespace CalamityMod.Projectiles
                         for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
                             int beeType = Main.rand.Next(NPCID.Bee, NPCID.BeeSmall + 1);
+                            if (Main.zenithWorld)
+                            {
+                                beeType = Main.rand.NextBool(3) ? ModContent.NPCType<PlagueChargerLarge>() : ModContent.NPCType<PlagueCharger>();
+                            }
+                            else if (Main.masterMode || BossRushEvent.BossRushActive)
+                            {
+                                switch (Main.rand.Next(12))
+                                {
+                                    default:
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                        break;
+
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                        beeType = NPCID.LittleHornetHoney;
+                                        break;
+
+                                    case 9:
+                                    case 10:
+                                        beeType = NPCID.HornetHoney;
+                                        break;
+
+                                    case 11:
+                                        beeType = NPCID.BigHornetHoney;
+                                        break;
+                                }
+                            }
+
                             int beeSpawn = NPC.NewNPC(projectile.GetSource_FromThis(), (int)projectile.Center.X, (int)projectile.Center.Y, beeType, 1);
                             Main.npc[beeSpawn].velocity.X = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].velocity.Y = (float)Main.rand.Next(-200, 201) * 0.002f;

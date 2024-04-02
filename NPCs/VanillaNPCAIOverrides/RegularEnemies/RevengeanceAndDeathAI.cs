@@ -3570,6 +3570,12 @@ PrepareToShoot:
                     if (Main.player[npc.target].position.Y - npc.position.Y < 80f && npc.velocity.Y > 0f)
                         npc.velocity.Y *= 0.97f;
                 }
+
+                if (npc.ai[3] == 1f)
+                {
+                    maxVelocity += npc.ai[2] * 1.5f;
+                    acceleration += npc.ai[2] * 0.01f;
+                }
             }
             else if (npc.type == NPCID.MossHornet)
             {
@@ -3963,7 +3969,7 @@ PrepareToShoot:
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    npc.ai[1] += (npc.type == NPCID.MossHornet ? 2f : 1f);
+                    npc.ai[1] += (npc.type == NPCID.MossHornet ? 2f : 1f) + npc.ai[2];
                     if (npc.justHit)
                         npc.ai[1] = 0f;
 
@@ -3972,6 +3978,7 @@ PrepareToShoot:
                         if (targetData.Type != 0 && Collision.CanHit(npc, targetData))
                         {
                             float projSpeed = (CalamityWorld.death || Main.hardMode) ? 5f : 8f;
+                            projSpeed += npc.ai[2] * ((CalamityWorld.death || Main.hardMode) ? 2f : 4f);
                             Vector2 projSpawnPosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height / 2);
                             float projTargetXDist = targetData.Center.X - projSpawnPosition.X;
                             float projTargetYDist = targetData.Center.Y - projSpawnPosition.Y;
@@ -3981,7 +3988,7 @@ PrepareToShoot:
                                 projTargetDistance = projSpeed / projTargetDistance;
                                 projTargetXDist *= projTargetDistance;
                                 projTargetYDist *= projTargetDistance;
-                                int projDamage = (int)(10f * npc.scale);
+                                int projDamage = (int)((npc.ai[3] == 1f ? 15f : 10f) * npc.scale);
                                 if (npc.type == NPCID.MossHornet)
                                     projDamage = (int)(30f * npc.scale);
 
@@ -7427,7 +7434,7 @@ PrepareToShoot:
             if (npc.ai[3] == 0f)
             {
                 npc.position.X += 8f;
-                if (npc.position.Y / 16f > Main.maxTilesY - 200f)
+                if (npc.position.Y / 16f > Main.UnderworldLayer)
                 {
                     npc.ai[3] = 3f;
                 }

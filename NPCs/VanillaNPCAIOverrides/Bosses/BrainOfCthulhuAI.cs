@@ -198,12 +198,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (!despawn)
                         {
                             Vector2 brainCenter = npc.Center;
-                            float targetXDist = Main.player[npc.target].Center.X - brainCenter.X;
-                            float targetYDist = Main.player[npc.target].Center.Y - brainCenter.Y;
+                            Vector2 destination = Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
+                            float targetXDist = destination.X - brainCenter.X;
+                            float targetYDist = destination.Y - brainCenter.Y;
                             float targetDistance = (float)Math.Sqrt(targetXDist * targetXDist + targetYDist * targetYDist);
                             float velocityScale = death ? 6f : 4.5f;
                             float velocityBoost = velocityScale * (1f - lifeRatio);
-                            float nonChargeSpeed = 18f + velocityBoost + 3f * enrageScale;
+                            float nonChargeSpeed = (masterMode ? 24f : 18f) + velocityBoost + 3f * enrageScale;
                             if (Main.getGoodWorld)
                                 nonChargeSpeed *= 1.15f;
 
@@ -213,6 +214,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             float minInertia = death ? 60f : 75f;
                             float maxInertia = death ? 80f : 100f;
+                            if (masterMode)
+                            {
+                                minInertia -= 10f;
+                                maxInertia -= 10f;
+                            }
+
                             float inertia = MathHelper.Lerp(minInertia, maxInertia, lifeRatio);
                             npc.velocity.X = (npc.velocity.X * inertia + targetXDist) / (inertia + 1f);
                             npc.velocity.Y = (npc.velocity.Y * inertia + targetYDist) / (inertia + 1f);
@@ -259,7 +266,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             SoundEngine.PlaySound(SoundID.ForceRoarPitched, npc.Center);
 
                             // Velocity
-                            npc.velocity = (Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
+                            npc.velocity = (Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * chargeVelocity;
                             if (Main.getGoodWorld)
                                 npc.velocity *= 1.15f;
                         }
@@ -406,6 +413,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                             spread = death ? 30 : 20;
                                         }
 
+                                        if (masterMode)
+                                        {
+                                            numProj += 3;
+                                            spread += 10;
+                                        }
+
                                         float rotation = MathHelper.ToRadians(spread);
                                         for (int j = 0; j < numProj; j++)
                                         {
@@ -442,6 +455,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             {
                                 numProj = death ? 5 : 3;
                                 spread = death ? 15 : 10;
+                            }
+
+                            if (masterMode)
+                            {
+                                numProj += 4;
+                                spread += 15;
                             }
 
                             float rotation = MathHelper.ToRadians(spread);
@@ -673,7 +692,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     float targetXDistPhase1 = Main.player[npc.target].Center.X - brainCenterPhase1.X;
                     float targetYDistPhase1 = Main.player[npc.target].Center.Y - brainCenterPhase1.Y;
                     float targetDistancePhase1 = (float)Math.Sqrt(targetXDistPhase1 * targetXDistPhase1 + targetYDistPhase1 * targetYDistPhase1);
-                    float maxMoveVelocity = (death ? 2f : 1.5f) + velocityScale;
+                    float maxMoveVelocity = (death ? (masterMode ? 4f : 2f) : (masterMode ? 3f : 1.5f)) + velocityScale;
                     if (Main.getGoodWorld)
                         maxMoveVelocity *= 2f;
 
@@ -698,7 +717,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (!despawn)
                             npc.localAI[1] += (death ? 2f : 1f) + velocityScale;
 
-                        if (npc.localAI[1] >= 360f)
+                        if (npc.localAI[1] >= (masterMode ? 540f : 360f))
                         {
                             // Teleport location
                             npc.localAI[1] = 0f;
@@ -855,7 +874,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float brainXDist = Main.npc[NPC.crimsonBoss].Center.X - creeperCenter.X;
                 float brainYDist = Main.npc[NPC.crimsonBoss].Center.Y - creeperCenter.Y;
                 float brainDistance = (float)Math.Sqrt(brainXDist * brainXDist + brainYDist * brainYDist);
-                float velocity = (death ? 12f : 8f) + chargeAggressionScale;
+                float velocity = (death ? (masterMode ? 16f : 12f) : (masterMode ? 12f : 8f)) + chargeAggressionScale;
                 velocity += 2f * enrageScale;
 
                 // Max distance from Brain
@@ -905,9 +924,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Set damage
                 npc.damage = npc.defDamage;
 
-                float chargeVelocity = (death ? 9f : 6f) + chargeAggressionScale;
+                float chargeVelocity = (death ? (masterMode ? 12f : 9f) : (masterMode ? 9f : 6f)) + chargeAggressionScale;
                 chargeVelocity += 2f * enrageScale;
-                Vector2 targetDirection = Main.player[npc.target].Center - npc.Center;
+                Vector2 destination = Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
+                Vector2 targetDirection = destination - npc.Center;
                 targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
                 if (Main.getGoodWorld)
                 {
@@ -922,7 +942,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 // Return to Brain after a set time
-                float chargeDistance = masterMode ? 700f : 600f;
+                float chargeDistance = masterMode ? 900f : 600f;
                 float returnToBrainGateValue = chargeDistance / chargeVelocity;
 
                 npc.ai[1] += 1f;

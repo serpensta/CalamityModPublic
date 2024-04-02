@@ -295,6 +295,7 @@ namespace CalamityMod
             EnemyStats.ContactDamageValues = new SortedDictionary<int, int[]>
             {
                 { NPCID.KingSlime, new int[] { 40, 64, 80, 96, 120 } },
+                { ModContent.NPCType<KingSlimeJewel3>(), new int[] { 30, 44, 60, 76, 90 } },
 
                 { ModContent.NPCType<DesertScourgeHead>(), new int[] { 45, 66, 88, 110, 132 } },
                 { ModContent.NPCType<DesertScourgeBody>(), new int[] { 24, 32, 40, 48, 72 } },
@@ -310,6 +311,7 @@ namespace CalamityMod
                     50, // 60 in phase 2, 70 in phase 3
                     72 } }, // Vanilla: 108 in phase 2; Rev+: 86 in phase 2, 101 in phase 3
                 { NPCID.ServantofCthulhu, new int[] { 18, 24, 30, 36, 54 } },
+                { ModContent.NPCType<BloodlettingServant>(), new int[] { 20, 26, 34, 42, 60 } }, // In phase 2: 26, 34, 44, 55, 78
 
                 { ModContent.NPCType<Crabulon>(), new int[] { 40, 64, 80, 96, 120 } },
                 { ModContent.NPCType<CrabShroom>(), new int[] { 25, 50, 62, 74, 75 } },
@@ -562,6 +564,7 @@ namespace CalamityMod
                 { new Tuple<int, int>(ModContent.NPCType<DesertScourgeHead>(), ModContent.ProjectileType<GreatSandBlast>()), new int[] { 26, 44, 60, 76, 108 } },
 
                 { new Tuple<int, int>(NPCID.EyeofCthulhu, ProjectileID.BloodNautilusShot), new int[] { 26, 44, 60, 76, 108 } },
+                { new Tuple<int, int>(ModContent.NPCType<BloodlettingServant>(), ProjectileID.BloodShot), new int[] { 26, 36, 44, 52, 84 } },
 
                 { new Tuple<int, int>(ModContent.NPCType<Crabulon>(), ModContent.ProjectileType<MushBomb>()), new int[] { 32, 48, 60, 72, 96 } },
                 { new Tuple<int, int>(ModContent.NPCType<Crabulon>(), ModContent.ProjectileType<MushBombFall>()), new int[] { 32, 48, 60, 72, 96 } },

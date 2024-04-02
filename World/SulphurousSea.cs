@@ -130,7 +130,7 @@ namespace CalamityMod.World
             get
             {
                 if (Main.remixWorld)
-                    return (int)((Main.maxTilesY - 200) * 0.2f);
+                    return (int)(Main.UnderworldLayer * 0.2f);
 
                 float depthFactor = Main.maxTilesX switch
                 {
@@ -235,7 +235,7 @@ namespace CalamityMod.World
                 xCheckPosition += Abyss.AtLeftSideOfWorld.ToDirectionInt();
             }
             while (CalamityUtils.ParanoidTileRetrieval(determinedPoint.X, determinedPoint.Y).TileType == TileID.Ebonstone);
-            YStart = Main.remixWorld ? (int)((Main.maxTilesY - 200) * 0.8f) : determinedPoint.Y;
+            YStart = Main.remixWorld ? (int)(Main.UnderworldLayer * 0.8f) : determinedPoint.Y;
         }
 
         public static void GenerateSandBlock()
@@ -976,7 +976,7 @@ namespace CalamityMod.World
             for (int i = 0; i < BiomeWidth; i++)
             {
                 int x = GetActualX(i);
-                for (int y = YStart - 140; y < (Main.remixWorld ? (Main.maxTilesY - 200) : Main.rockLayer); y++)
+                for (int y = YStart - 140; y < (Main.remixWorld ? Main.UnderworldLayer : Main.rockLayer); y++)
                 {
                     Tile tile = Main.tile[x, y];
                     Tile tileUp = Main.tile[x, y - 1];

@@ -100,7 +100,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             // Check for the flipped Abyss
             if (Main.remixWorld)
             {
-                notOcean = player.position.Y < (Main.maxTilesY - 200) * 0.8f || player.position.Y > Main.maxTilesY - 200 ||
+                notOcean = player.position.Y < Main.UnderworldLayer * 0.8f || player.position.Y > Main.UnderworldLayer ||
                     (player.position.X > 7680f && player.position.X < (Main.maxTilesX * 16 - 7680));
             }
 

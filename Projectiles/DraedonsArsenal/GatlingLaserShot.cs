@@ -33,12 +33,12 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
         {
             Time++;
             Lighting.AddLight(Projectile.Center, 0.2f, 0f, 0f);
-            if (Projectile.timeLeft % 11 == 0 && Time > 12 && Time < 460)
+            if (Projectile.timeLeft % 11 == 0 && Time > 15 && Time < 460)
             {
                 SparkParticle spark = new SparkParticle(Projectile.Center, Projectile.velocity * 0.01f, false, 6, 1.7f, Color.Red);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
-            if (Projectile.timeLeft % 4 == 0 && Time > 12 && Time < 460)
+            if (Projectile.timeLeft % 4 == 0 && Time > 15 && Time < 460)
             {
                 SparkParticle spark2 = new SparkParticle(Projectile.Center, Projectile.velocity * 0.01f, false, 6, 0.4f, Color.White);
                 GeneralParticleHandler.SpawnParticle(spark2);

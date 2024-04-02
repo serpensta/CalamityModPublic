@@ -201,7 +201,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.velocity.Y = NPC.velocity.Y + 1f;
                     maxChaseSpeed *= 2f;
                 }
-                if ((double)NPC.position.Y > (double)((Main.maxTilesY - 200) * 16))
+                if ((double)NPC.position.Y > (double)(Main.UnderworldLayer * 16))
                 {
                     for (int a = 0; a < Main.maxNPCs; a++)
                     {
