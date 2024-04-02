@@ -1523,7 +1523,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         // Boost speed if too far from target
                         if (spazmatismFlamethrowerTargetDist > flamethrowerDistance)
-                            spazmatismFlamethrowerMaxSpeed += MathHelper.Lerp(0f, Main.masterMode ? 10f : 6.6f, MathHelper.Clamp((spazmatismFlamethrowerTargetDist - flamethrowerDistance) / 1000f, 0f, 1f));
+                            spazmatismFlamethrowerMaxSpeed += MathHelper.Lerp(0f, masterMode ? 10f : 6.6f, MathHelper.Clamp((spazmatismFlamethrowerTargetDist - flamethrowerDistance) / 1000f, 0f, 1f));
 
                         if (Main.getGoodWorld)
                         {

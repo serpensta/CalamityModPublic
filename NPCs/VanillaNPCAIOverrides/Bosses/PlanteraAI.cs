@@ -792,7 +792,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (masterMode && Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            float sporeSpeed = Main.masterMode ? 12f : 10f;
+                            float sporeSpeed = 12f;
                             Vector2 sporeVelocity = projectileVelocity * sporeSpeed;
                             int spore = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCID.Spore);
                             Main.npc[spore].velocity.X = sporeVelocity.X;
