@@ -340,11 +340,6 @@ CrackshotColt: {
 		'''
 }
 
-CursedCapper: {
-	DisplayName: Cursed Capper
-	Tooltip: Fires cursed bullets
-}
-
 DaemonsFlame: {
 	DisplayName: Daemon's Flame
 	Tooltip:
@@ -1376,4 +1371,14 @@ MagnaCannon: {
 		Charging for longer increases the number of bolts fired
 		Fully charged shots fire an even longer and more rapid burst
 		'''
+}
+
+AGunofFireAndIce: {
+	DisplayName: A Gun of Fire And Ice
+	Tooltip: Hot ice and cold fire
+}
+
+Arietes41: {
+	DisplayName: Arietes 41
+	Tooltip: ""
 }
