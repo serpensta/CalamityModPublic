@@ -46,7 +46,7 @@ namespace CalamityMod.NPCs.StormWeaver
             global.unbreakableDR = true;
             NPC.chaseable = false;
             NPC.HitSound = SoundID.NPCHit4;
-            NPC.DeathSound = SoundID.NPCDeath14;
+            NPC.DeathSound = StormWeaverHead.DeathSound;
 
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
@@ -136,7 +136,6 @@ namespace CalamityMod.NPCs.StormWeaver
                     global.unbreakableDR = false;
                     NPC.chaseable = true;
                     NPC.HitSound = SoundID.NPCHit13;
-                    NPC.DeathSound = SoundID.NPCDeath13;
                     NPC.frame = new Rectangle(0, 0, 54, 52);
                 }
             }
