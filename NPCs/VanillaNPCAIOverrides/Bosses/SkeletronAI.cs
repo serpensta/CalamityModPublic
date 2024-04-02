@@ -29,11 +29,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
             // Phases
-            float phase2LifeRatio = 0.85f;
-            float phase3LifeRatio = 0.7f;
+            float phase2LifeRatio = masterMode ? 1f : 0.85f;
+            float phase3LifeRatio = masterMode ? 0.9f : 0.7f;
             float respawnHandsLifeRatio = 0.5f;
-            float phase4LifeRatio = 0.3f;
-            float phase5LifeRatio = 0.1f;
+            float phase4LifeRatio = masterMode ? 0.4f : 0.3f;
+            float phase5LifeRatio = masterMode ? 0.2f : 0.1f;
 
             // Begin firing spreads of skulls phase
             bool phase2 = lifeRatio < phase2LifeRatio;
