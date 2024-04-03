@@ -1210,7 +1210,7 @@ namespace CalamityMod.CalPlayer
 
                 if (silvaSet)
                 {
-                    double healMult = 0.03;
+                    double healMult = 0.1;
                     healMult -= proj.numHits * healMult * 0.5;
                     int heal = (int)Math.Round(damage * healMult);
                     if (heal > BalancingConstants.LifeStealCap)
