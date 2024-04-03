@@ -30,7 +30,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.TargetClosest();
 
             float enrageScale = bossRush ? 0.5f : masterMode ? 0.25f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 1f;
@@ -1000,7 +1000,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.TargetClosest();
 
             float enrageScale = bossRush ? 0.5f : masterMode ? 0.25f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 1f;

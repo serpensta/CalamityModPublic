@@ -1037,7 +1037,7 @@ namespace CalamityMod.Projectiles
                 bool spreadOut = false;
                 bool homeIn = false;
                 float spreadOutCutoffTime = EmpressRainbowStreakSpreadOutCutoff;
-                float homeInCutoffTime = Main.dayTime ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
+                float homeInCutoffTime = NPC.ShouldEmpressBeEnraged() ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
                 float spreadDeceleration = 0.97f;
                 float minAcceleration = revMasterMode ? 0.075f : 0.05f;
                 float maxAcceleration = revMasterMode ? 0.15f : 0.1f;

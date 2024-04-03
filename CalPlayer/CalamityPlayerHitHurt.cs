@@ -1383,15 +1383,15 @@ namespace CalamityMod.CalPlayer
                 }
                 else if (proj.type == ProjectileID.FairyQueenLance || proj.type == ProjectileID.HallowBossRainbowStreak || proj.type == ProjectileID.HallowBossSplitShotCore)
                 {
-                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 60);
+                    Player.AddBuff(NPC.ShouldEmpressBeEnraged() ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 60);
                 }
                 else if (proj.type == ProjectileID.HallowBossLastingRainbow)
                 {
-                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 120);
+                    Player.AddBuff(NPC.ShouldEmpressBeEnraged() ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 120);
                 }
                 else if (proj.type == ProjectileID.FairyQueenSunDance)
                 {
-                    Player.AddBuff(Main.dayTime ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 180);
+                    Player.AddBuff(NPC.ShouldEmpressBeEnraged() ? ModContent.BuffType<HolyFlames>() : ModContent.BuffType<Nightwither>(), 180);
                 }
                 else if (proj.type == ProjectileID.BloodNautilusShot)
                 {

@@ -141,7 +141,7 @@ namespace CalamityMod.NPCs.AstrumAureus
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
             // Phase 2 check
-            bool phase2 = lifeRatio <= 0.5f || Main.dayTime;
+            bool phase2 = lifeRatio <= 0.5f || Main.IsItDay();
 
             // Charge towards the target and explode after some time
             int inertia = 30;
@@ -207,7 +207,7 @@ namespace CalamityMod.NPCs.AstrumAureus
                 Point point = NPC.Center.ToTileCoordinates();
                 Tile tileSafely = Framing.GetTileSafely(point);
                 bool explodeOnCollision = tileSafely.HasUnactuatedTile && Main.tileSolid[tileSafely.TileType] && !Main.tileSolidTop[tileSafely.TileType] && !TileID.Sets.Platforms[tileSafely.TileType];
-                bool explodeOnAureus = distanceFromAureus < (180f + 30f * (NPC.scale - 1f)) && !Main.dayTime;
+                bool explodeOnAureus = distanceFromAureus < (180f + 30f * (NPC.scale - 1f)) && !Main.IsItDay();
                 if (vector.Length() < (60f + 30f * (NPC.scale - 1f)) || explodeOnCollision || explodeOnAureus || NPC.Calamity().newAI[0] >= enlargeDuration)
                 {
                     NPC.life = 0;
@@ -335,7 +335,7 @@ namespace CalamityMod.NPCs.AstrumAureus
                 return;
 
             // Damage Aureus for a percentage of its HP if the spawn explodes on or near it
-            if (Main.netMode != NetmodeID.MultiplayerClient && (Main.npc[CalamityGlobalNPC.astrumAureus].Center - NPC.Center).Length() < (200f + 30f * (NPC.scale - 1f)) && !Main.dayTime)
+            if (Main.netMode != NetmodeID.MultiplayerClient && (Main.npc[CalamityGlobalNPC.astrumAureus].Center - NPC.Center).Length() < (200f + 30f * (NPC.scale - 1f)) && !Main.IsItDay())
                 Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Main.npc[CalamityGlobalNPC.astrumAureus].Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), (int)(Main.npc[CalamityGlobalNPC.astrumAureus].lifeMax / 200 * NPC.scale), 0f, Main.myPlayer, Main.npc[CalamityGlobalNPC.astrumAureus].whoAmI);
         }
 
