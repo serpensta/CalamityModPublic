@@ -14,12 +14,13 @@ namespace CalamityMod.Items.Weapons.Ranged
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public bool swapType = false;
+        public bool healVisual = false;
 
         public override void SetDefaults()
         {
             Item.width = 80;
             Item.height = 46;
-            Item.damage = 90;
+            Item.damage = 150;
             Item.scale = 0.75f;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = 9;
@@ -93,8 +94,17 @@ namespace CalamityMod.Items.Weapons.Ranged
                     dust2.color = color;
                 }
                 Projectile lifeShot = Projectile.NewProjectileDirect(source, itemPosition + velocity.RotatedBy(-0.6 * player.direction) - velocity * 0.65f, velocity, type, damage, knockback, player.whoAmI);
-                CalamityGlobalProjectile cgp = lifeShot.Calamity();
-                cgp.lifeBullet2 = true;
+                if (!healVisual)
+                {
+                    CalamityGlobalProjectile cgp = lifeShot.Calamity();
+                    cgp.betterLifeBullet1 = true;
+                }
+                if (healVisual)
+                {
+                    CalamityGlobalProjectile cgp = lifeShot.Calamity();
+                    cgp.betterLifeBullet2 = true;
+                }
+                healVisual = !healVisual;
             }
 
             swapType = !swapType;

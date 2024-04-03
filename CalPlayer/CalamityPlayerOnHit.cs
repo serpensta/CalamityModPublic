@@ -338,60 +338,66 @@ namespace CalamityMod.CalPlayer
                 if (cgp.fireBullet)
                 {
                     target.AddBuff(BuffID.OnFire3, 60);
-                    for (int i = 0; i < 3; i++)
+                    if (proj.numHits == 0)
                     {
-                        CritSpark spark = new CritSpark(proj.Center, proj.velocity.RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.5f), Main.rand.NextBool() ? Color.Orange : Color.OrangeRed, Color.Yellow, Main.rand.NextFloat(0.4f, 0.6f), 15, Main.rand.NextFloat(-2f, 2f), 1.5f);
-                        GeneralParticleHandler.SpawnParticle(spark);
+                        for (int i = 0; i < 3; i++)
+                        {
+                            CritSpark spark = new CritSpark(proj.Center, proj.velocity.RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.5f), Main.rand.NextBool() ? Color.Orange : Color.OrangeRed, Color.Yellow, Main.rand.NextFloat(0.4f, 0.6f), 15, Main.rand.NextFloat(-2f, 2f), 1.5f);
+                            GeneralParticleHandler.SpawnParticle(spark);
+                        }
+                        SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact with { Volume = 0.3f, Pitch = 1f }, proj.Center);
                     }
-                    SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact with { Volume = 0.3f, Pitch = 0.8f }, proj.Center);
                 }
 
                 if (cgp.iceBullet)
                 {
                     target.AddBuff(BuffID.Frostburn2, 60);
-                    for (int i = 0; i < 3; i++)
+                    if (proj.numHits == 0)
                     {
-                        CritSpark spark = new CritSpark(proj.Center, proj.velocity.RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.5f), Main.rand.NextBool() ? Color.DeepSkyBlue : Color.LightSkyBlue, Color.White, Main.rand.NextFloat(0.4f, 0.6f), 15, Main.rand.NextFloat(-2f, 2f), 1.5f);
-                        GeneralParticleHandler.SpawnParticle(spark);
+                        for (int i = 0; i < 3; i++)
+                        {
+                            CritSpark spark = new CritSpark(proj.Center, proj.velocity.RotatedByRandom(0.4) * Main.rand.NextFloat(0.8f, 1.5f), Main.rand.NextBool() ? Color.DeepSkyBlue : Color.LightSkyBlue, Color.White, Main.rand.NextFloat(0.4f, 0.6f), 15, Main.rand.NextFloat(-2f, 2f), 1.5f);
+                            GeneralParticleHandler.SpawnParticle(spark);
+                        }
+                        SoundEngine.PlaySound(SoundID.Item27 with { Volume = 0.3f, Pitch = 0.8f }, proj.Center);
                     }
-                    SoundEngine.PlaySound(SoundID.Item27 with { Volume = 0.3f, Pitch = 0.8f }, proj.Center);
                 }
 
                 if (cgp.shockBullet)
                 {
                     target.AddBuff(BuffID.Electrified, 180);
 
-                    CustomPulse spark = new CustomPulse(proj.Center, Vector2.Zero, Color.Turquoise, "CalamityMod/Particles/PlasmaExplosion", new Vector2(1, 1), Main.rand.NextFloat(-2f, 2f), 0.005f, Main.rand.NextFloat(0.048f, 0.055f), 14);
-                    GeneralParticleHandler.SpawnParticle(spark);
-                    int points = 6;
-                    float radians = MathHelper.TwoPi / points;
-                    Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
-                    float rotRando = Main.rand.NextFloat(0.1f, 2.5f);
-                    for (int k = 0; k < points; k++)
-                    {
-                        Vector2 velocity = spinningPoint.RotatedBy(radians * k).RotatedBy(-0.45f * rotRando);
-                        SparkParticle subTrail = new SparkParticle(proj.Center + velocity * 4.5f, velocity * 8, false, 13, 0.85f, Color.Turquoise);
-                        GeneralParticleHandler.SpawnParticle(subTrail);
-                    }
-                    for (int i = 0; i <= 12; i++)
-                    {
-                        Dust dust2 = Dust.NewDustPerfect(proj.Center, 278, new Vector2(4, 4).RotatedByRandom(100f) * Main.rand.NextFloat(0.1f, 2.9f));
-                        dust2.noGravity = false;
-                        dust2.scale = Main.rand.NextFloat(0.3f, 0.9f);
-                        dust2.color = Color.Turquoise;
-                    }
-
-                    int onHitDamage = Player.CalcIntDamage<RangedDamageClass>(0.2f * proj.damage);
-                    Player.ApplyDamageToNPC(target, onHitDamage, 0f, 0, false);
-
                     if (proj.numHits == 0)
                     {
+                        CustomPulse spark = new CustomPulse(proj.Center, Vector2.Zero, Color.Turquoise, "CalamityMod/Particles/PlasmaExplosion", new Vector2(1, 1), Main.rand.NextFloat(-2f, 2f), 0.005f, Main.rand.NextFloat(0.048f, 0.055f), 14);
+                        GeneralParticleHandler.SpawnParticle(spark);
+                        int points = 6;
+                        float radians = MathHelper.TwoPi / points;
+                        Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
+                        float rotRando = Main.rand.NextFloat(0.1f, 2.5f);
+                        for (int k = 0; k < points; k++)
+                        {
+                            Vector2 velocity = spinningPoint.RotatedBy(radians * k).RotatedBy(-0.45f * rotRando);
+                            SparkParticle subTrail = new SparkParticle(proj.Center + velocity * 4.5f, velocity * 8, false, 13, 0.85f, Color.Turquoise);
+                            GeneralParticleHandler.SpawnParticle(subTrail);
+                        }
+                        for (int i = 0; i <= 12; i++)
+                        {
+                            Dust dust2 = Dust.NewDustPerfect(proj.Center, 278, new Vector2(4, 4).RotatedByRandom(100f) * Main.rand.NextFloat(0.1f, 2.9f));
+                            dust2.noGravity = false;
+                            dust2.scale = Main.rand.NextFloat(0.3f, 0.9f);
+                            dust2.color = Color.Turquoise;
+                        }
+
+                        int onHitDamage = Player.CalcIntDamage<RangedDamageClass>(0.2f * proj.damage);
+                        Player.ApplyDamageToNPC(target, onHitDamage, 0f, 0, false);
+
                         SoundStyle hitSound = new("CalamityMod/Sounds/Item/ElectricHit");
                         SoundEngine.PlaySound(hitSound with { Volume = 0.2f, Pitch = 0.7f, PitchVariance = 0.2f }, proj.Center);
                     }
                 }
 
-                if (cgp.pearlBullet)
+                if (cgp.pearlBullet && proj.numHits == 0)
                 {
                     Vector2 randPos = proj.Center + new Vector2(30, 30).RotateRandom(100) * Main.rand.NextFloat(0.9f, 1.1f);
                     CustomPulse spark = new CustomPulse(randPos, Vector2.Zero, Color.White, "CalamityMod/Particles/HighResHollowCircleHardEdge", new Vector2(1, 1), Main.rand.NextFloat(-2f, 2f), 0.005f, 0.08f, 14);
@@ -437,15 +443,11 @@ namespace CalamityMod.CalPlayer
                     int onHitDamage = Player.CalcIntDamage<RangedDamageClass>(0.2f * proj.damage);
                     Player.ApplyDamageToNPC(target, onHitDamage, 0f, 0, false);
 
-                    if (proj.numHits == 0)
-                    {
-                        SoundStyle hitSound = new("CalamityMod/Sounds/Item/HadalUrnClose");
-                        SoundEngine.PlaySound(hitSound with { Volume = 0.4f, Pitch = 0.4f, PitchVariance = 0.2f }, proj.Center);
-                    }
-                    
+                    SoundStyle hitSound = new("CalamityMod/Sounds/Item/HadalUrnClose");
+                    SoundEngine.PlaySound(hitSound with { Volume = 0.4f, Pitch = 0.4f, PitchVariance = 0.2f }, proj.Center);
                 }
 
-                if (cgp.lifeBullet)
+                if (cgp.lifeBullet && proj.numHits == 0)
                 {
                     int points = 10;
                     for (int k = 0; k < points; k++)
@@ -462,7 +464,7 @@ namespace CalamityMod.CalPlayer
                     CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Main.player[proj.owner], heal, ModContent.ProjectileType<AltTransfusionTrail>(), BalancingConstants.LifeStealRange);
                 }
 
-                if (cgp.lifeBullet2)
+                if ((cgp.betterLifeBullet1 || cgp.betterLifeBullet2) && proj.numHits == 0)
                 {
                     int points = 12;
                     for (int k = 0; k < points; k++)
@@ -475,7 +477,7 @@ namespace CalamityMod.CalPlayer
                         GeneralParticleHandler.SpawnParticle(orb);
                     }
 
-                    int heal = (int)Math.Round(hit.Damage * 0.02);
+                    int heal = (int)Math.Round(hit.Damage * 0.01);
                     if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                         return;
 

@@ -96,8 +96,10 @@ namespace CalamityMod.Projectiles
         // Adds lifesteal to bullets, currently used by Arietes 41
         public bool lifeBullet = false;
 
-        // Adds lifesteal to bullets, currently used by Pearl God
-        public bool lifeBullet2 = false;
+        // Adds lifesteal to bullets (visual 1), currently used by Pearl God
+        public bool betterLifeBullet1 = false;
+        // Adds lifesteal to bullets (visual 2), currently used by Pearl God
+        public bool betterLifeBullet2 = false;
 
         // If true, this projectile creates impact sparks upon hitting enemies
         public bool deepcoreBullet = false;
@@ -3772,12 +3774,12 @@ namespace CalamityMod.Projectiles
                     float targetDist = Vector2.Distance(player.Center, projectile.Center);
                     if (projectile.timeLeft > 200 && targetDist < 1400f)
                     {
-                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity, -projectile.velocity * 0.05f, false, 2, 0.9f, Color.White * 0.85f);
+                        int randomColor = Main.rand.Next(1, 3 + 1);
+                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
+                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity * 1.5f, -projectile.velocity * 0.05f, false, 2, 0.75f, color * 0.75f);
                         GeneralParticleHandler.SpawnParticle(spark);
-                        if (Main.rand.NextBool(4))
+                        if (Main.rand.NextBool(5))
                         {
-                            int randomColor = Main.rand.Next(1, 3 + 1);
-                            Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
                             PearlParticle pearl1 = new PearlParticle(projectile.Center + Main.rand.NextVector2Circular(6, 6), -projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f), false, Main.rand.Next(15, 20 + 1), Main.rand.NextFloat(0.4f, 0.55f), color, 0.9f, Main.rand.NextFloat(1, -1), true);
                             GeneralParticleHandler.SpawnParticle(pearl1);
                         }
@@ -3788,7 +3790,7 @@ namespace CalamityMod.Projectiles
                     float targetDist = Vector2.Distance(player.Center, projectile.Center);
                     if (projectile.timeLeft > 200 && targetDist < 1400f)
                     {
-                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity, -projectile.velocity * 0.05f, false, 2, 0.8f, Color.White * 0.75f);
+                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity, -projectile.velocity * 0.05f, false, 2, 0.85f, Color.White * 0.75f);
                         GeneralParticleHandler.SpawnParticle(spark);
 
                         for (int i = 0; i < 2; ++i)
@@ -3802,24 +3804,66 @@ namespace CalamityMod.Projectiles
                     }
                 }
 
-                if (lifeBullet2)
+                #region betterLifeBullet
+                if (betterLifeBullet1)
                 {
                     float targetDist = Vector2.Distance(player.Center, projectile.Center);
                     if (projectile.timeLeft > 200 && targetDist < 1400f)
                     {
-                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity, -projectile.velocity * 0.05f, false, 2, 0.9f, Color.White * 0.75f);
+                        int randomColor = Main.rand.Next(1, 3 + 1);
+                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
+
+                        float helixOffset = (float)Math.Sin(projectile.timeLeft / 25f * MathHelper.TwoPi) * -8f;
+                        Vector2 spawnOffset = new Vector2(helixOffset, 10f).RotatedBy(projectile.rotation);
+
+                        for (int i = 0; i < 3; ++i)
+                        {
+                            Dust dust = Dust.NewDustPerfect(projectile.Center + spawnOffset, 278, projectile.velocity * Main.rand.NextFloat(0.05f, 0.2f));
+                            dust.noGravity = true;
+                            dust.scale = Main.rand.NextFloat(0.35f, 0.45f);
+                            dust.color = color;
+                        }
+
+                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity, projectile.velocity * 0.05f, false, 2, 0.85f, color);
                         GeneralParticleHandler.SpawnParticle(spark);
 
                         if (Main.rand.NextBool(3))
                         {
-                            int randomColor = Main.rand.Next(1, 3 + 1);
-                            Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
-                            SparkParticle spark2 = new SparkParticle(projectile.Center + Main.rand.NextVector2Circular(6, 6), -projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f), false, 20, 0.4f, color);
-                            GeneralParticleHandler.SpawnParticle(spark2);
+                            SparkParticle spark3 = new SparkParticle(projectile.Center + Main.rand.NextVector2Circular(6, 6), -projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f), false, 20, 0.55f, color * 0.5f);
+                            GeneralParticleHandler.SpawnParticle(spark3);
                         }
                     }
                 }
+                if (betterLifeBullet2)
+                {
+                    float targetDist = Vector2.Distance(player.Center, projectile.Center);
+                    if (projectile.timeLeft > 200 && targetDist < 1400f)
+                    {
+                        int randomColor = Main.rand.Next(1, 3 + 1);
+                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
 
+                        float helixOffset = (float)Math.Sin(projectile.timeLeft / 25f * MathHelper.TwoPi) * 8f;
+                        Vector2 spawnOffset = new Vector2(helixOffset, 10f).RotatedBy(projectile.rotation);
+
+                        for (int i = 0; i < 3; ++i)
+                        {
+                            Dust dust = Dust.NewDustPerfect(projectile.Center + spawnOffset, 278, projectile.velocity * Main.rand.NextFloat(0.05f, 0.2f));
+                            dust.noGravity = true;
+                            dust.scale = Main.rand.NextFloat(0.35f, 0.45f);
+                            dust.color = color;
+                        }
+
+                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity, projectile.velocity * 0.05f, false, 2, 0.85f, color);
+                        GeneralParticleHandler.SpawnParticle(spark);
+
+                        if (Main.rand.NextBool(3))
+                        {
+                            SparkParticle spark3 = new SparkParticle(projectile.Center + Main.rand.NextVector2Circular(6, 6), -projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f), false, 20, 0.55f, color * 0.5f);
+                            GeneralParticleHandler.SpawnParticle(spark3);
+                        }
+                    }
+                }
+                #endregion
             }
         }
         #endregion

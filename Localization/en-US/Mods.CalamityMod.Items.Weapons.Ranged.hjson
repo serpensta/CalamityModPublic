@@ -80,6 +80,15 @@ Archerfish: {
 	Tooltip: Converts musket balls into streams of water
 }
 
+Arietes41: {
+	DisplayName: Arietes 41
+	Tooltip:
+		'''
+		Alternates between firing bullets imbued with lifesteal and electricity
+		Electric imbued bullets crate a small shockbast on impact, dealing additional damage to the enemy they hit
+		'''
+}
+
 ArterialAssault: {
 	DisplayName: Arterial Assault
 	Tooltip:
@@ -866,9 +875,8 @@ PearlGod: {
 	DisplayName: Pearl God
 	Tooltip:
 		'''
-		Fires shockblast rounds that emit massive explosions and steal enemy life as well as additional bullets
-		Every seventh shot fires a massive shockblast
-		'Your life is mine...'
+		Alternates between firing a bullet imbued with lifesteal and 3 bullets imbued with pearlescence
+		Pearlescent imbued bullets crate a radiant flash on impact, dealing additional damage to the enemy they hit
 		'''
 }
 
@@ -1375,10 +1383,9 @@ MagnaCannon: {
 
 AGunofFireAndIce: {
 	DisplayName: A Gun of Fire And Ice
-	Tooltip: Hot ice and cold fire
-}
-
-Arietes41: {
-	DisplayName: Arietes 41
-	Tooltip: ""
+	Tooltip:
+		'''
+		Alternates between firing bullets imbued with fire and ice
+		Any bullet type can be imbued when fired from this gun
+		'''
 }
