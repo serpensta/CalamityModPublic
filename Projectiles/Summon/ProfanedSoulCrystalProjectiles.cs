@@ -195,14 +195,14 @@ namespace CalamityMod.Projectiles.Summon
             int dustID = ProvUtils.GetDustID(pscState);
             for (int num193 = 0; num193 < 6; num193++)
             {
-                Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, 1.5f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, 1.5f);
             }
             for (int num194 = 0; num194 < 60; num194++)
             {
-                int num195 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 0, default, 2.5f);
+                int num195 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 0, default, 2.5f);
                 Main.dust[num195].noGravity = true;
                 Main.dust[num195].velocity *= 3f;
-                num195 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, 1.5f);
+                num195 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, 1.5f);
                 Main.dust[num195].velocity *= 2f;
                 Main.dust[num195].noGravity = true;
             }
@@ -320,7 +320,7 @@ namespace CalamityMod.Projectiles.Summon
                     if (Projectile.ai[1] == 0f)
                     {
                         float num550 = 24f; //12
-                        Vector2 vector43 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                        Vector2 vector43 = Projectile.Center;
                         float num551 = num535 - vector43.X;
                         float num552 = num536 - vector43.Y;
                         float num553 = (float)Math.Sqrt((double)(num551 * num551 + num552 * num552));
@@ -395,7 +395,7 @@ namespace CalamityMod.Projectiles.Summon
             int dust = ProvUtils.GetDustID(pscState);
             for (int num621 = 0; num621 < 4; num621++)
             {
-                int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                int num622 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num622].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -405,10 +405,10 @@ namespace CalamityMod.Projectiles.Summon
             }
             for (int num623 = 0; num623 < 12; num623++)
             {
-                int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
+                int num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
                 Main.dust[num624].noGravity = true;
                 Main.dust[num624].velocity *= 5f;
-                num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num624].velocity *= 2f;
 
             }
@@ -539,7 +539,7 @@ namespace CalamityMod.Projectiles.Summon
                 int dust = ProvUtils.GetDustID(pscState);
                 for (int num621 = 0; num621 < 4; num621++)
                 {
-                    int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                    int num622 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                     Main.dust[num622].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -549,10 +549,10 @@ namespace CalamityMod.Projectiles.Summon
                 }
                 for (int num623 = 0; num623 < 12; num623++)
                 {
-                    int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
+                    int num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
                     Main.dust[num624].noGravity = true;
                     Main.dust[num624].velocity *= 5f;
-                    num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                    num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                     Main.dust[num624].velocity *= 2f;
 
                 }
@@ -632,7 +632,7 @@ namespace CalamityMod.Projectiles.Summon
                 }
 
                 float num550 = 40f;
-                Vector2 vector43 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                Vector2 vector43 = Projectile.Center;
                 float num551 = num535 - vector43.X;
                 float num552 = num536 - vector43.Y;
                 float num553 = (float)Math.Sqrt((double)(num551 * num551 + num552 * num552));
@@ -807,7 +807,7 @@ namespace CalamityMod.Projectiles.Summon
             int dust = ProvUtils.GetDustID(pscState);
             for (int num621 = 0; num621 < 4; num621++)
             {
-                int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                int num622 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num622].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -817,10 +817,10 @@ namespace CalamityMod.Projectiles.Summon
             }
             for (int num623 = 0; num623 < 12; num623++)
             {
-                int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
+                int num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
                 Main.dust[num624].noGravity = true;
                 Main.dust[num624].velocity *= 5f;
-                num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num624].velocity *= 2f;
             }
 
@@ -937,7 +937,7 @@ namespace CalamityMod.Projectiles.Summon
             int dust = ProvUtils.GetDustID(pscState);
             for (int num621 = 0; num621 < 10; num621++)
             {
-                int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                int num622 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num622].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -947,10 +947,10 @@ namespace CalamityMod.Projectiles.Summon
             }
             for (int num623 = 0; num623 < 15; num623++)
             {
-                int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
+                int num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.75f);
                 Main.dust[num624].noGravity = true;
                 Main.dust[num624].velocity *= 5f;
-                num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num624].velocity *= 2f;
             }
         }
@@ -1078,7 +1078,7 @@ namespace CalamityMod.Projectiles.Summon
                         Projectile.timeLeft++;
                     Projectile.tileCollide = false;
                     float num550 = 40f;
-                    Vector2 vector43 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 vector43 = Projectile.Center;
                     float num551 = num535 - vector43.X;
                     float num552 = num536 - vector43.Y;
                     float num553 = (float)Math.Sqrt((double)(num551 * num551 + num552 * num552));
@@ -1779,7 +1779,7 @@ namespace CalamityMod.Projectiles.Summon
                         if (Projectile.ai[1] == 0f)
                         {
                             float num550 = 24f; //12
-                            Vector2 vector43 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                            Vector2 vector43 = Projectile.Center;
                             float num551 = num535 - vector43.X;
                             float num552 = num536 - vector43.Y;
                             float num553 = (float)Math.Sqrt((double)(num551 * num551 + num552 * num552));
@@ -1807,7 +1807,7 @@ namespace CalamityMod.Projectiles.Summon
             //Ensure that psa's spears are not coloured by night
             var psc = Projectile.ai[0] > 0f;
             int pscState = (int)((!Main.dayTime && psc) ? Providence.BossMode.Night : Providence.BossMode.Day);
-            int num469 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ProvUtils.GetDustID(pscState), 0f, 0f, 100, default, !Main.dayTime && psc ? 0.5f : 1f);
+            int num469 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ProvUtils.GetDustID(pscState), 0f, 0f, 100, default, !Main.dayTime && psc ? 0.5f : 1f);
             Main.dust[num469].noGravity = true;
             Main.dust[num469].velocity *= 0f;
             handleAI(psc && Projectile.ai[1] > 0f);
@@ -1846,7 +1846,7 @@ namespace CalamityMod.Projectiles.Summon
                 int dustID = ProvUtils.GetDustID(pscState);
                 for (int num621 = 0; num621 < 4; num621++)
                 {
-                    int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 100, default, !Main.dayTime && psc ? 0.5f : 2f);
+                    int num622 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 100, default, !Main.dayTime && psc ? 0.5f : 2f);
                     Main.dust[num622].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -1856,11 +1856,11 @@ namespace CalamityMod.Projectiles.Summon
                 }
                 for (int num623 = 0; num623 < (shouldAdjust ? 8 : 12); num623++)
                 {
-                    int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 100, default, !Main.dayTime && psc ? 1.25f : 3f);
+                    int num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 100, default, !Main.dayTime && psc ? 1.25f : 3f);
                     Main.dust[num624].noGravity = true;
                     Main.dust[num624].velocity *= 5f;
                     Main.dust[num624].fadeIn = shouldAdjust ? 0.9f : Main.dust[num624].fadeIn;
-                    num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 100, default, !Main.dayTime && psc ? 1f : 2f);
+                    num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 100, default, !Main.dayTime && psc ? 1f : 2f);
                     Main.dust[num624].velocity *= 2f;
                     Main.dust[num624].fadeIn = shouldAdjust ? 0.9f : Main.dust[num624].fadeIn;
                 }
@@ -2006,14 +2006,14 @@ namespace CalamityMod.Projectiles.Summon
             int dustID = ProvUtils.GetDustID(pscState);
             for (int num193 = 0; num193 < 6; num193++)
             {
-                Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, Main.dayTime ? 1.5f : 0.5f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, Main.dayTime ? 1.5f : 0.5f);
             }
             for (int num194 = 0; num194 < 60; num194++)
             {
-                int num195 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 0, default, Main.dayTime ? 2.5f : 0.5f);
+                int num195 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 0, default, Main.dayTime ? 2.5f : 0.5f);
                 Main.dust[num195].noGravity = true;
                 Main.dust[num195].velocity *= 3f;
-                num195 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, Main.dayTime ? 1.5f : 0.5f);
+                num195 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustID, 0f, 0f, 50, default, Main.dayTime ? 1.5f : 0.5f);
                 Main.dust[num195].velocity *= 2f;
                 Main.dust[num195].noGravity = true;
             }
@@ -2129,7 +2129,7 @@ namespace CalamityMod.Projectiles.Summon
 
             for (int num621 = 0; num621 < 4; num621++)
             {
-                int num622 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                int num622 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num622].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -2139,10 +2139,10 @@ namespace CalamityMod.Projectiles.Summon
             }
             for (int num623 = 0; num623 < 12; num623++)
             {
-                int num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.5f);
+                int num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 3f : 0.5f);
                 Main.dust[num624].noGravity = true;
                 Main.dust[num624].velocity *= 5f;
-                num624 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
+                num624 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust, 0f, 0f, 100, default, Main.dayTime ? 2f : 0.5f);
                 Main.dust[num624].velocity *= 2f;
 
             }

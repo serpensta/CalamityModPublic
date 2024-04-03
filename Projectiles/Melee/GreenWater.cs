@@ -58,7 +58,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.localAI[0] += 1f;
             }
 
-            int blood = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.6f, 2.4f));
+            int blood = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.6f, 2.4f));
             Main.dust[blood].noGravity = true;
             Main.dust[blood].velocity *= 0.5f;
         }

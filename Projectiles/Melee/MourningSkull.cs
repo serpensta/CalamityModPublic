@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Melee
                 int npcTracker = (int)Projectile.ai[0];
                 if (Main.npc[npcTracker].active)
                 {
-                    Vector2 projPos = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 projPos = Projectile.Center;
                     float npcXDist = Main.npc[npcTracker].position.X - projPos.X;
                     float npcYDist = Main.npc[npcTracker].position.Y - projPos.Y;
                     float npcDistance = (float)Math.Sqrt((double)(npcXDist * npcXDist + npcYDist * npcYDist));
@@ -134,7 +134,7 @@ namespace CalamityMod.Projectiles.Melee
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             for (int i = 0; i < 5; i++)
             {
-                int bloody = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 100, default, 2f);
+                int bloody = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                 Main.dust[bloody].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -144,10 +144,10 @@ namespace CalamityMod.Projectiles.Melee
             }
             for (int j = 0; j < 10; j++)
             {
-                int fiery = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
+                int fiery = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
                 Main.dust[fiery].noGravity = true;
                 Main.dust[fiery].velocity *= 5f;
-                fiery = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
+                fiery = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
                 Main.dust[fiery].velocity *= 2f;
             }
         }

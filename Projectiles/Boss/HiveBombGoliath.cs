@@ -165,7 +165,7 @@ namespace CalamityMod.Projectiles.Boss
 
             if (Main.netMode != NetmodeID.MultiplayerClient && Main.zenithWorld)
             {
-                Vector2 valueBoom = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                Vector2 valueBoom = Projectile.Center;
                 float spreadBoom = 15f * 0.0174f;
                 double startAngleBoom = Math.Atan2(Projectile.velocity.X, Projectile.velocity.Y) - spreadBoom / 2;
                 double deltaAngleBoom = spreadBoom / 8f;

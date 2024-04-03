@@ -166,13 +166,13 @@ namespace CalamityMod.Projectiles.Typeless
                 Main.dust[crystalDust2].noGravity = true;
             }
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.2f / 255f, (255 - Projectile.alpha) * 0.2f / 255f, (255 - Projectile.alpha) * 0.2f / 255f);
-            int paleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width - 28, Projectile.height - 28, DustID.BoneTorch, 0f, 0f, 100, default, 0.8f);
+            int paleDust = Dust.NewDust(Projectile.position, Projectile.width - 28, Projectile.height - 28, DustID.BoneTorch, 0f, 0f, 100, default, 0.8f);
             Main.dust[paleDust].velocity *= 0.1f;
             Main.dust[paleDust].velocity += Projectile.velocity * 0.5f;
             Main.dust[paleDust].noGravity = true;
             if (Main.rand.NextBool(12))
             {
-                int shinyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width - 32, Projectile.height - 32, DustID.Teleporter, 0f, 0f, 100, default, 1f);
+                int shinyDust = Dust.NewDust(Projectile.position, Projectile.width - 32, Projectile.height - 32, DustID.Teleporter, 0f, 0f, 100, default, 1f);
                 Main.dust[shinyDust].velocity *= 0.25f;
                 Main.dust[shinyDust].velocity += Projectile.velocity * 0.5f;
             }
@@ -221,14 +221,14 @@ namespace CalamityMod.Projectiles.Typeless
             int dustCount;
             for (int j = 0; j < 20; j = dustCount + 1)
             {
-                int superRandomDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, otherDustType, 0f, 0f, 200, default, crystalDust2);
+                int superRandomDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, otherDustType, 0f, 0f, 200, default, crystalDust2);
                 Dust dust = Main.dust[superRandomDust];
                 dust.position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * (float)Projectile.width / 2f;
                 dust.noGravity = true;
                 dust.velocity.Y -= 6f;
                 dust.velocity *= 3f;
                 dust.velocity += dustVel * Main.rand.NextFloat();
-                superRandomDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDust, 0f, 0f, 100, default, 0.6f);
+                superRandomDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, randomDust, 0f, 0f, 100, default, 0.6f);
                 dust.position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * (float)Projectile.width / 2f;
                 dust.velocity.Y -= 6f;
                 dust.velocity *= 2f;
@@ -241,7 +241,7 @@ namespace CalamityMod.Projectiles.Typeless
 
             for (int k = 0; k < 10; k = dustCount + 1)
             {
-                int palestDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.BoneTorch, 0f, 0f, 0, default, 1.5f);
+                int palestDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BoneTorch, 0f, 0f, 0, default, 1.5f);
                 Main.dust[palestDust].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy((double)Projectile.velocity.ToRotation(), default) * (float)Projectile.width / 3f;
                 Dust dust = Main.dust[palestDust];
                 dust.noGravity = true;

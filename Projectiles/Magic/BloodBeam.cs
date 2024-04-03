@@ -47,7 +47,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
                 Projectile.ai[0] += 1f;
                 int dustType = DustID.Blood;
-                int blood = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default, 1f);
+                int blood = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default, 1f);
                 Dust dust = Main.dust[blood];
                 if (Main.rand.NextBool(3))
                 {

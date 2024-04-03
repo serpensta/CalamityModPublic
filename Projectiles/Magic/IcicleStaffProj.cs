@@ -29,7 +29,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    int icyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.IceRod, 0f, 0f, 100, default, 0.75f);
+                    int icyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IceRod, 0f, 0f, 100, default, 0.75f);
                     Main.dust[icyDust].noGravity = true;
                     Main.dust[icyDust].velocity *= 0f;
                 }

@@ -136,7 +136,7 @@ namespace CalamityMod.Projectiles.Summon
                     projY -= Projectile.Center.Y;
                     int projectileType = ModContent.ProjectileType<DaedalusCrystalShot>();
                     float randSpeed = Main.rand.Next(10, 15); //modify the speed the projectile are shot.  Lower number = slower projectile.
-                    Vector2 firingDirection = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 firingDirection = Projectile.Center;
                     float projXDirection = projXStore - firingDirection.X;
                     float projYDirection = projYStore - firingDirection.Y;
                     float projSpeed = (float)Math.Sqrt((double)(projXDirection * projXDirection + projYDirection * projYDirection));

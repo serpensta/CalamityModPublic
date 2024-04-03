@@ -34,10 +34,10 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    int aquaDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.FishronWings, 0f, 0f, 100, new Color(60, Main.DiscoG, 190), Projectile.scale);
+                    int aquaDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.FishronWings, 0f, 0f, 100, new Color(60, Main.DiscoG, 190), Projectile.scale);
                     Main.dust[aquaDust].noGravity = true;
                     Main.dust[aquaDust].velocity *= 0f;
-                    int waterDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GlowingSnail, 0f, 0f, 100, new Color(60, Main.DiscoG, 190), Projectile.scale);
+                    int waterDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GlowingSnail, 0f, 0f, 100, new Color(60, Main.DiscoG, 190), Projectile.scale);
                     Main.dust[waterDust].noGravity = true;
                     Main.dust[waterDust].velocity *= 0f;
                 }

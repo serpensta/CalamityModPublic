@@ -164,13 +164,13 @@ namespace CalamityMod.Projectiles.Typeless
                 Main.dust[crystalDust2].noGravity = true;
             }
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.2f / 255f, (255 - Projectile.alpha) * 0.2f / 255f, (255 - Projectile.alpha) * 0.2f / 255f);
-            int paleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width - 28, Projectile.height - 28, DustID.BoneTorch, 0f, 0f, 100, default, 0.8f);
+            int paleDust = Dust.NewDust(Projectile.position, Projectile.width - 28, Projectile.height - 28, DustID.BoneTorch, 0f, 0f, 100, default, 0.8f);
             Main.dust[paleDust].velocity *= 0.1f;
             Main.dust[paleDust].velocity += Projectile.velocity * 0.5f;
             Main.dust[paleDust].noGravity = true;
             if (Main.rand.NextBool(12))
             {
-                int shinyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width - 32, Projectile.height - 32, DustID.Teleporter, 0f, 0f, 100, default, 1f);
+                int shinyDust = Dust.NewDust(Projectile.position, Projectile.width - 32, Projectile.height - 32, DustID.Teleporter, 0f, 0f, 100, default, 1f);
                 Main.dust[shinyDust].velocity *= 0.25f;
                 Main.dust[shinyDust].velocity += Projectile.velocity * 0.5f;
             }

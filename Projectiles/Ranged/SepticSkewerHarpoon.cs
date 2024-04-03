@@ -71,7 +71,7 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 Projectile.extraUpdates = 3;
             }
-            Vector2 halfDist = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+            Vector2 halfDist = Projectile.Center;
             float xDist = player.position.X + (float)(player.width / 2) - halfDist.X;
             float yDist = player.position.Y + (float)(player.height / 2) - halfDist.Y;
             float playerDistance = (float)Math.Sqrt((double)(xDist * xDist + yDist * yDist));
