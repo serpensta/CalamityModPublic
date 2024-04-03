@@ -173,7 +173,7 @@ namespace CalamityMod.NPCs.Cryogen
             {
                 for (int i = 0; i < 25; i++)
                 {
-                    int icyDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, dusttype, 0f, 0f, 100, default, 2f);
+                    int icyDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, dusttype, 0f, 0f, 100, default, 2f);
                     Main.dust[icyDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -184,10 +184,10 @@ namespace CalamityMod.NPCs.Cryogen
 
                 for (int j = 0; j < 50; j++)
                 {
-                    int icyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, dusttype, 0f, 0f, 100, default, 3f);
+                    int icyDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, dusttype, 0f, 0f, 100, default, 3f);
                     Main.dust[icyDust2].noGravity = true;
                     Main.dust[icyDust2].velocity *= 5f;
-                    icyDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, dusttype, 0f, 0f, 100, default, 2f);
+                    icyDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, dusttype, 0f, 0f, 100, default, 2f);
                     Main.dust[icyDust2].velocity *= 2f;
                 }
 

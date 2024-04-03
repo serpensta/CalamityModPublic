@@ -172,7 +172,7 @@ namespace CalamityMod.NPCs.AstrumAureus
 
                     for (int j = 0; j < 10; j++)
                     {
-                        int dust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
+                        int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
                         Main.dust[dust].velocity *= 1.66f;
                         if (Main.rand.NextBool())
                         {
@@ -184,10 +184,10 @@ namespace CalamityMod.NPCs.AstrumAureus
 
                     for (int k = 0; k < 20; k++)
                     {
-                        int dust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 2f);
+                        int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 2f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity *= 2f;
-                        dust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
+                        dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
                         Main.dust[dust].velocity *= 1.33f;
                         Main.dust[dust].noGravity = true;
                     }
@@ -357,7 +357,7 @@ namespace CalamityMod.NPCs.AstrumAureus
 
                 for (int r = 0; r < 30; r++)
                 {
-                    int astralDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
+                    int astralDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
                     Main.dust[astralDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -369,10 +369,10 @@ namespace CalamityMod.NPCs.AstrumAureus
 
                 for (int s = 0; s < 60; s++)
                 {
-                    int astralDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 2f);
+                    int astralDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.ShadowbeamStaff, 0f, 0f, 100, default, 2f);
                     Main.dust[astralDust2].noGravity = true;
                     Main.dust[astralDust2].velocity *= 5f;
-                    astralDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
+                    astralDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<AstralOrange>(), 0f, 0f, 100, default, 1f);
                     Main.dust[astralDust2].velocity *= 2f;
                     Main.dust[astralDust2].noGravity = true;
                 }

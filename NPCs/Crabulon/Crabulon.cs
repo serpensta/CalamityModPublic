@@ -906,7 +906,7 @@ namespace CalamityMod.NPCs.Crabulon
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int j = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
+                    int j = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
                     Main.dust[j].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -916,10 +916,10 @@ namespace CalamityMod.NPCs.Crabulon
                 }
                 for (int k = 0; k < 70; k++)
                 {
-                    int stompDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 3f);
+                    int stompDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 3f);
                     Main.dust[stompDust].noGravity = true;
                     Main.dust[stompDust].velocity *= 5f;
-                    stompDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
+                    stompDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
                     Main.dust[stompDust].velocity *= 2f;
                 }
                 if (Main.netMode != NetmodeID.Server)

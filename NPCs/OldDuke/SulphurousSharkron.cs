@@ -303,7 +303,7 @@ namespace CalamityMod.NPCs.OldDuke
 
                 for (int i = 0; i < 15; i++)
                 {
-                    int toxicDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 100, default, 2f);
+                    int toxicDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 100, default, 2f);
                     Main.dust[toxicDust].velocity.Y *= 6f;
                     Main.dust[toxicDust].velocity.X *= 3f;
                     if (Main.rand.NextBool())
@@ -315,10 +315,10 @@ namespace CalamityMod.NPCs.OldDuke
 
                 for (int j = 0; j < 30; j++)
                 {
-                    int bloody = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 3f);
+                    int bloody = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 3f);
                     Main.dust[bloody].noGravity = true;
                     Main.dust[bloody].velocity.Y *= 10f;
-                    bloody = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
+                    bloody = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                     Main.dust[bloody].velocity.X *= 2f;
                 }
 
