@@ -23,7 +23,7 @@ namespace CalamityMod.Items.Accessories
         {
             CalamityPlayer modPlayer = player.Calamity();
             modPlayer.bloodyWormTooth = true;
-            player.endurance += 0.12f;
+            player.endurance += 0.1f;
         }
 
         public override void AddRecipes()

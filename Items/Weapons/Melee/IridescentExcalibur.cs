@@ -48,6 +48,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shoot = ModContent.ProjectileType<GayBeam>();
             Item.shootSpeed = ShootSpeed;
             Item.rare = ModContent.RarityType<Rainbow>();
+            Item.shootsEveryUse = true;
         }
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
@@ -65,33 +66,34 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int proj = Projectile.NewProjectile(source, position, velocity, type, (int)Math.Round(damage * 0.5), knockback * 0.5f, player.whoAmI, (float)BeamType);
-            if (BeamType == 7)
-                Main.projectile[proj].penetrate = 3;
+            if (player.altFunctionUse == 2)
+            {
+                float adjustedItemScale = player.GetAdjustedItemScale(Item);
+                Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<IridescentExcaliburSlash>(), damage, knockback, player.whoAmI, (float)player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+                Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<IridescentExcaliburSlash2>(), 0, knockback, player.whoAmI, (float)player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+                Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<IridescentExcaliburSlash3>(), 0, knockback, player.whoAmI, (float)player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
+            }
+            else
+            {
+                int proj = Projectile.NewProjectile(source, position, velocity, type, (int)Math.Round(damage * 0.5), knockback * 0.5f, player.whoAmI, (float)BeamType);
+                if (BeamType == 7)
+                    Main.projectile[proj].penetrate = 3;
 
-            BeamType++;
-            if (BeamType >= MaxBeamTypes)
-                BeamType = 0;
+                BeamType++;
+                if (BeamType >= MaxBeamTypes)
+                    BeamType = 0;
+            }
 
             return false;
         }
 
         public override bool AltFunctionUse(Player player) => true;
 
-        public override bool CanUseItem(Player player)
+        public override bool? UseItem(Player player)
         {
-            if (player.altFunctionUse == 2)
-            {
-                Item.shoot = ProjectileID.None;
-                Item.shootSpeed = 0f;
-            }
-            else
-            {
-                Item.shoot = ModContent.ProjectileType<GayBeam>();
-                Item.shootSpeed = ShootSpeed;
-            }
-
-            return base.CanUseItem(player);
+            Item.noMelee = player.altFunctionUse == 2;
+            return base.UseItem(player);
         }
 
         public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
@@ -180,8 +182,8 @@ namespace CalamityMod.Items.Weapons.Melee
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<Orderbringer>().
                 AddIngredient(ItemID.TrueExcalibur).
+                AddIngredient<Orderbringer>().
                 AddIngredient<ShadowspecBar>(5).
                 AddIngredient<AscendantSpiritEssence>(5).
                 AddTile<DraedonsForge>().

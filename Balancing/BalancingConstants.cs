@@ -86,6 +86,9 @@
         #endregion
 
         #region Life Steal
+        // Life steal cap
+        internal static readonly int LifeStealCap = 100;
+        
         // Life steal accessories require a more strict cooldown due to their ease of use and global application
         internal static readonly float LifeStealAccessoryCooldownMultiplier = 3f;
 

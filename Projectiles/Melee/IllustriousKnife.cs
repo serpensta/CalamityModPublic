@@ -77,6 +77,9 @@ namespace CalamityMod.Projectiles.Melee
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 180);
 
             int heal = (int)Math.Round(hit.Damage * 0.015);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
@@ -88,6 +91,9 @@ namespace CalamityMod.Projectiles.Melee
             target.AddBuff(ModContent.BuffType<HolyFlames>(), 180);
 
             int heal = (int)Math.Round(info.Damage * 0.015);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 

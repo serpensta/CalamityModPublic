@@ -50,6 +50,9 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             int heal = (int)Math.Round(hit.Damage * Main.rand.NextFloat(0.05f, 0.1f));
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
@@ -59,6 +62,9 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             int heal = (int)Math.Round(info.Damage * Main.rand.NextFloat(0.05f, 0.1f));
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 
