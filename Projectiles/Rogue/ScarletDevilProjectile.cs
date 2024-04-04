@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Graphics.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -126,12 +127,15 @@ namespace CalamityMod.Projectiles.Rogue
             if (!Projectile.Calamity().stealthStrike)
                 return;
 
-            if (!Main.player[Projectile.owner].moonLeech)
-            {
-                // Give on-heal effects from stealth strikes.
-                Main.player[Projectile.owner].statLife += 90;
-                Main.player[Projectile.owner].HealEffect(90);
-            }
+            // Give on-heal effects from stealth strikes.
+            int heal = (int)Math.Round(hit.Damage * 0.01);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
+                return;
+
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
 
             // And spawn a bloom of bullets.
             SpawnOnStealthStrikeBullets();
@@ -145,8 +149,14 @@ namespace CalamityMod.Projectiles.Rogue
                 return;
 
             // Give on-heal effects from stealth strikes.
-            Main.player[Projectile.owner].statLife += 120;
-            Main.player[Projectile.owner].HealEffect(120);
+            int heal = (int)Math.Round(info.Damage * 0.01);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
+                return;
+
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
 
             // And spawn a bloom of bullets.
             SpawnOnStealthStrikeBullets();

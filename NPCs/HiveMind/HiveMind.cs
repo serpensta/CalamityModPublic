@@ -1135,7 +1135,7 @@ namespace CalamityMod.NPCs.HiveMind
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int killDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Demonite, 0f, 0f, 100, default, 2f);
+                    int killDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Demonite, 0f, 0f, 100, default, 2f);
                     Main.dust[killDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -1145,10 +1145,10 @@ namespace CalamityMod.NPCs.HiveMind
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int killDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Demonite, 0f, 0f, 100, default, 3f);
+                    int killDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Demonite, 0f, 0f, 100, default, 3f);
                     Main.dust[killDust2].noGravity = true;
                     Main.dust[killDust2].velocity *= 5f;
-                    killDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Demonite, 0f, 0f, 100, default, 2f);
+                    killDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Demonite, 0f, 0f, 100, default, 2f);
                     Main.dust[killDust2].velocity *= 2f;
                 }
             }

@@ -6,6 +6,7 @@ using CalamityMod.Projectiles.Melee;
 using CalamityMod.Rarities;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -17,8 +18,6 @@ namespace CalamityMod.Items.Weapons.Melee
     public class IridescentExcalibur : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-
-        private static int BaseDamage = 3000;
 
         private int MaxBeamTypes = 12;
 
@@ -37,7 +36,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 112;
             Item.height = 112;
-            Item.damage = BaseDamage;
+            Item.damage = 3000;
             Item.useAnimation = Item.useTime = 15;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
@@ -49,6 +48,17 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shoot = ModContent.ProjectileType<GayBeam>();
             Item.shootSpeed = ShootSpeed;
             Item.rare = ModContent.RarityType<Rainbow>();
+            Item.shootsEveryUse = true;
+        }
+
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            player.itemLocation += new Vector2(-12f * player.direction, 2f * player.gravDir).RotatedBy(player.itemRotation);
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Item.DrawItemGlowmaskSingleFrame(spriteBatch, rotation, ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Melee/IridescentExcaliburGlow").Value);
         }
 
         // Terraria seems to really dislike high crit values in SetDefaults
@@ -56,33 +66,34 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int proj = Projectile.NewProjectile(source, position, velocity, type, (int)Math.Round(damage * 0.5), knockback * 0.5f, player.whoAmI, (float)BeamType, 0f);
-            if (BeamType == 7)
-                Main.projectile[proj].penetrate = 3;
+            if (player.altFunctionUse == 2)
+            {
+                float adjustedItemScale = player.GetAdjustedItemScale(Item);
+                Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<IridescentExcaliburSlash>(), damage, knockback, player.whoAmI, (float)player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+                Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<IridescentExcaliburSlash2>(), 0, knockback, player.whoAmI, (float)player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+                Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<IridescentExcaliburSlash3>(), 0, knockback, player.whoAmI, (float)player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
+            }
+            else
+            {
+                int proj = Projectile.NewProjectile(source, position, velocity, type, (int)Math.Round(damage * 0.5), knockback * 0.5f, player.whoAmI, (float)BeamType);
+                if (BeamType == 7)
+                    Main.projectile[proj].penetrate = 3;
 
-            BeamType++;
-            if (BeamType >= MaxBeamTypes)
-                BeamType = 0;
+                BeamType++;
+                if (BeamType >= MaxBeamTypes)
+                    BeamType = 0;
+            }
 
             return false;
         }
 
         public override bool AltFunctionUse(Player player) => true;
 
-        public override bool CanUseItem(Player player)
+        public override bool? UseItem(Player player)
         {
-            if (player.altFunctionUse == 2)
-            {
-                Item.shoot = ProjectileID.None;
-                Item.shootSpeed = 0f;
-            }
-            else
-            {
-                Item.shoot = ModContent.ProjectileType<GayBeam>();
-                Item.shootSpeed = ShootSpeed;
-            }
-
-            return base.CanUseItem(player);
+            Item.noMelee = player.altFunctionUse == 2;
+            return base.UseItem(player);
         }
 
         public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
@@ -101,7 +112,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             if (Main.rand.NextBool())
             {
-                Color rainbowColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
+                Color rainbowColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Alpha);
                 Color color = Color.White;
                 int dustChoice = player.altFunctionUse == 2 ? Main.rand.Next(12) : BeamType;
                 switch (dustChoice)
@@ -160,33 +171,19 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
-
-            if (player.moonLeech)
-                return;
-
-            int healAmount = Main.rand.Next(3) + 10;
-            player.statLife += healAmount;
-            player.HealEffect(healAmount);
         }
 
         public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 600);
             target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
-
-            if (player.moonLeech)
-                return;
-
-            int healAmount = Main.rand.Next(3) + 10;
-            player.statLife += healAmount;
-            player.HealEffect(healAmount);
         }
 
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<Orderbringer>().
                 AddIngredient(ItemID.TrueExcalibur).
+                AddIngredient<Orderbringer>().
                 AddIngredient<ShadowspecBar>(5).
                 AddIngredient<AscendantSpiritEssence>(5).
                 AddTile<DraedonsForge>().

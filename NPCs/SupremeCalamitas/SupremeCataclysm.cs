@@ -77,8 +77,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.HitSound = SoundID.DD2_OgreRoar;
-            NPC.DeathSound = SoundID.NPCDeath52;
+            NPC.HitSound = SupremeCalamitas.BrotherHit;
+            NPC.DeathSound = SupremeCalamitas.BrotherDeath;
             NPC.Calamity().VulnerableToHeat = false;
             NPC.Calamity().VulnerableToCold = true;
         }
@@ -230,8 +230,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     CurrentFrame = 0;
                 }
 
-                // Shoot dart spreads.
-                fireRate = BossRushEvent.BossRushActive ? 3f : MathHelper.Lerp(1f, 4f, 1f - totalLifeRatio);
+                // Shoot dart spreads. (Can shoot faster and more darts on death)
+                fireRate = BossRushEvent.BossRushActive ? 3f : MathHelper.Lerp(1f, death ? 3.5f : 3f, 1f - totalLifeRatio);
                 DartBurstCounter += fireRate;
                 if (DartBurstCounter >= DartBurstCounterLimit)
                 {
@@ -244,14 +244,14 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         damage /= 2;
                     int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
                     float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = Main.zenithWorld ? 5f : 7f;
+                    float velocity = Main.zenithWorld ? 6f : 2.5f;
                     Vector2 spinningPoint = new Vector2(0f, -velocity);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f, 2);
                         }
                     }
 
@@ -326,7 +326,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 NPC.position.Y = NPC.position.Y - (float)(NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int brimDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                    int brimDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
                     Main.dust[brimDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -336,10 +336,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int brimDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 3f);
+                    int brimDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 3f);
                     Main.dust[brimDust2].noGravity = true;
                     Main.dust[brimDust2].velocity *= 5f;
-                    brimDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                    brimDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
                     Main.dust[brimDust2].velocity *= 2f;
                 }
 

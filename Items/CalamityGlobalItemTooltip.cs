@@ -93,6 +93,8 @@ namespace CalamityMod.Items
         private void ApplyRarityColor(Item item, TooltipLine nameLine)
         {
             #region Uniquely Colored Developer Items
+            if (item.type == ModContent.ItemType<LiliesOfFinality>())
+                nameLine.OverrideColor = Color.Lerp(Color.Red, Color.White, (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f);
             if (item.type == ModContent.ItemType<Fabstaff>())
                 nameLine.OverrideColor = new Color(Main.DiscoR, 100, 255);
             if (item.type == ModContent.ItemType<StaffofBlushie>())
@@ -258,6 +260,10 @@ namespace CalamityMod.Items
 
             // Numerous random tooltip edits which don't fit into another category
             #region Various Tooltip Edits
+
+            // Lilies of Finality 512 edit
+            if (item.type == ModContent.ItemType<LiliesOfFinality>())
+                EditTooltipByName("Damage", (line) => line.Text = LiliesOfFinality.TheNumber + " summon damage");
 
             // Master Mode items also drop in Revengeance
             // Only affects vanilla and Calamity items
@@ -701,9 +707,9 @@ namespace CalamityMod.Items
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("15%", "9%"));
             }
 
-            // Worm Scarf only gives 10% DR instead of 17%
+            // Worm Scarf only gives 14% DR instead of 17%
             if (item.type == ItemID.WormScarf)
-                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("17%", "10%"));
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("17%", "14%"));
 
             // Feral Claws line melee speed and true melee damage changes
             if (item.type == ItemID.FeralClaws)

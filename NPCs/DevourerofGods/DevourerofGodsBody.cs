@@ -32,6 +32,10 @@ namespace CalamityMod.NPCs.DevourerofGods
             phase2IconIndex = ModContent.GetModBossHeadSlot(phase2IconPath);
         }
 
+        private const float LaserVelocityMultiplierMin = 0.5f;
+
+        private const float LaserVelocityDistanceMultiplier = LaserVelocityMultiplierMin * 0.05f;
+
         private int invinceTime = 360;
         private bool setOpacity = false;
         private bool phase2Started = false;
@@ -250,8 +254,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                                     NPC.TargetClosest();
                                     SoundEngine.PlaySound(SoundID.Item12, player.Center);
                                     float maxProjectileVelocity = bossRush ? 24f : death ? 20f : revenge ? 18.25f : expertMode ? 17.5f : 16f;
-                                    float minProjectileVelocity = maxProjectileVelocity * 0.25f;
-                                    float projectileVelocity = MathHelper.Clamp(Vector2.Distance(player.Center, NPC.Center) * 0.01f, minProjectileVelocity, maxProjectileVelocity);
+                                    float minProjectileVelocity = maxProjectileVelocity * LaserVelocityMultiplierMin;
+                                    float projectileVelocity = MathHelper.Clamp(Vector2.Distance(player.Center, NPC.Center) * LaserVelocityDistanceMultiplier, minProjectileVelocity, maxProjectileVelocity);
                                     Vector2 velocityVector = Vector2.Normalize(player.Center - NPC.Center) * projectileVelocity;
                                     int type = ModContent.ProjectileType<DoGDeath>();
                                     int damage = NPC.GetProjectileDamage(type);
@@ -275,8 +279,8 @@ namespace CalamityMod.NPCs.DevourerofGods
                                 SoundEngine.PlaySound(SoundID.Item12, player.Center);
                                 NPC.localAI[0] = 0f;
                                 float maxProjectileVelocity = bossRush ? 22f : death ? 18f : revenge ? 16.25f : expertMode ? 15.5f : 14f;
-                                float minProjectileVelocity = maxProjectileVelocity * 0.25f;
-                                float projectileVelocity = MathHelper.Clamp(Vector2.Distance(player.Center, NPC.Center) * 0.01f, minProjectileVelocity, maxProjectileVelocity);
+                                float minProjectileVelocity = maxProjectileVelocity * LaserVelocityMultiplierMin;
+                                float projectileVelocity = MathHelper.Clamp(Vector2.Distance(player.Center, NPC.Center) * LaserVelocityDistanceMultiplier, minProjectileVelocity, maxProjectileVelocity);
                                 Vector2 velocityVector = Vector2.Normalize(player.Center - NPC.Center) * projectileVelocity;
                                 int type = ModContent.ProjectileType<DoGDeath>();
                                 int damage = NPC.GetProjectileDamage(type);
@@ -518,7 +522,7 @@ namespace CalamityMod.NPCs.DevourerofGods
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 10; i++)
                 {
-                    int cosmiliteDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.PurpleCosmilite, 0f, 0f, 100, default, 2f);
+                    int cosmiliteDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.PurpleCosmilite, 0f, 0f, 100, default, 2f);
                     Main.dust[cosmiliteDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -528,10 +532,10 @@ namespace CalamityMod.NPCs.DevourerofGods
                 }
                 for (int j = 0; j < 20; j++)
                 {
-                    int cosmiliteDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.PurpleCosmilite, 0f, 0f, 100, default, 3f);
+                    int cosmiliteDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.PurpleCosmilite, 0f, 0f, 100, default, 3f);
                     Main.dust[cosmiliteDust2].noGravity = true;
                     Main.dust[cosmiliteDust2].velocity *= 5f;
-                    cosmiliteDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.PurpleCosmilite, 0f, 0f, 100, default, 2f);
+                    cosmiliteDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.PurpleCosmilite, 0f, 0f, 100, default, 2f);
                     Main.dust[cosmiliteDust2].velocity *= 2f;
                 }
             }

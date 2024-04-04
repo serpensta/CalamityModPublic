@@ -427,7 +427,7 @@ namespace CalamityMod.World
         #region Smart Gem Gen
         public static void SmartGemGen()
         {
-            double oneThirdOfUnderground = (Main.maxTilesY - 200 - Main.worldSurface) / 3D;
+            double oneThirdOfUnderground = (Main.UnderworldLayer - Main.worldSurface) / 3D;
             double verticalStartFactor_Layer1 = Main.worldSurface;
             double verticalStartFactor_Layer2 = verticalStartFactor_Layer1 + oneThirdOfUnderground;
             double verticalStartFactor_Layer3 = verticalStartFactor_Layer1 + oneThirdOfUnderground * 2D;

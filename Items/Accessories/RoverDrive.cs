@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using CalamityMod.CalPlayer;
 using CalamityMod.DataStructures;
 using CalamityMod.Items.Materials;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -80,6 +82,12 @@ namespace CalamityMod.Items.Accessories
 
         // In vanity, provides a visual shield but no actual functionality
         public override void UpdateVanity(Player player) => player.Calamity().roverDriveShieldVisible = true;
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            string adrenTooltip = CalamityWorld.revenge ? this.GetLocalizedValue("ShieldAdren") : "";
+            tooltips.FindAndReplace("[ADREN]", adrenTooltip);
+        }
 
         // Scrappable for 3-5 wulfrum scrap or a 20% chance to get an energy core
         public override void ExtractinatorUse(int extractinatorBlockType, ref int resultType, ref int resultStack)

@@ -123,7 +123,7 @@ namespace CalamityMod.Projectiles.Boss
                     {
                         for (int i = 0; i < 160; i++)
                         {
-                            Dust dust = Dust.NewDustPerfect(Projectile.Top + Vector2.UnitY * 100f, (int)CalamityDusts.SulfurousSeaAcid);
+                            Dust dust = Dust.NewDustPerfect(Projectile.Top + Vector2.UnitY * 100f, (int)CalamityDusts.SulphurousSeaAcid);
                             dust.velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(5f, 23f);
                             dust.noGravity = true;
                             dust.scale = 3f;

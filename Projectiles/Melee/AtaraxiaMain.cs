@@ -75,7 +75,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.position.X = Projectile.position.X - (float)(Projectile.width / 2);
             Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
 
-            Vector2 corner = new Vector2(Projectile.position.X, Projectile.position.Y);
+            Vector2 corner = Projectile.position;
             for (int i = 0; i < 50; i++)
             {
                 int idx = Dust.NewDust(corner, Projectile.width, Projectile.height, DustID.GemAmethyst, 0f, 0f, 0, new Color(210, 0, 255), 2.2f);

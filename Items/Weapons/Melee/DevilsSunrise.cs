@@ -12,7 +12,6 @@ namespace CalamityMod.Items.Weapons.Melee
     public class DevilsSunrise : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        public static int BaseDamage = 420;
 
         public override void SetDefaults()
         {
@@ -22,7 +21,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.channel = true;
-            Item.damage = BaseDamage;
+            Item.damage = 420;
             Item.knockBack = 4f;
             Item.useAnimation = 25;
             Item.useTime = 5;

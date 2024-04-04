@@ -23,7 +23,7 @@ namespace CalamityMod.Items.Weapons.Summon
             Item.noMelee = true;
             Item.knockBack = 0.5f;
             Item.value = CalamityGlobalItem.Rarity10BuyPrice;
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ItemRarityID.Purple;
             Item.UseSound = SoundID.Item14;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Summon;

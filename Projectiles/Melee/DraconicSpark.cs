@@ -65,7 +65,7 @@ namespace CalamityMod.Projectiles.Melee
             if (foundTarget)
             {
                 float speed = HomingVelocity;
-                Vector2 projCenter = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                Vector2 projCenter = Projectile.Center;
                 float xDist = targetX - projCenter.X;
                 float yDist = targetY - projCenter.Y;
                 float dist = (float)Math.Sqrt((double)(xDist * xDist + yDist * yDist));

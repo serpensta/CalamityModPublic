@@ -226,7 +226,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             }
 
             // Activate daytime enrage
-            if (Main.dayTime && !bossRush && NPC.ai[1] != 3f && NPC.ai[1] != 2f)
+            if (Main.IsItDay() && !bossRush && NPC.ai[1] != 3f && NPC.ai[1] != 2f)
             {
                 // Heal
                 if (Main.netMode != NetmodeID.MultiplayerClient)

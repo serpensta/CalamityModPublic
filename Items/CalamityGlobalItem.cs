@@ -1031,7 +1031,7 @@ namespace CalamityMod.Items
             }
             else if (set == "SpectreHealing")
             {
-                player.GetDamage<MagicDamageClass>() += 0.2f;
+                player.GetDamage<MagicDamageClass>() += 0.4f;
                 player.setBonus = CalamityUtils.GetTextValue("Vanilla.Armor.SetBonus.SpectreHealing");
             }
             else if (set == "SolarFlare")
@@ -1539,7 +1539,7 @@ namespace CalamityMod.Items
                 modPlayer.fleshKnuckles = true;
 
             if (item.type == ItemID.WormScarf)
-                player.endurance -= 0.07f;
+                player.endurance -= 0.03f;
 
             if (item.type == ItemID.RoyalGel)
                 modPlayer.royalGel = true;

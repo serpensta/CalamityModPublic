@@ -9,12 +9,11 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class BlastBarrel : RogueWeapon
     {
-        public const int BaseDamage = 32;
         public override void SetDefaults()
         {
             Item.width = 48;
             Item.height = 48;
-            Item.damage = BaseDamage;
+            Item.damage = 32;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useStyle = ItemUseStyleID.Swing;

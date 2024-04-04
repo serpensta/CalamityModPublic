@@ -3224,7 +3224,7 @@ namespace CalamityMod.NPCs
             if (CalamityLists.AstrumDeusIDs.Contains(npc.type))
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
             if (eaterofWorldsResist)
-                modifiers.FinalDamage *= 0.01f;
+                modifiers.FinalDamage *= 0.05f;
         }
 
         // Directly modifies final damage incoming to an NPC based on their DR (damage reduction) stat added by Calamity.
@@ -3261,7 +3261,7 @@ namespace CalamityMod.NPCs
                     cirrusBossActive = Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas.SupremeCalamitas>().cirrus;
             }
 
-            bool nightProvi = npc.type == NPCType<Providence.Providence>() && !Main.dayTime;
+            bool nightProvi = npc.type == NPCType<Providence.Providence>() && !Main.IsItDay();
             bool dayEmpress = npc.type == NPCID.HallowBoss && NPC.ShouldEmpressBeEnraged();
             if (KillTime > 0 && AITimer < KillTime && !BossRushEvent.BossRushActive && !cirrusBossActive && (nightProvi || dayEmpress))
             {
@@ -5259,7 +5259,7 @@ namespace CalamityMod.NPCs
             if (hurtInfo.Damage <= 0)
                 return;
 
-            if (target.Calamity().sulfurSet)
+            if (target.Calamity().sulphurSet)
                 npc.AddBuff(BuffID.Poisoned, 120);
 
             if (target.Calamity().snowman)
@@ -5342,7 +5342,7 @@ namespace CalamityMod.NPCs
                     break;
 
                 case NPCID.HallowBoss:
-                    target.AddBuff(Main.dayTime ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
+                    target.AddBuff(NPC.ShouldEmpressBeEnraged() ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
                     break;
 
                 case NPCID.BloodNautilus:
@@ -6432,6 +6432,9 @@ namespace CalamityMod.NPCs
 
             if (Main.LocalPlayer.Calamity().trippy || (npc.type == NPCID.KingSlime && CalamityWorld.LegendaryMode && CalamityWorld.revenge))
                 return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
+
+            if (npc.type == NPCID.KingSlime && Main.masterMode && CalamityWorld.revenge)
+                return NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel2>()) ? Color.Lerp(new Color(0, 0, 150, npc.alpha), new Color(125, 125, 255, npc.alpha), (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f) : null;
 
             if (npc.type == NPCID.QueenBee && Main.zenithWorld)
             {

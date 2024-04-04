@@ -42,7 +42,7 @@ namespace CalamityMod.Items.Armor.Aerospec
 
         public override void UpdateEquip(Player player)
         {
-            player.GetDamage<MeleeDamageClass>() += 0.08f;
+            player.GetDamage<MeleeDamageClass>() += 0.1f;
         }
 
         public override void AddRecipes()

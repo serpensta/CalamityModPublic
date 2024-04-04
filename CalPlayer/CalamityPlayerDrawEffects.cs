@@ -295,6 +295,9 @@ namespace CalamityMod.CalPlayer
 
             if (calamityPlayer.vaporfied && drawInfo.shadow == 0f)
                 Vaporfied.DrawEffects(drawInfo);
+
+            if (calamityPlayer.vHex && drawInfo.shadow == 0f)
+                VulnerabilityHex.DrawEffects(drawInfo);
             #endregion
 
             if (calamityPlayer.PinkJellyRegen && drawInfo.shadow == 0f)

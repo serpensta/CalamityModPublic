@@ -129,7 +129,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.TargetClosest();
 
             float enrageScale = bossRush ? 1f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 calamityGlobalNPC.CurrentlyEnraged = !bossRush;
                 enrageScale += 2f;
@@ -421,7 +421,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 100f, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f);
-                                    Main.projectile[proj].timeLeft = 900;
+                                    Main.projectile[proj].timeLeft = 1200;
                                 }
                             }
                         }
@@ -600,7 +600,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, projectileType, damage, 0f, Main.myPlayer, 1f, 0f);
-                            Main.projectile[proj].timeLeft = 900;
+                            Main.projectile[proj].timeLeft = 1200;
                         }
 
                         npc.netUpdate = true;
@@ -1306,7 +1306,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int num12 = Projectile.NewProjectile(npc.GetSource_FromAI(), vector + laserVelocityActual.SafeNormalize(Vector2.UnitY) * 100f, laserVelocityActual, type, damage, 0f, Main.myPlayer, 1f, 0f);
-                            Main.projectile[num12].timeLeft = 900;
+                            Main.projectile[num12].timeLeft = 1200;
                         }
 
                         npc.netUpdate = true;

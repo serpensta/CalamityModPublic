@@ -68,7 +68,7 @@ namespace CalamityMod.Projectiles.Rogue
                     Projectile.active = false;
                     for (int j = 0; j < 8; j++)
                     {
-                        int dusty = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Flare, 0f, 0f, 100, default, 2f);
+                        int dusty = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Flare, 0f, 0f, 100, default, 2f);
                         Main.dust[dusty].velocity *= 3f;
                         if (Main.rand.NextBool())
                         {
@@ -77,10 +77,10 @@ namespace CalamityMod.Projectiles.Rogue
                     }
                     for (int k = 0; k < 16; k++)
                     {
-                        int dusty2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Flare, 0f, 0f, 100, default, 3f);
+                        int dusty2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Flare, 0f, 0f, 100, default, 3f);
                         Main.dust[dusty2].noGravity = true;
                         Main.dust[dusty2].velocity *= 5f;
-                        dusty2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Flare, 0f, 0f, 100, default, 2f);
+                        dusty2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Flare, 0f, 0f, 100, default, 2f);
                         Main.dust[dusty2].velocity *= 2f;
                     }
                 }

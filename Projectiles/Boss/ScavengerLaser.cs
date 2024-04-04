@@ -28,7 +28,7 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.alpha = 255;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 900;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -79,37 +79,11 @@ namespace CalamityMod.Projectiles.Boss
                 return;
             }
 
-            // Fly away from other lasers
-            float pushForce = death ? 0.12f : 0.08f;
-            float pushDistance = death ? 120f : 80f;
-            for (int k = 0; k < Main.maxProjectiles; k++)
-            {
-                Projectile otherProj = Main.projectile[k];
-                // Short circuits to make the loop as fast as possible
-                if (!otherProj.active || k == Projectile.whoAmI)
-                    continue;
-
-                // If the other projectile is indeed the same owned by the same player and they're too close, nudge them away.
-                bool sameProjType = otherProj.type == Projectile.type;
-                float taxicabDist = Vector2.Distance(Projectile.Center, otherProj.Center);
-                if (sameProjType && taxicabDist < pushDistance)
-                {
-                    if (Projectile.position.X < otherProj.position.X)
-                        Projectile.velocity.X -= pushForce;
-                    else
-                        Projectile.velocity.X += pushForce;
-
-                    if (Projectile.position.Y < otherProj.position.Y)
-                        Projectile.velocity.Y -= pushForce;
-                    else
-                        Projectile.velocity.Y += pushForce;
-                }
-            }
-
-            Vector2 maxVelocity = new Vector2(death ? 16f : 12f, 16f);
-            float maxAcceleration = death ? 0.6f : 0.4f;
+            Vector2 maxVelocity = new Vector2(death ? 15f : 12f, death ? 15f : 12f);
+            float maxAcceleration = death ? 0.5f : 0.4f;
             float timeBeforeHoming = death ? 30f : 45f;
-            float explodeDistance = death ? 32f : 16f;
+            float distanceAboveTargetBeforeHomingDownward = death ? 320f : 480f;
+            float explodeDistance = 16f;
             if (Projectile.ai[0] == 0f)
             {
                 Projectile.localAI[0] += 1f;
@@ -132,7 +106,7 @@ namespace CalamityMod.Projectiles.Boss
             }
             else if (Projectile.ai[0] == 1f)
             {
-                if (Main.player[(int)Projectile.ai[1]].Center.Y > Projectile.Center.Y + 80f)
+                if (Main.player[(int)Projectile.ai[1]].Center.Y > Projectile.Center.Y + distanceAboveTargetBeforeHomingDownward)
                 {
                     Projectile.ai[0] = 2f;
                     Projectile.netUpdate = true;
@@ -190,6 +164,33 @@ namespace CalamityMod.Projectiles.Boss
                     if (Projectile.velocity.Y > 0f && projectileVelocity.Y < 0f)
                         Projectile.velocity.Y -= maxAcceleration;
                 }
+
+                // Fly away from other lasers
+                float pushForce = death ? 0.12f : 0.08f;
+                float pushDistance = death ? 80f : 40f;
+                for (int k = 0; k < Main.maxProjectiles; k++)
+                {
+                    Projectile otherProj = Main.projectile[k];
+                    // Short circuits to make the loop as fast as possible
+                    if (!otherProj.active || k == Projectile.whoAmI)
+                        continue;
+
+                    // If the other projectile is indeed the same owned by the same player and they're too close, nudge them away.
+                    bool sameProjType = otherProj.type == Projectile.type;
+                    float taxicabDist = Vector2.Distance(Projectile.Center, otherProj.Center);
+                    if (sameProjType && taxicabDist < pushDistance)
+                    {
+                        if (Projectile.position.X < otherProj.position.X)
+                            Projectile.velocity.X -= pushForce;
+                        else
+                            Projectile.velocity.X += pushForce;
+
+                        if (Projectile.position.Y < otherProj.position.Y)
+                            Projectile.velocity.Y -= pushForce;
+                        else
+                            Projectile.velocity.Y += pushForce;
+                    }
+                }
             }
         }
 
@@ -229,8 +230,6 @@ namespace CalamityMod.Projectiles.Boss
                 Main.dust[killDust].velocity *= 2f;
                 Main.dust[killDust].noGravity = true;
             }
-
-            Projectile.Damage();
         }
     }
 }

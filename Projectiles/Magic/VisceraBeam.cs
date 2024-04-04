@@ -7,6 +7,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using CalamityMod.Balancing;
+using System;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -20,6 +22,7 @@ namespace CalamityMod.Projectiles.Magic
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 9;
@@ -88,13 +91,16 @@ namespace CalamityMod.Projectiles.Magic
                 }
             }
 
-            if (Main.player[Projectile.owner].moonLeech)
+            int heal = (int)Math.Round(hit.Damage * 0.05);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
-            Player player = Main.player[Projectile.owner];
-            player.statLife += 1;
-            player.HealEffect(1);
+            CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
         }
+
         public override void AI()
         {
             Player Owner = Main.player[Projectile.owner];
@@ -143,6 +149,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;

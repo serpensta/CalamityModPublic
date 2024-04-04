@@ -45,7 +45,7 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.localAI[1] += 1f;
             if (Projectile.localAI[1] > 4f)
             {
-                int theDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 0.75f);
+                int theDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 0.75f);
                 Main.dust[theDust].noGravity = true;
                 Main.dust[theDust].velocity *= 0f;
             }
@@ -101,7 +101,7 @@ namespace CalamityMod.Projectiles.Rogue
             }
             for (int i = 0; i < 2; i++)
             {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 1.2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 1.2f);
                 Main.dust[dust].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -111,10 +111,10 @@ namespace CalamityMod.Projectiles.Rogue
             }
             for (int j = 0; j < 2; j++)
             {
-                int dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 1.7f);
+                int dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 1.7f);
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].velocity *= 5f;
-                dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 1f);
+                dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 1f);
                 Main.dust[dust2].velocity *= 2f;
             }
         }

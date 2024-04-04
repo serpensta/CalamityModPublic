@@ -53,7 +53,7 @@ namespace CalamityMod.Projectiles.Boss
             }
             else
             {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 0.8f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 0.8f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 0f;
             }
@@ -121,7 +121,7 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
             for (int i = 0; i < 4; i++)
             {
-                int shroomDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 1.5f);
+                int shroomDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 1.5f);
                 Main.dust[shroomDust].velocity *= 1.5f;
                 if (Main.rand.NextBool())
                 {
@@ -131,10 +131,10 @@ namespace CalamityMod.Projectiles.Boss
             }
             for (int j = 0; j < 12; j++)
             {
-                int shroomDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
+                int shroomDust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
                 Main.dust[shroomDust2].noGravity = true;
                 Main.dust[shroomDust2].velocity *= 2f;
-                Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 1.5f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy, 0f, 0f, 100, default, 1.5f);
             }
 
             if (Main.zenithWorld && NPC.CountNPCS(NPCID.Crab) < 20 && Main.netMode != NetmodeID.MultiplayerClient)

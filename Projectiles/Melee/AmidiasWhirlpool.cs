@@ -118,7 +118,7 @@ namespace CalamityMod.Projectiles.Melee
                 if (isHoming)
                 {
                     int waterDust0 = 10;
-                    Vector2 dustDirection = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 dustDirection = Projectile.Center;
                     float waterDust1 = projCenter.X - dustDirection.X;
                     float waterDust2 = projCenter.Y - dustDirection.Y;
                     float waterDust3 = (float)Math.Sqrt((double)(waterDust1 * waterDust1 + waterDust2 * waterDust2));

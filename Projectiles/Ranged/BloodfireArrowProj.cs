@@ -1,4 +1,5 @@
 ﻿using System;
+using CalamityMod.Balancing;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Weapons.Ranged;
@@ -99,7 +100,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (player.moonLeech)
                 return;
 
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f)
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || target.lifeMax <= 5)
                 return;
 
             float lifeRatio = (float)player.statLife / player.statLifeMax2;
@@ -109,11 +110,11 @@ namespace CalamityMod.Projectiles.Ranged
             float chanceOfOneMoreHP = averageHealAmount - guaranteedHeal;
             bool bonusHeal = Main.rand.NextFloat() < chanceOfOneMoreHP;
             int finalHeal = guaranteedHeal + (bonusHeal ? 1 : 0);
+            if (finalHeal > BalancingConstants.LifeStealCap)
+                finalHeal = BalancingConstants.LifeStealCap;
+
             if (finalHeal > 0)
-            {
-                player.HealEffect(finalHeal);
-                player.statLife += finalHeal;
-            }
+                CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], finalHeal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
         }
 
         public override bool PreDraw(ref Color lightColor)

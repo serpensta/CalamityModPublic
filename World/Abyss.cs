@@ -569,7 +569,7 @@ namespace CalamityMod.World
             //ambient tiles and pots
             for (int abyssIndex = abyssMinX + 5; abyssIndex < abyssMaxX - 5; abyssIndex++)
             {
-                for (int abyssIndex2 = 0; abyssIndex2 < (Main.remixWorld ? rockLayer : Main.maxTilesY - 200); abyssIndex2++)
+                for (int abyssIndex2 = 0; abyssIndex2 < (Main.remixWorld ? rockLayer : Main.UnderworldLayer); abyssIndex2++)
                 {
                     Tile tileToGrowVineOn = Main.tile[abyssIndex, abyssIndex2];
 
@@ -578,7 +578,7 @@ namespace CalamityMod.World
                         Tile tile = Main.tile[abyssIndex, abyssIndex2 + 1];
 
                         //above the 4th layer
-                        if (abyssIndex2 < (Main.remixWorld ? rockLayer : Main.maxTilesY - 200) && WorldGen.SolidTile(abyssIndex, abyssIndex2 + 1))
+                        if (abyssIndex2 < (Main.remixWorld ? rockLayer : Main.UnderworldLayer) && WorldGen.SolidTile(abyssIndex, abyssIndex2 + 1))
                         {
                             //sulphur shale stuff 
                             if (tile.TileType == ModContent.TileType<SulphurousShale>())
@@ -743,7 +743,7 @@ namespace CalamityMod.World
                         }
 
                         //sulphur pots
-                        else if (tile.TileType == ModContent.TileType<SulphurousShale>() && abyssIndex2 < (Main.remixWorld ? Main.maxTilesY - 200 : (int)Main.worldSurface))
+                        else if (tile.TileType == ModContent.TileType<SulphurousShale>() && abyssIndex2 < (Main.remixWorld ? Main.UnderworldLayer : (int)Main.worldSurface))
                         {
                             if (WorldGen.genRand.NextBool(3))
                             {

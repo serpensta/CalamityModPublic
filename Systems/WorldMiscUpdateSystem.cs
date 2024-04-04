@@ -8,7 +8,9 @@ using CalamityMod.NPCs.PrimordialWyrm;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Tiles;
 using CalamityMod.Tiles.Abyss;
+using CalamityMod.Tiles.Crags;
 using CalamityMod.Tiles.SunkenSea;
+using CalamityMod.Walls;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -18,6 +20,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using static CalamityMod.World.CalamityWorld;
+using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Systems
 {
@@ -307,6 +310,78 @@ namespace CalamityMod.Systems
 
                                             if (Main.netMode == NetmodeID.Server)
                                                 NetMessage.SendTileSquare(-1, x, y, 1, TileChangeType.None);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (growthTile.LiquidAmount == 0 && y > Main.UnderworldLayer)
+                        {
+                            bool isCragsTile = tileType == TileType<BrimstoneSlag>() ||
+                                tileType == TileType<BrimstoneSlab>() ||
+                                tileType == TileType<ScorchedRemains>() ||
+                                tileType == TileType<ScorchedRemainsGrass>() ||
+                                tileType == TileType<ScorchedBone>();
+
+                            int wallType = Main.tile[x, y2].WallType;
+                            bool isCragHouseWall = wallType == WallType<BrimstoneSlagWall>() ||
+                                wallType == WallType<BrimstoneSlabWall>() ||
+                                wallType == WallType<ScorchedBoneWall>() ||
+                                wallType == WallType<SmoothBrimstoneSlagWall>();
+
+                            if (isCragsTile && isCragHouseWall && Main.tile[x, y2].LiquidAmount == 0)
+                            {
+                                // Lilies of Finality post-Yharon.
+                                if (WorldGen.genRand.NextBool(20) && DownedBossSystem.downedYharon)
+                                {
+                                    ushort tileTypeToPlace = (ushort)TileType<LiliesOfFinalityTile>();
+                                    int tileTypeToPlaceThickness = 3;
+                                    bool placeLilies = true;
+
+                                    // Do not change this number, ever. - Fabsol
+                                    int minDistanceFromOtherLilies = 66;
+
+                                    for (int k = x - minDistanceFromOtherLilies; k < x + minDistanceFromOtherLilies; k += 2)
+                                    {
+                                        for (int m = y - minDistanceFromOtherLilies; m < y + minDistanceFromOtherLilies; m += 2)
+                                        {
+                                            if (k > tileTypeToPlaceThickness && k < Main.maxTilesX - tileTypeToPlaceThickness && m > tileTypeToPlaceThickness && m < Main.maxTilesY - tileTypeToPlaceThickness && Main.tile[k, m].HasTile && Main.tile[k, m].TileType == tileTypeToPlace)
+                                            {
+                                                placeLilies = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (placeLilies)
+                                    {
+                                        if (x < tileTypeToPlaceThickness || x > Main.maxTilesX - tileTypeToPlaceThickness || y2 < tileTypeToPlaceThickness || y2 > Main.maxTilesY - tileTypeToPlaceThickness)
+                                            return;
+
+                                        bool placeTile = true;
+                                        for (int i2 = x - 1; i2 < x + 2; i2++)
+                                        {
+                                            for (int j3 = y2 - 2; j3 < y2 + 1; j3++)
+                                            {
+                                                if (Main.tile[i2, j3] == null)
+                                                    return;
+
+                                                if (Main.tile[i2, j3].HasTile)
+                                                    placeTile = false;
+                                            }
+
+                                            if (Main.tile[i2, y2 + 1] == null)
+                                                return;
+
+                                            if (!WorldGen.SolidTile2(i2, y2 + 1))
+                                                placeTile = false;
+                                        }
+
+                                        if (placeTile)
+                                        {
+                                            WorldGen.PlaceObject(x, y2, tileTypeToPlace, true);
+                                            NetMessage.SendObjectPlacement(-1, x, y2, tileTypeToPlace, 0, 0, -1, -1);
                                         }
                                     }
                                 }

@@ -74,14 +74,14 @@ SetBonus: {
 	Mining: Mining ore will sometimes have additional yield
 	Molten:
 		'''
-		20% extra true melee damage
+		7% extra melee damage, cannot be set on fire
+		10% extra true melee damage
 		Grants immunity to fire blocks and temporary immunity to lava
 		'''
 	MonkTier2:
 		'''
 		10% increased melee speed, crit, and damage
 		15% increased minion damage
-		Negates the summon damage penalty while wielding non-summon weapons
 		'''
 	Mythril:
 		'''
@@ -131,41 +131,23 @@ SetBonus: {
 		15% increased minion damage and 10% increased melee critical strike chance
 		Negates the summon damage penalty while wielding non-summon weapons
 		'''
-	HuntressTier2:
-		'''
-		10% increased minion and ranged damage
-		Negates the summon damage penalty while wielding non-summon weapons
-		'''
-	ApprenticeTier2:
-		'''
-		5% increased minion damage and 15% increased magic critical strike chance
-		Negates the summon damage penalty while wielding non-summon weapons
-		'''
+	HuntressTier2: 10% increased minion and ranged damage
+	ApprenticeTier2: 5% increased minion damage and 15% increased magic critical strike chance
 	MonkTier3:
 		'''
 		10% increased melee damage, melee critical strike chance and melee speed
 		30% increased minion damage
-		Negates the summon damage penalty while wielding non-summon weapons
 		'''
 	SquireTier3:
 		'''
 		Massively increased life regeneration
 		10% increased minion damage and melee critical strike chance
-		Negates the summon damage penalty while wielding non-summon weapons
 		'''
-	HuntressTier3:
-		'''
-		10% increased minion and ranged damage
-		Negates the summon damage penalty while wielding non-summon weapons
-		'''
-	ApprenticeTier3:
-		'''
-		10% increased minion damage and 15% increased magic critical strike chance
-		Negates the summon damage penalty while wielding non-summon weapons
-		'''
+	HuntressTier3: 10% increased minion and ranged damage
+	ApprenticeTier3: 10% increased minion damage and 15% increased magic critical strike chance
 	SpectreHealing:
 		'''
-		Reduces Magic damage by 20% and converts it to healing force
+		Converts magic damage to healing force
 		Magic damage done to enemies heals the player with lowest health
 		'''
 }

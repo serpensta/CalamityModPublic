@@ -9,13 +9,12 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class ConsecratedWater : RogueWeapon
     {
-        public const int BaseDamage = 48;
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.damage = BaseDamage;
+            Item.damage = 48;
             Item.useAnimation = Item.useTime = 29;
             Item.noMelee = true;
             Item.noUseGraphic = true;

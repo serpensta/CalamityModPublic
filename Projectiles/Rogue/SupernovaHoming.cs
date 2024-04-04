@@ -31,7 +31,7 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.ai[0] += 1;
             if (Projectile.ai[0] % 2 == 0)
             {
-                int coolDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width - 28, Projectile.height - 28, dustType, 0f, 0f, 100, default, 1.5f);
+                int coolDust = Dust.NewDust(Projectile.position, Projectile.width - 28, Projectile.height - 28, dustType, 0f, 0f, 100, default, 1.5f);
                 Main.dust[coolDust].noGravity = true;
                 Main.dust[coolDust].velocity *= 0.1f;
                 Main.dust[coolDust].velocity += Projectile.velocity * 0.5f;

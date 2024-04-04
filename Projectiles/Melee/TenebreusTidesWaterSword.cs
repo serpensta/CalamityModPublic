@@ -43,7 +43,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.ToRadians(45f);
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(45f);
 
             // If projectile hasn't hit anything yet
             if (Projectile.ai[0] == 0f)
@@ -51,7 +51,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.localAI[0] += 1f;
                 if (Projectile.localAI[0] > 7f)
                 {
-                    int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.4f);
+                    int water = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.4f);
                     Main.dust[water].noGravity = true;
                     Main.dust[water].velocity *= 0.5f;
                     Main.dust[water].velocity += Projectile.velocity * 0.1f;
@@ -134,7 +134,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 if (Main.rand.NextBool(3))
                 {
-                    int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.4f);
+                    int water = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Water, 0f, 0f, 100, default, 0.4f);
                     Main.dust[water].noGravity = true;
                     Main.dust[water].velocity *= 0.5f;
                     Main.dust[water].velocity += Projectile.velocity * 0.1f;
@@ -166,7 +166,7 @@ namespace CalamityMod.Projectiles.Melee
 
                 Projectile.localAI[0] += 1f;
 
-                int water = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 33, 0f, 0f, 100, default, 0.4f);
+                int water = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 33, 0f, 0f, 100, default, 0.4f);
                 Main.dust[water].noGravity = true;
                 Main.dust[water].velocity *= 0.5f;
                 Main.dust[water].velocity += Projectile.velocity * 0.1f;

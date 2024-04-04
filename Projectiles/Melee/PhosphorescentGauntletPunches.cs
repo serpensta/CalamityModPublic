@@ -83,7 +83,7 @@ namespace CalamityMod.Projectiles.Melee
                 Vector2 topRight = Projectile.Center + Projectile.velocity.RotatedBy(MathHelper.PiOver2) * 40f;
                 foreach (Vector2 spawnPosition in new BezierCurve(topLeft, top, topRight).GetPoints(50))
                 {
-                    Dust sulphurousAcid = Dust.NewDustPerfect(spawnPosition + Projectile.velocity * 16f, (int)CalamityDusts.SulfurousSeaAcid);
+                    Dust sulphurousAcid = Dust.NewDustPerfect(spawnPosition + Projectile.velocity * 16f, (int)CalamityDusts.SulphurousSeaAcid);
                     sulphurousAcid.velocity = Projectile.velocity * 4f;
                     sulphurousAcid.noGravity = true;
                     sulphurousAcid.scale = 1.2f;
@@ -115,7 +115,7 @@ namespace CalamityMod.Projectiles.Melee
             Vector2 rotatedHandPosition = player.RotatedRelativePoint(player.position + handOffset, true);
             for (int i = 0; i < 4; i++)
             {
-                Dust dust = Dust.NewDustDirect(player.Center, 0, 0, (int)CalamityDusts.SulfurousSeaAcid, 0f, 0f, 150, default, 1.3f);
+                Dust dust = Dust.NewDustDirect(player.Center, 0, 0, (int)CalamityDusts.SulphurousSeaAcid, 0f, 0f, 150, default, 1.3f);
                 dust.position = rotatedHandPosition;
                 dust.velocity = Vector2.Zero;
                 dust.noGravity = true;

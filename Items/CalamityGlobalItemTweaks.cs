@@ -78,7 +78,7 @@ namespace CalamityMod.Items
                 { ItemID.CrystalDart, Do(DamageExact(20)) },
                 { ItemID.CrystalSerpent, Do(DamageExact(45)) },
                 { ItemID.CrystalStorm, Do(DamageExact(40)) },
-                { ItemID.CursedArrow, Do(DamageExact(15)) },
+                { ItemID.CursedArrow, Do(DamageExact(14)) },
                 { ItemID.CursedDart, Do(DamageExact(25)) },
                 { ItemID.Cutlass, Do(UseRatio(0.9f), DamageExact(90)) },
                 { ItemID.DaedalusStormbow, Do(DamageExact(30)) },
@@ -162,6 +162,7 @@ namespace CalamityMod.Items
                 { ItemID.MonkStaffT1, Do(TrueMeleeNoSpeed, DamageExact(83)) }, // Sleepy Octopod
                 { ItemID.MonkStaffT2, Do(AutoReuse, TrueMelee, DamageExact(90)) }, // Ghastly Glaive
                 { ItemID.MonkStaffT3, Do(DamageExact(225)) }, // Sky Dragon's Fury
+                { ItemID.MoonlordTurretStaff, Do(DamageExact(50), UseExact(15)) }, //Lunar Portal Staff
                 { ItemID.Muramasa, Do(CritDelta(+20)) },
                 { ItemID.MushroomSpear, Do(AutoReuse, TrueMelee, UseRatio(0.8f), DamageExact(100)) },
                 { ItemID.Musket, Do(PointBlank, DamageExact(22)) },
@@ -487,7 +488,6 @@ namespace CalamityMod.Items
                 { ItemID.FireWhip, autoReuse }, // Firecracker
                 { ItemID.FlinxStaff, Do(AutoReuse, UseExact(35)) },
                 { ItemID.MaceWhip, autoReuse }, // Morning Star
-                { ItemID.MoonlordTurretStaff, Do(UseExact(15)) }, // Lunar Portal Staff
                 { ItemID.OpticStaff, Do(AutoReuse, UseExact(25)) },
                 { ItemID.PirateStaff, Do(AutoReuse, UseExact(25)) },
                 { ItemID.QueenSpiderStaff, Do(UseExact(25)) },

@@ -193,7 +193,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             Player player = Main.player[npc.target];
 
             float enrageScale = bossRush ? 1f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 2f;
@@ -775,7 +775,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             Player player = Main.player[npc.target];
 
             float enrageScale = bossRush ? 1f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 2f;
@@ -1094,7 +1094,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             Player player = Main.player[npc.target];
 
             float enrageScale = bossRush ? 1f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 2f;

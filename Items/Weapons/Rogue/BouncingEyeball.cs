@@ -9,7 +9,6 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class BouncingEyeball : RogueWeapon
     {
-        public const int BaseDamage = 16;
         public override void SetStaticDefaults()
         {
         }
@@ -17,7 +16,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             Item.width = 26;
             Item.height = 26;
-            Item.damage = BaseDamage;
+            Item.damage = 16;
             Item.useTime = 23;
             Item.useAnimation = 23;
             Item.useStyle = ItemUseStyleID.Swing;

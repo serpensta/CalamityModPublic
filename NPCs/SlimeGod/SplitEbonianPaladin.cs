@@ -785,7 +785,7 @@ namespace CalamityMod.NPCs.SlimeGod
                 NPC.position.Y = NPC.position.Y - (float)(NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int corruptionDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
+                    int corruptionDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
                     Main.dust[corruptionDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -795,10 +795,10 @@ namespace CalamityMod.NPCs.SlimeGod
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int corruptionDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 3f);
+                    int corruptionDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 3f);
                     Main.dust[corruptionDust2].noGravity = true;
                     Main.dust[corruptionDust2].velocity *= 5f;
-                    corruptionDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
+                    corruptionDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
                     Main.dust[corruptionDust2].velocity *= 2f;
                 }
             }

@@ -741,7 +741,7 @@ namespace CalamityMod.NPCs.SlimeGod
                 NPC.position.Y = NPC.position.Y - (float)(NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int crimDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
+                    int crimDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
                     Main.dust[crimDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -751,10 +751,10 @@ namespace CalamityMod.NPCs.SlimeGod
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int crimDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 3f);
+                    int crimDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 3f);
                     Main.dust[crimDust2].noGravity = true;
                     Main.dust[crimDust2].velocity *= 5f;
-                    crimDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
+                    crimDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
                     Main.dust[crimDust2].velocity *= 2f;
                 }
             }

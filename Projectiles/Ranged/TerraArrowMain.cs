@@ -12,7 +12,6 @@ namespace CalamityMod.Projectiles.Ranged
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
 
-        private bool initialized = false;
         private bool hitDirect = false;
         public override void SetDefaults()
         {
