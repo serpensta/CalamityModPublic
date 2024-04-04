@@ -154,7 +154,7 @@ namespace CalamityMod.Projectiles.Ranged
                     SquishyLightParticle exoEnergy = new(position, (Projectile.velocity * 3).RotatedByRandom(0.4f) * Main.rand.NextFloat(0.3f, 1.6f), 0.9f, sparkColor, 60);
                     GeneralParticleHandler.SpawnParticle(exoEnergy);
                 }
-                SoundEngine.PlaySound(DeadSunsWind.Shoot with { Volume = 1.9f }, Owner.MountedCenter);
+                SoundEngine.PlaySound(DeadSunsWind.ShootSound with { Volume = 1.9f }, Owner.MountedCenter);
             }
 
             Dust dust = Dust.NewDustPerfect(position, 263, (Projectile.velocity * 10).RotatedByRandom(0.6f) * Main.rand.NextFloat(0.3f, 1.6f));
@@ -223,7 +223,7 @@ namespace CalamityMod.Projectiles.Ranged
                 dust.scale = Main.rand.NextFloat(1.3f, 1.8f);
                 dust.color = sparkColor;
             }
-            SoundEngine.PlaySound(HalleysInferno.Shoot with { Volume = 0.4f }, Owner.MountedCenter);
+            SoundEngine.PlaySound(HalleysInferno.ShootSound with { Volume = 0.4f }, Owner.MountedCenter);
 
             int rightClickDamage = (int)(0.5f * damage);
             Projectile.NewProjectile(source, position, velocity, ProjectileType<ExoFlareCluster>(), rightClickDamage, knockback, Projectile.owner);
