@@ -38,7 +38,7 @@ namespace CalamityMod.Projectiles.Boss
         {
             if (Projectile.ai[2] >= 3)
             {
-                if (Projectile.timeLeft == 1200)
+                if (Projectile.timeLeft > 180)
                 {
                     shootVel = Projectile.velocity * 2;
                     Projectile.timeLeft = 180;
@@ -48,25 +48,25 @@ namespace CalamityMod.Projectiles.Boss
                     Vector2 randPos = Main.rand.NextVector2Circular(30, 30);
                     for (int i = 0; i < 2; i++)
                     {
-                        Particle bloom = new BloomParticle(Projectile.Center + randPos, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.5f), 1.55f, 0f, 10, false);
+                        Particle bloom = new CustomPulse(Projectile.Center + randPos, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.5f), "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1.1f, 0f, 14);
                         GeneralParticleHandler.SpawnParticle(bloom);
                     }
-                    Particle bloom2 = new BloomParticle(Projectile.Center + randPos, Vector2.Zero, Color.White, 1.4f, 0f, 10, false);
+                    Particle bloom2 = new CustomPulse(Projectile.Center + randPos, Vector2.Zero, Color.White, "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1f, 0f, 14);
                     GeneralParticleHandler.SpawnParticle(bloom2);
-                    Projectile.velocity *= 0.995f;
+                    Projectile.velocity *= 0.99f;
                 }
                 
                 if (Projectile.timeLeft >= 2 && Time % 3 == 0)
                 {
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
                     SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.55f }, Projectile.Center);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), shootVel.RotatedByRandom(0.4) * Main.rand.NextFloat(0.5f, 1.1f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.4f)).RotatedByRandom(0.3f) * Main.rand.NextFloat(0.4f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
                 }
                 if (Projectile.timeLeft == 1)
                 {
-                    int points = 15;
+                    int points = 25;
                     float radians = MathHelper.TwoPi / points;
-                    Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
+                    Vector2 spinningPoint = Vector2.Normalize(new Vector2(-4f, -4f));
                     for (int b = 0; b < 2; b++)
                     {
                         float rotRando = Main.rand.NextFloat(0.1f, 2.5f);
@@ -82,7 +82,7 @@ namespace CalamityMod.Projectiles.Boss
                     }
                 }
 
-                Vector2 vel = new Vector2(8, 8).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
+                Vector2 vel = new Vector2(14, 14).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
                 Dust cataclysmdust2 = Dust.NewDustPerfect(Projectile.Center + vel * 2, 279, vel);
                 cataclysmdust2.noGravity = true;
                 cataclysmdust2.scale = Main.rand.NextFloat(0.9f, 1.2f);
@@ -95,13 +95,13 @@ namespace CalamityMod.Projectiles.Boss
                     Projectile.extraUpdates = 2;
                 }
                 else
-                    Projectile.velocity *= 1.004f;
+                    Projectile.velocity *= 1.0045f;
 
                 if (Projectile.ai[2] == 0)
                 {
                     Projectile.scale = 0.75f;
-                    if (Projectile.timeLeft >= 1200)
-                        Projectile.timeLeft = 500;
+                    if (Projectile.timeLeft > 240)
+                        Projectile.timeLeft = 240;
                 }
 
                 if (Projectile.velocity.X < 0f)
