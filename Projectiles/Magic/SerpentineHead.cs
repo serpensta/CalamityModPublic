@@ -149,7 +149,7 @@ namespace CalamityMod.Projectiles.Magic
             }
             if (Projectile.velocity.X != 0f || Projectile.velocity.Y != 0f)
             {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             }
             if (Projectile.velocity.Y > 16f)
             {

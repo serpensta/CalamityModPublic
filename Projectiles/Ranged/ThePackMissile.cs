@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void AI()
         {
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+            Projectile.rotation = Projectile.velocity.ToRotation();
             Vector2 targetCenter = Projectile.Center;
             float minTargetDistance = 2500f;
             bool homeIn = false;

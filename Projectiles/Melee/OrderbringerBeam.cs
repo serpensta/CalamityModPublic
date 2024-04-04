@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 0.785f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
 
             if (Projectile.ai[1] == 0f)
             {

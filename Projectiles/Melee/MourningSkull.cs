@@ -53,7 +53,7 @@ namespace CalamityMod.Projectiles.Melee
             else
             {
                 Projectile.spriteDirection = 1;
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+                Projectile.rotation = Projectile.velocity.ToRotation();
             }
 
             if (Projectile.ai[0] >= 0f && Projectile.ai[0] < 200f)
@@ -100,7 +100,7 @@ namespace CalamityMod.Projectiles.Melee
                 else
                 {
                     Projectile.spriteDirection = 1;
-                    Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+                    Projectile.rotation = Projectile.velocity.ToRotation();
                 }
 
                 int eightConst = 8;

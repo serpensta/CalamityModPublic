@@ -45,7 +45,7 @@ namespace CalamityMod.Projectiles.Rogue
             else
                 Projectile.frame = 0;
 
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, lunarEnhance ? 300f : 150f, lunarEnhance ? 12f : 8f, 20f);
             if (Main.rand.NextBool(6)&& lunarEnhance)
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Vortex, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);

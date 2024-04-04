@@ -29,7 +29,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void AI()
         {
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.ToRadians(45);
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(45);
             Lighting.AddLight(Projectile.Center, 0.25f, 0.2f, 0f);
             if (Projectile.wet && !Projectile.lavaWet)
             {

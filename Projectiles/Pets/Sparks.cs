@@ -34,7 +34,6 @@ namespace CalamityMod.Projectiles.Pets
 
         private void Pickup()
         {
-            int defaultItemGrabRange = 38;
             Player player = Main.player[Projectile.owner];
 
             for (int itemIndex = 0; itemIndex < Main.maxItems; itemIndex++)

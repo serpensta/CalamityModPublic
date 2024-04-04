@@ -119,18 +119,7 @@ namespace CalamityMod.Projectiles.Summon
             {
                 Projectile.Kill();
             }
-            if ((double)Math.Abs(Projectile.velocity.X) > 0.2)
-            {
-                Projectile.rotation = Projectile.direction;
-            }
-            if (Projectile.velocity.X < 0f)
-            {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
-            }
-            else
-            {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
-            }
+            Projectile.rotation = Projectile.velocity.ToRotation();
             return false;
         }
 
@@ -744,7 +733,7 @@ namespace CalamityMod.Projectiles.Summon
             {
                 Projectile.tileCollide = true;
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
             Projectile.velocity *= boomerSwarm ? 1.03f : 1.02f;
             int pscState = (int)(Main.dayTime ? Providence.BossMode.Day : Providence.BossMode.Night);
@@ -1027,10 +1016,10 @@ namespace CalamityMod.Projectiles.Summon
             }
             else
             {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 2.355f;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(135f);
                 if (Projectile.spriteDirection == -1)
                 {
-                    Projectile.rotation -= 1.57f;
+                    Projectile.rotation -= MathHelper.PiOver2;
                 }
 
                 float num535 = Projectile.position.X;
@@ -1135,7 +1124,7 @@ namespace CalamityMod.Projectiles.Summon
             {
                 Lighting.AddLight(Projectile.Center, newColor2.ToVector3() * 0.5f);
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
             int num3;
             for (int num979 = 0; num979 < 2; num979 = num3 + 1)
             {
@@ -1928,18 +1917,7 @@ namespace CalamityMod.Projectiles.Summon
             {
                 Projectile.tileCollide = true;
             }
-            if ((double)Math.Abs(Projectile.velocity.X) > 0.2)
-            {
-                Projectile.rotation = Projectile.direction;
-            }
-            if (Projectile.velocity.X < 0f)
-            {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
-            }
-            else
-            {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
-            }
+            Projectile.rotation = Projectile.velocity.ToRotation();
             return false;
         }
 

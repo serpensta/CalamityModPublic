@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Melee
                     Projectile.Kill();
             }
             if (Projectile.ai[0] < 30f)
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.PiOver2;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
 
         public override void OnKill(int timeLeft)

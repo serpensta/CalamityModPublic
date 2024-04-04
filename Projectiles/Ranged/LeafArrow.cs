@@ -50,7 +50,7 @@ namespace CalamityMod.Projectiles.Ranged
                     Projectile.localAI[0] = 0f;
                 }
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 3.14f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.Pi;
             if (Projectile.localAI[1] <= 30f)
             {
                 Projectile.localAI[1] += 1f;

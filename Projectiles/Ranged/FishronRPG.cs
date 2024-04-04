@@ -36,7 +36,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.ai[1] = 1f;
                 SoundEngine.PlaySound(SoundID.Item92, Projectile.position);
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3)
             {
                 Projectile.tileCollide = false;

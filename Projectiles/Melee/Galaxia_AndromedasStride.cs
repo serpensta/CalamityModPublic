@@ -198,7 +198,7 @@ namespace CalamityMod.Projectiles.Melee
 
             if (Owner.direction != 1)
             {
-                Owner.itemRotation -= 3.14f;
+                Owner.itemRotation -= MathHelper.Pi;
             }
 
             Owner.itemRotation = MathHelper.WrapAngle(Owner.itemRotation);

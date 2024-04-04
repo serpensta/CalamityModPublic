@@ -63,7 +63,7 @@ namespace CalamityMod.Projectiles.Summon
                 dust.velocity *= 0f;
                 dust.scale = 0.5f;
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - MathHelper.PiOver2;
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
             float projX = Projectile.position.X;
             float projY = Projectile.position.Y;
             float attackDistance = 100000f;

@@ -48,7 +48,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 Projectile.alpha = 0;
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             float projX = Projectile.position.X;
             float projY = Projectile.position.Y;
             float homingRange = 100000f;

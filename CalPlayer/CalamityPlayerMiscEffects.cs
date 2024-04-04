@@ -1638,8 +1638,7 @@ namespace CalamityMod.CalPlayer
 
                 for (int j = 0; j < 2; j++)
                 {
-                    int green = Dust.NewDust(new Vector2(Player.position.X, Player.position.Y), Player.width, Player.height, DustID.ChlorophyteWeapon, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 2f);
-                    Dust dust = Main.dust[green];
+                    Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustID.ChlorophyteWeapon, 0f, 0f, 100, new Color(Main.DiscoR, 203, 103), 2f);
                     dust.position.X += (float)Main.rand.Next(-20, 21);
                     dust.position.Y += (float)Main.rand.Next(-20, 21);
                     dust.velocity *= 0.9f;

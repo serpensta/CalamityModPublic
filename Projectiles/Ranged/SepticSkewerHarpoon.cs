@@ -81,7 +81,7 @@ namespace CalamityMod.Projectiles.Ranged
                 {
                     Projectile.ai[0] = 1f;
                 }
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
                 Projectile.ai[1] += 1f;
                 if (Projectile.ai[1] > 5f)
                 {
@@ -100,7 +100,7 @@ namespace CalamityMod.Projectiles.Ranged
             else if (Projectile.ai[0] == 1f)
             {
                 Projectile.tileCollide = false;
-                Projectile.rotation = (float)Math.Atan2((double)yDist, (double)xDist) - 1.57f;
+                Projectile.rotation = (float)Math.Atan2((double)yDist, (double)xDist) - MathHelper.PiOver2;
                 float returnSpeed = 20f;
                 if (playerDistance < 50f)
                 {

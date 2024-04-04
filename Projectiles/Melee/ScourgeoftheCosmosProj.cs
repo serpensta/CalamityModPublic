@@ -51,7 +51,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.alpha -= 50;
             if (Projectile.alpha < 0)
                 Projectile.alpha = 0;
-            Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 0.785f;
+            Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathHelper.PiOver4;
             Projectile.ai[0] += 1f;
             if (Projectile.ai[0] >= 180f)
             {

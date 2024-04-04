@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Typeless
             if (Projectile.alpha > 0)
                 Projectile.alpha -= 15;
 
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
             if (Projectile.timeLeft > 285)
                 return;

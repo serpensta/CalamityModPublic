@@ -25,7 +25,7 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void AI()
         {
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.ToRadians(45f);
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(45f);
 
             Projectile.velocity.Y += 0.1f;
             if (Projectile.velocity.Y > 16f)

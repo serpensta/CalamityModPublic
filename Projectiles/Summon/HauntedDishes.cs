@@ -234,7 +234,7 @@ namespace CalamityMod.Projectiles.Summon
                     Projectile.spriteDirection = 1;
                 else if (Projectile.velocity.X < -0.5f)
                     Projectile.spriteDirection = -1;
-                Projectile.rotation = Projectile.spriteDirection != 1 ? (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 3.14f : (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+                Projectile.rotation = Projectile.spriteDirection != 1 ? Projectile.velocity.ToRotation() + MathHelper.Pi : Projectile.velocity.ToRotation();
             }
             else
             {

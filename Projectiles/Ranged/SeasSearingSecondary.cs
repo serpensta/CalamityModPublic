@@ -28,7 +28,7 @@ namespace CalamityMod.Projectiles.Ranged
                 Projectile.width = (int)(16f * Projectile.scale);
                 Projectile.height = (int)(32f * Projectile.scale);
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > 4f)
             {

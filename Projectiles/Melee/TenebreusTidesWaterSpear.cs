@@ -61,7 +61,7 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.frame = 0;
             }
 
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+            Projectile.rotation = Projectile.velocity.ToRotation();
 
             // If projectile hasn't hit anything yet
             if (Projectile.ai[0] == 0f)

@@ -54,7 +54,7 @@ namespace CalamityMod.Projectiles.Magic
             else
             {
                 Projectile.spriteDirection = 1;
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+                Projectile.rotation = Projectile.velocity.ToRotation();
             }
             Lighting.AddLight(Projectile.Center, 0f, 0.1f, 0.7f);
             if (Main.player[Projectile.owner].active && !Main.player[Projectile.owner].dead)

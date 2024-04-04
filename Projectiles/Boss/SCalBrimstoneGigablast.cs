@@ -11,10 +11,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.Audio;
-using CalamityMod.NPCs.SupremeCalamitas;
-using CalamityMod.NPCs;
 using CalamityMod.Particles;
 
 namespace CalamityMod.Projectiles.Boss
