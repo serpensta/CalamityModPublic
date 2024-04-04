@@ -42,15 +42,12 @@ namespace CalamityMod.Projectiles.Ranged
         {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
-            Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 226 : 303, new Vector2(Projectile.velocity.X * Main.rand.NextFloat(-0.1f, 0.1f), Projectile.velocity.Y * Main.rand.NextFloat(-0.1f, 0.1f)));
+            Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 223 : 252, new Vector2(Projectile.velocity.X * Main.rand.NextFloat(-0.1f, 0.1f), Projectile.velocity.Y * Main.rand.NextFloat(-0.1f, 0.1f)));
             dust.noGravity = true;
-            if (dust.type == 226)
-                dust.scale = Main.rand.NextFloat(0.45f, 0.7f);
+            if (dust.type == 223)
+                dust.scale = Main.rand.NextFloat(0.4f, 0.66f);
             else
-            {
-                dust.color = Color.Cyan;
-                dust.scale = Main.rand.NextFloat(0.6f, 0.85f);
-            }
+                dust.scale = Main.rand.NextFloat(0.65f, 0.9f);
         }
         // This projectile is always fullbright.
         public override Color? GetAlpha(Color lightColor)

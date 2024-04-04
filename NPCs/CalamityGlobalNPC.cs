@@ -5102,13 +5102,13 @@ namespace CalamityMod.NPCs
                 veriumDoomTimer--;
             if (veriumDoomTimer == 0 && veriumDoomMarked)
             {
-                for (int d = 0; d < 20; d++)
+                for (int d = 0; d < 14 + veriumDoomStacks; d++)
                 {
                     Particle sparks = new LineParticle(npc.Center, new Vector2(Main.rand.NextFloat(-9f, 9f), Main.rand.NextFloat(-9f, 9f)), false, 45, 0.9f, Main.rand.NextBool() ? Color.Cyan : Color.SkyBlue);
                     GeneralParticleHandler.SpawnParticle(sparks);
                 }
-                Particle boop = new CustomPulse(npc.Center, Vector2.Zero, new Color(206, 95, 212), "CalamityMod/Particles/Sparkle2", Vector2.One, Main.rand.NextFloat(-5f, 5f), 0.75f + (float)(0.04 * veriumDoomStacks), 1.5f + (float)(0.08 * veriumDoomStacks), 40);
-                GeneralParticleHandler.SpawnParticle(boop);
+                //Particle boop = new CustomPulse(npc.Center, Vector2.Zero, new Color(233, 95, 212), "CalamityMod/Particles/Sparkle2", Vector2.One, Main.rand.NextFloat(-5f, 5f), 0.8f + (float)(0.04 * veriumDoomStacks), 1.6f + (float)(0.08 * veriumDoomStacks), 40);
+                //GeneralParticleHandler.SpawnParticle(boop);
 
                 SoundEngine.PlaySound(new("CalamityMod/Sounds/NPCHit/CryogenHit", 3) { Volume = 0.6f}, npc.Center);
                 Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), 100 + (15 * veriumDoomStacks), 0, Main.myPlayer, 200f);
