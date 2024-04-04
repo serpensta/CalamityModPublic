@@ -1,9 +1,12 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using System;
+using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using CalamityMod.Particles;
 using Terraria.ModLoader;
+using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -11,6 +14,7 @@ namespace CalamityMod.Projectiles.Boss
     {
         public new string LocalizationCategory => "Projectiles.Boss";
         public ref float Time => ref Projectile.ai[0];
+        public bool dashSlashExplode = false;
 
         public override void SetStaticDefaults()
         {
@@ -41,8 +45,80 @@ namespace CalamityMod.Projectiles.Boss
             Projectile.frame = Projectile.frameCounter / 7 % Main.projFrames[Projectile.type];
 
             // Fade in and handle visuals.
-            Projectile.Opacity = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true) * Utils.GetLerpValue(1500f, 1492f, Projectile.timeLeft, true);
-            Projectile.spriteDirection = (Projectile.velocity.X > 0f).ToDirectionInt();
+            if (Projectile.ai[2] < 4)
+                Projectile.Opacity = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true) * Utils.GetLerpValue(1500f, 1492f, Projectile.timeLeft, true);
+            else if (Projectile.timeLeft == 1499)
+            {
+                Projectile.timeLeft = 180;
+                Projectile.Opacity = 1f;
+            }
+            if (Projectile.velocity.X < 0f)
+            {
+                Projectile.spriteDirection = -1;
+                Projectile.rotation = (float)Math.Atan2(-Projectile.velocity.Y, -Projectile.velocity.X);
+            }
+            else
+            {
+                Projectile.spriteDirection = 1;
+                Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
+            }
+            if (Projectile.ai[2] >= 1 && Projectile.ai[2] < 3)
+            {
+                if (Projectile.ai[2] == 1)
+                    Projectile.extraUpdates = 2;
+                else
+                    Projectile.velocity *= 1.004f;
+            }
+            // Acceleration slash
+            else if (Projectile.ai[2] == 3)
+            {
+                Projectile.extraUpdates = 5;
+                if (Time > 30)
+                    Projectile.velocity *= 1.015f;
+                if (Main.rand.NextBool(3))
+                {
+                    Dust catastrophedust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(50, 50) - Projectile.velocity.SafeNormalize(Vector2.UnitY) * 8.5f, 66, -Projectile.velocity * Main.rand.NextFloat(0.2f, 1.2f));
+                    catastrophedust.noGravity = true;
+                    catastrophedust.scale = Main.rand.NextFloat(0.5f, 0.7f);
+                    catastrophedust.color = Color.DeepSkyBlue;
+                }
+            }
+            // Dash of slashes
+            else if (Projectile.ai[2] >= 4)
+            {
+                Projectile.extraUpdates = 0;
+                if (Projectile.timeLeft == 1500)
+                {
+                    Projectile.timeLeft = 30 - (int)(Projectile.ai[2] - 4);
+                    SparkParticle spark1 = new SparkParticle(Projectile.Center, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
+                    GeneralParticleHandler.SpawnParticle(spark1);
+                    SparkParticle spark2 = new SparkParticle(Projectile.Center + Projectile.velocity * 50, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
+                    GeneralParticleHandler.SpawnParticle(spark2);
+                    SparkParticle spark3 = new SparkParticle(Projectile.Center - Projectile.velocity * 50, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
+                    GeneralParticleHandler.SpawnParticle(spark3);
+                }
+                else if (Projectile.timeLeft == 1)
+                {
+                    dashSlashExplode = true;
+                    VoidSparkParticle spark = new VoidSparkParticle(Projectile.Center, Projectile.velocity, false, 9, 1.3f, Color.Cyan * 0.7f);
+                    GeneralParticleHandler.SpawnParticle(spark);
+                    if (Projectile.ai[2] % 5 == 0)
+                    {
+                        SoundStyle charge = new("CalamityMod/Sounds/Item/ExobladeBeamSlash");
+                        SoundEngine.PlaySound(charge with { Volume = 0.65f, Pitch = 0.8f }, Projectile.Center);
+                    }
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Vector2 vel = new Vector2(14, 14).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
+                        Dust catastrophedust = Dust.NewDustPerfect(Projectile.Center + vel * 2, 279, vel);
+                        catastrophedust.noGravity = true;
+                        catastrophedust.scale = Main.rand.NextFloat(1.2f, 1.8f);
+                        catastrophedust.color = Color.DeepSkyBlue;
+                    }
+                }
+            }
+            else
+                Projectile.velocity *= 1.003f;
             Time++;
 
             // Emit light.
@@ -71,12 +147,13 @@ namespace CalamityMod.Projectiles.Boss
             return false;
         }
 
-        public override bool CanHitPlayer(Player target) => Projectile.Opacity >= 1f;
+        public override bool CanHitPlayer(Player target) => Projectile.Opacity >= 1f && Projectile.ai[2] < 4 || dashSlashExplode && Projectile.ai[2] >= 4;
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            if (info.Damage <= 0 || Projectile.Opacity != 1f)
+            if (info.Damage <= 0 || Projectile.Opacity != 1f && Projectile.ai[2] < 4 || !dashSlashExplode && Projectile.ai[2] >= 4)
                 return;
         }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, (Projectile.ai[2] >= 4 ? 140 : 50), targetHitbox);
     }
 }

@@ -14,6 +14,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities.Terraria.Utilities;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -28,17 +29,21 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public const int HorizontalOffset = 750;
 
-        public const int PunchCounterLimit = 60;
+        public const int PunchCounterLimit = 50;
 
         public const int DartBurstCounterLimit = 300;
 
+        public const int PreBigAttackPause = 50;
         public const float NormalBrothersDR = 0.25f;
+        public int BigAttackLimit = 4;
+        public bool targetSide = false;
 
         public Player Target => Main.player[NPC.target];
         public ref float PunchCounter => ref NPC.ai[1];
         public ref float DartBurstCounter => ref NPC.ai[2];
         public ref float ElapsedVerticalDistance => ref NPC.ai[3];
         public ref float AttackDelayTimer => ref NPC.localAI[0];
+        public ref float BigAttackTimer => ref NPC.localAI[1];
 
         public override void SetStaticDefaults()
         {
@@ -74,6 +79,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.DeathSound = SupremeCalamitas.BrotherDeath;
             NPC.Calamity().VulnerableToHeat = false;
             NPC.Calamity().VulnerableToCold = true;
+            NPC.localAI[1] = 300;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -125,8 +131,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void AI()
         {
+            bool isBroDead = NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? true : false;
+
             // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
             NPC.damage = 0;
+
+            NPC.direction = NPC.spriteDirection;
+
+            if (BigAttackTimer > 0)
+                BigAttackTimer--;
 
             // Set the whoAmI variable.
             CalamityGlobalNPC.SCalCataclysm = NPC.whoAmI;
@@ -168,43 +181,75 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             if (!NPC.WithinRange(Target.Center, CalamityGlobalNPC.CatchUpDistance200Tiles))
                 NPC.TargetClosest();
 
-            float acceleration = 1.5f;
+            float acceleration = Utils.Remap(AttackDelayTimer, 0f, 120f, 2f, 4f);
             int verticalSpeed = (int)Math.Round(MathHelper.Lerp(2f, 6.5f, 1f - totalLifeRatio));
 
-            // Move up.
-            if (ElapsedVerticalDistance < HorizontalOffset)
-            {
-                ElapsedVerticalDistance += verticalSpeed;
-                VerticalOffset -= verticalSpeed;
-            }
+            // Buffs for the big attack when the other brother dies
+            if (isBroDead && BigAttackTimer > 400)
+                BigAttackTimer = 400;
 
-            // Move down.
-            else if (ElapsedVerticalDistance < HorizontalOffset * 2)
-            {
-                ElapsedVerticalDistance += verticalSpeed;
-                VerticalOffset += verticalSpeed;
-            }
+            if (isBroDead && BigAttackTimer > 0 && BigAttackLimit < 19)
+                BigAttackLimit = 19;
 
-            // Reset the vertical distance once a single period has concluded.
+            if (BigAttackTimer > PreBigAttackPause)
+            {
+                // Move up.
+                if (ElapsedVerticalDistance < HorizontalOffset)
+                {
+                    ElapsedVerticalDistance += verticalSpeed;
+                    VerticalOffset -= verticalSpeed;
+                }
+
+                // Move down.
+                else if (ElapsedVerticalDistance < HorizontalOffset * 2)
+                {
+                    ElapsedVerticalDistance += verticalSpeed;
+                    VerticalOffset += verticalSpeed;
+                }
+
+                // Reset the vertical distance once a single period has concluded.
+                else
+                    ElapsedVerticalDistance = 0f;
+
+                // Hover to the side of the target.
+                Vector2 idealVelocity = NPC.SafeDirectionTo(Target.Center + new Vector2(HorizontalOffset * (targetSide ? -1 : 1), VerticalOffset)) * Utils.Remap(AttackDelayTimer, 60f, 120f, 0f, 50f);
+                if (PunchCounter <= PunchCounterLimit * 0.3f)
+                {
+                    if (AttackDelayTimer == 120 && Main.rand.NextBool())
+                    {
+                        for (int i = 0; i < 6; i++)
+                        {
+                            Dust cataclysmdust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.5f, 66, -NPC.velocity * Main.rand.NextFloat(0.2f, 1.2f));
+                            cataclysmdust.noGravity = true;
+                            cataclysmdust.scale = Main.rand.NextFloat(0.5f, 0.7f);
+                            cataclysmdust.color = Color.Red;
+                        }
+                    }
+                    NPC.SimpleFlyMovement(idealVelocity, acceleration);
+                }
+                else
+                    NPC.velocity *= 0.85f;
+            }
             else
-                ElapsedVerticalDistance = 0f;
+                NPC.velocity *= 0.9f;
 
             // Reset rotation to zero.
             NPC.rotation = 0f;
 
-            // Hover to the side of the target.
-            Vector2 idealVelocity = NPC.SafeDirectionTo(Target.Center + new Vector2(HorizontalOffset, VerticalOffset)) * 60f;
-            NPC.SimpleFlyMovement(idealVelocity, acceleration);
+            // Set direction.
+            NPC.spriteDirection = (Target.Center.X > NPC.Center.X).ToDirectionInt();
 
             // Have a small delay prior to shooting projectiles.
             if (AttackDelayTimer < 120f)
                 AttackDelayTimer++;
 
             // Handle projectile shots.
-            else
+            else if (BigAttackTimer > PreBigAttackPause)
             {
                 // Shoot fists.
-                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1f, 2.5f, 1f - totalLifeRatio);
+                float fireVelocity = isBroDead ? -8.8f : -8;
+                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1f, 2.5f, 1f - totalLifeRatio) * (isBroDead ? 1.2f : 1);
+                
                 PunchCounter += fireRate;
                 if (PunchCounter >= PunchCounterLimit)
                 {
@@ -214,42 +259,91 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     int damage = NPC.GetProjectileDamage(type);
                     if (bossRush)
                         damage /= 2;
+                    
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Vector2 fistSpawnPosition = NPC.Center + Vector2.UnitX * -74f;
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, Vector2.UnitX * -8f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt());
+                        Vector2 fistSpawnPosition = NPC.Center + Vector2.UnitX * 74f * NPC.direction;
+                        if (isBroDead)
+                        {
+                            if (PunchingFromRight)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center) * 16f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                            else
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(0.55) * 16f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(-0.55) * 16f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                            }
+                        }
+                        else
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center) * 16f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
                     }
                     PunchingFromRight = !PunchingFromRight;
                     CurrentFrame = 0;
                 }
-
-                // Shoot dart spreads. (Can shoot faster and more darts on death)
-                fireRate = BossRushEvent.BossRushActive ? 3f : MathHelper.Lerp(1f, death ? 3.5f : 3f, 1f - totalLifeRatio);
-                DartBurstCounter += fireRate;
-                if (DartBurstCounter >= DartBurstCounterLimit)
+            }
+            // Pause before attacking
+            else if (BigAttackTimer > 0)
+            {
+                if (BigAttackTimer == PreBigAttackPause)
                 {
-                    DartBurstCounter = 0f;
-                    SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, NPC.Center);
+                    SoundStyle charge = new("CalamityMod/Sounds/Custom/Ravager/RavagerPillarSummon");
+                    SoundEngine.PlaySound(charge with { Volume = 0.85f, Pitch = 0.6f }, NPC.Center);
+                }
+                for (int i = 0; i < 7; i++)
+                {
+                    Vector2 vel = new Vector2(14, 14).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
+                    Dust cataclysmdust = Dust.NewDustPerfect(NPC.Center + vel * 2, 279, vel);
+                    cataclysmdust.noGravity = true;
+                    cataclysmdust.scale = Main.rand.NextFloat(1.2f, 1.8f);
+                    cataclysmdust.color = Color.Red;
+                }
 
-                    int type = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
+                BigAttackTimer--;
+            }
+            // Big attack
+            else
+            {
+                // Shoot fists.
+                float fireRate = (BossRushEvent.BossRushActive ? 3.5f : MathHelper.Lerp(2f, 5f, 1f - totalLifeRatio) * (isBroDead ? 1.2f : 1)) + (isBroDead ? 19 - BigAttackLimit * 0.1f : 0);
+                if (isBroDead && BigAttackLimit == 0)
+                    fireRate = 1f;
+                PunchCounter += fireRate;
+                if (PunchCounter >= PunchCounterLimit)
+                {
+                    PunchCounter = 0f;
+                    SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.4f }, NPC.Center);
+
+                    int type = ModContent.ProjectileType<SupremeCataclysmFist>();
                     int damage = NPC.GetProjectileDamage(type);
                     if (bossRush)
                         damage /= 2;
-                    int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
-                    float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = Main.zenithWorld ? 6f : 2.5f;
-                    Vector2 spinningPoint = new Vector2(0f, -velocity);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+
+                    if (BigAttackLimit == 0 && isBroDead)
                     {
-                        for (int k = 0; k < totalProjectiles; k++)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f, 2);
+                            Vector2 fistSpawnPosition = NPC.Center + Vector2.UnitX * 74f * NPC.direction;
+                            SoundStyle charge = new("CalamityMod/Sounds/NPCKilled/RavagerLimbLoss", 3);
+                            SoundEngine.PlaySound(charge with { Volume = 0.65f, Pitch = -0.7f }, NPC.Center);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 3);
                         }
                     }
-
-                    for (int i = 0; i < 6; i++)
-                        Dust.NewDust(NPC.position + NPC.velocity, NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f);
+                    else if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 fistSpawnPosition = NPC.Center;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 1);
+                    }
+                    PunchingFromRight = !PunchingFromRight;
+                    CurrentFrame = 0;
+                    if (BigAttackLimit > 0)
+                        BigAttackLimit--;
+                    else
+                    {
+                        BigAttackTimer = 600;
+                        AttackDelayTimer = 0;
+                        BigAttackLimit = 4;
+                        if (isBroDead)
+                            targetSide = !targetSide;
+                    }
                 }
             }
         }

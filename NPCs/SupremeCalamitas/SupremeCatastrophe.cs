@@ -6,6 +6,7 @@ using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -14,6 +15,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 
 namespace CalamityMod.NPCs.SupremeCalamitas
 {
@@ -24,13 +26,19 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public int CurrentFrame;
         public bool SlashingFromRight;
         public const int HorizontalOffset = 750;
-        public const int SlashCounterLimit = 45;
+        public const int SlashCounterLimit = 50;
         public const int DartBurstCounterLimit = 300;
+        public const int PreBigAttackPause = 50;
+        public int BigAttackLimit = 4;
+        public bool targetSide = false;
+        public int dashAttackTimer = 20;
+        public int dashes = 0;
         public Player Target => Main.player[NPC.target];
         public ref float SlashCounter => ref NPC.ai[1];
         public ref float DartBurstCounter => ref NPC.ai[2];
         public ref float ElapsedVerticalDistance => ref NPC.ai[3];
         public ref float AttackDelayTimer => ref NPC.localAI[0];
+        public ref float BigAttackTimer => ref NPC.localAI[1];
 
         public override void SetStaticDefaults()
         {
@@ -66,6 +74,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.DeathSound = SupremeCalamitas.BrotherDeath;
             NPC.Calamity().VulnerableToHeat = false;
             NPC.Calamity().VulnerableToCold = true;
+            NPC.localAI[1] = 600;
+            AttackDelayTimer = 60;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -118,8 +128,15 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void AI()
         {
+            bool isBroDead = NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? true : false;
+
             // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
             NPC.damage = 0;
+
+            NPC.direction = NPC.spriteDirection;
+
+            if (BigAttackTimer > 0)
+                BigAttackTimer--;
 
             // Set the whoAmI variable.
             CalamityGlobalNPC.SCalCatastrophe = NPC.whoAmI;
@@ -161,26 +178,70 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             if (!NPC.WithinRange(Target.Center, CalamityGlobalNPC.CatchUpDistance200Tiles))
                 NPC.TargetClosest();
 
-            float acceleration = 1.5f;
+            float acceleration = Utils.Remap(AttackDelayTimer, 0f, 120f, 2f, 4f);
             int verticalSpeed = (int)Math.Round(MathHelper.Lerp(2f, 6.5f, 1f - totalLifeRatio));
 
-            // Move down.
-            if (ElapsedVerticalDistance < HorizontalOffset)
-            {
-                ElapsedVerticalDistance += verticalSpeed;
-                VerticalOffset += verticalSpeed;
-            }
+            // Buffs for the big attack when the other brother dies
+            if (isBroDead && BigAttackTimer > 400)
+                BigAttackTimer = 400;
 
-            // Move up.
-            else if (ElapsedVerticalDistance < HorizontalOffset * 2)
-            {
-                ElapsedVerticalDistance += verticalSpeed;
-                VerticalOffset -= verticalSpeed;
-            }
+            if (isBroDead && BigAttackTimer > 0 && BigAttackLimit < 9)
+                BigAttackLimit = 9;
 
-            // Reset the vertical distance once a single period has concluded.
+            if (BigAttackTimer > PreBigAttackPause)
+            {
+                // Move down.
+                if (ElapsedVerticalDistance < HorizontalOffset)
+                {
+                    ElapsedVerticalDistance += verticalSpeed;
+                    VerticalOffset += verticalSpeed;
+                }
+
+                // Move up.
+                else if (ElapsedVerticalDistance < HorizontalOffset * 2)
+                {
+                    ElapsedVerticalDistance += verticalSpeed;
+                    VerticalOffset -= verticalSpeed;
+                }
+
+                // Reset the vertical distance once a single period has concluded.
+                else
+                    ElapsedVerticalDistance = 0f;
+
+                // Hover to the side of the target.
+                Vector2 idealVelocity = NPC.SafeDirectionTo(Target.Center + new Vector2(-HorizontalOffset * (targetSide ? -1 : 1), VerticalOffset)) * (isBroDead ? Utils.Remap(AttackDelayTimer, 0f, 120f, 15f, 50f) : Utils.Remap(AttackDelayTimer, 60f, 120f, 0f, 50f));
+                if (SlashCounter <= SlashCounterLimit * 0.3f && dashAttackTimer == 0)
+                {
+                    if (AttackDelayTimer == 120 && Main.rand.NextBool())
+                    {
+                        for (int i = 0; i < 6; i++)
+                        {
+                            Dust catastrophedust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.5f, 66, -NPC.velocity * Main.rand.NextFloat(0.2f, 1.2f));
+                            catastrophedust.noGravity = true;
+                            catastrophedust.scale = Main.rand.NextFloat(0.5f, 0.7f);
+                            catastrophedust.color = Color.DeepSkyBlue;
+                        }
+                    }
+                    NPC.SimpleFlyMovement(idealVelocity, acceleration);
+                }
+                else if (dashAttackTimer == 0)
+                    NPC.velocity *= 0.85f;
+                else if (isBroDead)
+                {
+                    dashAttackTimer--;
+
+                    int type = ModContent.ProjectileType<SupremeCatastropheSlash>();
+                    int damage = NPC.GetProjectileDamage(type);
+                    if (bossRush)
+                        damage /= 2;
+
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity.SafeNormalize(Vector2.UnitY) * 0.1f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 4 + dashes);
+                    dashes++;
+                    NPC.velocity *= 0.975f;
+                }
+            }
             else
-                ElapsedVerticalDistance = 0f;
+                NPC.velocity *= 0.9f;   
 
             // Reset rotation to zero.
             NPC.rotation = 0f;
@@ -188,19 +249,16 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             // Set direction.
             NPC.spriteDirection = (Target.Center.X > NPC.Center.X).ToDirectionInt();
 
-            // Hover to the side of the target.
-            Vector2 idealVelocity = NPC.SafeDirectionTo(Target.Center + new Vector2(-HorizontalOffset, VerticalOffset)) * 60f;
-            NPC.SimpleFlyMovement(idealVelocity, acceleration);
-
             // Have a small delay prior to shooting projectiles.
             if (AttackDelayTimer < 120f)
                 AttackDelayTimer++;
 
             // Handle projectile shots.
-            else
+            else if (BigAttackTimer > PreBigAttackPause)
             {
                 // Shoot sword slashes.
-                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1f, 2.5f, 1f - totalLifeRatio);
+                float fireVelocity = isBroDead ? 4.4f : 4;
+                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1f, 2.5f, 1f - totalLifeRatio) * (isBroDead ? 1.2f : 1);
                 SlashCounter += fireRate;
                 if (SlashCounter >= SlashCounterLimit)
                 {
@@ -211,40 +269,91 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     int damage = NPC.GetProjectileDamage(type);
                     if (bossRush)
                         damage /= 2;
-                    Vector2 slashSpawnPosition = NPC.Center + Vector2.UnitX * 125f;
+                    Vector2 slashSpawnPosition = NPC.Center + Vector2.UnitX * 125f * NPC.direction;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, Vector2.UnitX * 4f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt());
+                    { 
+                        if (isBroDead)
+                        {
+                            if (SlashingFromRight)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 2);
+                            else
+                            {
+                                SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
+                                SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = 0.4f }, NPC.Center);
+
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 0.2f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 3);
+                            }
+                        }
+                        else
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 2);
+                    }
                     SlashingFromRight = !SlashingFromRight;
                     CurrentFrame = 0;
                 }
-
-                // Shoot dart spreads. (Can shoot faster and more darts on death)
-                fireRate = BossRushEvent.BossRushActive ? 3f : MathHelper.Lerp(1f, death ? 3.5f : 3f, 1f - totalLifeRatio);
-                DartBurstCounter += fireRate;
-                if (DartBurstCounter >= DartBurstCounterLimit)
+            }
+            // Pause before attacking
+            else if (BigAttackTimer > 0)
+            {
+                if (BigAttackTimer == PreBigAttackPause)
                 {
-                    DartBurstCounter = 0f;
-                    SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, NPC.Center);
+                    SoundStyle charge = new("CalamityMod/Sounds/Custom/Ravager/RavagerPillarSummon");
+                    SoundEngine.PlaySound(charge with { Volume = 0.85f, Pitch = 0.6f }, NPC.Center);
+                }
+                for (int i = 0; i < 7; i++)
+                {
+                    Vector2 vel = new Vector2(14, 14).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
+                    Dust catastrophedust = Dust.NewDustPerfect(NPC.Center + vel * 2, 279, vel);
+                    catastrophedust.noGravity = true;
+                    catastrophedust.scale = Main.rand.NextFloat(1.2f, 1.8f);
+                    catastrophedust.color = Color.DeepSkyBlue;
+                }
 
-                    int type = Main.zenithWorld ? ModContent.ProjectileType<BrimstoneHellblast2>() : ModContent.ProjectileType<BrimstoneBarrage>();
+                BigAttackTimer--;
+            }
+            // Big attack
+            else
+            {
+                // Shoot sword slashes.
+                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1.5f, 3f, 1f - totalLifeRatio) * (isBroDead ? 1.2f : 1);
+                if (isBroDead && BigAttackLimit == 0)
+                    fireRate = 1;
+                SlashCounter += fireRate;
+                if (SlashCounter >= SlashCounterLimit)
+                {
+                    SlashCounter = 0f;
+                    SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.4f }, NPC.Center);
+
+                    int type = ModContent.ProjectileType<SupremeCatastropheSlash>();
                     int damage = NPC.GetProjectileDamage(type);
                     if (bossRush)
                         damage /= 2;
-                    int totalProjectiles = bossRush ? 20 : death ? 16 : revenge ? 14 : expertMode ? 12 : 8;
-                    float radians = MathHelper.TwoPi / totalProjectiles;
-                    float velocity = Main.zenithWorld ? 6f : 2.5f;
-                    Vector2 spinningPoint = new Vector2(0f, -velocity);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    Vector2 slashSpawnPosition = NPC.Center;
+                    if (BigAttackLimit == 0 && isBroDead)
                     {
-                        for (int k = 0; k < totalProjectiles; k++)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f, 2);
+                            SoundStyle charge = new("CalamityMod/Sounds/Item/ExobladeBeamSlash");
+                            SoundEngine.PlaySound(charge with { Volume = 0.85f, Pitch = -0.5f }, NPC.Center);
+                            NPC.velocity = NPC.DirectionTo(Target.Center) * 90f;
+                            dashAttackTimer = 30;
+                            dashes = 0;
                         }
                     }
+                    else if (Main.netMode != NetmodeID.MultiplayerClient)
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 1);
 
-                    for (int i = 0; i < 6; i++)
-                        Dust.NewDust(NPC.position + NPC.velocity, NPC.width, NPC.height, (int)CalamityDusts.Brimstone, 0f, 0f);
+                    SlashingFromRight = !SlashingFromRight;
+                    CurrentFrame = 0;
+                    if (BigAttackLimit > 0)
+                        BigAttackLimit--;
+                    else
+                    {
+                        BigAttackTimer = 600;
+                        AttackDelayTimer = 0;
+                        BigAttackLimit = 4;
+                        if (isBroDead)
+                            targetSide = !targetSide;
+                    }
                 }
             }
         }
