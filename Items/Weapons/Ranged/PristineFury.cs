@@ -15,7 +15,6 @@ namespace CalamityMod.Items.Weapons.Ranged
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public int frameCounter = 0;
         public int frame = 0;
-        public static int BaseDamage = 80;
         public bool Trail = true;
 
         public override void SetStaticDefaults()
@@ -27,7 +26,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             Item.width = 100;
             Item.height = 46;
-            Item.damage = BaseDamage;
+            Item.damage = 80;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = 3;
             Item.useAnimation = 15;

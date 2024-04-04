@@ -42,7 +42,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
             bool death = CalamityWorld.death || bossRush;
 
             float enrageScale = bossRush ? 0.5f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 1.5f;

@@ -25,7 +25,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.autoReuse = true;
             Item.noMelee = true;
             Item.value = CalamityGlobalItem.Rarity10BuyPrice;
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ItemRarityID.Purple;
             Item.shoot = ModContent.ProjectileType<IonBlast>();
             Item.shootSpeed = 8f;
         }

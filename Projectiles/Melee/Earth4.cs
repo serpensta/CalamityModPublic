@@ -96,7 +96,10 @@ namespace CalamityMod.Projectiles.Melee
             SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
 
             int heal = (int)Math.Round(hit.Damage * 0.075);
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ModContent.ProjectileType<EarthHealOrb>(), BalancingConstants.LifeStealRange);

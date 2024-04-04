@@ -14,6 +14,7 @@ namespace CalamityMod.Items.Weapons.Melee
     public class DefiledGreatsword : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
+
         public override void SetDefaults()
         {
             Item.width = 102;
@@ -35,17 +36,17 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            switch (Main.rand.Next(3))
+            switch (Main.rand.Next(2))
             {
                 case 0:
-                    type = ModContent.ProjectileType<BlazingPhantomBlade>();
-                    break;
-                case 1:
                     type = ModContent.ProjectileType<HyperBlade>();
                     break;
-                case 2:
+                case 1:
                     type = ModContent.ProjectileType<SunlightBlade>();
                     break;
+                /*case 2:
+                    type = ModContent.ProjectileType<BlazingPhantomBlade>();
+                    break;*/
                 default:
                     break;
             }

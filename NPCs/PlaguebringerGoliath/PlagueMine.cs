@@ -5,6 +5,7 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -15,10 +16,15 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 {
     public class PlagueMine : ModNPC
     {
+        public static Asset<Texture2D> GlowTexture;
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
             Main.npcFrameCount[NPC.type] = 4;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueMineGlow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -125,7 +131,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
             spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
 
-            texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlagueMineGlow").Value;
+            texture2D15 = GlowTexture.Value;
             Color redLerpColor = Color.Lerp(Color.White, Color.Red, 0.5f);
 
             spriteBatch.Draw(texture2D15, drawLocation, NPC.frame, redLerpColor, NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
@@ -157,7 +163,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             NPC.position.Y = NPC.position.Y - (float)(NPC.height / 2);
             for (int i = 0; i < 15; i++)
             {
-                int greenPlague = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
+                int greenPlague = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[greenPlague].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -168,10 +174,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             }
             for (int j = 0; j < 30; j++)
             {
-                int greenPlague2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 3f);
+                int greenPlague2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 3f);
                 Main.dust[greenPlague2].noGravity = true;
                 Main.dust[greenPlague2].velocity *= 5f;
-                greenPlague2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
+                greenPlague2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GemEmerald, 0f, 0f, 100, default, 2f);
                 Main.dust[greenPlague2].velocity *= 2f;
                 Main.dust[greenPlague2].noGravity = true;
             }

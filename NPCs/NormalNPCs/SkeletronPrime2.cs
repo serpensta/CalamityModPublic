@@ -6,6 +6,8 @@ using CalamityMod.DataStructures;
 using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -19,11 +21,17 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override string Texture => $"Terraria/Images/NPC_{NPCID.SkeletronPrime}";
         public override string BossHeadTexture => $"Terraria/Images/NPC_Head_Boss_18";
 
+        public static Asset<Texture2D> EyeTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
             NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
+            if (!Main.dedServ)
+            {
+                EyeTexture = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/SkeletronPrimeHeadGlow");
+            }
         }
 
         public override void SetDefaults()
@@ -218,7 +226,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             }
 
             // Activate daytime enrage
-            if (Main.dayTime && !bossRush && NPC.ai[1] != 3f && NPC.ai[1] != 2f)
+            if (Main.IsItDay() && !bossRush && NPC.ai[1] != 3f && NPC.ai[1] != 2f)
             {
                 // Heal
                 if (Main.netMode != NetmodeID.MultiplayerClient)

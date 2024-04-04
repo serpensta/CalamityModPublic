@@ -41,7 +41,7 @@ namespace CalamityMod.NPCs.Leviathan
         private bool gfbAnaSummoned = false;
         private int soundDelay = 0;
         private float extrapitch = 0;
-        public static Texture2D AttackTexture = null;
+        public static Asset<Texture2D> AttackTexture = null;
 
         public static readonly SoundStyle RoarMeteorSound = new("CalamityMod/Sounds/Custom/LeviathanRoarMeteor");
         public static readonly SoundStyle RoarChargeSound = new("CalamityMod/Sounds/Custom/LeviathanRoarCharge");
@@ -52,7 +52,7 @@ namespace CalamityMod.NPCs.Leviathan
             Main.npcFrameCount[NPC.type] = 3;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             if (!Main.dedServ)
-                AttackTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/LeviathanAttack", AssetRequestMode.ImmediateLoad).Value;
+                AttackTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/LeviathanAttack", AssetRequestMode.AsyncLoad);
         }
 
         public override void SetDefaults()
@@ -783,7 +783,7 @@ namespace CalamityMod.NPCs.Leviathan
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int bloody = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
+                    int bloody = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                     Main.dust[bloody].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -793,10 +793,10 @@ namespace CalamityMod.NPCs.Leviathan
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int bloody2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 3f);
+                    int bloody2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 3f);
                     Main.dust[bloody2].noGravity = true;
                     Main.dust[bloody2].velocity *= 5f;
-                    bloody2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
+                    bloody2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 0f, 0f, 100, default, 2f);
                     Main.dust[bloody2].velocity *= 2f;
                 }
                 if (Main.netMode != NetmodeID.Server)
@@ -919,7 +919,7 @@ namespace CalamityMod.NPCs.Leviathan
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D texture = AttackTexture;
+            Texture2D texture = AttackTexture.Value;
             if (NPC.ai[0] == 1f || NPC.Calamity().newAI[3] < 180f)
             {
                 texture = TextureAssets.Npc[NPC.type].Value;

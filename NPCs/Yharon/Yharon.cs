@@ -28,6 +28,7 @@ using CalamityMod.Tiles.Ores;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
@@ -70,6 +71,10 @@ namespace CalamityMod.NPCs.Yharon
 
         public SlotId RoarSoundSlot;
 
+        public static Asset<Texture2D> GlowTextureGreen;
+        public static Asset<Texture2D> GlowTextureOrange;
+        public static Asset<Texture2D> GlowTexturePurple;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -86,6 +91,12 @@ namespace CalamityMod.NPCs.Yharon
             value.Position.Y -= 14f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+            if (!Main.dedServ)
+            {
+                GlowTextureGreen = ModContent.Request<Texture2D>(Texture + "GlowGreen", AssetRequestMode.AsyncLoad);
+                GlowTextureOrange = ModContent.Request<Texture2D>(Texture + "GlowOrange", AssetRequestMode.AsyncLoad);
+                GlowTexturePurple = ModContent.Request<Texture2D>(Texture + "GlowPurple", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -2844,15 +2855,15 @@ namespace CalamityMod.NPCs.Yharon
 
             if (enteredSubphase2 || NPC.ai[0] == 4f || startSecondAI)
             {
-                texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Yharon/YharonGlowOrange").Value;
+                texture = GlowTextureOrange.Value;
                 Color orangeGlowColor = Color.Lerp(Color.White, invincible ? invincibleColor : Color.Orange, 0.5f) * NPC.Opacity;
                 lerpEndColor = invincible ? invincibleColor : Color.Orange;
 
-                Texture2D texture2 = ModContent.Request<Texture2D>("CalamityMod/NPCs/Yharon/YharonGlowGreen").Value;
+                Texture2D texture2 = GlowTextureGreen.Value;
                 Color greenGlowColorOpacity = Color.Lerp(Color.White, invincible ? invincibleColor : Color.Chartreuse, 0.5f) * NPC.Opacity;
                 Color greenGlowColor = invincible ? invincibleColor : Color.Chartreuse;
 
-                Texture2D texture3 = ModContent.Request<Texture2D>("CalamityMod/NPCs/Yharon/YharonGlowPurple").Value;
+                Texture2D texture3 = GlowTexturePurple.Value;
                 Color blueGlowColorOpacity = Color.Lerp(Color.White, invincible ? invincibleColor : Color.BlueViolet, 0.5f) * NPC.Opacity;
                 Color blueGlowColor = invincible ? invincibleColor : Color.BlueViolet;
 
@@ -3245,7 +3256,7 @@ namespace CalamityMod.NPCs.Yharon
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int fieryDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
+                    int fieryDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fieryDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -3255,10 +3266,10 @@ namespace CalamityMod.NPCs.Yharon
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 3f);
+                    int fieryDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 3f);
                     Main.dust[fieryDust2].noGravity = true;
                     Main.dust[fieryDust2].velocity *= 5f;
-                    fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
+                    fieryDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fieryDust2].velocity *= 2f;
                 }
 

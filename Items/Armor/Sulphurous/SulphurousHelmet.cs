@@ -31,7 +31,7 @@ namespace CalamityMod.Items.Armor.Sulphurous
         {
             player.setBonus = this.GetLocalizedValue("SetBonus");
             var modPlayer = player.Calamity();
-            modPlayer.sulfurSet = true;
+            modPlayer.sulphurSet = true;
             player.GetJumpState<SulphurJump>().Enable();
             modPlayer.rogueStealthMax += 0.7f;
             modPlayer.wearingRogueArmor = true;

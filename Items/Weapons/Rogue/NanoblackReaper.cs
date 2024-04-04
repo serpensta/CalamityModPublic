@@ -14,7 +14,6 @@ namespace CalamityMod.Items.Weapons.Rogue
     [LegacyName("NanoblackReaperMelee", "NanoblackReaperRogue")]
     public class NanoblackReaper : RogueWeapon
     {
-        public static int BaseDamage = 130;
         public static float Knockback = 9f;
         public static float Speed = 16f;
 
@@ -22,7 +21,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             Item.width = 78;
             Item.height = 64;
-            Item.damage = BaseDamage;
+            Item.damage = 130;
             Item.knockBack = Knockback;
             Item.useTime = 6;
             Item.useAnimation = 6;

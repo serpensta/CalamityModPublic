@@ -8,6 +8,7 @@ using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.Projectiles.Enemy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -36,6 +37,8 @@ namespace CalamityMod.NPCs.AcidRain
 
         public const float ExplosionTelegraphTime = 120f;
 
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 5;
@@ -43,6 +46,10 @@ namespace CalamityMod.NPCs.AcidRain
             value.Position.Y += 8;
             value.PortraitPositionYOverride = 28f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -176,7 +183,7 @@ namespace CalamityMod.NPCs.AcidRain
         public override void HitEffect(NPC.HitInfo hit)
         {
             for (int k = 0; k < 8; k++)
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
 
             if (NPC.life <= 0)
             {
@@ -188,7 +195,7 @@ namespace CalamityMod.NPCs.AcidRain
                     Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>("NuclearToadGore4").Type, NPC.scale);
                 }
                 for (int i = 0; i < 25; i++)
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, Main.rand.NextFloat(-2f, 2f), -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, Main.rand.NextFloat(-2f, 2f), -1f, 0, default, 1f);
             }
         }
 
@@ -206,6 +213,6 @@ namespace CalamityMod.NPCs.AcidRain
                 target.AddBuff(ModContent.BuffType<Irradiated>(), 120);
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, ModContent.Request<Texture2D>(Texture + "Glow").Value, true);
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => CalamityGlobalNPC.DrawGlowmask(NPC, spriteBatch, GlowTexture.Value, true);
     }
 }

@@ -59,15 +59,15 @@ namespace CalamityMod.Projectiles.Boss
                 int dustType = ProvUtils.GetDustID(Projectile.maxPenetrate);
                 for (int i = 0; i < 2; i++)
                 {
-                    int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, velocityY, 50, default, 1.5f);
+                    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, velocityY, 50, default, 1.5f);
                     Main.dust[dust].noGravity = true;
                 }
                 for (int j = 0; j < 20; j++)
                 {
-                    int holyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, velocityY, 0, default, 2.5f);
+                    int holyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, velocityY, 0, default, 2.5f);
                     Main.dust[holyDust].noGravity = true;
                     Main.dust[holyDust].velocity *= 2f;
-                    holyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, velocityY, 50, default, 1.5f);
+                    holyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, velocityY, 50, default, 1.5f);
                     Main.dust[holyDust].velocity *= 1.5f;
                     Main.dust[holyDust].noGravity = true;
                 }
@@ -121,15 +121,15 @@ namespace CalamityMod.Projectiles.Boss
             int dustType = ProvUtils.GetDustID(Projectile.maxPenetrate);
             for (int i = 0; i < 2; i++)
             {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 1.5f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 1.5f);
                 Main.dust[dust].noGravity = true;
             }
             for (int j = 0; j < 20; j++)
             {
-                int holyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 0, default, 2.5f);
+                int holyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 0, default, 2.5f);
                 Main.dust[holyDust].noGravity = true;
                 Main.dust[holyDust].velocity *= 3f;
-                holyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 1.5f);
+                holyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 1.5f);
                 Main.dust[holyDust].velocity *= 2f;
                 Main.dust[holyDust].noGravity = true;
             }

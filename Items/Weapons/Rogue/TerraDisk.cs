@@ -10,14 +10,13 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class TerraDisk : RogueWeapon
     {
-        public static int BaseDamage = 100;
         public static float Speed = 12f;
 
         public override void SetDefaults()
         {
             Item.width = 46;
             Item.height = 46;
-            Item.damage = BaseDamage;
+            Item.damage = 100;
             Item.knockBack = 4f;
             Item.useAnimation = Item.useTime = 30;
             Item.autoReuse = true;

@@ -213,7 +213,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 dustVel = dustVel.RotatedBy(-angleRandom);
                 dustVel = dustVel.RotatedByRandom(2.0f * angleRandom);
 
-                int pulseDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust3, dustVel.X, dustVel.Y, 200, default, 1.7f);
+                int pulseDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust3, dustVel.X, dustVel.Y, 200, default, 1.7f);
                 Main.dust[pulseDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(MathHelper.Pi) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
                 Main.dust[pulseDust].noGravity = true;
 
@@ -221,7 +221,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 dust.velocity *= 3f;
                 dust = Main.dust[pulseDust];
 
-                pulseDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust1, dustVel.X, dustVel.Y, 100, default, 1f);
+                pulseDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust1, dustVel.X, dustVel.Y, 100, default, 1f);
                 Main.dust[pulseDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(MathHelper.Pi) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
 
                 dust = Main.dust[pulseDust];
@@ -240,7 +240,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 dustVel = dustVel.RotatedBy(-angleRandom);
                 dustVel = dustVel.RotatedByRandom(2.0f * angleRandom);
 
-                int pulseDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dust2, dustVel.X, dustVel.Y, 0, default, 3f);
+                int pulseDust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dust2, dustVel.X, dustVel.Y, 0, default, 3f);
                 Main.dust[pulseDust2].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.width / 3f;
                 Main.dust[pulseDust2].noGravity = true;
 

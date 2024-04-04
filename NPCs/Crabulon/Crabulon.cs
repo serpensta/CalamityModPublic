@@ -19,6 +19,7 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -35,6 +36,12 @@ namespace CalamityMod.NPCs.Crabulon
         private int biomeEnrageTimer = CalamityGlobalNPC.biomeEnrageTimerMax;
         private bool stomping = false;
 
+        public static Asset<Texture2D> AltTexture;
+        public static Asset<Texture2D> AttackTexture;
+        public static Asset<Texture2D> Texture_Glow;
+        public static Asset<Texture2D> AltTexture_Glow;
+        public static Asset<Texture2D> AttackTexture_Glow;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
@@ -48,6 +55,14 @@ namespace CalamityMod.NPCs.Crabulon
             value.Position.Y += 80f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+            if (!Main.dedServ)
+            {
+                AltTexture = ModContent.Request<Texture2D>(Texture + "Alt", AssetRequestMode.AsyncLoad);
+                AttackTexture = ModContent.Request<Texture2D>(Texture + "Attack", AssetRequestMode.AsyncLoad);
+                Texture_Glow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+                AltTexture_Glow = ModContent.Request<Texture2D>(Texture + "AltGlow", AssetRequestMode.AsyncLoad);
+                AttackTexture_Glow = ModContent.Request<Texture2D>(Texture + "AttackGlow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -769,11 +784,11 @@ namespace CalamityMod.NPCs.Crabulon
                 spriteEffects = SpriteEffects.FlipHorizontally;
 
             Texture2D textureIdle = TextureAssets.Npc[NPC.type].Value;
-            Texture2D glowIdle = ModContent.Request<Texture2D>("CalamityMod/NPCs/Crabulon/CrabulonGlow").Value;
-            Texture2D textureWalk = ModContent.Request<Texture2D>("CalamityMod/NPCs/Crabulon/CrabulonAlt").Value;
-            Texture2D glowWalk = ModContent.Request<Texture2D>("CalamityMod/NPCs/Crabulon/CrabulonAltGlow").Value;
-            Texture2D textureAttack = ModContent.Request<Texture2D>("CalamityMod/NPCs/Crabulon/CrabulonAttack").Value;
-            Texture2D glowAttack = ModContent.Request<Texture2D>("CalamityMod/NPCs/Crabulon/CrabulonAttackGlow").Value;
+            Texture2D glowIdle = Texture_Glow.Value;
+            Texture2D textureWalk = AltTexture.Value;
+            Texture2D glowWalk = AltTexture_Glow.Value;
+            Texture2D textureAttack = AttackTexture.Value;
+            Texture2D glowAttack = AttackTexture_Glow.Value;
             Color colorToShift = Main.zenithWorld ? new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB) : Color.Cyan;
             Color glowColor = Color.Lerp(Color.White, colorToShift, 0.5f);
 
@@ -891,7 +906,7 @@ namespace CalamityMod.NPCs.Crabulon
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int j = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
+                    int j = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
                     Main.dust[j].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -901,10 +916,10 @@ namespace CalamityMod.NPCs.Crabulon
                 }
                 for (int k = 0; k < 70; k++)
                 {
-                    int stompDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 3f);
+                    int stompDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 3f);
                     Main.dust[stompDust].noGravity = true;
                     Main.dust[stompDust].velocity *= 5f;
-                    stompDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
+                    stompDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.BlueFairy, 0f, 0f, 100, default, 2f);
                     Main.dust[stompDust].velocity *= 2f;
                 }
                 if (Main.netMode != NetmodeID.Server)

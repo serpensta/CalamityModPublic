@@ -70,7 +70,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             for (int i = 0; i < 3; i++)
             {
-                int empyreanDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Enchanted_Pink, 0f, 0f, 100, default, 0.8f);
+                int empyreanDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Enchanted_Pink, 0f, 0f, 100, default, 0.8f);
                 Main.dust[empyreanDust].noGravity = true;
                 Main.dust[empyreanDust].velocity *= 1.2f;
                 Main.dust[empyreanDust].velocity -= Projectile.oldVelocity * 0.3f;
@@ -79,8 +79,11 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            int heal = (int)Math.Round(hit.Damage * 0.0075);
-            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
+            int heal = (int)Math.Round(hit.Damage * 0.015);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0 || target.lifeMax <= 5)
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
@@ -89,6 +92,9 @@ namespace CalamityMod.Projectiles.Melee
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             int heal = (int)Math.Round(info.Damage * 0.015);
+            if (heal > BalancingConstants.LifeStealCap)
+                heal = BalancingConstants.LifeStealCap;
+
             if (Main.player[Main.myPlayer].lifeSteal <= 0f || heal <= 0)
                 return;
 

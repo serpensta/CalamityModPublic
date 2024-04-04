@@ -60,7 +60,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.ai[0] += 1f;
                 if (Main.rand.NextBool(3))
                 {
-                    int flareDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Flare, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default, 1f);
+                    int flareDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Flare, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default, 1f);
                     Dust dust = Main.dust[flareDust];
                     if (Main.rand.NextBool(3))
                     {
@@ -82,7 +82,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 Projectile.ai[0] += 1f;
             }
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - MathHelper.PiOver2;
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

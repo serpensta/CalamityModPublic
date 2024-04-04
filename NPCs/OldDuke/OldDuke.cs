@@ -22,6 +22,7 @@ using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
@@ -42,6 +43,8 @@ namespace CalamityMod.NPCs.OldDuke
 
         public SlotId RoarSoundSlot;
 
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -54,6 +57,10 @@ namespace CalamityMod.NPCs.OldDuke
             };
             value.Position.X += 14f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -327,7 +334,7 @@ namespace CalamityMod.NPCs.OldDuke
 
             if (NPC.ai[0] >= 4f && NPC.Calamity().newAI[1] != 1f)
             {
-                texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/OldDuke/OldDukeGlow").Value;
+                texture2D15 = GlowTexture.Value;
                 Color yellowLerpColor = Color.Lerp(Color.White, Color.Yellow, 0.5f);
                 drawLerpColor = Color.Yellow;
 
@@ -475,7 +482,7 @@ namespace CalamityMod.NPCs.OldDuke
                 int onHitDust = 0;
                 while (onHitDust < hit.Damage / NPC.lifeMax * 100.0)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, hit.HitDirection, -1f, 0, default, 1f);
                     onHitDust++;
                 }
             }
@@ -483,7 +490,7 @@ namespace CalamityMod.NPCs.OldDuke
             {
                 for (int r = 0; r < 150; r++)
                 {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulfurousSeaAcid, 2 * hit.HitDirection, -2f, 0, default, 1f);
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.SulphurousSeaAcid, 2 * hit.HitDirection, -2f, 0, default, 1f);
                 }
 
                 if (Main.netMode != NetmodeID.Server)

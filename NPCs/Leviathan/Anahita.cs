@@ -7,6 +7,7 @@ using CalamityMod.UI.VanillaBossBars;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -24,6 +25,7 @@ namespace CalamityMod.NPCs.Leviathan
         private bool forceChargeFrames = false;
         private int frameUsed = 0;
         public bool HasBegunSummoningLeviathan = false;
+        public static Asset<Texture2D> ChargeTexture;
         public bool WaitingForLeviathan
         {
             get
@@ -46,6 +48,10 @@ namespace CalamityMod.NPCs.Leviathan
                 Scale = 0.5f
             };
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/AnahitaStabbing", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -213,6 +219,7 @@ namespace CalamityMod.NPCs.Leviathan
                         float moveDirection = 1f;
                         if (Math.Abs(NPC.Center.X - Main.maxTilesX * 16f) > Math.Abs(NPC.Center.X))
                             moveDirection = -1f;
+
                         NPC.velocity.X = moveDirection * 6f;
                         NPC.spriteDirection = (int)-moveDirection;
                         NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y + 0.2f, -3f, 16f);
@@ -239,6 +246,13 @@ namespace CalamityMod.NPCs.Leviathan
 
                         NPC.velocity *= 0.9f;
                     }
+                    else
+                    {
+                        NPC.alpha -= 5;
+                        if (NPC.alpha < 0)
+                            NPC.alpha = 0;
+                    }
+
                     NPC.dontTakeDamage = true;
                     return;
                 }
@@ -302,8 +316,10 @@ namespace CalamityMod.NPCs.Leviathan
                 ChargeRotation(player, vector);
                 ChargeLocation(player, vector, false, true);
 
-                NPC.alpha += 3;
-                if (NPC.alpha >= 255)
+                if (NPC.alpha < 255)
+                    NPC.alpha += 3;
+
+                if (NPC.alpha > 255)
                 {
                     NPC.alpha = 255;
                 }
@@ -331,9 +347,8 @@ namespace CalamityMod.NPCs.Leviathan
                 return;
             }
 
-            // Alpha
             NPC.alpha -= 5;
-            if (NPC.alpha <= 0)
+            if (NPC.alpha < 0)
                 NPC.alpha = 0;
 
             // Play sound
@@ -425,7 +440,7 @@ namespace CalamityMod.NPCs.Leviathan
                 NPC.rotation = NPC.velocity.X * 0.02f;
                 NPC.spriteDirection = NPC.direction;
 
-                Vector2 anahitaPos = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
+                Vector2 anahitaPos = NPC.Center;
                 float playerXDist = player.position.X + (player.width / 2) - anahitaPos.X;
                 float playerYDist = player.position.Y + (player.height / 2) - 200f * NPC.scale - anahitaPos.Y;
                 float playerDistance = (float)Math.Sqrt(playerXDist * playerXDist + playerYDist * playerYDist);
@@ -489,7 +504,7 @@ namespace CalamityMod.NPCs.Leviathan
 
                 NPC.rotation = NPC.velocity.X * 0.02f;
                 Vector2 bubbleSpawnPos = new Vector2(NPC.position.X + (NPC.width / 2) + (15 * NPC.direction * NPC.scale), NPC.position.Y + 30 * NPC.scale);
-                Vector2 restingPos = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
+                Vector2 restingPos = NPC.Center;
                 float restingPlayerXDist = player.position.X + (player.width / 2) - restingPos.X;
                 float restingPlayerYDist = player.position.Y + (player.height / 2) - restingPos.Y;
                 float restingPlayerDistance = (float)Math.Sqrt(restingPlayerXDist * restingPlayerXDist + restingPlayerYDist * restingPlayerYDist);
@@ -885,7 +900,7 @@ namespace CalamityMod.NPCs.Leviathan
                     texture = TextureAssets.Npc[NPC.type].Value;
                     break;
                 case 1:
-                    texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/Leviathan/AnahitaStabbing").Value;
+                    texture = ChargeTexture.Value;
                     break;
             }
 

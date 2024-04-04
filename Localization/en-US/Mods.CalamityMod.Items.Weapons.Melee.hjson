@@ -124,7 +124,7 @@ AstralBlade: {
 
 AstralPike: {
 	DisplayName: Astral Pike
-	Tooltip: Summons astral star swarms on critical hits
+	Tooltip: Summons astral star swarms on hit
 }
 
 AstralScythe: {
@@ -467,7 +467,8 @@ Exoblade: {
 		Press <left> to release multiple energy beams that home in on enemies and slice them on hit
 		Press <right> to dash in the direction of the cursor with the blade
 		Enemy hits from the blade during the dash result in massive damage and a rebound
-		Press <left> immediately after a rebound to perform a powerful slash that explodes on enemy hits
+		Press <left> immediately after a rebound to perform a powerful slash
+		Powerful slashes are larger, heal you, and create a large explosion
 		'''
 }
 
@@ -679,7 +680,7 @@ IridescentExcalibur: {
 	DisplayName: Iridescent Excalibur
 	Tooltip:
 		'''
-		Freezes enemies and heals the player on hit
+		True melee strikes freeze enemies
 		Fires rainbow beams that change their behavior based on their color
 		Press <right> for true melee
 		'''
@@ -1327,7 +1328,7 @@ DefiledGreatsword: {
 		'''
 		Fires blazing, hyper, and sunlight blades
 		Gives the player the Brutal Carnage buff on enemy hits
-		This buff increases melee damage by 25% and melee crit chance by 10%
+		This buff increases melee damage by 20%
 		'''
 }
 
@@ -1351,7 +1352,7 @@ BlightedCleaver: {
 		'''
 		Fires homing blazing blades
 		Gives the player the Brutal Carnage buff on enemy hits
-		This buff increases melee damage by 25% and melee crit chance by 10%
+		This buff increases melee damage by 20%
 		'''
 }
 

@@ -33,7 +33,7 @@ namespace CalamityMod.Projectiles.Summon
                 if (target != null) //target found
                 {
                     float projVel = 40f;
-                    Vector2 targetDirection = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 targetDirection = Projectile.Center;
                     float targetX = target.Center.X - targetDirection.X;
                     float targetY = target.Center.Y - targetDirection.Y;
                     float targetDist = (float)Math.Sqrt((double)(targetX * targetX + targetY * targetY));

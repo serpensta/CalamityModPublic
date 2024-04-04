@@ -1,4 +1,5 @@
-﻿using CalamityMod.Particles;
+﻿using CalamityMod.Items.Ammo;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -95,5 +96,7 @@ namespace CalamityMod.Projectiles.Ranged
             }
         }
         public override bool? CanDamage() => Projectile.localAI[0] < 20 ? false : null;
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.SourceDamage.Flat += HyperiusBullet.SplitBulletBonusDamage;
     }
 }

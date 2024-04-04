@@ -23,6 +23,8 @@ namespace CalamityMod.NPCs.Abyss
 {
     public class ReaperShark : ModNPC
     {
+        public static Asset<Texture2D> ManTexture;
+
         public static readonly SoundStyle SearchRoarSound = new("CalamityMod/Sounds/Custom/ReaperSearchRoar");
         public static readonly SoundStyle EnragedRoarSound = new("CalamityMod/Sounds/Custom/ReaperEnragedRoar");
 
@@ -33,6 +35,10 @@ namespace CalamityMod.NPCs.Abyss
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;
+            if (!Main.dedServ)
+            {
+                ManTexture = ModContent.Request<Texture2D>(Texture + "Man", AssetRequestMode.ImmediateLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -688,7 +694,7 @@ namespace CalamityMod.NPCs.Abyss
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
-            Asset<Texture2D> npcTexture = Main.zenithWorld ? ModContent.Request<Texture2D>("CalamityMod/NPCs/Abyss/ReaperSharkMan") : TextureAssets.Npc[NPC.type];
+            Asset<Texture2D> npcTexture = Main.zenithWorld ? ManTexture : TextureAssets.Npc[NPC.type];
             Rectangle nframe = npcTexture.Frame(1, 4, 0, (int)NPC.frameCounter);
             Vector2 origin = new Vector2((float)(npcTexture.Value.Width / 2), (float)(npcTexture.Value.Height / Main.npcFrameCount[NPC.type] / 2));
             Vector2 npcOffset = NPC.Center - screenPos;

@@ -22,6 +22,7 @@ using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -47,6 +48,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
         private bool flyingFrame2 = false;
         private int curTex = 1;
 
+        public static Asset<Texture2D> ChargeTexture;
+        public static Asset<Texture2D> Texture_Glow;
+        public static Asset<Texture2D> ChargeTexture_Glow;
+
         public static readonly SoundStyle NukeWarningSound = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGNukeWarning");
         public static readonly SoundStyle AttackSwitchSound = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGAttackSwitch", 2);
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/PlagueSounds/PBGDash");
@@ -68,6 +73,12 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             value.Position.X -= 48f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
+            if (!Main.dedServ)
+            {
+                ChargeTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTex", AssetRequestMode.AsyncLoad);
+                Texture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathGlow", AssetRequestMode.AsyncLoad);
+                ChargeTexture_Glow = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTexGlow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -620,7 +631,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 // Move closer
                 bool canHitTarget = Collision.CanHit(NPC.Center, 1, 1, player.position, player.width, player.height);
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -703,7 +714,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -772,7 +783,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                         if (expertMode && NPC.CountNPCS(ModContent.NPCType<PlagueMine>()) < 3)
                             NPC.NewNPC(NPC.GetSource_FromAI(), (int)missileSpawnPos.X, (int)missileSpawnPos.Y, ModContent.NPCType<PlagueMine>(), 0, 0f, 0f, 0f, challengeAmt);
 
-                        float npcSpeed = (revenge ? 11f : 9f) + enrageScale * 2f;
+                        float npcSpeed = (revenge ? 10f : 8f) + enrageScale * 2f;
 
                         float projXDist = player.Center.X - missileSpawnPos.X;
                         float projYDist = player.Center.Y - missileSpawnPos.Y;
@@ -792,7 +803,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -884,7 +895,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
                 }
 
                 // Move closer
-                float distanceAboveTarget = !canHitTarget ? 0f : 560f;
+                float distanceAboveTarget = !canHitTarget ? 0f : 400f;
                 float distanceAwayFromTargetX = !canHitTarget ? 36f : 144f;
                 float distanceAwayFromTargetY = player.Center.Y - NPC.Center.Y;
                 float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
@@ -1157,8 +1168,8 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
         private void Movement(float distanceAboveTarget, Player player, float enrageScale)
         {
-            float acceleration = 0.48f;
-            float velocity = 24f;
+            float acceleration = (NPC.ai[0] == 1f || NPC.ai[0] == 5f) ? 0.24f : 0.48f; // Reduce acceleration while spawning minions
+            float velocity = (NPC.ai[0] == 1f || NPC.ai[0] == 5f) ? 12f : (NPC.ai[0] == 2f ? 18f : 24f); // Reduce velocity while preparing to spawn minions and spawning minions
             acceleration *= 0.5f * enrageScale + 1f;
             velocity *= 1f + enrageScale * 0.5f;
             Vector2 hoverDestination = player.Center - Vector2.UnitY * distanceAboveTarget;
@@ -1209,7 +1220,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 for (int i = 0; i < 40; i++)
                 {
-                    int plagueDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.Plague, 0f, 0f, 100, default, 2f);
+                    int plagueDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Plague, 0f, 0f, 100, default, 2f);
                     Main.dust[plagueDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -1220,10 +1231,10 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
 
                 for (int j = 0; j < 70; j++)
                 {
-                    int plagueDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.Plague, 0f, 0f, 100, default, 3f);
+                    int plagueDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Plague, 0f, 0f, 100, default, 3f);
                     Main.dust[plagueDust2].noGravity = true;
                     Main.dust[plagueDust2].velocity *= 5f;
-                    plagueDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, (int)CalamityDusts.Plague, 0f, 0f, 100, default, 2f);
+                    plagueDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, (int)CalamityDusts.Plague, 0f, 0f, 100, default, 2f);
                     Main.dust[plagueDust2].velocity *= 2f;
                 }
             }
@@ -1232,7 +1243,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Texture2D glowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathGlow").Value;
+            Texture2D glowTexture = Texture_Glow.Value;
             if (curTex != (charging ? 2 : 1))
             {
                 NPC.frame.X = 0;
@@ -1241,8 +1252,8 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             if (charging)
             {
                 curTex = 2;
-                texture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTex").Value;
-                glowTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/PlaguebringerGoliath/PlaguebringerGoliathChargeTexGlow").Value;
+                texture = ChargeTexture.Value;
+                glowTexture = ChargeTexture_Glow.Value;
             }
             else
                 curTex = 1;

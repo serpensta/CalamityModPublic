@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Summon
             else
             {
                 Projectile.spriteDirection = 1;
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X);
+                Projectile.rotation = Projectile.velocity.ToRotation();
             }
             //Homing
             if (Projectile.ai[0] > 20f)
@@ -117,7 +117,7 @@ namespace CalamityMod.Projectiles.Summon
             for (int i = 0; i < Main.rand.Next(28, 41); i++)
             {
                 Dust.NewDustPerfect(Projectile.Center + Utils.NextVector2Unit(Main.rand) * Main.rand.NextFloat(10f),
-                    (int)CalamityDusts.SulfurousSeaAcid,
+                    (int)CalamityDusts.SulphurousSeaAcid,
                     Utils.NextVector2Unit(Main.rand) * Main.rand.NextFloat(1f, 4f));
             }
         }

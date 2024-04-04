@@ -42,7 +42,7 @@ namespace CalamityMod.Projectiles.Magic
 
             if (Projectile.ai[0] == 0f)
             {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.Pi;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.Pi;
             }
             //Sticky Behaviour
             Projectile.StickyProjAI(5);
@@ -102,7 +102,7 @@ namespace CalamityMod.Projectiles.Magic
             SoundEngine.PlaySound(SoundID.NPCDeath1 with { Volume = SoundID.NPCDeath1.Volume * 0.5f }, Projectile.Center);
             for (int i = 0; i < 5; i++)
             {
-                int dust = Dust.NewDust(Projectile.Center, 1, 1, (int)CalamityDusts.SulfurousSeaAcid, 0, 0, 0, default, 1.5f);
+                int dust = Dust.NewDust(Projectile.Center, 1, 1, (int)CalamityDusts.SulphurousSeaAcid, 0, 0, 0, default, 1.5f);
                 Main.dust[dust].noGravity = true;
             }
         }

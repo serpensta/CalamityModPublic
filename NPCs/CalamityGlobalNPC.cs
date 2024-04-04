@@ -55,12 +55,16 @@ using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Systems;
+using CalamityMod.Tiles.FurnitureAuric;
+using CalamityMod.Tiles.Ores;
 using CalamityMod.UI;
 using CalamityMod.Walls.DraedonStructures;
 using CalamityMod.World;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -3210,7 +3214,7 @@ namespace CalamityMod.NPCs
             if (CalamityLists.AstrumDeusIDs.Contains(npc.type))
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
             if (eaterofWorldsResist)
-                modifiers.FinalDamage *= 0.01f;
+                modifiers.FinalDamage *= 0.05f;
         }
 
         // Directly modifies final damage incoming to an NPC based on their DR (damage reduction) stat added by Calamity.
@@ -3247,7 +3251,7 @@ namespace CalamityMod.NPCs
                     cirrusBossActive = Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas.SupremeCalamitas>().cirrus;
             }
 
-            bool nightProvi = npc.type == NPCType<Providence.Providence>() && !Main.dayTime;
+            bool nightProvi = npc.type == NPCType<Providence.Providence>() && !Main.IsItDay();
             bool dayEmpress = npc.type == NPCID.HallowBoss && NPC.ShouldEmpressBeEnraged();
             if (KillTime > 0 && AITimer < KillTime && !BossRushEvent.BossRushActive && !cirrusBossActive && (nightProvi || dayEmpress))
             {
@@ -5139,6 +5143,84 @@ namespace CalamityMod.NPCs
                 if (pearlAura > 0)
                     npc.velocity *= 0.9f;
             }
+
+            // Auric Ore/Repulsers reject Town NPCs and dummies
+            if ((NPCID.Sets.ActsLikeTownNPC[npc.type] || npc.townNPC) && !npc.dontTakeDamage || npc.type == NPCType<SuperDummyNPC>())
+            {
+                int auricOreID = TileType<AuricOre>();
+                int auricRepulserID = TileType<AuricRepulserPanelTile>();
+
+                // Get a list of tiles near the npc
+                // This is just Collision.GetEntityTiles but with a larger detection square because the sheer speed from auric boosts causes the detection to fail at higher speeds
+                List<Point> EdgeTiles = new List<Point>();
+                int extraDist = (int)(8 * npc.velocity.Length() / 6) + 1;
+                int left = (int)npc.position.X - extraDist;
+                int up = (int)npc.position.Y - extraDist;
+                int right = (int)npc.Right.X + extraDist;
+                int down = (int)npc.Bottom.Y + extraDist;
+                if (left % 16 == 0)
+                {
+                    left--;
+                }
+
+                if (up % 16 == 0)
+                {
+                    up--;
+                }
+
+                if (right % 16 == 0)
+                {
+                    right++;
+                }
+
+                if (down % 16 == 0)
+                {
+                    down++;
+                }
+
+                int width = right / 16 - left / 16;
+                int height = down / 16 - up / 16;
+                left /= 16;
+                up /= 16;
+                for (int i = left; i <= left + width; i++)
+                {
+                    EdgeTiles.Add(new Point(i, up));
+                    EdgeTiles.Add(new Point(i, up + height));
+                }
+
+                for (int j = up; j < up + height; j++)
+                {
+                    EdgeTiles.Add(new Point(left, j));
+                    EdgeTiles.Add(new Point(left + width, j));
+                }
+                foreach (Point touchedTile in EdgeTiles)
+                {
+                    Tile tile = Framing.GetTileSafely(touchedTile);
+                    if (!tile.HasTile || !tile.HasUnactuatedTile)
+                        continue;
+                    if (tile.TileType != auricOreID && tile.TileType != auricRepulserID)
+                        continue;
+
+                    // Force Auric Ore to animate with its crackling electricity
+                    if (tile.TileType == auricOreID)
+                    {
+                        AuricOre.Animate = true;
+                    }
+
+                    var yeetVec = Vector2.Normalize(npc.Center - touchedTile.ToWorldCoordinates());
+                    npc.velocity += yeetVec * 20f;
+                    // Speed must be clamped or they start clipping through tiles very easily
+                    float clampedSpeed = MathHelper.Clamp(npc.velocity.Length(), -40, 40);
+                    npc.velocity = npc.velocity.SafeNormalize(Vector2.Zero) * clampedSpeed;
+                    if (tile.TileType == auricOreID)
+                    {
+                        npc.SimpleStrikeNPC((int)(npc.lifeMax * 0.2f), 0);
+                        npc.AddBuff(BuffID.Electrified, 300);
+                    }
+                    SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/ExoMechs/TeslaShoot1"), npc.Center);
+                    break;
+                }
+            }
         }
         #endregion
 
@@ -5148,7 +5230,7 @@ namespace CalamityMod.NPCs
             if (hurtInfo.Damage <= 0)
                 return;
 
-            if (target.Calamity().sulfurSet)
+            if (target.Calamity().sulphurSet)
                 npc.AddBuff(BuffID.Poisoned, 120);
 
             if (target.Calamity().snowman)
@@ -5231,7 +5313,7 @@ namespace CalamityMod.NPCs
                     break;
 
                 case NPCID.HallowBoss:
-                    target.AddBuff(Main.dayTime ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
+                    target.AddBuff(NPC.ShouldEmpressBeEnraged() ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
                     break;
 
                 case NPCID.BloodNautilus:
@@ -6310,6 +6392,9 @@ namespace CalamityMod.NPCs
             if (Main.LocalPlayer.Calamity().trippy || (npc.type == NPCID.KingSlime && CalamityWorld.LegendaryMode && CalamityWorld.revenge))
                 return new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
 
+            if (npc.type == NPCID.KingSlime && Main.masterMode && CalamityWorld.revenge)
+                return NPC.AnyNPCs(ModContent.NPCType<KingSlimeJewel2>()) ? Color.Lerp(new Color(0, 0, 150, npc.alpha), new Color(125, 125, 255, npc.alpha), (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f) : null;
+
             if (npc.type == NPCID.QueenBee && Main.zenithWorld)
             {
                 if (npc.life / (float)npc.lifeMax < 0.5f)
@@ -6751,7 +6836,7 @@ namespace CalamityMod.NPCs
                 intensity *= intensityAndOpacityMult;
                 opacity *= intensityAndOpacityMult;
 
-                Texture2D forcefieldTexture = Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/ForcefieldTexture").Value;
+                Texture2D forcefieldTexture = SupremeCalamitas.SupremeCalamitas.ForcefieldTexture.Value;
 
                 if (npc.type == NPCID.CultistBoss)
                     GameShaders.Misc["CalamityMod:SupremeShield"].SetShaderTexture(Request<Texture2D>("CalamityMod/ExtraTextures/GreyscaleGradients/EternityStreak"));
@@ -6911,7 +6996,7 @@ namespace CalamityMod.NPCs
                         }
                     }
 
-                    Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerHeadGlow").Value;
+                    Texture2D glowTexture = CalamityMod.DestroyerGlowmasks[0].Value;
                     switch (npc.type)
                     {
                         default:
@@ -6919,11 +7004,11 @@ namespace CalamityMod.NPCs
                             break;
 
                         case NPCID.TheDestroyerBody:
-                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerBodyGlow").Value;
+                            glowTexture = CalamityMod.DestroyerGlowmasks[1].Value;
                             break;
 
                         case NPCID.TheDestroyerTail:
-                            glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/DestroyerTailGlow").Value;
+                            glowTexture = CalamityMod.DestroyerGlowmasks[2].Value;
                             break;
                     }
 
@@ -7158,8 +7243,8 @@ namespace CalamityMod.NPCs
                     if (masterMode && revenge)
                     {
                         int alpha = 192;
-                        eyesColor = npc.type == ModContent.NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
-                        Texture2D glowTexture = Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/SkeletronPrimeHeadGlow").Value;
+                        eyesColor = npc.type == NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
+                        Texture2D glowTexture = SkeletronPrime2.EyeTexture.Value;
                         for (int i = 0; i < 3; i++)
                             spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                     }

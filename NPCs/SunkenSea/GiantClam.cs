@@ -16,10 +16,10 @@ using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
@@ -37,6 +37,8 @@ namespace CalamityMod.NPCs.SunkenSea
         private bool hasBeenHit = false;
         private bool hide = false;
 
+        public static Asset<Texture2D> GlowTexture;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 12;
@@ -47,6 +49,10 @@ namespace CalamityMod.NPCs.SunkenSea
             };
             value.Position.Y += 40f;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.AsyncLoad);
+            }
         }
 
         public override void SetDefaults()
@@ -515,7 +521,7 @@ namespace CalamityMod.NPCs.SunkenSea
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            Texture2D glowmask = ModContent.Request<Texture2D>("CalamityMod/NPCs/SunkenSea/GiantClamGlow").Value;
+            Texture2D glowmask = GlowTexture.Value;
             SpriteEffects spriteEffects = SpriteEffects.None;
             Vector2 center = new Vector2(NPC.Center.X, NPC.Center.Y);
             Vector2 halfSizeTexture = new Vector2((float)(texture.Width / 2), (float)(texture.Height / Main.npcFrameCount[NPC.type] / 2));

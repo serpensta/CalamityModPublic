@@ -714,8 +714,8 @@ namespace CalamityMod.CalPlayer
         public bool frostSet = false; //vanilla armor
         public bool victideSet = false;
         public bool victideSummoner = false;
-        public bool sulfurSet = false;
-        public bool sulfurJump = false;
+        public bool sulphurSet = false;
+        public bool sulphurJump = false;
         public int sulphurBubbleCooldown = 0;
         public bool aeroSet = false;
         public bool statigelSet = false;
@@ -1079,6 +1079,7 @@ namespace CalamityMod.CalPlayer
         public bool celestialDragons = false;
         public bool KalandraMirror = false;
         public bool StellarTorus = false;
+        public bool LiliesOfFinalityBool = false;
         #endregion
 
         #region Biome
@@ -1179,6 +1180,7 @@ namespace CalamityMod.CalPlayer
         #region Draedon Summoning
         public bool AbleToSelectExoMech = false;
         public bool HasTalkedAtCodebreaker = false;
+        public bool HasCraftedDraedonsForge = false;
         public List<ulong> SeenDraedonDialogs = new();
         #endregion Draedon Summoning
 
@@ -1313,6 +1315,7 @@ namespace CalamityMod.CalPlayer
             boost.AddWithCondition("newCalamitasInventory", newCalamitasInventory);
             boost.AddWithCondition("GivenBrimstoneLocus", GivenBrimstoneLocus);
             boost.AddWithCondition("HasTalkedAtCodebreaker", HasTalkedAtCodebreaker);
+            boost.AddWithCondition("HasCraftedDraedonsForge", HasCraftedDraedonsForge);
 
             // Calculate the new total time of all sessions at the instant of this player save.
             TimeSpan newSessionTotal = previousSessionTotal.Add(CalamityMod.SpeedrunTimer.Elapsed);
@@ -1403,6 +1406,7 @@ namespace CalamityMod.CalPlayer
             newCalamitasInventory = boost.Contains("newCalamitasInventory");
             GivenBrimstoneLocus = boost.Contains("GivenBrimstoneLocus");
             HasTalkedAtCodebreaker = boost.Contains("HasTalkedAtCodebreaker");
+            HasCraftedDraedonsForge = boost.Contains("HasCraftedDraedonsForge");
 
             // Load rage if it's there, which it will be for any players saved with 1.5.
             // Older players have "stress" instead, which will be ignored. This is intentional.
@@ -1820,7 +1824,7 @@ namespace CalamityMod.CalPlayer
             victideSet = false;
             victideSummoner = false;
 
-            sulfurSet = false;
+            sulphurSet = false;
 
             aeroSet = false;
 
@@ -2118,6 +2122,7 @@ namespace CalamityMod.CalPlayer
             celestialDragons = false;
             KalandraMirror = false;
             StellarTorus = false;
+            LiliesOfFinalityBool = false;
 
             disableVoodooSpawns = false;
             disablePerfCystSpawns = false;
@@ -2547,7 +2552,7 @@ namespace CalamityMod.CalPlayer
             frostSet = false; //vanilla armor
             victideSet = false;
             aeroSet = false;
-            sulfurSet = false;
+            sulphurSet = false;
             statigelSet = false;
             tarraSet = false;
             tarraMelee = false;
@@ -2735,6 +2740,8 @@ namespace CalamityMod.CalPlayer
                     Projectile.NewProjectile(source, new Vector2((int)(Player.Center.X + (Math.Sin(projIndex * start) * 300)), (int)(Player.Center.Y + (Math.Cos(projIndex * start) * 300))), Vector2.Zero, ModContent.ProjectileType<AngelicAllianceArchangel>(), damage, proj.knockBack / 10f, Player.whoAmI, Main.rand.Next(180), projIndex * start);
                     Player.statLife += 2;
                     Player.HealEffect(2);
+                    if (Player.statLife > Player.statLifeMax2)
+                        Player.statLife = Player.statLifeMax2;
                 }
             }
             if (CalamityKeybinds.SandCloakHotkey.JustPressed && sandCloak && Main.myPlayer == Player.whoAmI && rogueStealth >= rogueStealthMax * 0.1f &&
@@ -3596,17 +3603,11 @@ namespace CalamityMod.CalPlayer
                     lifeStealRecoveryRateReduction += BalancingConstants.LifeStealRecoveryRateReduction_Master;
 
                 float lifeStealRecoveryRate = baseRecoveryRate - lifeStealRecoveryRateReduction;
-
-                // This value is here to somewhat prevent the rapid cooldown flashing that happens sometimes.
-                float cooldownDisplayGateValue = 12f;
-                float displayLifeStealCooldownGateValue = lifeStealRecoveryRate * cooldownDisplayGateValue;
-                if (Player.lifeSteal < -displayLifeStealCooldownGateValue)
+                if (Player.lifeSteal < -lifeStealRecoveryRate)
                 {
-                    float duration = Math.Abs(Player.lifeSteal);
-                    duration /= lifeStealRecoveryRate;
-
-                    if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < (int)duration))
-                        Player.AddCooldown(LifeSteal.ID, (int)duration);
+                    int duration = (int)Math.Ceiling(Math.Abs(Player.lifeSteal) / lifeStealRecoveryRate);
+                    if (!Player.HasCooldown(LifeSteal.ID) || (cooldowns[LifeSteal.ID].duration < duration))
+                        Player.AddCooldown(LifeSteal.ID, duration);
                 }
             }
 
@@ -3665,7 +3666,6 @@ namespace CalamityMod.CalPlayer
                     (silvaSet ? 0.05f : 0f) +
                     (blueCandle ? 0.05f : 0f) +
                     (planarSpeedBoost > 0 ? (0.01f * planarSpeedBoost) : 0f) +
-                    ((deepDiver && Player.IsUnderwater()) ? 0.15f : 0f) +
                     (hasteLevel * 0.05f);
 
                 float runSpeedMult = 1f +
@@ -3680,7 +3680,6 @@ namespace CalamityMod.CalPlayer
                     (CobaltSet ? CobaltArmorSetChange.SpeedBoostSetBonusPercentage * 0.01f : 0f) +
                     (silvaSet ? 0.05f : 0f) +
                     (planarSpeedBoost > 0 ? (0.01f * planarSpeedBoost) : 0f) +
-                    ((deepDiver && Player.IsUnderwater()) ? 0.15f : 0f) +
                     (hasteLevel * 0.05f);
 
                 if ((Player.slippy || Player.slippy2) && Player.iceSkate)
