@@ -30,13 +30,14 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public const int SlashCounterLimit = 50;
         public const int DartBurstCounterLimit = 300;
         public const int PreBigAttackPause = 50;
-        public int BigAttackLimit = 4;
+        public int BigAttackLimit = 8;
         public bool targetSide = false;
         public int dashAttackTimer = 0;
         public int dashes = 0;
         public Vector2 offset = Vector2.Zero;
         public bool MovingUp = false;
         public bool EnrageRoar = true;
+        public int accSlashCounter = 0;
         public Player Target => Main.player[NPC.target];
         public ref float SlashCounter => ref NPC.ai[1];
         public ref float DartBurstCounter => ref NPC.ai[2];
@@ -188,8 +189,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             float acceleration = Utils.Remap(AttackDelayTimer, 0f, 120f, 2f, 4f);
             int verticalSpeed = (int)Math.Round(MathHelper.Lerp(2f, 6.5f, 1f - totalLifeRatio));
 
-            bool isBroDead = NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? true : false;
-            if (totalLifeRatio < 0.3 && !isBroDead)
+            bool Phase2 = NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? true : false;
+            if (NPC.life / (float)NPC.lifeMax < (death ? 0.6 : 0.4) && !Phase2)
             {
                 if (EnrageRoar)
                 {
@@ -197,20 +198,20 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     SoundStyle yell = new("CalamityMod/Sounds/NPCKilled/RavagerLimbLoss2");
                     SoundEngine.PlaySound(yell with { Volume = 1.5f, Pitch = 0.3f }, NPC.Center);
                 }
-                isBroDead = true;
+                Phase2 = true;
             }
 
 
             // Buffs for the big attack when the other brother dies
-            if (isBroDead && BigAttackTimer > 400)
+            if (Phase2 && BigAttackTimer > 400)
             BigAttackTimer = 400;
 
-            if (isBroDead && BigAttackTimer > 0 && BigAttackLimit < 9)
-                BigAttackLimit = 9;
+            if (Phase2 && BigAttackTimer > 0 && BigAttackLimit < 11)
+                BigAttackLimit = 11;
 
             if (BigAttackTimer > PreBigAttackPause)
             {
-                if (isBroDead)
+                if (Phase2)
                 {
                     if (MovingUp)
                     {
@@ -234,7 +235,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
 
                     // Hover to the side of the target.
-                    Vector2 idealVelocity = NPC.SafeDirectionTo(Target.Center + new Vector2(-HorizontalOffset * (targetSide ? -1 : 1), VerticalOffset)) * (isBroDead ? Utils.Remap(AttackDelayTimer, 0f, 120f, 15f, 50f) : Utils.Remap(AttackDelayTimer, 60f, 120f, 0f, 50f));
+                    Vector2 idealVelocity = NPC.SafeDirectionTo(Target.Center + new Vector2(-HorizontalOffset * (targetSide ? -1 : 1), VerticalOffset)) * (Phase2 ? Utils.Remap(AttackDelayTimer, 0f, 120f, 15f, 50f) : Utils.Remap(AttackDelayTimer, 60f, 120f, 0f, 50f));
                     if (SlashCounter <= SlashCounterLimit * 0.3f && dashAttackTimer == 0)
                     {
                         if (AttackDelayTimer == 120 && Main.rand.NextBool())
@@ -262,12 +263,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity.SafeNormalize(Vector2.UnitY) * 0.1f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 4 + dashes);
                         dashes++;
-                        if (dashes == 30)
+                        if (dashes == 30 && NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false)
                         {
                             SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
                             SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f }, NPC.Center);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).RotatedBy(0.3f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).RotatedBy(-0.3f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.3f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.3f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
                             for (int i = 0; i < 30; i++)
                             {
                                 Vector2 vel = new Vector2(7, 7).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
@@ -330,13 +331,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else if (BigAttackTimer > PreBigAttackPause)
             {
                 // Shoot sword slashes.
-                float fireVelocity = isBroDead ? 4.4f : 4;
-                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1f, 2.5f, 1f - totalLifeRatio) * (isBroDead ? 1.25f : 1);
+                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1.5f, 2.5f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.25f : 1);
                 SlashCounter += fireRate;
                 if (SlashCounter >= SlashCounterLimit)
                 {
                     SlashCounter = 0f;
-                    SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, NPC.Center);
+                    SoundEngine.PlaySound(SupremeCalamitas.CatastropheSwing with { Volume = 0.5f, Pitch = (SlashingFromRight ? 0.2f : -0.2f) }, NPC.Center);
 
                     int type = ModContent.ProjectileType<SupremeCatastropheSlash>();
                     int damage = NPC.GetProjectileDamage(type);
@@ -345,16 +345,21 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     Vector2 slashSpawnPosition = NPC.Center + Vector2.UnitX * 125f * NPC.direction;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     { 
-                        if (isBroDead)
+                        Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.032f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
+                        if (Phase2)
                         {
-                            if (SlashingFromRight)
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 2);
+                            if (accSlashCounter < 3)
+                            {
+                                accSlashCounter++;
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, firingVelocity * 7f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 2);
+                            }
                             else
                             {
                                 SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
                                 SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = 0.4f }, NPC.Center);
 
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 0.2f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 3);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, firingVelocity * 0.2f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 3);
+                                accSlashCounter = 0;
                             }
                         }
                         else
@@ -387,8 +392,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else
             {
                 // Shoot sword slashes.
-                float fireRate = BossRushEvent.BossRushActive ? 3 : MathHelper.Lerp(2f, 4f, 1f - totalLifeRatio) * (isBroDead ? 1.2f : 1);
-                if (isBroDead && BigAttackLimit == 0)
+                float fireRate = BossRushEvent.BossRushActive ? 4f : MathHelper.Lerp(3f, 5f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.2f : 1);
+                if (Phase2 && BigAttackLimit == 0)
                     fireRate = 1;
                 SlashCounter += fireRate;
                 if (SlashCounter >= SlashCounterLimit)
@@ -400,21 +405,33 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     if (bossRush)
                         damage /= 2;
                     Vector2 slashSpawnPosition = NPC.Center;
-                    if (BigAttackLimit == 0 && isBroDead)
+                    Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.032f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
+                    if (BigAttackLimit == 0 && !Phase2 && death)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, firingVelocity * 90f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                        SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
+                        SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f }, NPC.Center);
+                    }
+                    else if (BigAttackLimit == 0 && Phase2)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             SoundStyle charge = new("CalamityMod/Sounds/Item/ExobladeBeamSlash");
                             SoundEngine.PlaySound(charge with { Volume = 0.85f, Pitch = -0.5f }, NPC.Center);
-                            NPC.velocity = NPC.DirectionTo(Target.Center) * 90f;
+                            NPC.velocity = firingVelocity * 90f;
                             dashAttackTimer = 30;
                             dashes = 0;
                         }
                     }
                     else if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.4f }, NPC.Center);
+                        SoundEngine.PlaySound(SupremeCalamitas.CatastropheSwing with { Volume = 0.5f, Pitch = (SlashingFromRight ? 0.2f : -0.2f) }, NPC.Center);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, NPC.DirectionTo(Target.Center) * 8f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 1);
+                        for (int i = 0; i < 7; i++)
+                        {
+                            SparkParticle orb = new SparkParticle(NPC.Center + NPC.DirectionTo(Target.Center) * 10f, (NPC.DirectionTo(Target.Center) * 30f).RotatedByRandom(0.6f) * Main.rand.NextFloat(0.4f, 1.1f), false, 40, Main.rand.NextFloat(0.75f, 2.25f), Color.Cyan);
+                            GeneralParticleHandler.SpawnParticle(orb);
+                        }
                     }
 
                     SlashingFromRight = !SlashingFromRight;
@@ -425,7 +442,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     {
                         BigAttackTimer = 600;
                         AttackDelayTimer = 0;
-                        BigAttackLimit = 4;
+                        BigAttackLimit = 8;
                         
                         targetSide = !targetSide;
                     }

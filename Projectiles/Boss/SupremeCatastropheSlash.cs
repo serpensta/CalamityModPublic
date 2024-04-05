@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using CalamityMod.Events;
+using CalamityMod.World;
 using CalamityMod.Particles;
 using Terraria.ModLoader;
 using Terraria.Audio;
@@ -40,6 +42,14 @@ namespace CalamityMod.Projectiles.Boss
 
         public override void AI()
         {
+            Time++;
+
+            // Difficulty modes
+            bool bossRush = BossRushEvent.BossRushActive;
+            bool death = CalamityWorld.death || bossRush;
+            bool revenge = CalamityWorld.revenge || bossRush;
+            bool expertMode = Main.expertMode || bossRush;
+
             // Decide frames.
             Projectile.frameCounter++;
             Projectile.frame = Projectile.frameCounter / 7 % Main.projFrames[Projectile.type];
@@ -47,10 +57,7 @@ namespace CalamityMod.Projectiles.Boss
             // Fade in and handle visuals.
             if (Projectile.ai[2] < 4 && Projectile.ai[2] < 50)
                 Projectile.Opacity = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true) * Utils.GetLerpValue(1500f, 1492f, Projectile.timeLeft, true);
-            if (Projectile.timeLeft == 1500)
-            {
 
-            }
             if (Projectile.velocity.X < 0f)
             {
                 Projectile.spriteDirection = -1;
@@ -107,7 +114,7 @@ namespace CalamityMod.Projectiles.Boss
                 {
                     if (Projectile.timeLeft == 1500)
                     {
-                        Projectile.timeLeft = 30 - (int)(Projectile.ai[2] - 4);
+                        Projectile.timeLeft = death ? 40 : 50 - (int)(Projectile.ai[2] - 4);
                         SparkParticle spark1 = new SparkParticle(Projectile.Center, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
                         GeneralParticleHandler.SpawnParticle(spark1);
                     }
@@ -166,7 +173,6 @@ namespace CalamityMod.Projectiles.Boss
             }
             else
                 Projectile.velocity *= 1.003f;
-            Time++;
 
             // Emit light.
             Lighting.AddLight(Projectile.Center, 0.5f * Projectile.Opacity, 0f, 0f);

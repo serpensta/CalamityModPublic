@@ -197,13 +197,13 @@ namespace CalamityMod.Projectiles.Boss
             Lighting.AddLight(Projectile.Center, 3f * Projectile.Opacity, 0f, 0f);
 
             float inertia = (revenge ? 4.5f : 5f) + speedAdd;
-            float speed = (revenge ? 1.5f : 1.35f) + (speedAdd * 0.25f);
+            float speed = (revenge ? 2.2f : 1.85f) + (speedAdd * 0.25f);
             float minDist = 160f;
 
-            if (NPC.AnyNPCs(ModContent.NPCType<SoulSeekerSupreme>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<SoulSeekerSupreme>()) || NPC.AnyNPCs(ModContent.NPCType<BrimstoneHeart>()))
             {
                 inertia *= 1.5f;
-                speed *= 0.5f;
+                speed *= 0.8f;
             }
 
             int target = (int)Projectile.ai[0];

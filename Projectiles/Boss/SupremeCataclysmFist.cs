@@ -1,7 +1,10 @@
 ﻿using System;
 using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Items.Accessories;
 using CalamityMod.NPCs.SupremeCalamitas;
 using CalamityMod.Particles;
+using CalamityMod.Events;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -16,6 +19,7 @@ namespace CalamityMod.Projectiles.Boss
         public new string LocalizationCategory => "Projectiles.Boss";
         public ref float Time => ref Projectile.ai[0];
         public Vector2 shootVel;
+        public int rotDirection = 1;
 
         public override void SetStaticDefaults()
         {
@@ -24,7 +28,8 @@ namespace CalamityMod.Projectiles.Boss
 
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = 44;
+            Projectile.width = 126;
+            Projectile.height = 54;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -36,31 +41,50 @@ namespace CalamityMod.Projectiles.Boss
 
         public override void AI()
         {
+            // Difficulty modes
+            bool bossRush = BossRushEvent.BossRushActive;
+            bool death = CalamityWorld.death || bossRush;
+            bool revenge = CalamityWorld.revenge || bossRush;
+            bool expertMode = Main.expertMode || bossRush;
+
             if (Projectile.ai[2] >= 3)
             {
-                if (Projectile.timeLeft > 180)
+                if (Projectile.timeLeft > 240)
                 {
-                    shootVel = Projectile.velocity * 2;
-                    Projectile.timeLeft = 180;
+                    shootVel = Projectile.velocity * 0.2f;
+                    Projectile.timeLeft = 240;
+                    rotDirection = Main.rand.NextBool() ? -1 : 1;
                 }
                 else
                 {
-                    Vector2 randPos = Main.rand.NextVector2Circular(30, 30);
+                    float randSize = Main.rand.NextFloat(0.8f, 1.2f);
                     for (int i = 0; i < 2; i++)
                     {
-                        Particle bloom = new CustomPulse(Projectile.Center + randPos, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.5f), "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1.1f, 0f, 14);
+                        Particle bloom = new CustomPulse(Projectile.Center, Vector2.Zero, Color.Lerp(Color.Red, Color.Magenta, 0.5f), "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1.7f * randSize, 0f, 10);
                         GeneralParticleHandler.SpawnParticle(bloom);
                     }
-                    Particle bloom2 = new CustomPulse(Projectile.Center + randPos, Vector2.Zero, Color.White, "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1f, 0f, 14);
-                    GeneralParticleHandler.SpawnParticle(bloom2);
-                    Projectile.velocity *= 0.99f;
+                    Particle bloom3 = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.9f, "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1.4f * randSize, 0f, 10);
+                    GeneralParticleHandler.SpawnParticle(bloom3);
+
+                    Projectile.velocity *= 0.985f;
                 }
-                
+
+                // Adds rotation, but it's SUPER unfair a lot of the time
+                //shootVel = shootVel.RotatedBy(Time * 0.00011f * rotDirection);
+
                 if (Projectile.timeLeft >= 2 && Time % 3 == 0)
                 {
+                    Vector2 randPos = shootVel.RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
                     SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.55f }, Projectile.Center);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.4f)).RotatedByRandom(0.3f) * Main.rand.NextFloat(0.4f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                }
+                if (Projectile.timeLeft >= 2 && Time % 3 == 0 && NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
+                {
+                    Vector2 randPos = shootVel.RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
+                    int type = ModContent.ProjectileType<SupremeCataclysmFist>();
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(-120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
                 }
                 if (Projectile.timeLeft == 1)
                 {
@@ -99,9 +123,12 @@ namespace CalamityMod.Projectiles.Boss
 
                 if (Projectile.ai[2] == 0)
                 {
-                    Projectile.scale = 0.75f;
-                    if (Projectile.timeLeft > 240)
-                        Projectile.timeLeft = 240;
+                    Projectile.scale = 0.8f;
+                    Projectile.extraUpdates = 2;
+                    Projectile.Opacity = 1;
+                    if (Projectile.timeLeft > 300)
+                        Projectile.timeLeft = 300;
+                    Projectile.velocity *= 1.009f;
                 }
 
                 if (Projectile.velocity.X < 0f)
@@ -139,8 +166,7 @@ namespace CalamityMod.Projectiles.Boss
             if (Projectile.ai[1] == 1f)
                 texture = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Boss/SupremeCataclysmFistAlt").Value;
 
-            Vector2 drawPosition = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
-            drawPosition.X -= Math.Sign(Projectile.velocity.X) * 40f;
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Rectangle frame = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
             Main.EntitySpriteDraw(texture, drawPosition, frame, Projectile.GetAlpha(lightColor), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, direction, 0);
             return false;
