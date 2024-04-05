@@ -258,6 +258,15 @@ AsgardsValor: {
 		'''
 }
 
+AuricSoulArtifact: {
+	DisplayName: Auric Soul Artifact
+	Tooltip:
+		'''
+		For each Fiery Draconid you have summoned, you gain 1 minion slot
+		Loyalty
+		'''
+}
+
 BadgeofBravery: {
 	DisplayName: Badge of Bravery
 	Tooltip:
@@ -842,15 +851,6 @@ GloveOfRecklessness: {
 		Increases rogue attack speed by 15%, but decreases damage by 10% and crit by 5%
 		15% increased stealth regeneration
 		Adds inaccuracy to rogue weapons
-		'''
-}
-
-GodlySoulArtifact: {
-	DisplayName: Auric Soul Artifact
-	Tooltip:
-		'''
-		For each Fiery Draconid you have summoned, you gain 1 minion slot
-		Loyalty
 		'''
 }
 
