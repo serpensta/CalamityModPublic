@@ -42,7 +42,7 @@ namespace CalamityMod.Projectiles.Magic
 
             if (Projectile.ai[0] == 0f)
             {
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.Pi;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.Pi;
             }
             //Sticky Behaviour
             Projectile.StickyProjAI(5);

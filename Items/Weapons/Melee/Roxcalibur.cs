@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Weapons.Melee
     public class Roxcalibur : ModItem, ILocalizedModType
     {
 
-        public string LocalizationCategory => "Items.Weapons.Melee";
+        public new string LocalizationCategory => "Items.Weapons.Melee";
 
         public static int BaseUseTime = 40;
         public override void SetDefaults()

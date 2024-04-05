@@ -78,7 +78,7 @@ namespace CalamityMod.Projectiles.Typeless
             int inc;
             for (int k = 0; k < 100; k = inc + 1)
             {
-                int deathGoldenDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Ichor, 0f, 0f, 75, default, 1.2f);
+                int deathGoldenDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Ichor, 0f, 0f, 75, default, 1.2f);
                 Dust dust = Main.dust[deathGoldenDust];
                 if (Main.rand.NextBool())
                 {

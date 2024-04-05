@@ -32,14 +32,14 @@ namespace CalamityMod.Projectiles.Melee
                     Projectile.Kill();
             }
             if (Projectile.ai[0] < 30f)
-                Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + MathHelper.PiOver2;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
 
         public override void OnKill(int timeLeft)
         {
             for (int dustIndex = 0; dustIndex < 3; ++dustIndex)
             {
-                int redDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TheDestroyer, 0f, 0f, 100, new Color(), 0.8f);
+                int redDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.TheDestroyer, 0f, 0f, 100, new Color(), 0.8f);
                 Dust dust = Main.dust[redDust];
                 dust.noGravity = true;
                 dust.velocity *= 1.2f;

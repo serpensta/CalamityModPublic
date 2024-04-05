@@ -136,7 +136,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Daytime enrage
-            if (Main.dayTime && !bossRush && npc.ai[1] != 3f && npc.ai[1] != 2f)
+            if (Main.IsItDay() && !bossRush && npc.ai[1] != 3f && npc.ai[1] != 2f)
             {
                 npc.ai[1] = 2f;
                 SoundEngine.PlaySound(SoundID.ForceRoar, npc.Center);

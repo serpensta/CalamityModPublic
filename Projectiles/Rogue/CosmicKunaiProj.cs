@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 namespace CalamityMod.Projectiles.Rogue
@@ -23,7 +23,7 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void AI()
         {
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.alpha += (Projectile.Calamity().stealthStrike ? 11 : 17);
             if (Projectile.alpha >= 255)
             {

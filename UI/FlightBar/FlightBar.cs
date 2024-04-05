@@ -228,7 +228,6 @@ namespace CalamityMod.UI
             if (!completedAnimation && FlightAnimFrame >= 0)
             {
                 Vector2 origin = new Vector2(correctBorder.Width * 0.5f, (correctBorder.Height / FlightAnimFrames) * 0.5f);
-                float animOffset = 5f;
                 float xOffset = (correctBorder.Width - flightBarAnimTexture.Width) / 2f;
                 int frameHeight = (flightBarAnimTexture.Height / FlightAnimFrames) - 1;
                 float yOffset = FlightAnimFrame == 0 ? 0 : ((correctBorder.Height / FlightAnimFrame) - frameHeight) / 2f;

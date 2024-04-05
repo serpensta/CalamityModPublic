@@ -40,8 +40,6 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
 using ReLogic.Utilities;
 using CalamityMod.Projectiles.Ranged;
 using Steamworks;

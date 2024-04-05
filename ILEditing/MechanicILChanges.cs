@@ -284,7 +284,7 @@ namespace CalamityMod.ILEditing
         #region Allow Empress to Enrage in Boss Rush
         private static bool AllowEmpressToEnrageInBossRush(Terraria.On_NPC.orig_ShouldEmpressBeEnraged orig)
         {
-            if (Main.dayTime || BossRushEvent.BossRushActive)
+            if (BossRushEvent.BossRushActive)
                 return true;
 
             return orig();

@@ -3251,7 +3251,7 @@ namespace CalamityMod.NPCs
                     cirrusBossActive = Main.npc[CalamityGlobalNPC.SCal].ModNPC<SupremeCalamitas.SupremeCalamitas>().cirrus;
             }
 
-            bool nightProvi = npc.type == NPCType<Providence.Providence>() && !Main.dayTime;
+            bool nightProvi = npc.type == NPCType<Providence.Providence>() && !Main.IsItDay();
             bool dayEmpress = npc.type == NPCID.HallowBoss && NPC.ShouldEmpressBeEnraged();
             if (KillTime > 0 && AITimer < KillTime && !BossRushEvent.BossRushActive && !cirrusBossActive && (nightProvi || dayEmpress))
             {
@@ -5313,7 +5313,7 @@ namespace CalamityMod.NPCs
                     break;
 
                 case NPCID.HallowBoss:
-                    target.AddBuff(Main.dayTime ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
+                    target.AddBuff(NPC.ShouldEmpressBeEnraged() ? BuffType<HolyFlames>() : BuffType<Nightwither>(), 240);
                     break;
 
                 case NPCID.BloodNautilus:

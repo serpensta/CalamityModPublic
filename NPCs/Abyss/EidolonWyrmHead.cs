@@ -220,7 +220,7 @@ namespace CalamityMod.NPCs.Abyss
 
             float currentSpeed = speed;
             float currentTurnSpeed = turnSpeed;
-            Vector2 segmentPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
+            Vector2 segmentPosition = NPC.Center;
 
             if (patrolSpot == Vector2.Zero)
                 patrolSpot = Main.player[NPC.target].Center;

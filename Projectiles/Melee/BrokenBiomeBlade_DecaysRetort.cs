@@ -43,7 +43,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             float collisionPoint = 0f;
             float bladeLength = 120f * Projectile.scale;
-            Vector2 displace = direction * ((float)Math.Sin(Timer / MaxTime * 3.14f) * 60);
+            Vector2 displace = direction * ((float)Math.Sin(Timer / MaxTime * MathHelper.Pi) * 60);
 
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Owner.Center + displace, Owner.Center + displace + (direction * bladeLength), 24, ref collisionPoint);
         }
@@ -124,7 +124,7 @@ namespace CalamityMod.Projectiles.Melee
             float drawAngle = direction.ToRotation();
             float drawRotation = drawAngle + MathHelper.PiOver4;
 
-            Vector2 displace = direction * ((float)Math.Sin(Timer / MaxTime * 3.14f) * 60);
+            Vector2 displace = direction * ((float)Math.Sin(Timer / MaxTime * MathHelper.Pi) * 60);
             Vector2 drawOrigin = new Vector2(0f, handle.Height);
             Vector2 drawOffset = Owner.Center + direction * 10f - Main.screenPosition;
 

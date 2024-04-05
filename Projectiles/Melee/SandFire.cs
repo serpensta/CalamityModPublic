@@ -31,7 +31,7 @@ namespace CalamityMod.Projectiles.Melee
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    int shiny = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Teleporter, 0f, 0f, 100, default, 0.5f);
+                    int shiny = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, 0f, 0f, 100, default, 0.5f);
                     Main.dust[shiny].noGravity = true;
                     Main.dust[shiny].velocity *= 0f;
                 }

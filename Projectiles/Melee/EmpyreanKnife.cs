@@ -70,7 +70,7 @@ namespace CalamityMod.Projectiles.Melee
         {
             for (int i = 0; i < 3; i++)
             {
-                int empyreanDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Enchanted_Pink, 0f, 0f, 100, default, 0.8f);
+                int empyreanDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Enchanted_Pink, 0f, 0f, 100, default, 0.8f);
                 Main.dust[empyreanDust].noGravity = true;
                 Main.dust[empyreanDust].velocity *= 1.2f;
                 Main.dust[empyreanDust].velocity -= Projectile.oldVelocity * 0.3f;

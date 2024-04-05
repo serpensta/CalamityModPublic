@@ -135,7 +135,7 @@ namespace CalamityMod.NPCs.Polterghast
                 Movement(phase2, expertMode, revenge, death, speedBoost, despawnBoost, lifeRatio, tileEnrageMult, player);
 
                 // Fire projectiles
-                Vector2 hookPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
+                Vector2 hookPosition = NPC.Center;
                 float targetX = Main.player[NPC.target].position.X + (Main.player[NPC.target].width / 2) - hookPosition.X;
                 float targetY = Main.player[NPC.target].position.Y + (Main.player[NPC.target].height / 2) - hookPosition.Y;
                 float targetDistance = (float)Math.Sqrt(targetX * targetX + targetY * targetY);
