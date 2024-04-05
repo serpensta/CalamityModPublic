@@ -122,7 +122,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (calamityGlobalNPC.newAI[0] >= timer && phase2)
                     {
                         if (Collision.CanHitLine(npc.Center, 1, 1, Main.player[npc.target].Center, 1, 1) &&
-                            npc.SafeDirectionTo(Main.player[npc.target].Center).AngleBetween((npc.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
+                            (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(npc.velocity.ToRotation(), MathHelper.PiOver2) == npc.velocity.ToRotation() &&
                             Vector2.Distance(npc.Center, Main.player[npc.target].Center) > 320f)
                         {
                             calamityGlobalNPC.newAI[0] = 0f;

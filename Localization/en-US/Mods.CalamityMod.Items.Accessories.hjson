@@ -308,10 +308,7 @@ BloodstainedGlove: {
 
 BloodyWormScarf: {
 	DisplayName: Bloody Worm Scarf
-	Tooltip:
-		'''
-		10% increased damage reduction and melee damage
-		'''
+	Tooltip: 10% increased damage reduction and melee damage
 }
 
 BloodyWormTooth: {
