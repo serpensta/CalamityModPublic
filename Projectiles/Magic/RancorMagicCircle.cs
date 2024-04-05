@@ -27,7 +27,7 @@ namespace CalamityMod.Projectiles.Magic
             }
         }
         public float ChargeupCompletion => MathHelper.Clamp(Time / ChargeupTime, 0f, 1f);
-        public const int ChargeupTime = 240;
+        public const int ChargeupTime = 180;
 
         public override void SetDefaults()
         {
