@@ -673,7 +673,7 @@ IllustriousKnives: {
 
 InsidiousImpaler: {
 	DisplayName: Insidious Impaler
-	Tooltip: Fires a harpoon that sticks to enemies and explodes
+	Tooltip: Fires infected harpoons that stick to enemies and explode
 }
 
 IridescentExcalibur: {
