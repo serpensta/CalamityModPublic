@@ -340,7 +340,7 @@ namespace CalamityMod.NPCs.DesertScourge
                         NPC.frameCounter = 0D;
                     }
                     if (NPC.frame.Y >= frameHeight * ClosedFinFrame)
-                        NPC.frame.Y = 0;
+                        NPC.frame.Y = frameHeight * ClosedFinFrame;
                 }
 
                 // Open fins while head is outside tiles.
