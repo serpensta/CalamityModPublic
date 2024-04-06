@@ -171,8 +171,11 @@ namespace CalamityMod.Projectiles.Rogue
 
         internal Color ColorFunction(float completionRatio)
         {
+            float colorIncrement = (float)Math.Pow(completionRatio, 1f / 2f);
+            if (colorIncrement is float.NaN)
+                return Color.DarkRed;
             float colorFade = 1f - Utils.GetLerpValue(0.6f, 0.98f, completionRatio, true);
-            Color baseColor = CalamityUtils.MulticolorLerp((float)Math.Pow(completionRatio, 1D / 2D), Color.White, Color.DarkRed, Color.Wheat, Color.IndianRed) * MathHelper.Lerp(0f, 1.4f, colorFade);
+            Color baseColor = CalamityUtils.MulticolorLerp(colorIncrement, Color.White, Color.DarkRed, Color.Wheat, Color.IndianRed) * MathHelper.Lerp(0f, 1.4f, colorFade);
             return Color.Lerp(baseColor, Color.DarkRed, (float)Math.Pow(completionRatio, 3D));
         }
 
