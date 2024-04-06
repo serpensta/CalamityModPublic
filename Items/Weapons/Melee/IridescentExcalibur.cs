@@ -184,8 +184,8 @@ namespace CalamityMod.Items.Weapons.Melee
             CreateRecipe().
                 AddIngredient(ItemID.TrueExcalibur).
                 AddIngredient<Orderbringer>().
-                AddIngredient<ShadowspecBar>(5).
-                AddIngredient<AscendantSpiritEssence>(5).
+                AddIngredient<MiracleMatter>(3).
+                AddIngredient<AshesofAnnihilation>(15).
                 AddTile<DraedonsForge>().
                 Register();
         }
