@@ -55,33 +55,36 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
             Projectile.scale = num6 + num * num5;
 
-            Color rainbowGoldEmphasis = new Color(Math.Abs(128 - Main.DiscoR) * 2 - 1, Math.Abs(128 - Main.DiscoG) * 2 - 1, Math.Abs(128 - Main.DiscoB) * 2 - 1);
+            float colorAIScale = Projectile.localAI[0] / Projectile.ai[1];
+            float amount = Utils.Remap(colorAIScale, 0f, 0.6f, 0f, 1f) * Utils.Remap(colorAIScale, 0.6f, 1f, 1f, 0f);
+            Color rainbow = Color.Lerp(new Color(255 - (Math.Abs(128 - Main.DiscoR) * 2 - 1), 255 - (Math.Abs(128 - Main.DiscoG) * 2 - 1), 255 - (Math.Abs(128 - Main.DiscoB) * 2 - 1)),
+                new Color(Math.Abs(128 - Main.DiscoR) * 2 - 1, Math.Abs(128 - Main.DiscoG) * 2 - 1, Math.Abs(128 - Main.DiscoB) * 2 - 1), amount);
+
             float num8 = Projectile.rotation + Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7f;
             Vector2 vector2 = Projectile.Center + num8.ToRotationVector2() * 84f * Projectile.scale;
             Vector2 vector3 = (num8 + Projectile.ai[0] * MathHelper.PiOver2).ToRotationVector2();
             if (Main.rand.NextFloat() * 2f < Projectile.Opacity)
             {
-                Dust dust2 = Dust.NewDustPerfect(Projectile.Center + num8.ToRotationVector2() * (Main.rand.NextFloat() * 80f * Projectile.scale + 20f * Projectile.scale), 278, vector3 * 1f, 100, rainbowGoldEmphasis, 0.4f);
+                Dust dust2 = Dust.NewDustPerfect(Projectile.Center + num8.ToRotationVector2() * (Main.rand.NextFloat() * 80f * Projectile.scale + 20f * Projectile.scale), 278, vector3 * 1f, 100, rainbow, 0.4f);
                 dust2.fadeIn = 0.4f + Main.rand.NextFloat() * 0.15f;
                 dust2.noGravity = true;
             }
 
             if (Main.rand.NextFloat() * 1.5f < Projectile.Opacity)
-                Dust.NewDustPerfect(vector2, 43, vector3 * 1f, 100, rainbowGoldEmphasis * Projectile.Opacity, 1.2f * Projectile.Opacity);
+                Dust.NewDustPerfect(vector2, 43, vector3 * 1f, 100, rainbow * Projectile.Opacity, 1.2f * Projectile.Opacity);
 
-            Color rainbowPinkEmphasis = new Color(Math.Abs(128 - Main.DiscoR) * 2 - 1, Math.Abs(128 - Main.DiscoG) * 2 - 1, Math.Abs(128 - Main.DiscoB) * 2 - 1);
             float num10 = Projectile.rotation + Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7f;
             Vector2 vector5 = Projectile.Center + num10.ToRotationVector2() * 84f * Projectile.scale;
             Vector2 vector6 = (num10 + Projectile.ai[0] * MathHelper.PiOver2).ToRotationVector2();
             if (Main.rand.NextFloat() < Projectile.Opacity)
             {
-                Dust dust4 = Dust.NewDustPerfect(Projectile.Center + num10.ToRotationVector2() * (Main.rand.NextFloat() * 80f * Projectile.scale + 20f * Projectile.scale), 278, vector6 * 1f, 100, rainbowPinkEmphasis, 0.4f);
+                Dust dust4 = Dust.NewDustPerfect(Projectile.Center + num10.ToRotationVector2() * (Main.rand.NextFloat() * 80f * Projectile.scale + 20f * Projectile.scale), 278, vector6 * 1f, 100, rainbow, 0.4f);
                 dust4.fadeIn = 0.4f + Main.rand.NextFloat() * 0.15f;
                 dust4.noGravity = true;
             }
 
             if (Main.rand.NextFloat() * 1.5f < Projectile.Opacity)
-                Dust.NewDustPerfect(vector5, 43, vector6 * 1f, 100, rainbowPinkEmphasis * Projectile.Opacity, 1.2f * Projectile.Opacity);
+                Dust.NewDustPerfect(vector5, 43, vector6 * 1f, 100, rainbow * Projectile.Opacity, 1.2f * Projectile.Opacity);
 
             Projectile.scale *= Projectile.ai[2];
             if (Projectile.localAI[0] >= Projectile.ai[1])
