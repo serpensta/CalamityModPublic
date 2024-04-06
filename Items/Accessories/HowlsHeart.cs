@@ -31,7 +31,7 @@ namespace CalamityMod.Items.Accessories
             Item.accessory = true;
 
             Item.value = CalamityGlobalItem.Rarity4BuyPrice;
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ItemRarityID.LightRed;
             Item.Calamity().donorItem = true;
         }
 

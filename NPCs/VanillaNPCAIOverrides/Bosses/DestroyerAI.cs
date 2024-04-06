@@ -376,7 +376,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (calamityGlobalNPC.newAI[0] % 20f == 0f)
                         npc.SyncExtraAI();
 
-                    if (npc.SafeDirectionTo(player.Center).AngleBetween((npc.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(18f) &&
+                    if ((player.Center - npc.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(npc.velocity.ToRotation(), MathHelper.PiOver2) == npc.velocity.ToRotation() &&
                         calamityGlobalNPC.newAI[0] >= laserBreathGateValue && Vector2.Distance(npc.Center, player.Center) > 480f &&
                         Collision.CanHit(npc.position, npc.width, npc.height, player.position, player.width, player.height))
                     {

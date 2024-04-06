@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Events;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -11,6 +12,7 @@ namespace CalamityMod.NPCs.DesertScourge
     public class DesertScourgeTail : ModNPC
     {
         public override LocalizedText DisplayName => CalamityUtils.GetText("NPCs.DesertScourgeHead.DisplayName");
+
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -19,8 +21,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void SetDefaults()
         {
             NPC.GetNPCDamage();
-            NPC.width = 32;
-            NPC.height = 48;
+            NPC.width = 74;
+            NPC.height = 82;
             NPC.defense = 9;
             NPC.DR_NERD(0.1f);
 
@@ -42,15 +44,6 @@ namespace CalamityMod.NPCs.DesertScourge
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.netAlways = true;
             NPC.dontCountMe = true;
-
-            if (BossRushEvent.BossRushActive)
-                NPC.scale *= 1.25f;
-            else if (CalamityWorld.death)
-                NPC.scale *= 1.2f;
-            else if (CalamityWorld.revenge)
-                NPC.scale *= 1.15f;
-            else if (Main.expertMode)
-                NPC.scale *= 1.1f;
 
             if (Main.getGoodWorld)
                 NPC.scale *= 0.4f;
@@ -123,7 +116,7 @@ namespace CalamityMod.NPCs.DesertScourge
             segmentTilePos.Y = (float)((int)(segmentTilePos.Y / 16f) * 16);
             playerXPos -= segmentTilePos.X;
             playerYPos -= segmentTilePos.Y;
-            float playerDistance = (float)System.Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
+            float playerDistance = (float)Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
             if (NPC.ai[1] > 0f && NPC.ai[1] < (float)Main.npc.Length)
             {
                 try
@@ -135,9 +128,11 @@ namespace CalamityMod.NPCs.DesertScourge
                 catch
                 {
                 }
-                NPC.rotation = (float)System.Math.Atan2((double)playerYPos, (double)playerXPos) + MathHelper.PiOver2;
-                playerDistance = (float)System.Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
-                playerDistance = (playerDistance - (float)(NPC.width)) / playerDistance;
+                NPC.rotation = (float)Math.Atan2((double)playerYPos, (double)playerXPos) + MathHelper.PiOver2;
+                playerDistance = (float)Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
+
+                int segmentOffset = 56;
+                playerDistance = (playerDistance - (float)segmentOffset) / playerDistance;
                 playerXPos *= playerDistance;
                 playerYPos *= playerDistance;
                 NPC.velocity = Vector2.Zero;
@@ -153,7 +148,7 @@ namespace CalamityMod.NPCs.DesertScourge
             // Calculate contact damage based on velocity
             float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
             if (expertMode)
-                maxChaseSpeed += 5f * (1f - lifeRatio);
+                maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);
 
             float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
             float minimalDamageVelocity = maxChaseSpeed * 0.5f;
@@ -167,6 +162,26 @@ namespace CalamityMod.NPCs.DesertScourge
                 float velocityDamageScalar = MathHelper.Clamp((bodyAndTailVelocity - minimalContactDamageVelocity) / minimalDamageVelocity, 0f, 1f);
                 NPC.damage = (int)MathHelper.Lerp(0f, NPC.defDamage, velocityDamageScalar);
             }
+        }
+
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            Rectangle targetHitbox = target.Hitbox;
+
+            float hitboxTopLeft = Vector2.Distance(NPC.Center, targetHitbox.TopLeft());
+            float hitboxTopRight = Vector2.Distance(NPC.Center, targetHitbox.TopRight());
+            float hitboxBotLeft = Vector2.Distance(NPC.Center, targetHitbox.BottomLeft());
+            float hitboxBotRight = Vector2.Distance(NPC.Center, targetHitbox.BottomRight());
+
+            float minDist = hitboxTopLeft;
+            if (hitboxTopRight < minDist)
+                minDist = hitboxTopRight;
+            if (hitboxBotLeft < minDist)
+                minDist = hitboxBotLeft;
+            if (hitboxBotRight < minDist)
+                minDist = hitboxBotRight;
+
+            return minDist <= 30f;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
