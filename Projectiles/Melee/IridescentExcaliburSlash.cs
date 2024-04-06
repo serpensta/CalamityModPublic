@@ -36,7 +36,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.usesOwnerMeleeHitCD = true;
             Projectile.stopsDealingDamageAfterPenetrateHits = true;
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.penetrate = 3;
+            Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
         }
