@@ -2376,6 +2376,7 @@ namespace CalamityMod.NPCs
                 case NPCID.Sharkron:
                 case NPCID.Sharkron2:
                     npc.width = npc.height = 36;
+                    npc.chaseable = false;
                     canBreakPlayerDefense = true;
                     break;
 

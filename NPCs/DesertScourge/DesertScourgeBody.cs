@@ -23,6 +23,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public static Asset<Texture2D> BodyTexture3;
         public static Asset<Texture2D> BodyTexture4;
 
+        private const int ClosedFinFrame = 5;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
@@ -321,16 +323,41 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void FindFrame(int frameHeight)
         {
+            // Fin animation segment.
             if (NPC.ai[3] == 0f)
             {
-                NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 10D)
+                // Close fins while head is in tiles.
+                NPC head = Main.npc[(int)NPC.ai[2]];
+                Point headTileCenter = head.Center.ToTileCoordinates();
+                Tile tileSafely = Framing.GetTileSafely(headTileCenter);
+                bool headInSolidTile = tileSafely.HasUnactuatedTile || tileSafely.LiquidAmount > 0;
+                if (headInSolidTile)
                 {
-                    NPC.frame.Y += frameHeight;
-                    NPC.frameCounter = 0D;
+                    NPC.frameCounter += 1D;
+                    if (NPC.frameCounter > 10D)
+                    {
+                        NPC.frame.Y += frameHeight;
+                        NPC.frameCounter = 0D;
+                    }
+                    if (NPC.frame.Y >= frameHeight * ClosedFinFrame)
+                        NPC.frame.Y = 0;
                 }
-                if (NPC.frame.Y >= frameHeight * Main.npcFrameCount[NPC.type])
-                    NPC.frame.Y = 0;
+
+                // Open fins while head is outside tiles.
+                else
+                {
+                    if (NPC.frame.Y > 0)
+                    {
+                        NPC.frameCounter += 1D;
+                        if (NPC.frameCounter > 10D)
+                        {
+                            NPC.frame.Y += frameHeight;
+                            NPC.frameCounter = 0D;
+                        }
+                        if (NPC.frame.Y >= frameHeight * Main.npcFrameCount[NPC.type])
+                            NPC.frame.Y = 0;
+                    }
+                }
             }
         }
 

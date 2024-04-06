@@ -637,13 +637,13 @@ namespace CalamityMod.NPCs.DesertScourge
         {
             // Open mouth to prepare for a nibble ;3
             bool openMouth = NPC.Distance(Main.player[NPC.target].Center) < 360f &&
-                (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(NPC.velocity.ToRotation(), MathHelper.PiOver2) == NPC.velocity.ToRotation() &&
+                (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(NPC.velocity.ToRotation(), MathHelper.PiOver4) == NPC.velocity.ToRotation() &&
                 NPC.ai[3] == 0f;
 
             bool closeMouthBite = NPC.ai[3] == 1f;
             if (closeMouthBite)
             {
-                // Force mouth open for a bite if it's not open
+                // Force mouth open for a bite if it's not open.
                 if (NPC.frame.Y < frameHeight * OpenMouthStopFrame)
                 {
                     NPC.frame.Y = frameHeight * OpenMouthStopFrame;
@@ -651,7 +651,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
 
                 NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 6D)
+                if (NPC.frameCounter > 10D)
                 {
                     NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0D;
@@ -667,7 +667,7 @@ namespace CalamityMod.NPCs.DesertScourge
             else if (openMouth)
             {
                 NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 6D)
+                if (NPC.frameCounter > 10D)
                 {
                     NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0D;
@@ -676,7 +676,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.frame.Y = frameHeight * OpenMouthStopFrame;
             }
 
-            // Close mouth
+            // Close mouth.
             else
             {
                 if (NPC.frame.Y > 0)
@@ -691,7 +691,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     else
                     {
                         NPC.frameCounter += 1D;
-                        if (NPC.frameCounter > 6D)
+                        if (NPC.frameCounter > 10D)
                         {
                             NPC.frame.Y -= frameHeight;
                             NPC.frameCounter = 0D;
@@ -716,7 +716,7 @@ namespace CalamityMod.NPCs.DesertScourge
         {
             CalamityGlobalNPC.SetNewBossJustDowned(NPC);
 
-            // If Desert Scourge has not been killed yet, notify players that the Sunken Sea is open and Sandstorms can happen
+            // If Desert Scourge has not been killed yet, notify players that the Sunken Sea is open and Sandstorms can happen.
             if (!DownedBossSystem.downedDesertScourge)
             {
                 string key = "Mods.CalamityMod.Status.Progression.OpenSunkenSea";
@@ -731,7 +731,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     CalamityUtils.StartSandstorm();
             }
 
-            // Mark Desert Scourge as dead
+            // Mark Desert Scourge as dead.
             DownedBossSystem.downedDesertScourge = true;
             CalamityNetcode.SyncWorld();
         }
@@ -752,7 +752,7 @@ namespace CalamityMod.NPCs.DesertScourge
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<DesertScourgeBag>()));
 
             // Extraneous potions
-            npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.LesserHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary
+            npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.LesserHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary.
 
             // Normal drops: Everything that would otherwise be in the bag
             var normalOnly = npcLoot.DefineNormalOnlyDropSet();
