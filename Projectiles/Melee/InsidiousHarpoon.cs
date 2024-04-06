@@ -1,8 +1,10 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee
@@ -10,6 +12,7 @@ namespace CalamityMod.Projectiles.Melee
     public class InsidiousHarpoon : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Melee";
+        public override LocalizedText DisplayName => CalamityUtils.GetItemName<InsidiousImpaler>();
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
@@ -23,8 +26,10 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.penetrate = 8;
             Projectile.alpha = 255;
-            Projectile.DamageType = DamageClass.Melee;
-            Projectile.extraUpdates = 2;
+            Projectile.DamageType = DamageClass.MeleeNoSpeed;
+            AIType = ProjectileID.BoneJavelin;
+            Projectile.scale = 1.3f;
+            Projectile.extraUpdates = 1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 20 * Projectile.extraUpdates;
             Projectile.tileCollide = true;
@@ -37,7 +42,18 @@ namespace CalamityMod.Projectiles.Melee
                 Projectile.alpha -= 25;
             }
             if (Projectile.alpha < 0)
+            {
                 Projectile.alpha = 0;
+            }
+            if (Projectile.ai[0] == 0f)
+            {
+                Projectile.localAI[1] += 1f;
+                if (Projectile.localAI[1] >= 45f)
+                {
+                    Projectile.velocity.X *= 0.98f;
+                    Projectile.velocity.Y += 0.35f;
+                }
+            }
 
             int dustType = 171;
             if (Main.rand.NextBool(3))
