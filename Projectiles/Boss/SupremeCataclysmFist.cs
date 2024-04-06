@@ -47,6 +47,7 @@ namespace CalamityMod.Projectiles.Boss
             bool revenge = CalamityWorld.revenge || bossRush;
             bool expertMode = Main.expertMode || bossRush;
 
+            // The Orb
             if (Projectile.ai[2] >= 3)
             {
                 if (Projectile.timeLeft > 240)
@@ -54,6 +55,7 @@ namespace CalamityMod.Projectiles.Boss
                     shootVel = Projectile.velocity * 0.2f;
                     Projectile.timeLeft = 240;
                     rotDirection = Main.rand.NextBool() ? -1 : 1;
+                    Projectile.velocity *= 5.5f;
                 }
                 else
                 {
@@ -66,25 +68,25 @@ namespace CalamityMod.Projectiles.Boss
                     Particle bloom3 = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.9f, "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 1.4f * randSize, 0f, 10);
                     GeneralParticleHandler.SpawnParticle(bloom3);
 
-                    Projectile.velocity *= 0.985f;
+                    Projectile.velocity *= 0.945f;
                 }
 
                 // Adds rotation, but it's SUPER unfair a lot of the time
                 //shootVel = shootVel.RotatedBy(Time * 0.00011f * rotDirection);
 
-                if (Projectile.timeLeft >= 2 && Time % 3 == 0)
+                if (Projectile.timeLeft <= 200 && Time % 3 == 0)
                 {
                     Vector2 randPos = shootVel.RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
                     SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.55f }, Projectile.Center);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
                 }
-                if (Projectile.timeLeft >= 2 && Time % 3 == 0 && NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
+                if (Projectile.timeLeft <= 200 && Time % 3 == 0 && NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
                 {
                     Vector2 randPos = shootVel.RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(-120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage / 2, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(-120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
                 }
                 if (Projectile.timeLeft == 1)
                 {
@@ -114,13 +116,15 @@ namespace CalamityMod.Projectiles.Boss
             }
             else if (Projectile.ai[2] <= 2)
             {
+                // Rapid punches
                 if (Projectile.ai[2] == 1)
                 {
                     Projectile.extraUpdates = 2;
                 }
-                else
-                    Projectile.velocity *= 1.0045f;
+                else // Regular punches
+                    Projectile.velocity *= 1.0055f;
 
+                // Orb mini fists
                 if (Projectile.ai[2] == 0)
                 {
                     Projectile.scale = 0.8f;
@@ -172,7 +176,7 @@ namespace CalamityMod.Projectiles.Boss
             return false;
         }
 
-        public override bool CanHitPlayer(Player target) => Projectile.Opacity >= 1f;
+        public override bool CanHitPlayer(Player target) => (Projectile.Opacity >= 1f || Projectile.ai[2] >= 3);
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
@@ -181,6 +185,6 @@ namespace CalamityMod.Projectiles.Boss
 
             target.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 240, true);
         }
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, 35 * Projectile.scale, targetHitbox);
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, (Projectile.ai[2] >= 3 ? 90 : 35 * Projectile.scale), targetHitbox);
     }
 }

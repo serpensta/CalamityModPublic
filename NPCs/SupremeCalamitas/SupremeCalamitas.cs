@@ -1848,6 +1848,27 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         NPC.Center = player.Center + new Vector2(0, -155);
                         Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
                         GeneralParticleHandler.SpawnParticle(pulse);
+                        for (int x = 0; x < Main.maxProjectiles; x++)
+                        {
+                            Projectile projectile = Main.projectile[x];
+                            if (projectile.active)
+                            {
+                                if (projectile.type == bulletHellblast ||
+                                    projectile.type == barrage ||
+                                    projectile.type == wave)
+                                {
+                                    if (projectile.timeLeft > 60)
+                                        projectile.timeLeft = 60;
+                                }
+                                else if (projectile.type == fireblast || projectile.type == gigablast)
+                                {
+                                    projectile.ai[1] = 1f;
+
+                                    if (projectile.timeLeft > 15)
+                                        projectile.timeLeft = 15;
+                                }
+                            }
+                        }
                         teleport = true;
                     }
                 }

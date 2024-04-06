@@ -68,6 +68,7 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.spriteDirection = 1;
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
             }
+            // Non dash slash trails
             if (Projectile.ai[2] == 50)
             {
                 Projectile.extraUpdates = 0;
@@ -85,14 +86,15 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY) * 0.1f, ModContent.ProjectileType<SupremeCatastropheSlash>(), Projectile.damage, 0f, Main.myPlayer, 0f, 5, 4 + Time);
                 return;
             }
-            if (Projectile.ai[2] >= 1 && Projectile.ai[2] < 3)
+            if (Projectile.ai[2] == 1 || Projectile.ai[2] == 2)
             {
+                // Rapid slashes
                 if (Projectile.ai[2] == 1)
                     Projectile.extraUpdates = 2;
-                else
+                else // Regular slashes
                     Projectile.velocity *= 1.0045f;
             }
-            // Acceleration slash
+            // Acceleration slashes
             else if (Projectile.ai[2] == 3)
             {
                 Projectile.extraUpdates = 5;
@@ -106,11 +108,11 @@ namespace CalamityMod.Projectiles.Boss
                     catastrophedust.color = Color.DeepSkyBlue;
                 }
             }
-            // Dash of slashes
+            // Slash trails
             else if (Projectile.ai[2] >= 4)
             {
                 Projectile.extraUpdates = 0;
-                if (Projectile.ai[1] == 5)
+                if (Projectile.ai[1] == 5) // Non dash trails
                 {
                     if (Projectile.timeLeft == 1500)
                     {
@@ -138,11 +140,11 @@ namespace CalamityMod.Projectiles.Boss
                         }
                     }
                 }
-                else
+                else // Dash trails
                 {
                     if (Projectile.timeLeft == 1500)
                     {
-                        Projectile.timeLeft = 30 - (int)(Projectile.ai[2] - 4);
+                        Projectile.timeLeft = 40 - (int)(Projectile.ai[2] - 4);
                         SparkParticle spark1 = new SparkParticle(Projectile.Center, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
                         GeneralParticleHandler.SpawnParticle(spark1);
                         SparkParticle spark2 = new SparkParticle(Projectile.Center + Projectile.velocity * 50, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
@@ -171,8 +173,6 @@ namespace CalamityMod.Projectiles.Boss
                     }
                 }
             }
-            else
-                Projectile.velocity *= 1.003f;
 
             // Emit light.
             Lighting.AddLight(Projectile.Center, 0.5f * Projectile.Opacity, 0f, 0f);
@@ -207,6 +207,6 @@ namespace CalamityMod.Projectiles.Boss
             if (info.Damage <= 0 || Projectile.Opacity != 1f && Projectile.ai[2] < 4 || !dashSlashExplode && Projectile.ai[2] >= 4)
                 return;
         }
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, (Projectile.ai[1] == 5 ? 78 : Projectile.ai[2] >= 4 ? 140 : 50), targetHitbox);
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, (Projectile.ai[1] == 5 ? 70 : Projectile.ai[2] >= 4 ? 100 : 50), targetHitbox);
     }
 }

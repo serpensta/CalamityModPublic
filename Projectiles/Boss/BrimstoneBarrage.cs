@@ -119,7 +119,7 @@ namespace CalamityMod.Projectiles.Boss
         {
             lightColor.R = (byte)(255 * Projectile.Opacity);
 
-            if (CalamityGlobalNPC.SCal != -1)
+            if (CalamityGlobalNPC.SCal != -1 && NPC.AnyNPCs(ModContent.NPCType<SupremeCalamitas>()) == true)
             {
                 if (Main.npc[CalamityGlobalNPC.SCal].active)
                 {

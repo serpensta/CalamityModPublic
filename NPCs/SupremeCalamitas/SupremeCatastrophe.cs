@@ -30,7 +30,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public const int SlashCounterLimit = 50;
         public const int DartBurstCounterLimit = 300;
         public const int PreBigAttackPause = 50;
-        public int BigAttackLimit = 8;
+        public int BigAttackLimit = 7;
         public bool targetSide = false;
         public int dashAttackTimer = 0;
         public int dashes = 0;
@@ -85,7 +85,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             NPC.DeathSound = SupremeCalamitas.BrotherDeath;
             NPC.Calamity().VulnerableToHeat = false;
             NPC.Calamity().VulnerableToCold = true;
-            NPC.localAI[1] = 600;
+            NPC.localAI[1] = 500;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -267,8 +267,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
                             SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f }, NPC.Center);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.3f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.3f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.35f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.35f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
                             for (int i = 0; i < 30; i++)
                             {
                                 Vector2 vel = new Vector2(7, 7).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
@@ -331,7 +331,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else if (BigAttackTimer > PreBigAttackPause)
             {
                 // Shoot sword slashes.
-                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1.5f, 2.5f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.25f : 1);
+                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1.5f, 2f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? death ? 1.25f : 1.05f : 1);
                 SlashCounter += fireRate;
                 if (SlashCounter >= SlashCounterLimit)
                 {
@@ -345,13 +345,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     Vector2 slashSpawnPosition = NPC.Center + Vector2.UnitX * 125f * NPC.direction;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     { 
-                        Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.032f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
+                        Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.028f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
                         if (Phase2)
                         {
-                            if (accSlashCounter < 3)
+                            if (accSlashCounter < 2)
                             {
                                 accSlashCounter++;
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, firingVelocity * 7f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, firingVelocity * 5.5f, type, damage, 0f, Main.myPlayer, 0f, SlashingFromRight.ToInt(), 2);
                             }
                             else
                             {
@@ -392,7 +392,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else
             {
                 // Shoot sword slashes.
-                float fireRate = BossRushEvent.BossRushActive ? 4f : MathHelper.Lerp(3f, 5f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.2f : 1);
+                float fireRate = BossRushEvent.BossRushActive ? 4f : MathHelper.Lerp(3f, 4f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.2f : 1);
                 if (Phase2 && BigAttackLimit == 0)
                     fireRate = 1;
                 SlashCounter += fireRate;
@@ -440,9 +440,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         BigAttackLimit--;
                     else
                     {
-                        BigAttackTimer = 600;
+                        BigAttackTimer = 500;
                         AttackDelayTimer = 0;
-                        BigAttackLimit = 8;
+                        BigAttackLimit = 7;
                         
                         targetSide = !targetSide;
                     }
