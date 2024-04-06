@@ -651,7 +651,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
 
                 NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 10D)
+                if (NPC.frameCounter > 6D)
                 {
                     NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0D;
