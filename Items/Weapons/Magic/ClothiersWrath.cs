@@ -38,7 +38,12 @@ namespace CalamityMod.Items.Weapons.Magic
                 Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
                 int proj = Projectile.NewProjectile(source, position, perturbedSpeed, type, damage, knockback, player.whoAmI);
                 if (proj.WithinBounds(Main.maxProjectiles))
+                {
                     Main.projectile[proj].DamageType = DamageClass.Magic;
+                    Main.projectile[proj].penetrate = 3;
+                    Main.projectile[proj].usesLocalNPCImmunity = true;
+                    Main.projectile[proj].localNPCHitCooldown = -1;
+                }
             }
             return false;
         }
