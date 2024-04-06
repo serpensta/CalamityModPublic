@@ -27,7 +27,6 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.penetrate = 8;
             Projectile.alpha = 255;
             Projectile.DamageType = DamageClass.MeleeNoSpeed;
-            AIType = ProjectileID.BoneJavelin;
             Projectile.scale = 1.3f;
             Projectile.extraUpdates = 1;
             Projectile.usesLocalNPCImmunity = true;
@@ -48,10 +47,13 @@ namespace CalamityMod.Projectiles.Melee
             if (Projectile.ai[0] == 0f)
             {
                 Projectile.localAI[1] += 1f;
-                if (Projectile.localAI[1] >= 45f)
+                if (Projectile.localAI[1] >= 60f)
                 {
-                    Projectile.velocity.X *= 0.98f;
-                    Projectile.velocity.Y += 0.35f;
+                    Projectile.velocity.X *= 0.99f;
+                    Projectile.velocity.Y += 0.3f;
+
+                    if (Projectile.velocity.Y > 16f)
+                        Projectile.velocity.Y = 16f;
                 }
             }
 
