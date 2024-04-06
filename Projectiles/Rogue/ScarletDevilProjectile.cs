@@ -127,6 +127,9 @@ namespace CalamityMod.Projectiles.Rogue
             if (!Projectile.Calamity().stealthStrike)
                 return;
 
+            // Spawn a bloom of bullets.
+            SpawnOnStealthStrikeBullets();
+
             // Give on-heal effects from stealth strikes.
             int heal = (int)Math.Round(hit.Damage * 0.01);
             if (heal > BalancingConstants.LifeStealCap)
@@ -136,9 +139,6 @@ namespace CalamityMod.Projectiles.Rogue
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
-
-            // And spawn a bloom of bullets.
-            SpawnOnStealthStrikeBullets();
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -147,6 +147,9 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ScarletBlast>(), (int)(Projectile.damage * 0.0075), 0f, Projectile.owner);
             if (!Projectile.Calamity().stealthStrike)
                 return;
+
+            // Spawn a bloom of bullets.
+            SpawnOnStealthStrikeBullets();
 
             // Give on-heal effects from stealth strikes.
             int heal = (int)Math.Round(info.Damage * 0.01);
@@ -157,9 +160,6 @@ namespace CalamityMod.Projectiles.Rogue
                 return;
 
             CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Main.player[Projectile.owner], heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange);
-
-            // And spawn a bloom of bullets.
-            SpawnOnStealthStrikeBullets();
         }
 
         internal float WidthFunction(float completionRatio)
