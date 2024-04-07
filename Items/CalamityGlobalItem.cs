@@ -1660,29 +1660,6 @@ namespace CalamityMod.Items
         #endregion
 
         #region Ammo
-        public override void PickAmmo(Item weapon, Item ammo, Player player, ref int type, ref float speed, ref StatModifier damage, ref float knockback)
-        {
-            // Sandgun with Calamity sands work like vanilla non-plain sand, +5 flat damage
-            if (weapon.type == ItemID.Sandgun)
-            {
-                if (ammo.type == ModContent.ItemType<AstralSand>())
-                {
-                    type = ModContent.ProjectileType<AstralSandBallGun>();
-                    damage.Flat += 5;
-                }
-                else if (ammo.type == ModContent.ItemType<EutrophicSand>())
-                {
-                    type = ModContent.ProjectileType<EutrophicSandBallGun>();
-                    damage.Flat += 5;
-                }
-                else if (ammo.type == ModContent.ItemType<SulphurousSand>())
-                {
-                    type = ModContent.ProjectileType<SulphurousSandBallGun>();
-                    damage.Flat += 5;
-                }
-            }
-        }
-
         public override bool CanConsumeAmmo(Item weapon, Item ammo, Player player) => Main.rand.NextFloat() <= player.Calamity().rangedAmmoCost;
 
         public static bool HasEnoughAmmo(Player player, Item item, int ammoConsumed)
