@@ -49,6 +49,7 @@ namespace CalamityMod.NPCs.DesertScourge
         public const float LungeUpwardCutoffDistance = 420f;
         public const float BurrowDistance = 800f;
         public const float BurrowDistance_BossRush = 400f;
+        public const float OpenMouthForBiteDistance = 220f;
 
         private const int OpenMouthStopFrame = 6;
 
@@ -655,7 +656,7 @@ namespace CalamityMod.NPCs.DesertScourge
             bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
 
             bool aboutToSpitSpread = lungeUpward && NPC.Center.Y <= NPC.Calamity().newAI[3] + LungeUpwardDistanceOffset - LungeUpwardCutoffDistance * 0.5f;
-            bool openMouth = NPC.Distance(Main.player[NPC.target].Center) < 220f &&
+            bool openMouth = NPC.Distance(Main.player[NPC.target].Center) < OpenMouthForBiteDistance &&
                 (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(NPC.velocity.ToRotation(), MathHelper.PiOver4) == NPC.velocity.ToRotation() &&
                 NPC.ai[3] == 0f;
 
