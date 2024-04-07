@@ -41,6 +41,15 @@ namespace CalamityMod.NPCs.DesertScourge
         public const float SegmentVelocity_Expert = 15f;
         public const float SegmentVelocity_Master = 18f;
 
+        public const float BurrowTimeGateValue = 540f;
+        public const float BurrowTimeGateValue_Death = 420f;
+        public const float BurrowResetTimeGateValue = 600f;
+
+        public const float LungeUpwardDistanceOffset = 600f;
+        public const float LungeUpwardCutoffDistance = 420f;
+        public const float BurrowDistance = 800f;
+        public const float BurrowDistance_BossRush = 400f;
+
         private const int OpenMouthStopFrame = 6;
 
         public static readonly SoundStyle RoarSound = new("CalamityMod/Sounds/Custom/DesertScourgeRoar");
@@ -174,9 +183,9 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.Calamity().newAI[0] += 1f;
             }
 
-            float burrowTimeGateValue = death ? 420f : 540f;
+            float burrowTimeGateValue = death ? BurrowTimeGateValue_Death : BurrowTimeGateValue;
             bool burrow = NPC.Calamity().newAI[0] >= burrowTimeGateValue;
-            bool resetTime = NPC.Calamity().newAI[0] >= burrowTimeGateValue + 600f;
+            bool resetTime = NPC.Calamity().newAI[0] >= burrowTimeGateValue + BurrowResetTimeGateValue;
             bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
             bool quickFall = NPC.Calamity().newAI[1] == 2f;
 
@@ -206,7 +215,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 turnSpeed *= 1.5f;
 
                 if (NPC.Calamity().newAI[3] == 0f && lungeUpward)
-                    NPC.Calamity().newAI[3] = player.Center.Y - 600f;
+                    NPC.Calamity().newAI[3] = player.Center.Y - LungeUpwardDistanceOffset;
             }
 
             if (NPC.ai[2] > 0f)
@@ -372,7 +381,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
             }
 
-            float burrowDistance = bossRush ? 600f : 800f;
+            float burrowDistance = bossRush ? BurrowDistance_BossRush : BurrowDistance;
             float burrowTarget = player.Center.Y + burrowDistance;
             float lungeTarget = NPC.Calamity().newAI[3];
             Vector2 npcCenter = NPC.Center;
@@ -398,7 +407,7 @@ namespace CalamityMod.NPCs.DesertScourge
             }
 
             // Quickly fall back down once above target
-            if (lungeUpward && NPC.Center.Y <= NPC.Calamity().newAI[3] + 600f - 420f)
+            if (lungeUpward && NPC.Center.Y <= NPC.Calamity().newAI[3] + LungeUpwardDistanceOffset - LungeUpwardCutoffDistance)
             {
                 // Spit a huge spread of sand upwards that falls down
                 SoundEngine.PlaySound(SoundID.NPCDeath13, NPC.Center);
@@ -432,7 +441,7 @@ namespace CalamityMod.NPCs.DesertScourge
             if (quickFall)
             {
                 NPC.velocity.Y += Main.getGoodWorld ? 1f : 0.5f;
-                if (NPC.Center.Y >= NPC.Calamity().newAI[3] + 600f)
+                if (NPC.Center.Y >= NPC.Calamity().newAI[3] + LungeUpwardDistanceOffset)
                 {
                     NPC.Calamity().newAI[0] = 0f;
                     NPC.Calamity().newAI[1] = 0f;
@@ -640,6 +649,12 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void FindFrame(int frameHeight)
         {
             // Open mouth to prepare for a nibble ;3
+            // Also open mouth if about to spit a projectile spread
+            float burrowTimeGateValue = (CalamityWorld.death || BossRushEvent.BossRushActive) ? BurrowTimeGateValue_Death : BurrowTimeGateValue;
+            bool burrow = NPC.Calamity().newAI[0] >= burrowTimeGateValue;
+            bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
+
+            bool aboutToSpitSpread = lungeUpward && NPC.Center.Y <= NPC.Calamity().newAI[3] + LungeUpwardDistanceOffset - LungeUpwardCutoffDistance * 0.5f;
             bool openMouth = NPC.Distance(Main.player[NPC.target].Center) < 220f &&
                 (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(NPC.velocity.ToRotation(), MathHelper.PiOver4) == NPC.velocity.ToRotation() &&
                 NPC.ai[3] == 0f;
@@ -668,7 +683,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.frame.Y = 0;
                 }
             }
-            else if (openMouth)
+            else if (openMouth || aboutToSpitSpread)
             {
                 NPC.frameCounter += 1D;
                 if (NPC.frameCounter > 6D)

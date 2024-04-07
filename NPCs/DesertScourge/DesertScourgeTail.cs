@@ -146,7 +146,7 @@ namespace CalamityMod.NPCs.DesertScourge
             }
 
             NPC head = Main.npc[(int)NPC.ai[2]];
-            float burrowTimeGateValue = (CalamityWorld.death || BossRushEvent.BossRushActive) ? 420f : 540f;
+            float burrowTimeGateValue = (CalamityWorld.death || BossRushEvent.BossRushActive) ? DesertScourgeHead.BurrowTimeGateValue_Death : DesertScourgeHead.BurrowTimeGateValue;
             bool burrow = head.Calamity().newAI[0] >= burrowTimeGateValue;
             bool lungeUpward = burrow && head.Calamity().newAI[1] == 1f;
             bool quickFall = head.Calamity().newAI[1] == 2f;
