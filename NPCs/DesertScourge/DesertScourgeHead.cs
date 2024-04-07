@@ -640,7 +640,7 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void FindFrame(int frameHeight)
         {
             // Open mouth to prepare for a nibble ;3
-            bool openMouth = NPC.Distance(Main.player[NPC.target].Center) < 360f &&
+            bool openMouth = NPC.Distance(Main.player[NPC.target].Center) < 220f &&
                 (Main.player[NPC.target].Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(NPC.velocity.ToRotation(), MathHelper.PiOver4) == NPC.velocity.ToRotation() &&
                 NPC.ai[3] == 0f;
 
@@ -671,7 +671,7 @@ namespace CalamityMod.NPCs.DesertScourge
             else if (openMouth)
             {
                 NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 10D)
+                if (NPC.frameCounter > 6D)
                 {
                     NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0D;
@@ -695,7 +695,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     else
                     {
                         NPC.frameCounter += 1D;
-                        if (NPC.frameCounter > 10D)
+                        if (NPC.frameCounter > 6D)
                         {
                             NPC.frame.Y -= frameHeight;
                             NPC.frameCounter = 0D;
