@@ -213,8 +213,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             if (Phase2 && BigAttackTimer > 400)
                 BigAttackTimer = 400;
 
-            if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false && BigAttackTimer > 0 && BigAttackLimit < 19)
-                BigAttackLimit = 19;
+            if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false && BigAttackTimer > 0 && BigAttackLimit < 29)
+                BigAttackLimit = 29;
             else if (Phase2 && BigAttackTimer > 0 && BigAttackLimit < 11)
                 BigAttackLimit = 11;
 
@@ -305,7 +305,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
             // Have a small delay prior to shooting projectiles.
             if (AttackDelayTimer < 120f)
-                AttackDelayTimer += (death ? 2 : 1);
+                AttackDelayTimer += (death ? 1.5f : 1f);
 
             // Handle projectile shots.
             else if (BigAttackTimer > PreBigAttackPause)
@@ -335,8 +335,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                             }
                             else
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(0.45) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(-0.45) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(0.48) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(-0.48) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
                                 doublePunchCounter = 0;
                             }
                         }
@@ -370,9 +370,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else
             {
                 // Shoot fists.
-                float fireRate = BossRushEvent.BossRushActive ? 3.5f : MathHelper.Lerp(3f, 4f, 1f - totalLifeRatio);
+                float fireRate = BossRushEvent.BossRushActive ? 2.8f : MathHelper.Lerp(2.5f, 3f, 1f - totalLifeRatio);
                 if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
-                    fireRate = BossRushEvent.BossRushActive ? 3.5f + (19 - BigAttackLimit) * 0.45f : MathHelper.Lerp(3f, (4f + (19 - BigAttackLimit) * 0.45f), 1f - totalLifeRatio) * 1.2f;
+                    fireRate = BossRushEvent.BossRushActive ? 3.5f + (29 - BigAttackLimit) * 0.45f : MathHelper.Lerp(3f, (4f + (29 - BigAttackLimit) * 0.45f), 1f - totalLifeRatio) * 1.2f;
                 if (Phase2 && BigAttackLimit == 0)
                     fireRate = 1;
 
@@ -389,10 +389,13 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                     if (BigAttackLimit == (Phase2 ? 1 : 0) && death)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 13f).RotatedBy(0.25f), type, damage, 0f, Main.myPlayer, 0f, 1, 2);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 13f).RotatedBy(0.7f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 13f).RotatedBy(-0.25f), type, damage, 0f, Main.myPlayer, 0f, 1, 2);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 13f).RotatedBy(-0.7f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
+                        if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
+                        { 
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(0.15f), type, damage, 0f, Main.myPlayer, 0f, 1, 2);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(-0.15f), type, damage, 0f, Main.myPlayer, 0f, 1, 2);
+                        }
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(0.6f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(-0.6f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
                         SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.8f, Pitch = 0.2f }, NPC.Center);
                     }
                     else if (BigAttackLimit == 0 && Phase2)
@@ -418,7 +421,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     {
                         SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.4f }, NPC.Center);
                         Vector2 randPos = (NPC.DirectionTo(Target.Center) * 1.5f).RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + randPos, NPC.DirectionTo(Target.Center) * (7f - (Phase2 ? (19 - BigAttackLimit) * 0.15f : (8 - BigAttackLimit) * 0.15f)), type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 1);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + randPos, NPC.DirectionTo(Target.Center) * (7.5f - (Phase2 ? (29 - BigAttackLimit) * 0.13f : (8 - BigAttackLimit) * 0.15f)), type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 1);
                         for (int i = 0; i < 7; i++)
                         {
                             GlowOrbParticle orb = new GlowOrbParticle(NPC.Center + NPC.DirectionTo(Target.Center) * 10f, (NPC.DirectionTo(Target.Center) * 30f).RotatedByRandom(0.6f) * Main.rand.NextFloat(0.4f, 1.1f), false, 50, Main.rand.NextFloat(1.75f, 3.25f), Color.Lerp(Color.Red, Color.Magenta, 0.5f), true);

@@ -7,6 +7,7 @@ using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using CalamityMod.Particles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -46,7 +47,30 @@ namespace CalamityMod.Projectiles.Boss
             if (Projectile.frame > 3)
                 Projectile.frame = 0;
 
+            int target = Player.FindClosest(Projectile.Center, 1, 1);
+
+            float targetDist;
+            if (target != -1 && !Main.player[target].dead && Main.player[target].active && Main.player[target] != null)
+                targetDist = Vector2.Distance(Main.player[target].Center, Projectile.Center);
+            else
+                targetDist = 1000;
+
             Lighting.AddLight(Projectile.Center, 0.9f * Projectile.Opacity, 0f, 0f);
+
+            if (targetDist < 1400f)
+            {
+                // Spawn in a helix-style pattern
+                float sine = (float)Math.Sin(Projectile.timeLeft * 0.575f / MathHelper.Pi);
+
+                Vector2 offset = Projectile.velocity.SafeNormalize(Vector2.UnitX).RotatedBy(MathHelper.PiOver2) * sine * 16f;
+
+                SparkParticle orb = new(Projectile.Center + offset, -Projectile.velocity * 0.05f, false, 8, 0.8f, Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.5f));
+                GeneralParticleHandler.SpawnParticle(orb);
+
+                SparkParticle orb2 = new(Projectile.Center - offset, -Projectile.velocity * 0.05f, false, 8, 0.8f, Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.5f));
+                GeneralParticleHandler.SpawnParticle(orb2);
+            }
+
 
             if (Projectile.timeLeft < 51)
                 Projectile.Opacity -= 0.02f;

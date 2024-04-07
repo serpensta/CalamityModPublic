@@ -9,6 +9,7 @@ using CalamityMod.World;
 using CalamityMod.Particles;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using CalamityMod.NPCs.SupremeCalamitas;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -83,7 +84,7 @@ namespace CalamityMod.Projectiles.Boss
                     catastrophedust.color = Color.DeepSkyBlue;
                     catastrophedust.alpha = 100;
                 }
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY) * 0.1f, ModContent.ProjectileType<SupremeCatastropheSlash>(), Projectile.damage, 0f, Main.myPlayer, 0f, 5, 4 + Time);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY) * 0.1f, ModContent.ProjectileType<SupremeCatastropheSlash>(), Projectile.damage, 0f, Main.myPlayer, 0f, 5, 3 + Time);
                 return;
             }
             if (Projectile.ai[2] == 1 || Projectile.ai[2] == 2)
@@ -109,18 +110,18 @@ namespace CalamityMod.Projectiles.Boss
                 }
             }
             // Slash trails
-            else if (Projectile.ai[2] >= 4)
+            else if (Projectile.ai[2] >= 4 && Projectile.ai[2] < 50)
             {
                 Projectile.extraUpdates = 0;
                 if (Projectile.ai[1] == 5) // Non dash trails
                 {
                     if (Projectile.timeLeft == 1500)
                     {
-                        Projectile.timeLeft = death ? 40 : 50 - (int)(Projectile.ai[2] - 4);
+                        Projectile.timeLeft = (death ? 35 : 45) - (int)(Projectile.ai[2] - 4);
                         SparkParticle spark1 = new SparkParticle(Projectile.Center, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
                         GeneralParticleHandler.SpawnParticle(spark1);
                     }
-                    else if (Projectile.timeLeft == 1)
+                    else if (Projectile.timeLeft == 1 && NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == true)
                     {
                         dashSlashExplode = true;
                         VoidSparkParticle spark = new VoidSparkParticle(Projectile.Center, Projectile.velocity, false, 9, 0.7f, Color.Cyan * 0.7f);
@@ -152,7 +153,7 @@ namespace CalamityMod.Projectiles.Boss
                         SparkParticle spark3 = new SparkParticle(Projectile.Center - Projectile.velocity * 50, Projectile.velocity, false, 25, 5f, Color.DeepSkyBlue * 0.35f);
                         GeneralParticleHandler.SpawnParticle(spark3);
                     }
-                    else if (Projectile.timeLeft == 1)
+                    else if (Projectile.timeLeft == 1 && NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == true)
                     {
                         dashSlashExplode = true;
                         VoidSparkParticle spark = new VoidSparkParticle(Projectile.Center, Projectile.velocity, false, 9, 1.3f, Color.Cyan * 0.7f);
@@ -171,6 +172,20 @@ namespace CalamityMod.Projectiles.Boss
                             catastrophedust.color = Color.DeepSkyBlue;
                         }
                     }
+                }
+            }
+
+            if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
+            {
+                Projectile.timeLeft = 1;
+                for (int k = 0; k < 10; k++)
+                {
+                    Vector2 velocity = new Vector2(7, 7).RotatedByRandom(100) * Main.rand.NextFloat(0.8f, 1.2f);
+
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center + velocity, 66, velocity * Main.rand.NextFloat(0.2f, 1f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(1.3f, 1.9f);
+                    dust.color = Color.Cyan;
                 }
             }
 

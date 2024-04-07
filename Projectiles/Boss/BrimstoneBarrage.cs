@@ -5,6 +5,7 @@ using CalamityMod.Events;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.CalClone;
 using CalamityMod.NPCs.SupremeCalamitas;
+using CalamityMod.Particles;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -25,7 +26,7 @@ namespace CalamityMod.Projectiles.Boss
         public override void SetDefaults()
         {
             Projectile.width = 18;
-            Projectile.height = 18;
+            Projectile.height = 44;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -47,6 +48,14 @@ namespace CalamityMod.Projectiles.Boss
         public override void AI()
         {
             bool bossRush = BossRushEvent.BossRushActive;
+
+            int target = Player.FindClosest(Projectile.Center, 1, 1);
+
+            float targetDist;
+            if (target != -1 && !Main.player[target].dead && Main.player[target].active && Main.player[target] != null)
+                targetDist = Vector2.Distance(Main.player[target].Center, Projectile.Center);
+            else
+                targetDist = 1000;
 
             if (Projectile.velocity.Length() < (Projectile.ai[1] == 0f ? (bossRush ? 17.5f : 14f) : (bossRush ? 12.5f : 10f)))
                 Projectile.velocity *= bossRush ? 1.0125f : 1.01f;
@@ -90,6 +99,11 @@ namespace CalamityMod.Projectiles.Boss
                 trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
                 trailDust.scale = Main.rand.NextFloat(0.2f, 0.6f);
             }
+            else if (Projectile.timeLeft % 2 == 0 && targetDist < 1400f)
+            {
+                SparkParticle orb = new SparkParticle(Projectile.Center - Projectile.velocity * 0.5f, -Projectile.velocity * Main.rand.NextFloat(0.1f, 0.6f), false, (int)MathHelper.Clamp(9 * Utils.GetLerpValue(510, 690, Projectile.timeLeft), 2, 9), 1.1f, Color.Lerp(Color.Red, Color.Magenta, 0.5f) * Projectile.Opacity * 0.85f);
+                GeneralParticleHandler.SpawnParticle(orb);
+            }
 
             if (Projectile.localAI[0] == 0f)
             {
@@ -131,5 +145,6 @@ namespace CalamityMod.Projectiles.Boss
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
             return false;
         }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, 18, targetHitbox);
     }
 }

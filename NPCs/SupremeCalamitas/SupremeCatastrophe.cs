@@ -267,8 +267,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
                             SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f }, NPC.Center);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.35f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.35f) * 80f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.34f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 0, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.34f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 0, 50);
                             for (int i = 0; i < 30; i++)
                             {
                                 Vector2 vel = new Vector2(7, 7).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
@@ -325,7 +325,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
             // Have a small delay prior to shooting projectiles.
             if (AttackDelayTimer < 120f)
-                AttackDelayTimer += (death ? 2 : 1);
+                AttackDelayTimer += (death ? 1.5f : 1f);
 
             // Handle projectile shots.
             else if (BigAttackTimer > PreBigAttackPause)
@@ -392,7 +392,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else
             {
                 // Shoot sword slashes.
-                float fireRate = BossRushEvent.BossRushActive ? 4f : MathHelper.Lerp(3f, 4f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.2f : 1);
+                float fireRate = BossRushEvent.BossRushActive ? 2.8f : MathHelper.Lerp(2.5f, 3f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? 1.35f : 1);
                 if (Phase2 && BigAttackLimit == 0)
                     fireRate = 1;
                 SlashCounter += fireRate;

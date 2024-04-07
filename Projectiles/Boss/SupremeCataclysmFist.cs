@@ -52,7 +52,7 @@ namespace CalamityMod.Projectiles.Boss
             {
                 if (Projectile.timeLeft > 240)
                 {
-                    shootVel = Projectile.velocity * 0.2f;
+                    shootVel = Projectile.velocity * 0.4f;
                     Projectile.timeLeft = 240;
                     rotDirection = Main.rand.NextBool() ? -1 : 1;
                     Projectile.velocity *= 5.5f;
@@ -79,14 +79,14 @@ namespace CalamityMod.Projectiles.Boss
                     Vector2 randPos = shootVel.RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
                     SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.2f, Pitch = 0.55f }, Projectile.Center);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)) * Main.rand.NextFloat(0.75f, 1f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
                 }
                 if (Projectile.timeLeft <= 200 && Time % 3 == 0 && NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
                 {
                     Vector2 randPos = shootVel.RotatedBy(MathHelper.ToRadians(90f)) * Main.rand.NextFloat(-25, 25);
                     int type = ModContent.ProjectileType<SupremeCataclysmFist>();
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(-120f)) * Main.rand.NextFloat(0.6f, 0.9f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(120f)) * Main.rand.NextFloat(0.75f, 1f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + randPos, (-shootVel * MathHelper.Clamp(Time * 0.1f, 1, 1.8f)).RotatedBy(MathHelper.ToRadians(-120f)) * Main.rand.NextFloat(0.75f, 1f), type, Projectile.damage, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 1 + 1), 0);
                 }
                 if (Projectile.timeLeft == 1)
                 {
@@ -106,6 +106,7 @@ namespace CalamityMod.Projectiles.Boss
                             cataclysmdust.color = Color.Red;
                         }
                     }
+                    Projectile.Kill();
                 }
 
                 Vector2 vel = new Vector2(14, 14).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
@@ -132,7 +133,7 @@ namespace CalamityMod.Projectiles.Boss
                     Projectile.Opacity = 1;
                     if (Projectile.timeLeft > 300)
                         Projectile.timeLeft = 300;
-                    Projectile.velocity *= 1.009f;
+                    Projectile.velocity *= 1.006f;
                 }
 
                 if (Projectile.velocity.X < 0f)
@@ -156,6 +157,20 @@ namespace CalamityMod.Projectiles.Boss
                 Projectile.Opacity = Utils.GetLerpValue(0f, 12f, Projectile.timeLeft, true) * Utils.GetLerpValue(1200f, 1193f, Projectile.timeLeft, true);
             
             Time++;
+
+            if (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false)
+            {
+                Projectile.timeLeft = 1;
+                for (int k = 0; k < 10; k++)
+                {
+                    Vector2 velocity = new Vector2(7, 7).RotatedByRandom(100) * Main.rand.NextFloat(0.8f, 1.2f);
+
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center + velocity, 66, velocity * Main.rand.NextFloat(0.2f, 1f));
+                    dust.noGravity = true;
+                    dust.scale = Main.rand.NextFloat(1.3f, 1.9f);
+                    dust.color = Color.Lerp(Color.Red, Color.Magenta, 0.5f);
+                }
+            }
 
             // Emit light.
             Lighting.AddLight(Projectile.Center, 0.5f * Projectile.Opacity, 0f, 0f);
