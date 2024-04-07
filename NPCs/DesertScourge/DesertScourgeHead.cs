@@ -164,13 +164,17 @@ namespace CalamityMod.NPCs.DesertScourge
                 enrageScale += 2f;
             }
 
-            // Percent life remaining
+            // Percent life remaining.
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
-            if (revenge || lifeRatio < (expertMode ? 0.75f : 0.5f))
-                NPC.Calamity().newAI[0] += 1f;
+            // Only increment the burrow timer if the head is beneath the player.
+            if (NPC.Center.Y > Main.player[NPC.target].Center.Y)
+            {
+                if (revenge || lifeRatio < (expertMode ? 0.75f : 0.5f))
+                    NPC.Calamity().newAI[0] += 1f;
+            }
 
-            float burrowTimeGateValue = death ? 630f : 810f;
+            float burrowTimeGateValue = death ? 420f : 540f;
             bool burrow = NPC.Calamity().newAI[0] >= burrowTimeGateValue;
             bool resetTime = NPC.Calamity().newAI[0] >= burrowTimeGateValue + 600f;
             bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
@@ -196,12 +200,12 @@ namespace CalamityMod.NPCs.DesertScourge
                 turnSpeed *= 1.2f;
             }
 
-            if (lungeUpward)
+            if (lungeUpward || burrow)
             {
-                speed *= 1.25f;
+                speed *= 1.5f;
                 turnSpeed *= 1.5f;
 
-                if (NPC.Calamity().newAI[3] == 0f)
+                if (NPC.Calamity().newAI[3] == 0f && lungeUpward)
                     NPC.Calamity().newAI[3] = player.Center.Y - 600f;
             }
 
@@ -343,6 +347,8 @@ namespace CalamityMod.NPCs.DesertScourge
                 NPC.spriteDirection = -1;
 
             float maxChaseSpeed = masterMode ? SegmentVelocity_Master : expertMode ? SegmentVelocity_Expert : SegmentVelocity_Normal;
+            if (burrow || lungeUpward || quickFall)
+                maxChaseSpeed *= 1.5f;
             if (expertMode)
                 maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);
 
@@ -366,9 +372,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
             }
 
-            float speedCopy = speed;
-            float turnSpeedCopy = turnSpeed;
-            float burrowDistance = bossRush ? 500f : 800f;
+            float burrowDistance = bossRush ? 600f : 800f;
             float burrowTarget = player.Center.Y + burrowDistance;
             float lungeTarget = NPC.Calamity().newAI[3];
             Vector2 npcCenter = NPC.Center;
@@ -452,22 +456,22 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.velocity.Y = maxChaseSpeed;
 
                 // This bool exists to stop the strange wiggle behavior when worms are falling down
-                bool slowXVelocity = Math.Abs(NPC.velocity.X) > speedCopy;
-                if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.4)
+                bool slowXVelocity = Math.Abs(NPC.velocity.X) > speed;
+                if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < maxChaseSpeed * 0.4)
                 {
                     if (NPC.velocity.X < 0f)
-                        NPC.velocity.X -= speedCopy * 1.1f;
+                        NPC.velocity.X -= speed * 1.1f;
                     else
-                        NPC.velocity.X += speedCopy * 1.1f;
+                        NPC.velocity.X += speed * 1.1f;
                 }
                 else if (NPC.velocity.Y == maxChaseSpeed)
                 {
                     if (slowXVelocity)
                     {
                         if (NPC.velocity.X < playerX)
-                            NPC.velocity.X += speedCopy;
+                            NPC.velocity.X += speed;
                         else if (NPC.velocity.X > playerX)
-                            NPC.velocity.X -= speedCopy;
+                            NPC.velocity.X -= speed;
                     }
                     else
                         NPC.velocity.X = 0f;
@@ -477,9 +481,9 @@ namespace CalamityMod.NPCs.DesertScourge
                     if (slowXVelocity)
                     {
                         if (NPC.velocity.X < 0f)
-                            NPC.velocity.X += speedCopy * 0.9f;
+                            NPC.velocity.X += speed * 0.9f;
                         else
-                            NPC.velocity.X -= speedCopy * 0.9f;
+                            NPC.velocity.X -= speed * 0.9f;
                     }
                     else
                         NPC.velocity.X = 0f;
@@ -509,72 +513,72 @@ namespace CalamityMod.NPCs.DesertScourge
                 if (((NPC.velocity.X > 0f && playerX > 0f) || (NPC.velocity.X < 0f && playerX < 0f)) && ((NPC.velocity.Y > 0f && targettingPosition > 0f) || (NPC.velocity.Y < 0f && targettingPosition < 0f)))
                 {
                     if (NPC.velocity.X < playerX)
-                        NPC.velocity.X += turnSpeedCopy;
+                        NPC.velocity.X += turnSpeed;
                     else if (NPC.velocity.X > playerX)
-                        NPC.velocity.X -= turnSpeedCopy;
+                        NPC.velocity.X -= turnSpeed;
 
                     if (NPC.velocity.Y < targettingPosition)
-                        NPC.velocity.Y += turnSpeedCopy;
+                        NPC.velocity.Y += turnSpeed;
                     else if (NPC.velocity.Y > targettingPosition)
-                        NPC.velocity.Y -= turnSpeedCopy;
+                        NPC.velocity.Y -= turnSpeed;
                 }
 
                 if ((NPC.velocity.X > 0f && playerX > 0f) || (NPC.velocity.X < 0f && playerX < 0f) || (NPC.velocity.Y > 0f && targettingPosition > 0f) || (NPC.velocity.Y < 0f && targettingPosition < 0f))
                 {
                     if (NPC.velocity.X < playerX)
-                        NPC.velocity.X += speedCopy;
+                        NPC.velocity.X += speed;
                     else if (NPC.velocity.X > playerX)
-                        NPC.velocity.X -= speedCopy;
+                        NPC.velocity.X -= speed;
 
                     if (NPC.velocity.Y < targettingPosition)
-                        NPC.velocity.Y += speedCopy;
+                        NPC.velocity.Y += speed;
                     else if (NPC.velocity.Y > targettingPosition)
-                        NPC.velocity.Y -= speedCopy;
+                        NPC.velocity.Y -= speed;
 
-                    if ((double)Math.Abs(targettingPosition) < (double)maxChaseSpeed * 0.2 && ((NPC.velocity.X > 0f && playerX < 0f) || (NPC.velocity.X < 0f && playerX > 0f)))
+                    if ((double)Math.Abs(targettingPosition) < maxChaseSpeed * 0.2 && ((NPC.velocity.X > 0f && playerX < 0f) || (NPC.velocity.X < 0f && playerX > 0f)))
                     {
                         if (NPC.velocity.Y > 0f)
-                            NPC.velocity.Y += speedCopy * 2f;
+                            NPC.velocity.Y += speed * 2f;
                         else
-                            NPC.velocity.Y -= speedCopy * 2f;
+                            NPC.velocity.Y -= speed * 2f;
                     }
 
-                    if ((double)Math.Abs(playerX) < (double)maxChaseSpeed * 0.2 && ((NPC.velocity.Y > 0f && targettingPosition < 0f) || (NPC.velocity.Y < 0f && targettingPosition > 0f)))
+                    if ((double)Math.Abs(playerX) < maxChaseSpeed * 0.2 && ((NPC.velocity.Y > 0f && targettingPosition < 0f) || (NPC.velocity.Y < 0f && targettingPosition > 0f)))
                     {
                         if (NPC.velocity.X > 0f)
-                            NPC.velocity.X += speedCopy * 2f;
+                            NPC.velocity.X += speed * 2f;
                         else
-                            NPC.velocity.X -= speedCopy * 2f;
+                            NPC.velocity.X -= speed * 2f;
                     }
                 }
                 else if (absolutePlayerX > absoluteTargetPos)
                 {
                     if (NPC.velocity.X < playerX)
-                        NPC.velocity.X += speedCopy * 1.1f;
+                        NPC.velocity.X += speed * 1.1f;
                     else if (NPC.velocity.X > playerX)
-                        NPC.velocity.X -= speedCopy * 1.1f;
+                        NPC.velocity.X -= speed * 1.1f;
 
-                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.5)
+                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < maxChaseSpeed * 0.5)
                     {
                         if (NPC.velocity.Y > 0f)
-                            NPC.velocity.Y += speedCopy;
+                            NPC.velocity.Y += speed;
                         else
-                            NPC.velocity.Y -= speedCopy;
+                            NPC.velocity.Y -= speed;
                     }
                 }
                 else
                 {
                     if (NPC.velocity.Y < targettingPosition)
-                        NPC.velocity.Y += speedCopy * 1.1f;
+                        NPC.velocity.Y += speed * 1.1f;
                     else if (NPC.velocity.Y > targettingPosition)
-                        NPC.velocity.Y -= speedCopy * 1.1f;
+                        NPC.velocity.Y -= speed * 1.1f;
 
-                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < (double)maxChaseSpeed * 0.5)
+                    if ((double)(Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) < maxChaseSpeed * 0.5)
                     {
                         if (NPC.velocity.X > 0f)
-                            NPC.velocity.X += speedCopy;
+                            NPC.velocity.X += speed;
                         else
-                            NPC.velocity.X -= speedCopy;
+                            NPC.velocity.X -= speed;
                     }
                 }
             }
