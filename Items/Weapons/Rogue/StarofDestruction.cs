@@ -22,7 +22,7 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.value = CalamityGlobalItem.Rarity9BuyPrice;
-            Item.rare = ItemRarityID.Cyan;
+            Item.rare = ItemRarityID.Red;
             Item.shoot = ModContent.ProjectileType<DestructionStar>();
             Item.shootSpeed = 5f;
             Item.DamageType = RogueDamageClass.Instance;

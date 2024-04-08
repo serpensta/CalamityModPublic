@@ -16,7 +16,7 @@ namespace CalamityMod.Items.Weapons.Typeless
             Item.height = 50;
             Item.DamageType = AverageDamageClass.Instance;
             Item.damage = 32;
-            Item.rare = ItemRarityID.Cyan;
+            Item.rare = ItemRarityID.Red;
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.Shoot;
