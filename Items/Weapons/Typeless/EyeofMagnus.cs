@@ -24,7 +24,7 @@ namespace CalamityMod.Items.Weapons.Typeless
             Item.UseSound = CommonCalamitySounds.LaserCannonSound;
             Item.autoReuse = true;
             Item.noMelee = true;
-            Item.value = CalamityGlobalItem.Rarity9BuyPrice;
+            Item.value = CalamityGlobalItem.Rarity10BuyPrice;
             Item.shoot = ModContent.ProjectileType<MagnusBeam>();
             Item.shootSpeed = 12f;
         }
