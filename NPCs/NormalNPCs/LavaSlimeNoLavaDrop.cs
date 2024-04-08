@@ -1,17 +1,6 @@
-﻿using System;
-using System.IO;
-using CalamityMod.DataStructures;
-using CalamityMod.Events;
-using CalamityMod.Items.Placeables.Banners;
-using CalamityMod.Items.Placeables.Ores;
-using CalamityMod.NPCs.TownNPCs;
-using CalamityMod.World;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.GameContent.Bestiary;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 namespace CalamityMod.NPCs.NormalNPCs
 {
@@ -22,8 +11,7 @@ namespace CalamityMod.NPCs.NormalNPCs
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 2;
-            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
+            this.HideFromBestiary();
         }
 
         public override void SetDefaults()
@@ -49,7 +37,9 @@ namespace CalamityMod.NPCs.NormalNPCs
                 NPC.lifeMax = 25;
                 NPC.value = 25f;
             }
-            
+            //Banner = NPCID.LavaSlime;
+            //BannerItem = ItemID.LavaSlimeBanner;
+
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = false;
             NPC.Calamity().VulnerableToHeat = false;
@@ -58,15 +48,6 @@ namespace CalamityMod.NPCs.NormalNPCs
             // Scale stats in Expert and Master
             CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
             CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
-        }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-            {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheUnderworld,
-                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.LavaSlimeNoLavaDrop")
-            });
         }
 
         public override void HitEffect(NPC.HitInfo hit)
