@@ -268,6 +268,10 @@ namespace CalamityMod
         public bool ChilledWaterRework { get; set; }
 
         [BackgroundColor(192, 54, 64, 192)]
+        [DefaultValue(true)]
+        public bool RemoveLavaDropsFromLavaSlimes { get; set; }
+
+        [BackgroundColor(192, 54, 64, 192)]
         [DefaultValue(false)]
         public bool ForceTownSafety { get; set; }
         #endregion

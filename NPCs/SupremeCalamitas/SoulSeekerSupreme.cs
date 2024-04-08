@@ -164,7 +164,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     int damage = NPC.GetProjectileDamage(type);
 					if (BossRushEvent.BossRushActive)
 						damage /= 2;
-                    Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * 5f;
+
+                    float velocity = 5f;
+                    float projectileVelocityToPass = velocity * 3f;
+                    Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * velocity;
                     if (targetDist <= 160 || targetDist >= 1952)
                     {
                         for (int i = 0; i < 10; i++)
@@ -177,7 +180,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVelocity * 0.5f, type, damage, 1f, Main.myPlayer, 0, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVelocity * 0.5f, type, damage, 1f, Main.myPlayer, 0f, 2f, projectileVelocityToPass);
                         for (int i = 0; i < 5; i++)
                         {
                             Dust ShotDust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 60 : 114);

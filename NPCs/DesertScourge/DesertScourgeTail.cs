@@ -145,8 +145,16 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.spriteDirection = -1;
             }
 
+            NPC head = Main.npc[(int)NPC.ai[2]];
+            float burrowTimeGateValue = (CalamityWorld.death || BossRushEvent.BossRushActive) ? DesertScourgeHead.BurrowTimeGateValue_Death : DesertScourgeHead.BurrowTimeGateValue;
+            bool burrow = head.Calamity().newAI[0] >= burrowTimeGateValue;
+            bool lungeUpward = burrow && head.Calamity().newAI[1] == 1f;
+            bool quickFall = head.Calamity().newAI[1] == 2f;
+
             // Calculate contact damage based on velocity
             float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
+            if (burrow || lungeUpward || quickFall)
+                maxChaseSpeed *= 1.5f;
             if (expertMode)
                 maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);
 

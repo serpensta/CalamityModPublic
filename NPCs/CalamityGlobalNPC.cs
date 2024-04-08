@@ -2376,6 +2376,7 @@ namespace CalamityMod.NPCs
                 case NPCID.Sharkron:
                 case NPCID.Sharkron2:
                     npc.width = npc.height = 36;
+                    npc.chaseable = false;
                     canBreakPlayerDefense = true;
                     break;
 
@@ -6053,6 +6054,13 @@ namespace CalamityMod.NPCs
                 spawnInfo.Player.Calamity().ZoneSulphur ||
                 spawnInfo.Player.Calamity().ZoneSunkenSea ||
                 (spawnInfo.Player.Calamity().ZoneAstral && !spawnInfo.Player.PillarZone());
+
+            // Replace vanilla Lava Slimes with Calamity Lava Slimes to avoid annoying lava drops
+            if (spawnInfo.Player.ZoneUnderworldHeight && !calamityBiomeZone && CalamityConfig.Instance.RemoveLavaDropsFromLavaSlimes && Main.expertMode)
+            {
+                pool.Add(NPCType<LavaSlimeNoLavaDrop>(), SpawnCondition.Underworld.Chance);
+                pool[NPCID.LavaSlime] = 0f;
+            }
 
             // Spawn Green Jellyfish in prehm and Blue Jellyfish in hardmode
             if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Water && !calamityBiomeZone)

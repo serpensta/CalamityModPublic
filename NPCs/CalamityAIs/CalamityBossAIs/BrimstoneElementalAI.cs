@@ -453,10 +453,11 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             float rotation = MathHelper.ToRadians(spread);
+                            float projectileVelocityToPass = velocity * 3f;
                             for (int i = 0; i < numProj; i++)
                             {
                                 Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
-                                int proj2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 5f, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 5f, perturbedSpeed, type, damage, 0f, Main.myPlayer, 1f, 0f, projectileVelocityToPass);
                                 if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
                                     Main.projectile[proj2].extraUpdates += 1;
                             }
@@ -544,10 +545,11 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
+                        float projectileVelocityToPass = projectileSpeed * 3f;
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 vector255 = spinningPoint.RotatedBy(radians2 * k);
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + vector255.SafeNormalize(Vector2.UnitY) * 5f, vector255, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + vector255.SafeNormalize(Vector2.UnitY) * 5f, vector255, type, damage, 0f, Main.myPlayer, 1f, 0f, projectileVelocityToPass);
                             if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
                                 Main.projectile[proj].extraUpdates += 1;
                         }
@@ -558,7 +560,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             for (int k = 0; k < totalProjectiles; k++)
                             {
                                 Vector2 vector255 = spinningPoint.RotatedBy(radians2 * k);
-                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + vector255.SafeNormalize(Vector2.UnitY) * 5f, vector255 * 0.75f, type, damage, 0f, Main.myPlayer, 1f, 0f);
+                                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + vector255.SafeNormalize(Vector2.UnitY) * 5f, vector255 * 0.75f, type, damage, 0f, Main.myPlayer, 1f, 0f, projectileVelocityToPass);
                                 if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
                                     Main.projectile[proj].extraUpdates += 1;
                             }

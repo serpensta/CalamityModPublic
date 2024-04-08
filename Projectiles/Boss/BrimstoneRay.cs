@@ -125,6 +125,8 @@ namespace CalamityMod.Projectiles.Boss
                 int projectileAmt = (int)(Projectile.localAI[1] / distanceBetweenProjectiles);
                 int type = ModContent.ProjectileType<BrimstoneBarrage>();
                 int damage = Projectile.GetProjectileDamage(ModContent.NPCType<BrimstoneElemental>());
+                float projectileVelocityToPass = 12f;
+
                 for (int i = 0; i < projectileAmt; i++)
                 {
                     int totalProjectiles = 2;
@@ -132,7 +134,7 @@ namespace CalamityMod.Projectiles.Boss
                     for (int j = 0; j < totalProjectiles; j++)
                     {
                         Vector2 projVelocity = Projectile.velocity.RotatedBy(radians * j + MathHelper.PiOver2);
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), fireFrom, projVelocity, type, damage, 0f, Main.myPlayer, death ? 2f : 1f, 0f);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), fireFrom, projVelocity, type, damage, 0f, Main.myPlayer, death ? 2f : 1f, 0f, projectileVelocityToPass);
                         Main.projectile[proj].tileCollide = true;
                         if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
                             Main.projectile[proj].extraUpdates += 1;

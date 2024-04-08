@@ -23,6 +23,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public static Asset<Texture2D> BodyTexture3;
         public static Asset<Texture2D> BodyTexture4;
 
+        private const int ClosedFinFrame = 5;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
@@ -260,8 +262,16 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.spriteDirection = -1;
             }
 
+            NPC head = Main.npc[(int)NPC.ai[2]];
+            float burrowTimeGateValue = (CalamityWorld.death || BossRushEvent.BossRushActive) ? DesertScourgeHead.BurrowTimeGateValue_Death : DesertScourgeHead.BurrowTimeGateValue;
+            bool burrow = head.Calamity().newAI[0] >= burrowTimeGateValue;
+            bool lungeUpward = burrow && head.Calamity().newAI[1] == 1f;
+            bool quickFall = head.Calamity().newAI[1] == 2f;
+
             // Calculate contact damage based on velocity
             float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
+            if (burrow || lungeUpward || quickFall)
+                maxChaseSpeed *= 1.5f;
             if (expertMode)
                 maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);
 
@@ -321,16 +331,41 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void FindFrame(int frameHeight)
         {
+            // Fin animation segment.
             if (NPC.ai[3] == 0f)
             {
-                NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 10D)
+                // Close fins while head is in tiles.
+                NPC head = Main.npc[(int)NPC.ai[2]];
+                Point headTileCenter = head.Center.ToTileCoordinates();
+                Tile tileSafely = Framing.GetTileSafely(headTileCenter);
+                bool headInSolidTile = tileSafely.HasUnactuatedTile || tileSafely.LiquidAmount > 0;
+                if (headInSolidTile)
                 {
-                    NPC.frame.Y += frameHeight;
-                    NPC.frameCounter = 0D;
+                    NPC.frameCounter += 1D;
+                    if (NPC.frameCounter > 10D)
+                    {
+                        NPC.frame.Y += frameHeight;
+                        NPC.frameCounter = 0D;
+                    }
+                    if (NPC.frame.Y >= frameHeight * ClosedFinFrame)
+                        NPC.frame.Y = frameHeight * ClosedFinFrame;
                 }
-                if (NPC.frame.Y >= frameHeight * Main.npcFrameCount[NPC.type])
-                    NPC.frame.Y = 0;
+
+                // Open fins while head is outside tiles.
+                else
+                {
+                    if (NPC.frame.Y > 0)
+                    {
+                        NPC.frameCounter += 1D;
+                        if (NPC.frameCounter > 10D)
+                        {
+                            NPC.frame.Y += frameHeight;
+                            NPC.frameCounter = 0D;
+                        }
+                        if (NPC.frame.Y >= frameHeight * Main.npcFrameCount[NPC.type])
+                            NPC.frame.Y = 0;
+                    }
+                }
             }
         }
 

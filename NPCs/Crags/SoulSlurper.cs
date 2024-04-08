@@ -176,7 +176,7 @@ namespace CalamityMod.NPCs.Crags
                     int dmg = Main.masterMode ? 19 : Main.expertMode ? 22 : 30;
                     int projType = ModContent.ProjectileType<BrimstoneBarrage>();
                     Vector2 projectileVelocity = new Vector2(targetX, targetY);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 16f, projectileVelocity, projType, dmg + (provy ? 30 : 0), 0f, Main.myPlayer, 1f, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 16f, projectileVelocity, projType, dmg + (provy ? 30 : 0), 0f, Main.myPlayer, 1f, 0f, projectileVelocity.Length() * 3f);
                 }
             }
             int npcTileX = (int)NPC.Center.X;

@@ -15,7 +15,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             Item.width = 44;
             Item.height = 44;
-            Item.damage = 333;
+            Item.damage = 248;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useAnimation = 31;
@@ -49,7 +49,7 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             CreateRecipe().
                 AddIngredient<EpidemicShredder>().
-                AddIngredient<UelibloomBar>(5).
+                AddIngredient(ItemID.LunarBar, 5).
                 AddTile(TileID.LunarCraftingStation).
                 Register();
         }

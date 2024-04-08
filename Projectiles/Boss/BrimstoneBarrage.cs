@@ -88,7 +88,7 @@ namespace CalamityMod.Projectiles.Boss
                     Projectile.velocity *= scaleFactor;
                 }
             }
-            if (Projectile.ai[2] == 2f)
+            if (Projectile.ai[1] == 2f)
             {
                 if (Projectile.timeLeft > 600)
                     Projectile.velocity *= 1.015f;

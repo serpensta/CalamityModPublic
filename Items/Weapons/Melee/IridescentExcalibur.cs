@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.value = CalamityGlobalItem.Rarity16BuyPrice;
             Item.shoot = ModContent.ProjectileType<GayBeam>();
             Item.shootSpeed = ShootSpeed;
-            Item.rare = ModContent.RarityType<Rainbow>();
+            Item.rare = ModContent.RarityType<HotPink>();
             Item.shootsEveryUse = true;
         }
 
@@ -184,8 +184,8 @@ namespace CalamityMod.Items.Weapons.Melee
             CreateRecipe().
                 AddIngredient(ItemID.TrueExcalibur).
                 AddIngredient<Orderbringer>().
-                AddIngredient<ShadowspecBar>(5).
-                AddIngredient<AscendantSpiritEssence>(5).
+                AddIngredient<MiracleMatter>(3).
+                AddIngredient<AshesofAnnihilation>(15).
                 AddTile<DraedonsForge>().
                 Register();
         }

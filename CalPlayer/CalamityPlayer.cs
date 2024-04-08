@@ -3296,6 +3296,9 @@ namespace CalamityMod.CalPlayer
             // TODO -- why is boss health bar code in Player.UpdateEquips and not a ModSystem
             CalamityConfig.Instance.BossHealthBarExtraInfo = shouldDrawSmallText;
 
+            // Putting this in GlobalItem will run multiple times for each slot, which this system already does, creating a slew of problems.
+            VanillaArmorChangeManager.ApplyPotentialEffectsTo(Player);
+
             // If the config is enabled, vastly increase the player's base tile and wall placement speeds
             // This stacks with the Brick Layer and Portable Cement Mixer
             if (CalamityConfig.Instance.FasterTilePlacement)

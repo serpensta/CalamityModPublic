@@ -996,14 +996,16 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         int damage = npc.GetProjectileDamage(ModContent.ProjectileType<BrimstoneFire>());
                         if (bossRush)
                             damage /= 2;
+
                         int totalProjectiles = bossRush ? 12 : death ? 10 : revenge ? 8 : expertMode ? 6 : 4;
                         float radians = MathHelper.TwoPi / totalProjectiles;
                         float velocity = 5f;
                         Vector2 spinningPoint = new Vector2(0f, -velocity);
+                        float projectileVelocityToPass = velocity * 3f;
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 0f, projectileVelocityToPass);
                         }
 
                         for (int i = 0; i < 6; i++)
@@ -1315,14 +1317,16 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                         int damage = npc.GetProjectileDamage(ModContent.ProjectileType<BrimstoneBall>());
                         if (bossRush)
                             damage /= 2;
+
                         int totalProjectiles = bossRush ? 12 : death ? 10 : revenge ? 8 : expertMode ? 6 : 4;
                         float radians = MathHelper.TwoPi / totalProjectiles;
                         float velocity = 5f;
                         Vector2 spinningPoint = new Vector2(0f, -velocity);
+                        float projectileVelocityToPass = velocity * 3f;
                         for (int k = 0; k < totalProjectiles; k++)
                         {
                             Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 1f);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity2, type, damage, 0f, Main.myPlayer, 0f, 0f, projectileVelocityToPass);
                         }
 
                         for (int i = 0; i < 6; i++)
