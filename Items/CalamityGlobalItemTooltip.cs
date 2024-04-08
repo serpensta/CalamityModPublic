@@ -92,9 +92,13 @@ namespace CalamityMod.Items
         #region Rarity Coloration
         private void ApplyRarityColor(Item item, TooltipLine nameLine)
         {
-            #region Uniquely Colored Developer Items
+            #region Uniquely Colored Items
             if (item.type == ModContent.ItemType<LiliesOfFinality>())
                 nameLine.OverrideColor = Color.Lerp(Color.Red, Color.White, (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f);
+            if (item.type == ModContent.ItemType<HeartoftheElements>() || item.type == ModContent.ItemType<TheCommunity>() || item.type == ModContent.ItemType<IridescentExcalibur>())
+                nameLine.OverrideColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
+
+            // Developer items
             if (item.type == ModContent.ItemType<Fabstaff>())
                 nameLine.OverrideColor = new Color(Main.DiscoR, 100, 255);
             if (item.type == ModContent.ItemType<StaffofBlushie>())

@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.value = CalamityGlobalItem.Rarity16BuyPrice;
             Item.shoot = ModContent.ProjectileType<GayBeam>();
             Item.shootSpeed = ShootSpeed;
-            Item.rare = ModContent.RarityType<Rainbow>();
+            Item.rare = ModContent.RarityType<HotPink>();
             Item.shootsEveryUse = true;
         }
 
