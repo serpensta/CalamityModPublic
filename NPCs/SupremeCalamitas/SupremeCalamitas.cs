@@ -2080,8 +2080,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
+                                        float projectileVelocityToPass = projectileVelocity.Length() * 2f;
                                         Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1)));
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer, 0f, 0f, projectileVelocityToPass);
                                         NPC.netUpdate = true;
                                     }
                                 }
@@ -2647,8 +2648,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
+                                        float projectileVelocityToPass = projectileVelocity.Length() * 2f;
                                         Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1)));
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer, 0f, 0f, projectileVelocityToPass);
                                         NPC.netUpdate = true;
                                     }
                                 }

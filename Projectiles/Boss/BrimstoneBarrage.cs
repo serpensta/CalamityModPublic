@@ -48,7 +48,7 @@ namespace CalamityMod.Projectiles.Boss
         {
             bool bossRush = BossRushEvent.BossRushActive;
 
-            if (Projectile.velocity.Length() < (Projectile.ai[1] == 0f ? (bossRush ? 17.5f : 14f) : (bossRush ? 12.5f : 10f)))
+            if (Projectile.velocity.Length() < Projectile.ai[2])
                 Projectile.velocity *= bossRush ? 1.0125f : 1.01f;
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
@@ -79,7 +79,7 @@ namespace CalamityMod.Projectiles.Boss
                     Projectile.velocity *= scaleFactor;
                 }
             }
-            if (Projectile.ai[2] == 2f)
+            if (Projectile.ai[1] == 2f)
             {
                 if (Projectile.timeLeft > 600)
                     Projectile.velocity *= 1.015f;
