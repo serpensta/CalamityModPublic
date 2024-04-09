@@ -60,10 +60,10 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.tileCollide = target != null; //Go through walls if we're hunting an NPC
             if (target != null)
             {
-                float homingSpeed = Projectile.velocity.Length() * (Projectile.Distance(target.Center) < 220f ? 1.3f : 1f);
+                float homingSpeed = Projectile.velocity.Length() * (Projectile.Distance(target.Center) < 420f ? 1.3f : 1.1f);
                 Vector2 idealVelocity = Projectile.SafeDirectionTo(target.Center) * homingSpeed;
 
-                float inertia = Projectile.Distance(target.Center) < 240f ? 4f : 13f;
+                float inertia = Projectile.Distance(target.Center) < 420f ? 4f : 8f;
                 Projectile.velocity = (Projectile.velocity * inertia + idealVelocity) / (inertia + 1f);
                 Projectile.velocity.Normalize();
                 Projectile.velocity *= homingSpeed;

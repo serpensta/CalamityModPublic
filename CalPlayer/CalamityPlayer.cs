@@ -3081,7 +3081,7 @@ namespace CalamityMod.CalPlayer
                     float rageRatio = rage / rageMax;
                     float baseDamage = rageRatio * GaelsGreatsword.SkullsplosionDamageMultiplier * GaelsGreatsword.BaseDamage;
                     int damage = (int)Player.GetTotalDamage<MeleeDamageClass>().ApplyTo(baseDamage);
-                    float skullCount = 20f;
+                    float skullCount = 14f + (rageBoostOne ? 4f : 0f) + (rageBoostTwo ? 4f : 0f) + (rageBoostThree ? 4f : 0f);
                     float skullSpeed = 12f;
                     for (float i = 0; i < skullCount; i += 1f)
                     {
