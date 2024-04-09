@@ -4,8 +4,12 @@ using CalamityMod.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
 using static System.MathF;
 using static CalamityMod.Items.Weapons.Summon.LiliesOfFinality;
 using static Terraria.ModLoader.ModContent;
@@ -15,6 +19,24 @@ namespace CalamityMod.Projectiles.Summon
     public class LiliesOfFinalityElster : BaseMinionProjectile
     {
         #region Members
+
+        private enum EyeFrame
+        {
+            EyeOpen,
+            EyeHalfClosed,
+            EyeClosed
+        }
+
+        private enum EyeState
+        {
+            NormalBlinking,
+            InStorm
+        }
+
+        private EyeState state;
+        private int timeInState;
+
+        public int EyeFrameToShow { get; private set; }
 
         public enum AIState { Idle, ReturnToOwner, AttackOnGround, AttackFlying }
         public AIState State
@@ -136,6 +158,10 @@ namespace CalamityMod.Projectiles.Summon
 
         public override void MinionAI()
         {
+            SetStateByPlayerInfo(Owner);
+            UpdateEyeFrameToShow(Owner);
+            timeInState++;
+
             switch (State)
             {
                 case AIState.Idle:
@@ -392,7 +418,89 @@ namespace CalamityMod.Projectiles.Summon
             Vector2 origin = frame.Size() * 0.5f;
             SpriteEffects flipSprite = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Main.EntitySpriteDraw(texture, drawPosition, frame, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, flipSprite);
+
+            if (Animation == AnimationState.Still || Animation == AnimationState.Walk)
+            {
+                float yOffset = -2f;
+                if (Animation == AnimationState.Walk)
+                {
+                    switch (Projectile.frame)
+                    {
+                        default:
+                            break;
+
+                        case 0:
+                        case 1:
+                            yOffset = 0f;
+                            break;
+
+                        case 6:
+                        case 7:
+                            yOffset = -4f;
+                            break;
+                    }
+                }
+
+                Texture2D blinkTexture_FirstEye = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ArianeAndElsterBlink_FirstEye", AssetRequestMode.ImmediateLoad).Value;
+                Texture2D blinkTexture_SecondEye = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ArianeAndElsterBlink_SecondEye", AssetRequestMode.ImmediateLoad).Value;
+
+                Rectangle blinkFrame = blinkTexture_FirstEye.Frame(1, 3, 0, EyeFrameToShow);
+                drawPosition += new Vector2(Projectile.spriteDirection == -1 ? 2f : 6f, yOffset);
+                Vector2 blinkDrawPos = new Vector2(drawPosition.X, drawPosition.Y);
+                Color skinColor = new Color(186, 144, 113, 255);
+                Main.EntitySpriteDraw(Projectile.spriteDirection == -1 ? blinkTexture_SecondEye : blinkTexture_FirstEye, blinkDrawPos, blinkFrame, skinColor, Projectile.rotation, origin, Projectile.scale, flipSprite);
+
+                blinkFrame = blinkTexture_SecondEye.Frame(1, 3, 0, EyeFrameToShow);
+                blinkDrawPos = new Vector2(drawPosition.X + 8f, drawPosition.Y);
+                Main.EntitySpriteDraw(Projectile.spriteDirection == -1 ? blinkTexture_FirstEye : blinkTexture_SecondEye, blinkDrawPos, blinkFrame, skinColor, Projectile.rotation, origin, Projectile.scale, flipSprite);
+            }
+
             return false;
+        }
+
+        private void UpdateEyeFrameToShow(Player player)
+        {
+            EyeFrame eyeFrameToShow = EyeFrame.EyeOpen;
+            switch (state)
+            {
+                case EyeState.NormalBlinking:
+                    {
+                        int eyeFrameChoiceBasedOnTime = timeInState % 300 - 294;
+                        eyeFrameToShow = ((eyeFrameChoiceBasedOnTime >= 4) ? EyeFrame.EyeHalfClosed : ((eyeFrameChoiceBasedOnTime < 2) ? ((eyeFrameChoiceBasedOnTime >= 0) ? EyeFrame.EyeHalfClosed : EyeFrame.EyeOpen) : EyeFrame.EyeClosed));
+                        break;
+                    }
+
+                case EyeState.InStorm:
+                    eyeFrameToShow = ((timeInState % 150 - 144 < 0) ? EyeFrame.EyeHalfClosed : EyeFrame.EyeClosed);
+                    break;
+            }
+
+            EyeFrameToShow = (int)eyeFrameToShow;
+        }
+
+        private void SetStateByPlayerInfo(Player player)
+        {
+            bool storming = player.ZoneSandstorm || (player.ZoneSnow && Main.IsItRaining);
+            bool behindBackWall = false;
+            Tile tileSafely = Framing.GetTileSafely(Projectile.Center);
+            if (tileSafely != null)
+                behindBackWall = tileSafely.WallType > 0;
+            if (behindBackWall)
+                storming = false;
+
+            if (storming)
+                SwitchToState(EyeState.InStorm);
+            else
+                SwitchToState(EyeState.NormalBlinking);
+        }
+
+        private void SwitchToState(EyeState newState, bool resetStateTimerEvenIfAlreadyInState = false)
+        {
+            if (state != newState || resetStateTimerEvenIfAlreadyInState)
+            {
+                state = newState;
+                timeInState = 0;
+            }
         }
 
         #endregion
