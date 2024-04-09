@@ -106,10 +106,10 @@ namespace CalamityMod.Projectiles.Boss
                         spawnDust.noGravity = true;
                         spawnDust.scale = Main.rand.NextFloat(1.7f, 2.8f) - Projectile.scale * 1.5f;
                     }
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         Vector2 sparkVel = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.1f);
-                        GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center + sparkVel * 2 * (Projectile.scale * 5), sparkVel, false, 120, Main.rand.NextFloat(1.55f, 2.75f) - Projectile.scale * 1.5f, Color.Lerp(Color.Red, Color.Magenta, 0.5f), true, true);
+                        GlowOrbParticle orb = new GlowOrbParticle(Projectile.Center + sparkVel * 2 * (Projectile.scale * 5), sparkVel, false, 60, Main.rand.NextFloat(1.55f, 2.75f) - Projectile.scale * 1.5f, Color.Lerp(Color.Red, Color.Magenta, 0.5f), true, true);
                         GeneralParticleHandler.SpawnParticle(orb);
                     }
                 }
