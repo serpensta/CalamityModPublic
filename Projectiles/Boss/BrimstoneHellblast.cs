@@ -57,7 +57,7 @@ namespace CalamityMod.Projectiles.Boss
 
             Lighting.AddLight(Projectile.Center, 0.9f * Projectile.Opacity, 0f, 0f);
 
-            if (targetDist < 1400f)
+            if (targetDist < 1400f && Projectile.ai[2] == 1)
             {
                 // Spawn in a helix-style pattern
                 float sine = (float)Math.Sin(Projectile.timeLeft * 0.575f / MathHelper.Pi);

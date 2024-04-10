@@ -99,7 +99,7 @@ namespace CalamityMod.Projectiles.Boss
                 trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
                 trailDust.scale = Main.rand.NextFloat(0.2f, 0.6f);
             }
-            else if (targetDist < 1400f)
+            else if (targetDist < 1400f && Projectile.ai[2] == 1)
             {
                 SparkParticle orb = new SparkParticle(Projectile.Center - Projectile.velocity * 0.5f, -Projectile.velocity * Main.rand.NextFloat(0.1f, 0.6f), false, (int)MathHelper.Clamp(9 * Utils.GetLerpValue(630, 690, Projectile.timeLeft), 2, 9), 1.1f, (Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.5f)) * Projectile.Opacity * 0.85f);
                 GeneralParticleHandler.SpawnParticle(orb);

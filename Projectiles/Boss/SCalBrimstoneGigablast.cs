@@ -194,21 +194,24 @@ namespace CalamityMod.Projectiles.Boss
                     for (int k = 0; k < totalProjectiles; k++)
                     {
                         Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity2, type, (int)Math.Round(Projectile.damage * 0.75), 0f, Projectile.owner, 0f, 0f, velocity * 2f);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity2, type, (int)Math.Round(Projectile.damage * 0.75), 0f, Projectile.owner, 0f, 0f, Projectile.ai[2]);
                     }
                 }
-                for (int i = 0; i < 25; i++)
+                if (Projectile.ai[2] == 1f)
                 {
-                    Vector2 velocity = new Vector2(15, 15).RotatedByRandom(100);
-                    PointParticle spark2 = new PointParticle(Projectile.Center + velocity, velocity * Main.rand.NextFloat(0.3f, 1f), false, 15, 1.25f, (Main.rand.NextBool() ? Color.Lerp(Color.Red, Color.Magenta, 0.5f) : Color.Red) * 0.6f);
-                    GeneralParticleHandler.SpawnParticle(spark2);
-                }
-                for (int i = 0; i < 25; i++)
-                {
-                    Dust failShotDust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 60 : 114);
-                    failShotDust.noGravity = true;
-                    failShotDust.velocity = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.3f);
-                    failShotDust.scale = Main.rand.NextFloat(0.9f, 1.8f);
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Vector2 velocity = new Vector2(15, 15).RotatedByRandom(100);
+                        PointParticle spark2 = new PointParticle(Projectile.Center + velocity, velocity * Main.rand.NextFloat(0.3f, 1f), false, 15, 1.25f, (Main.rand.NextBool() ? Color.Lerp(Color.Red, Color.Magenta, 0.5f) : Color.Red) * 0.6f);
+                        GeneralParticleHandler.SpawnParticle(spark2);
+                    }
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Dust failShotDust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 60 : 114);
+                        failShotDust.noGravity = true;
+                        failShotDust.velocity = new Vector2(20, 20).RotatedByRandom(100) * Main.rand.NextFloat(0.5f, 1.3f);
+                        failShotDust.scale = Main.rand.NextFloat(0.9f, 1.8f);
+                    }
                 }
             }
         }
