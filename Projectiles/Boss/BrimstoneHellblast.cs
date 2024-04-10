@@ -57,7 +57,7 @@ namespace CalamityMod.Projectiles.Boss
 
             Lighting.AddLight(Projectile.Center, 0.9f * Projectile.Opacity, 0f, 0f);
 
-            if (targetDist < 1400f && Projectile.ai[2] == 1)
+            if (targetDist < 1400f && Projectile.ai[1] == 2f)
             {
                 // Spawn in a helix-style pattern
                 float sine = (float)Math.Sin(Projectile.timeLeft * 0.575f / MathHelper.Pi);
@@ -71,13 +71,12 @@ namespace CalamityMod.Projectiles.Boss
                 GeneralParticleHandler.SpawnParticle(orb2);
             }
 
-
             if (Projectile.timeLeft < 51)
                 Projectile.Opacity -= 0.02f;
 
-            if (Projectile.ai[1] == 0f)
+            if (Projectile.ai[2] == 0f)
             {
-                Projectile.ai[1] = 1f;
+                Projectile.ai[2] = 1f;
                 SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
             }
 

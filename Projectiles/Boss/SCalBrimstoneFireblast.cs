@@ -58,7 +58,7 @@ namespace CalamityMod.Projectiles.Boss
 
             if (!withinRange)
             {
-                if (Projectile.ai[1] == 1f)
+                if (Projectile.ai[2] == 1f)
                     Projectile.Opacity = MathHelper.Clamp(Projectile.timeLeft / 60f, 0f, 1f);
                 else
                     Projectile.Opacity = MathHelper.Clamp(1f - ((Projectile.timeLeft - 130) / 20f), 0f, 1f);
@@ -117,7 +117,7 @@ namespace CalamityMod.Projectiles.Boss
                 }
                 withinRange = true;
             }
-            if (withinRange && Projectile.ai[1] == 0)
+            if (withinRange && Projectile.ai[2] == 0f)
             {
                 Projectile.velocity *= 0.9f;
                 for (int i = 0; i < 2; i++)
@@ -140,7 +140,7 @@ namespace CalamityMod.Projectiles.Boss
                     {
                         Particle bloom = new BloomParticle(Projectile.Center, Vector2.Zero, new Color(121, 21, 77), 0.1f, 0.7f, 30, false);
                         GeneralParticleHandler.SpawnParticle(bloom);
-                        if (Projectile.ai[1] == 1)
+                        if (Projectile.ai[2] == 1f)
                             bloom.Lifetime = 0;
                     }
                 }
@@ -197,7 +197,7 @@ namespace CalamityMod.Projectiles.Boss
             bool revenge = CalamityWorld.revenge || bossRush;
             bool expertMode = Main.expertMode || bossRush;
 
-            if (Projectile.ai[1] == 0f)
+            if (Projectile.ai[2] == 0f)
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
@@ -209,10 +209,11 @@ namespace CalamityMod.Projectiles.Boss
                     for (int k = 0; k < totalProjectiles; k++)
                     {
                         Vector2 velocity2 = spinningPoint.RotatedBy(radians * k);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity2, type, (int)Math.Round(Projectile.damage * 0.75), 0f, Projectile.owner, 0f, 0f, Projectile.ai[2]);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity2, type, (int)Math.Round(Projectile.damage * 0.75), 0f, Projectile.owner, 0f, Projectile.ai[1], velocity * 2f);
                     }
                 }
-                if (Projectile.ai[2] == 1f)
+
+                if (Projectile.ai[1] == 2f)
                 {
                     for (int i = 0; i < 18; i++)
                     {

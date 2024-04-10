@@ -480,7 +480,7 @@ namespace CalamityMod.NPCs.CalamityAIs.CalamityBossAIs
                             }
                             else if (projectile.type == ModContent.ProjectileType<SCalBrimstoneFireblast>())
                             {
-                                projectile.ai[1] = 1f;
+                                projectile.ai[2] = 1f;
 
                                 if (projectile.timeLeft > 60)
                                     projectile.timeLeft = 60;
