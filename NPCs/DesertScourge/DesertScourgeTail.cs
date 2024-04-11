@@ -21,8 +21,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void SetDefaults()
         {
             NPC.GetNPCDamage();
-            NPC.width = 74;
-            NPC.height = 82;
+            NPC.width = 104;
+            NPC.height = 104;
             NPC.defense = 9;
             NPC.DR_NERD(0.1f);
 
@@ -131,8 +131,8 @@ namespace CalamityMod.NPCs.DesertScourge
                 NPC.rotation = (float)Math.Atan2((double)playerYPos, (double)playerXPos) + MathHelper.PiOver2;
                 playerDistance = (float)Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
 
-                int segmentOffset = 56;
-                playerDistance = (playerDistance - (float)segmentOffset) / playerDistance;
+                int segmentOffset = 74;
+                playerDistance = (playerDistance - segmentOffset) / playerDistance;
                 playerXPos *= playerDistance;
                 playerYPos *= playerDistance;
                 NPC.velocity = Vector2.Zero;
@@ -152,8 +152,12 @@ namespace CalamityMod.NPCs.DesertScourge
             bool quickFall = head.Calamity().newAI[1] == 2f;
 
             // Calculate contact damage based on velocity
-            float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
-            if (burrow || lungeUpward || quickFall)
+            float maxChaseSpeed = Main.zenithWorld ? DesertScourgeHead.SegmentVelocity_ZenithSeed :
+                Main.getGoodWorld ? DesertScourgeHead.SegmentVelocity_GoodWorld :
+                masterMode ? DesertScourgeHead.SegmentVelocity_Master :
+                expertMode ? DesertScourgeHead.SegmentVelocity_Expert :
+                DesertScourgeHead.SegmentVelocity_Normal;
+            if (burrow || lungeUpward)
                 maxChaseSpeed *= 1.5f;
             if (expertMode)
                 maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);

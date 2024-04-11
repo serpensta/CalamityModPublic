@@ -27,7 +27,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 8;
+            Main.npcFrameCount[NPC.type] = 7;
 
             this.HideFromBestiary();
 
@@ -42,8 +42,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void SetDefaults()
         {
             NPC.GetNPCDamage();
-            NPC.width = 154;
-            NPC.height = 74;
+            NPC.width = 104;
+            NPC.height = 104;
             NPC.defense = 6;
             NPC.DR_NERD(0.05f);
 
@@ -111,8 +111,8 @@ namespace CalamityMod.NPCs.DesertScourge
                         NPC.ai[3] = 1f;
 
                         NPC.position = NPC.Center;
-                        NPC.width = (int)(BodyTexture2.Width() * NPC.scale);
-                        NPC.height = (int)(BodyTexture2.Height() * NPC.scale);
+                        //NPC.width = (int)(BodyTexture2.Width() * NPC.scale);
+                        //NPC.height = (int)(BodyTexture2.Height() * NPC.scale);
                         NPC.position -= NPC.Size * 0.5f;
                         NPC.frame = new Rectangle(0, 0, BodyTexture2.Width(), BodyTexture2.Height());
 
@@ -128,8 +128,8 @@ namespace CalamityMod.NPCs.DesertScourge
                         NPC.ai[3] = 2f;
 
                         NPC.position = NPC.Center;
-                        NPC.width = (int)(BodyTexture3.Width() * NPC.scale);
-                        NPC.height = (int)(BodyTexture3.Height() * NPC.scale);
+                        //NPC.width = (int)(BodyTexture3.Width() * NPC.scale);
+                        //NPC.height = (int)(BodyTexture3.Height() * NPC.scale);
                         NPC.position -= NPC.Size * 0.5f;
                         NPC.frame = new Rectangle(0, 0, BodyTexture3.Width(), BodyTexture3.Height());
 
@@ -145,8 +145,8 @@ namespace CalamityMod.NPCs.DesertScourge
                         NPC.ai[3] = 3f;
 
                         NPC.position = NPC.Center;
-                        NPC.width = (int)(BodyTexture4.Width() * NPC.scale);
-                        NPC.height = (int)(BodyTexture4.Height() * NPC.scale);
+                        //NPC.width = (int)(BodyTexture4.Width() * NPC.scale);
+                        //NPC.height = (int)(BodyTexture4.Height() * NPC.scale);
                         NPC.position -= NPC.Size * 0.5f;
                         NPC.frame = new Rectangle(0, 0, BodyTexture4.Width(), BodyTexture4.Height());
 
@@ -230,26 +230,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 playerDistance = (float)Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
 
                 int segmentOffset = 74;
-                switch ((int)NPC.ai[3])
-                {
-                    default:
-                    case 1:
-                    case 10:
-                        segmentOffset = 56;
-                        break;
-
-                    case 2:
-                    case 20:
-                        segmentOffset = 56;
-                        break;
-
-                    case 3:
-                    case 30:
-                        segmentOffset = 56;
-                        break;
-                }
-
-                playerDistance = (playerDistance - (float)segmentOffset) / playerDistance;
+                playerDistance = (playerDistance - segmentOffset) / playerDistance;
                 playerXPos *= playerDistance;
                 playerYPos *= playerDistance;
                 NPC.velocity = Vector2.Zero;
@@ -269,8 +250,12 @@ namespace CalamityMod.NPCs.DesertScourge
             bool quickFall = head.Calamity().newAI[1] == 2f;
 
             // Calculate contact damage based on velocity
-            float maxChaseSpeed = masterMode ? DesertScourgeHead.SegmentVelocity_Master : expertMode ? DesertScourgeHead.SegmentVelocity_Expert : DesertScourgeHead.SegmentVelocity_Normal;
-            if (burrow || lungeUpward || quickFall)
+            float maxChaseSpeed = Main.zenithWorld ? DesertScourgeHead.SegmentVelocity_ZenithSeed :
+                Main.getGoodWorld ? DesertScourgeHead.SegmentVelocity_GoodWorld :
+                masterMode ? DesertScourgeHead.SegmentVelocity_Master :
+                expertMode ? DesertScourgeHead.SegmentVelocity_Expert :
+                DesertScourgeHead.SegmentVelocity_Normal;
+            if (burrow || lungeUpward)
                 maxChaseSpeed *= 1.5f;
             if (expertMode)
                 maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);

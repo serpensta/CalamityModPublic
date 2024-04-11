@@ -40,6 +40,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public const float SegmentVelocity_Normal = 12f;
         public const float SegmentVelocity_Expert = 15f;
         public const float SegmentVelocity_Master = 18f;
+        public const float SegmentVelocity_GoodWorld = 21f;
+        public const float SegmentVelocity_ZenithSeed = 24f;
 
         public const float BurrowTimeGateValue = 540f;
         public const float BurrowTimeGateValue_Death = 420f;
@@ -80,8 +82,8 @@ namespace CalamityMod.NPCs.DesertScourge
             NPC.GetNPCDamage();
             NPC.defense = 4;
             NPC.npcSlots = 12f;
-            NPC.width = 158;
-            NPC.height = 116;
+            NPC.width = 104;
+            NPC.height = 104;
 
             NPC.LifeMaxNERB(4200, 5000, 1650000);
             if (Main.getGoodWorld)
@@ -190,19 +192,17 @@ namespace CalamityMod.NPCs.DesertScourge
             bool lungeUpward = burrow && NPC.Calamity().newAI[1] == 1f;
             bool quickFall = NPC.Calamity().newAI[1] == 2f;
 
-            float speed = death ? 0.15f : 0.12f;
-            float turnSpeed = death ? 0.1f : 0.08f;
+            float speed = death ? 0.18f : 0.15f;
+            float turnSpeed = death ? 0.36f : 0.3f;
 
             if (revenge)
             {
-                float velocityScale = death ? 0.08f : 0.06f;
-                speed += velocityScale * (1f - lifeRatio);
-                float accelerationScale = death ? 0.05f : 0.04f;
-                turnSpeed += accelerationScale * (1f - lifeRatio);
+                speed += (death ? 0.06f : 0.05f) * (1f - lifeRatio);
+                turnSpeed += (death ? 0.12f : 0.1f) * (1f - lifeRatio);
             }
 
-            speed += 0.1f * enrageScale;
-            turnSpeed += 0.05f * enrageScale;
+            speed += 0.15f * enrageScale;
+            turnSpeed += 0.3f * enrageScale;
 
             if (Main.getGoodWorld)
             {
@@ -356,8 +356,12 @@ namespace CalamityMod.NPCs.DesertScourge
             else if (NPC.velocity.X > 0f)
                 NPC.spriteDirection = -1;
 
-            float maxChaseSpeed = masterMode ? SegmentVelocity_Master : expertMode ? SegmentVelocity_Expert : SegmentVelocity_Normal;
-            if (burrow || lungeUpward || quickFall)
+            float maxChaseSpeed = Main.zenithWorld ? SegmentVelocity_ZenithSeed :
+                Main.getGoodWorld ? SegmentVelocity_GoodWorld :
+                masterMode ? SegmentVelocity_Master :
+                expertMode ? SegmentVelocity_Expert :
+                SegmentVelocity_Normal;
+            if (burrow || lungeUpward)
                 maxChaseSpeed *= 1.5f;
             if (expertMode)
                 maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);
@@ -441,7 +445,7 @@ namespace CalamityMod.NPCs.DesertScourge
             // Quickly fall and reset variables once at target's Y position
             if (quickFall)
             {
-                NPC.velocity.Y += Main.getGoodWorld ? 1f : 0.5f;
+                NPC.velocity.Y += maxChaseSpeed * 0.02f;
                 if (NPC.Center.Y >= NPC.Calamity().newAI[3] + LungeUpwardDistanceOffset)
                 {
                     NPC.Calamity().newAI[0] = 0f;
