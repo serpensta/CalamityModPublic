@@ -103,7 +103,7 @@ namespace CalamityMod.Projectiles.Boss
             else
                 targetDist = 1000;
 
-            if (!withinRange && Main.rand.NextBool())
+            if (Projectile.ai[1] == 2f && !withinRange && Main.rand.NextBool())
             {
                 SparkParticle orb = new SparkParticle(Projectile.Center - Projectile.velocity + Main.rand.NextVector2Circular(20, 20), -Projectile.velocity * Main.rand.NextFloat(0.1f, 1f), false, 14, Main.rand.NextFloat(0.35f, 0.6f), (Main.rand.NextBool() ? Color.Lerp(Color.Red, Color.Magenta, 0.5f) : Color.Red) * Projectile.Opacity);
                 GeneralParticleHandler.SpawnParticle(orb);
