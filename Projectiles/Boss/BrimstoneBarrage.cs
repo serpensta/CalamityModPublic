@@ -96,24 +96,27 @@ namespace CalamityMod.Projectiles.Boss
                 }
             }
 
-            // This only runs for SCal, SCal brothers, SCal seekers, and Sepulcher projectiles.
+            // This only runs for SCal projectiles.
             if (Projectile.ai[1] == 2f)
             {
-                if (Projectile.timeLeft > 600)
-                    Projectile.velocity *= 1.015f;
-
-                Projectile.scale = 0.8f;
-
-                Dust trailDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(4, 4), 182);
-                trailDust.noGravity = true;
-                trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
-                trailDust.scale = Main.rand.NextFloat(0.2f, 0.6f);
-
                 if (targetDist < 1400f)
                 {
                     SparkParticle orb = new SparkParticle(Projectile.Center - Projectile.velocity * 0.5f, -Projectile.velocity * Main.rand.NextFloat(0.1f, 0.6f), false, (int)MathHelper.Clamp(9 * Utils.GetLerpValue(630, 690, Projectile.timeLeft), 2, 9), 1.1f, (Main.rand.NextBool() ? Color.Red : Color.Lerp(Color.Red, Color.Magenta, 0.5f)) * Projectile.Opacity * 0.85f);
                     GeneralParticleHandler.SpawnParticle(orb);
                 }
+            }
+            // This only runs for SCal seekers and Sepulcher projectiles.
+            if (Projectile.ai[1] == 3f)
+            {
+                if (Projectile.timeLeft > 600)
+                    Projectile.velocity *= 1.015f;
+
+                Projectile.scale = 0.85f;
+
+                Dust trailDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(4, 4), 182);
+                trailDust.noGravity = true;
+                trailDust.velocity = (-Projectile.velocity * 0.5f) * Main.rand.NextFloat(0.1f, 0.9f);
+                trailDust.scale = Main.rand.NextFloat(0.2f, 0.6f);
             }
 
             if (Projectile.localAI[0] == 0f)
@@ -156,6 +159,6 @@ namespace CalamityMod.Projectiles.Boss
             CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
             return false;
         }
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, 18, targetHitbox);
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, 18 * Projectile.scale, targetHitbox);
     }
 }

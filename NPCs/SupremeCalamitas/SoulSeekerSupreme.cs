@@ -180,7 +180,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVelocity * 0.5f, type, damage, 1f, Main.myPlayer, 0f, 2f, projectileVelocityToPass);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVelocity * 0.5f, type, damage, 1f, Main.myPlayer, 0f, 3f, projectileVelocityToPass);
                         for (int i = 0; i < 5; i++)
                         {
                             Dust ShotDust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 60 : 114);
