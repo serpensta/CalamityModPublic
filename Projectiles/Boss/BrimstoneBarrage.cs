@@ -57,17 +57,13 @@ namespace CalamityMod.Projectiles.Boss
             else
                 targetDist = 1000;
 
-            // If this is an SCal projectile, or an SCal brother/seeker/sepulcher projectile, do not run this.
-            if (Projectile.ai[1] != 2f)
+            if (Projectile.velocity.Length() < Projectile.ai[2])
             {
-                if (Projectile.velocity.Length() < Projectile.ai[2])
+                Projectile.velocity *= bossRush ? 1.0125f : 1.01f;
+                if (Projectile.velocity.Length() > Projectile.ai[2])
                 {
-                    Projectile.velocity *= bossRush ? 1.0125f : 1.01f;
-                    if (Projectile.velocity.Length() > Projectile.ai[2])
-                    {
-                        Projectile.velocity.Normalize();
-                        Projectile.velocity *= Projectile.ai[2];
-                    }
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= Projectile.ai[2];
                 }
             }
 
