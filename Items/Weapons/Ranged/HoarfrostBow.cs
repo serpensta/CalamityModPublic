@@ -15,10 +15,10 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             Item.width = 26;
             Item.height = 70;
-            Item.damage = 37;
+            Item.damage = 36;
             Item.DamageType = DamageClass.Ranged;
-            Item.useTime = 25;
-            Item.useAnimation = 25;
+            Item.useTime = 29;
+            Item.useAnimation = 29;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 4f;
@@ -36,8 +36,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             for (int index = 0; index < 2; ++index)
             {
-                float SpeedX = velocity.X + Main.rand.Next(-30, 31) * 0.05f;
-                float SpeedY = velocity.Y + Main.rand.Next(-30, 31) * 0.05f;
+                float SpeedX = velocity.X + Main.rand.Next(-25, 26) * 0.05f;
+                float SpeedY = velocity.Y + Main.rand.Next(-25, 26) * 0.05f;
 
                 if (CalamityUtils.CheckWoodenAmmo(type, player))
                     Projectile.NewProjectile(source, position.X, position.Y, SpeedX, SpeedY, ModContent.ProjectileType<MistArrow>(), damage, knockback, player.whoAmI);

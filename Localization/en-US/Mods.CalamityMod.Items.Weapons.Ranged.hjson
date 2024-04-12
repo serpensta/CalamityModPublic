@@ -635,7 +635,7 @@ HoarfrostBow: {
 	Tooltip:
 		'''
 		Fires two arrows at once
-		Converts wooden arrows into mist arrows
+		Converts wooden arrows into mist arrows that spread frost mist on collision
 		'''
 }
 
