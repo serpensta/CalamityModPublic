@@ -14,19 +14,19 @@ namespace CalamityMod.Items.Weapons.Rogue
 {
     public class Supernova : RogueWeapon
     {
-        public static readonly SoundStyle ExplosionSound = new("CalamityMod/Sounds/Item/SupernovaBoom") { Volume = 0.8f };
+        public static readonly SoundStyle ExplosionSound = new("CalamityMod/Sounds/Item/SupernovaBoom") { Volume = 0.9f };
         public override void SetDefaults()
         {
             Item.width = 34;
             Item.height = 36;
-            Item.damage = 675;
+            Item.damage = 375;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-            Item.useAnimation = 24;
+            Item.useAnimation = 48;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 24;
-            Item.knockBack = 8f;
-            Item.UseSound = SoundID.Item15;
+            Item.useTime = 70;
+            Item.knockBack = 18f;
+            Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.value = CalamityGlobalItem.Rarity15BuyPrice;
             Item.shoot = ModContent.ProjectileType<SupernovaBomb>();
@@ -46,7 +46,9 @@ namespace CalamityMod.Items.Weapons.Rogue
                     Main.projectile[stealth].Calamity().stealthStrike = true;
                 return false;
             }
-            return true;
+            else
+                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+            return false;
         }
 
         public override void AddRecipes()
