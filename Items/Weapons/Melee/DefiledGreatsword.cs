@@ -17,7 +17,7 @@ namespace CalamityMod.Items.Weapons.Melee
 
         public const int TotalProjectiles = 3;
 
-        public const float ProjectileFullyVisibleDuration = 32f;
+        public const float ProjectileFullyVisibleDuration = 40f;
 
         public const float ProjectileFullyVisibleDurationIncreasePerAdditionalProjectile = 8f;
 
@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 102;
             Item.height = 102;
-            Item.damage = 124;
+            Item.damage = 119;
             Item.DamageType = DamageClass.Melee;
             Item.useAnimation = Item.useTime = 28;
             Item.useStyle = ItemUseStyleID.Swing;

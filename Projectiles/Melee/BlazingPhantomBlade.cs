@@ -15,11 +15,13 @@ namespace CalamityMod.Projectiles.Melee
     {
         public new string LocalizationCategory => "Projectiles.Melee";
 
-        internal const int TimeLeft = 210;
-
         internal const float StartingScale = 1f;
 
         internal const float SunlightBladeMaxVelocity = DefiledGreatsword.ShootSpeed * 2f;
+        internal const int SunlightBladePierce = 10;
+
+        internal const float FadeInTime = 30f;
+        internal const float FadeOutTime = 30f;
 
         public override void SetStaticDefaults()
         {
@@ -37,11 +39,11 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
-            Projectile.penetrate = 4;
+            Projectile.penetrate = -1; // Blazing blades and hyper blades hit four times, sunlight blades hit ten times.
             Projectile.ignoreWater = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 20;
-            Projectile.timeLeft = TimeLeft;
+            Projectile.timeLeft = 220;
             Projectile.noEnchantmentVisuals = true;
             Projectile.scale = StartingScale;
         }
@@ -49,25 +51,21 @@ namespace CalamityMod.Projectiles.Melee
         public override void AI()
         {
             // True Night's Edge AI
-            float fadeInTime = 50f;
-            float fadeOutTime = 15f;
+            //float fadeInTime = 30f;
+            //float fadeOutTime = 30f;
 
             // Defiled Greatsword has three variants for this projectile
             float fullyVisibleDuration = Projectile.ai[1];
             bool hyperBlade = fullyVisibleDuration == DefiledGreatsword.ProjectileFullyVisibleDuration + DefiledGreatsword.ProjectileFullyVisibleDurationIncreasePerAdditionalProjectile;
             bool sunlightBlade = fullyVisibleDuration == DefiledGreatsword.ProjectileFullyVisibleDuration + DefiledGreatsword.ProjectileFullyVisibleDurationIncreasePerAdditionalProjectile * 2f;
 
-            float timeBeforeFadeOut = fullyVisibleDuration + fadeInTime;
-            float projectileDuration = timeBeforeFadeOut + fadeOutTime;
-            float stopDealingDamageTime = TimeLeft - 20;
+            float timeBeforeFadeOut = fullyVisibleDuration + FadeInTime;
+            float projectileDuration = timeBeforeFadeOut + FadeOutTime;
 
             if (Projectile.localAI[0] == 0f)
                 SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
 
             Projectile.localAI[0] += 1f;
-            if (Projectile.damage == 0 && Projectile.localAI[0] < MathHelper.Lerp(timeBeforeFadeOut, projectileDuration, 0.5f))
-                Projectile.localAI[0] += 6f;
-
             Projectile.Opacity = Utils.Remap(Projectile.localAI[0], 0f, fullyVisibleDuration, 0f, 1f) * Utils.Remap(Projectile.localAI[0], timeBeforeFadeOut, projectileDuration, 1f, 0f);
             if (Projectile.localAI[0] >= projectileDuration)
             {
@@ -78,9 +76,6 @@ namespace CalamityMod.Projectiles.Melee
 
             Player player = Main.player[Projectile.owner];
             Projectile.direction = (Projectile.spriteDirection = (int)Projectile.ai[0]);
-
-            if (Projectile.damage != 0 && Projectile.localAI[0] >= stopDealingDamageTime)
-                Projectile.damage = 0;
 
             Projectile.localAI[1] += 1f;
             Projectile.rotation += Projectile.ai[0] * MathHelper.TwoPi * (4f + Projectile.Opacity * 4f) / 90f;
@@ -282,6 +277,14 @@ namespace CalamityMod.Projectiles.Melee
         {
             target.AddBuff(BuffID.Venom, 120);
             target.AddBuff(BuffID.OnFire3, 120);
+
+            bool sunlightBlade = Projectile.ai[1] == DefiledGreatsword.ProjectileFullyVisibleDuration + DefiledGreatsword.ProjectileFullyVisibleDurationIncreasePerAdditionalProjectile * 2f;
+            if (Projectile.numHits >= (sunlightBlade ? SunlightBladePierce : 3))
+            {
+                Projectile.localAI[0] = Projectile.ai[1] + FadeInTime;
+            }
         }
+
+        public override bool? CanDamage() => Projectile.localAI[0] > Projectile.ai[1] + FadeInTime ? false : null;
     }
 }
