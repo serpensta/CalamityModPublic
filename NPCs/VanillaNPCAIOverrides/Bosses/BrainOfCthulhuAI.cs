@@ -150,6 +150,42 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Super fast spin and charges phase
                 bool phase7 = lifeRatio < 0.1f;
 
+                // Spawn Creepers in Master Mode
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.localAI[0] == 1f && masterMode && phase3)
+                {
+                    npc.localAI[0] = 2f;
+                    SpawnMasterModeCreepers();
+                }
+
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.localAI[0] == 2f && masterMode && phase5)
+                {
+                    npc.localAI[0] = 3f;
+                    SpawnMasterModeCreepers();
+                }
+
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.localAI[0] == 3f && masterMode && phase7)
+                {
+                    npc.localAI[0] = 4f;
+                    SpawnMasterModeCreepers();
+                }
+
+                void SpawnMasterModeCreepers()
+                {
+                    int brainOfCthuluCreepersCount = GetBrainOfCthuluCreepersCountRevDeath() / 4;
+                    float attackTimerIncrement = 15f * 4;
+                    for (int i = 0; i < brainOfCthuluCreepersCount; i++)
+                    {
+                        float brainX = npc.Center.X;
+                        float brainY = npc.Center.Y;
+                        brainX += Main.rand.Next(-npc.width, npc.width);
+                        brainY += Main.rand.Next(-npc.height, npc.height);
+
+                        int creeperSpawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)brainX, (int)brainY, NPCID.Creeper, 0, 0f, i * attackTimerIncrement);
+                        Main.npc[creeperSpawn].velocity = new Vector2(Main.rand.Next(-30, 31) * 0.1f, Main.rand.Next(-30, 31) * 0.1f);
+                        Main.npc[creeperSpawn].netUpdate = true;
+                    }
+                }
+
                 // Whether the fucking thing is spinning or not, dipshit
                 bool spinning = npc.ai[0] == -4f;
 
@@ -611,6 +647,22 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.position.Y = npc.ai[2] * 16f - (npc.height / 2);
                         SoundEngine.PlaySound(SoundID.Item8, npc.Center);
                         npc.ai[0] = npc.ai[0] == -7f ? -8f : -3f;
+
+                        // Move non-charging Creepers to new Brain location
+                        for (int i = 0; i < Main.maxNPCs; i++)
+                        {
+                            NPC creeper = Main.npc[i];
+                            if (creeper.active && creeper.type == NPCID.Creeper)
+                            {
+                                bool creeperCanTeleport = creeper.ai[0] == 0f;
+                                if (creeperCanTeleport)
+                                {
+                                    creeper.position.X = npc.position.X;
+                                    creeper.position.Y = npc.position.Y;
+                                }
+                            }
+                        }
+
                         npc.netUpdate = true;
                         npc.netSpam = 0;
                     }
@@ -833,12 +885,25 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (!Main.player[npc.target].ZoneCrimson || bossRush)
                 enrageScale += 2f;
 
+            bool brainIsNotTeleporting = Main.npc[NPC.crimsonBoss].ai[0] == 0f || Main.npc[NPC.crimsonBoss].ai[0] == -1f || Main.npc[NPC.crimsonBoss].ai[0] == -6f;
+            bool brainIsInPhase2 = Main.npc[NPC.crimsonBoss].ai[0] < 0f;
+
             // Creeper count
             int creeperCount = NPC.CountNPCS(npc.type);
             if (creeperCount > GetBrainOfCthuluCreepersCountRevDeath())
                 creeperCount = GetBrainOfCthuluCreepersCountRevDeath();
 
-            float creeperRatio = creeperCount / (float)GetBrainOfCthuluCreepersCountRevDeath();
+            float creeperRatio = 1f;
+            if (masterMode && brainIsInPhase2)
+            {
+                bool brainIsInPhase3 = Main.npc[NPC.crimsonBoss].localAI[0] == 2f;
+                bool brainIsInPhase5 = Main.npc[NPC.crimsonBoss].localAI[0] == 3f;
+                bool brainIsInPhase7 = Main.npc[NPC.crimsonBoss].localAI[0] == 4f;
+                float creeperAmountScalar = (float)(GetBrainOfCthuluCreepersCountRevDeath() / 4);
+                creeperRatio = creeperCount / (creeperAmountScalar * (Main.npc[NPC.crimsonBoss].localAI[0] - 1f));
+            }
+            else
+                creeperRatio = creeperCount / (float)GetBrainOfCthuluCreepersCountRevDeath();
 
             // Scale the aggressiveness of the charges with amount of Creepers remaining
             float chargeAggressionScale = creeperRatio <= 0.1f ? 3.5f : creeperRatio <= 0.2f ? 2.5f : creeperRatio <= 0.4f ? 1.75f : creeperRatio <= 0.6f ? 1f : creeperRatio <= 0.8f ? 0.5f : 0f;
@@ -861,8 +926,6 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     dust.scale = 1.2f;
                 }
             }
-
-            bool brainIsNotTeleporting = Main.npc[NPC.crimsonBoss].ai[0] == 0f;
 
             // Stay near Brain
             if (npc.ai[0] == 0f)
@@ -903,7 +966,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     npc.ai[1] = 0f;
                     npc.TargetClosest();
-                    creeperCenter = new Vector2(npc.Center.X, npc.Center.Y);
+                    creeperCenter = npc.Center;
                     brainXDist = Main.player[npc.target].Center.X - creeperCenter.X;
                     brainYDist = Main.player[npc.target].Center.Y - creeperCenter.Y;
                     brainDistance = (float)Math.Sqrt(brainXDist * brainXDist + brainYDist * brainYDist);

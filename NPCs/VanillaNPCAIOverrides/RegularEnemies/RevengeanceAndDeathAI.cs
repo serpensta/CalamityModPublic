@@ -3571,8 +3571,11 @@ PrepareToShoot:
                         npc.velocity.Y *= 0.97f;
                 }
 
+                // Master Mode Queen Bee Hornets
                 if (npc.ai[3] == 1f)
                 {
+                    maxVelocity *= 1.4f;
+                    acceleration *= 1.8f;
                     maxVelocity += npc.ai[2] * 1.5f;
                     acceleration += npc.ai[2] * 0.01f;
                 }
@@ -3660,9 +3663,9 @@ PrepareToShoot:
                 acceleration *= 1.25f;
             }
 
-            Vector2 vector = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-            float targetXDist = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2);
-            float targetYDist = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2);
+            Vector2 vector = npc.Center;
+            float targetXDist = Main.player[npc.target].Center.X;
+            float targetYDist = Main.player[npc.target].Center.Y;
             targetXDist = (float)((int)(targetXDist / 8f) * 8);
             targetYDist = (float)((int)(targetYDist / 8f) * 8);
             vector.X = (float)((int)(vector.X / 8f) * 8);
@@ -3694,14 +3697,14 @@ PrepareToShoot:
                 {
                     npc.ai[0] += 1f;
                     if (npc.ai[0] > 0f)
-                        npc.velocity.Y = npc.velocity.Y + 0.03f;
+                        npc.velocity.Y += 0.03f;
                     else
-                        npc.velocity.Y = npc.velocity.Y - 0.03f;
+                        npc.velocity.Y -= 0.03f;
 
                     if (npc.ai[0] < -100f || npc.ai[0] > 100f)
-                        npc.velocity.X = npc.velocity.X + 0.03f;
+                        npc.velocity.X += 0.03f;
                     else
-                        npc.velocity.X = npc.velocity.X - 0.03f;
+                        npc.velocity.X -= 0.03f;
 
                     if (npc.ai[0] > 200f)
                         npc.ai[0] = -200f;
@@ -3709,10 +3712,11 @@ PrepareToShoot:
 
                 if (targetDistCheck < 150f && (npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.BloodSquid))
                 {
-                    npc.velocity.X = npc.velocity.X + targetXDist * 0.009f;
-                    npc.velocity.Y = npc.velocity.Y + targetYDist * 0.009f;
+                    npc.velocity.X += targetXDist * 0.009f;
+                    npc.velocity.Y += targetYDist * 0.009f;
                 }
 
+                // Master Mode Queen Bee Bees
                 if (npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall)
                 {
                     if (npc.ai[3] == 1f)
@@ -3751,28 +3755,28 @@ PrepareToShoot:
 
             if (npc.velocity.X < targetXDist)
             {
-                npc.velocity.X = npc.velocity.X + acceleration;
+                npc.velocity.X += acceleration;
                 if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.X < 0f && targetXDist > 0f)
-                    npc.velocity.X = npc.velocity.X + acceleration;
+                    npc.velocity.X += acceleration;
             }
             else if (npc.velocity.X > targetXDist)
             {
-                npc.velocity.X = npc.velocity.X - acceleration;
+                npc.velocity.X -= acceleration;
                 if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.X > 0f && targetXDist < 0f)
-                    npc.velocity.X = npc.velocity.X - acceleration;
+                    npc.velocity.X -= acceleration;
             }
 
             if (npc.velocity.Y < targetYDist)
             {
-                npc.velocity.Y = npc.velocity.Y + acceleration;
+                npc.velocity.Y += acceleration;
                 if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.Y < 0f && targetYDist > 0f)
-                    npc.velocity.Y = npc.velocity.Y + acceleration;
+                    npc.velocity.Y += acceleration;
             }
             else if (npc.velocity.Y > targetYDist)
             {
-                npc.velocity.Y = npc.velocity.Y - acceleration;
+                npc.velocity.Y -= acceleration;
                 if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.Y > 0f && targetYDist < 0f)
-                    npc.velocity.Y = npc.velocity.Y - acceleration;
+                    npc.velocity.Y -= acceleration;
             }
 
             if (npc.type == NPCID.ServantofCthulhu)
@@ -3928,9 +3932,9 @@ PrepareToShoot:
             if ((npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.BloodSquid) && npc.wet)
             {
                 if (npc.velocity.Y > 0f)
-                    npc.velocity.Y = npc.velocity.Y * 0.95f;
+                    npc.velocity.Y *= 0.95f;
 
-                npc.velocity.Y = npc.velocity.Y - 0.4f;
+                npc.velocity.Y -= 0.4f;
                 if (npc.velocity.Y < -3f)
                     npc.velocity.Y = -3f;
             }
@@ -3938,9 +3942,9 @@ PrepareToShoot:
             if (npc.type == NPCID.Moth && npc.wet)
             {
                 if (npc.velocity.Y > 0f)
-                    npc.velocity.Y = npc.velocity.Y * 0.95f;
+                    npc.velocity.Y *= 0.95f;
 
-                npc.velocity.Y = npc.velocity.Y - 0.7f;
+                npc.velocity.Y -= 0.7f;
                 if (npc.velocity.Y < -6f)
                     npc.velocity.Y = -6f;
 
@@ -3988,6 +3992,8 @@ PrepareToShoot:
                                 projTargetDistance = projSpeed / projTargetDistance;
                                 projTargetXDist *= projTargetDistance;
                                 projTargetYDist *= projTargetDistance;
+
+                                // Master Mode Queen Bee Hornets deal increased damage
                                 int projDamage = (int)((npc.ai[3] == 1f ? 15f : 10f) * npc.scale);
                                 if (npc.type == NPCID.MossHornet)
                                     projDamage = (int)(30f * npc.scale);
@@ -4013,10 +4019,10 @@ PrepareToShoot:
                 if ((npc.velocity.X > 0f && targetXDist > 0f) || (npc.velocity.X < 0f && targetXDist < 0f))
                 {
                     if (Math.Abs(npc.velocity.X) < 12f)
-                        npc.velocity.X = npc.velocity.X * 1.05f;
+                        npc.velocity.X *= 1.05f;
                 }
                 else
-                    npc.velocity.X = npc.velocity.X * 0.9f;
+                    npc.velocity.X *= 0.9f;
             }
 
             if (Main.netMode != NetmodeID.MultiplayerClient && !targetDead)
@@ -4089,7 +4095,7 @@ PrepareToShoot:
 
             if ((Main.dayTime && npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.MeteorHead && npc.type != NPCID.Bee && npc.type != NPCID.BeeSmall && npc.type != NPCID.Corruptor && npc.type != NPCID.Moth && npc.type != NPCID.Parrot && npc.type != NPCID.BloodSquid) || Main.player[npc.target].dead)
             {
-                npc.velocity.Y = npc.velocity.Y - acceleration * 2f;
+                npc.velocity.Y -= acceleration * 2f;
                 if (npc.timeLeft > 10)
                     npc.timeLeft = 10;
             }

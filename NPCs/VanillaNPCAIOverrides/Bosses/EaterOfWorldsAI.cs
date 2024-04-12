@@ -85,7 +85,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool phase4 = lifeRatio < (masterMode ? 0.5f : 0.2f);
 
             // Go fucking crazy in Master Mode
-            bool phase5 = lifeRatio < 0.15f && masterMode;
+            bool phase5 = lifeRatio < 0.1f && masterMode;
             bool phase6 = lifeRatio < 0.05f && masterMode;
 
             // Fire projectiles
@@ -357,13 +357,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (phase6)
             {
-                segmentVelocity += 6f * (enrageScale + 1f);
-                segmentAcceleration += 0.3f * (enrageScale + 1f);
+                segmentVelocity += 4f * (enrageScale + 1f);
+                segmentAcceleration += 0.2f * (enrageScale + 1f);
             }
             else if (phase5)
             {
-                segmentVelocity += 4f * (enrageScale + 1f);
-                segmentAcceleration += 0.2f * (enrageScale + 1f);
+                segmentVelocity += 3f * (enrageScale + 1f);
+                segmentAcceleration += 0.15f * (enrageScale + 1f);
             }
             else if (phase4)
             {
