@@ -69,12 +69,22 @@ namespace CalamityMod.Projectiles.Ranged
             {
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Smoke, Projectile.oldVelocity.X * 0.5f, Projectile.oldVelocity.Y * 0.5f, 100, new Color(237, 242, 242, 200), 1f);
             }
+
+            int mistAmt = 2;
+            for (int m = 0; m < mistAmt; m++)
+            {
+                if (Main.myPlayer == Projectile.owner)
+                {
+                    int frostMist = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-4f, 4f)), ModContent.ProjectileType<MistArrowFrostMist>(), (int)(Projectile.damage * 0.35f), (int)(Projectile.knockBack * 0.5f), Main.myPlayer, Main.rand.Next(3));
+                    Main.projectile[frostMist].rotation = Main.rand.NextFloat(-MathHelper.Pi, MathHelper.Pi);
+                }
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.Frostburn2, 180);
-            target.AddBuff(ModContent.BuffType<GlacialState>(), 30);
+            target.AddBuff(ModContent.BuffType<GlacialState>(), 60);
         }
     }
 }
