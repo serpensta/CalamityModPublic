@@ -764,7 +764,7 @@ FrostBarrier: {
 	Tooltip:
 		'''
 		You will freeze nearby enemies when you are struck
-		Grants immunity to the Chilled debuff
+		Grants immunity to Chilled and Frostburn
 		'''
 }
 
