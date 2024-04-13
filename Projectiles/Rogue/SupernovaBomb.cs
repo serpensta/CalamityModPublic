@@ -103,7 +103,7 @@ namespace CalamityMod.Projectiles.Rogue
             {
                 Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver4 * 3, 0.2f);
                 if (homing)
-                    CalamityUtils.HomeInOnNPC(Projectile, true, 2000f, MathHelper.Clamp(10 + time * 0.15f, 20, 35), 5);
+                    CalamityUtils.HomeInOnNPC(Projectile, true, 2000f, MathHelper.Clamp(5 + time * 0.1f, 10, 17), 5);
                 if (Main.rand.NextBool(3))
                 {
                     SparkParticle orb3 = new SparkParticle(Projectile.Center + Main.rand.NextVector2Circular(9, 9) - Projectile.velocity.SafeNormalize(Vector2.UnitY) * 12, visualDirection * Main.rand.NextFloat(0.2f, 0.8f), false, 20, 1.5f, Color.Lerp(Color.White, randomColor, 0.5f) * Utils.GetLerpValue(100, 170, time, true));
@@ -184,7 +184,7 @@ namespace CalamityMod.Projectiles.Rogue
                     Projectile.penetrate = 1;
                     homing = true;
                     Projectile.damage = startDamage;
-                    Projectile.extraUpdates = 2;
+                    Projectile.extraUpdates = 3;
                 }
             }
 
@@ -250,7 +250,9 @@ namespace CalamityMod.Projectiles.Rogue
                 {
                     if (Projectile.Calamity().stealthStrike)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaStealthBoom>(), Projectile.damage * 19, 0, Projectile.owner, 0f, 0f, 0f);
+                        float pitchRange = Main.rand.NextFloat(-0.1f, 0.1f);
+                        SoundEngine.PlaySound(Supernova.StealthChargeSound with { Pitch = pitchRange }, Projectile.Center);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaStealthBoom>(), Projectile.damage * 19, 0, Projectile.owner, 0f, 0f, pitchRange);
                     }
                     else
                     {

@@ -118,8 +118,17 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (currentFrame == 13)
             {
+                if (Main.zenithWorld)
+                {
+                    if (Vector2.Distance(Owner.Center, Projectile.Center) < radius)
+                    {
+                        Vector2 velToApply = Owner.Center.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.UnitX) * 30;
+                        Owner.velocity = velToApply + (velToApply.Y <= 0 ? new Vector2(0, -15) : Vector2.Zero);
+                    }
+                }
+
                 Projectile.velocity = Vector2.Zero;
-                Owner.Calamity().GeneralScreenShakePower = 6.5f;
+                Owner.Calamity().GeneralScreenShakePower = 5f;
 
                 int points = 5;
                 float radians = MathHelper.TwoPi / points;
@@ -132,7 +141,7 @@ namespace CalamityMod.Projectiles.Rogue
                     GeneralParticleHandler.SpawnParticle(subTrail);
                 }
 
-                for (int i = 0; i < 45; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     Vector2 randVel = new Vector2(15, 15).RotatedByRandom(100) * Main.rand.NextFloat(0.8f, 1.6f);
                     Particle smoke = new HeavySmokeParticle(Projectile.Center + randVel, randVel, new Color(57, 46, 115) * 0.9f, Main.rand.Next(25, 35 + 1), Main.rand.NextFloat(0.9f, 2.3f), 0.4f);
@@ -161,16 +170,18 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (currentFrame < 13)
             {
+                if (Main.zenithWorld)
+                {
+                    if (Vector2.Distance(Owner.Center, Projectile.Center) > 40 && Vector2.Distance(Owner.Center, Projectile.Center) < 600)
+                        Owner.Center += Owner.Center.DirectionTo(Projectile.Center).SafeNormalize(Vector2.UnitX) * 22;
+                }
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC target = Main.npc[i];
-                    if (!target.boss && target.IsAnEnemy(true, true))
+                    if (!target.boss && target.IsAnEnemy(true, true) && !CalamityPlayer.areThereAnyDamnBosses)
                     {
-                        if (!target.boss && target.IsAnEnemy(true, true) && !CalamityPlayer.areThereAnyDamnBosses)
-                        {
-                            if (Vector2.Distance(target.Center, Projectile.Center) > 40 && Vector2.Distance(target.Center, Projectile.Center) < 600)
-                                target.Center += target.Center.DirectionTo(Projectile.Center).SafeNormalize(Vector2.UnitX) * 22;
-                        }
+                        if (Vector2.Distance(target.Center, Projectile.Center) > 40 && Vector2.Distance(target.Center, Projectile.Center) < 600)
+                            target.Center += target.Center.DirectionTo(Projectile.Center).SafeNormalize(Vector2.UnitX) * 22;
                     }
                     else if (target != null && CalamityPlayer.areThereAnyDamnBosses)
                     {

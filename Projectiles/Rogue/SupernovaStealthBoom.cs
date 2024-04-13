@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.CalPlayer;
 using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
@@ -57,7 +58,7 @@ namespace CalamityMod.Projectiles.Rogue
             {
                 mainColor = randomColor;
                 startDamage = Projectile.damage;
-                Projectile.damage = (int)(Projectile.damage * 0.01f);
+                Projectile.damage = (int)(Projectile.damage * 0.004f);
             }
 
             if (time % 20 == 0)
@@ -134,12 +135,36 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (time == 80)
             {
+                radius = 2500;
+                if (Main.zenithWorld)
+                {
+                    Projectile.hostile = true;
+                    Projectile.friendly = true;
+                    startDamage *= 100;
+                }
+
+                SoundEngine.PlaySound(Supernova.StealthExplosionSound with { Pitch = Projectile.ai[2] }, Projectile.Center);
                 Projectile.damage = startDamage;
+                Projectile.numHits = 0;
                 damageFrame = true;
                 doDamage = true;
-                radius = 2500;
-                Owner.Calamity().GeneralScreenShakePower = 12.5f;
-                //Projectile.localNPCHitCooldown = 0;
+                Owner.Calamity().GeneralScreenShakePower = 14.5f;
+
+                for (int i = 0; i < 55; i++)
+                {
+                    Vector2 randVel = new Vector2(35, 35).RotatedByRandom(100) * Main.rand.NextFloat(0.05f, (Main.rand.NextBool(3) ? 1f : 0.5f));
+                    Particle smoke = new HeavySmokeParticle(Projectile.Center + randVel, randVel, new Color(57, 46, 115) * 0.9f, Main.rand.Next(25, 35 + 1), Main.rand.NextFloat(0.9f, 2.3f), 0.5f);
+                    GeneralParticleHandler.SpawnParticle(smoke);
+                }
+                for (int i = 0; i < 150; i++)
+                {
+                    Vector2 randVel = new Vector2(15, 15).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 1.6f);
+                    Dust dust2 = Dust.NewDustPerfect(Projectile.Center + randVel, 303, randVel);
+                    dust2.scale = Main.rand.NextFloat(1.75f, 2.5f);
+                    dust2.noGravity = true;
+                    dust2.color = new Color(57, 46, 115);
+                    dust2.alpha = Main.rand.Next(40, 100 + 1);
+                }
 
                 Particle orb = new CustomPulse(Projectile.Center, Vector2.Zero, mainColor, "CalamityMod/Particles/LargeBloom", new Vector2(1, 1), Main.rand.NextFloat(-10, 10), 4.5f, 3.5f, 20);
                 GeneralParticleHandler.SpawnParticle(orb);
@@ -296,7 +321,9 @@ namespace CalamityMod.Projectiles.Rogue
 
             time++;
             if (time >= 82)
+            {
                 Projectile.Kill();
+            }
         }
 
         public Color RandomizeColor(Color randomColor)
@@ -324,7 +351,7 @@ namespace CalamityMod.Projectiles.Rogue
             if (damageFrame)
             {
                 target.AddBuff(ModContent.BuffType<MiracleBlight>(), 90);
-                for (int i = 0; i <= 7; i++)
+                for (int i = 0; i <= MathHelper.Clamp(9 - Projectile.numHits, 3, 9); i++)
                 {
                     randomColor = Main.rand.Next(4) switch
                     {
@@ -333,9 +360,9 @@ namespace CalamityMod.Projectiles.Rogue
                         2 => Color.Orange,
                         _ => Color.LawnGreen,
                     };
-                    Vector2 vel = target.Center.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.UnitX) * 30 * Main.rand.NextFloat(0.05f, 1.2f);
+                    Vector2 vel = target.Center.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.UnitX) * 20 * Main.rand.NextFloat(0.05f, 1.2f);
                     Dust dust2 = Dust.NewDustPerfect(target.Center + Main.rand.NextVector2Circular(target.width * 0.5f, target.height * 0.5f), 66, vel);
-                    dust2.scale = Main.rand.NextFloat(0.35f, 0.85f);
+                    dust2.scale = Main.rand.NextFloat(1.15f, 2f);
                     dust2.noGravity = true;
                     dust2.color = Color.Lerp(Color.White, randomColor, 0.9f);
                 }
@@ -349,13 +376,8 @@ namespace CalamityMod.Projectiles.Rogue
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) // Add to regular plz
         {
-            if (!damageFrame)
-            {
-                if (Projectile.numHits > 0)
-                    Projectile.damage = (int)(Projectile.damage * 0.98f);
-                if (Projectile.damage < 1)
-                    Projectile.damage = 1;
-            }
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<MiracleBlight>(), 300);

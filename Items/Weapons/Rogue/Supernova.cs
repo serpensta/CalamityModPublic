@@ -15,11 +15,13 @@ namespace CalamityMod.Items.Weapons.Rogue
     public class Supernova : RogueWeapon
     {
         public static readonly SoundStyle ExplosionSound = new("CalamityMod/Sounds/Item/SupernovaBoom") { Volume = 0.9f };
+        public static readonly SoundStyle StealthExplosionSound = new("CalamityMod/Sounds/Item/SupernovaStealthExplode") { Volume = 0.9f };
+        public static readonly SoundStyle StealthChargeSound = new("CalamityMod/Sounds/Item/SupernovaStealthCharge") { Volume = 0.9f };
         public override void SetDefaults()
         {
             Item.width = 34;
             Item.height = 36;
-            Item.damage = 250;
+            Item.damage = 4500;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useAnimation = 70;
@@ -41,13 +43,13 @@ namespace CalamityMod.Items.Weapons.Rogue
         {
             if (player.Calamity().StealthStrikeAvailable()) //setting the stealth strike
             {
-                int stealth = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+                int stealth = Projectile.NewProjectile(source, position, velocity, type, (int)(damage / 18), knockback, player.whoAmI);
                 if (stealth.WithinBounds(Main.maxProjectiles))
                     Main.projectile[stealth].Calamity().stealthStrike = true;
                 return false;
             }
             else
-                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+                Projectile.NewProjectile(source, position, velocity, type, (int)(damage / 18), knockback, player.whoAmI);
             return false;
         }
 
