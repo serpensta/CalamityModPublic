@@ -3533,6 +3533,39 @@ PrepareToShoot:
                 targetDead = Main.player[npc.target].dead;
 
             bool queenBeeHornet = npc.type == NPCID.HornetHoney && npc.ai[3] == 1f;
+            if (queenBeeHornet)
+            {
+                if (Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
+                {
+                    if (npc.localAI[1] != 0f && !Collision.SolidCollision(npc.position, npc.width, npc.height))
+                    {
+                        npc.localAI[1] = 0f;
+                        npc.localAI[2] = 0f;
+                        npc.SyncVanillaLocalAI();
+                    }
+                }
+                else if (npc.localAI[1] == 0f)
+                    npc.localAI[2]++;
+
+                if (npc.localAI[2] >= (CalamityWorld.death ? 60f : 120f))
+                {
+                    npc.localAI[1] = 1f;
+                    npc.localAI[2] = 0f;
+                    npc.SyncVanillaLocalAI();
+                }
+                if (npc.localAI[1] == 0f)
+                {
+                    npc.alpha = 0;
+                    npc.noTileCollide = false;
+                }
+                else
+                {
+                    npc.wet = false;
+                    npc.alpha = 200;
+                    npc.noTileCollide = true;
+                }
+            }
+
             bool deathModeVelocityBuff = true;
             float maxVelocity = 6f;
             float acceleration = 0.05f;
