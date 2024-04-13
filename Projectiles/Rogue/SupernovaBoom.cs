@@ -18,7 +18,7 @@ namespace CalamityMod.Projectiles.Rogue
         private const int horizontalFrames = 5;
         private const int verticalFrames = 4;
         private const int frameLength = 2;
-        private const float radius = 304.5f;
+        private const float radius = 300f;
         public bool damageFrame = false;
 
         public Color variedColor = Color.White;

@@ -1169,9 +1169,9 @@ Supernova: {
 	DisplayName: Supernova
 	Tooltip:
 		'''
-		Toss a smart bomb that locks onto and tracks targets
-        If no target is found it will return to you
-		On hit bombs explode into a supernova that pulls in weaker enemies and pulls itself towards stronger enemies
+		Tosses a smart bomb that locks onto and tracks targets
+		If no target is found it will return to you
+		Bombs create a portable supernova on hit that pulls in weaker enemies and pulls itself towards stronger enemies
 		Stealth strikes explode with the power and size of a dying star
 		'''
 }

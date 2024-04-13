@@ -15,13 +15,13 @@ namespace CalamityMod.Items.Weapons.Rogue
     public class Supernova : RogueWeapon
     {
         public static readonly SoundStyle ExplosionSound = new("CalamityMod/Sounds/Item/SupernovaBoom") { Volume = 0.9f };
-        public static readonly SoundStyle StealthExplosionSound = new("CalamityMod/Sounds/Item/SupernovaStealthExplode") { Volume = 0.9f };
-        public static readonly SoundStyle StealthChargeSound = new("CalamityMod/Sounds/Item/SupernovaStealthCharge") { Volume = 0.9f };
+        public static readonly SoundStyle StealthExplosionSound = new("CalamityMod/Sounds/Item/SupernovaStealthExplode") { Volume = 1f };
+        public static readonly SoundStyle StealthChargeSound = new("CalamityMod/Sounds/Item/SupernovaStealthCharge") { Volume = 1f };
         public override void SetDefaults()
         {
-            Item.width = 34;
-            Item.height = 36;
-            Item.damage = 4500;
+            Item.width = 106;
+            Item.height = 112;
+            Item.damage = 5150;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useAnimation = 70;
@@ -37,7 +37,7 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.rare = ModContent.RarityType<Violet>();
         }
 
-        public override float StealthDamageMultiplier => 1f;
+        public override float StealthDamageMultiplier => 0.76f;
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
