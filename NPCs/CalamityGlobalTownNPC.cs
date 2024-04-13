@@ -1238,15 +1238,6 @@ namespace CalamityMod.NPCs
                 shop.AddWithCustomValue(ItemID.Steak, Item.buyPrice(gold: 5), Condition.HappyEnough, Condition.Hardmode);
             }
         }
-
-        public override void SetupTravelShop(int[] shop, ref int nextSlot)
-        {
-            if (Main.moonPhase == 0)
-            {
-                shop[nextSlot] = ItemType<FrostBarrier>();
-                nextSlot++;
-            }
-        }
         #endregion
     }
 }

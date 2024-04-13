@@ -2992,9 +2992,9 @@ namespace CalamityMod.CalPlayer
                 Player.buffImmune[BuffID.Chilled] = true;
                 Player.buffImmune[BuffID.Frozen] = true;
 
-                if (Player.statLife > (int)(Player.statLifeMax2 * 0.75))
+                if (Player.statLife > (int)(Player.statLifeMax2 * 0.5))
                     Player.GetDamage<GenericDamageClass>() += 0.1f;
-                if (Player.statLife < (int)(Player.statLifeMax2 * 0.25))
+                if (Player.statLife <= (int)(Player.statLifeMax2 * 0.5))
                     Player.statDefense += 20;
             }
 

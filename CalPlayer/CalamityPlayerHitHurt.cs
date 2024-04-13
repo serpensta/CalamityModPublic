@@ -2263,7 +2263,7 @@ namespace CalamityMod.CalPlayer
                     Player.AddBuff(ModContent.BuffType<ReaverRage>(), 180);
                 }
 
-                if ((fBarrier || (aquaticHeart && NPC.downedBoss3)) && !areThereAnyDamnBosses)
+                if (fBarrier || (aquaticHeart && NPC.downedBoss3))
                 {
                     SoundEngine.PlaySound(SoundID.Item27, Player.Center);
                     for (int m = 0; m < Main.maxNPCs; m++)
@@ -2273,17 +2273,13 @@ namespace CalamityMod.CalPlayer
                             continue;
 
                         float npcDist = (npc.Center - Player.Center).Length();
-                        float freezeDist = Main.rand.Next(200 + (int)hurtInfo.Damage / 2, 301 + (int)hurtInfo.Damage * 2);
+                        float freezeDist = 300 + (int)hurtInfo.Damage * 2;
                         if (freezeDist > 500f)
-                            freezeDist = 500f + (freezeDist - 500f) * 0.75f;
-                        if (freezeDist > 700f)
-                            freezeDist = 700f + (freezeDist - 700f) * 0.5f;
-                        if (freezeDist > 900f)
-                            freezeDist = 900f + (freezeDist - 900f) * 0.25f;
+                            freezeDist = 500f + (freezeDist - 500f) * 0.5f;
 
                         if (npcDist < freezeDist)
                         {
-                            float duration = Main.rand.Next(10 + (int)hurtInfo.Damage / 4, 20 + (int)hurtInfo.Damage / 3);
+                            float duration = Main.rand.Next(10 + (int)hurtInfo.Damage / 2, 20 + (int)hurtInfo.Damage);
                             if (duration > 120)
                                 duration = 120;
 

@@ -3662,7 +3662,7 @@ namespace CalamityMod.CalPlayer
                     (stressPills ? 0.05f : 0f) +
                     ((abyssalDivingSuit && Player.IsUnderwater()) ? 0.05f : 0f) +
                     (aquaticHeartWaterBuff ? 0.15f : 0f) +
-                    ((frostFlare && Player.statLife < (int)(Player.statLifeMax2 * 0.25)) ? 0.15f : 0f) +
+                    ((frostFlare && Player.statLife <= (int)(Player.statLifeMax2 * 0.5)) ? 0.15f : 0f) +
                     (dragonScales ? 0.1f : 0f) +
                     (kamiBoost ? KamiBuff.RunAccelerationBoost : 0f) +
                     (CobaltSet ? CobaltArmorSetChange.SpeedBoostSetBonusPercentage * 0.01f : 0f) +
@@ -3677,7 +3677,7 @@ namespace CalamityMod.CalPlayer
                     (stressPills ? 0.05f : 0f) +
                     ((abyssalDivingSuit && Player.IsUnderwater()) ? 0.05f : 0f) +
                     (aquaticHeartWaterBuff ? 0.15f : 0f) +
-                    ((frostFlare && Player.statLife < (int)(Player.statLifeMax2 * 0.25)) ? 0.15f : 0f) +
+                    ((frostFlare && Player.statLife <= (int)(Player.statLifeMax2 * 0.5)) ? 0.15f : 0f) +
                     (dragonScales ? 0.1f : 0f) +
                     (kamiBoost ? KamiBuff.RunSpeedBoost : 0f) +
                     (CobaltSet ? CobaltArmorSetChange.SpeedBoostSetBonusPercentage * 0.01f : 0f) +

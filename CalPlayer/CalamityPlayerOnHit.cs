@@ -1006,10 +1006,6 @@ namespace CalamityMod.CalPlayer
                 {
                     CalamityUtils.Inflict246DebuffsNPC(target, ModContent.BuffType<ElementalMix>());
                 }
-                if (cryogenSoul)
-                {
-                    CalamityUtils.Inflict246DebuffsNPC(target, BuffID.Frostburn);
-                }
                 if (ataxiaFire)
                 {
                     CalamityUtils.Inflict246DebuffsNPC(target, BuffID.OnFire3, 4f);
