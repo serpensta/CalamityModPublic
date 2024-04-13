@@ -138,8 +138,6 @@ namespace CalamityMod.ILEditing
             On_NPC.SlimeRainSpawns += PreventBossSlimeRainSpawns;
             On_ShimmerTransforms.IsItemTransformLocked += AdjustShimmerRequirements;
 
-            // TODO -- Beat Lava Slimes once and for all
-            // IL.Terraria.NPC.VanillaHitEffect += RemoveLavaDropsFromExpertLavaSlimes;
             IL_Projectile.CanExplodeTile += MakeMeteoriteExplodable;
             IL_Main.UpdateWindyDayState += MakeWindyDayMusicPlayLessOften;
             IL_Main.UpdateTime_StartNight += BloodMoonsRequire200MaxLife;

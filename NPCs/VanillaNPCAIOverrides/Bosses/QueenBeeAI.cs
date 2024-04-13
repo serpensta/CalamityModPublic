@@ -480,7 +480,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                         Main.npc[spawn].ai[2] = enrageScale;
                                         Main.npc[spawn].ai[3] = 1f;
                                     }
-                                    Main.npc[spawn].timeLeft = 3600;
+                                    Main.npc[spawn].timeLeft = 600;
                                     Main.npc[spawn].netUpdate = true;
                                 }
                             }
@@ -680,7 +680,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 Main.npc[spawn].ai[2] = enrageScale;
                                 Main.npc[spawn].ai[3] = 1f;
                             }
-                            Main.npc[spawn].timeLeft = 3600;
+                            Main.npc[spawn].timeLeft = 600;
                             Main.npc[spawn].netUpdate = true;
                         }
                     }
