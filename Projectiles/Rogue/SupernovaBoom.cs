@@ -72,7 +72,7 @@ namespace CalamityMod.Projectiles.Rogue
 
             mainColor = Color.Lerp(mainColor, variedColor, 0.07f);
 
-            Lighting.AddLight(Projectile.Center, mainColor.ToVector3() * (currentFrame == 13 ? 5 : 2));
+            Lighting.AddLight(Projectile.Center, mainColor.ToVector3() * 3);
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter % frameLength == frameLength - 1)
@@ -118,7 +118,8 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (currentFrame == 13)
             {
-                Owner.Calamity().GeneralScreenShakePower = 8.5f;
+                Projectile.velocity = Vector2.Zero;
+                Owner.Calamity().GeneralScreenShakePower = 6.5f;
 
                 int points = 5;
                 float radians = MathHelper.TwoPi / points;
@@ -168,7 +169,26 @@ namespace CalamityMod.Projectiles.Rogue
                         if (!target.boss && target.IsAnEnemy(true, true) && !CalamityPlayer.areThereAnyDamnBosses)
                         {
                             if (Vector2.Distance(target.Center, Projectile.Center) > 40 && Vector2.Distance(target.Center, Projectile.Center) < 600)
-                                target.velocity = target.Center.DirectionTo(Projectile.Center).SafeNormalize(Vector2.UnitX) * 22;
+                                target.Center += target.Center.DirectionTo(Projectile.Center).SafeNormalize(Vector2.UnitX) * 22;
+                        }
+                    }
+                    else if (target != null && CalamityPlayer.areThereAnyDamnBosses)
+                    {
+                        target = Projectile.Center.ClosestNPCAt(600);
+                        if (target != null)
+                        {
+                            if (Vector2.Distance(target.Center, Projectile.Center) > 5)
+                            {
+                                if (Vector2.Distance(target.Center, Projectile.Center) < 600)
+                                {
+                                    Projectile.velocity = Projectile.Center.DirectionTo(target.Center).SafeNormalize(Vector2.UnitX) * 30;
+                                }
+                            }
+                            else
+                            {
+                                Projectile.velocity = Vector2.Zero;
+                                Projectile.Center = target.Center;
+                            }
                         }
                     }
                 }
@@ -193,12 +213,19 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!target.boss && target.IsAnEnemy(true, true) && !CalamityPlayer.areThereAnyDamnBosses)
+            if (!target.boss && target.IsAnEnemy(true, true) && !CalamityPlayer.areThereAnyDamnBosses && target != null)
             {
                 Vector2 velToApply = target.Center.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.UnitX) * 30;
                 target.velocity = velToApply + (velToApply.Y <= 0 ? new Vector2(0, -5) : Vector2.Zero);
             }
-            target.AddBuff(ModContent.BuffType<MiracleBlight>(), 180);
+            target.AddBuff(ModContent.BuffType<MiracleBlight>(), 90);
+        }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (Projectile.numHits > 0)
+                Projectile.damage = (int)(Projectile.damage * 0.95f);
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<MiracleBlight>(), 300);

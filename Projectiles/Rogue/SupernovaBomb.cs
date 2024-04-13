@@ -24,6 +24,7 @@ namespace CalamityMod.Projectiles.Rogue
         public int time = 0;
         public bool homing = false;
         public bool returning = false;
+        public int startDamage;
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
@@ -54,7 +55,11 @@ namespace CalamityMod.Projectiles.Rogue
                 _ => Color.LawnGreen,
             };
             if (time == 0)
+            {
                 mainColor = randomColor;
+                startDamage = Projectile.damage;
+                Projectile.damage = (int)(Projectile.damage * 0.5f);
+            }
 
 
             if (time % 20 == 0)
@@ -126,22 +131,59 @@ namespace CalamityMod.Projectiles.Rogue
                     return;
                 }
 
-
-                if (time == 60)
+                if (time >= 60 && time < 75 && Projectile.Calamity().stealthStrike)
                 {
                     SoundStyle lockon = new("CalamityMod/Sounds/Custom/ExoMechs/ApolloArtemisTargetSelection");
-                    SoundEngine.PlaySound(lockon with { Pitch = -0.3f }, Projectile.Center);
+                    if (time == 60)
+                    {
+                        SoundEngine.PlaySound(lockon with { Pitch = -0.6f }, Projectile.Center);
 
-                    Particle pulse = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.75f, 0.2f, 10);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                        Particle pulse = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.95f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse);
 
-                    Particle pulse2 = new CustomPulse(Projectile.Center, Vector2.Zero, randomColor * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.6f, 0.2f, 10);
-                    GeneralParticleHandler.SpawnParticle(pulse2);
+                        Particle pulse2 = new CustomPulse(Projectile.Center, Vector2.Zero, randomColor * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.8f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse2);
+                    }
+                    if (time == 67)
+                    {
+                        SoundEngine.PlaySound(lockon with { Pitch = -0.4f }, Projectile.Center);
+
+                        Particle pulse = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.75f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse);
+
+                        Particle pulse2 = new CustomPulse(Projectile.Center, Vector2.Zero, randomColor * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.6f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse2);
+                    }
+                    if (time == 74)
+                    {
+                        SoundEngine.PlaySound(lockon with { Pitch = -0.1f }, Projectile.Center);
+
+                        Particle pulse = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.65f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse);
+
+                        Particle pulse2 = new CustomPulse(Projectile.Center, Vector2.Zero, randomColor * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.5f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse2);
+                    }
                 }
-                if (time > 62)
+                if (time == 60)
+                {
+                    if (!Projectile.Calamity().stealthStrike)
+                    {
+                        SoundStyle lockon = new("CalamityMod/Sounds/Custom/ExoMechs/ApolloArtemisTargetSelection");
+                        SoundEngine.PlaySound(lockon with { Pitch = -0.3f }, Projectile.Center);
+
+                        Particle pulse = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.75f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse);
+
+                        Particle pulse2 = new CustomPulse(Projectile.Center, Vector2.Zero, randomColor * 0.7f, "CalamityMod/Particles/BloomRing", new Vector2(1f, 1f), 0f, 0.6f, 0.2f, 10);
+                        GeneralParticleHandler.SpawnParticle(pulse2);
+                    }
+                }
+                if (time > (Projectile.Calamity().stealthStrike ? 75 : 62))
                 {
                     Projectile.penetrate = 1;
                     homing = true;
+                    Projectile.damage = startDamage;
                     Projectile.extraUpdates = 2;
                 }
             }
@@ -191,10 +233,6 @@ namespace CalamityMod.Projectiles.Rogue
                 }
             }
 
-            //stealth strike
-            if (Projectile.Calamity().stealthStrike && Projectile.timeLeft % 8 == 0 && Projectile.owner == Main.myPlayer && false)
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.UnitY * 2f, ModContent.ProjectileType<SupernovaHoming>(), (int)(Projectile.damage * 3), 0, Projectile.owner, 0f, 0f);
-            
             time++;
         }
 
@@ -206,12 +244,19 @@ namespace CalamityMod.Projectiles.Rogue
                 Projectile.width = Projectile.height = 128;
                 Projectile.position.X = Projectile.position.X - (float)(Projectile.width / 2);
                 Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
-                SoundEngine.PlaySound(Supernova.ExplosionSound, Projectile.Center);
 
                 //spawn explosion
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaBoom>(), Projectile.damage * 5, 0, Projectile.owner, 0f, 0f, Projectile.Calamity().stealthStrike ? 1f : 0f);
+                    if (Projectile.Calamity().stealthStrike)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaStealthBoom>(), Projectile.damage * 19, 0, Projectile.owner, 0f, 0f, 0f);
+                    }
+                    else
+                    {
+                        SoundEngine.PlaySound(Supernova.ExplosionSound, Projectile.Center);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaBoom>(), Projectile.damage * 19, 0, Projectile.owner, 0f, 0f, 0f);
+                    }
                 }
             }
             else
@@ -236,6 +281,8 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            if (!homing)
+                hit.Damage = (int)(Projectile.damage * 0.1f);
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 60);
         }
 
