@@ -885,7 +885,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (!Main.player[npc.target].ZoneCrimson || bossRush)
                 enrageScale += 2f;
 
-            bool brainIsNotTeleporting = Main.npc[NPC.crimsonBoss].ai[0] == 0f || Main.npc[NPC.crimsonBoss].ai[0] == -1f || Main.npc[NPC.crimsonBoss].ai[0] == -6f;
+            bool brainIsNotTeleportingOrCharging = Main.npc[NPC.crimsonBoss].ai[0] == 0f || Main.npc[NPC.crimsonBoss].ai[0] == -1f || Main.npc[NPC.crimsonBoss].ai[0] == -6f;
             bool brainIsInPhase2 = Main.npc[NPC.crimsonBoss].ai[0] < 0f;
 
             // Creeper count
@@ -939,15 +939,22 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 float brainDistance = (float)Math.Sqrt(brainXDist * brainXDist + brainYDist * brainYDist);
                 float velocity = (death ? (masterMode ? 16f : 12f) : (masterMode ? 12f : 8f)) + chargeAggressionScale;
                 velocity += 2f * enrageScale;
+                if (brainIsInPhase2)
+                {
+                    float velocityFloor = Main.npc[NPC.crimsonBoss].velocity.Length() + velocity * 0.5f;
+                    if (velocity < velocityFloor)
+                        velocity = velocityFloor;
+                }
 
-                // Max distance from Brain
-                if (brainDistance > 90f)
+                float maxDistanceFromBrain = 90f;
+                if (brainDistance > maxDistanceFromBrain)
                 {
                     brainDistance = velocity / brainDistance;
                     brainXDist *= brainDistance;
                     brainYDist *= brainDistance;
-                    npc.velocity.X = (npc.velocity.X * 15f + brainXDist) / 16f;
-                    npc.velocity.Y = (npc.velocity.Y * 15f + brainYDist) / 16f;
+                    float inertia = brainIsInPhase2 ? 5f : 15f;
+                    npc.velocity.X = (npc.velocity.X * inertia + brainXDist) / (inertia + 1f);
+                    npc.velocity.Y = (npc.velocity.Y * inertia + brainYDist) / (inertia + 1f);
                 }
 
                 // Increase speed
@@ -958,8 +965,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.alpha = Main.npc[NPC.crimsonBoss].alpha;
 
                 // Only increment the attack timer if the brain isn't teleporting
-                if (brainIsNotTeleporting)
-                    npc.ai[1] += 1f + chargeAggressionScale;
+                if (brainIsNotTeleportingOrCharging)
+                    npc.ai[1] += (brainIsInPhase2 ? 2f : 1f) + chargeAggressionScale;
 
                 // Charge at target
                 if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[1] >= TimeBeforeCreeperAttack)
@@ -984,32 +991,36 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Always fully visible while charging
                 npc.alpha = 0;
 
-                // Set damage
-                npc.damage = npc.defDamage;
-
                 float chargeVelocity = (death ? (masterMode ? 12f : 9f) : (masterMode ? 9f : 6f)) + chargeAggressionScale;
                 chargeVelocity += 2f * enrageScale;
-                Vector2 destination = Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
-                Vector2 targetDirection = destination - npc.Center;
-                targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
-                if (Main.getGoodWorld)
+                float returnToBrainGateValue = 1f;
+                if (!brainIsInPhase2)
                 {
-                    targetDirection *= chargeVelocity + 6f;
-                    npc.velocity = (npc.velocity * 49f + targetDirection) / 50f;
-                }
-                else
-                {
-                    targetDirection *= chargeVelocity;
-                    float inertia = masterMode ? 75f : 100f;
-                    npc.velocity = (npc.velocity * (inertia - 1f) + targetDirection) / inertia;
-                }
+                    // Set damage
+                    npc.damage = npc.defDamage;
 
-                // Return to Brain after a set time
-                float chargeDistance = masterMode ? 900f : 600f;
-                float returnToBrainGateValue = chargeDistance / chargeVelocity;
+                    Vector2 destination = Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero);
+                    Vector2 targetDirection = destination - npc.Center;
+                    targetDirection = targetDirection.SafeNormalize(Vector2.UnitY);
+                    if (Main.getGoodWorld)
+                    {
+                        targetDirection *= chargeVelocity + 6f;
+                        npc.velocity = (npc.velocity * 49f + targetDirection) / 50f;
+                    }
+                    else
+                    {
+                        targetDirection *= chargeVelocity;
+                        float inertia = masterMode ? 75f : 100f;
+                        npc.velocity = (npc.velocity * (inertia - 1f) + targetDirection) / inertia;
+                    }
+
+                    // Return to Brain after a set time
+                    float chargeDistance = masterMode ? 900f : 600f;
+                    returnToBrainGateValue = chargeDistance / chargeVelocity;
+                }
 
                 npc.ai[1] += 1f;
-                if (npc.ai[1] >= returnToBrainGateValue)
+                if (npc.ai[1] >= returnToBrainGateValue || brainIsInPhase2)
                 {
                     // Avoid cheap bullshit
                     npc.damage = 0;
@@ -1031,7 +1042,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.ai[2] = 1f;
                     }
 
-                    if (brainIsNotTeleporting)
+                    if (brainIsNotTeleportingOrCharging)
                     {
                         npc.ai[0] = 0f;
                         npc.ai[1] = 0f;

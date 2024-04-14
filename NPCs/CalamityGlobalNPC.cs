@@ -7121,16 +7121,139 @@ namespace CalamityMod.NPCs
                 // Telegraph for charge and blood shots
                 else if (npc.type == NPCID.Creeper)
                 {
+                    if (NPC.crimsonBoss < 0)
+                        return;
+
+                    Vector2 halfSize = npc.frame.Size() / 2;
+                    SpriteEffects spriteEffects = SpriteEffects.None;
+                    if (npc.spriteDirection == 1)
+                        spriteEffects = SpriteEffects.FlipHorizontally;
+
+                    bool brainIsInPhase2 = Main.npc[NPC.crimsonBoss].ai[0] < 0f;
+                    if (brainIsInPhase2)
+                    {
+                        Vector2 distanceFromBrain = npc.Center - Main.npc[NPC.crimsonBoss].Center;
+                        Color currentColor = npc.GetAlpha(drawColor);
+                        float opacity = (1f - Main.npc[NPC.crimsonBoss].life / (float)Main.npc[NPC.crimsonBoss].lifeMax) * 2f;
+                        opacity *= opacity;
+                        if (Main.getGoodWorld)
+                            opacity = 1f;
+
+                        opacity = MathHelper.Clamp(opacity, 0f, 1f);
+                        currentColor.R = (byte)((float)(int)currentColor.R * opacity);
+                        currentColor.G = (byte)((float)(int)currentColor.G * opacity);
+                        currentColor.B = (byte)((float)(int)currentColor.B * opacity);
+                        currentColor.A = (byte)((float)(int)currentColor.A * opacity);
+                        int totalAfterimages = 4;
+                        for (int i = 0; i < totalAfterimages; i++)
+                        {
+                            Vector2 position = npc.position;
+                            float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                            float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                            if (i == 0 || i == 2)
+                                position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            else
+                                position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+
+                            position.X -= npc.width / 2;
+                            if (i == 0 || i == 1)
+                                position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            else
+                                position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+
+                            position.Y -= npc.height / 2;
+
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position.X - screenPos.X + (float)(npc.width / 2) - (float)TextureAssets.Npc[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, position.Y - screenPos.Y + (float)npc.height - (float)TextureAssets.Npc[npc.type].Height() * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + npc.gfxOffY), npc.frame, currentColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        }
+
+                        float secondAfterimageSetHealthValue = (int)(Main.npc[NPC.crimsonBoss].lifeMax * 0.8f);
+                        if (Main.npc[NPC.crimsonBoss].life < secondAfterimageSetHealthValue)
+                        {
+                            currentColor = npc.GetAlpha(drawColor);
+                            float opacityScale = 1f - Main.npc[NPC.crimsonBoss].life / (float)secondAfterimageSetHealthValue;
+                            opacity = Main.getGoodWorld ? 1f : opacityScale;
+
+                            opacity = MathHelper.Clamp(opacity, 0f, 1f);
+                            currentColor.R = (byte)((float)(int)currentColor.R * opacity);
+                            currentColor.G = (byte)((float)(int)currentColor.G * opacity);
+                            currentColor.B = (byte)((float)(int)currentColor.B * opacity);
+                            currentColor.A = (byte)((float)(int)currentColor.A * opacity);
+                            totalAfterimages = death ? 12 : 4;
+                            for (int i = 0; i < totalAfterimages; i++)
+                            {
+                                Vector2 position = npc.position;
+                                float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                                float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                                if (i > 3)
+                                {
+                                    currentColor *= 0.5f;
+                                    distanceFromTargetX *= 0.5f;
+                                    distanceFromTargetY *= 0.5f;
+                                }
+
+                                switch (i)
+                                {
+                                    case 0:
+                                    case 4:
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromBrain.Y;
+                                        break;
+
+                                    case 1:
+                                    case 5:
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromBrain.X;
+                                        break;
+
+                                    case 2:
+                                    case 6:
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromBrain.Y;
+                                        break;
+
+                                    case 3:
+                                    case 7:
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromBrain.X;
+                                        break;
+
+                                    case 8:
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        break;
+
+                                    case 9:
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        break;
+
+                                    case 10:
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        break;
+
+                                    case 11:
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                                position.X -= npc.width / 2;
+                                position.Y -= npc.height / 2;
+
+                                spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position.X - screenPos.X + (float)(npc.width / 2) - (float)TextureAssets.Npc[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, position.Y - screenPos.Y + (float)npc.height - (float)TextureAssets.Npc[npc.type].Height() * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + npc.gfxOffY), npc.frame, currentColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                            }
+                        }
+                    }
+
                     float beginTelegraphGateValue = BrainOfCthulhuAI.TimeBeforeCreeperAttack - BrainOfCthulhuAI.CreeperTelegraphTime;
                     if (npc.ai[1] > beginTelegraphGateValue || npc.ai[0] == 1f)
                     {
                         float colorScale = npc.ai[0] == 1f ? 1f : MathHelper.Clamp((npc.ai[1] - beginTelegraphGateValue) / BrainOfCthulhuAI.CreeperTelegraphTime, 0f, 1f);
                         Color drawColor2 = new Color(150, 30, 30, 0) * colorScale;
-                        Vector2 halfSize = npc.frame.Size() / 2;
-                        SpriteEffects spriteEffects = SpriteEffects.None;
-                        if (npc.spriteDirection == 1)
-                            spriteEffects = SpriteEffects.FlipHorizontally;
-
                         for (int i = 0; i < 2; i++)
                         {
                             spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
