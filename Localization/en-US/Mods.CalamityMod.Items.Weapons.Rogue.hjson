@@ -1171,8 +1171,8 @@ Supernova: {
 		'''
 		Tosses a smart bomb that locks onto and tracks targets
 		If no target is found it will return to you
-		Bombs create a portable supernova on hit that pulls in weaker enemies and pulls itself towards stronger enemies
-		Stealth strikes explode with the power and size of a dying star
+		Each bomb creates a miniature supernova that drags in weak enemies and chases strong enemies
+		Stealth strikes create a blast that shakes the foundations of reality itself
 		'''
 }
 
