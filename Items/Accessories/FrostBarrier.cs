@@ -23,6 +23,7 @@ namespace CalamityMod.Items.Accessories
             CalamityPlayer modPlayer = player.Calamity();
             modPlayer.fBarrier = true;
             player.buffImmune[BuffID.Chilled] = true;
+            player.buffImmune[BuffID.Frostburn] = true;
         }
     }
 }

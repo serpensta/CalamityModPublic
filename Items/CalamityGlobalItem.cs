@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Sockets;
 using CalamityMod.Buffs.StatBuffs;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.CalPlayer;
@@ -503,7 +504,8 @@ namespace CalamityMod.Items
                             if (i != 0)
                             {
                                 Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(i));
-                                int rocket = Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<ScorpioRocket>(), (int)(damage * 0.25), 2f, player.whoAmI);
+                                int rocket = Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<ScorpioRocket>(), (int)(damage * 0.25), 2f, player.whoAmI, 0, 12f);
+                                //First extra value is rocket type which I just used 0 to get the default, second is the velocity I went with my gut feeling and got quite close to Scorpio's velocity with Rockets I
                                 if (rocket.WithinBounds(Main.maxProjectiles))
                                     Main.projectile[rocket].DamageType = DamageClass.Generic;
                             }
