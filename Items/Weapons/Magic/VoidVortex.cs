@@ -24,11 +24,11 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             Item.width = 130;
             Item.height = 130;
-            Item.damage = 110;
+            Item.damage = 90;
             Item.DamageType = DamageClass.Magic;
-            Item.mana = 60;
-            Item.useTime = 80;
-            Item.useAnimation = 80;
+            Item.mana = 30;
+            Item.useTime = 43;
+            Item.useAnimation = 43;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 0f;
@@ -44,21 +44,22 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             int numOrbs = 12;
             Vector2 clickPos = Main.MouseWorld;
-            float orbDistance = 48f;
-            float orbSpeed = 5f;
+            float orbDistance = 90f;
+            float orbSpeed = 4f;
 
             float spinCoinflip = Main.rand.NextBool() ? -1f : 1f;
             Vector2 dir = Main.rand.NextVector2Unit();
             for (int i = 0; i < numOrbs; i++)
             {
                 Vector2 orbPos = clickPos + dir * orbDistance;
-                Vector2 vel = dir.RotatedBy(spinCoinflip * MathHelper.PiOver2) * orbSpeed;
+                Vector2 vel = dir.RotatedBy(spinCoinflip * -MathHelper.PiOver2) * orbSpeed;
 
                 // Choose random firing stagger values for each orb to create a desynchronized barrage of lasers
-                float timingStagger = Main.rand.Next(OrbFireRate);
-                Projectile.NewProjectile(source, orbPos, vel, type, damage, knockback, player.whoAmI, timingStagger, spinCoinflip);
+                Projectile.NewProjectile(source, orbPos, -vel, type, damage, knockback, player.whoAmI, i * 4, spinCoinflip);
                 dir = dir.RotatedBy(MathHelper.TwoPi / numOrbs);
             }
+            // Big orb
+            Projectile.NewProjectile(source, clickPos, Vector2.Zero, type, damage * 9, 10, player.whoAmI, 0, spinCoinflip, 1);
             return false;
         }
 
