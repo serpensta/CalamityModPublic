@@ -21,7 +21,6 @@ namespace CalamityMod.Projectiles.Rogue
         private float radius = 90f;
         public bool damageFrame = false;
         public bool doDamage = true;
-        public int startDamage;
 
         public Color variedColor = Color.White;
         public Color mainColor = Color.LawnGreen;
@@ -42,7 +41,7 @@ namespace CalamityMod.Projectiles.Rogue
             Projectile.DamageType = RogueDamageClass.Instance;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 6;
+            Projectile.localNPCHitCooldown = 5;
         }
 
         public override void AI()
@@ -57,8 +56,6 @@ namespace CalamityMod.Projectiles.Rogue
             if (time == 0)
             {
                 mainColor = randomColor;
-                startDamage = Projectile.damage;
-                Projectile.damage = (int)(Projectile.damage * 0.004f);
             }
 
             if (time % 20 == 0)
@@ -140,11 +137,10 @@ namespace CalamityMod.Projectiles.Rogue
                 {
                     Projectile.hostile = true;
                     Projectile.friendly = true;
-                    startDamage *= 100;
+                    Projectile.damage *= 100;
                 }
 
                 SoundEngine.PlaySound(Supernova.StealthExplosionSound with { Pitch = Projectile.ai[2] }, Projectile.Center);
-                Projectile.damage = startDamage;
                 Projectile.numHits = 0;
                 damageFrame = true;
                 doDamage = true;
@@ -376,6 +372,8 @@ namespace CalamityMod.Projectiles.Rogue
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) // Add to regular plz
         {
+            if (!damageFrame)
+                modifiers.SourceDamage *= 0.004f;
             if (Projectile.damage < 1)
                 Projectile.damage = 1;
         }

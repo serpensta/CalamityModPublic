@@ -24,7 +24,6 @@ namespace CalamityMod.Projectiles.Rogue
         public int time = 0;
         public bool homing = false;
         public bool returning = false;
-        public int startDamage;
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
@@ -57,8 +56,6 @@ namespace CalamityMod.Projectiles.Rogue
             if (time == 0)
             {
                 mainColor = randomColor;
-                startDamage = Projectile.damage;
-                Projectile.damage = (int)(Projectile.damage * 0.5f);
             }
 
 
@@ -183,7 +180,6 @@ namespace CalamityMod.Projectiles.Rogue
                 {
                     Projectile.penetrate = 1;
                     homing = true;
-                    Projectile.damage = startDamage;
                     Projectile.extraUpdates = 3;
                 }
             }
@@ -252,12 +248,12 @@ namespace CalamityMod.Projectiles.Rogue
                     {
                         float pitchRange = Main.rand.NextFloat(-0.1f, 0.1f);
                         SoundEngine.PlaySound(Supernova.StealthChargeSound with { Pitch = pitchRange }, Projectile.Center);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaStealthBoom>(), Projectile.damage * 19, 0, Projectile.owner, 0f, 0f, pitchRange);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaStealthBoom>(), Projectile.damage, 0, Projectile.owner, 0f, 0f, pitchRange);
                     }
                     else
                     {
                         SoundEngine.PlaySound(Supernova.ExplosionSound, Projectile.Center);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaBoom>(), Projectile.damage * 19, 0, Projectile.owner, 0f, 0f, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SupernovaBoom>(), Projectile.damage, 0, Projectile.owner, 0f, 0f, 0f);
                     }
                 }
             }
@@ -283,9 +279,17 @@ namespace CalamityMod.Projectiles.Rogue
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!homing)
-                hit.Damage = (int)(Projectile.damage * 0.1f);
             target.AddBuff(ModContent.BuffType<MiracleBlight>(), 60);
+        }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) // Add to regular plz
+        {
+            if (!homing)
+                modifiers.SourceDamage *= 0.01f;
+            else
+                modifiers.SourceDamage *= 0.05f;
+
+            if (Projectile.damage < 1)
+                Projectile.damage = 1;
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info) => target.AddBuff(ModContent.BuffType<MiracleBlight>(), 300);
