@@ -1517,8 +1517,8 @@ AbsorberAffliction: {
 }
 
 YoungDukeBuff: {
-	DisplayName: Young Duke Buff
-	Description: Mods.CalamityMod.Buffs.YoungDukeBuff.Description
+	DisplayName: Baby Boomer
+	Description: The mutated fishron will intoxicate your foes
 }
 
 LiliesOfFinalityBuff: {
