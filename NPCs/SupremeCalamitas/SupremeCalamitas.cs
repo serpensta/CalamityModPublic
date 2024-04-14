@@ -755,7 +755,27 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         rumbleSound.Stop();
 
                     canDespawn = true;
-                    despawnProj = true;
+                    for (int x = 0; x < Main.maxProjectiles; x++)
+                    {
+                        Projectile projectile = Main.projectile[x];
+                        if (projectile.active)
+                        {
+                            if (projectile.type == bulletHellblast ||
+                                projectile.type == barrage ||
+                                projectile.type == wave)
+                            {
+                                if (projectile.timeLeft > 60)
+                                    projectile.timeLeft = 60;
+                            }
+                            else if (projectile.type == fireblast || projectile.type == gigablast)
+                            {
+                                projectile.ai[2] = 1f;
+
+                                if (projectile.timeLeft > 15)
+                                    projectile.timeLeft = 15;
+                            }
+                        }
+                    }
 
                     NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 0f, 0.065f);
                     NPC.velocity = Vector2.Lerp(Vector2.UnitY * -4f, Vector2.Zero, (float)Math.Sin(MathHelper.Pi * NPC.Opacity));

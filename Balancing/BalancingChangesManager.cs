@@ -485,8 +485,8 @@ namespace CalamityMod.Balancing
             // 30% resist to Surge Driver's alt click comets.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<BrimstoneHeart>(), new ProjectileResistBalancingRule(0.7f, ProjectileType<PrismComet>())));
 
-            // 30% resist to Supernova
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<BrimstoneHeart>(), new ProjectileResistBalancingRule(0.7f, ProjectileType<SupernovaBoom>(), ProjectileType<SupernovaStealthBoom>())));
+            // 20% resist to Supernova
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<BrimstoneHeart>(), new ProjectileResistBalancingRule(0.8f, ProjectileType<SupernovaBoom>(), ProjectileType<SupernovaStealthBoom>())));
 
             // 20% resist to Executioner's Blade stealth strikes.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<BrimstoneHeart>(), new ProjectileResistBalancingRule(0.8f, ProjectileType<ExecutionersBladeStealthProj>())));

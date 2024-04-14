@@ -46,9 +46,9 @@ namespace CalamityMod.Projectiles.Ranged
             }
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
             Projectile.spriteDirection = Projectile.direction;
-            if (Projectile.localAI[0] >= 10 && Projectile.localAI[0] <= 30 && SizeBonus > 1)
+            if (Projectile.localAI[0] >= 30 && SizeBonus > 1)
             {
-                SizeBonus -= 0.1f;
+                SizeBonus -= 0.02f;
             }
             // Flaking dust
             Projectile.localAI[0] += 1f;
