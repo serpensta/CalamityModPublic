@@ -125,6 +125,7 @@ namespace CalamityMod.Projectiles
                 { ProjectileID.ButchersChainsaw, Do(TrueMeleeNoSpeed, ArmorPenetrationDelta(+15), LocalIFrames(5), ScaleExact(1.5f)) },
                 { ProjectileID.ChlorophyteChainsaw, standardChainsawTweaks },
                 { ProjectileID.ChlorophyteDrill, standardDrillTweaks },
+                { ProjectileID.ChlorophyteOrb, Do(NoPiercing) },
                 { ProjectileID.CobaltChainsaw, standardChainsawTweaks },
                 { ProjectileID.CobaltDrill, standardDrillTweaks },
                 { ProjectileID.CrystalBullet, standardBulletTweaks },

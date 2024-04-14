@@ -249,6 +249,9 @@ namespace CalamityMod.Balancing
             // 70% resist to Stardust Dragon Staff.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.3f, ProjectileID.StardustDragon1, ProjectileID.StardustDragon2, ProjectileID.StardustDragon3, ProjectileID.StardustDragon4))));
 
+            // 70% resist to Charged Blaster Cannon.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.3f, ProjectileID.ChargedBlasterLaser))));
+
             // 60% resist to Aurora Blazer.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.4f, ProjectileType<AuroraFire>()))));
 
