@@ -7491,6 +7491,16 @@ namespace CalamityMod.NPCs
 
         public override bool? DrawHealthBar(NPC npc, byte hbPosition, ref float scale, ref Vector2 position)
         {
+            if ((CalamityWorld.revenge && Main.masterMode) || BossRushEvent.BossRushActive)
+            {
+                if (npc.type == NPCID.Creeper)
+                {
+                    bool brainIsInPhase2 = Main.npc[NPC.crimsonBoss].ai[0] < 0f;
+                    if (brainIsInPhase2)
+                        return false;
+                }
+            }
+
             if (CalamityWorld.death)
             {
                 switch (npc.type)
@@ -7505,10 +7515,12 @@ namespace CalamityMod.NPCs
                     case NPCID.DuneSplicerBody:
                     case NPCID.DuneSplicerTail:
                         return true;
+
                     default:
                         break;
                 }
             }
+
             return null;
         }
 
