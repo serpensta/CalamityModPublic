@@ -618,7 +618,7 @@ EclipseMirror: {
 		Grants the ability to evade attacks in a blast of darksun light, which inflicts extreme damage in a wide area
 		Attacks that deal less than 5% of your max life in damage will not be evaded
 		The evade has a cooldown that ranges between 15 and 90 seconds depending on the evaded attack's damage
-		Evading an attack grants full stealth
+		Evading an attack grants a lot of stealth
 		This cooldown is shared with all other dodges and reflects
 		'Its reflection shows naught but darkness'
 		'''

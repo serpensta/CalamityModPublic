@@ -6860,8 +6860,8 @@ namespace CalamityMod.NPCs
 
                 GameShaders.Misc["CalamityMod:SupremeShield"].UseSecondaryColor(secondaryForcefieldColor);
                 GameShaders.Misc["CalamityMod:SupremeShield"].UseColor(forcefieldColor);
-                GameShaders.Misc["CalamityMod:SupremeShield"].UseSaturation(intensity);
-                GameShaders.Misc["CalamityMod:SupremeShield"].UseOpacity(opacity);
+                GameShaders.Misc["CalamityMod:SupremeShield"].UseSaturation(1);
+                GameShaders.Misc["CalamityMod:SupremeShield"].UseOpacity(0.65f);
                 GameShaders.Misc["CalamityMod:SupremeShield"].Apply();
 
                 // Actual Cultist has a bigger shield than the Clones.

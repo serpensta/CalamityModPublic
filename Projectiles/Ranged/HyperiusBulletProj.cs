@@ -30,7 +30,7 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 1200;
-            Projectile.extraUpdates = 5;
+            Projectile.extraUpdates = 7;
             AIType = ProjectileID.Bullet;
             Projectile.ignoreWater = true;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;

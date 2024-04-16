@@ -128,6 +128,7 @@ namespace CalamityMod.Projectiles
         public bool extorterBoost = false;
         public bool LocketClone = false;
         public bool CannotProc = false;
+        public bool JewelSpikeSpawned = false;
 
         // Note: Although this was intended for fishing line colors, I use this as an AI variable a lot because vanilla only has 4 that sometimes are already in use.  ~Ben
         // TODO -- uses of this variable are undocumented and unstable. Remove it from the API surface.
@@ -3943,6 +3944,20 @@ namespace CalamityMod.Projectiles
                     }
                 }
             }
+
+            // Scuttler's Jewel projectiles can spawn either on-hit or on-kill, but only spawn once per projectile.
+            if (projectile.owner == Main.myPlayer && !projectile.npcProj && !projectile.trap && projectile.CountsAsClass<RogueDamageClass>() && modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0 && !JewelSpikeSpawned)
+            {
+                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(16);
+                damage = player.ApplyArmorAccDamageBonusesTo(damage);
+
+                int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);
+                Main.projectile[spike].frame = 4;
+                if (spike.WithinBounds(Main.maxProjectiles))
+                    Main.projectile[spike].DamageType = DamageClass.Generic;
+                modPlayer.scuttlerCooldown = 30;
+                JewelSpikeSpawned = true;
+            }
         }
         #endregion
 
@@ -4487,9 +4502,10 @@ namespace CalamityMod.Projectiles
                             }
                         }
 
-                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0)
+                        // Make sure the spike doesn't spawn again if it's already been spawned by on-hit.
+                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0 && !JewelSpikeSpawned)
                         {
-                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(18);
+                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(16);
                             damage = player.ApplyArmorAccDamageBonusesTo(damage);
 
                             int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);

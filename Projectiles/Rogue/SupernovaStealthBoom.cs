@@ -373,7 +373,7 @@ namespace CalamityMod.Projectiles.Rogue
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) // Add to regular plz
         {
             if (!damageFrame)
-                modifiers.SourceDamage *= 0.004f;
+                modifiers.SourceDamage *= 0.0025f;
             if (Projectile.damage < 1)
                 Projectile.damage = 1;
         }

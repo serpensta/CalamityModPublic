@@ -199,7 +199,7 @@ namespace CalamityMod.CalPlayer
                 Player.noKnockback = true;
 
                 Player.GiveIFrames(Player.longInvince ? 100 : 60, true);
-                rogueStealth = rogueStealthMax;
+                rogueStealth += 0.5f;
                 SoundEngine.PlaySound(SoundID.Item68, Player.Center);
 
                 var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<EclipseMirror>()));

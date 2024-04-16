@@ -499,11 +499,11 @@ namespace CalamityMod.Balancing
             // 50% resist to Subsuming Vortex.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<SoulSeekerSupreme>(), new ProjectileResistBalancingRule(0.5f, ProjectileType<ExoVortex>(), ProjectileType<ExoVortex2>(), ProjectileType<EnormousConsumingVortex>())));
 
+            // 40% resist to Supernova
+            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<SoulSeekerSupreme>(), new ProjectileResistBalancingRule(0.6f, ProjectileType<SupernovaBoom>(), ProjectileType<SupernovaStealthBoom>())));
+
             // 30% resist to Zenith.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<SoulSeekerSupreme>(), new ProjectileResistBalancingRule(0.7f, ProjectileID.FinalFractal)));
-
-            // 30% resist to Supernova
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<SoulSeekerSupreme>(), new ProjectileResistBalancingRule(0.7f, ProjectileType<SupernovaBoom>(), ProjectileType<SupernovaStealthBoom>())));
 
             // 25% resist to Yharim's Crystal.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<SoulSeekerSupreme>(), new ProjectileResistBalancingRule(0.75f, ProjectileType<YharimsCrystalBeam>())));
