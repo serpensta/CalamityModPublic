@@ -20,7 +20,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.width = 94;
             Item.height = 92;
             Item.DamageType = DamageClass.Melee;
-            Item.damage = 432;
+            Item.damage = 864;
             Item.knockBack = 2.5f;
             Item.useAnimation = 19;
             Item.useTime = 19;
@@ -46,12 +46,12 @@ namespace CalamityMod.Items.Weapons.Melee
 
             // Center projectile
             int centerID = ModContent.ProjectileType<AtaraxiaMain>();
-            int centerDamage = damage;
+            int centerDamage = (damage / 2);
             Projectile.NewProjectile(source, position, velocity, centerID, centerDamage, knockback, player.whoAmI, 0f, 0f);
 
             // Side projectiles (these deal 75% damage)
             int sideID = ModContent.ProjectileType<AtaraxiaSide>();
-            int sideDamage = (int)(0.75f * centerDamage);
+            int sideDamage = ((int)(0.75f * centerDamage) / 2);
             Vector2 originalVelocity = velocity;
             velocity.Normalize();
             velocity *= 22f;
@@ -81,10 +81,10 @@ namespace CalamityMod.Items.Weapons.Melee
 
         private void OnHitEffects(Player player, Vector2 targetPos)
         {
-            // Individual true melee homing missiles deal 10% of the weapon's base damage.
+            // Individual true melee homing missiles deal 30% of the weapon's base damage.
             int numSplits = 5;
             int trueMeleeID = ModContent.ProjectileType<AtaraxiaHoming>();
-            int trueMeleeDamage = (int)player.GetTotalDamage<MeleeDamageClass>().ApplyTo(0.1f * Item.damage);
+            int trueMeleeDamage = (int)player.GetTotalDamage<MeleeDamageClass>().ApplyTo(0.3f * Item.damage);
             float angleVariance = MathHelper.TwoPi / (float)numSplits;
             float spinOffsetAngle = MathHelper.Pi / (2f * numSplits);
             var source = player.GetSource_ItemUse(Item);
