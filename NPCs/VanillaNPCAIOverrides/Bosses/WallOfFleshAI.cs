@@ -605,6 +605,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * 16f;
                     npc.SimpleFlyMovement(idealVelocity, 0.36f);
                 }
+
+                if (npc.ai[1] == 0f)
+                {
+                    npc.ai[1] = 1f;
+                    SoundEngine.PlaySound(SoundID.NPCHit8, npc.Center);
+                    for (int i = 0; i < 100; i++)
+                    {
+                        int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X, npc.velocity.Y);
+                        Main.dust[dust].scale = Main.rand.NextFloat(1.5f, 4f);
+                        Main.dust[dust].velocity *= Main.rand.NextFloat(0.5f, 1.5f);
+                    }
+                }
             }
 
             Vector2 eyeLocation = npc.Center;
