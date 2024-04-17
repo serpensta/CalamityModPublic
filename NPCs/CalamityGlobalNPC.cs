@@ -8455,5 +8455,38 @@ namespace CalamityMod.NPCs
             npc.knockBackResist += knockBackResistReduction;
         }
         #endregion
+
+        #region Bestiary
+        public override void SetBestiary(NPC npc, Terraria.GameContent.Bestiary.BestiaryDatabase database, Terraria.GameContent.Bestiary.BestiaryEntry bestiaryEntry)
+        {
+            // Create a string array containing all an NPC's debuff resistances
+            string[] elements = new string[5]
+            {
+                NPCDebuffResistText(npc.Calamity().VulnerableToHeat, CalamityUtils.GetTextValue("UI.DebuffSystem.Heat")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToSickness, CalamityUtils.GetTextValue("UI.DebuffSystem.Sickness")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToCold, CalamityUtils.GetTextValue("UI.DebuffSystem.Cold")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToElectricity, CalamityUtils.GetTextValue("UI.DebuffSystem.Electricity")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToWater, CalamityUtils.GetTextValue("UI.DebuffSystem.Water"))
+            };
+
+            // Insert the debuff info into the NPC's bestiary entry
+            bestiaryEntry.Info.Insert(0, new BestiaryDebuffInfo(elements));
+        }
+
+        public static string NPCDebuffResistText(bool? effectiveness, string name)
+        {
+            string result = CalamityUtils.GetTextValue("UI.DebuffSystem.Neutral");
+            if (effectiveness == true)
+            {
+                result = CalamityUtils.GetTextValue("UI.DebuffSystem.Weak");
+            }
+            else if (effectiveness == false)
+            {
+                result = CalamityUtils.GetTextValue("UI.DebuffSystem.Resistant");
+            }
+            result += " " + CalamityUtils.GetTextValue("UI.DebuffSystem.To") + " " + name;
+            return result;
+        }
+        #endregion
     }
 }
