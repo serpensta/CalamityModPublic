@@ -1,4 +1,5 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Buffs.StatDebuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -27,11 +28,11 @@ namespace CalamityMod.Projectiles.Ranged
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Projectile.ai[1] == 0)
-                target.AddBuff(BuffID.OnFire3, 180);
+                target.AddBuff(BuffID.Daybreak, 300);
             if (Projectile.ai[1] == 1)
-                    target.AddBuff(BuffID.Electrified, 180);
+                    target.AddBuff(BuffID.Electrified, 300);
             if (Projectile.ai[1] == 2)
-                target.AddBuff(BuffID.Poisoned, 180);
+                target.AddBuff(ModContent.BuffType<Plague>(), 300);
 
             if (Projectile.numHits > 0)
                 Projectile.damage = (int)(Projectile.damage * 0.8f);
