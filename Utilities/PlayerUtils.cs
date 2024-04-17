@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CalamityMod.Balancing;
 using CalamityMod.CalPlayer;
 using CalamityMod.Cooldowns;
@@ -435,6 +436,34 @@ namespace CalamityMod
         /// Gives the player the specified number of immunity frames (or "iframes" for short).<br />If the player already has more iframes than you want to give them, this function does nothing.
         /// </summary>
         /// <param name="player">The player who should be given immunity frames.</param>
+        /// <param name="cooldownSlot">The immunity cooldown slot to use. See TML documentation for which is which.</param>
+        /// <param name="frames">The number of immunity frames to give.</param>
+        /// <param name="blink">Whether or not the player should be blinking during this time.</param>
+        /// <returns>Whether or not any immunity frames were given.</returns>
+        public static bool GiveIFrames(this Player player, int cooldownSlot, int frames, bool blink = false)
+        {
+            // Check to see if there is any way for the player to get iframes from this operation.
+            bool anyIFramesWouldBeGiven = (cooldownSlot < 0) ? player.immuneTime < frames : player.hurtCooldowns[cooldownSlot] < frames;
+
+            // If they would get nothing, don't do it.
+            if (!anyIFramesWouldBeGiven)
+                return false;
+
+            // Apply iframes thoroughly. Player.AddImmuneTime is not used because iframes should not exceed the intended amount.
+            player.immune = true;
+            player.immuneNoBlink = !blink;
+            if (cooldownSlot < 0)
+                player.immuneTime = frames;
+            else
+                player.hurtCooldowns[cooldownSlot] = frames;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Gives the player the specified number of immunity frames (or "iframes" for short).<br />If the player already has more iframes than you want to give them, this function does nothing.
+        /// </summary>
+        /// <param name="player">The player who should be given immunity frames.</param>
         /// <param name="frames">The number of immunity frames to give.</param>
         /// <param name="blink">Whether or not the player should be blinking during this time.</param>
         /// <returns>Whether or not any immunity frames were given.</returns>
@@ -450,8 +479,7 @@ namespace CalamityMod
             if (!anyIFramesWouldBeGiven)
                 return false;
 
-            // Apply iframes thoroughly.
-            // Player.AddImmuneTime does exist, but is equivalent to the below code.
+            // Apply iframes thoroughly. Player.AddImmuneTime is not used because iframes should not exceed the intended amount.
             player.immune = true;
             player.immuneNoBlink = !blink;
             player.immuneTime = frames;
@@ -473,6 +501,20 @@ namespace CalamityMod
             player.immuneTime = 0;
             for (int i = 0; i < player.hurtCooldowns.Length; ++i)
                 player.hurtCooldowns[i] = 0;
+        }
+
+        private static readonly FieldInfo hurtInfoDamageField = typeof(HurtInfo).GetField("_damage", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        /// <summary>
+        /// Lifted from Fargo's. Sets the damage and knockback of an incoming hit to zero, making it not affect the player.
+        /// </summary>
+        /// <param name="hurtInfo">The HurtInfo instance to nullify.</param>
+        public static void NullifyHit(ref this HurtInfo hurtInfo)
+        {
+            object unboxedHurtInfo = hurtInfo;
+            hurtInfoDamageField.SetValue(unboxedHurtInfo, 0);
+            hurtInfo = (Player.HurtInfo)unboxedHurtInfo;
+            hurtInfo.Knockback = 0;
         }
         #endregion
 

@@ -1467,17 +1467,6 @@ namespace CalamityMod.CalPlayer
             if (info.Damage < 1 /* || (godSlayerDamage && info.Damage <= 80) */)
                 return true;
 
-            // If this hit was marked to be completely ignored due to shield absorption, then process Adrenaline changes and ignore it.
-            if (freeDodgeFromShieldAbsorption)
-            {
-                freeDodgeFromShieldAbsorption = false;
-
-                // 20FEB2024: Ozzatron: Hits fully absorbed by shields remove half of your current Adrenaline.
-                // If using Draedon's Heart, it pauses for half the typical duration.
-                LoseAdrenalineOnHurt(info, true);
-                return true;
-            }
-
             // Gravistar Sabaton fall ram gives you a free dodge as long as you're slamming through NPCs
             // This also strikes the NPCs as a side effect
             if (gSabatonFalling)
@@ -1736,9 +1725,9 @@ namespace CalamityMod.CalPlayer
             // If the shield(s) completely absorb the hit, iframes are granted on the spot and the hit is marked to be dodged.
             // Shields are drained in order of progression, so your weaker shields will break first.
             // Damage can and will be blocked by multiple shields if it has to be.
+            bool shieldsFullyAbsorbedHit = false;
             if (HasAnyEnergyShield)
             {
-                bool shieldsFullyAbsorbedHit = false;
                 bool shieldsTookHit = false;
                 bool anyShieldBroke = false;
                 int totalDamageBlocked = 0;
@@ -1954,13 +1943,21 @@ namespace CalamityMod.CalPlayer
                         Player.AddCooldown(SpongeRecharge.ID, TheSponge.ShieldRechargeDelay, true);
                 }
 
-                // If the shields completely absorbed the hit, mark the player as dodging this damage instance later down the chain with a "Free Dodge".
+                // If the shields completely absorbed the hit, then delete the hit using reflection.
+                // 17APR2024: Ozzatron: Use Fargo's hit-nulling methodology instead of a Free Dodge so improper iframes are not granted
                 if (shieldsFullyAbsorbedHit)
                 {
-                    freeDodgeFromShieldAbsorption = true;
+                    info.NullifyHit();
+
+                    // Give the appropriate immunity frames.
+                    Player.GiveIFrames(info.CooldownCounter, Player.longInvince ? 100 : 60, true);
 
                     // Cancel defense damage, if it was going to occur this frame.
                     nextHitDealsDefenseDamage = false;
+
+                    // 20FEB2024: Ozzatron: Hits fully absorbed by shields remove half of your current Adrenaline.
+                    // If using Draedon's Heart, it pauses for half the typical duration.
+                    LoseAdrenalineOnHurt(info, true);
                 }
             }
 
@@ -1970,7 +1967,7 @@ namespace CalamityMod.CalPlayer
             // Otherwise, it reduces the damage of any hit to 5, which allows for full iframes.
             // It then applies the full hit (minus that 5 damage) to its own bleedout buffer.
             // Hits for less than 5 damage are ignored entirely and allowed to strike the player as normal.
-            if (chaliceOfTheBloodGod && !freeDodgeFromShieldAbsorption && info.Damage > ChaliceOfTheBloodGod.MinAllowedDamage)
+            if (chaliceOfTheBloodGod && !shieldsFullyAbsorbedHit && info.Damage > ChaliceOfTheBloodGod.MinAllowedDamage)
             {
                 int bleedoutToApply = info.Damage - ChaliceOfTheBloodGod.MinAllowedDamage;
                 chaliceBleedoutBuffer += bleedoutToApply;
