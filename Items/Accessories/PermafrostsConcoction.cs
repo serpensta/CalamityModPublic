@@ -6,6 +6,9 @@ namespace CalamityMod.Items.Accessories
 {
     public class PermafrostsConcoction : ModItem, ILocalizedModType
     {
+        // Boosted by Cross Necklace.
+        internal static readonly int EncasedIFrames = 90;
+        
         public new string LocalizationCategory => "Items.Accessories";
         public override void SetDefaults()
         {

@@ -415,6 +415,7 @@ namespace CalamityMod.CalPlayer
 
         #region Energy Shields
         public bool HasAnyEnergyShield => roverDrive || lunicCorpsSet || ((pSoulArtifact && !profanedCrystal) || profanedCrystalBuffs) || sponge;
+        public bool freeDodgeFromShieldAbsorption = false;
         public bool drawnAnyShieldThisFrame = false;
 
         // TODO -- Some way to show the player their total shield points.
@@ -2801,7 +2802,7 @@ namespace CalamityMod.CalPlayer
                                 Main.dust[dustIndex].noLight = true;
                             }
 
-                            spectralVeilImmunity = 45;
+                            spectralVeilImmunity = SpectralVeil.VeilIFrames;
                         }
                     }
                 }

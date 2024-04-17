@@ -1656,8 +1656,10 @@ namespace CalamityMod.CalPlayer
             if (tarraThrowing)
             {
                 // The iframes from the evasion are disabled by dodge disabling effects.
+                // 17APR2024: Ozzatron: Tarragon Immunity is meant to be a full invulnerability effect, so universal iframes are granted throughout its duration.
+                // It has no interaction with Cross Necklace.
                 if (tarragonImmunity && !disableAllDodges)
-                    Player.GiveIFrames(2, true);
+                    Player.GiveUniversalIFrames(2, true);
 
                 if (tarraThrowingCrits >= 50)
                 {

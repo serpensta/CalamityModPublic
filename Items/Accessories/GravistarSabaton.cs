@@ -11,6 +11,7 @@ namespace CalamityMod.Items.Accessories
 
         public static readonly int PassthroughDamage = 150;
         public static readonly int SlamDamage = 300;
+        public static readonly int PassthroughIFrames = 5;
 
         public override void SetDefaults()
         {
