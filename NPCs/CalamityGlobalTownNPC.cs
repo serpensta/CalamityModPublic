@@ -1194,8 +1194,9 @@ namespace CalamityMod.NPCs
             {
                 shop.Add(ItemType<SunkenSeaFountain>())
                 .Add(ItemType<SulphurousFountainItem>())
-                .Add(ItemType<AbyssFountainItem>(), Condition.Hardmode)
-                .Add(ItemType<AstralFountainItem>(), Condition.Hardmode)
+                .Add(ItemType<AbyssFountainItem>())
+                .Add(ItemType<AstralFountainItem>())
+                .Add(ItemType<BrimstoneLavaFountainItem>())
                 .AddWithCustomValue(ItemID.ButterflyDust, Item.buyPrice(gold: 10), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.FriedEgg, Item.buyPrice(gold: 2, silver: 50), Condition.HappyEnough);
             }

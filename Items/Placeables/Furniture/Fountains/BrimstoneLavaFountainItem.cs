@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Placeables.Furniture.Fountains
 {
-    public class SulphurousFountainItem : ModItem, ILocalizedModType
+    public class BrimstoneLavaFountainItem : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Placeables";
         public override void SetDefaults()
@@ -21,7 +21,7 @@ namespace CalamityMod.Items.Placeables.Furniture.Fountains
             Item.consumable = true;
             Item.value = Item.buyPrice(0, 4, 0, 0);
             Item.rare = ItemRarityID.Blue;
-            Item.createTile = ModContent.TileType<SulphurousFountainTile>();
+            Item.createTile = ModContent.TileType<BrimstoneLavaFountainTile>();
         }
     }
 }
