@@ -805,7 +805,12 @@ NettlevineGreatbow: {
 
 Norfleet: {
 	DisplayName: Norfleet
-	Tooltip: Fire everything!
+	Tooltip:
+		'''
+		Fires a cluster of erratic energy spheres that each contain a different element
+		Every three shots the weapon must recharge its energy to reload
+		[c/FF9900:'Blows up everything!']
+		'''
 }
 
 NullificationPistol: {
