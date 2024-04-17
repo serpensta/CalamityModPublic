@@ -32,13 +32,16 @@ using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.Liquid;
+using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.Graphics;
 using Terraria.Graphics.Light;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI.Gamepad;
 
 namespace CalamityMod.ILEditing
@@ -1358,6 +1361,98 @@ namespace CalamityMod.ILEditing
             cursor.EmitDelegate<Func<bool, bool>>((x) => !x);
 
             // The next (untouched) instruction stores this value into Player.scope.
+        }
+        #endregion
+
+
+        #region Custom world selection difficulties
+        internal static void GetDifficultyOverride(Terraria.GameContent.UI.Elements.On_AWorldListItem.orig_GetDifficulty orig, AWorldListItem self, out string expertText, out Color gameModeColor)
+        {
+            orig(self, out expertText, out gameModeColor);
+
+            // Uncomment this to prevent this from overriding other mods
+            /*if (expertText != Language.GetTextValue("UI.Legendary")
+                && expertText != Language.GetTextValue("UI.Normal")
+                && expertText != Language.GetTextValue("UI.Expert")
+                && expertText != Language.GetTextValue("UI.Master")
+                && expertText != Language.GetTextValue("UI.Creative"))
+                return;*/
+
+            string difficultyText = expertText;
+            Color difficultyColor = gameModeColor;
+
+            bool rev = false;
+            bool death = false;
+
+            // Grab data from the listed world
+            FieldInfo worldDataField = typeof(UIWorldListItem).GetField("_data", BindingFlags.NonPublic | BindingFlags.Instance);
+            WorldFileData worldData = (WorldFileData)worldDataField.GetValue(self);
+
+            // Check if the world data contains Calamity's difficulties and mark them true if they are true
+            if (self.Data.TryGetHeaderData<WorldSelectionDifficultySystem>(out TagCompound tag))
+            {
+                if (tag.ContainsKey("DeathMode") && tag.GetBool("DeathMode"))
+                {
+                    death = true;
+                }
+                else if (tag.ContainsKey("RevengeanceMode") && tag.GetBool("RevengeanceMode"))
+                {
+                    rev = true;
+                }
+            }
+
+            // Increase difficulty by 1 in For The Worthy/Getfixedboi
+            int trueGameMode = worldData.GameMode;
+            if (worldData.ForTheWorthy)
+            {
+                trueGameMode++;
+            }
+
+            // Change the difficulty names and colors based on Vanilla and Calamity difficulty combos
+            // The Expert and Master colors are from the wiki
+            // The Legendary colors are Malice and Defiled's wiki colors
+            if (trueGameMode == 3)
+            {
+                if (death)
+                {
+                    difficultyText = CalamityUtils.GetTextValue("UI.Death") + "+" + CalamityUtils.GetTextValue("UI.Legend");
+                    difficultyColor = new Color(220, 255, 132);
+                }
+                else if (rev)
+                {
+                    difficultyText = CalamityUtils.GetTextValue("UI.Rev") + "+" + CalamityUtils.GetTextValue("UI.Legend");
+                    difficultyColor = new Color(240, 128, 128);
+                }
+            }
+            else if (trueGameMode == 2)
+            {
+                if (death)
+                {
+                    difficultyText = CalamityUtils.GetTextValue("UI.Death") + "+" + Language.GetTextValue("UI.Master");
+                    difficultyColor = new Color(255, 25, 255);
+                }
+                else if (rev)
+                {
+                    difficultyText = CalamityUtils.GetTextValue("UI.Rev") + "+" + Language.GetTextValue("UI.Master");
+                    difficultyColor = new Color(124, 153, 242);
+                }
+            }
+            else if (trueGameMode == 1)
+            {
+                if (death)
+                {
+                    difficultyText = CalamityUtils.GetTextValue("UI.Death");
+                    difficultyColor = new Color(192, 64, 219);
+                }
+                else if (rev)
+                {
+                    difficultyText = CalamityUtils.GetTextValue("UI.Revengeance");
+                    difficultyColor = new Color(211, 42, 42);
+                }
+            }
+
+            expertText = difficultyText;
+            gameModeColor = difficultyColor;
         }
         #endregion
     }
