@@ -150,7 +150,11 @@ namespace CalamityMod.Projectiles.Ranged
             ShootingTimer++;
         }
 
-        public override void OnSpawn(IEntitySource source) => FrontArmStretch = Player.CompositeArmStretchAmount.ThreeQuarters;
+        public override void OnSpawn(IEntitySource source)
+        {
+            base.OnSpawn(source);
+            FrontArmStretch = Player.CompositeArmStretchAmount.ThreeQuarters;
+        }
 
         public void NetUpdate()
         {
