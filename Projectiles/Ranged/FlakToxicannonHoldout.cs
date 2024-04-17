@@ -1,4 +1,5 @@
-﻿using CalamityMod.Particles;
+﻿using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -11,6 +12,7 @@ namespace CalamityMod.Projectiles.Ranged
 {
     public class FlakToxicannonHoldout : BaseGunHoldoutProjectile
     {
+        public override int AssociatedItemID => ItemType<FlakToxicannon>();
         public override float MaxOffsetLengthFromArm => 38f;
         public override float RecoilResolveSpeed => 0.1f;
         public override float OffsetXUpwards => -10f;
