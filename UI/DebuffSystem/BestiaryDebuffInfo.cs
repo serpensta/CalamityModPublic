@@ -4,9 +4,10 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
+using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace CalamityMod.UI
+namespace CalamityMod.UI.DebuffSystem
 {
     public class BestiaryDebuffInfo : IBestiaryInfoElement
     {
@@ -51,16 +52,36 @@ namespace CalamityMod.UI
             // Add all five elements to the panel, each one below the previous
             for (int i = 0; i < 5; i++)
             {
+                string path = "CalamityMod/UI/DebuffSystem/";
+                switch (i)
+                {
+                    case 0:
+                        path += "Heat";
+                        break;
+                    case 1:
+                        path += "Sickness";
+                        break;
+                    case 2:
+                        path += "Cold";
+                        break;
+                    case 3:
+                        path += "Electricity";
+                        break;
+                    case 4:
+                        path += "Water";
+                        break;
+                }
+                path += "DebuffType";
                 float topPos = 0.2f + i * 0.175f;
                 // Icon
-                UIImage elementImage = new UIImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Stat_Knockback"))
+                UIImage elementImage = new UIImage(ModContent.Request<Texture2D>(path))
                 {
                     HAlign = 0f,
                     VAlign = 0f,
                     Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
                     Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
                     Top = new StyleDimension(0f, topPos - 0.0525f),
-                    Left = new StyleDimension(0f, 0f),
+                    Left = new StyleDimension(8f, 0f),
                     ImageScale = 0.8f,
                 };
                 backgroundPanel.Append(elementImage);
