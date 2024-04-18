@@ -1181,7 +1181,7 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.Wizard)
             {
-                shop.Add(ItemType<HowlsHeart>())
+                shop.AddWithCustomValue(ItemType<HowlsHeart>(), CalamityGlobalItem.RarityLightRedBuyPrice * 3)
                 .AddWithCustomValue(ItemID.MagicMissile, Item.buyPrice(gold: 5))
                 .AddWithCustomValue(ItemID.RodofDiscord, Item.buyPrice(gold: 50), Condition.Hardmode, Condition.InHallow)
                 .AddWithCustomValue(ItemID.SpectreStaff, Item.buyPrice(gold: 25), Condition.DownedGolem)
