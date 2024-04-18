@@ -1936,6 +1936,8 @@ namespace CalamityMod.Items
                 return RarityVioletBuyPrice;
             if (rarity == ModContent.RarityType<HotPink>())
                 return RarityHotPinkBuyPrice;
+            if (rarity == ModContent.RarityType<CalamityRed>())
+                return RarityCalamityRedBuyPrice;
 
             // Return 0 if it's not a progression based or other mod's rarity
             return 0;
