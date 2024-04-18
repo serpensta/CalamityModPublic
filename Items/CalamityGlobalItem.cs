@@ -18,6 +18,7 @@ using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
 using CalamityMod.Projectiles.Summon;
 using CalamityMod.Projectiles.Typeless;
+using CalamityMod.Rarities;
 using CalamityMod.UI;
 using CalamityMod.UI.CalamitasEnchants;
 using CalamityMod.World;
@@ -1846,7 +1847,7 @@ namespace CalamityMod.Items
         }
         #endregion
 
-        #region Money From Rarity
+        #region Rarity Price Table
         // Base numeric rarity pricing guide.
         private static readonly int Rarity0BuyPrice = Item.buyPrice(0, 0, 50, 0);
         private static readonly int Rarity1BuyPrice = Item.buyPrice(0, 1, 0, 0);
@@ -1866,6 +1867,27 @@ namespace CalamityMod.Items
         private static readonly int Rarity15BuyPrice = Item.buyPrice(2, 40, 0, 0);
         private static readonly int Rarity16BuyPrice = Item.buyPrice(2, 80, 0, 0);
         private static readonly int Rarity17BuyPrice = Item.buyPrice(3, 20, 0, 0); // This is Calamity's "plus" rarity (similar to vanilla 11 / Purple). Nothing uses it.
+
+        private static readonly int[] RarityBuyPriceArray = new int[] {
+            Rarity0BuyPrice,
+            Rarity1BuyPrice,
+            Rarity2BuyPrice,
+            Rarity3BuyPrice,
+            Rarity4BuyPrice,
+            Rarity5BuyPrice,
+            Rarity6BuyPrice,
+            Rarity7BuyPrice,
+            Rarity8BuyPrice,
+            Rarity9BuyPrice,
+            Rarity10BuyPrice,
+            Rarity11BuyPrice,
+            Rarity12BuyPrice,
+            Rarity13BuyPrice,
+            Rarity14BuyPrice,
+            Rarity15BuyPrice,
+            Rarity16BuyPrice,
+            Rarity17BuyPrice,
+        };
 
         // Canonical names which are implemented as properties that reference the base numeric rarity prices.
         // Also serves as a convenient counter for the number of items Calamity adds of each rarity.
@@ -1887,6 +1909,39 @@ namespace CalamityMod.Items
         public static int RarityVioletBuyPrice => Rarity15BuyPrice;
         public static int RarityHotPinkBuyPrice => Rarity16BuyPrice;
         public static int RarityCalamityRedBuyPrice => Rarity17BuyPrice;
+        #endregion
+
+        //
+        // !! WARNING !!
+        //
+        // 17APR2024: Ozzatron:
+        // THESE FUNCTIONS MAY SHOW ZERO REFERENCES BUT ARE ACTIVELY USED BY MULTIPLE CALAMITY ADDONS, INCLUDING CATALYST.
+        // DO NOT TOUCH. IF YOU DO, THESE ADDONS WILL BREAK!
+        //
+        #region Rarity / Price Helper Functions
+        public static int GetBuyPrice(int rarity)
+        {
+            // Vanilla rarities go directly to the array.
+            if (rarity >= ItemRarityID.White && rarity <= ItemRarityID.Purple)
+                return RarityBuyPriceArray[rarity];
+
+            // Calamity rarities aren't guaranteed to have the monotonic IDs, so they're handled directly.
+            if (rarity == ModContent.RarityType<Turquoise>())
+                return RarityTurquoiseBuyPrice;
+            if (rarity == ModContent.RarityType<PureGreen>())
+                return RarityPureGreenBuyPrice;
+            if (rarity == ModContent.RarityType<DarkBlue>())
+                return RarityDarkBlueBuyPrice;
+            if (rarity == ModContent.RarityType<Violet>())
+                return RarityVioletBuyPrice;
+            if (rarity == ModContent.RarityType<HotPink>())
+                return RarityHotPinkBuyPrice;
+
+            // Return 0 if it's not a progression based or other mod's rarity
+            return 0;
+        }
+
+        public static int GetBuyPrice(Item item) => GetBuyPrice(item.rare);
         #endregion
     }
 }
