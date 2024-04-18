@@ -224,6 +224,10 @@ namespace CalamityMod.NPCs
         public const int knockbackResistanceMin = 180;
         public int knockbackResistanceTimer = 0;
 
+        // Used for particle drawing on NPCs affected by vanilla Cobalt/Mythril weapons
+        public bool isNerfedByCobalt = false;
+        public bool isNerfedByMythril = false;
+
         // Debuffs
         public int vaporfied = 0;
         public int timeSlow = 0;
@@ -434,6 +438,9 @@ namespace CalamityMod.NPCs
 
             myClone.bossCanBeKnockedBack = bossCanBeKnockedBack;
             myClone.knockbackResistanceTimer = knockbackResistanceTimer;
+
+            myClone.isNerfedByCobalt = isNerfedByCobalt;
+            myClone.isNerfedByMythril = isNerfedByMythril;
 
             myClone.vaporfied = vaporfied;
             myClone.timeSlow = timeSlow;
@@ -6352,6 +6359,31 @@ namespace CalamityMod.NPCs
                         Main.dust[dust].noGravity = false;
                         Main.dust[dust].scale *= 0.5f;
                     }
+                }
+            }
+
+            // Cobalt and Mythril weapon particle effects
+            if (isNerfedByCobalt)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
+                    Vector2 velocity = new Vector2(0f, MathHelper.Max(Main.rand.NextFloat(4f, 6f) * ((npc.height - (spawnLocation.Y - npc.position.Y)) / 65), 0.6f));
+
+                    Particle cobaltArrow = new StatDownArrow(spawnLocation, velocity, new Color(27, 141, 235), new Color(0, 94, 181), 0.75f, 15);
+                    GeneralParticleHandler.SpawnParticle(cobaltArrow);
+                }
+            }
+
+            if (isNerfedByMythril)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
+                    Vector2 velocity = new Vector2(0f, MathHelper.Max(Main.rand.NextFloat(4f, 6f) * ((npc.height - (spawnLocation.Y - npc.position.Y)) / 65), 0.6f));
+
+                    Particle mythrilArrow = new StatDownArrow(spawnLocation, velocity, new Color(35, 217, 144), new Color(23, 145, 97), 0.75f, 15);
+                    GeneralParticleHandler.SpawnParticle(mythrilArrow);
                 }
             }
 
