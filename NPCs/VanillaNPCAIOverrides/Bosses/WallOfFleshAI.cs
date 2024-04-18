@@ -606,6 +606,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.SimpleFlyMovement(idealVelocity, 0.36f);
                 }
 
+                if (Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) > 10f)
+                {
+                    float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
+                    npc.direction = playerLocation < 0f ? 1 : -1;
+                    npc.spriteDirection = npc.direction;
+                }
+
                 if (npc.ai[1] == 0f)
                 {
                     npc.ai[1] = 1f;
