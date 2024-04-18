@@ -144,7 +144,7 @@ namespace CalamityMod.Items.Weapons.Ranged
 
                 int projType;
                 if (Main.zenithWorld)
-                    projType = arrowArr[Main.rand.Next(0, 67)];
+                    projType = arrowArr[Main.rand.Next(0, 68)];
                 else
                     projType = ProjectileID.Leaf;
 
