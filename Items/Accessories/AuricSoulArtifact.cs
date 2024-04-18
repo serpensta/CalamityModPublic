@@ -9,7 +9,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
-    public class GodlySoulArtifact : ModItem, ILocalizedModType
+    [LegacyName("GodlySoulArtifact")]
+    public class AuricSoulArtifact : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Accessories";
         public override void SetDefaults()
@@ -18,7 +19,7 @@ namespace CalamityMod.Items.Accessories
             Item.height = 28;
             Item.accessory = true;
             Item.rare = ModContent.RarityType<Violet>();
-            Item.value = CalamityGlobalItem.Rarity15BuyPrice;
+            Item.value = CalamityGlobalItem.RarityVioletBuyPrice;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

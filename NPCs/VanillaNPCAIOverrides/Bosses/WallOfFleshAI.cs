@@ -11,6 +11,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
     public static class WallOfFleshAI
     {
+        public const float LaserShootGateValue = 400f;
+        public const float LaserShootTelegraphTime = LaserShootGateValue * 0.5f;
+        public const float TotalLasersPerBarrage = 3f;
+
         public static bool BuffedWallofFleshAI(NPC npc, Mod mod)
         {
             CalamityGlobalNPC calamityGlobalNPC = npc.Calamity();
@@ -551,35 +555,68 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Velocity, direction, and position
             bool shouldFireLasers = true;
-            npc.position.X = Main.npc[Main.wofNPCIndex].position.X;
-            npc.direction = Main.npc[Main.wofNPCIndex].direction;
-            npc.spriteDirection = npc.direction;
+            bool masterModeDetach = lifeRatio < 0.5f && masterMode;
+            if (masterModeDetach)
+            {
+                npc.position.X = Main.npc[Main.wofNPCIndex].position.X;
+                npc.direction = Main.npc[Main.wofNPCIndex].direction;
+                npc.spriteDirection = npc.direction;
 
-            float expectedPosition = (Main.wofDrawAreaBottom + Main.wofDrawAreaTop) / 2;
-            if (npc.ai[0] > 0f)
-                expectedPosition = (expectedPosition + Main.wofDrawAreaTop) / 2f;
-            else
-                expectedPosition = (expectedPosition + Main.wofDrawAreaBottom) / 2f;
-            expectedPosition -= npc.height / 2;
+                float expectedPosition = (Main.wofDrawAreaBottom + Main.wofDrawAreaTop) / 2;
+                if (npc.ai[0] > 0f)
+                    expectedPosition = (expectedPosition + Main.wofDrawAreaTop) / 2f;
+                else
+                    expectedPosition = (expectedPosition + Main.wofDrawAreaBottom) / 2f;
+                expectedPosition -= npc.height / 2;
 
-            bool belowExpectedPosition = npc.position.Y > expectedPosition + 1f;
-            bool aboveExpectedPosition = npc.position.Y < expectedPosition - 1f;
-            if (belowExpectedPosition)
-            {
-                float distanceBelowExpectedPosition = npc.position.Y - expectedPosition + 1f;
-                float movementVelocity = MathHelper.Clamp(distanceBelowExpectedPosition * 0.03125f, 1f, 5f);
-                npc.velocity.Y = -movementVelocity;
-            }
-            else if (aboveExpectedPosition)
-            {
-                float distanceAboveExpectedPosition = expectedPosition - 1f - npc.position.Y;
-                float movementVelocity = MathHelper.Clamp(distanceAboveExpectedPosition * 0.03125f, 1f, 5f);
-                npc.velocity.Y = movementVelocity;
+                bool belowExpectedPosition = npc.position.Y > expectedPosition + 1f;
+                bool aboveExpectedPosition = npc.position.Y < expectedPosition - 1f;
+                if (belowExpectedPosition)
+                {
+                    float distanceBelowExpectedPosition = npc.position.Y - expectedPosition + 1f;
+                    float movementVelocity = MathHelper.Clamp(distanceBelowExpectedPosition * 0.03125f, 1f, 5f);
+                    npc.velocity.Y = -movementVelocity;
+                }
+                else if (aboveExpectedPosition)
+                {
+                    float distanceAboveExpectedPosition = expectedPosition - 1f - npc.position.Y;
+                    float movementVelocity = MathHelper.Clamp(distanceAboveExpectedPosition * 0.03125f, 1f, 5f);
+                    npc.velocity.Y = movementVelocity;
+                }
+                else
+                {
+                    npc.velocity.Y = 0f;
+                    npc.position.Y = expectedPosition;
+                }
             }
             else
             {
-                npc.velocity.Y = 0f;
-                npc.position.Y = expectedPosition;
+                bool canHitTarget = Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
+                float distanceAboveTarget = !canHitTarget ? 0f : (240f * npc.ai[0]);
+                float distanceAwayFromTargetX = !canHitTarget ? 36f : 480f;
+                float distanceAwayFromTargetY = Main.player[npc.target].Center.Y - npc.Center.Y;
+                float distanceAwayFromTargetYLeeway = !canHitTarget ? 16f : 48f;
+                bool tooFarX = Math.Abs(Main.player[npc.target].Center.X - npc.Center.X) > distanceAwayFromTargetX;
+                bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
+                bool tooFar = (tooFarX || tooFarY) && npc.Distance(Main.player[npc.target].Center) > 240f;
+                if (tooFar)
+                {
+                    Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * distanceAboveTarget;
+                    Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * 16f;
+                    npc.SimpleFlyMovement(idealVelocity, 0.36f);
+                }
+
+                if (npc.ai[1] == 0f)
+                {
+                    npc.ai[1] = 1f;
+                    SoundEngine.PlaySound(SoundID.NPCHit8, npc.Center);
+                    for (int i = 0; i < 100; i++)
+                    {
+                        int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X, npc.velocity.Y);
+                        Main.dust[dust].scale = Main.rand.NextFloat(1.5f, 4f);
+                        Main.dust[dust].velocity *= Main.rand.NextFloat(0.5f, 1.5f);
+                    }
+                }
             }
 
             Vector2 eyeLocation = npc.Center;
@@ -601,7 +638,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 else
                 {
                     npc.rotation = 0f;
-                    shouldFireLasers = false;
+                    if (!masterModeDetach)
+                        shouldFireLasers = false;
                 }
             }
             else if (Main.player[npc.target].Center.X < npc.Center.X)
@@ -611,7 +649,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else
             {
                 npc.rotation = 0f;
-                shouldFireLasers = false;
+                if (!masterModeDetach)
+                    shouldFireLasers = false;
             }
 
             // Fire lasers
@@ -636,30 +675,30 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.localAI[1] = 0f;
                 }
 
-                float shootBoost = fireEnragedLasers ? (death ? 1.5f : 1.5f * (1f - lifeRatio)) : (death ? 3f : 3f * (1f - lifeRatio));
+                float shootBoost = fireEnragedLasers ? (death ? 5f : 4f) : (death ? 3f : 3f * (1f - lifeRatio));
                 npc.localAI[1] += 1f + shootBoost;
 
                 bool canHit = Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
 
                 if (npc.localAI[2] == 0f)
                 {
-                    if (npc.localAI[1] > 400f || fireEnragedLasers)
+                    if (npc.localAI[1] > LaserShootGateValue)
                     {
                         npc.localAI[2] = 1f;
                         npc.localAI[1] = 0f;
                         npc.TargetClosest();
                     }
                 }
-                else if (npc.localAI[1] > 45f && (canHit || fireEnragedLasers) && !charging)
+                else if (npc.localAI[1] > 45f && (canHit || masterModeDetach) && !charging)
                 {
                     npc.localAI[1] = 0f;
                     npc.localAI[2] += 1f;
-                    if (npc.localAI[2] >= 4f)
+                    if (npc.localAI[2] >= TotalLasersPerBarrage + 1f)
                         npc.localAI[2] = 0f;
 
                     if (shouldFireLasers)
                     {
-                        bool phase2 = lifeRatio < 0.5 || masterMode;
+                        bool phase2 = lifeRatio < 0.5f || masterMode;
                         float velocity = (fireEnragedLasers ? 3f : 4f) + shootBoost;
 
                         int projectileType = phase2 ? ProjectileID.DeathLaser : ProjectileID.EyeLaser;

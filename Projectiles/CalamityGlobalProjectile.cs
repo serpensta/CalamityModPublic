@@ -128,6 +128,7 @@ namespace CalamityMod.Projectiles
         public bool extorterBoost = false;
         public bool LocketClone = false;
         public bool CannotProc = false;
+        public bool JewelSpikeSpawned = false;
 
         // Note: Although this was intended for fishing line colors, I use this as an AI variable a lot because vanilla only has 4 that sometimes are already in use.  ~Ben
         // TODO -- uses of this variable are undocumented and unstable. Remove it from the API surface.
@@ -3645,12 +3646,12 @@ namespace CalamityMod.Projectiles
                     if ((player.Calamity().flaskBrimstone || player.Calamity().flaskCrumbling || player.Calamity().flaskHoly) && !projectile.noEnchantments && !projectile.noEnchantmentVisuals)
                     {
                         int dustType = player.Calamity().flaskHoly ? (Main.rand.NextBool() ? 87 : (int)CalamityDusts.ProfanedFire) : player.Calamity().flaskBrimstone ? (Main.rand.NextBool() ? 114 : ModContent.DustType<BrimstoneFlame>()) : (Main.rand.NextBool() ? 121 : DustID.Stone);
-                        if (Main.rand.NextBool(4))
+                        if (Main.rand.NextBool(player.Calamity().flaskCrumbling ? 5 : 4))
                         {
                             Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, dustType, 0f, 0f, 100, default, Main.rand.NextFloat(0.6f, 0.9f));
                             dust.noGravity = dust.type == 121 ? false : true;
-                            if (!player.Calamity().flaskHoly)
-                                dust.fadeIn = 1f;
+                            if (player.Calamity().flaskBrimstone)
+                                dust.fadeIn = 0.8f;
                             dust.velocity = player.Calamity().flaskHoly && Main.rand.NextBool(3) ? new Vector2(Main.rand.NextFloat(-0.9f, 0.9f), Main.rand.NextFloat(-6.6f, -9.8f)) : dust.type == 121 ? new Vector2(Main.rand.NextFloat(-0.7f, 0.7f), Main.rand.NextFloat(0.6f, 1.8f)) : -projectile.velocity * 0.2f;
                         }
                     }
@@ -3942,6 +3943,20 @@ namespace CalamityMod.Projectiles
                         GeneralParticleHandler.SpawnParticle(sparke);
                     }
                 }
+            }
+
+            // Scuttler's Jewel projectiles can spawn either on-hit or on-kill, but only spawn once per projectile.
+            if (projectile.owner == Main.myPlayer && !projectile.npcProj && !projectile.trap && projectile.CountsAsClass<RogueDamageClass>() && modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0 && !JewelSpikeSpawned)
+            {
+                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(16);
+                damage = player.ApplyArmorAccDamageBonusesTo(damage);
+
+                int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);
+                Main.projectile[spike].frame = 4;
+                if (spike.WithinBounds(Main.maxProjectiles))
+                    Main.projectile[spike].DamageType = DamageClass.Generic;
+                modPlayer.scuttlerCooldown = 30;
+                JewelSpikeSpawned = true;
             }
         }
         #endregion
@@ -4432,6 +4447,7 @@ namespace CalamityMod.Projectiles
                             Main.npc[beeSpawn].velocity.X = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].velocity.Y = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].ai[3] = 1f;
+                            Main.npc[beeSpawn].timeLeft = 600;
                             Main.npc[beeSpawn].netUpdate = true;
                         }
                     }
@@ -4486,9 +4502,10 @@ namespace CalamityMod.Projectiles
                             }
                         }
 
-                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0)
+                        // Make sure the spike doesn't spawn again if it's already been spawned by on-hit.
+                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0 && !JewelSpikeSpawned)
                         {
-                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(18);
+                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(16);
                             damage = player.ApplyArmorAccDamageBonusesTo(damage);
 
                             int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);

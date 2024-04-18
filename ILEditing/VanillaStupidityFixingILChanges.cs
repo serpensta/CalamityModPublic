@@ -137,26 +137,6 @@ namespace CalamityMod.ILEditing
         }
         #endregion
 
-        #region Disabling of Lava Slime Lava Creation
-        private static void RemoveLavaDropsFromExpertLavaSlimes(ILContext il)
-        {
-            // Prevent Lava Slimes from dropping lava.
-            var cursor = new ILCursor(il);
-            if (!cursor.TryGotoNext(MoveType.Before, i => i.MatchCallOrCallvirt<WorldGen>("SquareTileFrame"))) // The only SquareTileFrame call in HitEffect.
-            {
-                LogFailure("Remove Lava Drops From Expert Lava Slimes", "Could not locate the SquareTileFrame function call.");
-                return;
-            }
-            if (!cursor.TryGotoPrev(MoveType.Before, i => i.MatchLdcI4(NPCID.LavaSlime))) // The ID of Lava Slimes.
-            {
-                LogFailure("Remove Lava Drops From Expert Lava Slimes", "Could not locate the Lava Slime ID variable.");
-                return;
-            }
-            cursor.Remove();
-            cursor.Emit(OpCodes.Ldc_I4, 0); // Change to an impossible scenario.
-        }
-        #endregion Disabling of Lava Slime Lava Creation
-
         #region Make Meteorite Explodable
         private static void MakeMeteoriteExplodable(ILContext il)
         {

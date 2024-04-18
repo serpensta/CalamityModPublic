@@ -1691,7 +1691,10 @@ namespace CalamityMod.NPCs.Yharon
 
             // Despawn safety, make sure to target another player if the current player target is too far away
             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > CalamityGlobalNPC.CatchUpDistance200Tiles)
+            {
                 NPC.TargetClosest();
+                NPC.netUpdate = true;
+            }
 
             Player targetData = Main.player[NPC.target];
 
@@ -1700,6 +1703,7 @@ namespace CalamityMod.NPCs.Yharon
             if (targetData.dead || !targetData.active)
             {
                 NPC.TargetClosest();
+                NPC.netUpdate = true;
                 targetData = Main.player[NPC.target];
                 if (targetData.dead || !targetData.active)
                 {

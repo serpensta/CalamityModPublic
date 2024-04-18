@@ -282,6 +282,11 @@ CalamityConfig: {
 			'''
 	}
 
+	RemoveLavaDropsFromLavaSlimes: {
+		Label: "[i:LavaWaders] Remove Lava Drops From Lava Slimes"
+		Tooltip: When enabled, Lava Slimes will be replaced with a new Lava Slime that no longer drops lava.
+	}
+
 	RemoveReforgeRNG: {
 		Label: "[i:TinHammer] Remove Reforge RNG"
 		Tooltip:

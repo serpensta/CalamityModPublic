@@ -92,9 +92,13 @@ namespace CalamityMod.Items
         #region Rarity Coloration
         private void ApplyRarityColor(Item item, TooltipLine nameLine)
         {
-            #region Uniquely Colored Developer Items
+            #region Uniquely Colored Items
             if (item.type == ModContent.ItemType<LiliesOfFinality>())
                 nameLine.OverrideColor = Color.Lerp(Color.Red, Color.White, (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f);
+            if (item.type == ModContent.ItemType<HeartoftheElements>() || item.type == ModContent.ItemType<TheCommunity>() || item.type == ModContent.ItemType<IridescentExcalibur>())
+                nameLine.OverrideColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
+
+            // Developer items
             if (item.type == ModContent.ItemType<Fabstaff>())
                 nameLine.OverrideColor = new Color(Main.DiscoR, 100, 255);
             if (item.type == ModContent.ItemType<StaffofBlushie>())
@@ -432,7 +436,7 @@ namespace CalamityMod.Items
 
             // Cobalt
             if (item.type == ItemID.CobaltSword || item.type == ItemID.CobaltNaginata)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nDecreases enemy defense by 25% on hit");
+                EditTooltipByName("Knockback", (line) => line.Text += "\nPermanently decreases enemy defense by 25% on hit");
 
             // Palladium
             if (item.type == ItemID.PalladiumSword || item.type == ItemID.PalladiumPike)
@@ -440,7 +444,7 @@ namespace CalamityMod.Items
 
             // Mythril
             if (item.type == ItemID.MythrilSword || item.type == ItemID.MythrilHalberd)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nDecreases enemy contact damage by 10% on hit");
+                EditTooltipByName("Knockback", (line) => line.Text += "\nPermanently decreases enemy contact damage by 10% on hit");
 
             // Orichalcum
             if (item.type == ItemID.OrichalcumSword || item.type == ItemID.OrichalcumHalberd)

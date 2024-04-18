@@ -105,8 +105,8 @@ namespace CalamityMod.Projectiles.Melee
             if (Projectile.ai[1] == 1f)
             {
                 Projectile.penetrate = -1;
+                Projectile.velocity *= 1.05f;
                 Projectile.alpha += 1;
-                Projectile.damage = (int)Math.Ceiling(Projectile.damage * 0.992); //Exponentially decays to a factor of 0.12896 of the original damage
                 if (Projectile.alpha >= 255)
                 {
                     Projectile.Kill();

@@ -165,7 +165,6 @@ IridescentExcaliburSlash.DisplayName: Iridescent Excalibur Slash
 IridescentExcaliburSlash2.DisplayName: Iridescent Excalibur Slash
 IridescentExcaliburSlash3.DisplayName: Iridescent Excalibur Slash
 HolyColliderHolyFire.DisplayName: Holy Collider Fire
-HyperBlade.DisplayName: Hyper Blade
 IceBombFriendly.DisplayName: Ice Bomb
 IllustriousKnife.DisplayName: Illustrious Knife
 InsidiousHarpoon.DisplayName: Insidious Harpoon
@@ -254,7 +253,6 @@ StygianShieldAttack.DisplayName: Bull Rush
 StygianShieldThrown.DisplayName: Shield of Chaos
 SulphurousGrabberBubble.DisplayName: Grabber Bubble
 SulphurousGrabberBubble2.DisplayName: Grabber Bubble
-SunlightBlade.DisplayName: Sunlight Blade
 SwordsmithsPride.DisplayName: Swordsmith's Pride
 SwordsmithsPrideBeam.DisplayName: Swordsmith's Projection
 SwordsplosionBlue.DisplayName: Blue Sword
@@ -321,3 +319,4 @@ AbyssBladeProjectile.DisplayName: Abyss Blade
 AbyssBladeSplitProjectile.DisplayName: Abyss Blade Jet
 NeptunesBountyProjectile.DisplayName: Neptune's Bounty
 NeptunesBountySplitProjectile.DisplayName: Neptune's Bounty Jet
+AtaraxiaBoom.DisplayName: Ataraxia Boom

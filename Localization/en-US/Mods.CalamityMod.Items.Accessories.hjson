@@ -258,6 +258,15 @@ AsgardsValor: {
 		'''
 }
 
+AuricSoulArtifact: {
+	DisplayName: Auric Soul Artifact
+	Tooltip:
+		'''
+		For each Fiery Draconid you have summoned, you gain 1 minion slot
+		Loyalty
+		'''
+}
+
 BadgeofBravery: {
 	DisplayName: Badge of Bravery
 	Tooltip:
@@ -609,7 +618,7 @@ EclipseMirror: {
 		Grants the ability to evade attacks in a blast of darksun light, which inflicts extreme damage in a wide area
 		Attacks that deal less than 5% of your max life in damage will not be evaded
 		The evade has a cooldown that ranges between 15 and 90 seconds depending on the evaded attack's damage
-		Evading an attack grants full stealth
+		Evading an attack grants a lot of stealth
 		This cooldown is shared with all other dodges and reflects
 		'Its reflection shows naught but darkness'
 		'''
@@ -754,8 +763,8 @@ FrostBarrier: {
 	DisplayName: Frost Barrier
 	Tooltip:
 		'''
-		You will freeze enemies near you when you are struck
-		You are immune to the chilled debuff
+		You will freeze nearby enemies when you are struck
+		Grants immunity to Chilled and Frostburn
 		'''
 }
 
@@ -763,10 +772,10 @@ FrostFlare: {
 	DisplayName: Frost Flare
 	Tooltip:
 		'''
-		All attacks and projectiles inflict frostbite
-		Immunity to frostburn, chilled and frozen
-		Being above 75% life grants 10% increased damage
-		Being below 25% life grants 20 defense and 15% increased max movement speed and acceleration
+		All attacks and projectiles inflict Frostbite
+		Immunity to Frostburn, Chilled and Frozen
+		Being above 50% life grants 10% increased damage
+		Being below 50% life grants 20 defense and 15% increased max movement speed and acceleration
 		Grants resistance against cold attacks
 		'''
 }
@@ -842,15 +851,6 @@ GloveOfRecklessness: {
 		Increases rogue attack speed by 15%, but decreases damage by 10% and crit by 5%
 		15% increased stealth regeneration
 		Adds inaccuracy to rogue weapons
-		'''
-}
-
-GodlySoulArtifact: {
-	DisplayName: Auric Soul Artifact
-	Tooltip:
-		'''
-		For each Fiery Draconid you have summoned, you gain 1 minion slot
-		Loyalty
 		'''
 }
 

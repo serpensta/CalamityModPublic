@@ -164,7 +164,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     int damage = NPC.GetProjectileDamage(type);
 					if (BossRushEvent.BossRushActive)
 						damage /= 2;
-                    Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * 5f;
+
+                    float velocity = 5f;
+                    float projectileVelocityToPass = velocity * 3f;
+                    Vector2 shootVelocity = (Target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * velocity;
                     if (targetDist <= 160 || targetDist >= 1952)
                     {
                         for (int i = 0; i < 10; i++)
@@ -177,7 +180,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     else
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVelocity * 0.5f, type, damage, 1f, Main.myPlayer, 0, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVelocity * 0.5f, type, damage, 1f, Main.myPlayer, 0f, 3f, projectileVelocityToPass);
                         for (int i = 0; i < 5; i++)
                         {
                             Dust ShotDust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 60 : 114);
@@ -259,17 +262,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D lineTex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/LineFade").Value;
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-            int shootRate = BossRushEvent.BossRushActive ? 120 : 180;
-            float opacity = timer >= shootRate - 35 ? (timer - (BossRushEvent.BossRushActive ? 101 : 181)) *  0.03f : 0;
-            Vector2 lineDir = (NPC.Center - Target.Center).SafeNormalize(Vector2.UnitY);
-            Vector2 linePos = (lineDir * (lineTex.Height * 0.25f)) + NPC.Center - Main.screenPosition;
-            spriteBatch.Draw(lineTex, linePos, null, Color.Red * opacity, lineDir.ToRotation(), lineTex.Size(), NPC.scale * 1.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin();
-
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
                 spriteEffects = SpriteEffects.FlipHorizontally;

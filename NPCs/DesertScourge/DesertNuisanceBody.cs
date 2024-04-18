@@ -11,8 +11,11 @@ namespace CalamityMod.NPCs.DesertScourge
     public class DesertNuisanceBody : ModNPC
     {
         public override LocalizedText DisplayName => CalamityUtils.GetText("NPCs.DesertNuisanceHead.DisplayName");
+
         public override void SetStaticDefaults()
         {
+            Main.npcFrameCount[NPC.type] = 7;
+
             this.HideFromBestiary();
         }
 

@@ -49,7 +49,7 @@ namespace CalamityMod.Items.Weapons.Summon
             Item.width = 36;
             Item.height = 50;
             Item.noMelee = true;
-            Item.value = CalamityGlobalItem.Rarity15BuyPrice;
+            Item.value = CalamityGlobalItem.RarityVioletBuyPrice;
             Item.rare = RarityType<Violet>();
             Item.useStyle = ItemUseStyleID.HoldUp;
         }

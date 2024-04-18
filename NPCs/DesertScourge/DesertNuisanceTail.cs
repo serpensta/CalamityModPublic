@@ -11,6 +11,7 @@ namespace CalamityMod.NPCs.DesertScourge
     public class DesertNuisanceTail : ModNPC
     {
         public override LocalizedText DisplayName => CalamityUtils.GetText("NPCs.DesertNuisanceHead.DisplayName");
+
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();

@@ -459,7 +459,7 @@ namespace CalamityMod.NPCs.PrimordialWyrm
             float chargeVelocityScalarIncrement = 0.005f;
             float totalChargeDistance = 3000f;
 
-            bool lookingAtTarget = NPC.SafeDirectionTo(player.Center).AngleBetween((NPC.rotation - MathHelper.PiOver2).ToRotationVector2()) < MathHelper.ToRadians(15f);
+            bool lookingAtTarget = (player.Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(NPC.velocity.ToRotation(), MathHelper.PiOver4) == NPC.velocity.ToRotation();
 
             // Telekinesis while enraged
             if (!targetDownDeep)

@@ -59,6 +59,7 @@ using CalamityMod.Systems;
 using CalamityMod.Tiles.FurnitureAuric;
 using CalamityMod.Tiles.Ores;
 using CalamityMod.UI;
+using CalamityMod.UI.DebuffSystem;
 using CalamityMod.Walls.DraedonStructures;
 using CalamityMod.World;
 using Microsoft.CodeAnalysis;
@@ -223,6 +224,10 @@ namespace CalamityMod.NPCs
         public bool bossCanBeKnockedBack = false;
         public const int knockbackResistanceMin = 180;
         public int knockbackResistanceTimer = 0;
+
+        // Used for particle drawing on NPCs affected by vanilla Cobalt/Mythril weapons
+        public bool isNerfedByCobalt = false;
+        public bool isNerfedByMythril = false;
 
         // Debuffs
         public int vaporfied = 0;
@@ -439,6 +444,9 @@ namespace CalamityMod.NPCs
 
             myClone.bossCanBeKnockedBack = bossCanBeKnockedBack;
             myClone.knockbackResistanceTimer = knockbackResistanceTimer;
+
+            myClone.isNerfedByCobalt = isNerfedByCobalt;
+            myClone.isNerfedByMythril = isNerfedByMythril;
 
             myClone.vaporfied = vaporfied;
             myClone.timeSlow = timeSlow;
@@ -2386,6 +2394,7 @@ namespace CalamityMod.NPCs
                 case NPCID.Sharkron:
                 case NPCID.Sharkron2:
                     npc.width = npc.height = 36;
+                    npc.chaseable = false;
                     canBreakPlayerDefense = true;
                     break;
 
@@ -6083,6 +6092,13 @@ namespace CalamityMod.NPCs
                 spawnInfo.Player.Calamity().ZoneSunkenSea ||
                 (spawnInfo.Player.Calamity().ZoneAstral && !spawnInfo.Player.PillarZone());
 
+            // Replace vanilla Lava Slimes with Calamity Lava Slimes to avoid annoying lava drops
+            if (spawnInfo.Player.ZoneUnderworldHeight && !calamityBiomeZone && CalamityConfig.Instance.RemoveLavaDropsFromLavaSlimes && Main.expertMode)
+            {
+                pool.Add(NPCType<LavaSlimeNoLavaDrop>(), SpawnCondition.Underworld.Chance);
+                pool[NPCID.LavaSlime] = 0f;
+            }
+
             // Spawn Green Jellyfish in prehm and Blue Jellyfish in hardmode
             if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Water && !calamityBiomeZone)
             {
@@ -6384,6 +6400,31 @@ namespace CalamityMod.NPCs
                         Main.dust[dust].noGravity = false;
                         Main.dust[dust].scale *= 0.5f;
                     }
+                }
+            }
+
+            // Cobalt and Mythril weapon particle effects
+            if (isNerfedByCobalt)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
+                    Vector2 velocity = new Vector2(0f, MathHelper.Max(Main.rand.NextFloat(4f, 6f) * ((npc.height - (spawnLocation.Y - npc.position.Y)) / 65), 0.6f));
+
+                    Particle cobaltArrow = new StatDownArrow(spawnLocation, velocity, new Color(27, 141, 235), new Color(0, 94, 181), 0.75f, 15);
+                    GeneralParticleHandler.SpawnParticle(cobaltArrow);
+                }
+            }
+
+            if (isNerfedByMythril)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
+                    Vector2 velocity = new Vector2(0f, MathHelper.Max(Main.rand.NextFloat(4f, 6f) * ((npc.height - (spawnLocation.Y - npc.position.Y)) / 65), 0.6f));
+
+                    Particle mythrilArrow = new StatDownArrow(spawnLocation, velocity, new Color(35, 217, 144), new Color(23, 145, 97), 0.75f, 15);
+                    GeneralParticleHandler.SpawnParticle(mythrilArrow);
                 }
             }
 
@@ -6893,8 +6934,8 @@ namespace CalamityMod.NPCs
 
                 GameShaders.Misc["CalamityMod:SupremeShield"].UseSecondaryColor(secondaryForcefieldColor);
                 GameShaders.Misc["CalamityMod:SupremeShield"].UseColor(forcefieldColor);
-                GameShaders.Misc["CalamityMod:SupremeShield"].UseSaturation(intensity);
-                GameShaders.Misc["CalamityMod:SupremeShield"].UseOpacity(opacity);
+                GameShaders.Misc["CalamityMod:SupremeShield"].UseSaturation(1);
+                GameShaders.Misc["CalamityMod:SupremeShield"].UseOpacity(0.65f);
                 GameShaders.Misc["CalamityMod:SupremeShield"].Apply();
 
                 // Actual Cultist has a bigger shield than the Clones.
@@ -7154,16 +7195,139 @@ namespace CalamityMod.NPCs
                 // Telegraph for charge and blood shots
                 else if (npc.type == NPCID.Creeper)
                 {
+                    if (NPC.crimsonBoss < 0)
+                        return;
+
+                    Vector2 halfSize = npc.frame.Size() / 2;
+                    SpriteEffects spriteEffects = SpriteEffects.None;
+                    if (npc.spriteDirection == 1)
+                        spriteEffects = SpriteEffects.FlipHorizontally;
+
+                    bool brainIsInPhase2 = Main.npc[NPC.crimsonBoss].ai[0] < 0f;
+                    if (brainIsInPhase2)
+                    {
+                        Vector2 distanceFromBrain = npc.Center - Main.npc[NPC.crimsonBoss].Center;
+                        Color currentColor = npc.GetAlpha(drawColor);
+                        float opacity = (1f - Main.npc[NPC.crimsonBoss].life / (float)Main.npc[NPC.crimsonBoss].lifeMax) * 2f;
+                        opacity *= opacity;
+                        if (Main.getGoodWorld)
+                            opacity = 1f;
+
+                        opacity = MathHelper.Clamp(opacity, 0f, 1f);
+                        currentColor.R = (byte)((float)(int)currentColor.R * opacity);
+                        currentColor.G = (byte)((float)(int)currentColor.G * opacity);
+                        currentColor.B = (byte)((float)(int)currentColor.B * opacity);
+                        currentColor.A = (byte)((float)(int)currentColor.A * opacity);
+                        int totalAfterimages = 4;
+                        for (int i = 0; i < totalAfterimages; i++)
+                        {
+                            Vector2 position = npc.position;
+                            float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                            float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                            if (i == 0 || i == 2)
+                                position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                            else
+                                position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+
+                            position.X -= npc.width / 2;
+                            if (i == 0 || i == 1)
+                                position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                            else
+                                position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+
+                            position.Y -= npc.height / 2;
+
+                            spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position.X - screenPos.X + (float)(npc.width / 2) - (float)TextureAssets.Npc[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, position.Y - screenPos.Y + (float)npc.height - (float)TextureAssets.Npc[npc.type].Height() * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + npc.gfxOffY), npc.frame, currentColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        }
+
+                        float secondAfterimageSetHealthValue = (int)(Main.npc[NPC.crimsonBoss].lifeMax * 0.8f);
+                        if (Main.npc[NPC.crimsonBoss].life < secondAfterimageSetHealthValue)
+                        {
+                            currentColor = npc.GetAlpha(drawColor);
+                            float opacityScale = 1f - Main.npc[NPC.crimsonBoss].life / (float)secondAfterimageSetHealthValue;
+                            opacity = Main.getGoodWorld ? 1f : opacityScale;
+
+                            opacity = MathHelper.Clamp(opacity, 0f, 1f);
+                            currentColor.R = (byte)((float)(int)currentColor.R * opacity);
+                            currentColor.G = (byte)((float)(int)currentColor.G * opacity);
+                            currentColor.B = (byte)((float)(int)currentColor.B * opacity);
+                            currentColor.A = (byte)((float)(int)currentColor.A * opacity);
+                            totalAfterimages = death ? 12 : 4;
+                            for (int i = 0; i < totalAfterimages; i++)
+                            {
+                                Vector2 position = npc.position;
+                                float distanceFromTargetX = Math.Abs(npc.Center.X - Main.player[Main.myPlayer].Center.X);
+                                float distanceFromTargetY = Math.Abs(npc.Center.Y - Main.player[Main.myPlayer].Center.Y);
+                                if (i > 3)
+                                {
+                                    currentColor *= 0.5f;
+                                    distanceFromTargetX *= 0.5f;
+                                    distanceFromTargetY *= 0.5f;
+                                }
+
+                                switch (i)
+                                {
+                                    case 0:
+                                    case 4:
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromBrain.Y;
+                                        break;
+
+                                    case 1:
+                                    case 5:
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromBrain.X;
+                                        break;
+
+                                    case 2:
+                                    case 6:
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromBrain.Y;
+                                        break;
+
+                                    case 3:
+                                    case 7:
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromBrain.X;
+                                        break;
+
+                                    case 8:
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        break;
+
+                                    case 9:
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y - distanceFromTargetY;
+                                        break;
+
+                                    case 10:
+                                        position.X = Main.player[Main.myPlayer].Center.X + distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        break;
+
+                                    case 11:
+                                        position.X = Main.player[Main.myPlayer].Center.X - distanceFromTargetX;
+                                        position.Y = Main.player[Main.myPlayer].Center.Y + distanceFromTargetY;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                                position.X -= npc.width / 2;
+                                position.Y -= npc.height / 2;
+
+                                spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, new Vector2(position.X - screenPos.X + (float)(npc.width / 2) - (float)TextureAssets.Npc[npc.type].Width() * npc.scale / 2f + halfSize.X * npc.scale, position.Y - screenPos.Y + (float)npc.height - (float)TextureAssets.Npc[npc.type].Height() * npc.scale / (float)Main.npcFrameCount[npc.type] + 4f + halfSize.Y * npc.scale + npc.gfxOffY), npc.frame, currentColor, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                            }
+                        }
+                    }
+
                     float beginTelegraphGateValue = BrainOfCthulhuAI.TimeBeforeCreeperAttack - BrainOfCthulhuAI.CreeperTelegraphTime;
                     if (npc.ai[1] > beginTelegraphGateValue || npc.ai[0] == 1f)
                     {
                         float colorScale = npc.ai[0] == 1f ? 1f : MathHelper.Clamp((npc.ai[1] - beginTelegraphGateValue) / BrainOfCthulhuAI.CreeperTelegraphTime, 0f, 1f);
                         Color drawColor2 = new Color(150, 30, 30, 0) * colorScale;
-                        Vector2 halfSize = npc.frame.Size() / 2;
-                        SpriteEffects spriteEffects = SpriteEffects.None;
-                        if (npc.spriteDirection == 1)
-                            spriteEffects = SpriteEffects.FlipHorizontally;
-
                         for (int i = 0; i < 2; i++)
                         {
                             spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
@@ -7210,6 +7374,32 @@ namespace CalamityMod.NPCs
                         for (int i = 0; i < 2; i++)
                         {
                             spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY) - glowOffset, npc.frame,
+                                drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
+                        }
+                    }
+                }
+
+                // Laser telegraph
+                else if (npc.type == NPCID.WallofFleshEye)
+                {
+                    float eyeTelegraphGateValue = WallOfFleshAI.LaserShootGateValue - WallOfFleshAI.LaserShootTelegraphTime;
+                    if (npc.localAI[1] > eyeTelegraphGateValue || npc.localAI[2] > 0f)
+                    {
+                        // Percent life remaining
+                        float lifeRatio = Main.npc[Main.wofNPCIndex].life / (float)Main.npc[Main.wofNPCIndex].lifeMax;
+
+                        Texture2D glowTexture = CalamityMod.WallOfFleshEyeGlowmask.Value;
+                        Vector2 halfSize = npc.frame.Size() / 2;
+                        SpriteEffects spriteEffects = SpriteEffects.None;
+                        if (npc.spriteDirection == 1)
+                            spriteEffects = SpriteEffects.FlipHorizontally;
+
+                        float colorScale = npc.localAI[2] > 0f ? 1f - ((npc.localAI[2] - 1f) / WallOfFleshAI.TotalLasersPerBarrage) : MathHelper.Clamp((npc.localAI[1] - eyeTelegraphGateValue) / WallOfFleshAI.LaserShootTelegraphTime, 0f, 1f);
+                        bool phase2 = lifeRatio < 0.5f || masterMode;
+                        Color drawColor2 = (phase2 ? new Color(255, 0, 0, 192) : new Color(100, 0, 200, 192)) * colorScale;
+                        for (int i = 0; i < 2; i++)
+                        {
+                            spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,
                                 drawColor2, npc.rotation, halfSize, npc.scale, spriteEffects, 0f);
                         }
                     }
@@ -7375,6 +7565,16 @@ namespace CalamityMod.NPCs
 
         public override bool? DrawHealthBar(NPC npc, byte hbPosition, ref float scale, ref Vector2 position)
         {
+            if ((CalamityWorld.revenge && Main.masterMode) || BossRushEvent.BossRushActive)
+            {
+                if (npc.type == NPCID.Creeper)
+                {
+                    bool brainIsInPhase2 = Main.npc[NPC.crimsonBoss].ai[0] < 0f;
+                    if (brainIsInPhase2)
+                        return false;
+                }
+            }
+
             if (CalamityWorld.death)
             {
                 switch (npc.type)
@@ -7389,10 +7589,12 @@ namespace CalamityMod.NPCs
                     case NPCID.DuneSplicerBody:
                     case NPCID.DuneSplicerTail:
                         return true;
+
                     default:
                         break;
                 }
             }
+
             return null;
         }
 
@@ -8325,6 +8527,39 @@ namespace CalamityMod.NPCs
             float knockBackResistMult = Main.masterMode ? MasterModeEnemyKnockbackMultiplier : ExpertModeEnemyKnockbackMultiplier;
             float knockBackResistReduction = npc.knockBackResist * knockBackResistMult;
             npc.knockBackResist += knockBackResistReduction;
+        }
+        #endregion
+
+        #region Bestiary
+        public override void SetBestiary(NPC npc, Terraria.GameContent.Bestiary.BestiaryDatabase database, Terraria.GameContent.Bestiary.BestiaryEntry bestiaryEntry)
+        {
+            // Create a string array containing all an NPC's debuff resistances
+            string[] elements = new string[5]
+            {
+                NPCDebuffResistText(npc.Calamity().VulnerableToHeat, CalamityUtils.GetTextValue("UI.DebuffSystem.Heat")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToSickness, CalamityUtils.GetTextValue("UI.DebuffSystem.Sickness")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToCold, CalamityUtils.GetTextValue("UI.DebuffSystem.Cold")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToElectricity, CalamityUtils.GetTextValue("UI.DebuffSystem.Electricity")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToWater, CalamityUtils.GetTextValue("UI.DebuffSystem.Water"))
+            };
+
+            // Insert the debuff info into the NPC's bestiary entry
+            bestiaryEntry.Info.Insert(0, new BestiaryDebuffInfo(elements));
+        }
+
+        public static string NPCDebuffResistText(bool? effectiveness, string name)
+        {
+            string result = CalamityUtils.GetTextValue("UI.DebuffSystem.Neutral");
+            if (effectiveness == true)
+            {
+                result = CalamityUtils.GetTextValue("UI.DebuffSystem.Weak");
+            }
+            else if (effectiveness == false)
+            {
+                result = CalamityUtils.GetTextValue("UI.DebuffSystem.Resistant");
+            }
+            result += " " + CalamityUtils.GetTextValue("UI.DebuffSystem.To") + " " + name;
+            return result;
         }
         #endregion
     }
