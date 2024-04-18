@@ -1082,7 +1082,7 @@ namespace CalamityMod.NPCs
             if (type == NPCID.Merchant)
             {
                 shop.AddWithCustomValue(ItemID.Bottle, Item.buyPrice(copper: 20), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.WormholePotion, Item.buyPrice(copper: 25), potionSells, Condition.HappyEnough);
+                .AddWithCustomValue(ItemID.WormholePotion, Item.buyPrice(silver: 5), potionSells, Condition.HappyEnough);
                 shop.Add(ItemID.HealingPotion, potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
                 .Add(ItemID.ManaPotion, potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
                 .Add(ItemID.Flare, hasFlareGunUpgrade)
