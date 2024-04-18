@@ -52,6 +52,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             ModContent.ProjectileType<TerraArrowMain>(),
             ModContent.ProjectileType<TerraArrowSplit>(),
             ModContent.ProjectileType<VanquisherArrowProj>(),
+            ModContent.ProjectileType<VeriumBoltProj>(),
             ModContent.ProjectileType<TyphoonArrow>(),
             ModContent.ProjectileType<MiniSharkron>(),
             ModContent.ProjectileType<TorrentialArrow>(),
