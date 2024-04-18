@@ -1175,6 +1175,10 @@ namespace CalamityMod.CalPlayer
         public Vector2 FireDrawerPosition;
 
         public int monolithAccursedShader = 0;
+
+        // This may seem like a scuffed setup, but a simple bool will have ordering issues when it comes to drawing.
+        // Until ModSceneMetrics gets implemented, this works for now.
+        public int BrimstoneLavaFountainCounter = 0;
         #endregion Draw Effects
 
         #region Draedon Summoning
@@ -2798,7 +2802,7 @@ namespace CalamityMod.CalPlayer
                                 Main.dust[dustIndex].noLight = true;
                             }
 
-                            spectralVeilImmunity = 45;
+                            spectralVeilImmunity = SpectralVeil.VeilIFrames;
                         }
                     }
                 }

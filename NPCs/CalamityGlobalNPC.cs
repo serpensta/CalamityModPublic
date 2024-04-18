@@ -58,6 +58,7 @@ using CalamityMod.Systems;
 using CalamityMod.Tiles.FurnitureAuric;
 using CalamityMod.Tiles.Ores;
 using CalamityMod.UI;
+using CalamityMod.UI.DebuffSystem;
 using CalamityMod.Walls.DraedonStructures;
 using CalamityMod.World;
 using Microsoft.CodeAnalysis;
@@ -222,6 +223,10 @@ namespace CalamityMod.NPCs
         public bool bossCanBeKnockedBack = false;
         public const int knockbackResistanceMin = 180;
         public int knockbackResistanceTimer = 0;
+
+        // Used for particle drawing on NPCs affected by vanilla Cobalt/Mythril weapons
+        public bool isNerfedByCobalt = false;
+        public bool isNerfedByMythril = false;
 
         // Debuffs
         public int vaporfied = 0;
@@ -433,6 +438,9 @@ namespace CalamityMod.NPCs
 
             myClone.bossCanBeKnockedBack = bossCanBeKnockedBack;
             myClone.knockbackResistanceTimer = knockbackResistanceTimer;
+
+            myClone.isNerfedByCobalt = isNerfedByCobalt;
+            myClone.isNerfedByMythril = isNerfedByMythril;
 
             myClone.vaporfied = vaporfied;
             myClone.timeSlow = timeSlow;
@@ -6354,6 +6362,31 @@ namespace CalamityMod.NPCs
                 }
             }
 
+            // Cobalt and Mythril weapon particle effects
+            if (isNerfedByCobalt)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
+                    Vector2 velocity = new Vector2(0f, MathHelper.Max(Main.rand.NextFloat(4f, 6f) * ((npc.height - (spawnLocation.Y - npc.position.Y)) / 65), 0.6f));
+
+                    Particle cobaltArrow = new StatDownArrow(spawnLocation, velocity, new Color(27, 141, 235), new Color(0, 94, 181), 0.75f, 15);
+                    GeneralParticleHandler.SpawnParticle(cobaltArrow);
+                }
+            }
+
+            if (isNerfedByMythril)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
+                    Vector2 velocity = new Vector2(0f, MathHelper.Max(Main.rand.NextFloat(4f, 6f) * ((npc.height - (spawnLocation.Y - npc.position.Y)) / 65), 0.6f));
+
+                    Particle mythrilArrow = new StatDownArrow(spawnLocation, velocity, new Color(35, 217, 144), new Color(23, 145, 97), 0.75f, 15);
+                    GeneralParticleHandler.SpawnParticle(mythrilArrow);
+                }
+            }
+
             // Some extraneous and probably undocumented visual effect caused by the heart lad pet thing
             if (ladHearts > 0 && !npc.loveStruck && Main.netMode != NetmodeID.Server)
             {
@@ -8453,6 +8486,39 @@ namespace CalamityMod.NPCs
             float knockBackResistMult = Main.masterMode ? MasterModeEnemyKnockbackMultiplier : ExpertModeEnemyKnockbackMultiplier;
             float knockBackResistReduction = npc.knockBackResist * knockBackResistMult;
             npc.knockBackResist += knockBackResistReduction;
+        }
+        #endregion
+
+        #region Bestiary
+        public override void SetBestiary(NPC npc, Terraria.GameContent.Bestiary.BestiaryDatabase database, Terraria.GameContent.Bestiary.BestiaryEntry bestiaryEntry)
+        {
+            // Create a string array containing all an NPC's debuff resistances
+            string[] elements = new string[5]
+            {
+                NPCDebuffResistText(npc.Calamity().VulnerableToHeat, CalamityUtils.GetTextValue("UI.DebuffSystem.Heat")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToSickness, CalamityUtils.GetTextValue("UI.DebuffSystem.Sickness")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToCold, CalamityUtils.GetTextValue("UI.DebuffSystem.Cold")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToElectricity, CalamityUtils.GetTextValue("UI.DebuffSystem.Electricity")),
+                NPCDebuffResistText(npc.Calamity().VulnerableToWater, CalamityUtils.GetTextValue("UI.DebuffSystem.Water"))
+            };
+
+            // Insert the debuff info into the NPC's bestiary entry
+            bestiaryEntry.Info.Insert(0, new BestiaryDebuffInfo(elements));
+        }
+
+        public static string NPCDebuffResistText(bool? effectiveness, string name)
+        {
+            string result = CalamityUtils.GetTextValue("UI.DebuffSystem.Neutral");
+            if (effectiveness == true)
+            {
+                result = CalamityUtils.GetTextValue("UI.DebuffSystem.Weak");
+            }
+            else if (effectiveness == false)
+            {
+                result = CalamityUtils.GetTextValue("UI.DebuffSystem.Resistant");
+            }
+            result += " " + CalamityUtils.GetTextValue("UI.DebuffSystem.To") + " " + name;
+            return result;
         }
         #endregion
     }
