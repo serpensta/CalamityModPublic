@@ -23,7 +23,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useTime = 75;
             Item.UseSound = SoundID.Item92;
             Item.shoot = ModContent.ProjectileType<NorfleetCannon>();
-            Item.value = CalamityGlobalItem.Rarity14BuyPrice;
+            Item.value = CalamityGlobalItem.RarityDarkBlueBuyPrice;
             Item.rare = ModContent.RarityType<DarkBlue>();
             Item.noMelee = true;
             Item.noUseGraphic = true;

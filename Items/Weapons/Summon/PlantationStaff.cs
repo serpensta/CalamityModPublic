@@ -44,7 +44,7 @@ namespace CalamityMod.Items.Weapons.Summon
             Item.mana = 10;
             Item.useTime = Item.useAnimation = 20;
             Item.noMelee = true;
-            Item.value = CalamityGlobalItem.Rarity8BuyPrice;
+            Item.value = CalamityGlobalItem.RarityYellowBuyPrice;
             Item.rare = ItemRarityID.Yellow;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item76;

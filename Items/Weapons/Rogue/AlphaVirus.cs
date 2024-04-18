@@ -25,7 +25,7 @@ namespace CalamityMod.Items.Weapons.Rogue
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.maxStack = 1;
-            Item.value = CalamityGlobalItem.Rarity12BuyPrice;
+            Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
             Item.shoot = ModContent.ProjectileType<AlphaVirusProjectile>();
             Item.shootSpeed = 4f;
             Item.rare = ModContent.RarityType<Turquoise>();
