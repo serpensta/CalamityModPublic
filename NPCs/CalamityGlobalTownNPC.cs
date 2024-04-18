@@ -1183,7 +1183,7 @@ namespace CalamityMod.NPCs
             {
                 shop.Add(ItemType<HowlsHeart>())
                 .AddWithCustomValue(ItemID.MagicMissile, Item.buyPrice(gold: 5))
-                .AddWithCustomValue(ItemID.RodofDiscord, Item.buyPrice(gold: 12, silver: 50), Condition.Hardmode, Condition.InHallow)
+                .AddWithCustomValue(ItemID.RodofDiscord, Item.buyPrice(gold: 50), Condition.Hardmode, Condition.InHallow)
                 .AddWithCustomValue(ItemID.SpectreStaff, Item.buyPrice(gold: 25), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.InfernoFork, Item.buyPrice(gold: 25), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.ShadowbeamStaff, Item.buyPrice(gold: 25), Condition.DownedGolem)
