@@ -1451,6 +1451,24 @@ namespace CalamityMod.ILEditing
                 }
             }
 
+            for (int i = 0; i < WorldSelectionDifficultySystem.difficulties.Count; i++)
+            {
+                WorldSelectionDifficultySystem.WorldDifficulty dif = WorldSelectionDifficultySystem.difficulties[i];
+                if (self.Data.TryGetHeaderData<WorldSelectionDifficultySystem>(out TagCompound tager))
+                {
+                    if (tager.ContainsKey(dif.name) && tager.GetBool(dif.name))
+                    {
+                        death = true;
+                        break;
+                    }
+                }
+                if (dif.function(tager))
+                {
+                    expertText = dif.name;
+                    gameModeColor = dif.color;
+                }
+            }
+
             expertText = difficultyText;
             gameModeColor = difficultyColor;
         }
