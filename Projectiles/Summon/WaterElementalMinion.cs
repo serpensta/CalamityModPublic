@@ -166,7 +166,7 @@ namespace CalamityMod.Projectiles.Summon
                         projectileType = ModContent.ProjectileType<WaterElementalSong>();
                     }
                     float projVel = Main.rand.Next(12, 20);
-                    Vector2 fireDirection = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 fireDirection = Projectile.Center;
                     float fireXVel = projXStore - fireDirection.X;
                     float fireYVel = projYStore - fireDirection.Y;
                     float fireVelocity = (float)Math.Sqrt((double)(fireXVel * fireXVel + fireYVel * fireYVel));

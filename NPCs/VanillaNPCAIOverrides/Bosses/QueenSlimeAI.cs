@@ -25,8 +25,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float slimeScale = 1f;
             bool teleported = false;
             bool phase2 = lifeRatio <= 0.5f;
-            bool phase3 = lifeRatio <= 0.4f;
-            bool phase4 = lifeRatio <= 0.2f;
+            bool phase3 = lifeRatio <= (masterMode ? 0.5f : 0.4f);
+            bool phase4 = lifeRatio <= (masterMode ? 0.5f : 0.2f);
+            bool phase5 = lifeRatio <= 0.25f && masterMode;
 
             // Spawn settings
             if (npc.localAI[0] == 0f)
@@ -505,9 +506,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 {
                                     Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * 1000f;
                                     float expandDelay = 0f;
-                                    int maxSmashes = 11;
+                                    int maxSmashes = death ? 23 : 17;
                                     int maxSmashesPerSide = (maxSmashes - 1) / 2;
-                                    float maxExpandDelay = 20f * maxSmashesPerSide;
+                                    float maxExpandDelay = (death ? 10f : 15f) * maxSmashesPerSide;
                                     for (int i = 0; i < maxSmashes; i++)
                                     {
                                         expandDelay = MathHelper.Lerp(0f, maxExpandDelay, Math.Abs(i - maxSmashesPerSide) / (float)maxSmashesPerSide);
@@ -532,6 +533,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     {
                                         Vector2 perturbedSpeed = destination.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
                                         Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, perturbedSpeed, type, damage, 0f, Main.myPlayer, 0f, -2f);
+                                    }
+
+                                    if (phase5)
+                                    {
+                                        numProj = 15;
+                                        destination *= 0.75f;
+                                        for (int i = 0; i < numProj; i++)
+                                        {
+                                            Vector2 perturbedSpeed = destination.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (float)(numProj - 1)));
+                                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, perturbedSpeed, type, damage, 0f, Main.myPlayer, 0f, -2f);
+                                        }
                                     }
                                 }
                             }
@@ -692,7 +704,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int numGelProjectiles = phase4 ? Main.rand.Next(9, 12) : phase2 ? Main.rand.Next(6, 9) : 12;
-                            if (masterMode)
+                            if (phase5)
                                 numGelProjectiles += 6;
                             if (Main.getGoodWorld)
                                 numGelProjectiles = 20;
@@ -816,7 +828,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Spawn small slimes
             // Don't spawn any slimes in final phase
-            if (npc.life <= 0 || phase4)
+            if (npc.life <= 0 || (phase4 && !masterMode))
                 return false;
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -834,7 +846,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             float slimeSpawnHealthGateValue = CalamityWorld.LegendaryMode ? 0.01f : phase3 ? 0.04f : phase2 ? 0.03f : 0.025f;
             if (masterMode)
-                slimeSpawnHealthGateValue *= 0.8f;
+                slimeSpawnHealthGateValue *= (phase2 ? 0.5f : 0.8f);
 
             int slimeSpawnThreshold = (int)(npc.lifeMax * slimeSpawnHealthGateValue);
 

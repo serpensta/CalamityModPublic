@@ -100,7 +100,7 @@ namespace CalamityMod.World
 
             do
             {
-                int underworldTop = Main.maxTilesY - 200;
+                int underworldTop = Main.UnderworldLayer;
                 int placementPositionX = WorldGen.genRand.Next((int)(Main.maxTilesX * 0.1f), (int)(Main.maxTilesX * 0.9f));
                 int placementPositionY = WorldGen.genRand.Next(underworldTop - 550, underworldTop - 50);
 
@@ -179,7 +179,7 @@ namespace CalamityMod.World
 
             do
             {
-                int underworldTop = Main.maxTilesY - 200;
+                int underworldTop = Main.UnderworldLayer;
                 int placementPositionX = WorldGen.genRand.Next((int)(Main.maxTilesX * 0.15f), (int)(Main.maxTilesX * 0.85f));
                 int placementPositionY = WorldGen.genRand.Next(underworldTop - 400, underworldTop - 50);
 
@@ -254,7 +254,7 @@ namespace CalamityMod.World
 
             do
             {
-                int underworldTop = Main.maxTilesY - 200;
+                int underworldTop = Main.UnderworldLayer;
                 //gen opposite to the brimstone crags
                 int placementPositionX = (Main.dungeonX > Main.maxTilesX / 2) ? WorldGen.genRand.Next((int)(Main.maxTilesX / 12), (int)(Main.maxTilesX / 9)) : WorldGen.genRand.Next((int)(Main.maxTilesX * 0.82), (int)(Main.maxTilesX * 0.925));
                 int placementPositionY = WorldGen.genRand.Next(Main.maxTilesY - 150, Main.maxTilesY - 125);
@@ -351,7 +351,7 @@ namespace CalamityMod.World
                 int sunkenSeaY = 0;
 
                 //copied the desert position code from the sunken sea's generation so the lab always generates within the sunken sea properly
-                for (int y = Main.maxTilesY - 200; y >= Main.worldSurface; y--)
+                for (int y = Main.UnderworldLayer; y >= Main.worldSurface; y--)
                 {
                     if (Main.tile[placementPositionX, y].WallType == ModContent.WallType<NavystoneWall>() ||
                     Main.tile[placementPositionX, y].WallType == ModContent.WallType<EutrophicSandWall>())
@@ -425,7 +425,7 @@ namespace CalamityMod.World
 
             do
             {
-                int underworldTop = Main.maxTilesY - 200;
+                int underworldTop = Main.UnderworldLayer;
                 int placementPositionX = WorldGen.genRand.Next(120, Main.maxTilesX - 120);
                 int placementPositionY = WorldGen.genRand.Next((int)Main.worldSurface + 160, underworldTop - HellVerticalAvoidance);
 
@@ -508,7 +508,7 @@ namespace CalamityMod.World
 
             do
             {
-                int underworldTop = Main.maxTilesY - 200;
+                int underworldTop = Main.UnderworldLayer;
                 int placementPositionX = WorldGen.genRand.Next(120, Main.maxTilesX - 120);
                 int placementPositionY = WorldGen.genRand.Next((int)Main.worldSurface + 160, underworldTop - HellVerticalAvoidance);
 

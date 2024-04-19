@@ -128,7 +128,7 @@ namespace CalamityMod.Projectiles.Summon
                 {
                     returnSpeed = 12f;
                 }
-                Vector2 playerDirection = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                Vector2 playerDirection = Projectile.Center;
                 float playerXDist = player.Center.X - playerDirection.X;
                 float playerYDist = player.Center.Y - playerDirection.Y - 60f;
                 float playerDist = (float)Math.Sqrt((double)(playerXDist * playerXDist + playerYDist * playerYDist));
@@ -178,7 +178,7 @@ namespace CalamityMod.Projectiles.Summon
                 if (Projectile.ai[1] == 0f)
                 {
                     float hoverSpeed = 8f; //12
-                    Vector2 playerDirectionAgain = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+                    Vector2 playerDirectionAgain = Projectile.Center;
                     float playerXDistAgain = projX - playerDirectionAgain.X;
                     float playerYDistAgain = projY - playerDirectionAgain.Y;
                     float playerDistAgain = (float)Math.Sqrt((double)(playerXDistAgain * playerXDistAgain + playerYDistAgain * playerYDistAgain));

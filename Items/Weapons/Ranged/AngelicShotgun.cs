@@ -15,14 +15,13 @@ namespace CalamityMod.Items.Weapons.Ranged
     public class AngelicShotgun : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
-        private static int BaseDamage = 96;
         private static float BulletSpeed = 12f;
 
         public override void SetDefaults()
         {
             Item.width = 86;
             Item.height = 38;
-            Item.damage = BaseDamage;
+            Item.damage = 96;
             Item.knockBack = 3f;
             Item.DamageType = DamageClass.Ranged;
             Item.noMelee = true;
@@ -33,7 +32,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.UseSound = SoundID.Item38;
             Item.useStyle = ItemUseStyleID.Shoot;
 
-            Item.value = CalamityGlobalItem.Rarity12BuyPrice;
+            Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.Calamity().donorItem = true;
 

@@ -10,6 +10,7 @@ using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.PlagueEnemies;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.Projectiles.Melee;
@@ -48,6 +49,9 @@ namespace CalamityMod.Projectiles
 
         // Source variables.
         public bool CreatedByPlayerDash = false;
+
+        // Speed cap for accelerating boss laser projectiles with 2 extraUpdates.
+        public const float AcceleratingBossLaserVelocityCap = 10f;
 
         // Damage Adjusters
         public const float PierceResistHarshness = 0.12f;
@@ -124,6 +128,7 @@ namespace CalamityMod.Projectiles
         public bool extorterBoost = false;
         public bool LocketClone = false;
         public bool CannotProc = false;
+        public bool JewelSpikeSpawned = false;
 
         // Note: Although this was intended for fishing line colors, I use this as an AI variable a lot because vanilla only has 4 that sometimes are already in use.  ~Ben
         // TODO -- uses of this variable are undocumented and unstable. Remove it from the API surface.
@@ -350,7 +355,7 @@ namespace CalamityMod.Projectiles
                         homingEndTime += 60f;
 
                     // Stop homing when within a certain distance of the target
-                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 80f && projectile.ai[1] < homingEndTime)
+                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < 96f && projectile.ai[1] < homingEndTime)
                         projectile.ai[1] = homingEndTime;
 
                     if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
@@ -638,7 +643,7 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[1] = 1f;
                 }
 
-                if (projectile.velocity.Length() < 12f)
+                if (projectile.velocity.Length() < AcceleratingBossLaserVelocityCap)
                     projectile.velocity *= 1.0025f;
 
                 return false;
@@ -661,7 +666,7 @@ namespace CalamityMod.Projectiles
                     projectile.localAI[1] = 1f;
                 }
 
-                if (projectile.velocity.Length() < 12f)
+                if (projectile.velocity.Length() < AcceleratingBossLaserVelocityCap)
                     projectile.velocity *= 1.0025f;
 
                 return false;
@@ -1033,7 +1038,7 @@ namespace CalamityMod.Projectiles
                 bool spreadOut = false;
                 bool homeIn = false;
                 float spreadOutCutoffTime = EmpressRainbowStreakSpreadOutCutoff;
-                float homeInCutoffTime = Main.dayTime ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
+                float homeInCutoffTime = NPC.ShouldEmpressBeEnraged() ? (revMasterMode ? 55f : 65f) : (revMasterMode ? 70f : 80f);
                 float spreadDeceleration = 0.97f;
                 float minAcceleration = revMasterMode ? 0.075f : 0.05f;
                 float maxAcceleration = revMasterMode ? 0.15f : 0.1f;
@@ -2368,7 +2373,7 @@ namespace CalamityMod.Projectiles
                         projectile.localAI[1] = 1f;
                     }
 
-                    if (projectile.velocity.Length() < 12f)
+                    if (projectile.velocity.Length() < AcceleratingBossLaserVelocityCap)
                         projectile.velocity *= 1.0025f;
 
                     return false;
@@ -2411,6 +2416,10 @@ namespace CalamityMod.Projectiles
 
                         float amount = MathHelper.Lerp(minAcceleration, maxAcceleration, Utils.GetLerpValue(spreadOutCutoffTime, 30f, projectile.timeLeft, clamped: true));
                         projectile.velocity = Vector2.SmoothStep(projectile.velocity, velocity, amount);
+
+                        // Stop homing when within a certain distance of the target
+                        if (Vector2.Distance(projectile.Center, Main.player[playerIndex].Center) < 96f && projectile.timeLeft > homeInCutoffTime)
+                            projectile.timeLeft = (int)homeInCutoffTime;
                     }
 
                     if (projectile.timeLeft <= 3)
@@ -2585,6 +2594,110 @@ namespace CalamityMod.Projectiles
                         if (projectile.velocity.Y > 16f)
                             projectile.velocity.Y = 16f;
                     }
+
+                    return false;
+                }
+
+                else if (projectile.type == ProjectileID.InfernoHostileBolt && projectile.ai[2] > 0f)
+                {
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item20, projectile.position);
+                        projectile.localAI[0] += 1f;
+                    }
+
+                    bool killX = false;
+                    bool killY = false;
+                    if (projectile.velocity.X < 0f && projectile.position.X < projectile.ai[0])
+                        killX = true;
+
+                    if (projectile.velocity.X > 0f && projectile.position.X > projectile.ai[0])
+                        killX = true;
+
+                    if (projectile.velocity.Y < 0f && projectile.position.Y < projectile.ai[1])
+                        killY = true;
+
+                    if (projectile.velocity.Y > 0f && projectile.position.Y > projectile.ai[1])
+                        killY = true;
+
+                    if (killX && killY)
+                        projectile.Kill();
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.IchorTorch, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default, 1.6f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].velocity *= 0.3f;
+                        Main.dust[dust].velocity += projectile.velocity * 0.1f;
+                        if (Main.getGoodWorld)
+                            Main.dust[dust].noLight = true;
+                    }
+
+                    Particle theSpark = new AltSparkParticle(projectile.Center, projectile.velocity * 0.06f + projectile.velocity * 0.1f, false, 40, 1f, new Color(255, 255, 100));
+                    GeneralParticleHandler.SpawnParticle(theSpark);
+
+                    return false;
+                }
+
+                else if (projectile.type == ProjectileID.InfernoHostileBlast && projectile.ai[2] > 0f)
+                {
+                    if (projectile.localAI[0] == 0f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item74, projectile.position);
+                        projectile.localAI[0] += 1f;
+                    }
+
+                    projectile.ai[0] += 1f;
+
+                    float totalDust = 20f;
+                    if (projectile.ai[0] > 540f)
+                        totalDust -= (projectile.ai[0] - 180f) / 2f;
+
+                    if (totalDust <= 0f)
+                    {
+                        totalDust = 0f;
+                        projectile.Kill();
+                    }
+
+                    float maxDustVelocityX = 10f;
+                    float maxDustVelocityY = 10f;
+                    float minDustSpeed = 3f;
+                    float maxDustSpeed = 8f;
+
+                    for (int i = 0; i < (int)totalDust; i++)
+                    {
+                        float dustVelocityX = Main.rand.NextFloat(-maxDustVelocityX, maxDustVelocityX);
+                        float dustVelocityY = Main.rand.NextFloat(-maxDustVelocityY, maxDustVelocityY);
+                        float randomDustSpeed = Main.rand.NextFloat(minDustSpeed, maxDustSpeed);
+                        float velocityLength = (float)Math.Sqrt(dustVelocityX * dustVelocityX + dustVelocityY * dustVelocityY);
+                        velocityLength = randomDustSpeed / velocityLength;
+                        dustVelocityX *= velocityLength;
+                        dustVelocityY *= velocityLength;
+                        Vector2 dustVelocity = new Vector2(dustVelocityX, dustVelocityY);
+                        Vector2 dustPosition = projectile.Center + new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f));
+                        int dust = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.IchorTorch, 0f, 0f, 100, default, 1.8f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].position = dustPosition;
+                        Main.dust[dust].velocity = dustVelocity;
+                        if (Main.getGoodWorld)
+                            Main.dust[dust].noLight = true;
+                    }
+
+                    float maxSparkVelocityX = 10f;
+                    float maxSparkVelocityY = 10f;
+                    float minSparkSpeed = 3f;
+                    float maxSparkSpeed = 7f;
+
+                    float sparkVelocityX = Main.rand.NextFloat(-maxSparkVelocityX, maxSparkVelocityX);
+                    float sparkVelocityY = Main.rand.NextFloat(-maxSparkVelocityY, maxSparkVelocityY);
+                    float randSparkSpeed = Main.rand.NextFloat(minSparkSpeed, maxSparkSpeed);
+                    float sparkLength = (float)Math.Sqrt(sparkVelocityX * sparkVelocityX + sparkVelocityY * sparkVelocityY);
+                    sparkLength = randSparkSpeed / sparkLength;
+                    sparkVelocityX *= sparkLength;
+                    sparkVelocityY *= sparkLength;
+
+                    Particle theSpark = new AltSparkParticle(projectile.Center, new Vector2(sparkVelocityX, sparkVelocityY), false, 40, 1f, new Color(255, 255, 100));
+                    GeneralParticleHandler.SpawnParticle(theSpark);
 
                     return false;
                 }
@@ -3139,8 +3252,8 @@ namespace CalamityMod.Projectiles
                         // ai[1] being set to 1 is done only by the Calamity usages of these projectiles in Skeletron and Skeletron Prime boss fights
                         bool isSkeletronBossProjectile = (projectile.type == ProjectileID.RocketSkeleton || projectile.type == ProjectileID.Shadowflames) && projectile.ai[1] > 0f;
 
-                        // These projectiles will not be buffed if Golem is alive
-                        bool isGolemBossProjectile = NPC.golemBoss > 0 && (projectile.type == ProjectileID.InfernoHostileBolt || projectile.type == ProjectileID.InfernoHostileBlast);
+                        // These projectiles will not be buffed if Golem fires them
+                        bool isGolemBossProjectile = (projectile.type == ProjectileID.InfernoHostileBolt || projectile.type == ProjectileID.InfernoHostileBlast) && projectile.ai[2] > 0f;
 
                         if (!isSkeletronBossProjectile && !isGolemBossProjectile)
                             projectile.damage += 30;
@@ -3533,12 +3646,12 @@ namespace CalamityMod.Projectiles
                     if ((player.Calamity().flaskBrimstone || player.Calamity().flaskCrumbling || player.Calamity().flaskHoly) && !projectile.noEnchantments && !projectile.noEnchantmentVisuals)
                     {
                         int dustType = player.Calamity().flaskHoly ? (Main.rand.NextBool() ? 87 : (int)CalamityDusts.ProfanedFire) : player.Calamity().flaskBrimstone ? (Main.rand.NextBool() ? 114 : ModContent.DustType<BrimstoneFlame>()) : (Main.rand.NextBool() ? 121 : DustID.Stone);
-                        if (Main.rand.NextBool(4))
+                        if (Main.rand.NextBool(player.Calamity().flaskCrumbling ? 5 : 4))
                         {
                             Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, dustType, 0f, 0f, 100, default, Main.rand.NextFloat(0.6f, 0.9f));
                             dust.noGravity = dust.type == 121 ? false : true;
-                            if (!player.Calamity().flaskHoly)
-                                dust.fadeIn = 1f;
+                            if (player.Calamity().flaskBrimstone)
+                                dust.fadeIn = 0.8f;
                             dust.velocity = player.Calamity().flaskHoly && Main.rand.NextBool(3) ? new Vector2(Main.rand.NextFloat(-0.9f, 0.9f), Main.rand.NextFloat(-6.6f, -9.8f)) : dust.type == 121 ? new Vector2(Main.rand.NextFloat(-0.7f, 0.7f), Main.rand.NextFloat(0.6f, 1.8f)) : -projectile.velocity * 0.2f;
                         }
                     }
@@ -3832,9 +3945,19 @@ namespace CalamityMod.Projectiles
                 }
             }
 
-            //Crystal bullet projectiles deal 50% of the bullet's damage which is absurd in vanilla, this nerfs them to 27.5%
-            if (projectile.type == ProjectileID.CrystalShard)
-                modifiers.SourceDamage *= 0.55f;
+            // Scuttler's Jewel projectiles can spawn either on-hit or on-kill, but only spawn once per projectile.
+            if (projectile.owner == Main.myPlayer && !projectile.npcProj && !projectile.trap && projectile.CountsAsClass<RogueDamageClass>() && modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0 && !JewelSpikeSpawned)
+            {
+                int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(16);
+                damage = player.ApplyArmorAccDamageBonusesTo(damage);
+
+                int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);
+                Main.projectile[spike].frame = 4;
+                if (spike.WithinBounds(Main.maxProjectiles))
+                    Main.projectile[spike].DamageType = DamageClass.Generic;
+                modPlayer.scuttlerCooldown = 30;
+                JewelSpikeSpawned = true;
+            }
         }
         #endregion
 
@@ -4168,6 +4291,7 @@ namespace CalamityMod.Projectiles
         {
             bool masterRevSkeletronPrimeBomb = projectile.type == ProjectileID.BombSkeletronPrime && projectile.ai[0] < 0f && (Main.masterMode || BossRushEvent.BossRushActive);
             bool revQueenBeeBeeHive = projectile.type == ProjectileID.BeeHive && (CalamityWorld.revenge || BossRushEvent.BossRushActive) && (projectile.ai[2] == 1f || CalamityWorld.death) && projectile.wet;
+            bool revGolemInferno = projectile.type == ProjectileID.InfernoHostileBolt && projectile.ai[2] > 0f;
 
             if (revQueenBeeBeeHive)
             {
@@ -4285,10 +4409,45 @@ namespace CalamityMod.Projectiles
                         for (int i = 0; i < availableAmountOfNPCsToSpawnUpToSlot; i++)
                         {
                             int beeType = Main.rand.Next(NPCID.Bee, NPCID.BeeSmall + 1);
+                            if (Main.zenithWorld)
+                            {
+                                beeType = Main.rand.NextBool(3) ? ModContent.NPCType<PlagueChargerLarge>() : ModContent.NPCType<PlagueCharger>();
+                            }
+                            else if (Main.masterMode || BossRushEvent.BossRushActive)
+                            {
+                                switch (Main.rand.Next(12))
+                                {
+                                    default:
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                        break;
+
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                        beeType = NPCID.LittleHornetHoney;
+                                        break;
+
+                                    case 9:
+                                    case 10:
+                                        beeType = NPCID.HornetHoney;
+                                        break;
+
+                                    case 11:
+                                        beeType = NPCID.BigHornetHoney;
+                                        break;
+                                }
+                            }
+
                             int beeSpawn = NPC.NewNPC(projectile.GetSource_FromThis(), (int)projectile.Center.X, (int)projectile.Center.Y, beeType, 1);
                             Main.npc[beeSpawn].velocity.X = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].velocity.Y = (float)Main.rand.Next(-200, 201) * 0.002f;
                             Main.npc[beeSpawn].ai[3] = 1f;
+                            Main.npc[beeSpawn].timeLeft = 600;
                             Main.npc[beeSpawn].netUpdate = true;
                         }
                     }
@@ -4296,9 +4455,17 @@ namespace CalamityMod.Projectiles
                     if (Main.netMode != NetmodeID.SinglePlayer)
                         NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
                 }
+
+                else if (revGolemInferno)
+                {
+                    Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileID.InfernoHostileBlast, projectile.damage, projectile.knockBack, projectile.owner, 0f, 0f, projectile.ai[2]);
+
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                        NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, projectile.identity, projectile.owner);
+                }
             }
 
-            if (masterRevSkeletronPrimeBomb || revQueenBeeBeeHive)
+            if (masterRevSkeletronPrimeBomb || revQueenBeeBeeHive || revGolemInferno)
             {
                 projectile.active = false;
                 return false;
@@ -4335,9 +4502,10 @@ namespace CalamityMod.Projectiles
                             }
                         }
 
-                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0)
+                        // Make sure the spike doesn't spawn again if it's already been spawned by on-hit.
+                        if (modPlayer.scuttlersJewel && stealthStrike && modPlayer.scuttlerCooldown <= 0 && !JewelSpikeSpawned)
                         {
-                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(18);
+                            int damage = (int)player.GetTotalDamage<RogueDamageClass>().ApplyTo(16);
                             damage = player.ApplyArmorAccDamageBonusesTo(damage);
 
                             int spike = Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, Vector2.Zero, ProjectileType<JewelSpike>(), damage, projectile.knockBack, projectile.owner);

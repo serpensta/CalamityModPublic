@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Balancing;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
@@ -186,6 +187,9 @@ namespace CalamityMod.Projectiles.Typeless
             if (Projectile.owner == Main.myPlayer && Main.player[Projectile.owner].lifeSteal > 0f && !Main.player[Projectile.owner].moonLeech && target.lifeMax > 5)
             {
                 int healAmount = 10 * damageDone / Projectile.damage; //should always be around max, less if enemy has defense/DR
+                if (healAmount > BalancingConstants.LifeStealCap)
+                    healAmount = BalancingConstants.LifeStealCap;
+
                 if (healAmount > 0)
                 {
                     Main.player[Projectile.owner].lifeSteal -= healAmount;

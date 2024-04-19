@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Summon
             velocity *= 2f;
             velocity.SafeNormalize(Vector2.Zero);
             float projSpeed = 5f * Projectile.scale;
-            Vector2 fireDirection = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
+            Vector2 fireDirection = npc.Center;
             float fireXVel = Projectile.Center.X - fireDirection.X;
             float fireYVel = Projectile.Center.Y - fireDirection.Y;
             float fireVelocity = (float)Math.Sqrt((double)(fireXVel * fireXVel + fireYVel * fireYVel));

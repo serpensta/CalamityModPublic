@@ -291,18 +291,18 @@ namespace CalamityMod.Projectiles.Magic
 
             for (int i = 0; i < 6; i++)
             {
-                int blackDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Granite, 0f, 0f, 100, default(Color), 1.75f);
+                int blackDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Granite, 0f, 0f, 100, default(Color), 1.75f);
                 Main.dust[blackDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(Math.PI) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
             }
 
             for (int j = 0; j < 45; j++)
             {
-                int purpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurpleTorch, 0f, 0f, 200, default(Color), 5.05f);
+                int purpleDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleTorch, 0f, 0f, 200, default(Color), 5.05f);
                 Main.dust[purpleDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(Math.PI) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
                 Main.dust[purpleDust].noGravity = true;
                 Dust dust = Main.dust[purpleDust];
                 dust.velocity *= 4f;
-                purpleDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GemRuby, 0f, 0f, 100, default(Color), 1.75f);
+                purpleDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemRuby, 0f, 0f, 100, default(Color), 1.75f);
                 Main.dust[purpleDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(Math.PI) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
                 dust = Main.dust[purpleDust];
                 dust.velocity *= 2.5f;
@@ -313,7 +313,7 @@ namespace CalamityMod.Projectiles.Magic
 
             for (int k = 0; k < 15; k++)
             {
-                int purpleDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.PurpleTorch, 0f, 0f, 0, default(Color), 3.55f);
+                int purpleDust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleTorch, 0f, 0f, 0, default(Color), 3.55f);
                 Main.dust[purpleDust2].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(Math.PI).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.width / 2f;
                 Main.dust[purpleDust2].noGravity = true;
                 Dust dust = Main.dust[purpleDust2];
@@ -322,7 +322,7 @@ namespace CalamityMod.Projectiles.Magic
 
             for (int l = 0; l < 15; l++)
             {
-                int blackDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Granite, 0f, 0f, 0, default(Color), 1.75f);
+                int blackDust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Granite, 0f, 0f, 0, default(Color), 1.75f);
                 Main.dust[blackDust2].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(Math.PI).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.width / 2f;
                 Main.dust[blackDust2].noGravity = true;
                 Dust dust = Main.dust[blackDust2];

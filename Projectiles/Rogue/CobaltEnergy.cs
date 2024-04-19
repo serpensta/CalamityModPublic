@@ -33,7 +33,7 @@ namespace CalamityMod.Projectiles.Rogue
         {
             for (int index = 0; index < 2; ++index)
             {
-                int ruby = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GemSapphire, Projectile.velocity.X, Projectile.velocity.Y, 90, new Color(), 1.2f);
+                int ruby = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemSapphire, Projectile.velocity.X, Projectile.velocity.Y, 90, new Color(), 1.2f);
                 Dust dust = Main.dust[ruby];
                 dust.noGravity = true;
                 dust.velocity *= 0.3f;
@@ -118,7 +118,7 @@ namespace CalamityMod.Projectiles.Rogue
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             for (int index1 = 0; index1 < 15; ++index1)
             {
-                int ruby = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GemSapphire, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 50, new Color(), 1.2f);
+                int ruby = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemSapphire, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 50, new Color(), 1.2f);
                 Dust dust = Main.dust[ruby];
                 dust.noGravity = true;
                 dust.scale *= 1.25f;

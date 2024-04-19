@@ -1691,7 +1691,10 @@ namespace CalamityMod.NPCs.Yharon
 
             // Despawn safety, make sure to target another player if the current player target is too far away
             if (Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > CalamityGlobalNPC.CatchUpDistance200Tiles)
+            {
                 NPC.TargetClosest();
+                NPC.netUpdate = true;
+            }
 
             Player targetData = Main.player[NPC.target];
 
@@ -1700,6 +1703,7 @@ namespace CalamityMod.NPCs.Yharon
             if (targetData.dead || !targetData.active)
             {
                 NPC.TargetClosest();
+                NPC.netUpdate = true;
                 targetData = Main.player[NPC.target];
                 if (targetData.dead || !targetData.active)
                 {
@@ -3256,7 +3260,7 @@ namespace CalamityMod.NPCs.Yharon
                 NPC.position.Y = NPC.position.Y - (NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int fieryDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
+                    int fieryDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fieryDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -3266,10 +3270,10 @@ namespace CalamityMod.NPCs.Yharon
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 3f);
+                    int fieryDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 3f);
                     Main.dust[fieryDust2].noGravity = true;
                     Main.dust[fieryDust2].velocity *= 5f;
-                    fieryDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
+                    fieryDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.CopperCoin, 0f, 0f, 100, default, 2f);
                     Main.dust[fieryDust2].velocity *= 2f;
                 }
 

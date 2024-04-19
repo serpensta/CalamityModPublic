@@ -204,7 +204,7 @@ CosmicKunai: {
 	Tooltip:
 		'''
 		Fires a rapid stream of short-range kunai
-		Stealth strikes make kunai travel farther and spawn 5 homing Cosmic Scythes
+		Stealth strikes make kunai pierce foes, travel farther, and spawn 5 homing scythes
 		'''
 }
 
@@ -1169,9 +1169,10 @@ Supernova: {
 	DisplayName: Supernova
 	Tooltip:
 		'''
-		Creates a massive explosion on impact
-		Explodes into spikes and homing energy
-		Stealth strikes release energy as they fly
+		Tosses a smart bomb that locks onto and tracks targets
+		If no target is found it will return to you
+		Each bomb creates a miniature supernova that drags in weak enemies and chases strong enemies
+		Stealth strikes create a blast that shakes the foundations of reality itself
 		'''
 }
 

@@ -3532,6 +3532,40 @@ PrepareToShoot:
             if (targetData.Type == NPCTargetType.Player)
                 targetDead = Main.player[npc.target].dead;
 
+            bool queenBeeHornet = npc.type == NPCID.HornetHoney && npc.ai[3] == 1f;
+            if (queenBeeHornet)
+            {
+                if (Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
+                {
+                    if (npc.localAI[1] != 0f && !Collision.SolidCollision(npc.position, npc.width, npc.height))
+                    {
+                        npc.localAI[1] = 0f;
+                        npc.localAI[2] = 0f;
+                        npc.SyncVanillaLocalAI();
+                    }
+                }
+                else if (npc.localAI[1] == 0f)
+                    npc.localAI[2]++;
+
+                if (npc.localAI[2] >= (CalamityWorld.death ? 60f : 120f))
+                {
+                    npc.localAI[1] = 1f;
+                    npc.localAI[2] = 0f;
+                    npc.SyncVanillaLocalAI();
+                }
+                if (npc.localAI[1] == 0f)
+                {
+                    npc.alpha = 0;
+                    npc.noTileCollide = false;
+                }
+                else
+                {
+                    npc.wet = false;
+                    npc.alpha = 200;
+                    npc.noTileCollide = true;
+                }
+            }
+
             bool deathModeVelocityBuff = true;
             float maxVelocity = 6f;
             float acceleration = 0.05f;
@@ -3562,13 +3596,24 @@ PrepareToShoot:
 
                 maxVelocity *= 1f - npc.scale;
                 acceleration *= 1f - npc.scale;
-                if ((double)(npc.position.Y / 16f) < Main.worldSurface)
+
+                // Despawn
+                if ((double)(npc.position.Y / 16f) < Main.worldSurface && !queenBeeHornet)
                 {
                     if (Main.player[npc.target].position.Y - npc.position.Y > 300f && npc.velocity.Y < 0f)
                         npc.velocity.Y *= 0.97f;
 
                     if (Main.player[npc.target].position.Y - npc.position.Y < 80f && npc.velocity.Y > 0f)
                         npc.velocity.Y *= 0.97f;
+                }
+
+                // Master Mode Queen Bee Hornets
+                if (queenBeeHornet)
+                {
+                    maxVelocity *= 1.4f;
+                    acceleration *= 1.8f;
+                    maxVelocity += npc.ai[2] * 1.5f;
+                    acceleration += npc.ai[2] * 0.01f;
                 }
             }
             else if (npc.type == NPCID.MossHornet)
@@ -3654,9 +3699,9 @@ PrepareToShoot:
                 acceleration *= 1.25f;
             }
 
-            Vector2 vector = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-            float targetXDist = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2);
-            float targetYDist = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2);
+            Vector2 vector = npc.Center;
+            float targetXDist = Main.player[npc.target].Center.X;
+            float targetYDist = Main.player[npc.target].Center.Y;
             targetXDist = (float)((int)(targetXDist / 8f) * 8);
             targetYDist = (float)((int)(targetYDist / 8f) * 8);
             vector.X = (float)((int)(vector.X / 8f) * 8);
@@ -3682,20 +3727,20 @@ PrepareToShoot:
                 targetYDist *= targetDistance;
             }
 
-            if (npc.type == NPCID.Hornet || npc.type == NPCID.MossHornet || (npc.type >= NPCID.HornetFatty && npc.type <= NPCID.HornetStingy) || npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Probe || npc.type == NPCID.Crimera || npc.type == NPCID.Moth || npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall || npc.type == NPCID.BloodSquid)
+            if (npc.type == NPCID.Hornet || npc.type == NPCID.MossHornet || (npc.type >= NPCID.HornetFatty && npc.type <= NPCID.HornetStingy) || npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.Moth || npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall || npc.type == NPCID.BloodSquid)
             {
                 if (targetDistCheck > 100f || npc.type == NPCID.Corruptor || npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall || npc.type == NPCID.BloodSquid || npc.type == NPCID.Hornet || npc.type == NPCID.MossHornet || (npc.type >= NPCID.HornetFatty && npc.type <= NPCID.HornetStingy))
                 {
                     npc.ai[0] += 1f;
                     if (npc.ai[0] > 0f)
-                        npc.velocity.Y = npc.velocity.Y + 0.03f;
+                        npc.velocity.Y += 0.03f;
                     else
-                        npc.velocity.Y = npc.velocity.Y - 0.03f;
+                        npc.velocity.Y -= 0.03f;
 
                     if (npc.ai[0] < -100f || npc.ai[0] > 100f)
-                        npc.velocity.X = npc.velocity.X + 0.03f;
+                        npc.velocity.X += 0.03f;
                     else
-                        npc.velocity.X = npc.velocity.X - 0.03f;
+                        npc.velocity.X -= 0.03f;
 
                     if (npc.ai[0] > 200f)
                         npc.ai[0] = -200f;
@@ -3703,10 +3748,11 @@ PrepareToShoot:
 
                 if (targetDistCheck < 150f && (npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.BloodSquid))
                 {
-                    npc.velocity.X = npc.velocity.X + targetXDist * 0.009f;
-                    npc.velocity.Y = npc.velocity.Y + targetYDist * 0.009f;
+                    npc.velocity.X += targetXDist * 0.009f;
+                    npc.velocity.Y += targetYDist * 0.009f;
                 }
 
+                // Master Mode Queen Bee Bees
                 if (npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall)
                 {
                     if (npc.ai[3] == 1f)
@@ -3745,28 +3791,28 @@ PrepareToShoot:
 
             if (npc.velocity.X < targetXDist)
             {
-                npc.velocity.X = npc.velocity.X + acceleration;
-                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.X < 0f && targetXDist > 0f)
-                    npc.velocity.X = npc.velocity.X + acceleration;
+                npc.velocity.X += acceleration;
+                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && !queenBeeHornet && npc.type != NPCID.BloodSquid && npc.velocity.X < 0f && targetXDist > 0f)
+                    npc.velocity.X += acceleration;
             }
             else if (npc.velocity.X > targetXDist)
             {
-                npc.velocity.X = npc.velocity.X - acceleration;
-                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.X > 0f && targetXDist < 0f)
-                    npc.velocity.X = npc.velocity.X - acceleration;
+                npc.velocity.X -= acceleration;
+                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && !queenBeeHornet && npc.type != NPCID.BloodSquid && npc.velocity.X > 0f && targetXDist < 0f)
+                    npc.velocity.X -= acceleration;
             }
 
             if (npc.velocity.Y < targetYDist)
             {
-                npc.velocity.Y = npc.velocity.Y + acceleration;
-                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.Y < 0f && targetYDist > 0f)
-                    npc.velocity.Y = npc.velocity.Y + acceleration;
+                npc.velocity.Y += acceleration;
+                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && !queenBeeHornet && npc.type != NPCID.BloodSquid && npc.velocity.Y < 0f && targetYDist > 0f)
+                    npc.velocity.Y += acceleration;
             }
             else if (npc.velocity.Y > targetYDist)
             {
-                npc.velocity.Y = npc.velocity.Y - acceleration;
-                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && npc.type != NPCID.Probe && npc.type != NPCID.BloodSquid && npc.velocity.Y > 0f && targetYDist < 0f)
-                    npc.velocity.Y = npc.velocity.Y - acceleration;
+                npc.velocity.Y -= acceleration;
+                if (npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.Corruptor && !queenBeeHornet && npc.type != NPCID.BloodSquid && npc.velocity.Y > 0f && targetYDist < 0f)
+                    npc.velocity.Y -= acceleration;
             }
 
             if (npc.type == NPCID.ServantofCthulhu)
@@ -3808,42 +3854,6 @@ PrepareToShoot:
                     npc.rotation = (float)Math.Atan2((double)targetYDist, (double)targetXDist) + MathHelper.Pi;
                 }
             }
-            else if (npc.type == NPCID.Probe)
-            {
-                if (npc.justHit)
-                    npc.localAI[0] = 0f;
-
-                npc.localAI[0] += 1f;
-                if (Main.netMode != NetmodeID.MultiplayerClient && npc.localAI[0] >= 120f)
-                {
-                    npc.localAI[0] = 0f;
-                    if (Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
-                    {
-                        int projDamage = 22;
-                        int projType = 84;
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector.X, vector.Y, targetXDist, targetYDist, projType, projDamage, 0f, Main.myPlayer, 0f, 0f);
-                    }
-                }
-
-                int npcXPos = (int)npc.position.X + npc.width / 2;
-                int npcTileY = (int)npc.position.Y + npc.height / 2;
-                int npcTileX = npcXPos / 16;
-                npcTileY /= 16;
-                if (!WorldGen.SolidTile(npcTileX, npcTileY))
-                    Lighting.AddLight((int)((npc.position.X + (float)(npc.width / 2)) / 16f), (int)((npc.position.Y + (float)(npc.height / 2)) / 16f), 0.3f, 0.1f, 0.05f);
-
-                if (targetXDist > 0f)
-                {
-                    npc.spriteDirection = 1;
-                    npc.rotation = (float)Math.Atan2((double)targetYDist, (double)targetXDist);
-                }
-
-                if (targetXDist < 0f)
-                {
-                    npc.spriteDirection = -1;
-                    npc.rotation = (float)Math.Atan2((double)targetYDist, (double)targetXDist) + MathHelper.Pi;
-                }
-            }
             else if (npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.BloodSquid)
             {
                 npc.rotation = (float)Math.Atan2((double)targetYDist, (double)targetXDist) - MathHelper.PiOver2;
@@ -3860,7 +3870,7 @@ PrepareToShoot:
             else
                 npc.rotation = (float)Math.Atan2((double)npc.velocity.Y, (double)npc.velocity.X) - MathHelper.PiOver2;
 
-            if (npc.type == NPCID.Hornet || npc.type == NPCID.MossHornet || (npc.type >= NPCID.HornetFatty && npc.type <= NPCID.HornetStingy) || npc.type == NPCID.EaterofSouls || npc.type == NPCID.MeteorHead || npc.type == NPCID.Corruptor || npc.type == NPCID.Probe || npc.type == NPCID.Crimera || npc.type == NPCID.Moth || npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall || npc.type == NPCID.BloodSquid)
+            if (npc.type == NPCID.Hornet || npc.type == NPCID.MossHornet || (npc.type >= NPCID.HornetFatty && npc.type <= NPCID.HornetStingy) || npc.type == NPCID.EaterofSouls || npc.type == NPCID.MeteorHead || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.Moth || npc.type == NPCID.Bee || npc.type == NPCID.BeeSmall || npc.type == NPCID.BloodSquid)
             {
                 float reboundSpeed = 0.7f;
                 if (npc.type == NPCID.EaterofSouls || npc.type == NPCID.Crimera)
@@ -3899,7 +3909,7 @@ PrepareToShoot:
                     dust.velocity.X *= 0.3f;
                     dust.velocity.Y *= 0.3f;
                 }
-                else if (npc.type != NPCID.Probe && npc.type != NPCID.Moth && npc.type != NPCID.Parrot && npc.type != NPCID.Bee && npc.type != NPCID.BeeSmall && Main.rand.NextBool(20))
+                else if (npc.type != NPCID.Moth && npc.type != NPCID.Parrot && npc.type != NPCID.Bee && npc.type != NPCID.BeeSmall && Main.rand.NextBool(20))
                 {
                     int dustType = 18;
                     if (npc.type == NPCID.Crimera)
@@ -3922,9 +3932,9 @@ PrepareToShoot:
             if ((npc.type == NPCID.EaterofSouls || npc.type == NPCID.Corruptor || npc.type == NPCID.Crimera || npc.type == NPCID.BloodSquid) && npc.wet)
             {
                 if (npc.velocity.Y > 0f)
-                    npc.velocity.Y = npc.velocity.Y * 0.95f;
+                    npc.velocity.Y *= 0.95f;
 
-                npc.velocity.Y = npc.velocity.Y - 0.4f;
+                npc.velocity.Y -= 0.4f;
                 if (npc.velocity.Y < -3f)
                     npc.velocity.Y = -3f;
             }
@@ -3932,9 +3942,9 @@ PrepareToShoot:
             if (npc.type == NPCID.Moth && npc.wet)
             {
                 if (npc.velocity.Y > 0f)
-                    npc.velocity.Y = npc.velocity.Y * 0.95f;
+                    npc.velocity.Y *= 0.95f;
 
-                npc.velocity.Y = npc.velocity.Y - 0.7f;
+                npc.velocity.Y -= 0.7f;
                 if (npc.velocity.Y < -6f)
                     npc.velocity.Y = -6f;
 
@@ -3963,8 +3973,8 @@ PrepareToShoot:
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    npc.ai[1] += (npc.type == NPCID.MossHornet ? 2f : 1f);
-                    if (npc.justHit)
+                    npc.ai[1] += ((npc.type == NPCID.MossHornet || queenBeeHornet) ? 2f : 1f) + npc.ai[2];
+                    if (npc.justHit && !queenBeeHornet)
                         npc.ai[1] = 0f;
 
                     if (npc.ai[1] >= 240f)
@@ -3972,7 +3982,11 @@ PrepareToShoot:
                         if (targetData.Type != 0 && Collision.CanHit(npc, targetData))
                         {
                             float projSpeed = (CalamityWorld.death || Main.hardMode) ? 5f : 8f;
-                            Vector2 projSpawnPosition = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height / 2);
+                            projSpeed += npc.ai[2] * ((CalamityWorld.death || Main.hardMode) ? 2f : 4f);
+                            if (queenBeeHornet)
+                                projSpeed += 2f;
+
+                            Vector2 projSpawnPosition = npc.Center;
                             float projTargetXDist = targetData.Center.X - projSpawnPosition.X;
                             float projTargetYDist = targetData.Center.Y - projSpawnPosition.Y;
                             if ((projTargetXDist < 0f && npc.velocity.X < 0f) || (projTargetXDist > 0f && npc.velocity.X > 0f))
@@ -3981,7 +3995,9 @@ PrepareToShoot:
                                 projTargetDistance = projSpeed / projTargetDistance;
                                 projTargetXDist *= projTargetDistance;
                                 projTargetYDist *= projTargetDistance;
-                                int projDamage = (int)(10f * npc.scale);
+
+                                // Master Mode Queen Bee Hornets deal increased damage
+                                int projDamage = (int)((queenBeeHornet ? 15f : 10f) * npc.scale);
                                 if (npc.type == NPCID.MossHornet)
                                     projDamage = (int)(30f * npc.scale);
 
@@ -4001,15 +4017,15 @@ PrepareToShoot:
                 }
             }
 
-            if (npc.type == NPCID.Probe & flag)
+            if (queenBeeHornet & flag)
             {
                 if ((npc.velocity.X > 0f && targetXDist > 0f) || (npc.velocity.X < 0f && targetXDist < 0f))
                 {
                     if (Math.Abs(npc.velocity.X) < 12f)
-                        npc.velocity.X = npc.velocity.X * 1.05f;
+                        npc.velocity.X *= 1.05f;
                 }
                 else
-                    npc.velocity.X = npc.velocity.X * 0.9f;
+                    npc.velocity.X *= 0.9f;
             }
 
             if (Main.netMode != NetmodeID.MultiplayerClient && !targetDead)
@@ -4082,7 +4098,7 @@ PrepareToShoot:
 
             if ((Main.dayTime && npc.type != NPCID.Crimera && npc.type != NPCID.EaterofSouls && npc.type != NPCID.MeteorHead && npc.type != NPCID.Bee && npc.type != NPCID.BeeSmall && npc.type != NPCID.Corruptor && npc.type != NPCID.Moth && npc.type != NPCID.Parrot && npc.type != NPCID.BloodSquid) || Main.player[npc.target].dead)
             {
-                npc.velocity.Y = npc.velocity.Y - acceleration * 2f;
+                npc.velocity.Y -= acceleration * 2f;
                 if (npc.timeLeft > 10)
                     npc.timeLeft = 10;
             }
@@ -7427,7 +7443,7 @@ PrepareToShoot:
             if (npc.ai[3] == 0f)
             {
                 npc.position.X += 8f;
-                if (npc.position.Y / 16f > Main.maxTilesY - 200f)
+                if (npc.position.Y / 16f > Main.UnderworldLayer)
                 {
                     npc.ai[3] = 3f;
                 }

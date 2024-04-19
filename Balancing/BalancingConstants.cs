@@ -18,6 +18,18 @@
         internal const float BalloonJumpSpeedBoost = 0.75f;
         #endregion
 
+        #region Immunity Frames
+        // Default immunity frame rules
+        internal const int VanillaDefaultIFrames = 40;
+        internal const int VanillaParryIFrames = 60;
+        internal const int VanillaDodgeIFrames = 80;
+
+        // In vanilla, the Cross Necklace grants +40 iframes to all hits except for in PvP (where it does nothing)
+        // and Brand of the Inferno (where it only gives +30 instead).
+        internal const int CrossNecklaceIFrameBoost = 40;
+        internal const int CrossNecklaceIFrameBoost_Parry = 30;
+        #endregion
+
         #region Dashes and Dodges
         // Dash cooldowns (in frames)
         internal const int UniversalDashCooldown = 30;
@@ -86,11 +98,15 @@
         #endregion
 
         #region Life Steal
+        // Life steal cap
+        internal static readonly int LifeStealCap = 100;
+        
         // Life steal accessories require a more strict cooldown due to their ease of use and global application
         internal static readonly float LifeStealAccessoryCooldownMultiplier = 3f;
 
-        // Life steal cooldown multiplier used for armor set bonuses
+        // Life steal cooldown multipliers used for armor set bonuses
         internal static readonly float LifeStealSetBonusCooldownMultiplier = 2f;
+        internal static readonly float LifeStealReaverTankCooldownMultiplier = 4f;
 
         // The range was buffed in vanilla from 1200 to 3000 in 1.4.4, and I agree with that decision
         internal static readonly float LifeStealRange = 3000f;

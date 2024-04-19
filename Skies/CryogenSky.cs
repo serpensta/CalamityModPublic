@@ -143,7 +143,7 @@ namespace CalamityMod.Skies
                         auroraColor *= fadeInLerp;
                     if (FadeoutTimer > 0f)
                         auroraColor *= fadeOutLerp;
-                    if (Main.dayTime)
+                    if (Main.IsItDay())
                         auroraColor *= 0.4f;
 
                     float yBrightness = MathHelper.Lerp(1.5f, 0.5f, 1f - MathHelper.Clamp((Auroras[i].Center.Y + 300f) / 200f, 0f, 1f)) * 1.3f;

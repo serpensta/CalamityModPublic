@@ -1217,12 +1217,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 int projectileType = (phase3 || masterMode) ? ProjectileID.InfernoHostileBolt : ProjectileID.Fireball;
                 int damage = npc.GetProjectileDamage(projectileType);
-                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), freeHeadCenter.X, freeHeadCenter.Y, freeHeadTargetX, freeHeadTargetY, projectileType, damage, 0f, Main.myPlayer);
+                float ai0 = projectileType == ProjectileID.InfernoHostileBolt ? Main.player[npc.target].Center.X : 0f;
+                float ai1 = projectileType == ProjectileID.InfernoHostileBolt ? Main.player[npc.target].Center.Y : 0f;
+                float ai2 = projectileType == ProjectileID.InfernoHostileBolt ? 1f : 0f;
+                int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), freeHeadCenter.X, freeHeadCenter.Y, freeHeadTargetX, freeHeadTargetY, projectileType, damage, 0f, Main.myPlayer, ai0, ai1, ai2);
                 if (projectileType == ProjectileID.InfernoHostileBolt)
                 {
                     Main.projectile[proj].timeLeft = 300;
-                    Main.projectile[proj].ai[0] = Main.player[npc.target].Center.X;
-                    Main.projectile[proj].ai[1] = Main.player[npc.target].Center.Y;
                     Main.projectile[proj].netUpdate = true;
                 }
                 else

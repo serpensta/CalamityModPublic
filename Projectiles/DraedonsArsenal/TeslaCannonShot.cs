@@ -236,7 +236,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 int randomDustType = Main.rand.NextBool(2)? dustArray[4] : dustArray[5];
                 float scale = randomDustType == dustArray[4] ? 1.5f : 1f;
 
-                int electricDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 200, default, 2.5f * scale);
+                int electricDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 200, default, 2.5f * scale);
                 Main.dust[electricDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(MathHelper.Pi) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
                 Main.dust[electricDust].noGravity = true;
 
@@ -244,7 +244,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 dust.velocity *= 3f;
                 dust = Main.dust[electricDust];
 
-                electricDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 100, default, 1.5f * scale);
+                electricDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 100, default, 1.5f * scale);
                 Main.dust[electricDust].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(MathHelper.Pi) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
 
                 dust = Main.dust[electricDust];
@@ -265,7 +265,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 int randomDustType = Main.rand.NextBool(2)? dustArray[4] : dustArray[5];
                 float scale = randomDustType == dustArray[4] ? 1.5f : 1f;
 
-                int electricDust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 0, default, 3f * scale);
+                int electricDust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, randomDustType, dustVel.X, dustVel.Y, 0, default, 3f * scale);
                 Main.dust[electricDust2].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(MathHelper.Pi).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.width / 3f;
                 Main.dust[electricDust2].noGravity = true;
 

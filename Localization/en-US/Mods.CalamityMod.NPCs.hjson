@@ -146,6 +146,7 @@ AeroSlime.DisplayName: Aero Slime
 ArmoredDiggerHead.DisplayName: Armored Digger
 MechanizedSerpent: Mechanized Serpent
 AuroraSpirit.DisplayName: Aurora Spirit
+BloodlettingServant.DisplayName: Bloodletting Servant
 BloomSlime.DisplayName: Bloom Slime
 Bohldohr.DisplayName: Bohldohr
 Cnidrion.DisplayName: Cnidrion
@@ -167,7 +168,10 @@ Frogfish.DisplayName: Frogfish
 Horse.DisplayName: Earth Elemental
 IceClasper.DisplayName: Ice Clasper
 ImpiousImmolator.DisplayName: Impious Immolator
-KingSlimeJewel.DisplayName: Crown Jewel
+KingSlimeJewel.DisplayName: Ruby Jewel
+KingSlimeJewel2.DisplayName: Sapphire Jewel
+KingSlimeJewel3.DisplayName: Emerald Jewel
+LavaSlimeNoLavaDrop.DisplayName: Lava Slime
 MantisShrimp.DisplayName: Mantis Shrimp
 OverloadedSoldier.DisplayName: Overloaded Soldier
 PerennialSlime.DisplayName: Perennial Slime
