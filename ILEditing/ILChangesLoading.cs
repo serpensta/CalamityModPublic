@@ -80,6 +80,7 @@ namespace CalamityMod.ILEditing
             On_NPC.Collision_DecideFallThroughPlatforms += EnableCalamityBossPlatformCollision;
             IL_Wiring.HitWireSingle += AddTwinklersToStatue;
             On_Player.UpdateItemDye += FindCalamityItemDyeShader;
+            On_Item.GetShimmered += ShimmerEffectEdits;
 
             // Mana Burn (Chaos Stone) and Chalice of the Blood God
             IL_Player.ApplyLifeAndOrMana += ManaSicknessAndChaliceBufferHeal;
