@@ -29,7 +29,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2.25f;
-            Item.value = CalamityGlobalItem.Rarity5BuyPrice;
+            Item.value = CalamityGlobalItem.RarityPinkBuyPrice;
             Item.rare = ItemRarityID.Pink;
             Item.UseSound = ShootSound;
             Item.autoReuse = true;

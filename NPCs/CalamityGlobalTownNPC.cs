@@ -1082,7 +1082,7 @@ namespace CalamityMod.NPCs
             if (type == NPCID.Merchant)
             {
                 shop.AddWithCustomValue(ItemID.Bottle, Item.buyPrice(copper: 20), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ItemID.WormholePotion, Item.buyPrice(copper: 25), potionSells, Condition.HappyEnough);
+                .AddWithCustomValue(ItemID.WormholePotion, Item.buyPrice(silver: 5), potionSells, Condition.HappyEnough);
                 shop.Add(ItemID.HealingPotion, potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
                 .Add(ItemID.ManaPotion, potionSells, Condition.HappyEnough, Condition.DownedEowOrBoc)
                 .Add(ItemID.Flare, hasFlareGunUpgrade)
@@ -1181,9 +1181,9 @@ namespace CalamityMod.NPCs
 
             if (type == NPCID.Wizard)
             {
-                shop.Add(ItemType<HowlsHeart>())
+                shop.AddWithCustomValue(ItemType<HowlsHeart>(), CalamityGlobalItem.RarityLightRedBuyPrice * 3)
                 .AddWithCustomValue(ItemID.MagicMissile, Item.buyPrice(gold: 5))
-                .AddWithCustomValue(ItemID.RodofDiscord, Item.buyPrice(gold: 12, silver: 50), Condition.Hardmode, Condition.InHallow)
+                .AddWithCustomValue(ItemID.RodofDiscord, Item.buyPrice(gold: 50), Condition.Hardmode, Condition.InHallow)
                 .AddWithCustomValue(ItemID.SpectreStaff, Item.buyPrice(gold: 25), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.InfernoFork, Item.buyPrice(gold: 25), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.ShadowbeamStaff, Item.buyPrice(gold: 25), Condition.DownedGolem)
@@ -1194,8 +1194,9 @@ namespace CalamityMod.NPCs
             {
                 shop.Add(ItemType<SunkenSeaFountain>())
                 .Add(ItemType<SulphurousFountainItem>())
-                .Add(ItemType<AbyssFountainItem>(), Condition.Hardmode)
-                .Add(ItemType<AstralFountainItem>(), Condition.Hardmode)
+                .Add(ItemType<AbyssFountainItem>())
+                .Add(ItemType<AstralFountainItem>())
+                .Add(ItemType<BrimstoneLavaFountainItem>())
                 .AddWithCustomValue(ItemID.ButterflyDust, Item.buyPrice(gold: 10), Condition.DownedGolem)
                 .AddWithCustomValue(ItemID.FriedEgg, Item.buyPrice(gold: 2, silver: 50), Condition.HappyEnough);
             }
