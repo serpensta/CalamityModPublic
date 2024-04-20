@@ -9,7 +9,9 @@ using CalamityMod.Events;
 using CalamityMod.FluidSimulation;
 using CalamityMod.ForegroundDrawing;
 using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Accessories.Vanity;
 using CalamityMod.Items.Dyes;
+using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.Astral;
 using CalamityMod.NPCs.AstrumAureus;
@@ -29,6 +31,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Achievements;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.Liquid;
@@ -1359,6 +1362,35 @@ namespace CalamityMod.ILEditing
             cursor.EmitDelegate<Func<bool, bool>>((x) => !x);
 
             // The next (untouched) instruction stores this value into Player.scope.
+        }
+        #endregion
+
+        #region Shimmer effect edits
+        public static void ShimmerEffectEdits(Terraria.On_Item.orig_GetShimmered orig, Item self)
+        {
+            // Don't keep the original stack amount when shimmering Fabsol's Vodka into Crystal Heart Vodka
+            if (self.type == ModContent.ItemType<FabsolsVodka>())
+            {
+                self.SetDefaults(ModContent.ItemType<CrystalHeartVodka>());
+                self.shimmered = true;
+                self.shimmerWet = true;
+                self.wet = true;
+                self.velocity *= 0.1f;
+                if (Main.netMode == 0)
+                {
+                    Item.ShimmerEffect(self.Center);
+                }
+                else
+                {
+                    NetMessage.SendData(146, -1, -1, null, 0, (int)self.Center.X, (int)self.Center.Y);
+                    NetMessage.SendData(145, -1, -1, null, self.whoAmI, 1f);
+                }
+                AchievementsHelper.NotifyProgressionEvent(27);
+            }
+            else
+            {
+                orig(self);
+            }
         }
         #endregion
     }
