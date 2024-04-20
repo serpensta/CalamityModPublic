@@ -35,7 +35,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
             Item.value = CalamityGlobalItem.RarityOrangeBuyPrice;
             Item.rare = ItemRarityID.Orange;
 
-            Item.shoot = ModContent.ProjectileType<PulseRifleShot>();
+            Item.shoot = ModContent.ProjectileType<PulsePistolShot>();
             Item.shootSpeed = 5.2f; // This may seem low but the shot has 10 extra updates.
 
             modItem.UsesCharge = true;

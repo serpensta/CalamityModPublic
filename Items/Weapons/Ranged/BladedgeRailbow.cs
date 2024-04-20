@@ -38,7 +38,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             ProjectileID.Hellwing,
             ProjectileID.FrostArrow,
             ProjectileID.BoneArrow,
-            ProjectileID.PhantasmArrow,
             ProjectileID.DD2PhoenixBowShot,
             ProjectileID.PulseBolt,
             ProjectileID.ShadowFlameArrow,
@@ -52,7 +51,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             ModContent.ProjectileType<TerraArrowMain>(),
             ModContent.ProjectileType<TerraArrowSplit>(),
             ModContent.ProjectileType<VanquisherArrowProj>(),
-            ModContent.ProjectileType<VeriumBoltProj>(),
             ModContent.ProjectileType<TyphoonArrow>(),
             ModContent.ProjectileType<MiniSharkron>(),
             ModContent.ProjectileType<TorrentialArrow>(),
@@ -144,13 +142,16 @@ namespace CalamityMod.Items.Weapons.Ranged
 
                 int projType;
                 if (Main.zenithWorld)
-                    projType = arrowArr[Main.rand.Next(0, 68)];
+                    projType = arrowArr[Main.rand.Next(0, arrowArr.Length)];
                 else
                     projType = ProjectileID.Leaf;
 
                 int projectile = Projectile.NewProjectile(source, realPlayerPos.X + offsetSpawn.X, realPlayerPos.Y + offsetSpawn.Y, velocity.X, velocity.Y, projType, damage, 0f, player.whoAmI);
+                // Now for the special conditions to fix stuff...
                 if (projectile.WithinBounds(Main.maxProjectiles) && (projType == ProjectileID.Leaf || projType == ModContent.ProjectileType<SlimeStream>()))
                     Main.projectile[projectile].DamageType = DamageClass.Ranged;
+                if (projType == ModContent.ProjectileType<AstrealArrow>() || projType == ModContent.ProjectileType<CorrodedShell>() || projType == ModContent.ProjectileType<Shell>())
+                    Main.projectile[projectile].velocity /= 2;
             }
             return false;
         }

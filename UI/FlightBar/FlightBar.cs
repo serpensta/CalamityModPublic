@@ -44,7 +44,7 @@ namespace CalamityMod.UI
         {
             Player player = modPlayer.Player;
             object result;
-            if (player.equippedWings != null && !player.mount.Active && player.wingTimeMax == 0 && modPlayer.Player.mount._data.flightTimeMax == 0)
+            if (player.equippedWings != null && player.wingTimeMax == 0 && !(player.mount.Active && player.mount._data.flightTimeMax > 0))
                 result = 0;
             if ((modPlayer.infiniteFlight || RidingInfiniteFlightMount(modPlayer.Player)) && completedAnimation)
             {
@@ -52,8 +52,10 @@ namespace CalamityMod.UI
             }
             else
             {
-                int currentFlight = modPlayer.Player.mount._data.flightTimeMax > 0 ? player.mount._flyTime : (int)player.wingTime;
-                int maxFlight = modPlayer.Player.mount._data.flightTimeMax > 0 ? player.mount._data.flightTimeMax : player.wingTimeMax;
+                bool ridingLimitedFlightMount = player.mount.Active && player.mount._data.flightTimeMax > 0;
+
+                int currentFlight = ridingLimitedFlightMount ? player.mount._flyTime + (int)(player.mount._data.fatigueMax - player.mount._fatigue) : (int)player.wingTime;
+                int maxFlight = ridingLimitedFlightMount ? player.mount._data.flightTimeMax + (int)player.mount._data.fatigueMax : player.wingTimeMax;
                 return (Math.Min(100f * currentFlight / maxFlight, 100f)).ToString("0.00"); // why the FUCK can wingtime be higher than max wingtime?????????
             }
 
@@ -188,7 +190,9 @@ namespace CalamityMod.UI
         {
             float uiScale = Main.UIScale;
             Player player = modPlayer.Player;
-            float flightRatio = player.mount.Active && player.mount._data.flightTimeMax > 0 ? Math.Min((float)player.mount._flyTime / player.mount._data.flightTimeMax, 1f) : Math.Min(player.wingTime / player.wingTimeMax, 1f); // why the FUCK can wingtime be higher than max wingtime?????????
+            float flightRatio = 1;
+            if (!modPlayer.infiniteFlight && !RidingInfiniteFlightMount(player))
+                flightRatio = player.mount.Active && player.mount._data.flightTimeMax > 0 ? Math.Min((float)(player.mount._flyTime + (player.mount._data.fatigueMax - player.mount._fatigue)) / (player.mount._data.flightTimeMax + player.mount._data.fatigueMax), 1f) : Math.Min(player.wingTime / player.wingTimeMax, 1f); // why the FUCK can wingtime be higher than max wingtime?????????
             if (!completedAnimation && FlightAnimFrame == -1 && (modPlayer.infiniteFlight || RidingInfiniteFlightMount(modPlayer.Player)))
                 FlightAnimFrame++;
             if (FlightAnimFrame > -1) //animation started, complete it.

@@ -459,7 +459,7 @@ ElementalEruption: {
 
 EternalBlizzard: {
 	DisplayName: Eternal Blizzard
-	Tooltip: Fires an additional icicle arrow that shatters on impact
+	Tooltip: Fires an additional icicle arrow that freezes into a falling icicle
 }
 
 Eviscerator: {
