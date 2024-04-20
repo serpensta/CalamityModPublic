@@ -112,7 +112,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (NPC.CountNPCS(NPCID.LeechHead) < 10)
                     {
                         int leechSpawn = NPC.NewNPC(npc.GetSource_FromAI(), (int)(npc.Center.X), (int)(npc.Center.Y + 20f), NPCID.LeechHead, 1);
-                        int leechVelocity = masterMode ? 14 : 9;
+                        int leechVelocity = masterMode ? 12 : 9;
                         Main.npc[leechSpawn].velocity.X = npc.direction * leechVelocity;
                     }
 
