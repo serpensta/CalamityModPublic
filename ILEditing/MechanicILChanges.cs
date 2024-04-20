@@ -1375,9 +1375,9 @@ namespace CalamityMod.ILEditing
 
             string difficultyText = expertText;
             Color difficultyColor = gameModeColor;
-            for (int i = WorldSelectionDifficultySystem.difficulties.Count - 1; i >= 0; i--)
+            for (int i = WorldSelectionDifficultySystem.WorldDifficulties.Count - 1; i >= 0; i--)
             {
-                WorldSelectionDifficultySystem.WorldDifficulty d = WorldSelectionDifficultySystem.difficulties[i];
+                WorldSelectionDifficultySystem.WorldDifficulty d = WorldSelectionDifficultySystem.WorldDifficulties[i];
                 {
                     if (d.function(self))
                     {

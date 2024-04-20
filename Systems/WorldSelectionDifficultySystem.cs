@@ -22,12 +22,12 @@ namespace CalamityMod.Systems
             string legend = CalamityUtils.GetTextValue("UI.Legend");
             string plus = "+";
 
-            difficulties.Add(new WorldDifficulty(revenge, GetRevengeance, new(211, 42, 42)));
-            difficulties.Add(new WorldDifficulty(death, GetDeath, new(192, 64, 219)));
-            difficulties.Add(new WorldDifficulty(rev + plus + master, GetMasterRevengeance, new(124, 153, 242)));
-            difficulties.Add(new WorldDifficulty(death + plus + master, GetMasterDeath, new(255, 25, 255)));
-            difficulties.Add(new WorldDifficulty(rev + plus + legend, GetLegendRevengeance, new(240, 128, 128)));
-            difficulties.Add(new WorldDifficulty(death + plus + legend, GetLegendDeath, new(220, 255, 132)));
+            WorldDifficulties.Add(new WorldDifficulty(revenge, GetRevengeance, new(211, 42, 42)));
+            WorldDifficulties.Add(new WorldDifficulty(death, GetDeath, new(192, 64, 219)));
+            WorldDifficulties.Add(new WorldDifficulty(rev + plus + master, GetMasterRevengeance, new(124, 153, 242)));
+            WorldDifficulties.Add(new WorldDifficulty(death + plus + master, GetMasterDeath, new(255, 25, 255)));
+            WorldDifficulties.Add(new WorldDifficulty(rev + plus + legend, GetLegendRevengeance, new(240, 128, 128)));
+            WorldDifficulties.Add(new WorldDifficulty(death + plus + legend, GetLegendDeath, new(220, 255, 132)));
         }
 
         // Since CalamityWorld is static, and therefore invalid for TryGetHeaderData, make copies for Rev and Death
@@ -39,7 +39,7 @@ namespace CalamityMod.Systems
 
         public record WorldDifficulty(string name, Func<AWorldListItem, bool> function, Color color);
 
-        public static List<WorldDifficulty> difficulties = new List<WorldDifficulty>();
+        public static List<WorldDifficulty> WorldDifficulties = new List<WorldDifficulty>();
         public static bool GetRevengeance(AWorldListItem item)
         {
             if (item.Data.TryGetHeaderData<WorldSelectionDifficultySystem>(out TagCompound tag))
