@@ -136,11 +136,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int type = ProjectileID.Fireball;
                                 damage = npc.GetProjectileDamage(type);
                                 int numProj = 3;
-                                int spread = 30;
+                                int spread = 15;
                                 float rotation = MathHelper.ToRadians(spread);
                                 for (int j = 0; j < numProj; j++)
                                 {
-                                    Vector2 randomVelocity = Main.rand.NextVector2CircularEdge(2f, 2f);
+                                    Vector2 randomVelocity = Main.rand.NextVector2CircularEdge(1.5f, 1.5f);
                                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1))) + randomVelocity;
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                                 }
@@ -600,9 +600,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 float distanceAboveTarget = 240f * npc.ai[0];
                 float distanceAwayFromTargetX = 560f;
+                float distanceAwayFromTargetXLeeway = 40f;
                 float distanceAwayFromTargetY = Main.player[npc.target].Center.Y - npc.Center.Y;
-                float distanceAwayFromTargetYLeeway = 48f;
-                bool tooFarX = Math.Abs(Main.player[npc.target].Center.X - npc.Center.X) > distanceAwayFromTargetX;
+                float distanceAwayFromTargetYLeeway = 40f;
+                float absoluteDistanceX = Math.Abs(Main.player[npc.target].Center.X - npc.Center.X);
+                bool tooFarX = absoluteDistanceX > distanceAwayFromTargetX + distanceAwayFromTargetXLeeway || absoluteDistanceX < distanceAwayFromTargetX - distanceAwayFromTargetXLeeway;
                 bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
                 if (tooFar)

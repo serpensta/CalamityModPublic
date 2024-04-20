@@ -306,7 +306,6 @@ namespace CalamityMod.CalPlayer
 
         #region Pet
         public bool thirdSage = false;
-        public bool thirdSageH = false;
         public bool perfmini = false;
         public bool akato = false;
         public bool yharonPet = false;
@@ -1235,7 +1234,6 @@ namespace CalamityMod.CalPlayer
             adrenalineBoostThree = false;
             drawBossHPBar = true;
             shouldDrawSmallText = true;
-            healToFull = false;
 
             newMerchantInventory = false;
             newPainterInventory = false;
@@ -1288,7 +1286,6 @@ namespace CalamityMod.CalPlayer
             boost.AddWithCondition("adrenalineThree", adrenalineBoostThree);
             boost.AddWithCondition("bossHPBar", drawBossHPBar);
             boost.AddWithCondition("drawSmallText", shouldDrawSmallText);
-            boost.AddWithCondition("fullHPRespawn", healToFull);
 
             boost.AddWithCondition("newMerchantInventory", newMerchantInventory);
             boost.AddWithCondition("newPainterInventory", newPainterInventory);
@@ -1379,7 +1376,6 @@ namespace CalamityMod.CalPlayer
             adrenalineBoostThree = boost.Contains("adrenalineThree");
             drawBossHPBar = boost.Contains("bossHPBar");
             shouldDrawSmallText = boost.Contains("drawSmallText");
-            healToFull = boost.Contains("fullHPRespawn");
 
             newMerchantInventory = boost.Contains("newMerchantInventory");
             newPainterInventory = boost.Contains("newPainterInventory");
@@ -3735,8 +3731,7 @@ namespace CalamityMod.CalPlayer
         #region On Respawn
         public override void OnRespawn()
         {
-            if (healToFull)
-                thirdSageH = true;
+            healToFull = true;
 
             // The player rotation can be off if the player dies at the right time when using Final Dawn.
             Player.fullRotation = 0f;

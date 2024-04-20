@@ -2962,9 +2962,9 @@ namespace CalamityMod.CalPlayer
             // The player's true max life value with Calamity adjustments
             actualMaxLife = Player.statLifeMax2;
 
-            if (thirdSageH && !Player.dead && healToFull)
+            if (!Player.dead && healToFull)
             {
-                thirdSageH = false;
+                healToFull = false;
                 Player.statLife = actualMaxLife;
             }
 

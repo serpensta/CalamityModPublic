@@ -1001,9 +1001,6 @@ namespace CalamityMod
                 "StarlightFuelCell" => player.Calamity().adrenalineBoostTwo,
                 "Ectoheart" => player.Calamity().adrenalineBoostThree,
 
-                "HermitsBox" => player.Calamity().healToFull,
-                "HermitsBoxofOneHundredMedicines" => player.Calamity().healToFull,
-
                 "CelestialOnion" => player.Calamity().extraAccessoryML,
 
                 _ => false, // Return false if no case is found
@@ -1032,9 +1029,6 @@ namespace CalamityMod
                 case "ElectrolyteGelPack": player.Calamity().adrenalineBoostOne = value; break;
                 case "StarlightFuelCell": player.Calamity().adrenalineBoostTwo = value; break;
                 case "Ectoheart": player.Calamity().adrenalineBoostThree = value; break;
-
-                case "HermitsBox": player.Calamity().healToFull = value; break;
-                case "HermitsBoxofOneHundredMedicines": player.Calamity().healToFull = value; break;
 
                 case "CelestialOnion": player.Calamity().extraAccessoryML = value; break;
             };
