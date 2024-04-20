@@ -123,14 +123,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         Vector2 projectileSpawn = npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f;
 
                         int damage = npc.GetProjectileDamage(ProjectileID.DemonSickle);
-                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, ProjectileID.DemonSickle, damage, 0f, Main.myPlayer, 0f, projectileVelocity.Length() * 3f);
+                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, ProjectileID.DemonSickle, damage, 0f, Main.myPlayer, 0f, projectileVelocity.Length() * 2.5f);
                         Main.projectile[proj].timeLeft = 600;
                         Main.projectile[proj].tileCollide = false;
 
                         if (masterMode)
                         {
-                            float fireballVelocity = 3f;
-                            projectileVelocity = projectileVelocity.SafeNormalize(Vector2.UnitY) * (npc.velocity.Length() + fireballVelocity);
+                            float fireballVelocity = npc.velocity.Length() + 3f;
+                            projectileVelocity = projectileVelocity.SafeNormalize(Vector2.UnitY) * fireballVelocity;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 int type = ProjectileID.Fireball;
@@ -138,9 +138,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int numProj = 3;
                                 int spread = 15;
                                 float rotation = MathHelper.ToRadians(spread);
+                                fireballVelocity *= 0.1f;
                                 for (int j = 0; j < numProj; j++)
                                 {
-                                    Vector2 randomVelocity = Main.rand.NextVector2CircularEdge(1.5f, 1.5f);
+                                    Vector2 randomVelocity = Main.rand.NextVector2CircularEdge(fireballVelocity, fireballVelocity);
                                     Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1))) + randomVelocity;
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + perturbedSpeed.SafeNormalize(Vector2.UnitY) * 50f, perturbedSpeed, type, damage, 0f, Main.myPlayer);
                                 }
