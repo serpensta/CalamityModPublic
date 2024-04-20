@@ -598,8 +598,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
             else
             {
-                float distance = 400f;
-                float distanceAboveTarget = distance * npc.ai[0];
+                float distance = 480f;
+                float distanceAboveTarget = distance * 0.5f * npc.ai[0];
                 float distanceAwayFromTargetX = distance * npc.ai[3];
                 float distanceAwayFromTargetY = Main.player[npc.target].Center.Y - npc.Center.Y;
                 float distanceAwayFromTargetYLeeway = 48f;
@@ -610,7 +610,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 {
                     Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * distanceAboveTarget + Vector2.UnitX * distanceAwayFromTargetX;
                     Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * 16f;
-                    npc.SimpleFlyMovement(idealVelocity, 0.3f);
+                    npc.SimpleFlyMovement(idealVelocity, 0.36f);
                 }
 
                 float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
@@ -645,7 +645,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             Vector2 eyeLocation = npc.Center;
             float predictionAmount = MathHelper.Lerp(0f, 20f, (float)Math.Sqrt(1f - lifeRatio));
-            Vector2 lookAt = Main.player[npc.target].Center + (masterMode ? (Main.player[npc.target].velocity * predictionAmount) : Vector2.Zero);
+            Vector2 lookAt = Main.player[npc.target].Center + (bossRush ? (Main.player[npc.target].velocity * predictionAmount) : Vector2.Zero);
             float eyeTargetX = lookAt.X - eyeLocation.X;
             float eyeTargetY = lookAt.Y - eyeLocation.Y;
             float wallVelocity = (float)Math.Sqrt(eyeTargetX * eyeTargetX + eyeTargetY * eyeTargetY);

@@ -13,6 +13,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
     public static class EaterOfWorldsAI
     {
         private const int TotalMasterModeWorms = 4;
+        public const float DRIncreaseTime = 600f;
 
         public static bool BuffedEaterofWorldsAI(NPC npc, Mod mod)
         {
@@ -48,7 +49,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (tile.WallType == WallID.EbonstoneUnsafe)
                 enrage = false;
 
-            float enrageScale = bossRush ? 1.5f : 0f;
+            float enrageScale = bossRush ? 0.5f : 0f;
             if (((npc.position.Y / 16f) < Main.worldSurface && enrage) || bossRush)
             {
                 calamityGlobalNPC.CurrentlyEnraged = !bossRush;
@@ -70,7 +71,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float lifeRatio = MathHelper.Clamp(segmentCount / totalSegments, 0f, 1f);
 
             // 10 seconds of resistance to prevent spawn killing
-            if (calamityGlobalNPC.newAI[1] < 600f && bossRush)
+            if (calamityGlobalNPC.newAI[1] < DRIncreaseTime)
                 calamityGlobalNPC.newAI[1] += 1f;
 
             // Phases
@@ -434,9 +435,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             else
             {
                 // Prevent new heads from being slowed when they spawn
-                if (calamityGlobalNPC.newAI[1] < 3f)
+                if (calamityGlobalNPC.newAI[2] < 3f)
                 {
-                    calamityGlobalNPC.newAI[1] += 1f;
+                    calamityGlobalNPC.newAI[2] += 1f;
 
                     // Set velocity for when a new head spawns
                     // Only set this if the head is far enough away from the player, to avoid unfair hits

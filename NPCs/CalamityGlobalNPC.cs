@@ -3217,13 +3217,12 @@ namespace CalamityMod.NPCs
             ApplyDR(npc, ref modifiers);
 
             // Damage reduction on spawn for certain worm bosses.
-            bool eaterofWorldsResist = CalamityLists.EaterofWorldsIDs.Contains(npc.type) && BossRushEvent.BossRushActive;
+            if (CalamityLists.EaterofWorldsIDs.Contains(npc.type))
+                modifiers.FinalDamage *= 1f - MathHelper.Lerp(BossRushEvent.BossRushActive ? 0.8f : 0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / EaterOfWorldsAI.DRIncreaseTime, 0f, 1f));
             if (CalamityLists.DestroyerIDs.Contains(npc.type))
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / DestroyerAI.DRIncraeseTime, 0f, 1f));
             if (CalamityLists.AstrumDeusIDs.Contains(npc.type))
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
-            if (eaterofWorldsResist)
-                modifiers.FinalDamage *= 0.05f;
         }
 
         // Directly modifies final damage incoming to an NPC based on their DR (damage reduction) stat added by Calamity.
