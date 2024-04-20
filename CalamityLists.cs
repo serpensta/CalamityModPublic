@@ -2029,6 +2029,7 @@ namespace CalamityMod
                 ProjectileID.NettleBurstEnd,
                 ProjectileID.NettleBurstLeft,
                 ProjectileID.NettleBurstRight,
+                ProjectileType<AtlantisSpear>(),
                 ProjectileType<AuroraFire>(),
                 ProjectileType<BallisticPoisonCloud>(),
                 ProjectileType<DuststormCloudHitbox>()
