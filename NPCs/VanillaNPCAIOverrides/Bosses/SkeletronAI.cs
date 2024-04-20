@@ -129,10 +129,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float distance = Vector2.Distance(Main.player[npc.target].Center, npc.Center);
 
             // Despawn
-            if (Main.player[npc.target].dead || distance > (bossRush ? CalamityGlobalNPC.CatchUpDistance350Tiles : CalamityGlobalNPC.CatchUpDistance200Tiles))
+            int despawnDistanceInTiles = 500;
+            if (Main.player[npc.target].dead || Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) / 16f > despawnDistanceInTiles)
             {
                 npc.TargetClosest();
-                if (Main.player[npc.target].dead || distance > (bossRush ? CalamityGlobalNPC.CatchUpDistance350Tiles : CalamityGlobalNPC.CatchUpDistance200Tiles))
+                if (Main.player[npc.target].dead || Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) / 16f > despawnDistanceInTiles)
                     npc.ai[1] = 3f;
             }
 
