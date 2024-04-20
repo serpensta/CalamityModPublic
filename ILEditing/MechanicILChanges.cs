@@ -1371,10 +1371,13 @@ namespace CalamityMod.ILEditing
         #region Custom world selection difficulties
         internal static void GetDifficultyOverride(Terraria.GameContent.UI.Elements.On_AWorldListItem.orig_GetDifficulty orig, AWorldListItem self, out string expertText, out Color gameModeColor)
         {
+            // Run the original code and pull out the original text and text color
             orig(self, out expertText, out gameModeColor);
 
             string difficultyText = expertText;
             Color difficultyColor = gameModeColor;
+            
+            // Go through the World Selection Difficulty System's World Difficulty list backwards and choose the latest difficulty that applies
             for (int i = WorldSelectionDifficultySystem.WorldDifficulties.Count - 1; i >= 0; i--)
             {
                 WorldSelectionDifficultySystem.WorldDifficulty d = WorldSelectionDifficultySystem.WorldDifficulties[i];
@@ -1388,6 +1391,7 @@ namespace CalamityMod.ILEditing
                 }
             }
 
+            // Set the text and text color
             expertText = difficultyText;
             gameModeColor = difficultyColor;
         }

@@ -15,6 +15,9 @@ namespace CalamityMod.Systems
     {
         public override void PostSetupContent()
         {
+            // Load all of the World Difficulties to the World Difficulty list
+            // The difficulty the world uses will be the latest applicable one, so these are added in order from easiest to hardest
+
             string revenge = CalamityUtils.GetTextValue("UI.Revengeance");
             string death = CalamityUtils.GetTextValue("UI.Death");
             string rev = CalamityUtils.GetTextValue("UI.Rev");
@@ -30,9 +33,9 @@ namespace CalamityMod.Systems
             WorldDifficulties.Add(new WorldDifficulty(death + plus + legend, GetLegendDeath, new(220, 255, 132)));
         }
 
-        // Since CalamityWorld is static, and therefore invalid for TryGetHeaderData, make copies for Rev and Death
         public override void SaveWorldHeader(TagCompound tag)
         {
+            // Since CalamityWorld is static, and therefore invalid for TryGetHeaderData, make copies for Rev and Death
             tag["RevengeanceMode"] = CalamityWorld.revenge;
             tag["DeathMode"] = CalamityWorld.death;
         }
