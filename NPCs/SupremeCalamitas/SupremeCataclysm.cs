@@ -389,13 +389,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                     if (BigAttackLimit == (Phase2 ? 1 : 0) && death)
                     {
-                        if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
-                        { 
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(0.15f), type, damage, 0f, Main.myPlayer, 0f, 1, 2);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(-0.15f), type, damage, 0f, Main.myPlayer, 0f, 1, 2);
-                        }
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(0.6f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 9.5f).RotatedBy(-0.6f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 10.5f).RotatedBy(0.5f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 10.5f).RotatedBy(-0.5f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
                         SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.8f, Pitch = 0.2f }, NPC.Center);
                     }
                     else if (BigAttackLimit == 0 && Phase2)

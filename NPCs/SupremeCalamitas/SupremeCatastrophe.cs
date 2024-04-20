@@ -267,8 +267,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
                             SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f }, NPC.Center);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.34f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 0, 50);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.34f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 0, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center).RotatedBy(0.34f) * 130, NPC.DirectionTo(Target.Center).RotatedBy(0.34f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 0, 50);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + NPC.DirectionTo(Target.Center).RotatedBy(-0.34f) * 130, NPC.DirectionTo(Target.Center).RotatedBy(-0.34f) * 90f, type, damage, 0f, Main.myPlayer, 0f, 0, 50);
                             for (int i = 0; i < 30; i++)
                             {
                                 Vector2 vel = new Vector2(7, 7).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 2.5f);
@@ -406,11 +406,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         damage /= 2;
                     Vector2 slashSpawnPosition = NPC.Center;
                     Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.032f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
-                    if (BigAttackLimit == 0 && !Phase2 && death)
+
+                    if ((Phase2 ? BigAttackLimit <= 3 && BigAttackLimit > 0 : BigAttackLimit == 0) && death)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition, firingVelocity * 90f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition + firingVelocity * 130, (Phase2 ? NPC.DirectionTo(Target.Center) : firingVelocity) * 90f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
                         SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");
-                        SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f }, NPC.Center);
+                        SoundEngine.PlaySound(slash with { Volume = 0.55f, Pitch = -0.3f - BigAttackLimit * 0.1f }, NPC.Center);
                     }
                     else if (BigAttackLimit == 0 && Phase2)
                     {
