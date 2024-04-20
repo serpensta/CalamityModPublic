@@ -607,14 +607,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 bool tooFarX = absoluteDistanceX > distanceAwayFromTargetX + distanceAwayFromTargetXLeeway || absoluteDistanceX < distanceAwayFromTargetX - distanceAwayFromTargetXLeeway;
                 bool tooFarY = distanceAwayFromTargetY > distanceAboveTarget + distanceAwayFromTargetYLeeway || distanceAwayFromTargetY < distanceAboveTarget - distanceAwayFromTargetYLeeway;
                 bool tooFar = tooFarX || tooFarY;
+                Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * distanceAboveTarget + Vector2.UnitX * distanceAwayFromTargetX * npc.ai[3];
                 if (tooFar)
                 {
-                    Vector2 hoverDestination = Main.player[npc.target].Center - Vector2.UnitY * distanceAboveTarget + Vector2.UnitX * distanceAwayFromTargetX * npc.ai[3];
                     Vector2 idealVelocity = npc.SafeDirectionTo(hoverDestination) * 16f;
                     npc.SimpleFlyMovement(idealVelocity, 0.36f);
                 }
 
-                if (npc.Distance(Main.player[npc.target].Center) < distanceAwayFromTargetX)
+                if (npc.Distance(Main.player[npc.target].Center) < distanceAwayFromTargetX || npc.Distance(hoverDestination) > 120f)
                     shouldFireLasers = false;
 
                 float playerLocation = npc.Center.X - Main.player[npc.target].Center.X;
