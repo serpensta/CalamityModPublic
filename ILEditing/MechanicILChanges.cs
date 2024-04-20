@@ -35,13 +35,16 @@ using Terraria.GameContent.Achievements;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.Liquid;
+using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.Graphics;
 using Terraria.Graphics.Light;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI.Gamepad;
 
 namespace CalamityMod.ILEditing
@@ -1362,6 +1365,35 @@ namespace CalamityMod.ILEditing
             cursor.EmitDelegate<Func<bool, bool>>((x) => !x);
 
             // The next (untouched) instruction stores this value into Player.scope.
+        }
+        #endregion
+
+        #region Custom world selection difficulties
+        internal static void GetDifficultyOverride(Terraria.GameContent.UI.Elements.On_AWorldListItem.orig_GetDifficulty orig, AWorldListItem self, out string expertText, out Color gameModeColor)
+        {
+            // Run the original code and pull out the original text and text color
+            orig(self, out expertText, out gameModeColor);
+
+            string difficultyText = expertText;
+            Color difficultyColor = gameModeColor;
+            
+            // Go through the World Selection Difficulty System's World Difficulty list backwards and choose the latest difficulty that applies
+            for (int i = WorldSelectionDifficultySystem.WorldDifficulties.Count - 1; i >= 0; i--)
+            {
+                WorldSelectionDifficultySystem.WorldDifficulty d = WorldSelectionDifficultySystem.WorldDifficulties[i];
+                {
+                    if (d.function(self))
+                    {
+                        difficultyText = d.name;
+                        difficultyColor = d.color;
+                        break;
+                    }
+                }
+            }
+
+            // Set the text and text color
+            expertText = difficultyText;
+            gameModeColor = difficultyColor;
         }
         #endregion
 
