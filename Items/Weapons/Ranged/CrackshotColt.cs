@@ -53,12 +53,10 @@ namespace CalamityMod.Items.Weapons.Ranged
             if (player.altFunctionUse == 2)
             {
                 // player.CanBuyItem() breaks if the player has more than 2,147 platinum coins and was never fixed
-                // This alternative method works no matter how much money the player has
-                long cashAvailable = Utils.CoinsCount(out bool overflow, player.inventory);
-                if (cashAvailable < 1 && !overflow)
-                    return false;
-
-                return player.GetActiveRicoshotCoinCount() < 4;
+                // 20APR2024: Ozzatron: The method was instead replaced with player.CanAfford, which is immune to overflow
+                // Additionally, CanAfford checks your Piggy Bank, Safe, etc., meaning Crackshot Colt can use coins from there
+                bool hasAtLeastOneCopper = player.CanAfford(1);
+                return hasAtLeastOneCopper && player.GetActiveRicoshotCoinCount() < 4;
             }
             return true;
         }

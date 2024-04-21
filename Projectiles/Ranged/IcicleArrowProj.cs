@@ -23,10 +23,10 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.arrow = true;
             Projectile.coldDamage = true;
             Projectile.penetrate = -1;
-            Projectile.extraUpdates = 8;
-            Projectile.timeLeft = 1200;
+            Projectile.extraUpdates = 6;
+            Projectile.timeLeft = 1000;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10 * Projectile.extraUpdates;
+            Projectile.localNPCHitCooldown = 15 * Projectile.extraUpdates;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
 
@@ -99,7 +99,7 @@ namespace CalamityMod.Projectiles.Ranged
             if (!falling)
             {
                 SoundEngine.PlaySound(SoundID.Item50 with { Volume = 0.35f, Pitch = -0.2f, PitchVariance = 0.2f }, Projectile.Center);
-                Projectile.velocity = new Vector2(0, -5.5f).RotatedByRandom(0.25f) * Main.rand.NextFloat(0.75f, 1.1f);
+                Projectile.velocity = new Vector2(0, -6.5f).RotatedByRandom(0.25f) * Main.rand.NextFloat(0.75f, 1.1f);
                 for (int k = 0; k < 3; k++)
                 {
                     Vector2 velocity = startVelocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(0.3f, 0.85f);
@@ -111,7 +111,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (falling)
-                Projectile.damage = (int)(Projectile.damage * 1.35f);
+                Projectile.damage = (int)(Projectile.damage * 1.2f);
         }
         public override void OnKill(int timeLeft)
         {
@@ -135,7 +135,7 @@ namespace CalamityMod.Projectiles.Ranged
                     dust2.scale = Main.rand.NextFloat(0.75f, 0.95f);
                     dust2.noGravity = false;
                 }
-                Projectile.velocity = new Vector2(0, -7.5f).RotatedByRandom(0.25f) * Main.rand.NextFloat(0.75f, 1.1f);
+                Projectile.velocity = new Vector2(0, -6.5f).RotatedByRandom(0.25f) * Main.rand.NextFloat(0.75f, 1.1f);
                 return false;
             }
             else

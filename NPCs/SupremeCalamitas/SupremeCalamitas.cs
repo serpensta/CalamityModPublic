@@ -125,6 +125,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public int alicornFrame = 0;
         public int alicornFrameCounter = 0;
         public int dashVisualCounter = 0;
+        public int brothersPause = 5; // Helps prevent telefragging
 
         public float shieldOpacity = 1f;
         public float shieldRotation = 0f;
@@ -2024,39 +2025,50 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             {
                 if (lifeRatio < 0.45f && !enteredBrothersPhase)
                 {
-                    enteredBrothersPhase = true;
-                    attackCastDelay = brothersSpawnCastTime;
-                    NPC.netUpdate = true;
-                    if (!teleport)
+                    if (brothersPause == 0)
                     {
-                        Dust.QuickDustLine(NPC.Center, player.Center + new Vector2(0, -155), 500f, cirrus ? Color.Pink : Color.Red);
-                        NPC.velocity = Vector2.Zero;
-                        NPC.Center = player.Center + new Vector2(0, -155);
-                        Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
-                        GeneralParticleHandler.SpawnParticle(pulse);
-                        for (int x = 0; x < Main.maxProjectiles; x++)
+                        enteredBrothersPhase = true;
+                        attackCastDelay = brothersSpawnCastTime;
+                        NPC.netUpdate = true;
+                        if (!teleport)
                         {
-                            Projectile projectile = Main.projectile[x];
-                            if (projectile.active)
+                            Dust.QuickDustLine(NPC.Center, player.Center + new Vector2(0, -155), 500f, cirrus ? Color.Pink : Color.Red);
+                            NPC.velocity = Vector2.Zero;
+                            NPC.Center = player.Center + new Vector2(0, -175);
+                            Particle pulse = new DirectionalPulseRing(NPC.Center, Vector2.Zero, Color.Red, new Vector2(1f, 1f), 0, 0.1f, 5f, 15);
+                            GeneralParticleHandler.SpawnParticle(pulse);
+                            for (int x = 0; x < Main.maxProjectiles; x++)
                             {
-                                if (projectile.type == bulletHellblast ||
-                                    projectile.type == barrage ||
-                                    projectile.type == wave)
+                                Projectile projectile = Main.projectile[x];
+                                if (projectile.active)
                                 {
-                                    if (projectile.timeLeft > 60)
-                                        projectile.timeLeft = 60;
-                                }
-                                else if (projectile.type == fireblast || projectile.type == gigablast)
-                                {
-                                    projectile.ai[2] = 1f;
+                                    if (projectile.type == bulletHellblast ||
+                                        projectile.type == barrage ||
+                                        projectile.type == wave)
+                                    {
+                                        if (projectile.timeLeft > 60)
+                                            projectile.timeLeft = 60;
+                                    }
+                                    else if (projectile.type == fireblast || projectile.type == gigablast)
+                                    {
+                                        projectile.ai[2] = 1f;
 
-                                    if (projectile.timeLeft > 15)
-                                        projectile.timeLeft = 15;
+                                        if (projectile.timeLeft > 15)
+                                            projectile.timeLeft = 15;
+                                    }
                                 }
                             }
+                            teleport = true;
                         }
-                        teleport = true;
                     }
+                    else
+                    {
+                        brothersPause--;
+                        NPC.dontTakeDamage = true;
+                        NPC.velocity *= 0.85f;
+                        return;
+                    }
+                    
                 }
             }
 
