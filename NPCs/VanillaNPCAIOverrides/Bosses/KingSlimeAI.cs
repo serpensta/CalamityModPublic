@@ -289,7 +289,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[0] >= 30f && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = -30f;
+                    npc.ai[0] = -15f;
                     npc.netUpdate = true;
                     npc.TargetClosest();
                 }
@@ -297,7 +297,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode == NetmodeID.MultiplayerClient && npc.ai[0] >= 60f)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = -30f;
+                    npc.ai[0] = -15f;
                     npc.TargetClosest();
                 }
 
@@ -750,7 +750,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[0] >= 30f && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = -30f;
+                    npc.ai[0] = -15f;
                     npc.netUpdate = true;
                     npc.TargetClosest();
                 }
@@ -758,7 +758,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode == NetmodeID.MultiplayerClient && npc.ai[0] >= 60f)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = -30f;
+                    npc.ai[0] = -15f;
                     npc.TargetClosest();
                 }
 
