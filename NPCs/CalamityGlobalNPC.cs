@@ -7338,23 +7338,23 @@ namespace CalamityMod.NPCs
                 }
 
                 // Laser telegraph
-                else if (npc.type == NPCID.WallofFleshEye)
+                else if (npc.type == NPCID.WallofFleshEye && Main.wofNPCIndex >= 0)
                 {
+                    bool enraged = npc.localAI[3] > 0f;
                     float eyeTelegraphGateValue = WallOfFleshAI.LaserShootGateValue - WallOfFleshAI.LaserShootTelegraphTime;
-                    if (npc.localAI[1] > eyeTelegraphGateValue || npc.localAI[2] > 0f)
+                    if (npc.localAI[1] > eyeTelegraphGateValue || npc.localAI[2] > 0f || enraged)
                     {
-                        // Percent life remaining
-                        float lifeRatio = Main.npc[Main.wofNPCIndex].life / (float)Main.npc[Main.wofNPCIndex].lifeMax;
-
                         Texture2D glowTexture = CalamityMod.WallOfFleshEyeGlowmask.Value;
                         Vector2 halfSize = npc.frame.Size() / 2;
                         SpriteEffects spriteEffects = SpriteEffects.None;
                         if (npc.spriteDirection == 1)
                             spriteEffects = SpriteEffects.FlipHorizontally;
 
-                        float colorScale = npc.localAI[2] > 0f ? 1f - ((npc.localAI[2] - 1f) / WallOfFleshAI.TotalLasersPerBarrage) : MathHelper.Clamp((npc.localAI[1] - eyeTelegraphGateValue) / WallOfFleshAI.LaserShootTelegraphTime, 0f, 1f);
-                        bool phase2 = lifeRatio < 0.5f || masterMode;
-                        Color drawColor2 = (phase2 ? new Color(255, 0, 0, 192) : new Color(100, 0, 200, 192)) * colorScale;
+                        float colorScale = enraged ? MathHelper.Clamp(npc.localAI[3] / WallOfFleshAI.EnragedLaserFiringDuration, 0f, 1f) :
+                            npc.localAI[2] > 0f ? 1f - ((npc.localAI[2] - 1f) / WallOfFleshAI.TotalLasersPerBarrage) :
+                            MathHelper.Clamp((npc.localAI[1] - eyeTelegraphGateValue) / WallOfFleshAI.LaserShootTelegraphTime, 0f, 1f);
+
+                        Color drawColor2 = new Color(100, 0, 200, 192) * colorScale;
                         for (int i = 0; i < 2; i++)
                         {
                             spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame,

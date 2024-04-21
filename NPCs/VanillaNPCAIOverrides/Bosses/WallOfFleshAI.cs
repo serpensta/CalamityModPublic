@@ -14,6 +14,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         public const float LaserShootGateValue = 400f;
         public const float LaserShootTelegraphTime = LaserShootGateValue * 0.5f;
         public const float TotalLasersPerBarrage = 3f;
+        public const float EnragedLaserFiringDuration = 300f;
 
         public static bool BuffedWallofFleshAI(NPC npc, Mod mod)
         {
@@ -123,7 +124,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         Vector2 projectileSpawn = npc.Center + projectileVelocity.SafeNormalize(Vector2.UnitY) * 50f;
 
                         int damage = npc.GetProjectileDamage(ProjectileID.DemonSickle);
-                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, ProjectileID.DemonSickle, damage, 0f, Main.myPlayer, 0f, projectileVelocity.Length() * 2.5f);
+                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), projectileSpawn, projectileVelocity, ProjectileID.DemonSickle, damage, 0f, Main.myPlayer, 0f, projectileVelocity.Length() * 3f);
                         Main.projectile[proj].timeLeft = 600;
                         Main.projectile[proj].tileCollide = false;
 
@@ -688,7 +689,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 bool charging = Main.npc[Main.wofNPCIndex].ai[3] == 1f;
 
                 // Set up enraged laser firing timer
-                float enragedLaserTimer = 300f;
+                float enragedLaserTimer = EnragedLaserFiringDuration;
                 if (charging)
                     npc.localAI[3] = enragedLaserTimer;
 
@@ -727,10 +728,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     if (shouldFireLasers)
                     {
-                        bool phase2 = lifeRatio < 0.5f || masterMode;
                         float velocity = (fireEnragedLasers ? 3f : 4f) + shootBoost;
-
-                        int projectileType = phase2 ? ProjectileID.DeathLaser : ProjectileID.EyeLaser;
+                        int projectileType = ProjectileID.EyeLaser;
                         int damage = npc.GetProjectileDamage(projectileType);
 
                         Vector2 projectileVelocity = (lookAt - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
