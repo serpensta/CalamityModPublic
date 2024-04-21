@@ -141,8 +141,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             cursedFlameDirection.Y -= targetYDirection;
 
                             int type = (death && phase3) ? ModContent.ProjectileType<ShadowflameFireball>() : ProjectileID.CursedFlameHostile;
-                            float homeIn = death ? (phase4 ? 2f : 0f) : 0f;
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), cursedFlameDirection.X, cursedFlameDirection.Y, targetXDirection, targetYDirection, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, 0f, homeIn);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), cursedFlameDirection.X, cursedFlameDirection.Y, targetXDirection, targetYDirection, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                         }
                     }
                 }
@@ -358,12 +357,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (phase6)
             {
-                segmentVelocity += 4f * (enrageScale + 1f);
+                segmentVelocity += (death ? 2.4f : 4f) * (enrageScale + 1f);
                 segmentAcceleration += 0.2f * (enrageScale + 1f);
             }
             else if (phase5)
             {
-                segmentVelocity += 3f * (enrageScale + 1f);
+                segmentVelocity += (death ? 2.2f : 3f) * (enrageScale + 1f);
                 segmentAcceleration += 0.15f * (enrageScale + 1f);
             }
             else if (phase4)
