@@ -288,7 +288,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[0] >= 30f && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = 0f;
+                    npc.ai[0] = -60f;
                     npc.netUpdate = true;
                     npc.TargetClosest();
                 }
@@ -296,7 +296,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode == NetmodeID.MultiplayerClient && npc.ai[0] >= 60f)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = 0f;
+                    npc.ai[0] = -60f;
                     npc.TargetClosest();
                 }
 
@@ -749,7 +749,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (npc.ai[0] >= 30f && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = 0f;
+                    npc.ai[0] = -60f;
                     npc.netUpdate = true;
                     npc.TargetClosest();
                 }
@@ -757,7 +757,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (Main.netMode == NetmodeID.MultiplayerClient && npc.ai[0] >= 60f)
                 {
                     npc.ai[1] = 0f;
-                    npc.ai[0] = 0f;
+                    npc.ai[0] = -60f;
                     npc.TargetClosest();
                 }
 
@@ -905,7 +905,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         public static void GetPlaceToTeleportTo(NPC npc)
         {
             npc.TargetClosest(false);
-            float distanceAhead = 640f;
+            float distanceAhead = 800f;
             Vector2 randomDefault = Main.rand.NextBool() ? Vector2.UnitX : -Vector2.UnitX;
             Vector2 vectorAimedAheadOfTarget = Main.player[npc.target].Center + new Vector2((float)Math.Round(Main.player[npc.target].velocity.X), 0f).SafeNormalize(randomDefault) * distanceAhead;
             Point predictiveTeleportPoint = vectorAimedAheadOfTarget.ToTileCoordinates();
