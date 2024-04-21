@@ -564,7 +564,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Velocity, direction, and position
             bool shouldFireLasers = true;
-            bool masterModeDetach = lifeRatio < 0.5f && masterMode;
+            float phase2LifeRatio = 0.5f;
+            bool masterModeDetach = lifeRatio < phase2LifeRatio && masterMode;
             if (!masterModeDetach)
             {
                 npc.position.X = Main.npc[Main.wofNPCIndex].position.X;
@@ -635,18 +636,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
                 }
 
-                // 50% chance to change position
-                if (lifeRatio < 0.25f)
+                // 50% chance to change Y position
+                float eyePositionRandomChangeGateValue = MathHelper.Lerp(death ? 180f : 240f, death ? 480f : 720f, lifeRatio / phase2LifeRatio);
+                if (npc.ai[2] >= eyePositionRandomChangeGateValue)
                 {
-                    npc.ai[2] += 1f;
-                    float eyePositionRandomChangeGateValue = death ? 240f : 360f;
-                    if (npc.ai[2] > eyePositionRandomChangeGateValue)
-                    {
-                        npc.ai[2] = 0f;
-                        npc.ai[0] = Main.rand.NextBool() ? 1f : -1f;
-                        npc.netUpdate = true;
-                    }
+                    npc.ai[2] = 0f;
+                    npc.ai[0] = Main.rand.NextBool() ? 1f : -1f;
+                    npc.netUpdate = true;
                 }
+                npc.ai[2] += 1f;
             }
 
             Vector2 eyeLocation = npc.Center;
