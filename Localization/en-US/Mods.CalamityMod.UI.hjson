@@ -31,7 +31,8 @@ ChangingTheRules: "[c/919191:You cannot change the rules now!]"
 NoDifficulty: None
 NoDifficultyInfo: The classic Terraria experience, with no Calamity difficulty changes
 Revengeance: Revengeance
-Rev: Rev
+RevMaster: Rev+Master
+RevLegend: Rev+Legend
 RevengeanceShortInfo: "[c/F54254:The intended Calamity experience!]"
 RevengeanceExpandedInfo:
 	'''
@@ -46,6 +47,8 @@ RevengeanceExpandedInfo:
 RevengeanceActivate: Revengeance is active.
 RevengeanceDeactivate: Revengeance is not active.
 Death: Death
+DeathMaster: Death+Master
+DeathLegend: Death+Legend
 DeathShortInfo: "[c/C82DF7:A tougher challenge for the more experienced, or for those that want a step up from Revengeance Mode]"
 DeathExpandedInfo:
 	'''
@@ -56,7 +59,6 @@ DeathExpandedInfo:
 	'''
 DeathActivate: Death is active; enjoy the fun.
 DeathDeactivate: Death is not active; not fun enough for you?
-Legend: Legend
 // Calamity Health Bar
 ExoTwinsNameNormal: XS-01 Artemis and XS-03 Apollo
 ExoTwinsNameHekate: Eyes of XB-∞ Hekate
