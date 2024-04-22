@@ -2300,9 +2300,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
-                                        float projectileVelocityToPass = projectileVelocity.Length() * 2f;
+                                        float projectileVelocityToPass = projectileVelocity.Length() * 1.3f;
                                         Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1)));
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer, 0, 2f, projectileVelocityToPass);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer, 0, 4f, projectileVelocityToPass);
                                         NPC.netUpdate = true;
                                     }
                                 }
@@ -2857,9 +2857,9 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
-                                        float projectileVelocityToPass = projectileVelocity.Length() * 2f;
+                                        float projectileVelocityToPass = projectileVelocity.Length() * 1.3f;
                                         Vector2 perturbedSpeed = projectileVelocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, j / (float)(numProj - 1)));
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer, 0f, 2f, projectileVelocityToPass);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), projectileSpawn, perturbedSpeed, randomShot, barrageDamage, 0f, Main.myPlayer, 0f, 4f, projectileVelocityToPass);
                                         NPC.netUpdate = true;
                                     }
                                 }
@@ -3097,6 +3097,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             // Bonus visuals
             if (!canDespawn && !hasDoneDeathAnim && shieldOpacity >= 0.9f)
             {
+                NPC.damage = NPC.defDamage;
                 if (dashVisualCounter < 9)
                     dashVisualCounter++;
                 else
@@ -3120,7 +3121,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                 }
             }
             else
+            {
+                NPC.damage = 0;
                 dashVisualCounter = 0;
+            }
             #endregion
         }
 
