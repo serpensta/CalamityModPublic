@@ -293,7 +293,6 @@ namespace CalamityMod.NPCs
             "Lucerne", // <@!271954788676141066> (lord_lucerne)
             "Milo", // <@!401849201597874179> (maskedmilo)
             "Octo", // <@!796112889353994281> (octolinggrimm)
-            "Tardo", // <@!739343546867384391> (midnight295)
         };
         private static readonly string[] TownCatSiameseNames = null;
         private static readonly string[] TownCatBlackNames =
@@ -303,6 +302,7 @@ namespace CalamityMod.NPCs
         private static readonly string[] TownCatOrangeTabbyNames =
         {
             "Felix" // <@!183424826407518208> (lilac_vrt_olligoci)
+            "Tardo", // <@!739343546867384391> (midnight295)
         };
         private static readonly string[] TownCatRussianBlueNames = null;
         private static readonly string[] TownCatSilverNames = null;
