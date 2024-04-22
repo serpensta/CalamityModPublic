@@ -125,7 +125,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public int alicornFrame = 0;
         public int alicornFrameCounter = 0;
         public int dashVisualCounter = 0;
-        public int brothersPause = 5; // Helps prevent telefragging
+        public int brothersPause = 15; // Helps prevent telefragging
 
         public float shieldOpacity = 1f;
         public float shieldRotation = 0f;
