@@ -22,23 +22,24 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             RegisterItemDrop(ModContent.ItemType<BlueDistortedMonolith>());
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
-            TileObjectData.newTile.Width = 4;
+            TileObjectData.newTile.Width = 5;
+            TileObjectData.newTile.Height = 5;
             TileObjectData.newTile.Origin = new Point16(0, 2);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 4, 0);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 5, 0);
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(50, 127, 209));
 
             DustType = (int)CalamityDusts.BlueCosmilite;
-            AnimationFrameHeight = 54;
+            AnimationFrameHeight = 90;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main.tile[i, j].TileFrameY < 54)
+            if (Main.tile[i, j].TileFrameY < 90)
             {
                 return;
             }
@@ -61,7 +62,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             if (frameCounter >= 7.2)
             {
                 frameCounter = 0;
-                if (++frame >= 7)
+                if (++frame >= 6)
                 {
                     frame = 0;
                 }
@@ -87,12 +88,12 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
 
         public override void HitWire(int i, int j)
         {
-            int x = i - Main.tile[i, j].TileFrameX / 18 % 4;
-            int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
-            int tileXX18 = 54;
-            for (int l = x; l < x + 4; l++)
+            int x = i - Main.tile[i, j].TileFrameX / 18 % 5;
+            int y = j - Main.tile[i, j].TileFrameY / 18 % 5;
+            int tileXX18 = 90;
+            for (int l = x; l < x + 5; l++)
             {
-                for (int m = y; m < y + 3; m++)
+                for (int m = y; m < y + 5; m++)
                 {
                     if (Main.tile[l, m].HasTile && Main.tile[l, m].TileType == Type)
                     {
@@ -105,9 +106,9 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             if (Wiring.running)
             {
-                for (int o = 0; o < 4; o++)
+                for (int o = 0; o < 5; o++)
                 {
-                    for (int p = 0; p < 3; p++)
+                    for (int p = 0; p < 5; p++)
                     {
                         Wiring.SkipWire(x + 0, x + p);
                     }
@@ -128,9 +129,9 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             int height = 18;
             int animate = 0;
-            if (tile.TileFrameY >= 54)
+            if (tile.TileFrameY >= 92)
             {
-                animate = Main.tileFrame[Type] * AnimationFrameHeight;
+                animate = Main.tileFrame[Type] * 92;
             }
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             return false;

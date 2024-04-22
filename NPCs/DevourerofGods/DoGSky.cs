@@ -106,13 +106,13 @@ namespace CalamityMod.NPCs.DevourerofGods
                 {
                     if (Main.LocalPlayer.Calamity().monolithDevourerBShader > 0)
                     {
-                        float intensity = MathHelper.Min(MathHelper.Lerp(0, 0.5f, (float)Main.LocalPlayer.Calamity().monolithDevourerBShader / 30), 0.45f);
+                        float intensity = MathHelper.Min(MathHelper.Lerp(0, 0.5f, (float)Main.LocalPlayer.Calamity().monolithDevourerBShader / 15), 0.45f);
                         Color regularSkyColor = Color.Cyan;
                         spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), regularSkyColor * intensity);
                     }
                     if (Main.LocalPlayer.Calamity().monolithDevourerPShader > 0)
                     {
-                        float intensity = MathHelper.Min(MathHelper.Lerp(0, 0.5f, (float)Main.LocalPlayer.Calamity().monolithDevourerPShader / 30), 0.45f);
+                        float intensity = MathHelper.Min(MathHelper.Lerp(0, 0.5f, (float)Main.LocalPlayer.Calamity().monolithDevourerPShader / 15), 0.45f);
                         Color regularSkyColor = Color.Fuchsia;
                         spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), regularSkyColor * intensity);
                     }

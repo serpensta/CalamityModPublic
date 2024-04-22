@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.Items.Placeables.Furniture.Monoliths;
 using CalamityMod.NPCs.Yharon;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -52,6 +53,15 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             if (player.active)
             {
                 Main.LocalPlayer.Calamity().monolithPlagueShader = 30;
+            }
+
+            // Spawn mist particles at the bottom tiles
+            if (Main.tile[i,j +1].TileType != Type)
+            {
+                if (Main.rand.NextBool(60))
+                {
+                    GeneralParticleHandler.SpawnParticle(new PlagueHumidifierMist(new Vector2(i * 16, j * 16) + new Vector2(Main.rand.NextFloat(0, 16), Main.rand.NextFloat(16)), 60, Main.rand.NextFloat(0.8f, 1.2f), Vector2.UnitX * Main.rand.NextFloat(-2, 2)));
+                }
             }
         }
 
