@@ -925,7 +925,7 @@ namespace CalamityMod.NPCs.Yharon
                             {
                                 float bulletHellTeleportLocationDistance = 540f;
                                 Vector2 defaultTeleportLocation = new Vector2(0f, -bulletHellTeleportLocationDistance);
-                                Vector2 teleportLocation = -(player.velocity.SafeNormalize(Vector2.Zero) * bulletHellTeleportLocationDistance);
+                                Vector2 teleportLocation = player.velocity.SafeNormalize(Vector2.Zero) * -1f * bulletHellTeleportLocationDistance;
                                 Vector2 center = player.Center + (teleportLocation == Vector2.Zero ? defaultTeleportLocation : teleportLocation);
                                 NPC.Center = center;
 
@@ -1302,7 +1302,7 @@ namespace CalamityMod.NPCs.Yharon
                             {
                                 float bulletHellTeleportLocationDistance = 540f;
                                 Vector2 defaultTeleportLocation = new Vector2(0f, -bulletHellTeleportLocationDistance);
-                                Vector2 teleportLocation = -(player.velocity.SafeNormalize(Vector2.Zero) * bulletHellTeleportLocationDistance);
+                                Vector2 teleportLocation = player.velocity.SafeNormalize(Vector2.Zero) * -1f * bulletHellTeleportLocationDistance;
                                 Vector2 center = player.Center + (teleportLocation == Vector2.Zero ? defaultTeleportLocation : teleportLocation);
                                 NPC.Center = center;
 
@@ -2050,7 +2050,7 @@ namespace CalamityMod.NPCs.Yharon
 
                                 float bulletHellTeleportLocationDistance = 540f;
                                 Vector2 defaultTeleportLocation = new Vector2(0f, -bulletHellTeleportLocationDistance);
-                                Vector2 teleportLocation = -(targetData.velocity.SafeNormalize(Vector2.Zero) * bulletHellTeleportLocationDistance);
+                                Vector2 teleportLocation = targetData.velocity.SafeNormalize(Vector2.Zero) * -1f * bulletHellTeleportLocationDistance;
                                 Vector2 center = targetData.Center + (teleportLocation == Vector2.Zero ? defaultTeleportLocation : teleportLocation);
                                 NPC.Center = center;
 
