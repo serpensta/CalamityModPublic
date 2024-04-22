@@ -73,8 +73,8 @@ namespace CalamityMod.NPCs
             "Heniek", // <@!363404700445442050> (kazurgundu)
             "Fire", // <@!354362326947856384> (fire#0692)
             "Barney Calhoun", // <@!634462901431697410> (potatostego)
-            "XiaoEn0426", // <@!440448864772816896> (XiaoEn0426#9157)
-            "Jeffred", // <@!295362230038560768> (Knight Solaire#0873)
+            "XiaoEn0426", // <@!440448864772816896> (xiaoen0426)
+            "Jeffred", // <@!295362230038560768> (paladinsamuel)
             "The Cooler Arthur", // <@!568263512523014154> (gokuartillery)
             "Markie", // <@!291141964039061504> (markie_)
             "Shark", // <@!874464051697172492> (congratsistrash)
@@ -86,7 +86,7 @@ namespace CalamityMod.NPCs
         };
         private static readonly string[] CyborgNames =
         {
-            "Sylux", // <@!331812782183809025> (Gonk#2451)
+            "Sylux", // <@!331812782183809025> (gonkachino)
         };
         private static readonly string[] DemolitionistNames =
         {
@@ -99,18 +99,18 @@ namespace CalamityMod.NPCs
             "Izuna",
             "Jasmine", // <@!430532867479699456> (phantasmagoria.)
             "Cybil", // <@!486507232666845185> (Captain Doofus#????)
-            "Ruth", // <@!1001307586068492388> (Briny_Coffee#4393)
+            "Ruth", // <@!1001307586068492388> (briny_coffee)
         };
         private static readonly string[] DyeTraderNames = null;
         private static readonly string[] GoblinTinkererNames =
         {
             "Verth",
-            "Gormer", // <@!287651204924833795> (Picasso's Bean#2819 -- RIP)
+            "Gormer", // <@!287651204924833795> (picassosbean2819 -- RIP)
             "TingFlarg", // <@!185605031716847616> (smugggo)
-            "Driser", // <@!121996994406252544> (Driser#8630)
+            "Driser", // <@!121996994406252544> (driser)
             "Eddie Spaghetti", // <@!466397267407011841> (nathansfriend)
             "G'tok", // <@!335192200956608535> (gtoktas)
-            "Katto", // <@!175972165504466944> (Katto#2858)
+            "Katto", // <@!175972165504466944> (katto_kat)
             "Him", // <@!931019614958256139> (himtheguy1)
             "Tooshiboots", // <@!333532730593771522> (ulmod)
             "Neesh", // <@!175803493464932352> (xjetty)
