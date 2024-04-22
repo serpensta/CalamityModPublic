@@ -301,7 +301,7 @@ namespace CalamityMod.NPCs
         };
         private static readonly string[] TownCatOrangeTabbyNames =
         {
-            "Felix" // <@!183424826407518208> (lilac_vrt_olligoci)
+            "Felix", // <@!183424826407518208> (lilac_vrt_olligoci)
             "Tardo", // <@!739343546867384391> (midnight295)
         };
         private static readonly string[] TownCatRussianBlueNames = null;
