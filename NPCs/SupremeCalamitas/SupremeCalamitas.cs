@@ -536,6 +536,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             #endregion
             #region Forcefield and Shield Logic
 
+            // Shield effect rotation
+            rotateToPlayer = rotateToPlayer.AngleLerp((player.Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation() + MathHelper.PiOver2, 0.04f);
+            rotateAwayPlayer = rotateAwayPlayer.AngleLerp((player.Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation() - MathHelper.PiOver2, 0.04f);
+
             if (hitTimer > 0)
                 hitTimer--;
 
@@ -3732,9 +3736,6 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             GameShaders.Misc["CalamityMod:SupremeShield"].Apply();
 
             Texture2D centerTexture = ModContent.Request<Texture2D>("CalamityMod/Particles/CentralGold").Value;
-
-            rotateToPlayer = (player.Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation() + MathHelper.PiOver2;
-            rotateAwayPlayer = (player.Center - NPC.Center).SafeNormalize(Vector2.UnitY).ToRotation() - MathHelper.PiOver2;
 
             Texture2D immuneTex = ModContent.Request<Texture2D>("CalamityMod/Particles/SemiCircularSmearVertical").Value;
             if (postMusicHit)

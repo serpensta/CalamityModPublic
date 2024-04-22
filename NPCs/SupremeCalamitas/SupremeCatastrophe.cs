@@ -407,7 +407,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     Vector2 slashSpawnPosition = NPC.Center;
                     Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.032f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
 
-                    if ((Phase2 ? BigAttackLimit <= 3 && BigAttackLimit > 0 : BigAttackLimit == 0) && death)
+                    if ((NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? BigAttackLimit <= 3 && BigAttackLimit > 0 : BigAttackLimit == 0) && death)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), slashSpawnPosition + firingVelocity * 130, (Phase2 ? NPC.DirectionTo(Target.Center) : firingVelocity) * 90f, type, damage, 0f, Main.myPlayer, 0f, 5, 50);
                         SoundStyle slash = new("CalamityMod/Sounds/Item/MurasamaBigSwing");

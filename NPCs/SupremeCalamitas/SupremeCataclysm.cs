@@ -335,8 +335,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                             }
                             else
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(0.48) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(-0.48) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? 0.48f : 0.55f) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false  ? - 0.48f : -0.55f) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
                                 doublePunchCounter = 0;
                             }
                         }
@@ -387,11 +387,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         damage /= 2;
                     Vector2 fistSpawnPosition = NPC.Center + Vector2.UnitX * 74f * NPC.direction;
 
-                    if (BigAttackLimit == (Phase2 ? 1 : 0) && death)
+                    if ((NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? BigAttackLimit <= 3 && BigAttackLimit > 0 : BigAttackLimit == 0) && death)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 10.5f).RotatedBy(0.5f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 10.5f).RotatedBy(-0.5f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
-                        SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound with { Volume = 1.8f, Pitch = 0.2f }, NPC.Center);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 11f).RotatedBy(0.6f - BigAttackLimit * 0.16f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 11f).RotatedBy(-0.6f + BigAttackLimit * 0.16f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
+                        SoundStyle fire = new("CalamityMod/Sounds/NPCHit/ThanatosHitOpen1");
+                        SoundEngine.PlaySound(fire with { Volume = 0.4f, Pitch = -0.8f - BigAttackLimit * 0.1f }, NPC.Center);
                     }
                     else if (BigAttackLimit == 0 && Phase2)
                     {
