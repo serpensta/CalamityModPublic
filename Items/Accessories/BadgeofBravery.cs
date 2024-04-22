@@ -29,7 +29,7 @@ namespace CalamityMod.Items.Accessories
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient(ItemID.FeralClaws).
+                AddIngredient(ItemID.WarriorEmblem).
                 AddIngredient<UelibloomBar>(2).
                 AddTile(TileID.LunarCraftingStation).
                 Register();
