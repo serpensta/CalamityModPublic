@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Enemy
 {
@@ -106,7 +106,7 @@ namespace CalamityMod.Projectiles.Enemy
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.Item54, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Item54, Projectile.Center);
 
             Projectile.position = Projectile.Center;
             Projectile.width = Projectile.height = 60;
@@ -115,7 +115,7 @@ namespace CalamityMod.Projectiles.Enemy
 
             for (int i = 0; i < 25; i++)
             {
-                int toxicDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 31, 0f, 0f, 0, default, 1f);
+                int toxicDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 0, default, 1f);
                 Main.dust[toxicDust].position = (Main.dust[toxicDust].position + Projectile.position) / 2f;
                 Main.dust[toxicDust].velocity = new Vector2((float)Main.rand.Next(-100, 101), (float)Main.rand.Next(-100, 101));
                 Main.dust[toxicDust].velocity.Normalize();

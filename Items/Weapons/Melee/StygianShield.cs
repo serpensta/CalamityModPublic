@@ -3,8 +3,8 @@ using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Melee;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Localization;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Melee
@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Weapons.Melee
     public class StygianShield : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        
+
         // Held stats
         public const int HeldDefense = 16;
         public const int DisableDashDuration = 90;
@@ -38,7 +38,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.shoot = ModContent.ProjectileType<StygianShieldAttack>();
             Item.shootSpeed = 10f;
             Item.knockBack = 6f;
-            Item.value = CalamityGlobalItem.Rarity8BuyPrice;
+            Item.value = CalamityGlobalItem.RarityYellowBuyPrice;
             Item.rare = ItemRarityID.Yellow;
             Item.Calamity().donorItem = true; // Donor: Cin2Win
             Item.UseSound = null;
@@ -104,7 +104,7 @@ namespace CalamityMod.Items.Weapons.Melee
             if (Player.ActiveItem().type == ModContent.ItemType<StygianShield>())
             {
                 Player.shield = EquipLoader.GetEquipSlot(Mod, "StygianShield", EquipType.Shield);
-			    Player.cShield = 0;
+                Player.cShield = 0;
             }
         }
     }

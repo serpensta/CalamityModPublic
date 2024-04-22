@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -33,7 +33,7 @@ namespace CalamityMod.Projectiles.Magic
             Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * 10f, 8f, DelegateMethods.CastLightOpen);
             if (Projectile.alpha > 0)
             {
-                SoundEngine.PlaySound(SoundID.Item9, Projectile.position);
+                SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
                 Projectile.alpha = 0;
                 Projectile.scale = 1.1f;
                 Projectile.frame = Main.rand.Next(14);
@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Magic
                     Vector2 dustRotate = Vector2.UnitX * 0f;
                     dustRotate += -Vector2.UnitY.RotatedBy((double)((float)dustIncr * (6.28318548f / dustLoopCheck)), default) * new Vector2(1f, 4f);
                     dustRotate = dustRotate.RotatedBy((double)Projectile.velocity.ToRotation(), default);
-                    int rainbow = Dust.NewDust(Projectile.Center, 0, 0, 66, 0f, 0f, 0, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
+                    int rainbow = Dust.NewDust(Projectile.Center, 0, 0, DustID.RainbowTorch, 0f, 0f, 0, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
                     Main.dust[rainbow].scale = 1.5f;
                     Main.dust[rainbow].noGravity = true;
                     Main.dust[rainbow].position = Projectile.Center + dustRotate;
@@ -58,11 +58,11 @@ namespace CalamityMod.Projectiles.Magic
         public override void OnKill(int timeLeft)
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
             int randDustAmt = Main.rand.Next(4, 10);
             for (int i = 0; i < randDustAmt; i++)
             {
-                int rainbowDeath = Dust.NewDust(Projectile.Center, 0, 0, 66, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
+                int rainbowDeath = Dust.NewDust(Projectile.Center, 0, 0, DustID.RainbowTorch, 0f, 0f, 100, new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB), 1f);
                 Dust dust = Main.dust[rainbowDeath];
                 dust.velocity *= 1.6f;
                 dust.velocity.Y -= 1f;

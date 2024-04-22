@@ -71,7 +71,7 @@ namespace CalamityMod.Projectiles.Boss
                 bool underworld = Projectile.ai[0] == 2f;
                 if (!Main.zenithWorld)
                 {
-                    if (Main.dayTime)
+                    if (Main.IsItDay())
                     {
                         color.R = 255;
                         if (underworld)

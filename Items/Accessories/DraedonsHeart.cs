@@ -1,8 +1,8 @@
-﻿using CalamityMod.Balancing;
+﻿using System.Collections.Generic;
+using CalamityMod.Balancing;
 using CalamityMod.CalPlayer;
 using CalamityMod.Rarities;
 using CalamityMod.World;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

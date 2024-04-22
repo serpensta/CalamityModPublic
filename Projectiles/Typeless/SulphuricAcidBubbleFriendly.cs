@@ -1,4 +1,4 @@
-using CalamityMod.Buffs.StatDebuffs;
+﻿using CalamityMod.Buffs.StatDebuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -138,7 +138,7 @@ namespace CalamityMod.Projectiles.Typeless
             int inc;
             for (int i = 0; i < 25; i = inc + 1)
             {
-                int toxicDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 31, 0f, 0f, 0, default, 1f);
+                int toxicDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 0, default, 1f);
                 Main.dust[toxicDust].position = (Main.dust[toxicDust].position + Projectile.position) / 2f;
                 Main.dust[toxicDust].velocity = new Vector2((float)Main.rand.Next(-100, 101), (float)Main.rand.Next(-100, 101));
                 Main.dust[toxicDust].velocity.Normalize();

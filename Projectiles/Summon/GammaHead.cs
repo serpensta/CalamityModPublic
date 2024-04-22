@@ -1,11 +1,11 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.DataStructures;
 using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -107,7 +107,7 @@ namespace CalamityMod.Projectiles.Summon
             // Release a circle of sulphuric dust.
             for (int i = 0; i < 18; i++)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.SulfurousSeaAcid);
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.SulphurousSeaAcid);
                 dust.velocity = new Vector2(0f, -5f).RotatedBy(i / 18f * MathHelper.TwoPi);
                 dust.noGravity = true;
                 dust.scale = 1.35f;
@@ -205,7 +205,7 @@ namespace CalamityMod.Projectiles.Summon
                 return;
 
             for (int i = 0; i < 10; i++)
-                Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.SulfurousSeaAcid, Main.rand.NextVector2CircularEdge(4f, 4f)).noGravity = true;
+                Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.SulphurousSeaAcid, Main.rand.NextVector2CircularEdge(4f, 4f)).noGravity = true;
         }
 
         public override bool PreDraw(ref Color lightColor)

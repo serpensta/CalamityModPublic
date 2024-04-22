@@ -24,6 +24,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = 1;
+            Projectile.extraUpdates = 1;
             Projectile.alpha = 150;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.timeLeft = 120;
@@ -103,7 +104,7 @@ namespace CalamityMod.Projectiles.Melee
             Projectile.position.Y = Projectile.position.Y - (float)(Projectile.height / 2);
             for (int j = 0; j < 20; j++)
             {
-                int shiny = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 159, 0f, 0f, 100, default, 0.5f);
+                int shiny = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, 0f, 0f, 100, default, 0.5f);
                 Main.dust[shiny].velocity *= 3f;
                 if (Main.rand.NextBool())
                 {
@@ -113,10 +114,10 @@ namespace CalamityMod.Projectiles.Melee
             }
             for (int k = 0; k < 35; k++)
             {
-                int shiny2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 32, 0f, 0f, 100, default, 1f);
+                int shiny2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Sand, 0f, 0f, 100, default, 1f);
                 Main.dust[shiny2].noGravity = true;
                 Main.dust[shiny2].velocity *= 5f;
-                shiny2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 159, 0f, 0f, 100, default, 0.5f);
+                shiny2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Teleporter, 0f, 0f, 100, default, 0.5f);
                 Main.dust[shiny2].velocity *= 2f;
             }
         }

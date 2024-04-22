@@ -330,7 +330,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.netUpdate = true;
             }
         }
-        
+
         public void ReturnToIdleState()
         {
             AITimer = 0f;

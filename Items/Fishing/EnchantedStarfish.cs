@@ -1,7 +1,7 @@
 ﻿using Terraria;
+using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent.Achievements;
 
 namespace CalamityMod.Items.Fishing
 {
@@ -13,7 +13,7 @@ namespace CalamityMod.Items.Fishing
             Item.ResearchUnlockCount = 10;
             ItemID.Sets.CanBePlacedOnWeaponRacks[Item.type] = true;
             // For some reason Life/Mana boosting items are in this set (along with Magic Mirror+)
-			ItemID.Sets.SortingPriorityBossSpawns[Type] = 19; // Mana Crystal
+            ItemID.Sets.SortingPriorityBossSpawns[Type] = 19; // Mana Crystal
         }
 
         public override void SetDefaults()

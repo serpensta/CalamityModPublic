@@ -1,13 +1,13 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System.Collections.Generic;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
+using CalamityMod.NPCs.ExoMechs.Thanatos;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.NPCs.ExoMechs.Thanatos;
-using System.Collections.Generic;
 
 namespace CalamityMod.Projectiles.Summon
 {
@@ -70,7 +70,7 @@ namespace CalamityMod.Projectiles.Summon
 
             // Calculate frames.
             Projectile.frameCounter++;
-            if (!HasCollidedWithGround) 
+            if (!HasCollidedWithGround)
                 Projectile.frame = Projectile.frameCounter / 6 % 5;
             else
             {

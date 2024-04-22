@@ -92,7 +92,7 @@ namespace CalamityMod.CalPlayer
             ApplyDoTDebuff(wDeath, 0);
 
             ApplyDoTDebuff(irradiated, 4, purity);
-            int sulphurDoT = 6 - (sulfurSet ? 2 : 0) - (sulphurskin ? 2 : 0);
+            int sulphurDoT = 6 - (sulphurSet ? 2 : 0) - (sulphurskin ? 2 : 0);
             ApplyDoTDebuff(sulphurPoison, sulphurDoT, purity);
             ApplyDoTDebuff(rTide, 6, purity);
             ApplyDoTDebuff(weakBrimstoneFlames, 7);
@@ -103,7 +103,7 @@ namespace CalamityMod.CalPlayer
             ApplyDoTDebuff(bFlames, abaddon ? 10 : 30, purity);
             ApplyDoTDebuff(nightwither, reducedNightwitherDamage ? 20 : 40, purity);
             ApplyDoTDebuff(hFlames, reducedHolyFlamesDamage ? 20 : 40, purity);
-            ApplyDoTDebuff(vHex, 30);
+            ApplyDoTDebuff(vHex, 35);
             ApplyDoTDebuff(cDepth, 18, purity);
             ApplyDoTDebuff(astralInfection, 24, infectedJewel || purity);
             ApplyDoTDebuff(pFlames, 30, purity);
@@ -123,7 +123,7 @@ namespace CalamityMod.CalPlayer
                 if (Vector2.Distance(Player.Center.ToTileCoordinates().ToVector2(), closestSafeZone.ToVector2()) < SulphuricWaterSafeZoneSystem.NearbySafeTiles[closestSafeZone] * 17f)
                     nearSafeZone = true;
             }
-            
+
             float ASPoisonLevel = 0f;
             if (CalamityGlobalNPC.aquaticScourge >= 0 && Main.zenithWorld)
             {
@@ -142,7 +142,7 @@ namespace CalamityMod.CalPlayer
                     increment *= 4f + (8f * ASPoisonLevel);
                 if (sulphurskin && !ASPoisoning)
                     increment *= 0.5f;
-                if (sulfurSet && !ASPoisoning)
+                if (sulphurSet && !ASPoisoning)
                     increment *= 0.5f;
 
                 SulphWaterPoisoningLevel = MathHelper.Clamp(SulphWaterPoisoningLevel + increment, 0f, 1f);
@@ -288,7 +288,7 @@ namespace CalamityMod.CalPlayer
             {
                 Player.manaRegen = 0;
                 Player.manaRegenBonus = 0;
-                Player.manaRegenDelay = (int) Player.maxRegenDelay;
+                Player.manaRegenDelay = (int)Player.maxRegenDelay;
                 if (Player.lifeRegen > 0)
                     Player.lifeRegen = 0;
                 totalNegativeLifeRegen += 42; //the meaning of death
@@ -423,7 +423,7 @@ namespace CalamityMod.CalPlayer
             {
                 float missingLifeRatio = (Player.statLifeMax2 - Player.statLife) / Player.statLifeMax2;
                 //Ambrosial Ampule and ooze give between 2 and 6 hp/s, Purity gives between 3 and 7 hp/s
-                float lifeRegenToGive = MathHelper.Lerp( purity ? 6f : 4f, purity ? 14f : 12f, missingLifeRatio);
+                float lifeRegenToGive = MathHelper.Lerp(purity ? 6f : 4f, purity ? 14f : 12f, missingLifeRatio);
                 Player.lifeRegen += (int)lifeRegenToGive;
             }
 
@@ -685,7 +685,7 @@ namespace CalamityMod.CalPlayer
                 Player.lifeRegen += 2;
                 if (Main.rand.NextBool())
                 {
-                    int regen = Dust.NewDust(Player.position, Player.width, Player.height, 5, 0f, 0f, 200, new Color(99, 54, 84), 2f);
+                    int regen = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Blood, 0f, 0f, 200, new Color(99, 54, 84), 2f);
                     Main.dust[regen].noGravity = true;
                     Main.dust[regen].fadeIn = 1.3f;
                     Vector2 velocity = CalamityUtils.RandomVelocity(100f, 50f, 100f, 0.04f);
@@ -775,7 +775,7 @@ namespace CalamityMod.CalPlayer
             #region Standing Still Life Regen
             // Standing still healing bonuses (all are exclusive with vanilla Shiny Stone, but all function similarly)
             if (!Player.shinyStone && Player.StandingStill() && Player.velocity.Y == 0 && Player.itemAnimation == 0)
-            { 
+            {
                 bool honeyDewWorking = honeyTurboRegen && Player.honeyWet;
                 bool anyStandingStillLifeRegen = shadeRegen || cFreeze || honeyDewWorking || photosynthesis || aAmpoule || purity;
                 bool onlyPhotosynthesisAtNight = !shadeRegen && !cFreeze && !honeyDewWorking && photosynthesis && !Main.dayTime;
@@ -783,7 +783,7 @@ namespace CalamityMod.CalPlayer
                 // Divides all negative life regen by two before applying any other effects.
                 if (anyStandingStillLifeRegen && Player.lifeRegen < 0)
                     Player.lifeRegen /= 2;
-                
+
                 // Spawn dust of some flavor while actually regenerating, aAmpule and purity have a slightly different looking style
                 if (Player.lifeRegen > 0 && Player.statLife < actualMaxLife)
                 {
@@ -834,7 +834,7 @@ namespace CalamityMod.CalPlayer
 
                 if (Main.rand.Next(30000) < Player.lifeRegenTime || Main.rand.NextBool())
                 {
-                    int regen = Dust.NewDust(Player.position, Player.width, Player.height, 12, 0f, 0f, 200, Color.OrangeRed, 1f);
+                    int regen = Dust.NewDust(Player.position, Player.width, Player.height, DustID.HeartCrystal, 0f, 0f, 200, Color.OrangeRed, 1f);
                     Main.dust[regen].noGravity = true;
                     Main.dust[regen].fadeIn = 1.3f;
                     Vector2 velocity = CalamityUtils.RandomVelocity(100f, 50f, 100f, 0.04f);

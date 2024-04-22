@@ -17,7 +17,6 @@ namespace CalamityMod.Items.Weapons.Melee
         {
             Item.width = 94;
             Item.height = 94;
-            Item.scale = 1.5f;
             Item.DamageType = DamageClass.Melee;
             Item.damage = 360;
             Item.knockBack = 8.5f;
@@ -29,7 +28,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item1;
 
-            Item.value = CalamityGlobalItem.Rarity13BuyPrice;
+            Item.value = CalamityGlobalItem.RarityPureGreenBuyPrice;
             Item.rare = ModContent.RarityType<PureGreen>();
             Item.Calamity().donorItem = true;
         }

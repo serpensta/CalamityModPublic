@@ -74,7 +74,8 @@ SetBonus: {
 	Mining: Mining ore will sometimes have additional yield
 	Molten:
 		'''
-		20% extra true melee damage
+		7% extra melee damage, cannot be set on fire
+		10% extra true melee damage
 		Grants immunity to fire blocks and temporary immunity to lava
 		'''
 	MonkTier2:
@@ -128,6 +129,7 @@ SetBonus: {
 		'''
 		Increases your life regeneration
 		15% increased minion damage and 10% increased melee critical strike chance
+		Negates the summon damage penalty while wielding non-summon weapons
 		'''
 	HuntressTier2: 10% increased minion and ranged damage
 	ApprenticeTier2: 5% increased minion damage and 15% increased magic critical strike chance
@@ -145,7 +147,7 @@ SetBonus: {
 	ApprenticeTier3: 10% increased minion damage and 15% increased magic critical strike chance
 	SpectreHealing:
 		'''
-		Reduces Magic damage by 20% and converts it to healing force
+		Converts magic damage to healing force
 		Magic damage done to enemies heals the player with lowest health
 		'''
 }

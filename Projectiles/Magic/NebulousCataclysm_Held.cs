@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items.Weapons.Magic;
+﻿using System;
+using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -104,7 +104,7 @@ namespace CalamityMod.Projectiles.Magic
                     }
 
                     if (ableToShoot)
-                        SoundEngine.PlaySound(SoundID.Item117, Projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item117, Projectile.Center);
                 }
 
                 if (Main.myPlayer == Projectile.owner && ableToShoot)

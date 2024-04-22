@@ -16,6 +16,11 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
         private SlotId gatlingLaserLoopID;
         private bool fireLasers = false;
 
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Projectile.type] = 4;
+        }
+
         public override void SetDefaults()
         {
             Projectile.width = 24;
@@ -29,6 +34,15 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
         public override void AI()
         {
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 13)
+            {
+                Projectile.frameCounter = 10;
+                Projectile.frame++;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
+                    Projectile.frame = 0;
+            }
+
             if (SoundEngine.TryGetActiveSound(gatlingLaserLoopID, out var ShootingSound) && ShootingSound.IsPlaying)
                 ShootingSound.Position = Projectile.Center;
             Player player = Main.player[Projectile.owner];
@@ -58,7 +72,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                     {
                         fireLasers = true;
                         Projectile.soundDelay *= 6;
-                        gatlingLaserLoopID = SoundEngine.PlaySound(GatlingLaser.FireLoopSound, Projectile.position);
+                        gatlingLaserLoopID = SoundEngine.PlaySound(GatlingLaser.FireLoopSound, Projectile.Center);
                     }
                 }
                 if (shootThisFrame && Main.myPlayer == Projectile.owner && fireLasers)
@@ -130,7 +144,7 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                         if (SoundEngine.TryGetActiveSound(gatlingLaserLoopID, out result))
                             result.Stop();
 
-                        SoundEngine.PlaySound(GatlingLaser.FireEndSound, Projectile.position);
+                        SoundEngine.PlaySound(GatlingLaser.FireEndSound, Projectile.Center);
                         Projectile.Kill();
                     }
                 }

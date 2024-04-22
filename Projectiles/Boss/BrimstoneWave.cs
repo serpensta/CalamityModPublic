@@ -1,10 +1,10 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.NPCs.SupremeCalamitas;
+﻿using System;
+using System.IO;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.SupremeCalamitas;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -45,6 +45,11 @@ namespace CalamityMod.Projectiles.Boss
 
         public override void AI()
         {
+            Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 60 : 114);
+            dust.noGravity = true;
+            dust.velocity = Projectile.velocity * Main.rand.NextFloat(0.1f, 0.7f);
+            dust.scale = Main.rand.NextFloat(0.9f, 1.8f);
+
             x++;
             Projectile.velocity.Y = (float)(5D * Math.Sin(x / 5D));
 

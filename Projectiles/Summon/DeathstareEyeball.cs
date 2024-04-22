@@ -1,8 +1,8 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -77,7 +77,7 @@ namespace CalamityMod.Projectiles.Summon
                 Initialize(Owner);
                 Projectile.ai[0] = 1f;
             }
-            
+
             if (Target is null)
                 DoHoveringAI();
             else

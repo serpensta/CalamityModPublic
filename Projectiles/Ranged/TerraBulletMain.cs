@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityMod.Particles;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Ranged
 {
@@ -11,8 +12,8 @@ namespace CalamityMod.Projectiles.Ranged
         public new string LocalizationCategory => "Projectiles.Ranged";
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 2;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
         public override void SetDefaults()
@@ -25,30 +26,24 @@ namespace CalamityMod.Projectiles.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 600;
-            Projectile.alpha = 255;
-            Projectile.extraUpdates = 3;
+            Projectile.extraUpdates = 5;
             Projectile.Calamity().pointBlankShotDuration = CalamityGlobalProjectile.DefaultPointBlankDuration;
         }
 
         public override void AI()
         {
-            Lighting.AddLight(Projectile.Center, 0f, 0.4f, 0f);
+            Lighting.AddLight(Projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
 
-            // localAI is used as an invisibility counter. The bullet fades into existence after 15 startup frames.
             Projectile.localAI[0] += 1f;
             if (Projectile.localAI[0] > 4f)
             {
-                // After 15 frames, the alpha will be exactly 0
-                if (Projectile.alpha > 0)
-                    Projectile.alpha -= 17;
-
-                // Dust type 74, scale 0.8, no gravity, no light, no velocity
-                Vector2 pos = Projectile.Center - Projectile.velocity * 0.1f;
-                Dust d = Dust.NewDustDirect(pos, 0, 0, 74, Scale: 0.8f);
-                d.position = pos;
-                d.velocity = Vector2.Zero;
-                d.noGravity = true;
-                d.noLight = true;
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(5) ? 131 : 294, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f));
+                dust.noGravity = true;
+                dust.scale = Main.rand.NextFloat(0.45f, 0.65f);
+                if (dust.type == 131)
+                    dust.scale = Main.rand.NextFloat(0.35f, 0.55f);
+                else
+                    dust.fadeIn = 0.5f;
             }
         }
 
@@ -67,8 +62,14 @@ namespace CalamityMod.Projectiles.Ranged
                     Vector2 velocity = CalamityUtils.RandomVelocity(100f, 70f, 100f);
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity, ModContent.ProjectileType<TerraBulletSplit>(), (int)(Projectile.damage * 0.3), 0f, Projectile.owner, 0f, 0f);
                 }
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 velocity = new Vector2(4, 4).RotatedByRandom(100);
+                    LineParticle spark2 = new LineParticle(Projectile.Center + velocity, velocity * Main.rand.NextFloat(0.5f, 1f), false, 11, 0.65f, Main.rand.NextBool(3) ? Color.MediumAquamarine : Color.Lime);
+                    GeneralParticleHandler.SpawnParticle(spark2);
+                }
             }
-            SoundEngine.PlaySound(SoundID.Item118, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Item118 with { Pitch = 0.5f }, Projectile.Center);
         }
     }
 }

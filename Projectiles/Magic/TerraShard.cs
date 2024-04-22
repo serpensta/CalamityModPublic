@@ -1,5 +1,7 @@
-using Terraria;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
 namespace CalamityMod.Projectiles.Magic
 {
     public class TerraShard : ModProjectile, ILocalizedModType
@@ -20,7 +22,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             for (int i = 0; i < 4; i++)
             {
-                Dust terraMagic = Dust.NewDustDirect(Projectile.Center, 1, 1, 107, 0f, 0f, 0, default, 0.5f);
+                Dust terraMagic = Dust.NewDustDirect(Projectile.Center, 1, 1, DustID.TerraBlade, 0f, 0f, 0, default, 0.5f);
                 terraMagic.scale = 0.42f;
                 terraMagic.velocity *= 0.1f;
             }

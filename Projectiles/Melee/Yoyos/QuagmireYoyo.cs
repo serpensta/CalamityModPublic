@@ -37,7 +37,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
             if ((Projectile.position - Main.player[Projectile.owner].position).Length() > 3200f) //200 blocks
                 Projectile.Kill();
             if (Main.rand.NextBool(5 * MaxUpdates))
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 44, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.JungleSpore, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f);
             if (Projectile.owner == Main.myPlayer)
             {
                 if (Main.rand.NextBool(10 * MaxUpdates))

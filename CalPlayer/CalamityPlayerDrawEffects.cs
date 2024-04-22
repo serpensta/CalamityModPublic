@@ -62,7 +62,7 @@ namespace CalamityMod.CalPlayer
                     Rectangle screenArea = new Rectangle((int)Main.screenPosition.X - 500, (int)Main.screenPosition.Y - 50, Main.screenWidth + 1000, Main.screenHeight + 100);
                     int dustDrawn = 0;
                     float maxShroomDust = Main.maxDustToDraw / 2;
-                    Color shroomColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 0);
+                    Color shroomColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, Main.DiscoR);
                     for (int i = 0; i < Main.maxDustToDraw; i++)
                     {
                         Dust dust = Main.dust[i];
@@ -104,6 +104,10 @@ namespace CalamityMod.CalPlayer
                     }
                 }
             }
+            else // This is such a stupid way to reset this but you can't just put it in ResetEffects
+            {
+                calamityPlayer.trippyLevel = 1;
+            }
 
             // TODO -- rogue stealth visuals are an utter catastrophe and should be fully destroyed on next stealth rework
             if (calamityPlayer.rogueStealth > 0f && calamityPlayer.rogueStealthMax > 0f && Player.townNPCs < 3f && CalamityConfig.Instance.StealthInvisibility)
@@ -127,7 +131,7 @@ namespace CalamityMod.CalPlayer
                 {
                     if (Main.rand.NextBool())
                     {
-                        int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 4, Player.height + 4, 229, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1f);
+                        int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 4, Player.height + 4, DustID.Vortex, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity *= 0.5f;
                         drawInfo.DustCache.Add(dust);
@@ -142,7 +146,7 @@ namespace CalamityMod.CalPlayer
                 {
                     if (Main.rand.NextBool())
                     {
-                        int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 4, Player.height + 4, 246, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1f);
+                        int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 4, Player.height + 4, DustID.GoldCoin, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity *= 0.5f;
                         drawInfo.DustCache.Add(dust);
@@ -162,7 +166,7 @@ namespace CalamityMod.CalPlayer
                     {
                         if (Main.rand.NextBool())
                         {
-                            int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 4, Player.height + 4, 27, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1.5f);
+                            int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 4, Player.height + 4, DustID.Shadowflame, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1.5f);
                             Main.dust[dust].noGravity = true;
                             Main.dust[dust].velocity *= 0.5f;
                             drawInfo.DustCache.Add(dust);
@@ -181,7 +185,7 @@ namespace CalamityMod.CalPlayer
                     {
                         if (Main.rand.NextBool(14))
                         {
-                            int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 8, Player.height + 8, 206, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1.5f);
+                            int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f), Player.width + 8, Player.height + 8, DustID.UnusedWhiteBluePurple, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1.5f);
                             Main.dust[dust].noGravity = true;
                             Main.dust[dust].velocity *= 1f;
                             drawInfo.DustCache.Add(dust);
@@ -291,6 +295,9 @@ namespace CalamityMod.CalPlayer
 
             if (calamityPlayer.vaporfied && drawInfo.shadow == 0f)
                 Vaporfied.DrawEffects(drawInfo);
+
+            if (calamityPlayer.vHex && drawInfo.shadow == 0f)
+                VulnerabilityHex.DrawEffects(drawInfo);
             #endregion
 
             if (calamityPlayer.PinkJellyRegen && drawInfo.shadow == 0f)

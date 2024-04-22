@@ -1,7 +1,7 @@
-﻿using CalamityMod.Items.Weapons.Magic;
+﻿using System;
+using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -110,7 +110,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.soundDelay = soundDelayer - soundDelayMult * aiSoundDelay;
 
                 if (isActive)
-                    SoundEngine.PlaySound(SoundID.Item117, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item117, Projectile.Center);
             }
             else if (Projectile.soundDelay <= 0 && canUseItem)
             {
@@ -147,7 +147,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.soundDelay = soundDelayer - soundDelayMult * aiSoundDelay;
                 if (Projectile.ai[0] != 1f && isActive)
                 {
-                    SoundEngine.PlaySound(SoundID.Item117, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item117, Projectile.Center);
                 }
                 Projectile.localAI[0] = 12f;
             }

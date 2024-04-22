@@ -1,12 +1,12 @@
-﻿using CalamityMod.Buffs.Summon;
+﻿using System;
+using CalamityMod.Buffs.Summon;
 using CalamityMod.CalPlayer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 namespace CalamityMod.Projectiles.Summon
 {
     public class PinkButterfly : ModProjectile, ILocalizedModType
@@ -46,7 +46,7 @@ namespace CalamityMod.Projectiles.Summon
                     Vector2 rotate = Vector2.Normalize(Projectile.velocity) * new Vector2((float)Projectile.width / 2f, (float)Projectile.height) * 0.5f;
                     rotate = rotate.RotatedBy((double)((float)(i - (dustAmt / 2 - 1)) * 6.28318548f / (float)dustAmt), default) + Projectile.Center;
                     Vector2 faceDirection = rotate - Projectile.Center;
-                    int dust = Dust.NewDust(rotate + faceDirection, 0, 0, 73, faceDirection.X, faceDirection.Y, 100, default, 1.1f);
+                    int dust = Dust.NewDust(rotate + faceDirection, 0, 0, DustID.PinkFairy, faceDirection.X, faceDirection.Y, 100, default, 1.1f);
                     Main.dust[dust].noGravity = true;
                 }
                 Projectile.localAI[0] += 1f;
@@ -194,7 +194,7 @@ namespace CalamityMod.Projectiles.Summon
 
             // Projectile fire timer
             if (Projectile.ai[1] > 0f)
-                Projectile.ai[1] += (float)Main.rand.Next(1, 2+1);
+                Projectile.ai[1] += (float)Main.rand.Next(1, 2 + 1);
 
             // Reset timer
             if (Projectile.ai[1] > 240f)
@@ -226,7 +226,7 @@ namespace CalamityMod.Projectiles.Summon
                         for (int i = 0; i < numProj; i++)
                         {
                             Vector2 perturbedSpeed = projDirectionAgain.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numProj - 1)));
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, projectileType, (int)(Projectile.damage * 0.8f), Projectile.knockBack * 0.5f, Projectile.owner, targetIndex, 0f);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, projectileType, (int)(Projectile.damage * 0.85f), Projectile.knockBack * 0.5f, Projectile.owner, targetIndex, 0f);
                         }
                         Projectile.netUpdate = true;
                     }

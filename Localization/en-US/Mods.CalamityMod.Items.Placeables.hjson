@@ -343,6 +343,11 @@ BabyGhostBellJar: {
 	Tooltip: ""
 }
 
+CirrusCouch: {
+	DisplayName: Cirrus Courch
+	Tooltip: This shouldn't exist...
+}
+
 AquaticScourgeRelic: {
 	DisplayName: Aquatic Scourge Relic
 	Tooltip: A glimpse into what could have been...
@@ -633,6 +638,11 @@ AbyssFountainItem: {
 
 AstralFountainItem: {
 	DisplayName: Astral Water Fountain
+	Tooltip: ""
+}
+
+BrimstoneLavaFountainItem: {
+	DisplayName: Brimstone Lava Fountain
 	Tooltip: ""
 }
 

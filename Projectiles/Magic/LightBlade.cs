@@ -3,9 +3,9 @@ using CalamityMod.Items.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -129,7 +129,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.NPCHit3, Projectile.position);
+            SoundEngine.PlaySound(SoundID.NPCHit3, Projectile.Center);
             int numDust = Main.rand.Next(4, 10);
             for (int i = 0; i < numDust; i++)
             {

@@ -1,14 +1,14 @@
-﻿using CalamityMod.NPCs;
+﻿using System;
+using System.IO;
+using CalamityMod.NPCs;
 using CalamityMod.NPCs.Providence;
+using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using System.IO;
-using CalamityMod.World;
 
 namespace CalamityMod.Projectiles.Boss
 {
@@ -75,7 +75,7 @@ namespace CalamityMod.Projectiles.Boss
                 int dustType = ProvUtils.GetDustID(Projectile.maxPenetrate);
                 for (int i = 0; i < 10; i++)
                 {
-                    int holyDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 2f);
+                    int holyDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 100, default, 2f);
                     Main.dust[holyDust].velocity *= 3f;
                     Main.dust[holyDust].noGravity = true;
                     if (Main.rand.NextBool())
@@ -136,15 +136,15 @@ namespace CalamityMod.Projectiles.Boss
             int dustType = ProvUtils.GetDustID(Projectile.maxPenetrate);
             for (int j = 0; j < 4; j++)
             {
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 2f);
                 Main.dust[dust].noGravity = true;
             }
             for (int k = 0; k < 40; k++)
             {
-                int profaned = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 0, default, 4f);
+                int profaned = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 0, default, 4f);
                 Main.dust[profaned].noGravity = true;
                 Main.dust[profaned].velocity *= 3f;
-                profaned = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 2f);
+                profaned = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, 0f, 0f, 50, default, 2f);
                 Main.dust[profaned].velocity *= 2f;
                 Main.dust[profaned].noGravity = true;
             }

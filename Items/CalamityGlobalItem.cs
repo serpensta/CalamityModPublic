@@ -6,7 +6,6 @@ using CalamityMod.CalPlayer;
 using CalamityMod.Enums;
 using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Placeables;
 using CalamityMod.Items.VanillaArmorChanges;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Summon;
@@ -199,6 +198,10 @@ namespace CalamityMod.Items
                     item.expert = false;
                     break;
             }
+
+            // Allow Beam Sword to change direction when it fires, because vanilla disables it for some reason.
+            if (item.type == ItemID.BeamSword)
+                item.ChangePlayerDirectionOnShoot = true;
 
             // Apply Calamity Global Item Tweaks.
             SetDefaults_ApplyTweaks(item);
@@ -499,7 +502,8 @@ namespace CalamityMod.Items
                             if (i != 0)
                             {
                                 Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.ToRadians(i));
-                                int rocket = Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<ScorpioRocket>(), (int)(damage * 0.25), 2f, player.whoAmI);
+                                int rocket = Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<ScorpioRocket>(), (int)(damage * 0.25), 2f, player.whoAmI, 0, 12f);
+                                //First extra value is rocket type which I just used 0 to get the default, second is the velocity I went with my gut feeling and got quite close to Scorpio's velocity with Rockets I
                                 if (rocket.WithinBounds(Main.maxProjectiles))
                                     Main.projectile[rocket].DamageType = DamageClass.Generic;
                             }
@@ -962,7 +966,6 @@ namespace CalamityMod.Items
         {
             CalamityPlayer modPlayer = player.Calamity();
             VanillaArmorChangeManager.CreateTooltipManuallyAsNecessary(player);
-            VanillaArmorChangeManager.ApplyPotentialEffectsTo(player);
 
             if (set == "WizardHat")
             {
@@ -1027,7 +1030,7 @@ namespace CalamityMod.Items
             }
             else if (set == "SpectreHealing")
             {
-                player.GetDamage<MagicDamageClass>() += 0.2f;
+                player.GetDamage<MagicDamageClass>() += 0.4f;
                 player.setBonus = CalamityUtils.GetTextValue("Vanilla.Armor.SetBonus.SpectreHealing");
             }
             else if (set == "SolarFlare")
@@ -1057,7 +1060,7 @@ namespace CalamityMod.Items
 
                 case ItemID.TopazRobe:
                     player.statManaMax2 -= 20;
-                    player.manaCost += 0.02f ; // 7% to 5%
+                    player.manaCost += 0.02f; // 7% to 5%
                     break;
 
                 case ItemID.SapphireRobe:
@@ -1195,14 +1198,13 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FairyBoots)
                 modPlayer.fairyBoots = true;
 
-            // Arcane and Magnet Flower buffs
+            // Mana Flower tinker buffs
             if (item.type == ItemID.MagnetFlower)
                 player.manaCost -= 0.02f;
-            if (item.type == ItemID.ArcaneFlower)
-            {
+            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.ManaCloak)
                 player.manaCost -= 0.04f;
+            if (item.type == ItemID.ArcaneFlower)
                 player.GetDamage<MagicDamageClass>() += 0.05f;
-            }
 
             if (item.type == ItemID.SniperScope)
             {
@@ -1220,7 +1222,7 @@ namespace CalamityMod.Items
             {
                 player.GetDamage<MeleeDamageClass>() += 0.02f;
             }
-            
+
             // Feral Claws line melee speed adjustments and nonstacking
             // First removes all their melee speed so it can be given based on which you wear without stacking
             if (item.type == ItemID.FeralClaws)
@@ -1258,39 +1260,39 @@ namespace CalamityMod.Items
             if (item.type == ItemID.SunStone)
             {
                 if (Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.MoonStone)
             {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.CelestialStone)
             {
                 player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
             }
-            
+
             if (item.type == ItemID.CelestialShell)
             {
                 player.GetAttackSpeed<MeleeDamageClass>() -= 0.1f;
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             //Moon Charm and Moon Shell melee speed removal
-            
+
             if (item.type == ItemID.MoonCharm)
-            {    
+            {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.MoonShell)
-            {    
+            {
                 if (!Main.dayTime)
-                player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
+                    player.GetAttackSpeed<MeleeDamageClass>() -= 0.051f;
             }
 
             if (item.type == ItemID.TerrasparkBoots)
@@ -1536,7 +1538,7 @@ namespace CalamityMod.Items
                 modPlayer.fleshKnuckles = true;
 
             if (item.type == ItemID.WormScarf)
-                player.endurance -= 0.07f;
+                player.endurance -= 0.03f;
 
             if (item.type == ItemID.RoyalGel)
                 modPlayer.royalGel = true;
@@ -1570,11 +1572,11 @@ namespace CalamityMod.Items
                 /* Prehardmode = 2
                  * Hardmode = 3
                  * Post-Moon Lord = 4
-                 * Post-DoG = 6
+                 * Post-DoG = 5
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 4;
+                    player.statDefense += 3;
                 else if (NPC.downedMoonlord)
                     player.statDefense += 2;
                 else if (Main.hardMode)
@@ -1585,34 +1587,34 @@ namespace CalamityMod.Items
             if (item.prefix == PrefixID.Armored)
             {
                 /* Prehardmode = 3
-                 * Hardmode = 5
-                 * Post-Moon Lord = 6
-                 * Post-DoG = 8
+                 * Hardmode = 4
+                 * Post-Moon Lord = 5
+                 * Post-DoG = 6
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 5;
-                else if (NPC.downedMoonlord)
                     player.statDefense += 3;
-                else if (Main.hardMode)
+                else if (NPC.downedMoonlord)
                     player.statDefense += 2;
+                else if (Main.hardMode)
+                    player.statDefense += 1;
 
                 player.endurance += 0.0075f;
             }
             if (item.prefix == PrefixID.Warding)
             {
                 /* Prehardmode = 4
-                 * Hardmode = 6
-                 * Post-Moon Lord = 8
-                 * Post-DoG = 10
+                 * Hardmode = 5
+                 * Post-Moon Lord = 6
+                 * Post-DoG = 7
                  */
 
                 if (DownedBossSystem.downedDoG)
-                    player.statDefense += 6;
+                    player.statDefense += 3;
                 else if (NPC.downedMoonlord)
-                    player.statDefense += 4;
-                else if (Main.hardMode)
                     player.statDefense += 2;
+                else if (Main.hardMode)
+                    player.statDefense += 1;
 
                 player.endurance += 0.01f;
             }
@@ -1657,29 +1659,6 @@ namespace CalamityMod.Items
         #endregion
 
         #region Ammo
-        public override void PickAmmo(Item weapon, Item ammo, Player player, ref int type, ref float speed, ref StatModifier damage, ref float knockback)
-        {
-            // Sandgun with Calamity sands work like vanilla non-plain sand, +5 flat damage
-            if (weapon.type == ItemID.Sandgun)
-            {
-                if (ammo.type == ModContent.ItemType<AstralSand>())
-                {
-                    type = ModContent.ProjectileType<AstralSandBallGun>();
-                    damage.Flat += 5;
-                }
-                else if (ammo.type == ModContent.ItemType<EutrophicSand>())
-                {
-                    type = ModContent.ProjectileType<EutrophicSandBallGun>();
-                    damage.Flat += 5;
-                }
-                else if (ammo.type == ModContent.ItemType<SulphurousSand>())
-                {
-                    type = ModContent.ProjectileType<SulphurousSandBallGun>();
-                    damage.Flat += 5;
-                }
-            }
-        }
-
         public override bool CanConsumeAmmo(Item weapon, Item ammo, Player player) => Main.rand.NextFloat() <= player.Calamity().rangedAmmoCost;
 
         public static bool HasEnoughAmmo(Player player, Item item, int ammoConsumed)
@@ -1812,8 +1791,8 @@ namespace CalamityMod.Items
         #region On Create
         public override void OnCreated(Item item, ItemCreationContext context)
         {
-			// ChoosePrefix also happens on craft so go reset it here too
-			storedPrefix = -1;
+            // ChoosePrefix also happens on craft so go reset it here too
+            storedPrefix = -1;
         }
         #endregion
 
@@ -1831,14 +1810,14 @@ namespace CalamityMod.Items
         // removed data saved on items; reforging is now a coalescing flowchart that has no RNG
         public override int ChoosePrefix(Item item, UnifiedRandom rand)
         {
-			if (storedPrefix == -1 && item.CountsAsClass<RogueDamageClass>() && (item.maxStack == 1 || item.AllowReforgeForStackableItem))
-			{
-				// Crafting (or first reforge of) a rogue weapon has a 75% chance for a random modifier, this check is done by vanilla
-				// Negative modifiers have a 66.66% chance of being voided, Annoying modifier is intentionally ignored by vanilla
-				int prefix = CalamityUtils.RandomRoguePrefix();
-				bool keepPrefix = !CalamityUtils.NegativeRoguePrefix(prefix) || Main.rand.NextBool(3);
-				return keepPrefix ? prefix : 0;
-			}
+            if (storedPrefix == -1 && item.CountsAsClass<RogueDamageClass>() && (item.maxStack == 1 || item.AllowReforgeForStackableItem))
+            {
+                // Crafting (or first reforge of) a rogue weapon has a 75% chance for a random modifier, this check is done by vanilla
+                // Negative modifiers have a 66.66% chance of being voided, Annoying modifier is intentionally ignored by vanilla
+                int prefix = CalamityUtils.RandomRoguePrefix();
+                bool keepPrefix = !CalamityUtils.NegativeRoguePrefix(prefix) || Main.rand.NextBool(3);
+                return keepPrefix ? prefix : 0;
+            }
 
             if (!CalamityConfig.Instance.RemoveReforgeRNG || Main.gameMenu || storedPrefix == -1)
                 return -1;
@@ -1868,91 +1847,103 @@ namespace CalamityMod.Items
         }
         #endregion
 
-        #region Money From Rarity
-        public static readonly int Rarity0BuyPrice = Item.buyPrice(0, 0, 50, 0);
-        public static readonly int Rarity1BuyPrice = Item.buyPrice(0, 1, 0, 0);
-        public static readonly int Rarity2BuyPrice = Item.buyPrice(0, 2, 0, 0);
-        public static readonly int Rarity3BuyPrice = Item.buyPrice(0, 4, 0, 0);
-        public static readonly int Rarity4BuyPrice = Item.buyPrice(0, 12, 0, 0);
-        public static readonly int Rarity5BuyPrice = Item.buyPrice(0, 24, 0, 0);
-        public static readonly int Rarity6BuyPrice = Item.buyPrice(0, 36, 0, 0);
-        public static readonly int Rarity7BuyPrice = Item.buyPrice(0, 48, 0, 0);
-        public static readonly int Rarity8BuyPrice = Item.buyPrice(0, 60, 0, 0);
-        public static readonly int Rarity9BuyPrice = Item.buyPrice(0, 80, 0, 0);
-        public static readonly int Rarity10BuyPrice = Item.buyPrice(1, 0, 0, 0);
-        public static readonly int Rarity11BuyPrice = Item.buyPrice(1, 10, 0, 0);
-        public static readonly int Rarity12BuyPrice = Item.buyPrice(1, 20, 0, 0);
-        public static readonly int Rarity13BuyPrice = Item.buyPrice(1, 30, 0, 0);
-        public static readonly int Rarity14BuyPrice = Item.buyPrice(1, 40, 0, 0);
-        public static readonly int Rarity15BuyPrice = Item.buyPrice(1, 50, 0, 0);
-        public static readonly int Rarity16BuyPrice = Item.buyPrice(2, 0, 0, 0);
+        #region Rarity Price Table
+        // Base numeric rarity pricing guide.
+        private static readonly int Rarity0BuyPrice = Item.buyPrice(0, 0, 50, 0);
+        private static readonly int Rarity1BuyPrice = Item.buyPrice(0, 1, 0, 0);
+        private static readonly int Rarity2BuyPrice = Item.buyPrice(0, 2, 0, 0);
+        private static readonly int Rarity3BuyPrice = Item.buyPrice(0, 4, 0, 0);
+        private static readonly int Rarity4BuyPrice = Item.buyPrice(0, 12, 0, 0);
+        private static readonly int Rarity5BuyPrice = Item.buyPrice(0, 24, 0, 0);
+        private static readonly int Rarity6BuyPrice = Item.buyPrice(0, 36, 0, 0);
+        private static readonly int Rarity7BuyPrice = Item.buyPrice(0, 48, 0, 0);
+        private static readonly int Rarity8BuyPrice = Item.buyPrice(0, 60, 0, 0);
+        private static readonly int Rarity9BuyPrice = Item.buyPrice(0, 80, 0, 0);
+        private static readonly int Rarity10BuyPrice = Item.buyPrice(1, 0, 0, 0); // Highest raw rarity used by vanilla items (ML drops)
+        private static readonly int Rarity11BuyPrice = Item.buyPrice(1, 20, 0, 0); // End of vanilla rarities
+        private static readonly int Rarity12BuyPrice = Item.buyPrice(1, 50, 0, 0);
+        private static readonly int Rarity13BuyPrice = Item.buyPrice(1, 75, 0, 0);
+        private static readonly int Rarity14BuyPrice = Item.buyPrice(2, 0, 0, 0);
+        private static readonly int Rarity15BuyPrice = Item.buyPrice(2, 40, 0, 0);
+        private static readonly int Rarity16BuyPrice = Item.buyPrice(2, 80, 0, 0);
+        private static readonly int Rarity17BuyPrice = Item.buyPrice(3, 20, 0, 0); // This is Calamity's "plus" rarity (similar to vanilla 11 / Purple). Nothing uses it.
 
-        public static readonly int RarityWhiteBuyPrice = Item.buyPrice(0, 0, 50, 0);
-        public static readonly int RarityBlueBuyPrice = Item.buyPrice(0, 1, 0, 0);
-        public static readonly int RarityGreenBuyPrice = Item.buyPrice(0, 2, 0, 0);
-        public static readonly int RarityOrangeBuyPrice = Item.buyPrice(0, 4, 0, 0);
-        public static readonly int RarityLightRedBuyPrice = Item.buyPrice(0, 12, 0, 0);
-        public static readonly int RarityPinkBuyPrice = Item.buyPrice(0, 24, 0, 0);
-        public static readonly int RarityLightPurpleBuyPrice = Item.buyPrice(0, 36, 0, 0);
-        public static readonly int RarityLimeBuyPrice = Item.buyPrice(0, 48, 0, 0);
-        public static readonly int RarityYellowBuyPrice = Item.buyPrice(0, 60, 0, 0);
-        public static readonly int RarityCyanBuyPrice = Item.buyPrice(0, 80, 0, 0);
-        public static readonly int RarityRedBuyPrice = Item.buyPrice(1, 0, 0, 0);
-        public static readonly int RarityPurpleBuyPrice = Item.buyPrice(1, 10, 0, 0);
-        public static readonly int RarityTurquoiseBuyPrice = Item.buyPrice(1, 20, 0, 0);
-        public static readonly int RarityPureGreenBuyPrice = Item.buyPrice(1, 30, 0, 0);
-        public static readonly int RarityDarkBlueBuyPrice = Item.buyPrice(1, 40, 0, 0);
-        public static readonly int RarityVioletBuyPrice = Item.buyPrice(1, 50, 0, 0);
-        public static readonly int RarityHotPinkBuyPrice = Item.buyPrice(2, 0, 0, 0);
+        private static readonly int[] RarityBuyPriceArray = new int[] {
+            Rarity0BuyPrice,
+            Rarity1BuyPrice,
+            Rarity2BuyPrice,
+            Rarity3BuyPrice,
+            Rarity4BuyPrice,
+            Rarity5BuyPrice,
+            Rarity6BuyPrice,
+            Rarity7BuyPrice,
+            Rarity8BuyPrice,
+            Rarity9BuyPrice,
+            Rarity10BuyPrice,
+            Rarity11BuyPrice,
+            Rarity12BuyPrice,
+            Rarity13BuyPrice,
+            Rarity14BuyPrice,
+            Rarity15BuyPrice,
+            Rarity16BuyPrice,
+            Rarity17BuyPrice,
+        };
 
+        // Canonical names which are implemented as properties that reference the base numeric rarity prices.
+        // Also serves as a convenient counter for the number of items Calamity adds of each rarity.
+        public static int RarityWhiteBuyPrice => Rarity0BuyPrice;
+        public static int RarityBlueBuyPrice => Rarity1BuyPrice;
+        public static int RarityGreenBuyPrice => Rarity2BuyPrice;
+        public static int RarityOrangeBuyPrice => Rarity3BuyPrice;
+        public static int RarityLightRedBuyPrice => Rarity4BuyPrice;
+        public static int RarityPinkBuyPrice => Rarity5BuyPrice;
+        public static int RarityLightPurpleBuyPrice => Rarity6BuyPrice;
+        public static int RarityLimeBuyPrice => Rarity7BuyPrice;
+        public static int RarityYellowBuyPrice => Rarity8BuyPrice;
+        public static int RarityCyanBuyPrice => Rarity9BuyPrice;
+        public static int RarityRedBuyPrice => Rarity10BuyPrice;
+        public static int RarityPurpleBuyPrice => Rarity11BuyPrice;
+        public static int RarityTurquoiseBuyPrice => Rarity12BuyPrice;
+        public static int RarityPureGreenBuyPrice => Rarity13BuyPrice;
+        public static int RarityDarkBlueBuyPrice => Rarity14BuyPrice;
+        public static int RarityVioletBuyPrice => Rarity15BuyPrice;
+        public static int RarityHotPinkBuyPrice => Rarity16BuyPrice;
+        public static int RarityCalamityRedBuyPrice => Rarity17BuyPrice;
+        #endregion
+
+        //
+        // !! WARNING !!
+        //
+        // 17APR2024: Ozzatron:
+        // THESE FUNCTIONS MAY SHOW ZERO REFERENCES BUT ARE ACTIVELY USED BY MULTIPLE CALAMITY ADDONS, INCLUDING CATALYST.
+        // DO NOT TOUCH. IF YOU DO, THESE ADDONS WILL BREAK!
+        //
+        #region Rarity / Price Helper Functions
         public static int GetBuyPrice(int rarity)
         {
-            switch (rarity)
-            {
-                case 0:
-					return Rarity0BuyPrice;
-                case 1:
-					return Rarity1BuyPrice;
-                case 2:
-					return Rarity2BuyPrice;
-                case 3:
-					return Rarity3BuyPrice;
-                case 4:
-					return Rarity4BuyPrice;
-                case 5:
-					return Rarity5BuyPrice;
-                case 6:
-					return Rarity6BuyPrice;
-                case 7:
-					return Rarity7BuyPrice;
-                case 8:
-					return Rarity8BuyPrice;
-                case 9:
-					return Rarity9BuyPrice;
-                case 10:
-					return Rarity10BuyPrice;
-                case 11:
-					return Rarity11BuyPrice;
-            }
-			if (rarity == ModContent.RarityType<Turquoise>())
-				return RarityTurquoiseBuyPrice;
-			if (rarity == ModContent.RarityType<PureGreen>())
-				return RarityPureGreenBuyPrice;
-			if (rarity == ModContent.RarityType<DarkBlue>())
-				return RarityDarkBlueBuyPrice;
-			if (rarity == ModContent.RarityType<Violet>())
-				return RarityVioletBuyPrice;
-			if (rarity == ModContent.RarityType<HotPink>())
-				return RarityHotPinkBuyPrice;
+            // Vanilla rarities go directly to the array.
+            if (rarity >= ItemRarityID.White && rarity <= ItemRarityID.Purple)
+                return RarityBuyPriceArray[rarity];
 
-			// Return 0 if it's not a progression based or other mod's rarity
-			return 0;
+            // Calamity rarities aren't guaranteed to have the monotonic IDs, so they're handled directly.
+            if (rarity == ModContent.RarityType<Turquoise>())
+                return RarityTurquoiseBuyPrice;
+            if (rarity == ModContent.RarityType<PureGreen>())
+                return RarityPureGreenBuyPrice;
+            if (rarity == ModContent.RarityType<DarkBlue>())
+                return RarityDarkBlueBuyPrice;
+            if (rarity == ModContent.RarityType<Violet>())
+                return RarityVioletBuyPrice;
+            if (rarity == ModContent.RarityType<HotPink>())
+                return RarityHotPinkBuyPrice;
+            if (rarity == ModContent.RarityType<CalamityRed>())
+                return RarityCalamityRedBuyPrice;
+
+            // Return 0 if it's not a progression based or other mod's rarity
+            return 0;
         }
 
-        public static int GetBuyPrice(Item item)
-        {
-            return GetBuyPrice(item.rare);
-        }
+        public static int GetBuyPrice(Item item) => GetBuyPrice(item.rare);
         #endregion
     }
 }

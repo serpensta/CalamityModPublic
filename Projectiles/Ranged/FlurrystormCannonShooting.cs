@@ -1,6 +1,6 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System;
+using CalamityMod.Items.Weapons.Ranged;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -133,7 +133,7 @@ namespace CalamityMod.Projectiles.Ranged
                     {
                         Main.projectile[snowball].noDropItem = true;
                         Main.projectile[snowball].DamageType = DamageClass.Ranged;
-                        Main.projectile[snowball].extraUpdates += Main.rand.Next(0,2);
+                        Main.projectile[snowball].extraUpdates += Main.rand.Next(0, 2);
                     }
 
                     if (Main.rand.NextBool(5)) //ice chunk

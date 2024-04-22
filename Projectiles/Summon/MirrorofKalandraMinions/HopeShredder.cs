@@ -51,7 +51,7 @@ namespace CalamityMod.Projectiles.Summon.MirrorofKalandraMinions
                 DoAnimation();
                 ShootTarget();
 
-                Projectile.rotation = Projectile.rotation.AngleTowards(CalamityUtils.CalculatePredictiveAimToTarget(Projectile.Center, Target, MirrorofKalandra.Vile_ArrowSpeed).ToRotation(), .2f);
+                Projectile.rotation = Projectile.rotation.AngleTowards(CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(Projectile.Center, Target, MirrorofKalandra.Vile_ArrowSpeed, MirrorofKalandra.Vile_ArrowSpeedMult).ToRotation(), .2f);
             }
             else
             {
@@ -75,7 +75,7 @@ namespace CalamityMod.Projectiles.Summon.MirrorofKalandraMinions
                 Vector2 spawnPosition = Projectile.Center + Projectile.rotation.ToRotationVector2() * (Projectile.width / 2);
                 int arrow = Projectile.NewProjectile(Projectile.GetSource_FromThis(),
                     spawnPosition,
-                    CalamityUtils.CalculatePredictiveAimToTarget(spawnPosition, Target, MirrorofKalandra.Vile_ArrowSpeed),
+                    CalamityUtils.CalculatePredictiveAimToTargetMaxUpdates(spawnPosition, Target, MirrorofKalandra.Vile_ArrowSpeed, MirrorofKalandra.Vile_ArrowSpeedMult),
                     ModContent.ProjectileType<HopeShredderArrow>(),
                     Projectile.damage,
                     Projectile.knockBack,
@@ -116,7 +116,7 @@ namespace CalamityMod.Projectiles.Summon.MirrorofKalandraMinions
             Main.EntitySpriteDraw(texture, drawPosition + Projectile.rotation.ToRotationVector2() * 5f, frame, Color.DarkBlue with { A = 100 }, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
 
             Main.EntitySpriteDraw(texture, drawPosition, frame, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-            
+
 
             return false;
         }
