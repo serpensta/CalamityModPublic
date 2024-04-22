@@ -243,6 +243,7 @@ namespace CalamityMod.NPCs
             "Lacuna", // <@!790746689211203604> (_lacuna_)
             "Mae Borowski", //<@!219158690433990656> (justakkolite)
             "Jackie", // <@!353241811717718016> (jackalchan)
+            "Fera", // <@!195850711567826945> (juneark_)
         };
 
         // The following sets are for the 1.4 Town Pets: Town Dogs, Cats and Bunnies.
@@ -292,6 +293,7 @@ namespace CalamityMod.NPCs
             "Lucerne", // <@!271954788676141066> (lord_lucerne)
             "Milo", // <@!401849201597874179> (maskedmilo)
             "Octo", // <@!796112889353994281> (octolinggrimm)
+            "Tardo", // <@!739343546867384391> (midnight295)
         };
         private static readonly string[] TownCatSiameseNames = null;
         private static readonly string[] TownCatBlackNames =
