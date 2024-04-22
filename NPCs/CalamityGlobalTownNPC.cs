@@ -77,6 +77,7 @@ namespace CalamityMod.NPCs
             "Jeffred", // <@!295362230038560768> (Knight Solaire#0873)
             "The Cooler Arthur", // <@!568263512523014154> (gokuartillery)
             "Markie", // <@!291141964039061504> (markie_)
+            "Shark", // <@!874464051697172492> (congratsistrash)
         };
         private static readonly string[] ClothierNames =
         {
@@ -242,7 +243,6 @@ namespace CalamityMod.NPCs
             "Kiriku", // <@!395312478160027668> (rulosss#6814)
             "Lacuna", // <@!790746689211203604> (_lacuna_)
             "Mae Borowski", //<@!219158690433990656> (justakkolite)
-            "Jackie", // <@!353241811717718016> (jackalchan)
             "Fera", // <@!195850711567826945> (juneark_)
         };
 
