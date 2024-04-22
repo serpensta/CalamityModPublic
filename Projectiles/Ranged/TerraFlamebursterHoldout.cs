@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -12,6 +13,8 @@ namespace CalamityMod.Projectiles.Ranged
     public class TerraFlamebursterHoldout : BaseGunHoldoutProjectile
     {
         public override int AssociatedItemID => ModContent.ItemType<TerraFlameburster>();
+        public override string Texture => "CalamityMod/Projectiles/Ranged/TerraFlamebursterHoldout";
+        public override Vector2 GunTipPosition => base.GunTipPosition - Vector2.UnitX.RotatedBy(Projectile.rotation) * 17f - (Vector2.UnitY.RotatedBy(Projectile.rotation) * 7f * Projectile.spriteDirection);
         public override float MaxOffsetLengthFromArm => 20f;
         public override float OffsetXUpwards => -5f;
         public override float BaseOffsetY => -5f;
