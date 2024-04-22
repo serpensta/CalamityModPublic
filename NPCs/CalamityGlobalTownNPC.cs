@@ -71,7 +71,7 @@ namespace CalamityMod.NPCs
             "Drifter",
             "Finchi",
             "Heniek", // <@!363404700445442050> (kazurgundu)
-            "Fire", // <@!354362326947856384> (fire#0692)
+            "Fire", // <@!354362326947856384> (ultimatefirewaster)
             "Barney Calhoun", // <@!634462901431697410> (potatostego)
             "XiaoEn0426", // <@!440448864772816896> (xiaoen0426)
             "Jeffred", // <@!295362230038560768> (paladinsamuel)
@@ -123,15 +123,15 @@ namespace CalamityMod.NPCs
             "Streakist", // used to be "StreakistYT". couldn't find the youtube channel, and decided to remove the ad.
             "Necroplasmic",
             "Devin",
-            "Woffle", // <@!185980979427540992> (Chipbeam#2268)
+            "Woffle", // <@!185980979427540992> (chipbeam)
             "Cameron", // <@!340401981711712258> (cammywammy.)
             "Wilbur", // <@!295171926324805634> (all_imperfect_chaos)
             "Good Game Design", // <@!564267767042277385> (dominickarma)
-            "Danmaku", // <@!756259562268524555> (Danmaku#2659)
-            "Grylken", // <@!299970404435361802> (Grylken#1569)
+            "Danmaku", // <@!756259562268524555> (danmaku0)
+            "Grylken", // <@!299970404435361802> (grylken)
             "Outlaw", // <@!918311619480657922> (thechosenoutlaw)
-            "Alfred Rend", // <@!606301806481375255> (Deadsqurp300#0907)
-            "Leeman", // <@!281999243168841728> (Tweee#5831)
+            "Alfred Rend", // <@!606301806481375255> (deadsqurp300)
+            "Leeman", // <@!281999243168841728> (tweee)
             "Mihai", // <@!373941893467209730> (cmihaii.)
             "Cooler Kevin", // <@!614126424751603714> (exellent.)
         };
@@ -139,7 +139,7 @@ namespace CalamityMod.NPCs
         {
             "Lilly",
             "Daawn", // <@!206162323541458944> (daawnily)
-            "Robin", // <@!654737510030639112> (Altzeus#8687)
+            "Robin", // <@!654737510030639112> (altzeus)
             "Curly", // <@!673092101780668416> (curly4830)
         };
         private static readonly string[] MerchantNames =
@@ -154,18 +154,18 @@ namespace CalamityMod.NPCs
         };
         private static readonly string[] PainterNames =
         {
-            "Picasso", // <@!353316526306361347> (sconicboom -- for the late Picasso's Bean#2819)
+            "Picasso", // <@!353316526306361347> (sconicboom -- for the late picassosbean2819)
         };
         private static readonly string[] PartyGirlNames =
         {
-            "Arin", // <@!268169458302976012> (Kiyotu#0006)
+            "Arin", // <@!268169458302976012> (kiyotu)
         };
         private static readonly string[] PirateNames =
         {
             "Tyler Van Hook",
             "Cap'n Deek", // "Alex N" on Patreon (No discord account)
             "Captain Billy Bones", // <@!699589229507772416> (djackv)
-            "Captain J. Crackers", // <@!233232602994049024> (Qyuuno#3031)
+            "Captain J. Crackers", // <@!233232602994049024> (qyuuno)
         };
         private static readonly string[] PrincessNames =
         {
@@ -203,7 +203,7 @@ namespace CalamityMod.NPCs
             "Tim Lockwood", // <@!605839945483026434> (pomvoid)
             "Sir Samuel Winchester Jenkins Kester II", // <@!107659695749070848> (ryaegos)
             "Brutus", // <@!591889650692521984> (.brutus._)
-            "Sloth", // <@!486265327387279391> (BossyPunch#4983)
+            "Sloth", // <@!486265327387279391> (bossypunch)
         };
         private static readonly string[] TaxCollectorNames =
         {
@@ -232,15 +232,15 @@ namespace CalamityMod.NPCs
             "Inorim, son of Ivukey",
             "Jensen",
             "Merasmus", // <@!288066987819663360> (spiderprovidence)
-            "Habolo", // <@!163028025494077441> (ChristmasGoat#7810)
+            "Habolo", // <@!163028025494077441> (hellgoat2)
             "Ortho", // <@!264984390910738432> (worcuus)
             "Chris Tallballs", // <@!770211589076418571> (bewearium)
             "Syethas", // <@!325413275066171393> (cosmicstariight)
-            "Nextdoor Psycho", // <@!173261518572486656> (⋈-NextdoorPsycho-⋈#0001)
+            "Nextdoor Psycho", // <@!173261518572486656> (nextdoorpsycho)
         };
         private static readonly string[] ZoologistNames =
         {
-            "Kiriku", // <@!395312478160027668> (rulosss#6814)
+            "Kiriku", // <@!395312478160027668> (rulosss)
             "Lacuna", // <@!790746689211203604> (_lacuna_)
             "Mae Borowski", //<@!219158690433990656> (justakkolite)
             "Fera", // <@!195850711567826945> (juneark_)
@@ -276,7 +276,7 @@ namespace CalamityMod.NPCs
         private static readonly string[] TownDogDalmatianNames = null;
         private static readonly string[] TownDogHuskyNames =
         {
-            "Yoshi", // <@!541127291426832384> (GregTheSpinarak#6643)
+            "Yoshi", // <@!541127291426832384> (gregthespinarak)
         };
 
         private const int TownCatSiameseVanillaNames = 12;
@@ -288,7 +288,7 @@ namespace CalamityMod.NPCs
         private static readonly string[] TownCatNames =
         {
             "Smoogle", // <@!709968379334623274> (smooglin)
-            "The Meowurer of Gods", // <@!385949114271268864> (GP#7876)
+            "The Meowurer of Gods", // <@!385949114271268864> (thatgp)
             "Katsafaros", // <@!190595401328492544> (gr_mm)
             "Lucerne", // <@!271954788676141066> (lord_lucerne)
             "Milo", // <@!401849201597874179> (maskedmilo)
