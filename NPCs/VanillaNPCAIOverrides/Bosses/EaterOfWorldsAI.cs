@@ -616,11 +616,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         // Limit this variable so that the following calculation never goes too low
                         numHeads--;
-                        if (numHeads > 8)
-                            numHeads = 8;
+                        if (numHeads > 7)
+                            numHeads = 7;
 
-                        float pushDistanceLowerLimit = 16f - numHeads;
-                        float pushDistanceUpperLimit = 160f - numHeads * 10f;
+                        float pushDistanceLowerLimit = 14f - numHeads;
+                        float pushDistanceUpperLimit = 140f - numHeads * 10f;
                         float pushDistance = MathHelper.Lerp(pushDistanceLowerLimit, pushDistanceUpperLimit, 1f - lifeRatio) * npc.scale;
                         float pushVelocity = 0.25f + enrageScale * 0.125f;
                         for (int i = 0; i < Main.maxNPCs; i++)
