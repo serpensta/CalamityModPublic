@@ -34,7 +34,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Height = 5;
             TileObjectData.newTile.Origin = new Point16(0, 1);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 16 };
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 3, 0);
@@ -68,16 +68,10 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
             frameCounter++;
-            if (frameCounter % 3 == 0)
-            {
-                exoframe++;
-                if (exoframe > 11)
-                    exoframe = 0;
-            }
             if (frameCounter >= 7.2)
             {
                 frameCounter = 0;
-                if (++frame >= 2)
+                if (++frame >= 13)
                 {
                     frame = 0;
                 }
@@ -131,7 +125,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             NetMessage.SendTileSquare(-1, x, y + 1, 3);
         }
-        int exoframe = 0;
+
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
@@ -148,14 +142,11 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             {
                 animate = Main.tileFrame[Type] * 92;
             }
-            Rectangle textFrame = Numbers.Frame(1, 13, 0, exoframe);
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             if (Glow != null)
                 Main.spriteBatch.Draw(Glow, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            if (Numbers != null && tile.TileFrameX == 36 && tile.TileFrameY == 164)
-            {
-                Main.spriteBatch.Draw(Numbers, new Vector2(i * 16 - (int)Main.screenPosition.X - 30, j * 16 - (int)Main.screenPosition.Y - 62) + zero, textFrame, Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            }
+            if (Numbers != null)
+                Main.spriteBatch.Draw(Numbers, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Color.White, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             return false;
         }
     }

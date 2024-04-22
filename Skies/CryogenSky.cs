@@ -46,8 +46,15 @@ namespace CalamityMod.Skies
 
         public override void Update(GameTime gameTime)
         {
-            if (FadeInCountdown > 0)
-                FadeInCountdown--;
+            if (!ShouldDrawRegularly && Main.LocalPlayer.Calamity().monolithCryogenShader <= 0)
+            {
+                if (FadeInCountdown > 0)
+                    FadeInCountdown--;
+            }
+            else
+            {
+                FadeInCountdown = 1;
+            }
 
             if (CryogenIndex == -1 && !ShouldDrawRegularly && Main.LocalPlayer.Calamity().monolithCryogenShader <= 0)
             {
