@@ -423,7 +423,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 npc.damage = 0;
 
                 calamityGlobalNPC.newAI[1] += 1f;
-                float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 14f) : phase4 ? (death ? 8f : 6f) : masterMode ? (death ? 5f : 4f) : (4f * ((1f - lifeRatio) / (1f - phase4LifeRatio)));
+                float chargePhaseChangeRateBoost = phase5 ? (death ? 24f : 14f) : phase4 ? (death ? 8f : 6f) : (((masterMode && death) ? 6f : 4f) * ((1f - lifeRatio) / (1f - phase4LifeRatio)));
                 float chargePhaseChangeRate = chargePhaseChangeRateBoost + 1f;
                 npc.ai[2] += chargePhaseChangeRate;
                 npc.localAI[1] += chargePhaseChangeRate;
@@ -635,7 +635,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             {
                                 float shadowFlameProjectileSpeed = death ? 5f : 4f;
                                 if (masterMode)
-                                    shadowFlameProjectileSpeed *= 1.25f;
+                                    shadowFlameProjectileSpeed *= 1.2f;
 
                                 Vector2 initialProjectileVelocity = npc.Center.DirectionTo(Main.player[npc.target].Center) * shadowFlameProjectileSpeed;
                                 int type = ProjectileID.Shadowflames;
@@ -659,7 +659,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 bool dontGoMach10 = false;
-                float dashPhaseTime = masterMode ? 180f : 300f;
+                float dashPhaseTime = masterMode ? 210f : 300f;
                 if (npc.ai[2] >= dashPhaseTime)
                 {
                     if (Main.getGoodWorld)
@@ -744,7 +744,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         headSpinVelocityMult += velocityBoost;
                 }
 
-                float altDashStopDistance = death ? (masterMode ? 280f : 360f) : (masterMode ? 320f : 400f);
+                float altDashStopDistance = death ? (masterMode ? 320f : 360f) : (masterMode ? 360f : 400f);
                 float headSpeedIncreaseDist = phase3 ? altDashStopDistance : 160f;
                 if (headSpinTargetDist > headSpeedIncreaseDist)
                 {
@@ -768,7 +768,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (npc.ai[2] < altDashPhaseTime)
                         {
                             if (npc.Center.Distance(Main.player[npc.target].Center) > altDashStopDistance || npc.ai[2] == 1f + phaseChangeRateBoost)
-                                npc.velocity = headSpinVelocity.SafeNormalize(Vector2.UnitY) * headSpinVelocityMult + npc.Center.DirectionTo(Main.player[npc.target].Center + (masterMode ? Main.player[npc.target].velocity * 20f : Vector2.Zero)) * 2f;
+                                npc.velocity = headSpinVelocity.SafeNormalize(Vector2.UnitY) * headSpinVelocityMult + npc.Center.DirectionTo(Main.player[npc.target].Center + (bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero)) * 2f;
                             else
                                 npc.ai[2] = altDashPhaseTime;
                         }
