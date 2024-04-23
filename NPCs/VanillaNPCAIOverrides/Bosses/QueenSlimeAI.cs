@@ -713,7 +713,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             if (Main.getGoodWorld)
                                 numGelProjectiles = 20;
 
-                            float projectileVelocity = death ? (masterMode ? 13.5f : 12f) : (masterMode ? 12f : 10.5f);
+                            float projectileVelocity = death ? 12f : 10.5f;
                             int type = ProjectileID.QueenSlimeGelAttack;
                             int damage = npc.GetProjectileDamage(type);
                             if (phase2)
@@ -1493,7 +1493,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 int type = ProjectileID.QueenSlimeGelAttack;
                                 for (int j = 0; j < num15; j++)
                                 {
-                                    Vector2 spinningpoint = new Vector2(Main.masterMode ? 13.5f : 9f, 0f);
+                                    Vector2 spinningpoint = new Vector2(Main.masterMode ? 10.5f : 9f, 0f);
                                     spinningpoint = spinningpoint.RotatedBy((float)(-j) * MathHelper.TwoPi / (float)num14, Vector2.Zero);
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                                 }
@@ -1880,7 +1880,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if ((double)npc.velocity.X > -0.1 && (double)npc.velocity.X < 0.1)
                     npc.velocity.X = 0f;
 
-                npc.ai[0] += 7f;
+                npc.ai[0] += (Main.masterMode ? 16f : Main.expertMode ? 10f : 7f);
 
                 float num33 = -1000f;
 
@@ -1903,14 +1903,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (num34 == 3)
                     {
                         npc.velocity.Y = -8f;
-                        npc.velocity.X += 3 * npc.direction;
+                        npc.velocity.X += (Main.masterMode ? 9 : Main.expertMode ? 6 : 3) * npc.direction;
                         npc.ai[0] = -200f;
                         npc.ai[3] = npc.position.X;
                     }
                     else
                     {
                         npc.velocity.Y = -6f;
-                        npc.velocity.X += 2 * npc.direction;
+                        npc.velocity.X += (Main.masterMode ? 6 : Main.expertMode ? 4 : 2) * npc.direction;
                         npc.ai[0] = -120f;
                         if (num34 == 1)
                             npc.ai[0] += num33;
@@ -2033,7 +2033,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if ((double)npc.velocity.X > -0.1 && (double)npc.velocity.X < 0.1)
                     npc.velocity.X = 0f;
 
-                npc.ai[0] += 5f;
+                npc.ai[0] += (Main.masterMode ? 11f : Main.expertMode ? 7f : 5f);
 
                 float num33 = -500f;
 
@@ -2056,14 +2056,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (num34 == 3)
                     {
                         npc.velocity.Y = -8f;
-                        npc.velocity.X += 3 * npc.direction;
+                        npc.velocity.X += (Main.masterMode ? 9 : Main.expertMode ? 6 : 3) * npc.direction;
                         npc.ai[0] = -200f;
                         npc.ai[3] = npc.position.X;
                     }
                     else
                     {
                         npc.velocity.Y = -6f;
-                        npc.velocity.X += 2 * npc.direction;
+                        npc.velocity.X += (Main.masterMode ? 6 : Main.expertMode ? 4 : 2) * npc.direction;
                         npc.ai[0] = -120f;
                         if (num34 == 1)
                             npc.ai[0] += num33;
