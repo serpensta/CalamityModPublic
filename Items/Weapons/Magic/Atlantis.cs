@@ -41,7 +41,7 @@ namespace CalamityMod.Items.Weapons.Magic
             if (Main.zenithWorld)
             {
                 bool devourer = DownedBossSystem.downedDoG;
-                float damageMult = 1f + (devourer ? (430f / 82f - 1f) : 0f);
+                float damageMult = 1f + (devourer ? (348f / 86f - 1f) : 0f);
                 damage *= damageMult;
             }
         }
