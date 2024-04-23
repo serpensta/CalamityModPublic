@@ -2517,41 +2517,6 @@ namespace CalamityMod.NPCs
                 }
             }
 
-            if (CalamityWorld.revenge)
-            {
-                double damageMultiplier = 1D;
-                bool containsNPC = false;
-                if (CalamityLists.revengeanceEnemyBuffList25Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.25;
-                    containsNPC = true;
-                }
-                else if (CalamityLists.revengeanceEnemyBuffList20Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.2;
-                    containsNPC = true;
-                }
-                else if (CalamityLists.revengeanceEnemyBuffList15Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.15;
-                    containsNPC = true;
-                }
-                else if (CalamityLists.revengeanceEnemyBuffList10Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.1;
-                    containsNPC = true;
-                }
-
-                if (containsNPC)
-                {
-                    if (CalamityWorld.death)
-                        damageMultiplier += (damageMultiplier - 1D) * 0.6;
-
-                    npc.damage = (int)Math.Round(npc.damage * damageMultiplier);
-                    npc.defDamage = npc.damage;
-                }
-            }
-
             // Nerf KB resist in Expert and Master using this roundabout method
             if (Main.expertMode)
                 AdjustExpertModeStatScaling(npc);
