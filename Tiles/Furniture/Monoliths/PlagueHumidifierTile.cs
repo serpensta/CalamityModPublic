@@ -24,7 +24,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
             TileObjectData.newTile.Height = 4;
-            TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.Origin = new Point16(1, 3);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
@@ -58,9 +58,9 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             // Spawn mist particles at the bottom tiles
             if (Main.tile[i,j +1].TileType != Type)
             {
-                if (Main.rand.NextBool(60))
+                if (Main.rand.NextBool(30))
                 {
-                    GeneralParticleHandler.SpawnParticle(new PlagueHumidifierMist(new Vector2(i * 16, j * 16) + new Vector2(Main.rand.NextFloat(0, 16), Main.rand.NextFloat(16)), 60, Main.rand.NextFloat(0.8f, 1.2f), Vector2.UnitX * Main.rand.NextFloat(-2, 2)));
+                    GeneralParticleHandler.SpawnParticle(new PlagueHumidifierMist(new Vector2(i * 16, j * 16) + new Vector2(Main.rand.NextFloat(0, 16), Main.rand.NextFloat(16)), Main.rand.Next(40, 80), Main.rand.NextFloat(0.8f, 1.2f), Vector2.UnitX * Main.rand.NextFloat(-0.8f, 0.8f)));
                 }
             }
         }

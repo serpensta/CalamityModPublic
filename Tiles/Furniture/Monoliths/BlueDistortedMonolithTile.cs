@@ -24,7 +24,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
             TileObjectData.newTile.Width = 5;
             TileObjectData.newTile.Height = 5;
-            TileObjectData.newTile.Origin = new Point16(0, 2);
+            TileObjectData.newTile.Origin = new Point16(2, 4);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
@@ -34,7 +34,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             AddMapEntry(new Color(50, 127, 209));
 
             DustType = (int)CalamityDusts.BlueCosmilite;
-            AnimationFrameHeight = 90;
+            AnimationFrameHeight = 92;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
@@ -64,7 +64,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
                 frameCounter = 0;
                 if (++frame >= 6)
                 {
-                    frame = 0;
+                    frame = 1;
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         {
             int x = i - Main.tile[i, j].TileFrameX / 18 % 5;
             int y = j - Main.tile[i, j].TileFrameY / 18 % 5;
-            int tileXX18 = 90;
+            int tileXX18 = 92;
             for (int l = x; l < x + 5; l++)
             {
                 for (int m = y; m < y + 5; m++)

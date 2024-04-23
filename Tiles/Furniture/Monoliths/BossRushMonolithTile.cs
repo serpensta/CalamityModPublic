@@ -29,7 +29,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Width = 4;
-            TileObjectData.newTile.Origin = new Point16(2, 2);
+            TileObjectData.newTile.Origin = new Point16(2, 3);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;

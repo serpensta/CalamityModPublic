@@ -22,7 +22,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             RegisterItemDrop(ModContent.ItemType<DeepSeaAnchor>());
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
-            TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.Origin = new Point16(0, 3);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;

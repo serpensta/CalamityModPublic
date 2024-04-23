@@ -29,7 +29,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             Main.tileFrameImportant[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
             TileObjectData.newTile.Height = 3;
-            TileObjectData.newTile.Origin = new Point16(0, 1);
+            TileObjectData.newTile.Origin = new Point16(0, 2);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
@@ -39,12 +39,12 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             AddMapEntry(new Color(16, 50, 64));
 
             DustType = ModContent.DustType<AstralOrange>();
-            AnimationFrameHeight = 54;
+            AnimationFrameHeight = 56;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main.tile[i, j].TileFrameY < 54)
+            if (Main.tile[i, j].TileFrameY < 56)
             {
                 return;
             }
@@ -134,9 +134,9 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
             }
             int height = 18;
             int animate = 0;
-            if (tile.TileFrameY >= 54)
+            if (tile.TileFrameY >= 56)
             {
-                animate = Main.tileFrame[Type] * AnimationFrameHeight;
+                animate = Main.tileFrame[Type] * 56;
             }
             Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
             if (Glow != null)
