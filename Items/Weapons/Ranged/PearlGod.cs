@@ -7,6 +7,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityMod.Rarities;
+using CalamityMod.Items.Materials;
 
 namespace CalamityMod.Items.Weapons.Ranged
 {
@@ -28,8 +30,8 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 3f;
-            Item.value = CalamityGlobalItem.RarityYellowBuyPrice;
-            Item.rare = ItemRarityID.Yellow;
+            Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
+            Item.rare = ModContent.RarityType<Turquoise>();
             Item.UseSound = SoundID.Item41;
             Item.autoReuse = true;
             Item.shootSpeed = 14f;
@@ -66,11 +68,23 @@ namespace CalamityMod.Items.Weapons.Ranged
                     PearlParticle pearl1 = new PearlParticle(itemPosition + velocity.RotatedBy(-0.6 * player.direction) + velocity * 1.35f, velocity.RotatedByRandom(0.25) * Main.rand.NextFloat(0.2f, 1f), false, Main.rand.Next(40, 45 + 1), Main.rand.NextFloat(0.6f, 0.75f), color, 0.95f, Main.rand.NextFloat(1, -1), true);
                     GeneralParticleHandler.SpawnParticle(pearl1);
                 }
+                int shotColor = Main.rand.Next(1, 3 + 1);
                 for (int k = 0; k < 3; k++)
                 {
                     Projectile pearlShot = Projectile.NewProjectileDirect(source, itemPosition + velocity.RotatedBy(-0.6 * player.direction) + velocity * 1.65f, velocity.RotatedBy(k == 0 ? 0 : k == 1 ? 0.025f : -0.025f), type, damage, knockback, player.whoAmI);
                     CalamityGlobalProjectile cgp = pearlShot.Calamity();
-                    cgp.pearlBullet = true;
+                    if (shotColor == 1)
+                        cgp.pearlBullet1 = true; // blue
+                    if (shotColor == 2)
+                        cgp.pearlBullet2 = true; // pink
+                    if (shotColor == 3)
+                        cgp.pearlBullet3 = true; // yellow
+
+                    if (shotColor < 3)
+                        shotColor++;
+                    else
+                        shotColor = 1;
+
                 }
             }
             // Life bullet
@@ -80,7 +94,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 {
                     int randomColor = Main.rand.Next(1, 3 + 1);
                     Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
-                    SparkParticle spark = new SparkParticle(itemPosition + velocity.RotatedBy(-0.6 * player.direction) + velocity * 1.35f, velocity.RotatedByRandom(0.25) * Main.rand.NextFloat(0.2f, 1.5f), false, Main.rand.Next(20, 25 + 1), Main.rand.NextFloat(0.4f, 0.65f), color);
+                    Particle spark = new SparkParticle(itemPosition + velocity.RotatedBy(-0.6 * player.direction) + velocity * 1.35f, velocity.RotatedByRandom(0.25) * Main.rand.NextFloat(0.2f, 1.5f), false, Main.rand.Next(20, 25 + 1), Main.rand.NextFloat(0.4f, 0.65f), color);
                     GeneralParticleHandler.SpawnParticle(spark);
                 }
                 for (int k = 0; (k < 13); k++)
@@ -139,10 +153,11 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<AGunofFireAndIce>().
-                AddIngredient(ItemID.SpectreBar, 5).
-                AddIngredient(ItemID.ShroomiteBar, 5).
-                AddTile(TileID.MythrilAnvil).
+                AddIngredient<Arietes41>().
+                AddIngredient<LifeAlloy>(5).
+                AddIngredient<RuinousSoul>(2).
+                AddIngredient(ItemID.WhitePearl).
+                AddTile(TileID.LunarCraftingStation).
                 Register();
         }
     }

@@ -90,8 +90,12 @@ namespace CalamityMod.Projectiles
         // Adds shock to bullets, currently used by Arietes 41
         public bool shockBullet = false;
 
-        // Adds... pearl? to bullets, currently used by Pearl God
-        public bool pearlBullet = false;
+        // Adds... pearl? to bullets (visual 1, blue), currently used by Pearl God
+        public bool pearlBullet1 = false;
+        // Adds... pearl? to bullets (visual 2, pink), currently used by Pearl God
+        public bool pearlBullet2 = false;
+        // Adds... pearl? to bullets (visual 3, yellow), currently used by Pearl God
+        public bool pearlBullet3 = false;
 
         // Adds lifesteal to bullets, currently used by Arietes 41
         public bool lifeBullet = false;
@@ -3770,14 +3774,13 @@ namespace CalamityMod.Projectiles
                         }
                     }
                 }
-                if (pearlBullet)
+                if ((pearlBullet1 || pearlBullet2 || pearlBullet3))
                 {
                     float targetDist = Vector2.Distance(player.Center, projectile.Center);
                     if (projectile.timeLeft > 200 && targetDist < 1400f)
                     {
-                        int randomColor = Main.rand.Next(1, 3 + 1);
-                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
-                        SparkParticle spark = new SparkParticle(projectile.Center + projectile.velocity * 1.5f, -projectile.velocity * 0.05f, false, 2, 0.75f, color * 0.75f);
+                        Color color = pearlBullet1 ? Color.LightBlue : pearlBullet2 ? Color.LightPink : Color.Khaki;
+                        Particle spark = new GlowSparkParticle(projectile.Center + projectile.velocity * 1.5f, -projectile.velocity * 0.05f, false, 3, 0.0093f, color, new Vector2(0.6f, 1.8f), false, false);
                         GeneralParticleHandler.SpawnParticle(spark);
                         if (Main.rand.NextBool(5))
                         {

@@ -20,15 +20,15 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.width = 56;
             Item.height = 30;
             Item.scale = 0.85f;
-            Item.damage = 45;
+            Item.damage = 65;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = 13;
             Item.useAnimation = 13;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
-            Item.knockBack = 2.25f;
-            Item.value = CalamityGlobalItem.Rarity4BuyPrice;
-            Item.rare = ItemRarityID.LightRed;
+            Item.knockBack = 2.5f;
+            Item.value = CalamityGlobalItem.RarityYellowBuyPrice;
+            Item.rare = ItemRarityID.Yellow;
             Item.UseSound = SoundID.Item41;
             Item.autoReuse = true;
             Item.shootSpeed = 13f;
@@ -101,9 +101,9 @@ namespace CalamityMod.Items.Weapons.Ranged
             CreateRecipe().
                 AddIngredient<AGunofFireAndIce>().
                 AddIngredient(ItemID.ShroomiteBar, 3).
-                AddIngredient(ItemID.FallenStar, 5).
+                AddIngredient(ItemID.FallenStar, 3). // 41 Arietis is a triple star system
                 AddIngredient<CoreofSunlight>().
-                AddTile(TileID.Anvils).
+                AddTile(TileID.MythrilAnvil).
                 Register();
         }
     }

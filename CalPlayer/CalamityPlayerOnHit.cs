@@ -401,44 +401,42 @@ namespace CalamityMod.CalPlayer
                     }
                 }
 
-                if (cgp.pearlBullet && proj.numHits == 0)
+                if ((cgp.pearlBullet1 || cgp.pearlBullet2 || cgp.pearlBullet3) && proj.numHits == 0)
                 {
-                    Vector2 randPos = proj.Center + new Vector2(30, 30).RotateRandom(100) * Main.rand.NextFloat(0.9f, 1.1f);
-                    CustomPulse spark = new CustomPulse(randPos, Vector2.Zero, Color.White, "CalamityMod/Particles/HighResHollowCircleHardEdge", new Vector2(1, 1), Main.rand.NextFloat(-2f, 2f), 0.005f, 0.08f, 14);
-                    GeneralParticleHandler.SpawnParticle(spark);
-                    int points = (int)(MathHelper.Clamp(6 - (int)(proj.numHits * 0.3f), 3, 6));
-                    float radians = MathHelper.TwoPi / points;
+                    Color color = cgp.pearlBullet1 ? Color.LightBlue : cgp.pearlBullet2 ? Color.LightPink : Color.Khaki;
                     Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
+                    float radians = MathHelper.TwoPi / 3;
+
+                    Vector2 Position = target.Center + spinningPoint.RotatedBy(radians * (cgp.pearlBullet1 ? 0 : cgp.pearlBullet2 ? 1 : 2)).RotatedBy(-0.45f) * 55;
+                    int bulletType = (cgp.pearlBullet1 ? 0 : cgp.pearlBullet2 ? 1 : 2);
+
+                    CustomPulse spark = new CustomPulse(target.Center, Vector2.Zero, Color.White, "CalamityMod/Particles/HighResHollowCircleHardEdge", new Vector2(1, 1), Main.rand.NextFloat(-2f, 2f), 0.005f, 0.035f + 0.018f * bulletType, 14 + bulletType);
+                    GeneralParticleHandler.SpawnParticle(spark);
+                    CustomPulse spark2 = new CustomPulse(Position, Vector2.Zero, color, "CalamityMod/Particles/HighResFoggyCircleHardEdge", new Vector2(1, 1), Main.rand.NextFloat(-2f, 2f), 0.005f, 0.06f, 17);
+                    GeneralParticleHandler.SpawnParticle(spark2);
+
+                    int points = 6;
+                    radians = MathHelper.TwoPi / points;
+                    spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
                     float rotRando = Main.rand.NextFloat(0.1f, 2.5f);
                     for (int k = 0; k < points; k++)
                     {
-                        int randomColor = Main.rand.Next(1, 3 + 1);
-                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
-
                         Vector2 velocity = spinningPoint.RotatedBy(radians * k).RotatedBy(-0.45f * rotRando);
-                        SparkParticle subTrail = new SparkParticle(randPos + velocity * 10f, velocity * 15, false, 13, 1f, color);
+                        Particle subTrail = new GlowSparkParticle(Position + velocity * 10f, velocity * 15, false, 12, 0.03f, color, new Vector2(1.35f, 0.5f), true);
                         GeneralParticleHandler.SpawnParticle(subTrail);
-                        SparkParticle subTrail2 = new SparkParticle(randPos + velocity * 20f, velocity * 18, false, 23, 0.55f, Color.White);
-                        GeneralParticleHandler.SpawnParticle(subTrail2);
                     }
 
                     int pearls = (int)(MathHelper.Clamp(7 - (int)(proj.numHits * 0.5f), 2, 7));
                     for (int k = 0; k < pearls; k++)
                     {
-                        int randomColor = Main.rand.Next(1, 3 + 1);
-                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
-
                         Vector2 velocity = new Vector2(1, 1).RotatedByRandom(100) * Main.rand.NextFloat(0.7f, 1.2f);
-                        PearlParticle subTrail = new PearlParticle(randPos + velocity * 11f, velocity * 10, true, 50, 0.85f, color, 0.95f, Main.rand.NextFloat(2, -2), true);
+                        PearlParticle subTrail = new PearlParticle(Position + velocity * 11f, velocity * 10, true, 50, 0.85f, color, 0.95f, Main.rand.NextFloat(2, -2), true);
                         GeneralParticleHandler.SpawnParticle(subTrail);
                     }
                     int dusts = (int)(MathHelper.Clamp(10 - (int)(proj.numHits * 0.5f), 2, 10));
                     for (int i = 0; i <= dusts; i++)
                     {
-                        int randomColor = Main.rand.Next(1, 3 + 1);
-                        Color color = randomColor == 1 ? Color.LightBlue : randomColor == 2 ? Color.LightPink : Color.Khaki;
-
-                        Dust dust2 = Dust.NewDustPerfect(randPos, 278, new Vector2(5, 5).RotatedByRandom(100f) * Main.rand.NextFloat(0.1f, 2.9f));
+                        Dust dust2 = Dust.NewDustPerfect(Position, 278, new Vector2(5, 5).RotatedByRandom(100f) * Main.rand.NextFloat(0.1f, 2.9f));
                         dust2.noGravity = false;
                         dust2.scale = Main.rand.NextFloat(0.3f, 0.8f);
                         dust2.color = color;
@@ -450,6 +448,7 @@ namespace CalamityMod.CalPlayer
                     SoundStyle hitSound = new("CalamityMod/Sounds/Item/HadalUrnClose");
                     SoundEngine.PlaySound(hitSound with { Volume = 0.4f, Pitch = 0.4f, PitchVariance = 0.2f }, proj.Center);
                 }
+
 
                 if (cgp.lifeBullet && proj.numHits == 0)
                 {
