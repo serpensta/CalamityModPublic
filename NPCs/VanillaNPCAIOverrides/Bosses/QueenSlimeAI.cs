@@ -850,7 +850,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             float slimeSpawnHealthGateValue = CalamityWorld.LegendaryMode ? 0.01f : phase3 ? 0.04f : phase2 ? 0.03f : 0.025f;
             if (masterMode)
-                slimeSpawnHealthGateValue *= (phase2 ? 0.5f : 0.8f);
+                slimeSpawnHealthGateValue *= 0.5f;
 
             int slimeSpawnThreshold = (int)(npc.lifeMax * slimeSpawnHealthGateValue);
 
