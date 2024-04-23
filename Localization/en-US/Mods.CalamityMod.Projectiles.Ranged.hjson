@@ -129,6 +129,7 @@ MineralMortarProjectile.DisplayName: Onyx Bomb
 MiniatureFolly.DisplayName: Miniature Folly
 MiniSharkron.DisplayName: Mini Sharkron
 MistArrow.DisplayName: Mist Arrow
+MistArrowFrostMist.DisplayName: Frost Mist
 MortarRoundProj.DisplayName: Mortar
 NeedlerProj.DisplayName: Needle
 NorfleetComet.DisplayName: Comet
@@ -237,7 +238,7 @@ UltimaSpark.DisplayName: Ultima Spark
 UniversalGenesisStar.DisplayName: Genesis Star
 UniversalGenesisStarcaller.DisplayName: Starcaller Shot
 VanquisherArrowMain.DisplayName: Vanquisher Arrow
-VeriumBulletProj.DisplayName: Verium Bullet
+VeriumBoltProj.DisplayName: Verium Bolt
 Voidragon.DisplayName: Voidragon Blast
 VoidragonTentacle.DisplayName: Voidragon Tentacle
 WaterSpout.DisplayName: Spout

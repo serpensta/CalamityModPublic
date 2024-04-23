@@ -43,7 +43,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float servantAndProjectileVelocity = (death ? 8f : 6f) + (masterMode ? 2f : 0f);
 
             float enrageScale = bossRush ? 1f : masterMode ? 0.5f : 0f;
-            if (Main.dayTime || bossRush)
+            if (Main.IsItDay() || bossRush)
             {
                 npc.Calamity().CurrentlyEnraged = !bossRush;
                 enrageScale += 2f;

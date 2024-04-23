@@ -170,34 +170,43 @@ namespace CalamityMod.NPCs.SlimeGod
                     NPC.netUpdate = true;
                     NPC.TargetClosest(false);
                     player = Main.player[NPC.target];
-                    Vector2 vectorAimedAheadOfTarget = player.Center + new Vector2((float)Math.Round(player.velocity.X), 0f).SafeNormalize(Vector2.Zero) * 1120f;
-                    Point teleportAheadPos = vectorAimedAheadOfTarget.ToTileCoordinates();
-                    int maxTeleportTries = 0;
-                    while (maxTeleportTries < 100)
+
+                    float distanceAhead = 960f;
+                    Vector2 randomDefault = Main.rand.NextBool() ? Vector2.UnitX : -Vector2.UnitX;
+                    Vector2 vectorAimedAheadOfTarget = player.Center + new Vector2((float)Math.Round(player.velocity.X), 0f).SafeNormalize(randomDefault) * distanceAhead;
+                    Point predictiveTeleportPoint = vectorAimedAheadOfTarget.ToTileCoordinates();
+                    int randomPredictiveTeleportOffset = 5;
+                    int teleportTries = 0;
+                    while (teleportTries < 100)
                     {
-                        maxTeleportTries++;
-                        int teleportPosX = Main.rand.Next(teleportAheadPos.X - 5, teleportAheadPos.X + 6);
-                        int teleportPosY = Main.rand.Next(teleportAheadPos.Y - 5, teleportAheadPos.Y);
-                        if (Main.tile[teleportPosX, teleportPosY].HasUnactuatedTile)
-                            continue;
+                        teleportTries++;
+                        int teleportTileX = Main.rand.Next(predictiveTeleportPoint.X - randomPredictiveTeleportOffset, predictiveTeleportPoint.X + randomPredictiveTeleportOffset + 1);
+                        int teleportTileY = Main.rand.Next(predictiveTeleportPoint.Y - randomPredictiveTeleportOffset, predictiveTeleportPoint.Y);
 
-                        bool canTeleport = true;
-                        if (canTeleport && Main.tile[teleportPosX, teleportPosY].LiquidType == LiquidID.Lava)
-                            canTeleport = false;
-                        if (canTeleport && !Collision.CanHitLine(NPC.Center, 0, 0, vectorAimedAheadOfTarget, 0, 0))
-                            canTeleport = false;
-
-                        if (canTeleport)
+                        if (!Main.tile[teleportTileX, teleportTileY].HasUnactuatedTile)
                         {
-                            NPC.localAI[0] = teleportPosX * 16 + 8;
-                            NPC.localAI[3] = teleportPosY * 16 + 16;
-                            NPC.ai[3] = 0f;
-                            break;
+                            bool canTeleportToTile = true;
+                            if (canTeleportToTile && Main.tile[teleportTileX, teleportTileY].LiquidType == LiquidID.Lava)
+                                canTeleportToTile = false;
+                            if (canTeleportToTile && !Collision.CanHitLine(NPC.Center, 0, 0, predictiveTeleportPoint.ToVector2() * 16, 0, 0))
+                                canTeleportToTile = false;
+
+                            if (canTeleportToTile)
+                            {
+                                NPC.localAI[0] = teleportTileX * 16 + 8;
+                                NPC.localAI[3] = teleportTileY * 16 + 16;
+                                NPC.ai[3] = 0f;
+                                break;
+                            }
+                            else
+                                predictiveTeleportPoint.X += predictiveTeleportPoint.X < 0f ? 1 : -1;
                         }
+                        else
+                            predictiveTeleportPoint.X += predictiveTeleportPoint.X < 0f ? 1 : -1;
                     }
 
                     // Default teleport if the above conditions aren't met in 100 iterations
-                    if (maxTeleportTries >= 100)
+                    if (teleportTries >= 100)
                     {
                         Vector2 bottom = Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].Bottom;
                         NPC.localAI[0] = bottom.X;
@@ -741,7 +750,7 @@ namespace CalamityMod.NPCs.SlimeGod
                 NPC.position.Y = NPC.position.Y - (float)(NPC.height / 2);
                 for (int i = 0; i < 40; i++)
                 {
-                    int crimDust = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
+                    int crimDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
                     Main.dust[crimDust].velocity *= 3f;
                     if (Main.rand.NextBool())
                     {
@@ -751,10 +760,10 @@ namespace CalamityMod.NPCs.SlimeGod
                 }
                 for (int j = 0; j < 70; j++)
                 {
-                    int crimDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 3f);
+                    int crimDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 3f);
                     Main.dust[crimDust2].noGravity = true;
                     Main.dust[crimDust2].velocity *= 5f;
-                    crimDust2 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
+                    crimDust2 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.TintableDust, 0f, 0f, NPC.alpha, dustColor, 2f);
                     Main.dust[crimDust2].velocity *= 2f;
                 }
             }

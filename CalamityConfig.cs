@@ -49,8 +49,10 @@ namespace CalamityMod
         public bool BossesStopWeather { get; set; }
 
         [BackgroundColor(192, 54, 64, 192)]
-        [DefaultValue(true)]
-        public bool Screenshake { get; set; }
+        [SliderColor(224, 165, 56, 128)]
+        [Range(0f, 10f)]
+        [DefaultValue(1f)]
+        public float ScreenshakePower { get; set; }
 
         [BackgroundColor(192, 54, 64, 192)]
         [DefaultValue(true)]
@@ -266,6 +268,10 @@ namespace CalamityMod
         [BackgroundColor(192, 54, 64, 192)]
         [DefaultValue(true)]
         public bool ChilledWaterRework { get; set; }
+
+        [BackgroundColor(192, 54, 64, 192)]
+        [DefaultValue(true)]
+        public bool RemoveLavaDropsFromLavaSlimes { get; set; }
 
         [BackgroundColor(192, 54, 64, 192)]
         [DefaultValue(false)]

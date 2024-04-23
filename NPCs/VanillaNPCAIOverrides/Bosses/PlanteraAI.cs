@@ -808,7 +808,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             // Heal if on surface
             if (surface)
             {
-                if (Main.rand.NextBool(Main.dayTime ? 3 : 6))
+                if (Main.rand.NextBool(Main.IsItDay() ? 3 : 6))
                 {
                     int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Pixie, 0f, 0f, 200, default, 0.5f);
                     Main.dust[dust].noGravity = true;
@@ -824,7 +824,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 // Heal, 100 (50 during daytime) seconds to reach full HP from 0
                 calamityGlobalNPC.newAI[1] += 1f;
-                if (calamityGlobalNPC.newAI[1] >= (Main.dayTime ? 30f : 60f))
+                if (calamityGlobalNPC.newAI[1] >= (Main.IsItDay() ? 30f : 60f))
                 {
                     calamityGlobalNPC.newAI[1] = 0f;
                     npc.SyncExtraAI();

@@ -622,6 +622,12 @@ namespace CalamityMod.Projectiles.Melee
                     return;
 
                 int healAmt = (int)Math.Round(hit.Damage * 0.04);
+                if (healAmt > BalancingConstants.LifeStealCap)
+                    healAmt = BalancingConstants.LifeStealCap;
+
+                if (healAmt <= 0)
+                    return;
+
                 CalamityGlobalProjectile.SpawnLifeStealProjectile(Projectile, Owner, healAmt, ModContent.ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange);
             }
         }

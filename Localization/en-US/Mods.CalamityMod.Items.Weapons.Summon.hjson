@@ -186,7 +186,6 @@ CosmicImmaterializer: {
 		Summons a cosmic energy spiral to fight for you
 		The orb will fire swarms of homing energy bolts when enemies are detected by it
 		Requires 10 minion slots to use and there can only be one energy spiral
-		Without a summoner armor set bonus this minion will deal less damage
 		'''
 }
 

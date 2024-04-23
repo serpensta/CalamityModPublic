@@ -153,7 +153,9 @@ BarracudaGun: {
 
 BladedgeRailbow: {
 	DisplayName: Bladedge Railbow
-	Tooltip: Fires a spread of 4 arrows and 2 leaves at once
+	Tooltip: "[GFB]"
+	TooltipNormal: Fires a spread of 4 arrows and 2 leaves at once
+	TooltipGFB: Fires a spread of 4 arrows... along with other various things
 }
 
 BlightSpewer: {
@@ -461,7 +463,7 @@ ElementalEruption: {
 
 EternalBlizzard: {
 	DisplayName: Eternal Blizzard
-	Tooltip: Fires an additional icicle arrow that shatters on impact
+	Tooltip: Fires an additional icicle arrow that freezes into a falling icicle
 }
 
 Eviscerator: {
@@ -639,7 +641,7 @@ HoarfrostBow: {
 	Tooltip:
 		'''
 		Fires two arrows at once
-		Converts wooden arrows into mist arrows
+		Converts wooden arrows into mist arrows that spread frost mist on collision
 		'''
 }
 
@@ -809,7 +811,12 @@ NettlevineGreatbow: {
 
 Norfleet: {
 	DisplayName: Norfleet
-	Tooltip: Fire everything!
+	Tooltip:
+		'''
+		Fires a cluster of erratic energy spheres that each contain a different element
+		Every three shots the weapon must recharge its energy to reload
+		[c/FF9900:'Blows up everything!']
+		'''
 }
 
 NullificationPistol: {

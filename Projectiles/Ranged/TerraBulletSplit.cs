@@ -41,7 +41,7 @@ namespace CalamityMod.Projectiles.Ranged
         public override void AI()
         {
             Projectile.ai[2]++;
-            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
             Dust dust = Dust.NewDustPerfect(Projectile.Center, 264, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.6f));
             dust.noGravity = true;

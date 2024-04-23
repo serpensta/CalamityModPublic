@@ -87,6 +87,7 @@ namespace CalamityMod.CalPlayer
             {
                 case ItemID.CobaltSword:
                     target.Calamity().miscDefenseLoss = (int)(target.defense * 0.25);
+                    target.Calamity().isNerfedByCobalt = true;
                     break;
 
                 case ItemID.PalladiumSword:
@@ -97,6 +98,7 @@ namespace CalamityMod.CalPlayer
 
                 case ItemID.MythrilSword:
                     target.damage = (int)(target.defDamage * 0.9);
+                    target.Calamity().isNerfedByMythril = true;
                     break;
 
                 case ItemID.OrichalcumSword:
@@ -216,6 +218,7 @@ namespace CalamityMod.CalPlayer
             {
                 case ProjectileID.CobaltNaginata:
                     target.Calamity().miscDefenseLoss = (int)(target.defense * 0.25);
+                    target.Calamity().isNerfedByCobalt = true;
                     break;
 
                 case ProjectileID.PalladiumPike:
@@ -226,6 +229,7 @@ namespace CalamityMod.CalPlayer
 
                 case ProjectileID.MythrilHalberd:
                     target.damage = (int)(target.defDamage * 0.9);
+                    target.Calamity().isNerfedByMythril = true;
                     break;
 
                 case ProjectileID.OrichalcumHalberd:
@@ -1159,10 +1163,6 @@ namespace CalamityMod.CalPlayer
                 {
                     CalamityUtils.Inflict246DebuffsNPC(target, ModContent.BuffType<ElementalMix>());
                 }
-                if (cryogenSoul)
-                {
-                    CalamityUtils.Inflict246DebuffsNPC(target, BuffID.Frostburn);
-                }
                 if (ataxiaFire)
                 {
                     CalamityUtils.Inflict246DebuffsNPC(target, BuffID.OnFire3, 4f);
@@ -1327,6 +1327,9 @@ namespace CalamityMod.CalPlayer
                 if (vampiricTalisman && proj.CountsAsClass<RogueDamageClass>() && crit)
                 {
                     int heal = (int)Math.Round(damage * 0.015);
+                    if (heal > BalancingConstants.LifeStealCap)
+                        heal = BalancingConstants.LifeStealCap;
+
                     if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(1f, heal))
                         CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileID.VampireHeal, BalancingConstants.LifeStealRange, BalancingConstants.LifeStealAccessoryCooldownMultiplier);
                 }
@@ -1350,6 +1353,9 @@ namespace CalamityMod.CalPlayer
                         double healMult = 0.2;
                         healMult -= proj.numHits * healMult * 0.25;
                         int heal = (int)Math.Round(damage * healMult * (Player.statMana / (double)Player.statManaMax2));
+                        if (heal > BalancingConstants.LifeStealCap)
+                            heal = BalancingConstants.LifeStealCap;
+
                         if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
                             CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<ManaPolarizerHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealAccessoryCooldownMultiplier);
                     }
@@ -1360,6 +1366,9 @@ namespace CalamityMod.CalPlayer
                     double healMult = 0.1;
                     healMult -= proj.numHits * healMult * 0.5;
                     int heal = (int)Math.Round(damage * healMult);
+                    if (heal > BalancingConstants.LifeStealCap)
+                        heal = BalancingConstants.LifeStealCap;
+
                     if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
                         CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<SilvaOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealSetBonusCooldownMultiplier);
                 }
@@ -1370,6 +1379,9 @@ namespace CalamityMod.CalPlayer
                         double healMult = 0.1;
                         healMult -= proj.numHits * healMult * 0.5;
                         int heal = (int)Math.Round(damage * healMult);
+                        if (heal > BalancingConstants.LifeStealCap)
+                            heal = BalancingConstants.LifeStealCap;
+
                         if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
                             CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealSetBonusCooldownMultiplier);
                     }
@@ -1378,6 +1390,9 @@ namespace CalamityMod.CalPlayer
                         double healMult = 0.1;
                         healMult -= proj.numHits * healMult * 0.5;
                         int heal = (int)Math.Round(damage * healMult);
+                        if (heal > BalancingConstants.LifeStealCap)
+                            heal = BalancingConstants.LifeStealCap;
+
                         if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
                             CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<HydrothermicHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealSetBonusCooldownMultiplier);
                     }
@@ -1388,6 +1403,9 @@ namespace CalamityMod.CalPlayer
                     double healMult = 0.1;
                     healMult -= proj.numHits * healMult * 0.5;
                     int heal = (int)Math.Round(damage * healMult);
+                    if (heal > BalancingConstants.LifeStealCap)
+                        heal = BalancingConstants.LifeStealCap;
+
                     if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
                         CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<ReaverHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealReaverTankCooldownMultiplier);
                 }
@@ -1399,6 +1417,9 @@ namespace CalamityMod.CalPlayer
                         double healMult = 0.1;
                         healMult -= proj.numHits * healMult * 0.5;
                         int heal = (int)Math.Round(damage * healMult);
+                        if (heal > BalancingConstants.LifeStealCap)
+                            heal = BalancingConstants.LifeStealCap;
+
                         if (CalamityGlobalProjectile.CanSpawnLifeStealProjectile(healMult, heal))
                             CalamityGlobalProjectile.SpawnLifeStealProjectile(proj, Player, heal, ProjectileType<EmpyreanHealOrb>(), BalancingConstants.LifeStealRange, BalancingConstants.LifeStealSetBonusCooldownMultiplier);
                     }
@@ -1461,6 +1482,9 @@ namespace CalamityMod.CalPlayer
                 {
                     double healMult = 0.1;
                     int heal = (int)Math.Round(damage * healMult);
+                    if (heal > BalancingConstants.LifeStealCap)
+                        heal = BalancingConstants.LifeStealCap;
+
                     if (heal > 0 && !Main.player[Main.myPlayer].moonLeech)
                     {
                         Main.player[Main.myPlayer].lifeSteal -= heal * BalancingConstants.LifeStealReaverTankCooldownMultiplier;
