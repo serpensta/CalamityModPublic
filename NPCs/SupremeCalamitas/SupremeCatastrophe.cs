@@ -38,6 +38,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public bool MovingUp = false;
         public bool EnrageRoar = true;
         public int accSlashCounter = 0;
+        public bool setMovement = true;
         public Player Target => Main.player[NPC.target];
         public ref float SlashCounter => ref NPC.ai[1];
         public ref float DartBurstCounter => ref NPC.ai[2];
@@ -138,6 +139,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void AI()
         {
+            if (setMovement)
+            {
+                MovingUp = (NPC.ai[0] == 1 ? true : false);
+                setMovement = false;
+            }
+
             // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
             NPC.damage = 0;
 
@@ -242,10 +249,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             for (int i = 0; i < 6; i++)
                             {
-                                Dust catastrophedust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.5f, 66, -NPC.velocity * Main.rand.NextFloat(0.2f, 1.2f));
+                                Dust catastrophedust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.5f, 66, -NPC.velocity * Main.rand.NextFloat(0.1f, 0.6f));
                                 catastrophedust.noGravity = true;
-                                catastrophedust.scale = Main.rand.NextFloat(0.5f, 0.7f);
-                                catastrophedust.color = Color.DeepSkyBlue;
+                                catastrophedust.scale = Main.rand.NextFloat(0.7f, 1.3f);
+                                catastrophedust.color = Color.Cyan;
                             }
                         }
                         CalamityUtils.SmoothMovement(NPC, 0, (Target.Center + new Vector2(-HorizontalOffset * (!targetSide ? 1 : -1), VerticalOffset)) - NPC.Center, Utils.Remap(AttackDelayTimer, 10f, 120f, 20f, 80f), 1f, false);
@@ -345,7 +352,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     Vector2 slashSpawnPosition = NPC.Center + Vector2.UnitX * 125f * NPC.direction;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     { 
-                        Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.028f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
+                        Vector2 firingVelocity = (NPC.AnyNPCs(ModContent.NPCType<SupremeCataclysm>()) == false ? (NPC.DirectionTo(Target.Center) + Target.velocity * 0.0305f).SafeNormalize(Vector2.UnitY) : NPC.DirectionTo(Target.Center));
                         if (Phase2)
                         {
                             if (accSlashCounter < 2)

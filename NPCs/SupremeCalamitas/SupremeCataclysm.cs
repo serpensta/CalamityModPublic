@@ -44,6 +44,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public bool MovingUp = true;
         public bool EnrageRoar = true;
         public int doublePunchCounter = 0;
+        public bool setMovement = true;
 
         public Player Target => Main.player[NPC.target];
         public ref float PunchCounter => ref NPC.ai[1];
@@ -144,6 +145,12 @@ namespace CalamityMod.NPCs.SupremeCalamitas
 
         public override void AI()
         {
+            if (setMovement)
+            {
+                MovingUp = (NPC.ai[0] == 1 ? true : false);
+                setMovement = false;
+            }
+
             // Setting this in SetDefaults will disable expert mode scaling, so put it here instead
             NPC.damage = 0;
 
@@ -251,10 +258,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         {
                             for (int i = 0; i < 6; i++)
                             {
-                                Dust cataclysmdust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.5f, 66, -NPC.velocity * Main.rand.NextFloat(0.2f, 1.2f));
+                                Dust cataclysmdust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(NPC.width, NPC.height) - NPC.velocity * 0.5f, 66, -NPC.velocity * Main.rand.NextFloat(0.1f, 0.6f));
                                 cataclysmdust.noGravity = true;
-                                cataclysmdust.scale = Main.rand.NextFloat(0.5f, 0.7f);
-                                cataclysmdust.color = Color.Red;
+                                cataclysmdust.scale = Main.rand.NextFloat(0.7f, 1.3f);
+                                cataclysmdust.color = Color.Lerp(Color.Red, Color.Magenta, 0.5f);
                             }
                         }
                         CalamityUtils.SmoothMovement(NPC, 0, (Target.Center + new Vector2(-HorizontalOffset * (!targetSide ? -1 : 1), VerticalOffset)) - NPC.Center, Utils.Remap(AttackDelayTimer, 10f, 120f, 20f, 80f), 1f, false);
