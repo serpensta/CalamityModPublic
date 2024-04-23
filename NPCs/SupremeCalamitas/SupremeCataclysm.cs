@@ -45,6 +45,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
         public bool EnrageRoar = true;
         public int doublePunchCounter = 0;
         public bool setMovement = true;
+        public bool broIsAlive = true;
 
         public Player Target => Main.player[NPC.target];
         public ref float PunchCounter => ref NPC.ai[1];
@@ -202,7 +203,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             float acceleration = Utils.Remap(AttackDelayTimer, 0f, 120f, 2f, 4f);
             int verticalSpeed = (int)Math.Round(MathHelper.Lerp(2f, 6.5f, 1f - totalLifeRatio));
 
-            bool Phase2 = NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? true : false;
+            bool Phase2 = broIsAlive == false ? true : false;
             if (NPC.life / (float)NPC.lifeMax < (death ? 0.6 : 0.4) && !Phase2)
             {
                 if (EnrageRoar)
@@ -220,10 +221,10 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             if (Phase2 && BigAttackTimer > 400)
                 BigAttackTimer = 400;
 
-            if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false && BigAttackTimer > 0 && BigAttackLimit < 29)
+            if (broIsAlive == false && BigAttackTimer > 0 && BigAttackLimit < 29)
                 BigAttackLimit = 29;
-            else if (Phase2 && BigAttackTimer > 0 && BigAttackLimit < 11)
-                BigAttackLimit = 11;
+            else if (BigAttackTimer > 0 && BigAttackLimit < 7)
+                BigAttackLimit = 7;
 
             if (BigAttackTimer > PreBigAttackPause)
             {
@@ -318,7 +319,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             else if (BigAttackTimer > PreBigAttackPause)
             {
                 // Shoot fists.
-                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1.5f, 2f, 1f - totalLifeRatio) * (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? death ? 1.32f : 1.1f : 1);
+                float fireRate = BossRushEvent.BossRushActive ? 2f : MathHelper.Lerp(1.5f, 2f, 1f - totalLifeRatio) * (broIsAlive == false ? death ? 1.32f : 1.1f : 1);
                 
                 PunchCounter += fireRate;
                 if (PunchCounter >= PunchCounterLimit)
@@ -342,8 +343,8 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                             }
                             else
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? 0.48f : 0.55f) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false  ? - 0.48f : -0.55f) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(broIsAlive == false ? 0.48f : 0.55f) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, NPC.DirectionTo(Target.Center).RotatedBy(broIsAlive == false  ? - 0.48f : -0.55f) * 15f, type, damage, 0f, Main.myPlayer, 0f, PunchingFromRight.ToInt(), 2);
                                 doublePunchCounter = 0;
                             }
                         }
@@ -352,6 +353,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                     }
                     PunchingFromRight = !PunchingFromRight;
                     CurrentFrame = 0;
+                    broIsAlive = NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>());
                 }
             }
             // Pause before attacking
@@ -378,7 +380,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
             {
                 // Shoot fists.
                 float fireRate = BossRushEvent.BossRushActive ? 2.8f : MathHelper.Lerp(2.5f, 3f, 1f - totalLifeRatio);
-                if (NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false)
+                if (broIsAlive == false)
                     fireRate = BossRushEvent.BossRushActive ? 3.5f + (29 - BigAttackLimit) * 0.45f : MathHelper.Lerp(3f, (4f + (29 - BigAttackLimit) * 0.45f), 1f - totalLifeRatio) * 1.2f;
                 if (Phase2 && BigAttackLimit == 0)
                     fireRate = 1;
@@ -394,7 +396,7 @@ namespace CalamityMod.NPCs.SupremeCalamitas
                         damage /= 2;
                     Vector2 fistSpawnPosition = NPC.Center + Vector2.UnitX * 74f * NPC.direction;
 
-                    if ((NPC.AnyNPCs(ModContent.NPCType<SupremeCatastrophe>()) == false ? BigAttackLimit <= 3 && BigAttackLimit > 0 : BigAttackLimit == 0) && death)
+                    if ((broIsAlive == false ? BigAttackLimit <= 3 && BigAttackLimit > 0 : BigAttackLimit == 1) && death)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 11f).RotatedBy(0.6f - BigAttackLimit * 0.16f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), fistSpawnPosition, (NPC.DirectionTo(Target.Center) * 11f).RotatedBy(-0.6f + BigAttackLimit * 0.16f), type, damage, 0f, Main.myPlayer, 0f, 0, 2);
