@@ -312,7 +312,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             if (Main.getGoodWorld)
                                 numGelProjectiles = 15;
 
-                            float projectileVelocity = death ? 22.5f : 18f;
+                            float gelVelocity = death ? 20f : 16f;
+                            Vector2 upwardVelocity = Vector2.UnitY * gelVelocity;
                             int type = ProjectileID.QueenSlimeGelAttack;
                             int damage = npc.GetProjectileDamage(type);
 
@@ -320,16 +321,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             {
                                 for (int j = 0; j < numGelProjectiles; j++)
                                 {
-                                    Vector2 spinningpoint = new Vector2(projectileVelocity, 0f);
+                                    Vector2 spinningpoint = new Vector2(gelVelocity, 0f);
 
                                     if (CalamityWorld.LegendaryMode)
                                         spinningpoint *= Main.rand.NextFloat() + 0.5f;
 
                                     spinningpoint = spinningpoint.RotatedBy((-j) * MathHelper.TwoPi / numGelProjectiles, Vector2.Zero);
-                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, damage, 0f, Main.myPlayer, 0f, -2f);
+                                    int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint - upwardVelocity, type, damage, 0f, Main.myPlayer, 0f, -2f);
                                     Main.projectile[proj].timeLeft = 900;
                                 }
                             }
+
+                            SoundEngine.PlaySound(SoundID.Item155, npc.Center);
                         }
                     }
 
@@ -504,18 +507,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 // Line of explosions in Master Mode
                                 if (masterMode)
                                 {
-                                    Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * 1000f;
                                     float expandDelay = 0f;
-                                    int maxSmashes = death ? 23 : 17;
-                                    int maxSmashesPerSide = (maxSmashes - 1) / 2;
+                                    int maxSmashes = death ? 22 : 16;
+                                    float minSmashOffset = maxSmashes * 20f;
+                                    float maxSmashOffset = maxSmashes * 100f;
+                                    Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * maxSmashOffset;
+                                    int maxSmashesPerSide = maxSmashes / 2;
                                     float maxExpandDelay = (death ? 10f : 15f) * maxSmashesPerSide;
-                                    for (int i = 0; i < maxSmashes; i++)
+                                    float smashSpawnDistanceOffset = maxSmashes * minSmashOffset;
+                                    for (int i = 0; i < maxSmashes + 1; i++)
                                     {
                                         expandDelay = MathHelper.Lerp(0f, maxExpandDelay, Math.Abs(i - maxSmashesPerSide) / (float)maxSmashesPerSide);
                                         if (i != maxSmashesPerSide)
                                             Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, damage, 0f, Main.myPlayer, -expandDelay);
 
-                                        extraSmashPosition -= Vector2.UnitX * 200f;
+                                        extraSmashPosition -= Vector2.UnitX * smashSpawnDistanceOffset;
                                     }
                                 }
 
@@ -1181,14 +1187,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (Main.getGoodWorld)
                                     num14 = 15;
 
+                                float gelVelocity = 12f;
+                                Vector2 upwardVelocity = Vector2.UnitY * gelVelocity;
                                 int type = ProjectileID.QueenSlimeGelAttack;
                                 for (int j = 0; j < num14; j++)
                                 {
-                                    Vector2 spinningpoint = new Vector2(15f, 0f);
+                                    Vector2 spinningpoint = new Vector2(gelVelocity, 0f);
                                     spinningpoint = spinningpoint.RotatedBy((float)(-j) * MathHelper.TwoPi / (float)num14, Vector2.Zero);
-                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
+                                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, spinningpoint - upwardVelocity, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer);
                                 }
                             }
+
+                            SoundEngine.PlaySound(SoundID.Item155, npc.Center);
                         }
                     }
 
@@ -1336,18 +1346,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                                     if (Main.masterMode)
                                     {
-                                        Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * 1000f;
                                         float expandDelay = 0f;
-                                        int maxSmashes = 11;
-                                        int maxSmashesPerSide = (maxSmashes - 1) / 2;
+                                        int maxSmashes = 10;
+                                        float minSmashOffset = maxSmashes * 20f;
+                                        float maxSmashOffset = maxSmashes * 100f;
+                                        Vector2 extraSmashPosition = npc.Bottom + Vector2.UnitX * maxSmashOffset;
+                                        int maxSmashesPerSide = maxSmashes / 2;
                                         float maxExpandDelay = 20f * maxSmashesPerSide;
-                                        for (int i = 0; i < maxSmashes; i++)
+                                        float smashSpawnDistanceOffset = maxSmashes * minSmashOffset;
+                                        for (int i = 0; i < maxSmashes + 1; i++)
                                         {
                                             expandDelay = MathHelper.Lerp(0f, maxExpandDelay, Math.Abs(i - maxSmashesPerSide) / (float)maxSmashesPerSide);
                                             if (i != maxSmashesPerSide)
                                                 Projectile.NewProjectile(npc.GetSource_FromAI(), extraSmashPosition, Vector2.Zero, type, npc.GetProjectileDamage(type), 0f, Main.myPlayer, -expandDelay);
 
-                                            extraSmashPosition -= Vector2.UnitX * 200f;
+                                            extraSmashPosition -= Vector2.UnitX * smashSpawnDistanceOffset;
                                         }
                                     }
                                 }
