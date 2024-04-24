@@ -34,7 +34,7 @@ namespace CalamityMod.NPCs.DesertScourge
     public class DesertScourgeHead : ModNPC
     {
         private int biomeEnrageTimer = CalamityGlobalNPC.biomeEnrageTimerMax;
-        private bool TailSpawned = false;
+        private bool tailSpawned = false;
         public bool playRoarSound = false;
 
         public const float SegmentVelocity_Normal = 12f;
@@ -238,9 +238,9 @@ namespace CalamityMod.NPCs.DesertScourge
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (!TailSpawned && NPC.ai[0] == 0f)
+                if (!tailSpawned && NPC.ai[0] == 0f)
                 {
-                    int Previous = NPC.whoAmI;
+                    int previous = NPC.whoAmI;
                     int minLength = death ? 24 : revenge ? 21 : expertMode ? 18 : 15;
                     if (Main.getGoodWorld)
                         minLength *= 3;
@@ -268,13 +268,13 @@ namespace CalamityMod.NPCs.DesertScourge
 
                         Main.npc[lol].ai[2] = NPC.whoAmI;
                         Main.npc[lol].realLife = NPC.whoAmI;
-                        Main.npc[lol].ai[1] = Previous;
-                        Main.npc[Previous].ai[0] = lol;
+                        Main.npc[lol].ai[1] = previous;
+                        Main.npc[previous].ai[0] = lol;
                         NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, lol, 0f, 0f, 0f, 0);
-                        Previous = lol;
+                        previous = lol;
                     }
 
-                    TailSpawned = true;
+                    tailSpawned = true;
                 }
             }
 
