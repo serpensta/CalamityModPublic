@@ -26,7 +26,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public const float OpenMouthForBiteDistance = 220f;
 
-        private const int OpenMouthStopFrame = 6;
+        private const int OpenMouthStopFrame = 4;
 
         public override void SetStaticDefaults()
         {
@@ -531,7 +531,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 }
 
                 NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 6D)
+                if (NPC.frameCounter > 4D)
                 {
                     NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0D;
@@ -547,7 +547,7 @@ namespace CalamityMod.NPCs.DesertScourge
             else if (openMouth)
             {
                 NPC.frameCounter += 1D;
-                if (NPC.frameCounter > 6D)
+                if (NPC.frameCounter > 4D)
                 {
                     NPC.frame.Y += frameHeight;
                     NPC.frameCounter = 0D;
@@ -571,7 +571,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     else
                     {
                         NPC.frameCounter += 1D;
-                        if (NPC.frameCounter > 6D)
+                        if (NPC.frameCounter > 4D)
                         {
                             NPC.frame.Y -= frameHeight;
                             NPC.frameCounter = 0D;
