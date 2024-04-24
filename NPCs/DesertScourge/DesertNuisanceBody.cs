@@ -204,7 +204,7 @@ namespace CalamityMod.NPCs.DesertScourge
             }
 
             // Decide segment offset stuff.
-            int segmentOffset = 66;
+            int segmentOffset = 62;
             NPC.rotation = directionToNextSegment.ToRotation() + MathHelper.PiOver2;
             NPC.Center = aheadSegment.Center - directionToNextSegment.SafeNormalize(Vector2.Zero) * NPC.scale * segmentOffset;
             NPC.spriteDirection = (directionToNextSegment.X > 0).ToDirectionInt();

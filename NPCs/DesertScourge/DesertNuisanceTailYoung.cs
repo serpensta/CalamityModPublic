@@ -124,7 +124,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 NPC.rotation = (float)System.Math.Atan2((double)playerYPos, (double)playerXPos) + MathHelper.PiOver2;
                 playerDistance = (float)System.Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
 
-                int segmentOffset = 58;
+                int segmentOffset = 50;
                 playerDistance = (playerDistance - segmentOffset) / playerDistance;
                 playerXPos *= playerDistance;
                 playerYPos *= playerDistance;
