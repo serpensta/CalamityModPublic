@@ -66,13 +66,8 @@ namespace CalamityMod.Skies
 
         private float GetIntensity()
         {
-            if (ShouldDrawRegularly)
+            if (ShouldDrawRegularly || Main.LocalPlayer?.Calamity().monolithBossRushShader > 0)
                 return 1f;
-            if (Main.LocalPlayer?.Calamity().monolithBossRushShader > 0)
-            {
-                float raito = Main.LocalPlayer.Calamity().monolithBossRushShader / 30;
-                return Utils.GetLerpValue(0.57f, 1f, raito, true);
-            }
 
             float fadeRatio = BossRushEvent.StartTimer / (float)BossRushEvent.StartEffectTotalTime;
             return Utils.GetLerpValue(0.57f, 1f, fadeRatio, true);

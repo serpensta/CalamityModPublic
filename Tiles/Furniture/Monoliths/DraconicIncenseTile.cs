@@ -21,7 +21,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         {
             if (!Main.dedServ)
             {
-                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/DraconicIncenseTile_Glow", AssetRequestMode.ImmediateLoad).Value;
+                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/DraconicIncenseTile_Glow", AssetRequestMode.AsyncLoad).Value;
             }
             RegisterItemDrop(ModContent.ItemType<DraconicIncense>());
             Main.tileFrameImportant[Type] = true;

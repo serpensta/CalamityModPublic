@@ -23,7 +23,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         {
             if (!Main.dedServ)
             {
-                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/AstralProjectorTile_Glow", AssetRequestMode.ImmediateLoad).Value;
+                Glow = ModContent.Request<Texture2D>("CalamityMod/Tiles/Furniture/Monoliths/AstralProjectorTile_Glow", AssetRequestMode.AsyncLoad).Value;
             }
             RegisterItemDrop(ModContent.ItemType<AstralProjector>());
             Main.tileFrameImportant[Type] = true;
