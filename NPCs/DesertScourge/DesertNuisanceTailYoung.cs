@@ -20,8 +20,8 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void SetDefaults()
         {
             NPC.GetNPCDamage();
-            NPC.width = 76;
-            NPC.height = 76;
+            NPC.width = 78;
+            NPC.height = 78;
 
             NPC.defense = 7;
             if (Main.getGoodWorld)
@@ -124,7 +124,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 NPC.rotation = (float)System.Math.Atan2((double)playerYPos, (double)playerXPos) + MathHelper.PiOver2;
                 playerDistance = (float)System.Math.Sqrt((double)(playerXPos * playerXPos + playerYPos * playerYPos));
 
-                int segmentOffset = 60;
+                int segmentOffset = 58;
                 playerDistance = (playerDistance - segmentOffset) / playerDistance;
                 playerXPos *= playerDistance;
                 playerYPos *= playerDistance;
