@@ -2926,9 +2926,14 @@ LivingHolyFireBlock: {
 	Tooltip: ""
 }
 
-DraedonsAmbienceMusicBox: {
-	DisplayName: Music Box (Draedon's Ambience)
-	Tooltip: Plays high tech ambience by PinpinNeon
+DraedonExoSelectMusicBox: {
+	DisplayName: Music Box (Exo Mech Selection)
+	Tooltip: Plays 'Signal Received' by CDMusic
+}
+
+DraedonTalkMusicBox: {
+	DisplayName: Music Box (Codebreaker)
+	Tooltip: Plays a variant of 'Signal Received' by CDMusic
 }
 
 Navystone: {
