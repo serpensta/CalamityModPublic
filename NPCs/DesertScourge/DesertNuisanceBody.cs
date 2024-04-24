@@ -294,7 +294,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     break;
             }
 
-            return minDist <= hitDistance;
+            return minDist <= hitDistance * NPC.scale;
         }
 
         public override void FindFrame(int frameHeight)

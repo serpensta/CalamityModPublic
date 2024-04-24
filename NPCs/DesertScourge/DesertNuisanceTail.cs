@@ -177,7 +177,7 @@ namespace CalamityMod.NPCs.DesertScourge
             if (hitboxBotRight < minDist)
                 minDist = hitboxBotRight;
 
-            return minDist <= 30f;
+            return minDist <= 30f * NPC.scale;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
