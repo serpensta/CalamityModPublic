@@ -1624,6 +1624,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (canHit)
                                 {
                                     Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFlamethrowerPos + flamethrowerVelocity.SafeNormalize(Vector2.UnitY) * 25f, flamethrowerVelocity, type, damage, 0f, Main.myPlayer);
+                                    if (masterMode && npc.ai[3] % 30f == 0f)
+                                    {
+                                        type = npc.ai[3] % 60f == 0f ? ModContent.ProjectileType<ShadowflameFireball>() : ProjectileID.CursedFlameHostile;
+                                        damage = npc.GetProjectileDamage(type);
+                                        Projectile.NewProjectile(npc.GetSource_FromAI(), spazmatismFlamethrowerPos + flamethrowerVelocity.SafeNormalize(Vector2.UnitY) * 25f, flamethrowerVelocity * 2f, type, damage, 0f, Main.myPlayer);
+                                    }
                                 }
                                 else
                                 {
@@ -1670,8 +1676,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         // Set rotation and velocity
                         npc.rotation = spazmatismRotation;
-                        float spazmatismPhase2ChargeSpeed = 16.75f + (death ? 5f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
-                        spazmatismPhase2ChargeSpeed += 8f * enrageScale;
+                        float spazmatismPhase2ChargeSpeed = 18f + (death ? 5f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
+                        spazmatismPhase2ChargeSpeed += 16f * enrageScale;
                         if (Main.getGoodWorld)
                             spazmatismPhase2ChargeSpeed *= 1.2f;
 
