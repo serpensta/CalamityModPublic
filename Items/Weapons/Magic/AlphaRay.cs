@@ -46,7 +46,7 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             if (player.altFunctionUse == 2)
             {
-                Projectile.NewProjectile(source, position.X, position.Y, velocity.X * 1.35f, velocity.Y * 1.35f, ModContent.ProjectileType<BigBeamofDeath>(), (int)(damage * 1.6625), knockback, player.whoAmI);
+                Projectile.NewProjectile(source, position.X, position.Y, velocity.X * 1.35f, velocity.Y * 1.35f, ModContent.ProjectileType<GenisisBeam>(), (int)(damage * 1.6625), knockback, player.whoAmI);
                 int laserAmt = 3;
                 float SpeedX = velocity.X + Main.rand.NextFloat(-1f, 1f);
                 float SpeedY = velocity.Y + Main.rand.NextFloat(-1f, 1f);

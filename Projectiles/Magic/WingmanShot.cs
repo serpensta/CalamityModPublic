@@ -12,7 +12,7 @@ namespace CalamityMod.Projectiles.Magic
         public new string LocalizationCategory => "Projectiles.Magic";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
         public int BounceHits = 0;
-        public Color mainColor = Color.Orchid;
+        public Color mainColor = Color.White;
         public int time = 0;
         public override void SetStaticDefaults()
         {
@@ -35,6 +35,15 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void AI()
         {
+            if (mainColor == Color.White)
+            {
+                if (Projectile.ai[1] == 0)
+                    mainColor = Color.Orchid;
+                if (Projectile.ai[1] == 1)
+                    mainColor = Color.Cyan;
+                if (Projectile.ai[1] == 2)
+                    mainColor = Color.MediumTurquoise;
+            }       
             Lighting.AddLight(Projectile.Center, mainColor.ToVector3() * 0.7f);
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             //Dust dust = Dust.NewDustPerfect(Projectile.Center, 107); // + Main.rand.NextVector2Circular(-3, 3)
