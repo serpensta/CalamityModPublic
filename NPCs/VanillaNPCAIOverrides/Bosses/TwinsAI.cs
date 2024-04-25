@@ -440,7 +440,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 10f + Main.rand.NextVector2CircularEdge(2f, 2f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 8f;
                             int numProj = shootLaser ? 6 : 2;
                             int spread = shootLaser ? 20 : 80;
                             float rotation = MathHelper.ToRadians(spread);
@@ -1316,14 +1316,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     npc.ai[2] += 1f;
 
-                    float timeBeforeSlowDown = masterMode ? 15f : 10f;
+                    float timeBeforeSlowDown = masterMode ? 30f : 10f;
                     if (npc.ai[2] >= timeBeforeSlowDown)
                     {
                         // Avoid cheap bullshit
                         npc.damage = 0;
 
                         // Slow down
-                        npc.velocity *= masterMode ? 0.72f : 0.8f;
+                        npc.velocity *= 0.8f;
 
                         if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1)
                             npc.velocity.X = 0f;
@@ -1334,7 +1334,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - MathHelper.PiOver2;
 
                     // Charge 8 times
-                    float chargeTime = 25f;
+                    float chargeTime = masterMode ? 45f : 25f;
                     if (npc.ai[2] >= chargeTime)
                     {
                         // Reset AI array and go to cursed fireball phase
@@ -1494,7 +1494,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     float spazmatismFlamethrowerMaxSpeed = 6.2f + (death ? 2f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
                     float spazmatismFlamethrowerAccel = 0.1f + (death ? 0.03f * ((phase2LifeRatio - lifeRatio) / phase2LifeRatio) : 0f);
-                    spazmatismFlamethrowerMaxSpeed += 4f * enrageScale;
+                    spazmatismFlamethrowerMaxSpeed += 3f * enrageScale;
                     spazmatismFlamethrowerAccel += 0.06f * enrageScale;
 
                     int spazmatismFlamethrowerFaceDirection = 1;
@@ -1511,7 +1511,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     {
                         // Boost speed if too far from target
                         if (spazmatismFlamethrowerTargetDist > flamethrowerDistance)
-                            spazmatismFlamethrowerMaxSpeed += MathHelper.Lerp(0f, masterMode ? 10f : 6.6f, MathHelper.Clamp((spazmatismFlamethrowerTargetDist - flamethrowerDistance) / 1000f, 0f, 1f));
+                            spazmatismFlamethrowerMaxSpeed += MathHelper.Lerp(0f, masterMode ? 8f : 6f, MathHelper.Clamp((spazmatismFlamethrowerTargetDist - flamethrowerDistance) / 1000f, 0f, 1f));
 
                         if (Main.getGoodWorld)
                         {
@@ -1582,7 +1582,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 npc.localAI[1] = 0f;
 
                                 float spazmatismShadowFireballSpeed = 6f;
-                                spazmatismShadowFireballSpeed += 4f * enrageScale;
+                                spazmatismShadowFireballSpeed += 3f * enrageScale;
                                 float timeForFlamethrowerToReachMaxVelocity = 60f;
                                 float flamethrowerSpeedScalar = MathHelper.Clamp(npc.ai[2] / timeForFlamethrowerToReachMaxVelocity, 0f, 1f);
                                 spazmatismShadowFireballSpeed = MathHelper.Lerp(0.1f, spazmatismShadowFireballSpeed, flamethrowerSpeedScalar);
@@ -1789,7 +1789,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             if (death)
                             {
-                                float velocity = spazmatismPhase3ChargeSpeed * 0.75f;
+                                float velocity = spazmatismPhase3ChargeSpeed * 0.6f;
                                 int type = (!retAlive && npc.ai[3] % 2f == 0f) ? ModContent.ProjectileType<ShadowflameFireball>() : ProjectileID.CursedFlameHostile;
                                 int damage = npc.GetProjectileDamage(type);
 
@@ -1804,7 +1804,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                         damage = (int)(damage * secondMechMultiplier);
                                 }
 
-                                Vector2 projectileVelocity = (Main.player[npc.target].Center + (!retAlive && bossRush ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
+                                Vector2 projectileVelocity = (Main.player[npc.target].Center + ((!retAlive && bossRush) ? Main.player[npc.target].velocity * 20f : Vector2.Zero) - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
                                 int numProj = 3;
                                 int spread = 15;
                                 float rotation = MathHelper.ToRadians(spread);
@@ -2335,7 +2335,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     damage = (int)(damage * secondMechMultiplier);
                             }
 
-                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 9f + Main.rand.NextVector2CircularEdge(1f, 1f);
+                            Vector2 projectileVelocity = (Main.player[npc.target].Center - npc.Center).SafeNormalize(Vector2.UnitY) * 8f;
                             int numProj = 3;
                             int spread = 10;
                             float rotation = MathHelper.ToRadians(spread);
@@ -3046,7 +3046,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (!NPC.IsMechQueenUp)
                 {
                     if (num485 > flamethrowerDistance)
-                        num480 += MathHelper.Lerp(0f, Main.masterMode ? 10f : 6.6f, MathHelper.Clamp((num485 - flamethrowerDistance) / 1000f, 0f, 1f));
+                        num480 += MathHelper.Lerp(0f, Main.masterMode ? 8f : 6f, MathHelper.Clamp((num485 - flamethrowerDistance) / 1000f, 0f, 1f));
 
                     if (Main.getGoodWorld)
                     {
