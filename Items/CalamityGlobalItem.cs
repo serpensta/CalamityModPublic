@@ -40,7 +40,6 @@ namespace CalamityMod.Items
         public override bool InstancePerEntity => true;
 
         // TODO -- split out a separate GlobalItem for rogue behavior?
-        internal float StealthGenBonus;
         internal float StealthStrikePrefixBonus;
 
         #region Chargeable Item Variables
@@ -88,7 +87,6 @@ namespace CalamityMod.Items
 
         public CalamityGlobalItem()
         {
-            StealthGenBonus = 1f;
             StealthStrikePrefixBonus = 0f;
         }
 
@@ -104,7 +102,6 @@ namespace CalamityMod.Items
             CalamityGlobalItem myClone = (CalamityGlobalItem)base.Clone(item, itemClone);
 
             // Rogue
-            myClone.StealthGenBonus = StealthGenBonus;
             myClone.StealthStrikePrefixBonus = StealthStrikePrefixBonus;
 
             // Charge (Draedon's Arsenal)
@@ -1161,15 +1158,6 @@ namespace CalamityMod.Items
         {
             CalamityPlayer modPlayer = player.Calamity();
 
-            if (item.prefix > 0)
-            {
-                float stealthGenBoost = item.Calamity().StealthGenBonus - 1f;
-                if (stealthGenBoost > 0)
-                {
-                    modPlayer.accStealthGenBoost += stealthGenBoost;
-                }
-            }
-
             // Obsidian Skull and its upgrades make you immune to On Fire!
             if (item.type == ItemID.ObsidianSkull || item.type == ItemID.ObsidianHorseshoe || item.type == ItemID.ObsidianShield || item.type == ItemID.ObsidianWaterWalkingBoots || item.type == ItemID.LavaWaders || item.type == ItemID.ObsidianSkullRose || item.type == ItemID.MoltenCharm || item.type == ItemID.LavaSkull || item.type == ItemID.MoltenSkullRose || item.type == ItemID.AnkhShield)
                 player.buffImmune[BuffID.OnFire] = true;
@@ -1800,7 +1788,6 @@ namespace CalamityMod.Items
         private static int storedPrefix = -1;
         public override void PreReforge(Item item)
         {
-            StealthGenBonus = 1f;
             StealthStrikePrefixBonus = 0f;
             storedPrefix = item.prefix;
         }

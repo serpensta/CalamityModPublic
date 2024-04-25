@@ -64,14 +64,14 @@ namespace CalamityMod.NPCs.DesertScourge
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                Scale = 0.75f,
-                PortraitScale = 0.6f,
+                Scale = 0.65f,
+                PortraitScale = 0.7f,
                 CustomTexturePath = "CalamityMod/ExtraTextures/Bestiary/DesertScourge_Bestiary",
                 PortraitPositionXOverride = 40,
                 PortraitPositionYOverride = 40
             };
-            value.Position.X += 95;
-            value.Position.Y += 45;
+            value.Position.X += 65;
+            value.Position.Y += 35;
             NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
         }

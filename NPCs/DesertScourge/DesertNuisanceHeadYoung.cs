@@ -31,19 +31,7 @@ namespace CalamityMod.NPCs.DesertScourge
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
-
-            NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers()
-            {
-                Scale = 0.8f,
-                PortraitScale = 0.8f,
-                CustomTexturePath = "CalamityMod/ExtraTextures/Bestiary/DesertNuisance_Bestiary",
-                PortraitPositionXOverride = 40,
-                PortraitPositionYOverride = 40
-            };
-            value.Position.X += 50;
-            value.Position.Y += 35;
-            NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
+            this.HideFromBestiary();
             NPCID.Sets.MPAllowedEnemies[Type] = true;
         }
 
