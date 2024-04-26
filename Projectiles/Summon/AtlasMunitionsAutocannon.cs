@@ -189,6 +189,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile heldCannon = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Main.LocalPlayer.Center, Vector2.UnitX, ModContent.ProjectileType<AtlasMunitionsAutocannonHeld>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
                 heldCannon.ModProjectile<AtlasMunitionsAutocannonHeld>().HeatInterpolant = HeatInterpolant * 0.65f;
                 heldCannon.originalDamage = Projectile.originalDamage;
+                heldCannon.ai[2] = Projectile.ai[2];
 
                 CannonIsMounted = false;
                 Projectile.netUpdate = true;
