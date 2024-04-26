@@ -106,8 +106,6 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             {
                 Projectile.rotation = Projectile.rotation.AngleLerp(0f, MathHelper.TwoPi / 50f);
             }
-
-            Projectile.StickToTiles(false, false);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -136,5 +134,11 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
 
         public override bool? CanDamage() => false;
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            fallThrough = false;
+            return true;
+        }
     }
 }
