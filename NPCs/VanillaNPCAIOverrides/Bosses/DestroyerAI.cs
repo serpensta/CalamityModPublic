@@ -784,7 +784,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Despawn
-            if (player.dead)
+            bool oblivionFightDespawn = oblivionAlive && lifeRatio < 0.1f;
+            if (player.dead || oblivionFightDespawn)
             {
                 shouldFly = false;
                 npc.velocity.Y += 2f;

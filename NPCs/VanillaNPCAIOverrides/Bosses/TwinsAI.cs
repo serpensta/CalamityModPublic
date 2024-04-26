@@ -159,7 +159,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             npc.reflectsProjectiles = false;
 
-            if (Main.player[npc.target].dead)
+            bool oblivionFightDespawn = oblivionAlive && lifeRatio < 0.1f;
+            if (Main.player[npc.target].dead || oblivionFightDespawn)
             {
                 npc.velocity.Y -= 0.04f;
                 if (npc.timeLeft > 10)
@@ -1126,7 +1127,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             npc.reflectsProjectiles = false;
 
             // Despawn
-            if (Main.player[npc.target].dead)
+            bool oblivionFightDespawn = oblivionAlive && lifeRatio < 0.1f;
+            if (Main.player[npc.target].dead || oblivionFightDespawn)
             {
                 npc.velocity.Y -= 0.04f;
                 if (npc.timeLeft > 10)
