@@ -104,7 +104,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Check for Oblivion in Master Mode
             bool oblivionAlive = false;
-            if (masterMode && !bossRush)
+            if (masterMode && !bossRush && npc.localAI[3] != -1f)
             {
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
@@ -114,6 +114,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         break;
                     }
                 }
+            }
+
+            // Set variable to force despawn when Prime dies in Master Rev+
+            // Set to -1f if Prime isn't alive when summoned
+            if (npc.localAI[3] == 0f)
+            {
+                if (oblivionAlive)
+                    npc.localAI[3] = 1f;
+                else
+                    npc.localAI[3] = -1f;
+
+                npc.SyncExtraAI();
             }
 
             // Phase HP ratios
@@ -159,7 +171,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             npc.reflectsProjectiles = false;
 
-            bool oblivionFightDespawn = oblivionAlive && lifeRatio < 0.1f;
+            // Despawn
+            bool oblivionWasAlive = npc.localAI[3] == 1f && !oblivionAlive;
+            bool oblivionFightDespawn = (oblivionAlive && lifeRatio < 0.1f) || oblivionWasAlive;
             if (Main.player[npc.target].dead || oblivionFightDespawn)
             {
                 npc.velocity.Y -= 0.04f;
@@ -1069,7 +1083,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Check for Oblivion in Master Mode
             bool oblivionAlive = false;
-            if (masterMode && !bossRush)
+            if (masterMode && !bossRush && npc.localAI[3] != -1f)
             {
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
@@ -1079,6 +1093,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         break;
                     }
                 }
+            }
+
+            // Set variable to force despawn when Prime dies in Master Rev+
+            // Set to -1f if Prime isn't alive when summoned
+            if (npc.localAI[3] == 0f)
+            {
+                if (oblivionAlive)
+                    npc.localAI[3] = 1f;
+                else
+                    npc.localAI[3] = -1f;
+
+                npc.SyncExtraAI();
             }
 
             // Phase HP ratios
@@ -1127,7 +1153,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             npc.reflectsProjectiles = false;
 
             // Despawn
-            bool oblivionFightDespawn = oblivionAlive && lifeRatio < 0.1f;
+            bool oblivionWasAlive = npc.localAI[3] == 1f && !oblivionAlive;
+            bool oblivionFightDespawn = (oblivionAlive && lifeRatio < 0.1f) || oblivionWasAlive;
             if (Main.player[npc.target].dead || oblivionFightDespawn)
             {
                 npc.velocity.Y -= 0.04f;
