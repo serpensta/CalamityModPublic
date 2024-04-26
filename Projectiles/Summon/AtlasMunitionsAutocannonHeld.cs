@@ -77,11 +77,10 @@ namespace CalamityMod.Projectiles.Summon
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
-            Projectile.sentry = true;
-            Projectile.penetrate = -1;
-            Projectile.timeLeft = 90000;
+            Projectile.timeLeft = Projectile.SentryLifeTime;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.Opacity = 1f;
+            Projectile.ContinuouslyUpdateDamageStats = true;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
