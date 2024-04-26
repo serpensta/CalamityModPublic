@@ -40,9 +40,9 @@ namespace CalamityMod.Projectiles.Magic
                 if (Projectile.ai[1] == 0)
                     mainColor = Color.Orchid;
                 if (Projectile.ai[1] == 1)
-                    mainColor = Color.Cyan;
+                    mainColor = Color.Indigo;
                 if (Projectile.ai[1] == 2)
-                    mainColor = Color.MediumTurquoise;
+                    mainColor = Color.MediumVioletRed;
             }       
             Lighting.AddLight(Projectile.Center, mainColor.ToVector3() * 0.7f);
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;

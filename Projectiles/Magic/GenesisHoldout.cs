@@ -10,16 +10,16 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Magic
 {
-    public class GenisisHoldout : BaseGunHoldoutProjectile
+    public class GenesisHoldout : BaseGunHoldoutProjectile
     {
-        public override int AssociatedItemID => ModContent.ItemType<Genisis>();
+        public override int AssociatedItemID => ModContent.ItemType<Genesis>();
         public override Vector2 GunTipPosition => base.GunTipPosition - Vector2.UnitY.RotatedBy(Projectile.rotation) * 2f * Projectile.spriteDirection;
         public override float MaxOffsetLengthFromArm => 10f;
         public override float OffsetXUpwards => -5f;
         public override float BaseOffsetY => -5f;
         public override float OffsetYDownwards => 5f;
 
-        public Color StaticEffectsColor = Color.Cyan;
+        public Color StaticEffectsColor = Color.Indigo;
 
         public float FiringTime = 15;
         public float Windup = 60;
@@ -72,11 +72,11 @@ namespace CalamityMod.Projectiles.Magic
                     
                     if (Windup > 10)
                     {
-                        Windup -= 10;
+                        if (!fireYBeam)
+                            Windup -= 12;
                     }
                     else
                     {
-                        WindingUp = !WindingUp;
                         Windup = 10;
                     }
 
@@ -106,9 +106,9 @@ namespace CalamityMod.Projectiles.Magic
                 SoundStyle fire = new("CalamityMod/Sounds/Item/LanceofDestinyStrong");
                 SoundEngine.PlaySound(fire with { Volume = 0.35f, Pitch = 1f, PitchVariance = 0.15f }, Projectile.Center);
 
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<GenisisBeam>(), Projectile.damage * 10, Projectile.knockBack, Projectile.owner, 0, 0);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<GenesisBeam>(), Projectile.damage * 7, Projectile.knockBack, Projectile.owner, 0, 0);
 
-                Particle pulse3 = new GlowSparkParticle((GunTipPosition - firingVelocity3 * 2), firingVelocity3 * 2, false, Main.rand.Next(7, 11 + 1), 0.047f, StaticEffectsColor, new Vector2(1.5f, 0.9f), true);
+                Particle pulse3 = new GlowSparkParticle(GunTipPosition, shootDirection * 18, false, 6, 0.057f, StaticEffectsColor, new Vector2(1.7f, 0.8f), true);
                 GeneralParticleHandler.SpawnParticle(pulse3);
                 for (int i = 0; i < 8; i++)
                 {
@@ -123,25 +123,17 @@ namespace CalamityMod.Projectiles.Magic
 
                 for (int i = 0; i < 4; i++)
                 {
-                    firingVelocity3 = (shootDirection * 10).RotatedBy((0.045f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
+                    firingVelocity3 = (shootDirection * 10).RotatedBy((0.05f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3 * (1 - i * 0.1f), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 1);
                 }
                 for (int i = 0; i < 4; i++)
                 {
-                    firingVelocity3 = (shootDirection * 10).RotatedBy((-0.045f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
+                    firingVelocity3 = (shootDirection * 10).RotatedBy((-0.05f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3 * (1 - i * 0.1f), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 1);
                 }
-                //Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity2, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 1);
-                //Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 1);
 
-                Particle pulse = new GlowSparkParticle((GunTipPosition - firingVelocity1 * 2), firingVelocity1 * 2, false, Main.rand.Next(7, 11 + 1), 0.035f, StaticEffectsColor, new Vector2(1.5f, 0.9f), true);
-                GeneralParticleHandler.SpawnParticle(pulse);
-                Particle pulse2 = new GlowSparkParticle((GunTipPosition - firingVelocity2 * 2), firingVelocity2 * 2, false, Main.rand.Next(7, 11 + 1), 0.035f, StaticEffectsColor, new Vector2(1.5f, 0.9f), true);
-                GeneralParticleHandler.SpawnParticle(pulse2);
-                //Particle pulse3 = new GlowSparkParticle((GunTipPosition - firingVelocity3 * 2), firingVelocity3 * 2, false, Main.rand.Next(7, 11 + 1), 0.04f, StaticEffectsColor, new Vector2(1.5f, 0.9f), true);
-                //GeneralParticleHandler.SpawnParticle(pulse3);
-                //Particle sparkle = new GenericSparkle(GunTipPosition, Vector2.Zero, Color.White, StaticEffectsColor, 1.7f, 4, Main.rand.NextFloat(-7f, 7f), 2);
-                //GeneralParticleHandler.SpawnParticle(sparkle);
+                Particle pulse3 = new GlowSparkParticle(GunTipPosition, shootDirection * 18, false, 6, 0.057f, StaticEffectsColor, new Vector2(1.7f, 0.8f), true);
+                GeneralParticleHandler.SpawnParticle(pulse3);
             }
 
             // Inside here go all the things that dedicated servers shouldn't spend resources on.

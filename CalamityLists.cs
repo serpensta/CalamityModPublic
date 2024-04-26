@@ -1620,7 +1620,7 @@ namespace CalamityMod
                 ItemType<EidolicWail>(),
                 ItemType<GatlingLaser>(),
                 ItemType<GaussPistol>(),
-                ItemType<Genisis>(),
+                ItemType<Genesis>(),
                 ItemType<IonBlaster>(),
                 ItemType<Lazhar>(),
                 ItemType<NanoPurge>(),

@@ -257,7 +257,8 @@ WyvernFeatherPurple.DisplayName: Feather
 WyvernProjectile.DisplayName: Wyvern
 YharimsCrystalBeam.DisplayName: Yharim's Beam
 YharimsCrystalPrism.DisplayName: Yermes Christal
-WingmanShot.DisplayName: Wingman Shot
+WingmanShot.DisplayName: Energy Shot
 WingmanGrenade.DisplayName: Wingman Grenade
-GenisisBeam.DisplayName: Genisis Beam
+GenesisBeam.DisplayName: Genesis Beam
+GenesisSplitBeam.DisplayName: Genesis Split Beam
 GenisisSplitBeam.DisplayName: Genisis Split Beam

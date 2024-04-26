@@ -345,8 +345,8 @@ FrostBolt: {
 	Tooltip: Casts a slow-moving ball of frost
 }
 
-Genisis: {
-	DisplayName: Genisis
+Genesis: {
+	DisplayName: Genesis
 	Tooltip: Fires a Y-shaped beam of destructive energy and a spread of lasers
 }
 

@@ -8,7 +8,8 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Magic
 {
-    public class Genisis : ModItem, ILocalizedModType
+    [LegacyName("Genisis")]
+    public class Genesis : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetDefaults()
@@ -30,7 +31,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.shootSpeed = 6f;
             Item.channel = true;
             Item.noUseGraphic = true;
-            Item.shoot = ModContent.ProjectileType<GenisisHoldout>();
+            Item.shoot = ModContent.ProjectileType<GenesisHoldout>();
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
@@ -39,7 +40,7 @@ namespace CalamityMod.Items.Weapons.Magic
         public override void HoldItem(Player player) => player.Calamity().mouseRotationListener = true;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<GenisisHoldout>(), damage, knockback, player.whoAmI, 0, 0, 0);
+            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<GenesisHoldout>(), damage, knockback, player.whoAmI, 0, 0, 0);
             holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
 
             return false;
@@ -47,7 +48,7 @@ namespace CalamityMod.Items.Weapons.Magic
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient(ItemID.LaserMachinegun).
+                AddIngredient(ItemID.LaserRifle).
                 AddIngredient(ItemID.LunarBar, 5).
                 AddIngredient<LifeAlloy>(5).
                 AddTile(TileID.LunarCraftingStation).
