@@ -253,7 +253,7 @@ CalamityConfig: {
 			'''
 	}
 
-    NewVanillaTextures: {
+	NewVanillaTextures: {
 		Label: "[i:Paintbrush] New Vanilla Textures"
 		Tooltip:
 			'''
