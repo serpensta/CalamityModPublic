@@ -4276,6 +4276,7 @@ namespace CalamityMod.NPCs
                             {
                                 case NPCID.Herpling:
                                 case NPCID.Derpling:
+                                case NPCID.ChatteringTeethBomb:
                                     return RevengeanceAndDeathAI.BuffedHerplingAI(npc, Mod);
                             }
                         }
