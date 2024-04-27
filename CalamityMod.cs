@@ -114,6 +114,10 @@ namespace CalamityMod
         // Wall of Flesh eye laser telegraph glowmask
         public static Asset<Texture2D> WallOfFleshEyeGlowmask;
 
+        // Master Rev+ Skeletron Prime
+        public static Asset<Texture2D> ChadPrime;
+        public static Asset<Texture2D> ChadPrimeEyeGlowmask;
+
         // DR data structure
         public static SortedDictionary<int, float> DRValues;
 
@@ -299,6 +303,10 @@ namespace CalamityMod
 
             // Wall of Flesh glowmask
             WallOfFleshEyeGlowmask = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/WallOfFleshEyeTelegraphGlow", AssetRequestMode.AsyncLoad);
+
+            // Master Rev+ Skeletron Prime textures
+            ChadPrime = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ChadPrime", AssetRequestMode.AsyncLoad);
+            ChadPrimeEyeGlowmask = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ChadPrimeHeadGlow", AssetRequestMode.AsyncLoad);
 
             // TODO -- Sky shaders should probably be loaded in a ModSystem
             Filters.Scene["CalamityMod:DevourerofGodsHead"] = new Filter(new DoGScreenShaderData("FilterMiniTower").UseColor(0.4f, 0.1f, 1.0f).UseOpacity(0.5f), EffectPriority.VeryHigh);

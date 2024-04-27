@@ -18,7 +18,6 @@ namespace CalamityMod.NPCs.NormalNPCs
 {
     public class SkeletronPrime2 : ModNPC
     {
-        public override string Texture => $"Terraria/Images/NPC_{NPCID.SkeletronPrime}";
         public override string BossHeadTexture => $"Terraria/Images/NPC_Head_Boss_18";
 
         public static Asset<Texture2D> EyeTexture;
@@ -30,7 +29,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
             if (!Main.dedServ)
             {
-                EyeTexture = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/SkeletronPrimeHeadGlow");
+                EyeTexture = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/SkeletronPrime2HeadGlow");
             }
         }
 
@@ -215,7 +214,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             // Phases
             bool phase2 = lifeRatio < 0.66f;
             bool phase3 = lifeRatio < 0.33f;
-            bool spawnSpazmatism = phase3 && !bossRush && NPC.localAI[2] == 0f;
+            bool spawnSpazmatism = lifeRatio < 0.5f && !bossRush && NPC.localAI[2] == 0f;
 
             // Spawn Spazmatism in Master Mode (just like Oblivion from Avalon)
             if (spawnSpazmatism)
@@ -271,6 +270,9 @@ namespace CalamityMod.NPCs.NormalNPCs
 
             bool normalLaserRotation = NPC.localAI[1] % 2f == 0f;
 
+            // Prevents cheap hits
+            bool canUseAttackInMaster = NPC.position.Y < Main.player[NPC.target].position.Y - 350f;
+
             // Float near player
             if (NPC.ai[1] == 0f || NPC.ai[1] == 4f)
             {
@@ -283,7 +285,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                 {
                     // Start spin phase after 1.875 seconds
                     NPC.ai[2] += phase3 ? 1.2f : 0.8f;
-                    if (NPC.ai[2] >= (90f - (death ? 60f * (1f - lifeRatio) : 0f)) && (!otherHeadChargingOrSpinning || phase3))
+                    if (NPC.ai[2] >= (90f - (death ? 60f * (1f - lifeRatio) : 0f)) && (!otherHeadChargingOrSpinning || phase3) && canUseAttackInMaster)
                     {
                         bool shouldSpinAround = NPC.ai[1] == 4f && NPC.position.Y < Main.player[NPC.target].position.Y - 400f &&
                             Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) < 600f && Vector2.Distance(Main.player[NPC.target].Center, NPC.Center) > 400f;
@@ -318,9 +320,10 @@ namespace CalamityMod.NPCs.NormalNPCs
                     acceleration += 0.025f;
                 if (!sawAlive)
                     acceleration += 0.025f;
+                acceleration *= 4f;
 
                 float topVelocity = acceleration * 100f;
-                float deceleration = 0.8f;
+                float deceleration = 0.7f;
 
                 float headDecelerationUpDist = 0f;
                 float headDecelerationDownDist = 0f;
