@@ -203,19 +203,19 @@ Communication: {
 	Crusade: {
 		Inquiry: Role in the Crusade
 		Response: 
-                        '''
-                        While the Crusade is widely considered to have begun on the date of 6.19.1781 with Yharon's rebirth, I took no part in it until 4.23.1803. Upon joining, I was chosen to lead the science and engineering divisions. While I was given freedom over which projects I chose and how I pursued them, it was expected that anything I made would be beneficial to the war effort.\n\n
+			'''
+			While the Crusade is widely considered to have begun on the date of 6.19.1781 with Yharon's rebirth, I took no part in it until 4.23.1803. Upon joining, I was chosen to lead the science and engineering divisions. While I was given freedom over which projects I chose and how I pursued them, it was expected that anything I made would be beneficial to the war effort.\n\n
 
-                        Boosting the efficiency of mining operations was my first major contribution to Yharim's campaign, being essential to any further development. I learned how to mass produce the first generation of Excavators to expand mining operations outside of Azafure, and then used similar mass-producible technology to create arms and armaments that far outclassed our enemies'. Many simply dubbed this equipment "The Arsenal".\n\n
+			Boosting the efficiency of mining operations was my first major contribution to Yharim's campaign, being essential to any further development. I learned how to mass produce the first generation of Excavators to expand mining operations outside of Azafure, and then used similar mass-producible technology to create arms and armaments that far outclassed our enemies'. Many simply dubbed this equipment "The Arsenal".\n\n
 
-                        Throughout the Crusade, I also created widespread surveillance systems, using knowledge gained from my original survey of the continent I was activated on. Soon, my vigil over Yharim's rapidly expanding territory was absolute, and my knowledge of his adversaries grew. There were few nations I knew not the weakness of, and fewer still that knew our own.\n\n
+			Throughout the Crusade, I also created widespread surveillance systems, using knowledge gained from my original survey of the continent I was activated on. Soon, my vigil over Yharim's rapidly expanding territory was absolute, and my knowledge of his adversaries grew. There were few nations I knew not the weakness of, and fewer still that knew our own.\n\n
 
-                        However, what I am most notorious for are my hulking machines of war. I am certain that you are familiar with them. Though Yharim was almost sycophantic in his praise of my results, even if he sometimes questioned my methods, our time together came to an abrupt end after he learned of the Plaguebringer Goliath. Regrettably, this event left a sizable hole in my laboratory. No longer subject to his restrictions, my work on cloning the Witch and creating exotechnology began.\n\n
+			However, what I am most notorious for are my hulking machines of war. I am certain that you are familiar with them. Though Yharim was almost sycophantic in his praise of my results, even if he sometimes questioned my methods, our time together came to an abrupt end after he learned of the Plaguebringer Goliath. Regrettably, this event left a sizable hole in my laboratory. No longer subject to his restrictions, my work on cloning the Witch and creating exotechnology began.\n\n
 
-                        My role in the Crusade summarily ended; I do not consider the later inclusion of exotechnology into Yharim’s armor a formal part of my work under him. Yharim's knights and other troops continued to use my "Arsenal" in their military efforts, but I no longer oversaw their research or production.\n\n
+			My role in the Crusade summarily ended; I do not consider the later inclusion of exotechnology into Yharim’s armor a formal part of my work under him. Yharim's knights and other troops continued to use my "Arsenal" in their military efforts, but I no longer oversaw their research or production.\n\n
 
-                        The Crusade did not obstruct or interfere with my core objective of creation and scientific advancement; rather, it simply redirected my focus. Through it, I gained novel insights and reached heights I would not have reached without playing a part in it. I appreciate having had the opportunity to work with some of the greatest organic minds of the time, and I hope those that are still alive will bring progress to a plethora of fields I have yet to explore.
-                        '''
+			The Crusade did not obstruct or interfere with my core objective of creation and scientific advancement; rather, it simply redirected my focus. Through it, I gained novel insights and reached heights I would not have reached without playing a part in it. I appreciate having had the opportunity to work with some of the greatest organic minds of the time, and I hope those that are still alive will bring progress to a plethora of fields I have yet to explore.
+			'''
 	}
 
 	Goals: {
@@ -242,15 +242,15 @@ Communication: {
 
 			The second to be drafted was Thanatos. I took advantage of the size of the chassis and potent propulsion systems to add nigh impenetrable armor and innumerable pulsed laser turrets. Few would be capable of learning its weakness before meeting their demise.\n\n
 
-                        I forged its armor using a process inspired by how Silva created Braelor's axe: by using particle jets to slowly and carefully fuse many elements together into a nanocomposite, the invincible armor organically "grows" over Thanatos' structure like a chrysalis. Regrettably, the plating's immense weight makes Thanatos notably slower than its siblings.\n\n
+			I forged its armor using a process inspired by how Silva created Braelor's axe: by using particle jets to slowly and carefully fuse many elements together into a nanocomposite, the invincible armor organically "grows" over Thanatos' structure like a chrysalis. Regrettably, the plating's immense weight makes Thanatos notably slower than its siblings.\n\n
 
 			When designing the third, Apollo, my goal was to downscale significantly; to make something powerful, yet compact. Reviewing the most compact forms of destructive potential I knew, I elected to simulate the Witch's flames.\n\n
                         
-                        Apollo's searing exoplasma is fueled by unstable nanomachines that constantly shed a deluge of ultra high energy particles. This both heats the plasma to incredible temperatures and causes radiation burns of a severity on par with those inflicted by the Witch. The craft had little capability beyond its nanomachine plasma projector, but there was no worry. Apollo was never meant to fight alone.\n\n
+			Apollo's searing exoplasma is fueled by unstable nanomachines that constantly shed a deluge of ultra high energy particles. This both heats the plasma to incredible temperatures and causes radiation burns of a severity on par with those inflicted by the Witch. The craft had little capability beyond its nanomachine plasma projector, but there was no worry. Apollo was never meant to fight alone.\n\n
 
 			The final to begin construction was Artemis. Rather than being founded on raw power, it was made to be the apex of speed and accuracy. There is elegance in simplicity, for all of Artemis' combat efficacy comes from an onboard predictive AI and a battery of hard-light bolt emitters.\n\n
-
-                        It was the perfect partner to its twin and required no revisions. Organic beings are naturally inclined to fixate their senses on fire, presenting Artemis with the perfect opportunity to strike with unparalleled precision.
+			
+            It was the perfect partner to its twin and required no revisions. Organic beings are naturally inclined to fixate their senses on fire, presenting Artemis with the perfect opportunity to strike with unparalleled precision.
 			'''
 	}
 
@@ -264,11 +264,11 @@ Communication: {
 
 			Peerless computation density does not come without a price. My prototype models consumed absurd amounts of energy and could not be meaningfully integrated into any system without a limitless source of power. After experimentation with a plethora of different candidates failed to bring results, I chose to approach the problem of limitless power more directly.\n\n
 
-                        The Ilmeran crystals that you know as "Sea Prisms" are self-illuminating and provide a weak electric charge indefinitely, even when tapped by circuitry. Etching the crystals with conduction pathways at the molecular level and providing an initial energy impulse, not unlike igniting a newborn star, transforms them into a facsimile of the Exo Prisms you are familiar with.\n\n
+			The Ilmeran crystals that you know as "Sea Prisms" are self-illuminating and provide a weak electric charge indefinitely, even when tapped by circuitry. Etching the crystals with conduction pathways at the molecular level and providing an initial energy impulse, not unlike igniting a newborn star, transforms them into a facsimile of the Exo Prisms you are familiar with.\n\n
 
 			Exo Prisms emit a self-sustaining resonance of particles that is unlike any other phenomena I have observed. I dubbed this Exotic Resonance, and it is the breakthrough that the rest of exotechnology is named for. Exotic resonance remains present no matter how much energy is drawn from it, amplifying the intrinsic properties of the Sea Prisms far beyond my expectations. The sheer abundance of energy produced via exotic resonance allows a sufficient quantity of Exo Prisms to power any device, no matter the size or complexity.\n\n
 
-                        You will find my modern Exo Prisms easy to work with when using my forge, and should have no issues using their power to vastly enhance your armaments. If you are concerned about my harvesting of Sea Prisms from Ilmeris, do remember that you found the largest ever cohesive gem unharmed in my laboratory. Artificially growing equivalent crystals allows me to manufacture pure, flawless Exo Prisms en masse, which provide much more stable power output. I have no need to strip mine the sea kingdom to meet my exponentially rising energy budget.
+			You will find my modern Exo Prisms easy to work with when using my forge, and should have no issues using their power to vastly enhance your armaments. If you are concerned about my harvesting of Sea Prisms from Ilmeris, do remember that you found the largest ever cohesive gem unharmed in my laboratory. Artificially growing equivalent crystals allows me to manufacture pure, flawless Exo Prisms en masse, which provide much more stable power output. I have no need to strip mine the sea kingdom to meet my exponentially rising energy budget.
 			'''
 	}
 
@@ -318,7 +318,7 @@ Communication: {
 
 			Though I was disappointed that I had little chance to study Yharon given he was what initially drew me to Yharim, I would be presented with many other opportunities throughout the next seventy-two years: the Archmage's magic, the Devourer's realm, and the Witch's power were the most notable. The Crusade taught me that I progressed faster with external aid, even if it only served as inspiration.\n\n
 
-                        My last interaction with Yharim was not even a year before I first observed you. He had come to me some months after his nearly fatal encounter with Braelor and Statis and requested that I enhance his Auric armor with my newly-invented exotechnology. We spoke little before he departed to the Dragon Aerie, and I believe him to still be there.
+			My last interaction with Yharim was not even a year before I first observed you. He had come to me some months after his nearly fatal encounter with Braelor and Statis and requested that I enhance his Auric armor with my newly-invented exotechnology. We spoke little before he departed to the Dragon Aerie, and I believe him to still be there.
 			'''
 	}
 
@@ -328,11 +328,11 @@ Communication: {
 			'''
 			My knowledge of the Dragon Aerie is limited. Yharim is adamant in protecting it. In recent history, only he and Yharon have trod there, and neither were inclined to share details about it.\n\n
 
-                        Even if I dared to evoke Yharim's wrath, I cannot survey the Aerie. My attempts at locating it have been fruitless despite having surveyed this world's surface and skies many times over. Perhaps it avoids observation, as per some manner of cloaking. It is also possible it simply exists outside of conventional space, in a pocket dimension of sorts. Either case would make detecting it via my current methods drastically more difficult.\n\n
+			Even if I dared to evoke Yharim's wrath, I cannot survey the Aerie. My attempts at locating it have been fruitless despite having surveyed this world's surface and skies many times over. Perhaps it avoids observation, as per some manner of cloaking. It is also possible it simply exists outside of conventional space, in a pocket dimension of sorts. Either case would make detecting it via my current methods drastically more difficult.\n\n
 
 			What I do know is that the Dragon Aerie is an unusually large sky island that acted as the sacred home of the Auric dragons. Few others were ever allowed to tread there, as a sort of religious sanctuary or holy ground.\n\n
                 
-                        It is also where Auric dragons would be laid to rest in preparation for their revival by Yharon. As their revival on the Aerie was a commonly accepted fact even at the start of recorded history, the sky island must be at least 2,000 years old, with Yharon himself being a similar age.\n\n
+			It is also where Auric dragons would be laid to rest in preparation for their revival by Yharon. As their revival on the Aerie was a commonly accepted fact even at the start of recorded history, the sky island must be at least 2,000 years old, with Yharon himself being a similar age.\n\n
 
 			Considering the extraordinary power of the Auric dragons and the sanctity of the Dragon Aerie, I am left to ponder: did the Aerie make the Auric dragons powerful, or is the Aerie inundated with power due to their extended presence? Perhaps more importantly, what made them leave the safety of the Aerie even as their kind were being slain? I eagerly await the uncovering of such mysteries.
 			'''
@@ -372,9 +372,9 @@ Communication: {
 
 			Despite my issues with the Serpent, his assistance on the battlefield and with resource acquisition was welcome. One of the few unquestionable truths about him was the grandeur of his title. I still make use of smelted Cosmilite to this day in numerous applications, and I utilize the raw material as a metallurgical component of various alloys such as the Exo Mechanical Trio's plating.\n\n
 
-                        Yet the most profound mystery remains: the means via which the Devourer's body processed or disposed of godly essence. The energy is not absorbed or entirely converted, but scans for traces of the essence showed that it was not stored inside him for other purposes. All signs indicated that godly essence simply vanished shortly after he consumed it.\n\n
+			Yet the most profound mystery remains: the means via which the Devourer's body processed or disposed of godly essence. The energy is not absorbed or entirely converted, but scans for traces of the essence showed that it was not stored inside him for other purposes. All signs indicated that godly essence simply vanished shortly after he consumed it.\n\n
 
-                        Unless he blatantly defied the laws of thermodynamics, which is most unlikely, the mass-energy must have been transferred elsewhere. Where to, I am not sure. I doubt this matter will ever be resolved now that the Devourer has been culled.
+			Unless he blatantly defied the laws of thermodynamics, which is most unlikely, the mass-energy must have been transferred elsewhere. Where to, I am not sure. I doubt this matter will ever be resolved now that the Devourer has been culled.
 			'''
 	}
 
@@ -424,9 +424,9 @@ Communication: {
 
 			Even when I deemed that I had plateaued in the field of cybernetics, the limitations of my methodology were ever present. The bodies of most jungle creatures were too frail to handle the prerequisite cybernetic enhancements. A Queen Bee was the optimal choice to host the nanomachines. Born to rule, such beings are resilient enough to survive the augmentation, but still weak enough to be subdued if or when necessary.\n\n
 
-                        Something about this research in particular incensed the Godseeker. Upon witnessing my progress, he flew into a rage. He blasted out a sizable chunk of the genomic laboratory and intentionally allowed my first, unfinished specimen to escape. In no uncertain words, he terminated his agreement with me and stormed off. I do not know what line was crossed, but he has made no further moves to antagonize me, so I shall continue my research in peace.\n\n
+			Something about this research in particular incensed the Godseeker. Upon witnessing my progress, he flew into a rage. He blasted out a sizable chunk of the genomic laboratory and intentionally allowed my first, unfinished specimen to escape. In no uncertain words, he terminated his agreement with me and stormed off. I do not know what line was crossed, but he has made no further moves to antagonize me, so I shall continue my research in peace.\n\n
 
-                        Regardless. There is a unique allure to setting loose a synthesized mimicry of prokaryotic life. It continues to evolve incomprehensibly rapidly, even as we speak, providing endless opportunities for analysis.
+			Regardless. There is a unique allure to setting loose a synthesized mimicry of prokaryotic life. It continues to evolve incomprehensibly rapidly, even as we speak, providing endless opportunities for analysis.
 			'''
 	}
 
@@ -436,17 +436,17 @@ Communication: {
 			'''
 			The Infection has beguiled me since its surge upon this world. To study it, I retrofitted an Aureus reconnaissance model with armor intended to nullify its effects. In the end, all the protection I could muster only delayed Aureus' fall to the starborne rot. Observing your trials, I understood why it was overtaken: the lack of a thinking brain.\n\n
 
-                        Attempts at studying it on my own failed; a body was built for the task, but the chassis fell short, even if my mind remained. Using an alternative approach, I sent hired mercenaries into the infection. Few returned, but those who did provided me with enough intel.\n\n
+			Attempts at studying it on my own failed; a body was built for the task, but the chassis fell short, even if my mind remained. Using an alternative approach, I sent hired mercenaries into the infection. Few returned, but those who did provided me with enough intel.\n\n
 
-                        What interested me the most were the reports of an infected Astrum Deus patrolling the Infection. Until the rot afflicted it fully, the closest it had ever been spotted was in Terraria's higher atmosphere. Further analysis pointed towards it being the catalyst for the infection's arrival on the surface. Though I have not found a concrete reason as to why and how this happened, I do have a hypothesis.\n\n
+			What interested me the most were the reports of an infected Astrum Deus patrolling the Infection. Until the rot afflicted it fully, the closest it had ever been spotted was in Terraria's higher atmosphere. Further analysis pointed towards it being the catalyst for the infection's arrival on the surface. Though I have not found a concrete reason as to why and how this happened, I do have a hypothesis.\n\n
 
 			As you may know, stars are concentrations of magic that form over countless years of ambient mana gathering together in deep space. With the mana having nothing to gravitate towards but itself, it condenses until it becomes a brilliant star. Stars that grow too large begin to collapse, degenerating and forming clots of Astral Infection. Throughout the cosmos at large, this is a rare occurrence, as Astrum Deus intermittently devours large stars for sustenance.\n\n
 
 			However, space is unfathomably large. If Astrum Deus were to vanish from space for even a brief time, some number of stars should visibly degenerate into Astral Infection, observable via telescope. Yet such observations show no significant increase in the quantity of collapsed stars. Furthermore, I know from my calculations that the observable universe is far, far too large to support a scenario where Astrum Deus disappears.\n\n
 
-                        It is therefore almost certain the Astrum Deus we know is simply one of many. Anything further I say on this matter is speculation.\n\n
+			It is therefore almost certain the Astrum Deus we know is simply one of many. Anything further I say on this matter is speculation.\n\n
 
-                        The infected Astrum Deus near our world may be a juvenile. This would explain why it could struggle to devour a star or fail to identify an infected star as a potential hazard. It then grew sick and crashed onto the nearest planet. As there are presumably many others of its kind, space on the whole is largely unaffected. I welcome any other hypotheses you may have.
+			The infected Astrum Deus near our world may be a juvenile. This would explain why it could struggle to devour a star or fail to identify an infected star as a potential hazard. It then grew sick and crashed onto the nearest planet. As there are presumably many others of its kind, space on the whole is largely unaffected. I welcome any other hypotheses you may have.
 			'''
 	}
 
@@ -460,11 +460,11 @@ Communication: {
 
 			If you are concerned about the sea's current state, you are far from the first. You may put your worries to rest, as I have no plans to further irradiate the area for the foreseeable future. Indeed, my actions have already been met with scathing criticism and uproar.\n\n
 
-                        The Godseeker's bureaucrats would frequently remind me of how the public had organized to revolt against my advancement of science. From what they knew, they were justified. They feared what calamities further science could wreak upon Terraria, due to the destruction brought upon the Sulphurous Sea.\n\n
+			The Godseeker's bureaucrats would frequently remind me of how the public had organized to revolt against my advancement of science. From what they knew, they were justified. They feared what calamities further science could wreak upon Terraria, due to the destruction brought upon the Sulphurous Sea.\n\n
 
-                        I thought such retaliation to be absurd, but it appears not all can see reason. Despite my infamy and legacy, technological advancements continue to be made by many other scientists across Terraria, even if the subject continues to provoke unfounded fear mongering.\n\n
+			I thought such retaliation to be absurd, but it appears not all can see reason. Despite my infamy and legacy, technological advancements continue to be made by many other scientists across Terraria, even if the subject continues to provoke unfounded fear mongering.\n\n
 
-                        Regardless, if I deem it necessary, I possess the means to simply rebuild the Sulphur Sea from the bedrock up. Restoring it to its pristine status would be a trivial matter and a testament to science's creative potential.
+			Regardless, if I deem it necessary, I possess the means to simply rebuild the Sulphur Sea from the bedrock up. Restoring it to its pristine status would be a trivial matter and a testament to science's creative potential.
 			'''
 	}
 }
