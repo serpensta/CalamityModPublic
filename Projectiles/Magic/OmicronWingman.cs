@@ -17,21 +17,22 @@ using CalamityMod.Graphics.Renderers;
 
 namespace CalamityMod.Projectiles.Magic
 {
-    public class WingmanHoldout : ModProjectile
+    public class OmicronWingman : ModProjectile
     {
         public override LocalizedText DisplayName => CalamityUtils.GetItemName<Wingman>();
         public override string Texture => "CalamityMod/Items/Weapons/Magic/Wingman";
 
-        public Color StaticEffectsColor = Color.Orchid;
+        public Color StaticEffectsColor = Color.MediumVioletRed;
         private ref float ShootingTimer => ref Projectile.ai[0];
-        private float FiringTime = 40;
+        private float FiringTime = 10;
         private float PostFireCooldown = 0;
         private Vector2 MovementOffset;
         public bool MovingUp = true;
         public float xOffset = 1;
         public float yOffset = 0;
         public int time = 0;
-        public int firingDelay = 45;
+        public int firingDelay = 15;
+        public int launchDelay = 0;
 
         private ref float OffsetLength => ref Projectile.localAI[0];
 
@@ -73,56 +74,39 @@ namespace CalamityMod.Projectiles.Magic
 
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 12f;
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
-            if (Owner.CantUseHoldout() || heldItem.type != ModContent.ItemType<Wingman>() )
+            if (launchDelay == 0 && Owner.CantUseHoldout() || heldItem.type != ModContent.ItemType<Omicron>() )
             {
                 NetUpdate();
                 if (PostFireCooldown <= 0)
                     Projectile.Kill();
             }
-            else if (PostFireCooldown <= 0 && (Owner.Calamity().mouseRight || (firingDelay <= 0 && Projectile.ai[2] == 1 || Projectile.ai[2] == -1)))
+            else if (launchDelay > 0 || (PostFireCooldown <= 0 && (Owner.Calamity().mouseRight || (firingDelay <= 0 && Projectile.ai[2] == 1 || Projectile.ai[2] == -1))))
             {
                 // If the player's pressing RMB, it'll shoot the grenade.
-                if (Owner.Calamity().mouseRight)
+                if (launchDelay > 0 || Owner.Calamity().mouseRight)
                 {
-                    if ((Owner.CheckMana(Owner.ActiveItem(), (int)(heldItem.mana * Owner.manaCost) * 5, true, false)))
+                    if (launchDelay < 50)
+                        launchDelay++;
+                    
+                    if (launchDelay >= 50 && (Owner.CheckMana(Owner.ActiveItem(), (int)(heldItem.mana * Owner.manaCost) * 2, true, false)))
                     {
                         Shoot(heldItem, true);
-                        PostFireCooldown = 35 + 55 * Utils.GetLerpValue(10, 40, FiringTime, true);
+                        PostFireCooldown = 50;
                         ShootingTimer = 0;
-                        FiringTime = 40;
-                    }
-                    else
-                    {
-                        if (Projectile.soundDelay <= 0)
-                        {
-                            SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = -0.5f }, Projectile.Center);
-                            Projectile.soundDelay = 50;
-                        }
-                        ShootingTimer = 0;
+                        launchDelay = 0;
                     }
                 }
                 else if (ShootingTimer >= FiringTime)
                 {
-                    if (Owner.CheckMana(Owner.ActiveItem(), -1, true, false))
+                    if (Owner.CheckMana(Owner.ActiveItem(), -1, false, false))
                     {
                         Shoot(heldItem, false);
                         ShootingTimer = 0;
-
-                        if (FiringTime > 10)
-                            FiringTime -= 5;
-                        else
-                            FiringTime = 10;
                     }
                     else
                     {
-                        if (Projectile.soundDelay <= 0)
-                        {
-                            SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = -0.5f }, Projectile.Center);
-                            Projectile.soundDelay = 50;
-                        }
-                        ShootingTimer = 0;
+                        Projectile.Kill();
                     }
-
                 }
             }
 
@@ -163,7 +147,7 @@ namespace CalamityMod.Projectiles.Magic
             Vector2 lengthOffset = rotationVector * OffsetLength;
             Vector2 armOffset = new Vector2(Utils.Remap(proximityLookingUpwards, -1f, 1f, 0f, -12f) * direction, -10f + Utils.Remap(MathF.Abs(proximityLookingUpwards), 0f, 1f, 0f, proximityLookingUpwards > 0f ? 15f : 0f));
 
-            if (time % 40 == 0)
+            if (time % 30 == 0)
             {
                 MovingUp = !MovingUp;
             }
@@ -186,17 +170,6 @@ namespace CalamityMod.Projectiles.Magic
             Owner.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
 
             Projectile.spriteDirection = Projectile.direction = direction;
-            Owner.ChangeDir(direction);
-
-            float armRotation = (Projectile.rotation - MathHelper.PiOver2); // -Pi/2 because the arms rotation starts with arms pointing down.
-            if (Projectile.ai[2] == 1)
-            {
-                Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Quarter, armRotation);
-            }
-            else
-            {
-                Owner.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, armRotation);
-            }
         }
 
         private void Shoot(Item item, bool isGrenade)
@@ -212,14 +185,19 @@ namespace CalamityMod.Projectiles.Magic
             if (isGrenade)
             {
                 SoundStyle fire = new("CalamityMod/Sounds/Item/DeadSunExplosion");
-                SoundEngine.PlaySound(fire with { Volume = 0.35f, Pitch = -0.4f, PitchVariance = 0.2f }, Projectile.Center);
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * Utils.GetLerpValue(60, 10, FiringTime, true), ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 4, Projectile.knockBack * 5, Projectile.owner, 0);
+                SoundEngine.PlaySound(fire with { Volume = 0.2f, Pitch = -0.4f, PitchVariance = 0.2f }, Projectile.Center);
+                Projectile bomb = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * 0.8f, ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 6, Projectile.knockBack * 5, Projectile.owner, 0, 2);
+                bomb.timeLeft = 520;
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity, ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 6, Projectile.knockBack * 5, Projectile.owner, 0, 2);
             }
             else
             {
                 SoundStyle fire = new("CalamityMod/Sounds/Item/MagnaCannonShot");
                 SoundEngine.PlaySound(fire with { Volume = 0.25f, Pitch = 1f, PitchVariance = 0.35f }, Projectile.Center);
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * Utils.GetLerpValue(80, 10, FiringTime, true), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0);
+                
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * Utils.GetLerpValue(80, 10, FiringTime, true), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity.RotatedBy(-0.06) * Utils.GetLerpValue(80, 10, FiringTime, true) * 0.85f, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity.RotatedBy(0.06) * Utils.GetLerpValue(80, 10, FiringTime, true) * 0.85f, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
             }
 
             NetUpdate();
@@ -262,7 +240,7 @@ namespace CalamityMod.Projectiles.Magic
                 dust.color = StaticEffectsColor;
             }
             ShootingTimer = 0;
-            firingDelay = 45;
+            firingDelay = 15;
             PostFireCooldown--;
         }
 

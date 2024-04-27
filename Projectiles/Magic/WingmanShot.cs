@@ -42,7 +42,13 @@ namespace CalamityMod.Projectiles.Magic
                 if (Projectile.ai[1] == 1)
                     mainColor = Color.Indigo;
                 if (Projectile.ai[1] == 2)
+                {
                     mainColor = Color.MediumVioletRed;
+                    Projectile.scale = 1.2f;
+                    Projectile.extraUpdates = 5;
+                    Projectile.tileCollide = false;
+                }
+
             }       
             Lighting.AddLight(Projectile.Center, mainColor.ToVector3() * 0.7f);
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
@@ -53,7 +59,7 @@ namespace CalamityMod.Projectiles.Magic
                 Projectile.velocity *= 0.995f;
             if (time % 2 == 0 && Projectile.timeLeft > 15)
             {
-                SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity.SafeNormalize(Vector2.UnitY) * 3.5f, Projectile.velocity * 0.01f, false, 5, 1f, mainColor * 0.4f);
+                SparkParticle spark = new SparkParticle(Projectile.Center - Projectile.velocity.SafeNormalize(Vector2.UnitY) * 3.5f, Projectile.velocity * 0.01f, false, 5, 1f * Projectile.scale, mainColor * 0.4f);
                 GeneralParticleHandler.SpawnParticle(spark);
             }
             time++;
@@ -69,8 +75,8 @@ namespace CalamityMod.Projectiles.Magic
             Vector2 rotationPoint = texture.Size() * 0.5f;
 
             //CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.Lerp(Color.Cyan, Color.White, 0.7f) * 0.6f, 1);
-            Main.EntitySpriteDraw(texture, drawPosition, null, mainColor with { A = 0 }, drawRotation, rotationPoint, new Vector2(0.5f, 1.4f) * 0.025f, SpriteEffects.None);
-            Main.EntitySpriteDraw(texture, drawPosition, null, Color.White with { A = 0 }, drawRotation, rotationPoint, new Vector2(0.5f, 1.4f) * 0.02f, SpriteEffects.None);
+            Main.EntitySpriteDraw(texture, drawPosition, null, mainColor with { A = 0 }, drawRotation, rotationPoint, new Vector2(0.5f, 1.4f) * 0.025f * Projectile.scale, SpriteEffects.None);
+            Main.EntitySpriteDraw(texture, drawPosition, null, Color.White with { A = 0 }, drawRotation, rotationPoint, new Vector2(0.5f, 1.4f) * 0.02f * Projectile.scale, SpriteEffects.None);
             return false;
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -82,7 +88,7 @@ namespace CalamityMod.Projectiles.Magic
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            for (int i = 0; i <= 8; i++)
+            for (int i = 0; i <= 6; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 264 : 66, new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f), 0, default, Main.rand.NextFloat(1.2f, 1.6f));
                 dust.noGravity = true;

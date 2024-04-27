@@ -150,7 +150,6 @@ NightBolt.DisplayName: Night's Bolt
 NightOrb.DisplayName: Night's Orb
 NightsRayBeam.DisplayName: Night's Ray
 NuclearFuryProjectile.DisplayName: Nuclear Fury
-ParticleBeamofDoom.DisplayName: Doom
 PartySparkle.DisplayName: Pretty Sparkle
 PhantasmalFuryProj.DisplayName: Phantasmal Fury
 Phantom.DisplayName: Phantom
@@ -262,3 +261,4 @@ WingmanGrenade.DisplayName: Wingman Grenade
 GenesisBeam.DisplayName: Genesis Beam
 GenesisSplitBeam.DisplayName: Genesis Split Beam
 GenisisSplitBeam.DisplayName: Genisis Split Beam
+OmicronBeam.DisplayName: Omicron Beam

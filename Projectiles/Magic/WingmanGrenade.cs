@@ -13,7 +13,7 @@ namespace CalamityMod.Projectiles.Magic
         public new string LocalizationCategory => "Projectiles.Magic";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
         public int BounceHits = 0;
-        public Color mainColor = Color.Orchid;
+        public Color mainColor = Color.White;
         public bool exploding = false;
         public override void SetStaticDefaults()
         {
@@ -36,8 +36,20 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void AI()
         {
-            if (Projectile.scale == 1)
+            if (mainColor == Color.White)
+            {
                 Projectile.scale = 0.4f;
+                if (Projectile.ai[1] == 0)
+                    mainColor = Color.Orchid;
+
+                if (Projectile.ai[1] == 2)
+                {
+                    mainColor = Color.MediumVioletRed;
+                    Projectile.tileCollide = false;
+                    Projectile.scale = 0.5f;
+                }
+            }
+
             if (Projectile.timeLeft % 2 == 0)
                 Projectile.scale = Main.rand.NextFloat(0.35f, 0.5f);
 
@@ -129,6 +141,6 @@ namespace CalamityMod.Projectiles.Magic
             return false;
         }
         public override bool? CanDamage() => null;
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, exploding ? 120 : 20, targetHitbox);
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, exploding ? 120 : (Projectile.ai[1] == 2 ? 30 : 20), targetHitbox);
     }
 }

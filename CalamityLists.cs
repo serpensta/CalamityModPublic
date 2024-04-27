@@ -1613,7 +1613,7 @@ namespace CalamityMod
                 ItemType<AcidGun>(),
                 ItemType<AethersWhisper>(),
                 ItemType<AetherfluxCannon>(),
-                ItemType<AlphaRay>(),
+                ItemType<Omicron>(),
                 ItemType<ApoctosisArray>(),
                 ItemType<Cryophobia>(),
                 ItemType<Effervescence>(),

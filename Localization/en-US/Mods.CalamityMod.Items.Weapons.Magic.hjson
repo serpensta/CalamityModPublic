@@ -27,15 +27,6 @@ AethersWhisper: {
 		'''
 }
 
-AlphaRay: {
-	DisplayName: Alpha Ray
-	Tooltip:
-		'''
-		Disintegrates everything with a tri-beam of energy and lasers
-		Press <right> to fire a Y-shaped beam of destructive energy and a spread of lasers
-		'''
-}
-
 AlulaAustralis: {
 	DisplayName: Alula Australis
 	Tooltip: Fires a beautiful aurora trailed by a star shower
@@ -546,6 +537,15 @@ NightsRay: {
 NuclearFury: {
 	DisplayName: Nuclear Fury
 	Tooltip: Casts a torrent of cosmic typhoons
+}
+
+Omicron: {
+	DisplayName: Omicron
+	Tooltip:
+		'''
+		Disintegrates everything with a tri-beam of energy and lasers
+		Press <right> to fire a Y-shaped beam of destructive energy and a spread of lasers
+		'''
 }
 
 ParasiticSceptor: {
