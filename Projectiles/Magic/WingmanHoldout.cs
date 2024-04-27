@@ -22,7 +22,7 @@ namespace CalamityMod.Projectiles.Magic
         public override LocalizedText DisplayName => CalamityUtils.GetItemName<Wingman>();
         public override string Texture => "CalamityMod/Items/Weapons/Magic/Wingman";
 
-        public Color StaticEffectsColor = Color.Orchid;
+        public Color StaticEffectsColor = Color.HotPink;
         private ref float ShootingTimer => ref Projectile.ai[0];
         private float FiringTime = 40;
         private float PostFireCooldown = 0;

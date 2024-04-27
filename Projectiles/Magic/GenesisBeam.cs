@@ -13,7 +13,7 @@ namespace CalamityMod.Projectiles.Magic
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
         public ref float time => ref Projectile.ai[0];
 
-        public Color mainColor = Color.Indigo;
+        public Color mainColor = Color.MediumSlateBlue;
         public override void SetDefaults()
         {
             Projectile.width = 12;

@@ -44,7 +44,7 @@ namespace CalamityMod.Projectiles.Magic
             Item heldItem = Owner.ActiveItem();
 
             // Fire if the owner stops channeling or otherwise cannot use the weapon.
-            if (Owner.CantUseHoldout())
+            if (Owner.CantUseHoldout() || heldItem.type != ModContent.ItemType<Omicron>())
             {
                 if (PostFireCooldown <= 0)
                     Projectile.Kill();
@@ -130,7 +130,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
 
                 Owner.Calamity().GeneralScreenShakePower = 6.5f;
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<OmicronBeam>(), Projectile.damage * 23, Projectile.knockBack, Projectile.owner, 0, 0);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<OmicronBeam>(), Projectile.damage * 38, Projectile.knockBack, Projectile.owner, 0, 0);
 
                 for (int i = 0; i < 8; i++)
                 {
@@ -145,12 +145,12 @@ namespace CalamityMod.Projectiles.Magic
 
                 for (int i = 0; i < 5; i++)
                 {
-                    firingVelocity3 = (shootDirection * 10).RotatedBy((0.05f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
+                    firingVelocity3 = (shootDirection * 10).RotatedBy((0.04f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3 * (1 - i * 0.1f), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
                 }
                 for (int i = 0; i < 5; i++)
                 {
-                    firingVelocity3 = (shootDirection * 10).RotatedBy((-0.05f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
+                    firingVelocity3 = (shootDirection * 10).RotatedBy((-0.04f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3 * (1 - i * 0.1f), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
                 }
 
@@ -181,7 +181,7 @@ namespace CalamityMod.Projectiles.Magic
         }
         private void PostFiringCooldown()
         {
-            Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 12f;
+            Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 25f;
 
             if (PostFireCooldown > 0 && Main.rand.NextBool())
             {

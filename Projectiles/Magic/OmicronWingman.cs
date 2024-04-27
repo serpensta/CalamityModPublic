@@ -55,6 +55,8 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void AI()
         {
+            if (time > 1 && Owner.ownedProjectileCounts[ModContent.ProjectileType<OmicronHoldout>()] < 1)
+                Projectile.Kill();
             Lighting.AddLight(Projectile.Center, StaticEffectsColor.ToVector3() * 0.2f);
             if (Projectile.scale == 1)
             {
@@ -67,20 +69,21 @@ namespace CalamityMod.Projectiles.Magic
             // Update damage based on curent magic damage stat (so Mana Sickness affects it)
             Projectile.damage = heldItem is null ? 0 : Owner.GetWeaponDamage(heldItem);
 
-            if (PostFireCooldown > 0)
-            {
-                PostFiringCooldown();
-            }
-
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 12f;
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
-            if (launchDelay == 0 && Owner.CantUseHoldout() || heldItem.type != ModContent.ItemType<Omicron>() )
+            if (PostFireCooldown == 0 && launchDelay == 0 && Owner.CantUseHoldout() || heldItem.type != ModContent.ItemType<Omicron>())
             {
                 NetUpdate();
                 if (PostFireCooldown <= 0)
                     Projectile.Kill();
             }
-            else if (launchDelay > 0 || (PostFireCooldown <= 0 && (Owner.Calamity().mouseRight || (firingDelay <= 0 && Projectile.ai[2] == 1 || Projectile.ai[2] == -1))))
+
+            if (PostFireCooldown > 0)
+            {
+                PostFiringCooldown();
+            }
+
+            if (launchDelay > 0 || (PostFireCooldown <= 0 && (Owner.Calamity().mouseRight || (firingDelay <= 0 && Projectile.ai[2] == 1 || Projectile.ai[2] == -1))))
             {
                 // If the player's pressing RMB, it'll shoot the grenade.
                 if (launchDelay > 0 || Owner.Calamity().mouseRight)
@@ -186,18 +189,18 @@ namespace CalamityMod.Projectiles.Magic
             {
                 SoundStyle fire = new("CalamityMod/Sounds/Item/DeadSunExplosion");
                 SoundEngine.PlaySound(fire with { Volume = 0.2f, Pitch = -0.4f, PitchVariance = 0.2f }, Projectile.Center);
-                Projectile bomb = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * 0.8f, ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 6, Projectile.knockBack * 5, Projectile.owner, 0, 2);
-                bomb.timeLeft = 520;
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity, ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 6, Projectile.knockBack * 5, Projectile.owner, 0, 2);
+                Projectile bomb = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity, ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 8, Projectile.knockBack * 5, Projectile.owner, 0, 2);
+                bomb.timeLeft = 530;
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * 1.2f, ModContent.ProjectileType<WingmanGrenade>(), Projectile.damage * 8, Projectile.knockBack * 5, Projectile.owner, 0, 2);
             }
             else
             {
                 SoundStyle fire = new("CalamityMod/Sounds/Item/MagnaCannonShot");
                 SoundEngine.PlaySound(fire with { Volume = 0.25f, Pitch = 1f, PitchVariance = 0.35f }, Projectile.Center);
                 
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity * Utils.GetLerpValue(80, 10, FiringTime, true), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity.RotatedBy(-0.06) * Utils.GetLerpValue(80, 10, FiringTime, true) * 0.85f, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity.RotatedBy(0.06) * Utils.GetLerpValue(80, 10, FiringTime, true) * 0.85f, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity.RotatedBy(-0.05) * 0.85f, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity.RotatedBy(0.05) * 0.85f, ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
             }
 
             NetUpdate();

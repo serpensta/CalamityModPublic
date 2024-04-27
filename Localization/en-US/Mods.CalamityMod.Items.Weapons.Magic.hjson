@@ -338,7 +338,12 @@ FrostBolt: {
 
 Genesis: {
 	DisplayName: Genesis
-	Tooltip: Fires a Y-shaped beam of destructive energy and a spread of lasers
+	Tooltip:
+		'''
+		Fire an array of lasers that decreases in spread for each shot
+		Every 6th shot fires a splitting Genesis Beam and resets the spread of the weapon
+		Hitting an enemy where the Genesis Beam splits deals increased damage
+		'''
 }
 
 GhastlyVisage: {
@@ -543,8 +548,10 @@ Omicron: {
 	DisplayName: Omicron
 	Tooltip:
 		'''
-		Disintegrates everything with a tri-beam of energy and lasers
-		Press <right> to fire a Y-shaped beam of destructive energy and a spread of lasers
+		Fire an array of lasers and create two improved Wingman constructs that fly around you and fire lasers at your cursor
+		Press <right> when firing to shoot a Omicron Beam that splits upon hitting an enemy
+		After firing an Omnicron Beam your Wingmen will launch improved pairs of grenades
+		Hitting an enemy with an Omicron Beam right as it is fired will increase the damage done substantially and stop it from splitting
 		'''
 }
 
@@ -939,7 +946,12 @@ Waywasher: {
 
 Wingman: {
 	DisplayName: Wingman
-	Tooltip: Fires a concentrated laser beam
+	Tooltip:
+		'''
+		Creates two Wingman constructs that fly around you and fire lasers at your cursor
+		Press <right> when firing to make the Wingmen launch grenades and then go on cooldown
+		Launching grenades when the Wingmen are fully revved up will decrease the cooldown
+		'''
 }
 
 WintersFury: {

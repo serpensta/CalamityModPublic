@@ -15,6 +15,7 @@ namespace CalamityMod.Projectiles.Magic
         public int BounceHits = 0;
         public Color mainColor = Color.White;
         public bool exploding = false;
+        public float sizeBonus = 1;
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 14;
@@ -25,7 +26,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             Projectile.width = Projectile.height = 20;
             Projectile.friendly = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 480;
             Projectile.DamageType = DamageClass.Magic;
@@ -40,13 +41,13 @@ namespace CalamityMod.Projectiles.Magic
             {
                 Projectile.scale = 0.4f;
                 if (Projectile.ai[1] == 0)
-                    mainColor = Color.Orchid;
+                    mainColor = Color.HotPink;
 
                 if (Projectile.ai[1] == 2)
                 {
                     mainColor = Color.MediumVioletRed;
-                    Projectile.tileCollide = false;
                     Projectile.scale = 0.5f;
+                    sizeBonus = 1.5f;
                 }
             }
 
@@ -63,22 +64,22 @@ namespace CalamityMod.Projectiles.Magic
                     Projectile.timeLeft = 65;
                 if (Projectile.timeLeft == 65)
                 {
-                    Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, mainColor, "CalamityMod/Particles/HighResHollowCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10, 10), 0f, 0.12f, 15);
+                    Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, mainColor, "CalamityMod/Particles/HighResHollowCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10, 10), 0f, 0.12f * sizeBonus, 15);
                     GeneralParticleHandler.SpawnParticle(blastRing2);
-                    Particle blastRing = new CustomPulse(Projectile.Center, Vector2.Zero, Color.Lerp(mainColor, Color.White, 0.5f), "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 3f, 0f, 25);
+                    Particle blastRing = new CustomPulse(Projectile.Center, Vector2.Zero, Color.Lerp(mainColor, Color.White, 0.5f), "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 3f * sizeBonus, 0f, 25);
                     GeneralParticleHandler.SpawnParticle(blastRing);
                     SoundStyle fire = new("CalamityMod/Sounds/Item/ArcNovaDiffuserChargeImpact");
                     SoundEngine.PlaySound(fire with { Volume = 1.25f, Pitch = -0.2f, PitchVariance = 0.15f }, Projectile.Center);
                 }
                 if (Projectile.timeLeft == 65)
                 {
-                    Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, mainColor, "CalamityMod/Particles/HighResHollowCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10, 10), 0.12f, 0.135f, 50);
+                    Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, mainColor, "CalamityMod/Particles/HighResHollowCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10, 10), 0.12f * sizeBonus, 0.135f * sizeBonus, 50);
                     GeneralParticleHandler.SpawnParticle(blastRing2);
                 }
 
                 if (Projectile.timeLeft % 4 == 0)
                 {
-                    Particle blastRing2 = new CustomPulse(Projectile.Center + new Vector2(95, 95).RotatedByRandom(100) * Main.rand.NextFloat(0.7f, 1.1f), Vector2.Zero, mainColor, "CalamityMod/Particles/HighResHollowCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10, 10), 0f, Main.rand.NextFloat(0.04f, 0.07f), 13);
+                    Particle blastRing2 = new CustomPulse(Projectile.Center + new Vector2(95, 95).RotatedByRandom(100) * sizeBonus * Main.rand.NextFloat(0.7f, 1.1f), Vector2.Zero, mainColor, "CalamityMod/Particles/HighResHollowCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10, 10), 0f, Main.rand.NextFloat(0.04f, 0.07f) * sizeBonus, 13);
                     GeneralParticleHandler.SpawnParticle(blastRing2);
                 }
             }
@@ -90,7 +91,7 @@ namespace CalamityMod.Projectiles.Magic
             {
                 if (!exploding && Main.rand.NextBool() || exploding)
                 {
-                    Vector2 dustVel = new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f);
+                    Vector2 dustVel = new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f) * (exploding ? sizeBonus : 1);
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + dustVel * (exploding ? 5 : 1), Main.rand.NextBool(4) ? 264 : 66, dustVel * (exploding ? 5 : 1), 0, default, Main.rand.NextFloat(0.9f, 1.2f) * (exploding ? 1.5f : 1));
                     dust.noGravity = true;
                     dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
@@ -141,6 +142,6 @@ namespace CalamityMod.Projectiles.Magic
             return false;
         }
         public override bool? CanDamage() => null;
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, exploding ? 120 : (Projectile.ai[1] == 2 ? 30 : 20), targetHitbox);
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, exploding ? 120 * sizeBonus : 20 * sizeBonus, targetHitbox);
     }
 }

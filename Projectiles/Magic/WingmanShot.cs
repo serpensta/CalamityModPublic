@@ -24,7 +24,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             Projectile.width = Projectile.height = 5;
             Projectile.friendly = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.penetrate = 2;
             Projectile.timeLeft = 240;
             Projectile.DamageType = DamageClass.Magic;
@@ -38,19 +38,19 @@ namespace CalamityMod.Projectiles.Magic
             if (mainColor == Color.White)
             {
                 if (Projectile.ai[1] == 0)
-                    mainColor = Color.Orchid;
+                    mainColor = Color.HotPink;
                 if (Projectile.ai[1] == 1)
-                    mainColor = Color.Indigo;
+                    mainColor = Color.MediumSlateBlue;
                 if (Projectile.ai[1] == 2)
                 {
                     mainColor = Color.MediumVioletRed;
-                    Projectile.scale = 1.2f;
+                    Projectile.scale = 1.25f;
                     Projectile.extraUpdates = 5;
-                    Projectile.tileCollide = false;
+                    Projectile.penetrate = 3;
                 }
 
-            }       
-            Lighting.AddLight(Projectile.Center, mainColor.ToVector3() * 0.7f);
+            }
+
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             //Dust dust = Dust.NewDustPerfect(Projectile.Center, 107); // + Main.rand.NextVector2Circular(-3, 3)
             //dust.noGravity = true;
@@ -82,17 +82,19 @@ namespace CalamityMod.Projectiles.Magic
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Projectile.numHits > 0)
-                Projectile.damage = (int)(Projectile.damage * 0.8f);
+                Projectile.damage = (int)(Projectile.damage * 0.9f);
             if (Projectile.damage < 1)
                 Projectile.damage = 1;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            for (int i = 0; i <= 6; i++)
+            for (int i = 0; i <= 4; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 264 : 66, new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f), 0, default, Main.rand.NextFloat(1.2f, 1.6f));
                 dust.noGravity = true;
                 dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
+                dust.noLightEmittence = true;
+                dust.noLight = true;
             }
             BounceHits++;
             if (Projectile.velocity.X != oldVelocity.X)
@@ -109,11 +111,13 @@ namespace CalamityMod.Projectiles.Magic
         }
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 2; i++)
             {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 264 : 66, (Projectile.velocity.SafeNormalize(Vector2.UnitY) * 15f).RotatedByRandom(MathHelper.ToRadians(15f)) * Main.rand.NextFloat(0.1f, 0.8f), 0, default, Main.rand.NextFloat(1.2f, 1.6f));
                 dust.noGravity = true;
                 dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
+                dust.noLightEmittence = true;
+                dust.noLight = true;
             }
         }
     }

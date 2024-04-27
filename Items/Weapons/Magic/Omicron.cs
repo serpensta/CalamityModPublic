@@ -40,14 +40,14 @@ namespace CalamityMod.Items.Weapons.Magic
         public override void HoldItem(Player player) => player.Calamity().mouseRotationListener = true;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<OmicronHoldout>(), damage, knockback, player.whoAmI, 0, 0, 0);
-            holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
-
             for (int i = 0; i < 2; i++)
             {
                 Projectile holdout2 = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<OmicronWingman>(), damage, knockback, player.whoAmI, 0, 0, i == 0 ? 1 : -1);
                 holdout2.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
             }
+
+            Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<OmicronHoldout>(), damage, knockback, player.whoAmI, 0, 0, 0);
+            holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
 
             return false;
         }

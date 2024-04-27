@@ -19,7 +19,7 @@ namespace CalamityMod.Projectiles.Magic
         public override float BaseOffsetY => -5f;
         public override float OffsetYDownwards => 5f;
 
-        public Color StaticEffectsColor = Color.Indigo;
+        public Color StaticEffectsColor = Color.MediumSlateBlue;
 
         public float FiringTime = 15;
         public float Windup = 60;
