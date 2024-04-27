@@ -272,7 +272,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                     npc.ai[2] += 1f;
                     float phaseGateValue = (masterMode ? 300f : 450f) - (death ? phase1MaxLaserPhaseDurationDecrease * ((1f - lifeRatio) / (1f - phase2LifeRatio)) : 0f);
-                    float laserGateValue = oblivionAlive ? 90f : 30f;
+                    float laserGateValue = oblivionAlive ? 60f : 30f;
                     if (NPC.IsMechQueenUp)
                     {
                         phaseGateValue = 900f;
