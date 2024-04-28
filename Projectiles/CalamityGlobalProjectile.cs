@@ -10,6 +10,7 @@ using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.PlagueEnemies;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
@@ -355,7 +356,7 @@ namespace CalamityMod.Projectiles
                         homingEndTime += 90f;
 
                     // Stop homing when within a certain distance of the target
-                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < ((revSkeletronPrimeHomingSkull && Main.masterMode && CalamityWorld.revenge) ? 192f : 96f) && projectile.ai[1] < homingEndTime)
+                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < ((revSkeletronPrimeHomingSkull && ((Main.masterMode && CalamityWorld.revenge) || BossRushEvent.BossRushActive)) ? 192f : 96f) && projectile.ai[1] < homingEndTime)
                         projectile.ai[1] = homingEndTime;
 
                     if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
@@ -2253,19 +2254,14 @@ namespace CalamityMod.Projectiles
                         return false;
                     }
 
+                    if (projectile.timeLeft < SkeletronPrime2.BombTimeLeft / 2 && projectile.timeLeft > 3)
+                        projectile.tileCollide = true;
+
                     if (masterModeSkeletronPrimeHomingBomb)
                     {
                         projectile.ai[1] += 1f;
                         float homingStartTime = 20f;
                         float homingEndTime = death ? 140f : 110f;
-
-                        if (projectile.ai[1] < homingEndTime)
-                        {
-                            projectile.ai[1] = homingEndTime;
-
-                            if (projectile.timeLeft > 3)
-                                projectile.tileCollide = true;
-                        }
 
                         if (Vector2.Distance(projectile.Center, Main.player[target].Center) < 192f && projectile.ai[1] < homingEndTime)
                             projectile.ai[1] = homingEndTime;
@@ -2290,12 +2286,7 @@ namespace CalamityMod.Projectiles
                     else
                     {
                         if (projectile.velocity.Y > 10f)
-                        {
                             projectile.velocity.Y = 10f;
-
-                            if (!projectile.tileCollide && projectile.timeLeft > 3)
-                                projectile.tileCollide = true;
-                        }
                     }
 
                     if (projectile.localAI[0] == 0f)
@@ -2334,24 +2325,11 @@ namespace CalamityMod.Projectiles
                         dust8.position = projectile.Center + new Vector2(0f, -projectile.height / 2 - 6).RotatedBy(projectile.rotation) * 1.1f;
                     }
 
-                    if (!masterModeSkeletronPrimeHomingBomb)
+                    if (masterModeSkeletronPrimeFallingBomb)
                     {
                         projectile.ai[2] += 1f;
-                        if (projectile.ai[2] > 5f)
-                        {
-                            projectile.ai[2] = 10f;
-                            if (projectile.velocity.Y == 0f && projectile.velocity.X != 0f)
-                            {
-                                projectile.velocity.X *= 0.97f;
-                                if ((double)projectile.velocity.X > -0.01 && (double)projectile.velocity.X < 0.01)
-                                {
-                                    projectile.velocity.X = 0f;
-                                    projectile.netUpdate = true;
-                                }
-                            }
-
+                        if (projectile.ai[2] > 60f)
                             projectile.velocity.Y += 0.2f;
-                        }
                     }
 
                     projectile.rotation += projectile.velocity.X * 0.1f;
@@ -2386,13 +2364,13 @@ namespace CalamityMod.Projectiles
                 {
                     bool primeCannonProjectile = projectile.ai[1] == 2f;
                     bool homeIn = false;
-                    float homingTime = masterMode ? 240f : 180f;
+                    float homingTime = masterMode ? 90f : 180f;
                     float spreadOutCutoffTime = 555f;
                     float homeInCutoffTime = spreadOutCutoffTime - homingTime;
-                    float minAcceleration = masterMode ? 0.096f : 0.08f;
-                    float maxAcceleration = masterMode ? 0.144f : 0.12f;
-                    float homingVelocity = masterMode ? 30f : 25f;
-                    float maxVelocity = masterMode ? 18f : 15f;
+                    float minAcceleration = masterMode ? 0.072f : 0.08f;
+                    float maxAcceleration = masterMode ? 0.108f : 0.12f;
+                    float homingVelocity = masterMode ? 22.5f : 25f;
+                    float maxVelocity = masterMode ? 13.5f : 15f;
 
                     if (!primeCannonProjectile)
                     {

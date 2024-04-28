@@ -22,6 +22,8 @@ namespace CalamityMod.NPCs.NormalNPCs
 
         public static Asset<Texture2D> EyeTexture;
 
+        public const int BombTimeLeft = 600;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;
@@ -312,15 +314,22 @@ namespace CalamityMod.NPCs.NormalNPCs
                     NPC.rotation = NPC.velocity.X / 15f;
 
                 float acceleration = (bossRush ? 0.2f : 0.125f) + (death ? 0.05f * (1f - lifeRatio) : 0f);
+                float accelerationMult = 1f;
                 if (!cannonAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!laserAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!viceAlive)
                     acceleration += 0.025f;
                 if (!sawAlive)
                     acceleration += 0.025f;
-                acceleration *= 4f;
+                acceleration *= accelerationMult;
 
                 float topVelocity = acceleration * 100f;
                 float deceleration = 0.7f;
@@ -679,7 +688,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                     }
 
                                     int enragedBombs = Projectile.NewProjectile(NPC.GetSource_FromAI(), headCenter.X, headCenter.Y + 30f, enragedHeadBombTargetX, enragedHeadBombTargetY, type, damage, 0f, Main.myPlayer, -1f);
-                                    Main.projectile[enragedBombs].timeLeft = 600;
+                                    Main.projectile[enragedBombs].timeLeft = BombTimeLeft;
                                     Main.projectile[enragedBombs].tileCollide = false;
                                 }
                             }
@@ -757,7 +766,7 @@ namespace CalamityMod.NPCs.NormalNPCs
                                 {
                                     Vector2 bombVelocity = spinningPoint.RotatedBy(radians * k);
                                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Vector2.UnitY * 30f + bombVelocity.SafeNormalize(Vector2.UnitY) * 15f, bombVelocity - upwardVelocity, type, damage, 0f, Main.myPlayer, -2f);
-                                    Main.projectile[proj].timeLeft = 900;
+                                    Main.projectile[proj].timeLeft = BombTimeLeft;
                                     Main.projectile[proj].tileCollide = false;
                                 }
                                 NPC.localAI[1] += 1f;
