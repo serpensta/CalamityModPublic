@@ -2325,24 +2325,11 @@ namespace CalamityMod.Projectiles
                         dust8.position = projectile.Center + new Vector2(0f, -projectile.height / 2 - 6).RotatedBy(projectile.rotation) * 1.1f;
                     }
 
-                    if (!masterModeSkeletronPrimeHomingBomb)
+                    if (masterModeSkeletronPrimeFallingBomb)
                     {
                         projectile.ai[2] += 1f;
-                        if (projectile.ai[2] > 5f)
-                        {
-                            projectile.ai[2] = 10f;
-                            if (projectile.velocity.Y == 0f && projectile.velocity.X != 0f)
-                            {
-                                projectile.velocity.X *= 0.97f;
-                                if ((double)projectile.velocity.X > -0.01 && (double)projectile.velocity.X < 0.01)
-                                {
-                                    projectile.velocity.X = 0f;
-                                    projectile.netUpdate = true;
-                                }
-                            }
-
+                        if (projectile.ai[2] > 60f)
                             projectile.velocity.Y += 0.2f;
-                        }
                     }
 
                     projectile.rotation += projectile.velocity.X * 0.1f;
@@ -2377,13 +2364,13 @@ namespace CalamityMod.Projectiles
                 {
                     bool primeCannonProjectile = projectile.ai[1] == 2f;
                     bool homeIn = false;
-                    float homingTime = masterMode ? 240f : 180f;
+                    float homingTime = masterMode ? 90f : 180f;
                     float spreadOutCutoffTime = 555f;
                     float homeInCutoffTime = spreadOutCutoffTime - homingTime;
-                    float minAcceleration = masterMode ? 0.096f : 0.08f;
-                    float maxAcceleration = masterMode ? 0.144f : 0.12f;
-                    float homingVelocity = masterMode ? 30f : 25f;
-                    float maxVelocity = masterMode ? 18f : 15f;
+                    float minAcceleration = masterMode ? 0.072f : 0.08f;
+                    float maxAcceleration = masterMode ? 0.108f : 0.12f;
+                    float homingVelocity = masterMode ? 22.5f : 25f;
+                    float maxVelocity = masterMode ? 13.5f : 15f;
 
                     if (!primeCannonProjectile)
                     {
