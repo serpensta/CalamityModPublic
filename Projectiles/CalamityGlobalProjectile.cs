@@ -10,6 +10,7 @@ using CalamityMod.Events;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Potions.Alcohol;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.PlagueEnemies;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Boss;
@@ -355,7 +356,7 @@ namespace CalamityMod.Projectiles
                         homingEndTime += 90f;
 
                     // Stop homing when within a certain distance of the target
-                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < ((revSkeletronPrimeHomingSkull && Main.masterMode && CalamityWorld.revenge) ? 192f : 96f) && projectile.ai[1] < homingEndTime)
+                    if (Vector2.Distance(projectile.Center, Main.player[num133].Center) < ((revSkeletronPrimeHomingSkull && ((Main.masterMode && CalamityWorld.revenge) || BossRushEvent.BossRushActive)) ? 192f : 96f) && projectile.ai[1] < homingEndTime)
                         projectile.ai[1] = homingEndTime;
 
                     if (projectile.ai[1] < homingEndTime && projectile.ai[1] > homingStartTime)
@@ -2253,19 +2254,14 @@ namespace CalamityMod.Projectiles
                         return false;
                     }
 
+                    if (projectile.timeLeft < SkeletronPrime2.BombTimeLeft / 2 && projectile.timeLeft > 3)
+                        projectile.tileCollide = true;
+
                     if (masterModeSkeletronPrimeHomingBomb)
                     {
                         projectile.ai[1] += 1f;
                         float homingStartTime = 20f;
                         float homingEndTime = death ? 140f : 110f;
-
-                        if (projectile.ai[1] < homingEndTime)
-                        {
-                            projectile.ai[1] = homingEndTime;
-
-                            if (projectile.timeLeft > 3)
-                                projectile.tileCollide = true;
-                        }
 
                         if (Vector2.Distance(projectile.Center, Main.player[target].Center) < 192f && projectile.ai[1] < homingEndTime)
                             projectile.ai[1] = homingEndTime;
@@ -2290,12 +2286,7 @@ namespace CalamityMod.Projectiles
                     else
                     {
                         if (projectile.velocity.Y > 10f)
-                        {
                             projectile.velocity.Y = 10f;
-
-                            if (!projectile.tileCollide && projectile.timeLeft > 3)
-                                projectile.tileCollide = true;
-                        }
                     }
 
                     if (projectile.localAI[0] == 0f)

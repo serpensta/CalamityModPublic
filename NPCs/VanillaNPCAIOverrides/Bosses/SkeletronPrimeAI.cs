@@ -290,16 +290,23 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     npc.rotation = npc.velocity.X / 15f;
 
                 float acceleration = (bossRush ? 0.2f : masterMode ? 0.125f : 0.1f) + (death ? 0.05f * (1f - lifeRatio) : 0f);
+                float accelerationMult = 1f;
                 if (!cannonAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!laserAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!viceAlive)
                     acceleration += 0.025f;
                 if (!sawAlive)
                     acceleration += 0.025f;
                 if (masterMode)
-                    acceleration *= 4f;
+                    acceleration *= accelerationMult;
 
                 float topVelocity = acceleration * 100f;
                 float deceleration = masterMode ? 0.7f : 0.85f;
@@ -830,14 +837,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Movement
             float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+            float accelerationMult = 1f;
             if (!cannonAlive)
+            {
                 acceleration += 0.025f;
+                accelerationMult += 0.5f;
+            }
             if (!viceAlive)
                 acceleration += 0.025f;
             if (!sawAlive)
                 acceleration += 0.025f;
             if (masterMode)
-                acceleration *= 4f;
+                acceleration *= accelerationMult;
 
             float topVelocity = acceleration * 100f;
             float deceleration = masterMode ? 0.6f : 0.8f;
@@ -1155,14 +1166,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Movement
             float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+            float accelerationMult = 1f;
             if (!laserAlive)
+            {
                 acceleration += 0.025f;
+                accelerationMult += 0.5f;
+            }
             if (!viceAlive)
                 acceleration += 0.025f;
             if (!sawAlive)
                 acceleration += 0.025f;
             if (masterMode)
-                acceleration *= 4f;
+                acceleration *= accelerationMult;
 
             float topVelocity = acceleration * 100f;
             float deceleration = masterMode ? 0.6f : 0.8f;
@@ -1388,14 +1403,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.ai[2] == 99f)
             {
                 float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                float accelerationMult = 1f;
                 if (!cannonAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!laserAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!sawAlive)
                     acceleration += 0.025f;
                 if (masterMode)
-                    acceleration *= 4f;
+                    acceleration *= accelerationMult;
 
                 float topVelocity = acceleration * 100f;
                 float deceleration = masterMode ? 0.6f : 0.8f;
@@ -1471,14 +1493,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                    float accelerationMult = 1f;
                     if (!cannonAlive)
+                    {
                         acceleration += 0.025f;
+                        accelerationMult += 0.5f;
+                    }
                     if (!laserAlive)
+                    {
                         acceleration += 0.025f;
+                        accelerationMult += 0.5f;
+                    }
                     if (!sawAlive)
                         acceleration += 0.025f;
                     if (masterMode)
-                        acceleration *= 4f;
+                        acceleration *= accelerationMult;
 
                     float topVelocity = acceleration * 100f;
                     float deceleration = masterMode ? 0.6f : 0.8f;
@@ -1749,14 +1778,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.ai[2] == 99f)
             {
                 float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                float accelerationMult = 1f;
                 if (!cannonAlive)
+                {
                     acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
+                if (!laserAlive)
+                {
+                    acceleration += 0.025f;
+                    accelerationMult += 0.5f;
+                }
                 if (!viceAlive)
                     acceleration += 0.025f;
-                if (!laserAlive)
-                    acceleration += 0.025f;
                 if (masterMode)
-                    acceleration *= 4f;
+                    acceleration *= accelerationMult;
 
                 float topVelocity = acceleration * 100f;
                 float deceleration = masterMode ? 0.6f : 0.8f;
@@ -1828,14 +1864,21 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     }
 
                     float acceleration = (bossRush ? 0.6f : death ? (masterMode ? 0.375f : 0.3f) : (masterMode ? 0.3125f : 0.25f));
+                    float accelerationMult = 1f;
                     if (!cannonAlive)
+                    {
                         acceleration += 0.025f;
+                        accelerationMult += 0.5f;
+                    }
+                    if (!laserAlive)
+                    {
+                        acceleration += 0.025f;
+                        accelerationMult += 0.5f;
+                    }
                     if (!viceAlive)
                         acceleration += 0.025f;
-                    if (!laserAlive)
-                        acceleration += 0.025f;
                     if (masterMode)
-                        acceleration *= 4f;
+                        acceleration *= accelerationMult;
 
                     float topVelocity = acceleration * 100f;
                     float deceleration = masterMode ? 0.6f : 0.8f;

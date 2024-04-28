@@ -1303,6 +1303,8 @@ namespace CalamityMod.CalPlayer
                 else if (proj.type == ProjectileID.DeathLaser || proj.type == ProjectileID.RocketSkeleton || proj.type == ProjectileID.BombSkeletronPrime)
                 {
                     Player.AddBuff(BuffID.OnFire, 180);
+                    if (proj.type == ProjectileID.BombSkeletronPrime && proj.ai[0] < 0f && (Main.masterMode || BossRushEvent.BossRushActive))
+                        proj.Kill();
                 }
                 else if (proj.type == ProjectileID.Skull)
                 {
