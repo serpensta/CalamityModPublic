@@ -144,6 +144,7 @@ namespace CalamityMod
         internal Mod crouchMod = null;
         internal Mod dialogueTweak = null;
         internal Mod fargos = null;
+        internal Mod luminance = null;
         internal Mod magicStorage = null;
         internal Mod overhaul = null;
         internal Mod redemption = null;
@@ -179,6 +180,8 @@ namespace CalamityMod
             ModLoader.TryGetMod("DialogueTweak", out dialogueTweak);
             fargos = null;
             ModLoader.TryGetMod("Fargowiltas", out fargos);
+            luminance = null;
+            ModLoader.TryGetMod("Luminance", out luminance);
             magicStorage = null;
             ModLoader.TryGetMod("MagicStorage", out magicStorage);
             overhaul = null;
@@ -424,6 +427,7 @@ namespace CalamityMod
             crouchMod = null;
             dialogueTweak = null;
             fargos = null;
+            luminance = null;
             magicStorage = null;
             overhaul = null;
             redemption = null;
