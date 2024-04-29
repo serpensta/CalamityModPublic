@@ -33,6 +33,7 @@ NoDifficultyInfo: The classic Terraria experience, with no Calamity difficulty c
 Revengeance: Revengeance
 RevMaster: Rev+Master
 RevLegend: Rev+Legend
+RevengeanceEnabled: Revengeance Mode is enabled
 RevengeanceShortInfo: "[c/F54254:The intended Calamity experience!]"
 RevengeanceExpandedInfo:
 	'''
@@ -49,6 +50,7 @@ RevengeanceDeactivate: Revengeance is not active.
 Death: Death
 DeathMaster: Death+Master
 DeathLegend: Death+Legend
+DeathEnabled: Death Mode is enabled
 DeathShortInfo: "[c/C82DF7:A tougher challenge for the more experienced, or for those that want a step up from Revengeance Mode]"
 DeathExpandedInfo:
 	'''
