@@ -2247,8 +2247,7 @@ namespace CalamityMod.Projectiles
                     int target = 0;
                     target = Player.FindClosest(projectile.Center, 1, 1);
 
-                    // Blow up when within a certain distance of the target
-                    if (Vector2.Distance(projectile.Center, Main.player[target].Center) < 16f)
+                    if (projectile.Hitbox.Intersects(Main.player[target].Hitbox))
                     {
                         projectile.Kill();
                         return false;
