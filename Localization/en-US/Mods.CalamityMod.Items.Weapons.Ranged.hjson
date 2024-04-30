@@ -322,15 +322,6 @@ CorrodedCaustibow: {
 	Tooltip: Converts wooden arrows into slow, powerful shells that trail an irradiated aura
 }
 
-CosmicBolter: {
-	DisplayName: Cosmic Bolter
-	Tooltip:
-		'''
-		Fires a tight column of three arrows
-		Converts wooden arrows into sliding energy bolts
-		'''
-}
-
 CrackshotColt: {
 	DisplayName: Crackshot Colt
 	Tooltip:
@@ -1345,6 +1336,15 @@ UniversalGenesis: {
 		Converts musket balls into starcaller shots that summon additional stars on enemy hits
 		50% chance to save ammo
 		'Let the starry sky fall upon your enemies'
+		'''
+}
+
+VernalBolter: {
+	DisplayName: Vernal Bolter
+	Tooltip:
+		'''
+		Fires a tight column of three arrows
+		Converts wooden arrows into sliding energy bolts
 		'''
 }
 

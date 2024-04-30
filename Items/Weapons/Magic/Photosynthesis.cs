@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Weapons.Magic
 {
-    public class TerraRay : ModItem, ILocalizedModType
+    public class Photosynthesis : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Magic";
         public override void SetStaticDefaults()
@@ -33,7 +33,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.rare = ItemRarityID.Yellow;
             Item.UseSound = SoundID.Item60;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<TerraBeam>();
+            Item.shoot = ModContent.ProjectileType<PhotosyntheticSolarBeam>();
             Item.shootSpeed = 6f;
         }
 
@@ -47,7 +47,7 @@ namespace CalamityMod.Items.Weapons.Magic
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Item.DrawItemGlowmaskSingleFrame(spriteBatch, rotation, ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Magic/TerraRayGlow").Value);
+            Item.DrawItemGlowmaskSingleFrame(spriteBatch, rotation, ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Magic/PhotosynthesisGlow").Value);
         }
 
         public override void AddRecipes()
