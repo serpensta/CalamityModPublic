@@ -99,7 +99,7 @@ namespace CalamityMod.Items.Weapons.Ranged
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient<AGunofFireAndIce>().
+                AddIngredient<ThermoclineBlaster>().
                 AddIngredient(ItemID.ShroomiteBar, 3).
                 AddIngredient(ItemID.FallenStar, 3). // 41 Arietis is a triple star system
                 AddIngredient<CoreofSunlight>().

@@ -4,6 +4,7 @@ using CalamityMod.Particles;
 using CalamityMod.Projectiles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -12,14 +13,14 @@ using Terraria.ModLoader;
 namespace CalamityMod.Items.Weapons.Ranged
 {
     [LegacyName("CursedCapper")]
-    public class AGunofFireAndIce : ModItem, ILocalizedModType
+    public class ThermoclineBlaster : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Ranged";
         public bool swapType = false;
         public override void SetDefaults()
         {
-            Item.width = 56;
-            Item.height = 36;
+            Item.width = 60;
+            Item.height = 40;
             Item.scale = 0.75f;
             Item.damage = 45;
             Item.DamageType = DamageClass.Ranged;
@@ -67,6 +68,17 @@ namespace CalamityMod.Items.Weapons.Ranged
                 CalamityGlobalProjectile cgp = fireShot.Calamity();
                 cgp.fireBullet = true;
             }
+            for (int k = 0; k < 4; k++)
+            {
+                Vector2 spawnPosition = itemPosition + velocity.RotatedBy(-0.6 * player.direction) + velocity * 0.5f;
+                Vector2 smokeVel = velocity.RotatedByRandom(0.25) * Main.rand.NextFloat(0.2f, 1f);
+                Particle smoke = new HeavySmokeParticle(spawnPosition, smokeVel, Color.White, Main.rand.Next(40, 60 + 1), Main.rand.NextFloat(0.2f, 0.45f), 0.5f, Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextBool(), required: true);
+                GeneralParticleHandler.SpawnParticle(smoke);
+
+                Dust dust = Dust.NewDustPerfect(spawnPosition, 303, smokeVel.RotatedByRandom(0.15f), 80, default, Main.rand.NextFloat(0.25f, 1f));
+                dust.noGravity = false;
+                dust.color = Color.White;
+            }
 
             swapType = !swapType;
             return false;
@@ -77,7 +89,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             float itemRotation = player.compositeFrontArm.rotation + MathHelper.PiOver2 * player.gravDir;
 
             Vector2 itemPosition = player.MountedCenter + itemRotation.ToRotationVector2() * 7f;
-            Vector2 itemSize = new Vector2(56, 36);
+            Vector2 itemSize = new Vector2(60, 40);
             Vector2 itemOrigin = new Vector2(-24, 3);
 
             CalamityUtils.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin);

@@ -1388,8 +1388,8 @@ MagnaCannon: {
 		'''
 }
 
-AGunofFireAndIce: {
-	DisplayName: A Gun of Fire And Ice
+ThermoclineBlaster: {
+	DisplayName: Thermocline Blaster
 	Tooltip:
 		'''
 		Alternates between firing bullets imbued with fire and ice
