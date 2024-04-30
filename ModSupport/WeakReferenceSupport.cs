@@ -1274,6 +1274,8 @@ namespace CalamityMod
         public static void LuminanceSupport()
         {
             Mod luminance = GetInstance<CalamityMod>().luminance;
+            if (luminance is null)
+                return;
 
             Func<WorldFileData, bool> deathEnabled = data =>
             {
