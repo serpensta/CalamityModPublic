@@ -434,7 +434,7 @@ namespace CalamityMod.CalPlayer
                     ModContent.ItemType<DeadSunsWind>(),
                     ModContent.ItemType<Meowthrower>(),
                     ModContent.ItemType<OverloadedBlaster>(),
-                    ModContent.ItemType<TerraFlameburster>(),
+                    ModContent.ItemType<WildfireBloom>(),
                     ModContent.ItemType<Photoviscerator>(),
                     ModContent.ItemType<Shadethrower>(),
                     ModContent.ItemType<BloodBoiler>(),
