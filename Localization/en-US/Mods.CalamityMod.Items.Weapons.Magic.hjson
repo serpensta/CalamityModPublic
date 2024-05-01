@@ -341,7 +341,7 @@ Genesis: {
 	Tooltip:
 		'''
 		Fire an array of lasers that decreases in spread for each shot
-		Every 6th shot fires a splitting Genesis Beam and resets the spread of the weapon
+		Every sixth shot fires a splitting Genesis Beam and resets the spread of the weapon
 		Hitting an enemy where the Genesis Beam splits deals increased damage
 		'''
 }

@@ -103,11 +103,11 @@ namespace CalamityMod.Projectiles.Magic
             }
             if (time <= 7 && Projectile.ai[1] == 0) // This is the sweet spot
             {
-                modifiers.SourceDamage *= 4;
+                modifiers.SourceDamage *= 5;
 
                 if (!HitDirect)
                 {
-                    Owner.velocity += -Projectile.velocity * 2;
+                    Owner.velocity += -Projectile.velocity;
                     for (int i = 0; i <= 9; i++)
                     {
                         Particle energy = new GlowSparkParticle(Projectile.Center, (Projectile.velocity * 15).RotatedByRandom(0.5f) * Main.rand.NextFloat(0.1f, 0.4f), false, 11, Main.rand.NextFloat(0.05f, 0.07f), mainColor, new Vector2(2, 0.5f), true);

@@ -58,12 +58,11 @@ namespace CalamityMod.Projectiles.Magic
             if (time > 1 && Owner.ownedProjectileCounts[ModContent.ProjectileType<OmicronHoldout>()] < 1)
                 Projectile.Kill();
             Lighting.AddLight(Projectile.Center, StaticEffectsColor.ToVector3() * 0.2f);
-            if (Projectile.scale == 1)
+            if (time == 0)
             {
                 MovingUp = Projectile.ai[2] == 1 ? true : false;
             }
             firingDelay--;
-            Projectile.scale = 1.2f;
             Item heldItem = Owner.ActiveItem();
 
             // Update damage based on curent magic damage stat (so Mana Sickness affects it)
@@ -271,6 +270,13 @@ namespace CalamityMod.Projectiles.Magic
                 return false;
 
             Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Magic/Wingman").Value;
+
+            if (Projectile.ai[2] == 1)
+                texture = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Magic/OmicronWingman").Value;
+            else
+                texture = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Magic/OmicronWingmanAlt").Value;
+
+
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Color drawColor = Projectile.GetAlpha(lightColor);
             float drawRotation = Projectile.rotation + (Projectile.spriteDirection == -1 ? MathHelper.Pi : 0f);

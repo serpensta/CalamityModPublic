@@ -25,10 +25,18 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.idStaticNPCHitCooldown = 31;
             Projectile.penetrate = -1;
             Projectile.extraUpdates = 75;
-            Projectile.timeLeft = 30;
+            Projectile.timeLeft = 20;
         }
         public override void AI()
         {
+            if (time == 0)
+            {
+                if (Projectile.ai[1] == 0)
+                    Projectile.penetrate = 1;
+                else
+                    Projectile.timeLeft = 50;
+            }
+
             if (Projectile.timeLeft % 2 == 0 && (Projectile.ai[1] == 1 && time > 2 || (Projectile.ai[1] == 0 && time > 3 && Projectile.timeLeft > 2)))
             {
                 Particle spark = new GlowSparkParticle(Projectile.Center, -Projectile.velocity * 0.05f, false, 17, 0.06f, mainColor, new Vector2(0.5f, 1.3f));
@@ -82,9 +90,9 @@ namespace CalamityMod.Projectiles.Magic
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (Projectile.timeLeft <= 3) // This is the sweet spot
+            if (Projectile.ai[1] == 0) // This is the sweet spot
             {
-                modifiers.SourceDamage *= 2;
+                modifiers.SourceDamage *= 1.5f;
 
                 int points = 10;
                 float radians = MathHelper.TwoPi / points;
