@@ -274,10 +274,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             float straightUpJumpHeight = 540f;
                             if (npc.ai[3] == 0f)
-                            {
-                                npc.ai[3] = (!headAlive && Collision.CanHit(npc.Center, 1, 1, new Vector2(npc.Center.X, npc.Center.Y - 60f) - Vector2.UnitY * straightUpJumpHeight, 1, 1)) ? Main.rand.Next(3) + 1f :
-                                    (!leftFistAlive && !rightFistAlive) ? Main.rand.Next(2) + 1f : 1f;
-                            }
+                                npc.ai[3] = (!headAlive && npc.Bottom.Y - straightUpJumpHeight > Main.player[npc.target].Top.Y) ? Main.rand.Next(3) + 1f : (!leftFistAlive && !rightFistAlive) ? Main.rand.Next(2) + 1f : 1f;
 
                             switch ((int)npc.ai[3])
                             {
@@ -351,7 +348,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                     npc.ai[1] = 0f;
                                     npc.ai[2] = 2f;
 
-                                    float jumpDuration = (float)Math.Floor(straightUpJumpHeight / npc.velocity.Y);
+                                    float jumpDuration = (float)Math.Floor(straightUpJumpHeight / Math.Abs(npc.velocity.Y));
                                     npc.ai[3] = jumpDuration;
 
                                     npc.netUpdate = true;
@@ -466,7 +463,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             Main.dust[fiery2].velocity.X *= 2f;
                         }
 
-                        int totalFireballs = masterMode ? 8 : 5;
+                        int totalFireballs = masterMode ? 7 : 5;
                         if (turboEnrage && Main.getGoodWorld)
                             totalFireballs *= 2;
 
@@ -504,7 +501,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     // Velocity when falling
                     if (npc.ai[2] == 2f)
                     {
-                        float laserShootGateValue = death ? 3f : 4f;
+                        // Do not collide with tiles while doing this crazy shit
+                        npc.noTileCollide = true;
+
+                        float laserShootGateValue = death ? 5f : 8f;
                         if (npc.ai[3] % laserShootGateValue == 0f)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
