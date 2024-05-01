@@ -313,7 +313,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 // Prepare to charge
                 // More charges are used in a row at lower HP
-                if (doneWithTentaclePhase && !charging)
+                if (doneWithTentaclePhase && !charging && !despawn)
                 {
                     float timeToChargeIncrement = phase4 ? 2f : phase3 ? 1.5f : 1f;
                     if (masterMode)
