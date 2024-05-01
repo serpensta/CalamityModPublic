@@ -272,7 +272,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (masterMode)
                         {
-                            float straightUpJumpHeight = 540f;
+                            float straightUpJumpHeight = 640f;
                             if (npc.ai[3] == 0f)
                                 npc.ai[3] = (!headAlive && npc.Bottom.Y - straightUpJumpHeight > Main.player[npc.target].Top.Y) ? Main.rand.Next(3) + 1f : (!leftFistAlive && !rightFistAlive) ? Main.rand.Next(2) + 1f : 1f;
 
@@ -504,7 +504,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         // Do not collide with tiles while doing this crazy shit
                         npc.noTileCollide = true;
 
-                        float laserShootGateValue = death ? 5f : 8f;
+                        float laserShootGateValue = death ? 6f : 9f;
                         if (npc.ai[3] % laserShootGateValue == 0f)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
