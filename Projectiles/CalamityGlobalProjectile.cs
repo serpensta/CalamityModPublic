@@ -82,10 +82,10 @@ namespace CalamityMod.Projectiles
         // Adds Brimstone flames to bullets, currently only used by Animosity
         public bool brimstoneBullets = false;
 
-        // Adds fire to bullets, currently used by A Gun of Fire And Ice
+        // Adds fire to bullets, currently used by Thermocline Blaster
         public bool fireBullet = false;
 
-        // Adds ice to bullets, currently used by A Gun of Fire And Ice
+        // Adds ice to bullets, currently used by Thermocline Blaster
         public bool iceBullet = false;
 
         // Adds shock to bullets, currently used by Arietes 41
