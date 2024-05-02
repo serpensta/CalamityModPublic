@@ -1161,11 +1161,11 @@ namespace CalamityMod.NPCs
                     int nailCount = Main.rand.Next(3, 6);
                     int[] players = new int[nailCount];
                     int i = 0;
-                    for (int j = 0; j < Main.player.Length; j++)
+                    foreach (Player plr in Main.ActivePlayers)
                     {
-                        if (Main.player[j].active && !Main.player[j].dead && Collision.CanHitLine(npc.position, npc.width, npc.height, Main.player[j].position, Main.player[j].width, Main.player[j].height))
+                        if (!plr.dead && Collision.CanHitLine(npc.position, npc.width, npc.height, plr.position, plr.width, plr.height))
                         {
-                            players[i] = j;
+                            players[i] = plr.whoAmI;
                             i++;
                             if (i == nailCount)
                             {
@@ -7637,9 +7637,9 @@ namespace CalamityMod.NPCs
                 bool spawnTwinkle = npc.ai[1] >= (CalamityWorld.death ? 60f : 120f);
                 if (!spawnTwinkle && npc.velocity.Y == 0f)
                 {
-                    for (int j = 0; j < Main.maxPlayers; j++)
+                    foreach (Player plr in Main.ActivePlayers)
                     {
-                        if (Main.player[j].active && !Main.player[j].dead && Main.player[j].Distance(npc.Center) < 800f && Main.player[j].Center.Y < npc.Center.Y && Math.Abs(Main.player[j].Center.X - npc.Center.X) < 20f)
+                        if (!plr.dead && plr.Distance(npc.Center) < 800f && plr.Center.Y < npc.Center.Y && Math.Abs(plr.Center.X - npc.Center.X) < 20f)
                         {
                             spawnTwinkle = true;
                             break;

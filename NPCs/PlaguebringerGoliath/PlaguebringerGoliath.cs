@@ -202,12 +202,7 @@ namespace CalamityMod.NPCs.PlaguebringerGoliath
             Vector2 vectorCenter = NPC.Center;
 
             // Count nearby players
-            int activePlayers = 0;
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                if (Main.player[i].active && !Main.player[i].dead && (vectorCenter - Main.player[i].Center).Length() < 1000f)
-                    activePlayers++;
-            }
+            int activePlayers = Main.CurrentFrameFlags.ActivePlayersCount;
 
             // Get a target
             if (NPC.target < 0 || NPC.target == Main.maxPlayers || Main.player[NPC.target].dead || !Main.player[NPC.target].active)

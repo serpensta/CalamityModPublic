@@ -6230,9 +6230,9 @@ namespace CalamityMod.NPCs
         #region Player Counts
         public static bool AnyLivingPlayers()
         {
-            for (int i = 0; i < Main.maxPlayers; i++)
+            foreach (Player player in Main.ActivePlayers)
             {
-                if (Main.player[i] != null && Main.player[i].active && !Main.player[i].dead && !Main.player[i].ghost)
+                if (!player.dead && !player.ghost)
                 {
                     return true;
                 }
@@ -6247,15 +6247,7 @@ namespace CalamityMod.NPCs
                 return 1;
             }
 
-            int players = 0;
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                if (Main.player[i] != null && Main.player[i].active)
-                {
-                    players++;
-                }
-            }
-            return players;
+            return Main.CurrentFrameFlags.ActivePlayersCount;
         }
         #endregion
 

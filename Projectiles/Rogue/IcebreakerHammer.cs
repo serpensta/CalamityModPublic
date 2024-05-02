@@ -93,10 +93,9 @@ namespace CalamityMod.Projectiles.Rogue
                     int buffType = ModContent.BuffType<GlacialState>();
                     float radius = 112f; // 7 blocks
 
-                    for (int i = 0; i < Main.maxPlayers; i++)
+                    foreach (Player player in Main.ActivePlayers)
                     {
                         Player owner = Main.player[Projectile.owner];
-                        Player player = Main.player[i];
                         if ((owner.team != player.team || player.team == 0)  && player.hostile && owner.hostile && !player.dead && !player.buffImmune[buffType] && Vector2.Distance(Projectile.Center, player.Center) <= radius)
                         {
                             if (player.FindBuffIndex(buffType) == -1)

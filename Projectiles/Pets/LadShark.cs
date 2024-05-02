@@ -78,9 +78,8 @@ namespace CalamityMod.Projectiles.Pets
                                 npc.Calamity().ladHearts = CalamityUtils.SecondsToFrames(9f);
                         }
                     }
-                    for (int k = 0; k < Main.maxPlayers; k++)
+                    foreach (Player players in Main.ActivePlayers)
                     {
-                        Player players = Main.player[k];
                         if (!players.dead && Vector2.Distance(Projectile.Center, players.Center) <= radius)
                         {
                             if (players.Calamity().ladHearts <= 0)

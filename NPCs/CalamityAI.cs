@@ -3934,16 +3934,13 @@ namespace CalamityMod.NPCs
 
                     if (npc.position.Y > player.position.Y)
                     {
-                        for (int m = 0; m < Main.maxPlayers; m++)
+                        foreach (Player m in Main.ActivePlayers)
                         {
-                            if (Main.player[m].active)
+                            Rectangle rectangle2 = new Rectangle((int)m.position.X - noFlyZone, (int)m.position.Y - noFlyZone, noFlyZone * 2, height);
+                            if (rectangle.Intersects(rectangle2))
                             {
-                                Rectangle rectangle2 = new Rectangle((int)Main.player[m].position.X - noFlyZone, (int)Main.player[m].position.Y - noFlyZone, noFlyZone * 2, height);
-                                if (rectangle.Intersects(rectangle2))
-                                {
-                                    outsideNoFlyZone = false;
-                                    break;
-                                }
+                                outsideNoFlyZone = false;
+                                break;
                             }
                         }
                         if (outsideNoFlyZone)
@@ -4522,20 +4519,20 @@ namespace CalamityMod.NPCs
                     }
 
                     float succPower = 0.125f + finalPhaseDustRatio * 0.125f;
-                    for (int i = 0; i < Main.maxPlayers; i++)
+                    foreach (Player plr in Main.ActivePlayers)
                     {
-                        float distance = Vector2.Distance(Main.player[i].Center, npc.Center);
-                        if (distance < suckDistance && Main.player[i].grappling[0] == -1)
+                        float distance = Vector2.Distance(plr.Center, npc.Center);
+                        if (distance < suckDistance && plr.grappling[0] == -1)
                         {
-                            if (Collision.CanHit(npc.Center, 1, 1, Main.player[i].Center, 1, 1))
+                            if (Collision.CanHit(npc.Center, 1, 1, plr.Center, 1, 1))
                             {
                                 float distanceRatio = distance / suckDistance;
                                 float multiplier = 1f - distanceRatio;
 
-                                if (Main.player[i].Center.X < npc.Center.X)
-                                    Main.player[i].velocity.X += succPower * multiplier;
+                                if (plr.Center.X < npc.Center.X)
+                                    plr.velocity.X += succPower * multiplier;
                                 else
-                                    Main.player[i].velocity.X -= succPower * multiplier;
+                                    plr.velocity.X -= succPower * multiplier;
                             }
                         }
                     }

@@ -842,10 +842,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (attackTimer == 0f && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 leechNPCCenter = npc.Center + leechCenterOffset;
-                        for (int i = 0; i < Main.maxPlayers; i++)
+                        foreach (Player player6 in Main.ActivePlayers)
                         {
-                            Player player6 = Main.player[i];
-                            if (player6.active && !player6.dead && Vector2.Distance(player6.Center, leechNPCCenter) <= 3000f)
+                            if (!player6.dead && Vector2.Distance(player6.Center, leechNPCCenter) <= 3000f)
                             {
                                 Vector2 targetLeechDist = Main.player[npc.target].Center - leechNPCCenter;
                                 if (targetLeechDist != Vector2.Zero)

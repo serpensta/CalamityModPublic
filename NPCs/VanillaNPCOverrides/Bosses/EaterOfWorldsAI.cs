@@ -281,16 +281,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     noFlyZone = 100;
 
                 bool freeMoveAnyway = true;
-                for (int k = 0; k < Main.maxPlayers; k++)
+                foreach (Player player in Main.ActivePlayers)
                 {
-                    if (Main.player[k].active)
+                    Rectangle rectangle2 = new Rectangle((int)player.position.X - noFlyZone, (int)player.position.Y - noFlyZone, noFlyZone * 2, noFlyZone * 2);
+                    if (rectangle.Intersects(rectangle2))
                     {
-                        Rectangle rectangle2 = new Rectangle((int)Main.player[k].position.X - noFlyZone, (int)Main.player[k].position.Y - noFlyZone, noFlyZone * 2, noFlyZone * 2);
-                        if (rectangle.Intersects(rectangle2))
-                        {
-                            freeMoveAnyway = false;
-                            break;
-                        }
+                        freeMoveAnyway = false;
+                        break;
                     }
                 }
                 if (freeMoveAnyway)
@@ -430,9 +427,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (shouldDespawn && !bossRush)
                     {
                         bool everyoneDead = true;
-                        for (int i = 0; i < Main.maxPlayers; i++)
+                        foreach (Player player in Main.ActivePlayers)
                         {
-                            if (Main.player[i].active && !Main.player[i].dead)
+                            if (!player.dead)
                             {
                                 everyoneDead = false;
                                 break;

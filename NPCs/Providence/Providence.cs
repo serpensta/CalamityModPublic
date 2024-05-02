@@ -1266,10 +1266,10 @@ namespace CalamityMod.NPCs.Providence
                     if (NPC.ai[3] % 60f == 0f && expertMode)
                     {
                         List<int> targets = new List<int>();
-                        for (int p = 0; p < Main.maxPlayers; p++)
+                        foreach (Player plr in Main.ActivePlayers)
                         {
-                            if (Main.player[p].active && !Main.player[p].dead)
-                                targets.Add(p);
+                            if (!plr.dead)
+                                targets.Add(plr.whoAmI);
 
                             if (targets.Count > 4)
                                 break;

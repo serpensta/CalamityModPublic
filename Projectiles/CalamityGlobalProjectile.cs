@@ -3142,10 +3142,9 @@ namespace CalamityMod.Projectiles
 
             float lowestHealthCheck = 0f;
             int healTarget = projectile.owner;
-            for (int i = 0; i < Main.maxPlayers; i++)
+            foreach (Player otherPlayer in Main.ActivePlayers)
             {
-                Player otherPlayer = Main.player[i];
-                if (otherPlayer.active && !otherPlayer.dead && ((!player.hostile && !otherPlayer.hostile) || player.team == otherPlayer.team))
+                if (!otherPlayer.dead && ((!player.hostile && !otherPlayer.hostile) || player.team == otherPlayer.team))
                 {
                     float playerDist = Vector2.Distance(projectile.Center, otherPlayer.Center);
                     if (playerDist < distanceRequired && (otherPlayer.statLifeMax2 - otherPlayer.statLife) > lowestHealthCheck)

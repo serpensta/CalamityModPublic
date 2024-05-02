@@ -502,12 +502,12 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 continue;
 
                             // Spawn extra Ethereal Lances per player.
-                            for (int j = 0; j < Main.maxPlayers; j++)
+                            foreach (Player player in Main.ActivePlayers)
                             {
-                                if (!npc.Boss_CanShootExtraAt(j, lanceFrequency % 3, 3, 2400f))
+                                if (!npc.Boss_CanShootExtraAt(player.whoAmI, lanceFrequency % 3, 3, 2400f))
                                     continue;
 
-                                Player extraPlayer = Main.player[j];
+                                Player extraPlayer = player;
                                 playerCenter = extraPlayer.Center;
                                 if (Vector2.Dot(extraPlayer.velocity.SafeNormalize(Vector2.UnitY), lanceDirection) > 0f)
                                     lanceDirection *= -1f;
@@ -988,12 +988,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 continue;
 
                             int multiplayerExtraStraightLances = (int)(npc.ai[1] / etherealLanceGateValue);
-                            for (int l = 0; l < Main.maxPlayers; l++)
+                            foreach (Player player in Main.ActivePlayers)
                             {
-                                if (!npc.Boss_CanShootExtraAt(l, multiplayerExtraStraightLances % 3, 3, 2400f))
+                                if (!npc.Boss_CanShootExtraAt(player.whoAmI, multiplayerExtraStraightLances % 3, 3, 2400f))
                                     continue;
 
-                                Player player = Main.player[l];
                                 inverseTargetVel = -player.velocity;
                                 inverseTargetVel.SafeNormalize(-Vector2.UnitY);
                                 targetCenter = player.Center;

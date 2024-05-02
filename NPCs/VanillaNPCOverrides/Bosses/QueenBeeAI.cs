@@ -440,9 +440,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 // Bee spawn timer
                 npc.ai[1] += 1f;
                 int beeSpawnTimer = 0;
-                for (int i = 0; i < 255; i++)
+                foreach (Player player in Main.ActivePlayers)
                 {
-                    if (Main.player[i].active && !Main.player[i].dead && (npc.Center - Main.player[i].Center).Length() < 1000f)
+                    if (!player.dead && (npc.Center - player.Center).Length() < 1000f)
                         beeSpawnTimer++;
                 }
                 npc.ai[1] += beeSpawnTimer / 2;

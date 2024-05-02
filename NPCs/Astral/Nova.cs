@@ -209,12 +209,12 @@ namespace CalamityMod.NPCs.Astral
 
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int i = 0; i < Main.maxPlayers; i++)
+                foreach (Player player in Main.ActivePlayers)
                 {
-                    if (Main.player[i].getRect().Intersects(myRect))
+                    if (player.getRect().Intersects(myRect))
                     {
-                        int direction = NPC.Center.X - Main.player[i].Center.X < 0 ? -1 : 1;
-                        Main.player[i].Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.damage, direction);
+                        int direction = NPC.Center.X - player.Center.X < 0 ? -1 : 1;
+                        player.Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.damage, direction);
                     }
                 }
             }

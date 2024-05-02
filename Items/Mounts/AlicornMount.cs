@@ -85,12 +85,8 @@ namespace CalamityMod.Items.Mounts
         public override void Dismount(Player player, ref bool skipDust)
         {
             bool anyPlayerOnFabMount = false;
-            for (int i = 0; i < Main.maxPlayers; i++)
+            foreach (Player player2 in Main.ActivePlayers)
             {
-                Player player2 = Main.player[i];
-                if (!player2.active)
-                    continue;
-
                 // The player that is dismounting is technically not on the mount anymore.
                 if (player2.Calamity().fab && player2.whoAmI != player.whoAmI)
                 {

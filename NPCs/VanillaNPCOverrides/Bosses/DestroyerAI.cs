@@ -342,16 +342,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.position.Y > player.position.Y)
                     {
-                        for (int m = 0; m < Main.maxPlayers; m++)
+                        foreach (Player plr in Main.ActivePlayers)
                         {
-                            if (Main.player[m].active)
+                            Rectangle noFlyRectangle = new Rectangle((int)plr.position.X - noFlyZone, (int)plr.position.Y - noFlyZone, noFlyZone * 2, height);
+                            if (rectangle.Intersects(noFlyRectangle))
                             {
-                                Rectangle noFlyRectangle = new Rectangle((int)Main.player[m].position.X - noFlyZone, (int)Main.player[m].position.Y - noFlyZone, noFlyZone * 2, height);
-                                if (rectangle.Intersects(noFlyRectangle))
-                                {
-                                    outsideNoFlyZone = false;
-                                    break;
-                                }
+                                outsideNoFlyZone = false;
+                                break;
                             }
                         }
                         if (outsideNoFlyZone)
