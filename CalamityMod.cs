@@ -114,6 +114,10 @@ namespace CalamityMod
         // Wall of Flesh eye laser telegraph glowmask
         public static Asset<Texture2D> WallOfFleshEyeGlowmask;
 
+        // Master Rev+ Skeletron Prime
+        public static Asset<Texture2D> ChadPrime;
+        public static Asset<Texture2D> ChadPrimeEyeGlowmask;
+
         // DR data structure
         public static SortedDictionary<int, float> DRValues;
 
@@ -140,6 +144,7 @@ namespace CalamityMod
         internal Mod crouchMod = null;
         internal Mod dialogueTweak = null;
         internal Mod fargos = null;
+        internal Mod luminance = null;
         internal Mod magicStorage = null;
         internal Mod overhaul = null;
         internal Mod redemption = null;
@@ -175,6 +180,8 @@ namespace CalamityMod
             ModLoader.TryGetMod("DialogueTweak", out dialogueTweak);
             fargos = null;
             ModLoader.TryGetMod("Fargowiltas", out fargos);
+            luminance = null;
+            ModLoader.TryGetMod("Luminance", out luminance);
             magicStorage = null;
             ModLoader.TryGetMod("MagicStorage", out magicStorage);
             overhaul = null;
@@ -300,6 +307,10 @@ namespace CalamityMod
             // Wall of Flesh glowmask
             WallOfFleshEyeGlowmask = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/VanillaBossGlowmasks/WallOfFleshEyeTelegraphGlow", AssetRequestMode.AsyncLoad);
 
+            // Master Rev+ Skeletron Prime textures
+            ChadPrime = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ChadPrime", AssetRequestMode.AsyncLoad);
+            ChadPrimeEyeGlowmask = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/ChadPrimeHeadGlow", AssetRequestMode.AsyncLoad);
+
             // TODO -- Sky shaders should probably be loaded in a ModSystem
             Filters.Scene["CalamityMod:DevourerofGodsHead"] = new Filter(new DoGScreenShaderData("FilterMiniTower").UseColor(0.4f, 0.1f, 1.0f).UseOpacity(0.5f), EffectPriority.VeryHigh);
             SkyManager.Instance["CalamityMod:DevourerofGodsHead"] = new DoGSky();
@@ -342,6 +353,7 @@ namespace CalamityMod
             SkyManager.Instance["CalamityMod:AstralSurface"] = new AstralSkySurface();
             SkyManager.Instance["CalamityMod:AstralDesert"] = new AstralSkyDesert();
             SkyManager.Instance["CalamityMod:AstralSnow"] = new AstralSkySnow();
+            SkyManager.Instance["CalamityMod:MonolithAstral"] = new AstralMonolithSky();
             SkyManager.Instance["CalamityMod:SulphurSea"] = new SulphurSeaSky();
             SkyManager.Instance["CalamityMod:Cryogen"] = new CryogenSky();
             SkyManager.Instance["CalamityMod:StormWeaverFlash"] = new StormWeaverFlashSky();
@@ -415,6 +427,7 @@ namespace CalamityMod
             crouchMod = null;
             dialogueTweak = null;
             fargos = null;
+            luminance = null;
             magicStorage = null;
             overhaul = null;
             redemption = null;

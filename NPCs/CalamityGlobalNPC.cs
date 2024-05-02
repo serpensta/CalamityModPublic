@@ -1414,7 +1414,7 @@ namespace CalamityMod.NPCs
             else if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
             {
                 // HP boosted in Master Mode due to having two heads (piercing can make them die faster than normal here since they share an HP bar)
-                npc.lifeMax = (int)Math.Round(npc.lifeMax * (Main.masterMode ? 1.4 : 1.2));
+                npc.lifeMax = (int)Math.Round(npc.lifeMax * (Main.masterMode ? 1.7 : 1.2));
                 npc.npcSlots = 12f;
             }
             else if (npc.type <= NPCID.PrimeLaser && npc.type >= NPCID.PrimeCannon)
@@ -2513,41 +2513,6 @@ namespace CalamityMod.NPCs
                     npc.lifeMax = (int)Math.Round(npc.lifeMax * 2.5);
                     npc.damage += 30;
                     npc.life = npc.lifeMax;
-                    npc.defDamage = npc.damage;
-                }
-            }
-
-            if (CalamityWorld.revenge)
-            {
-                double damageMultiplier = 1D;
-                bool containsNPC = false;
-                if (CalamityLists.revengeanceEnemyBuffList25Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.25;
-                    containsNPC = true;
-                }
-                else if (CalamityLists.revengeanceEnemyBuffList20Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.2;
-                    containsNPC = true;
-                }
-                else if (CalamityLists.revengeanceEnemyBuffList15Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.15;
-                    containsNPC = true;
-                }
-                else if (CalamityLists.revengeanceEnemyBuffList10Percent.Contains(npc.type))
-                {
-                    damageMultiplier += 0.1;
-                    containsNPC = true;
-                }
-
-                if (containsNPC)
-                {
-                    if (CalamityWorld.death)
-                        damageMultiplier += (damageMultiplier - 1D) * 0.6;
-
-                    npc.damage = (int)Math.Round(npc.damage * damageMultiplier);
                     npc.defDamage = npc.damage;
                 }
             }
@@ -4311,6 +4276,7 @@ namespace CalamityMod.NPCs
                             {
                                 case NPCID.Herpling:
                                 case NPCID.Derpling:
+                                case NPCID.ChatteringTeethBomb:
                                     return RevengeanceAndDeathAI.BuffedHerplingAI(npc, Mod);
                             }
                         }
@@ -7077,7 +7043,7 @@ namespace CalamityMod.NPCs
                         }
                     }
 
-                    Texture2D glowTexture = CalamityMod.DestroyerGlowmasks[0].Value;
+                    Texture2D glowTexture = CalamityConfig.Instance.NewVanillaTextures ? CalamityMod.DestroyerGlowmasks[0].Value : TextureAssets.Dest[0].Value;
                     switch (npc.type)
                     {
                         default:
@@ -7085,11 +7051,11 @@ namespace CalamityMod.NPCs
                             break;
 
                         case NPCID.TheDestroyerBody:
-                            glowTexture = CalamityMod.DestroyerGlowmasks[1].Value;
+                            glowTexture = CalamityConfig.Instance.NewVanillaTextures ? CalamityMod.DestroyerGlowmasks[1].Value : TextureAssets.Dest[1].Value;
                             break;
 
                         case NPCID.TheDestroyerTail:
-                            glowTexture = CalamityMod.DestroyerGlowmasks[2].Value;
+                            glowTexture = CalamityConfig.Instance.NewVanillaTextures ? CalamityMod.DestroyerGlowmasks[2].Value : TextureAssets.Dest[2].Value;
                             break;
                     }
 
@@ -7385,7 +7351,7 @@ namespace CalamityMod.NPCs
                     float eyeTelegraphGateValue = WallOfFleshAI.LaserShootGateValue - WallOfFleshAI.LaserShootTelegraphTime;
                     if (npc.localAI[1] > eyeTelegraphGateValue || npc.localAI[2] > 0f || enraged)
                     {
-                        Texture2D glowTexture = CalamityMod.WallOfFleshEyeGlowmask.Value;
+                        Texture2D glowTexture = CalamityConfig.Instance.NewVanillaTextures ? CalamityMod.WallOfFleshEyeGlowmask.Value : TextureAssets.Npc[npc.type].Value;
                         Vector2 halfSize = npc.frame.Size() / 2;
                         SpriteEffects spriteEffects = SpriteEffects.None;
                         if (npc.spriteDirection == 1)
@@ -7407,7 +7373,7 @@ namespace CalamityMod.NPCs
                 // His afterimages I can't get to work, so fuck it
                 else if (npc.type == NPCID.SkeletronPrime || npc.type == ModContent.NPCType<SkeletronPrime2>())
                 {
-                    Texture2D npcTexture = TextureAssets.Npc[npc.type].Value;
+                    Texture2D npcTexture = (masterMode && revenge && npc.type == NPCID.SkeletronPrime) ? CalamityMod.ChadPrime.Value : TextureAssets.Npc[npc.type].Value;
                     int frameHeight = npcTexture.Height / Main.npcFrameCount[npc.type];
 
                     npc.frame.Y = (int)newAI[3];
@@ -7474,9 +7440,8 @@ namespace CalamityMod.NPCs
                     {
                         int alpha = 192;
                         eyesColor = npc.type == NPCType<SkeletronPrime2>() ? new Color(150, 100, 255, alpha) : new Color(255, 255, 0, alpha);
-                        Texture2D glowTexture = SkeletronPrime2.EyeTexture.Value;
-                        for (int i = 0; i < 3; i++)
-                            spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
+                        Texture2D glowTexture = npc.type == NPCID.SkeletronPrime ? CalamityMod.ChadPrimeEyeGlowmask.Value : SkeletronPrime2.EyeTexture.Value;
+                        spriteBatch.Draw(glowTexture, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);
                     }
                     else
                         spriteBatch.Draw(TextureAssets.BoneEyes.Value, npc.Center - screenPos + new Vector2(0, npc.gfxOffY), npc.frame, eyesColor, npc.rotation, npc.frame.Size() / 2, npc.scale, spriteEffects, 0f);

@@ -187,14 +187,14 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Ravager
-            // 70% resist to Icicle Arrows.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.3f, ProjectileType<IcicleArrowProj>()))));
-
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(ResistTrueMelee(0.5f))));
 
             // 50% resist to Aegis Blade's explosions because the true melee resist ain't enough.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<AegisBlast>()))));
+
+            // 50% resist to Icicle Arrows.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.5f, ProjectileType<IcicleArrowProj>()))));
 
             // 35% resist to Flying Dragon.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.RavagerIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileID.DD2SquireSonicBoom))));
@@ -261,11 +261,11 @@ namespace CalamityMod.Balancing
             // 55% resist to Flak Kraken.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.45f, ProjectileType<FlakKrakenProjectile>()))));
 
-            // 55% resist to Icicle Arrows.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.45f, ProjectileType<IcicleArrowProj>()))));
-
             // 50% resist to true melee.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(ResistTrueMelee(0.5f))));
+
+            // 35% resist to Icicle Arrows.
+            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.65f, ProjectileType<IcicleArrowProj>()))));
 
             // 20% resist to Cluster Fragments.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.AstrumDeusIDs, Do(new ProjectileResistBalancingRule(0.8f, ProjectileID.ClusterFragmentsI, ProjectileID.ClusterFragmentsII))));
@@ -428,9 +428,6 @@ namespace CalamityMod.Balancing
 
             // 30% resist to Eclipse's Fall.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<EclipsesFallMain>()))));
-
-            // 30% resist to Pulse Rifle.
-            NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<PulseRifleShot>()))));
 
             // 30% resist to Sirius.
             NPCSpecificBalancingChanges.AddRange(Bundle(CalamityLists.ThanatosIDs, Do(new ProjectileResistBalancingRule(0.7f, ProjectileType<SiriusExplosion>()))));

@@ -40,7 +40,6 @@ namespace CalamityMod.Items
         public override bool InstancePerEntity => true;
 
         // TODO -- split out a separate GlobalItem for rogue behavior?
-        internal float StealthGenBonus;
         internal float StealthStrikePrefixBonus;
 
         #region Chargeable Item Variables
@@ -88,7 +87,6 @@ namespace CalamityMod.Items
 
         public CalamityGlobalItem()
         {
-            StealthGenBonus = 1f;
             StealthStrikePrefixBonus = 0f;
         }
 
@@ -104,7 +102,6 @@ namespace CalamityMod.Items
             CalamityGlobalItem myClone = (CalamityGlobalItem)base.Clone(item, itemClone);
 
             // Rogue
-            myClone.StealthGenBonus = StealthGenBonus;
             myClone.StealthStrikePrefixBonus = StealthStrikePrefixBonus;
 
             // Charge (Draedon's Arsenal)
@@ -662,6 +659,28 @@ namespace CalamityMod.Items
                 NetMessage.SendData(MessageID.MoonlordHorror, -1, -1, null, NPC.MoonLordCountdown);
             }
 
+            // Staff/Axe of Regrowth growing Calamity grass
+            if (item.type == ItemID.StaffofRegrowth || item.type == ItemID.AcornAxe)
+            {
+                Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                Tile tileAbove = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY - 1);
+
+                if (tile.HasTile && !tileAbove.HasTile && tileAbove.LiquidAmount == 0 && tile.TileType == ModContent.TileType<Tiles.Crags.ScorchedRemains>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
+                {
+                    Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<Tiles.Crags.ScorchedRemainsGrass>();
+
+                    SoundEngine.PlaySound(SoundID.Dig, player.Center);
+                    return true;
+                }
+                else if (tile.HasTile && tile.TileType == ModContent.TileType<Tiles.Astral.AstralDirt>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
+                {
+                    Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<Tiles.Astral.AstralGrass>();
+
+                    SoundEngine.PlaySound(SoundID.Dig, player.Center);
+                    return true;
+                }
+            }
+
             return base.UseItem(item, player);
         }
 
@@ -1161,15 +1180,6 @@ namespace CalamityMod.Items
         {
             CalamityPlayer modPlayer = player.Calamity();
 
-            if (item.prefix > 0)
-            {
-                float stealthGenBoost = item.Calamity().StealthGenBonus - 1f;
-                if (stealthGenBoost > 0)
-                {
-                    modPlayer.accStealthGenBoost += stealthGenBoost;
-                }
-            }
-
             // Obsidian Skull and its upgrades make you immune to On Fire!
             if (item.type == ItemID.ObsidianSkull || item.type == ItemID.ObsidianHorseshoe || item.type == ItemID.ObsidianShield || item.type == ItemID.ObsidianWaterWalkingBoots || item.type == ItemID.LavaWaders || item.type == ItemID.ObsidianSkullRose || item.type == ItemID.MoltenCharm || item.type == ItemID.LavaSkull || item.type == ItemID.MoltenSkullRose || item.type == ItemID.AnkhShield)
                 player.buffImmune[BuffID.OnFire] = true;
@@ -1548,79 +1558,6 @@ namespace CalamityMod.Items
 
             if (item.type == ItemID.EoCShield || item.type == ItemID.Tabi || item.type == ItemID.MasterNinjaGear)
                 modPlayer.DashID = string.Empty;
-
-            // Hard / Guarding / Armored / Warding give 0.25% / 0.5% / 0.75% / 1% DR
-            if (item.prefix == PrefixID.Hard)
-            {
-                /* Prehardmode = 1
-                 * Hardmode = 2
-                 * Post-Moon Lord = 3
-                 * Post-DoG = 4
-                 */
-
-                if (DownedBossSystem.downedDoG)
-                    player.statDefense += 3;
-                else if (NPC.downedMoonlord)
-                    player.statDefense += 2;
-                else if (Main.hardMode)
-                    player.statDefense += 1;
-
-                player.endurance += 0.0025f;
-            }
-            if (item.prefix == PrefixID.Guarding)
-            {
-                /* Prehardmode = 2
-                 * Hardmode = 3
-                 * Post-Moon Lord = 4
-                 * Post-DoG = 5
-                 */
-
-                if (DownedBossSystem.downedDoG)
-                    player.statDefense += 3;
-                else if (NPC.downedMoonlord)
-                    player.statDefense += 2;
-                else if (Main.hardMode)
-                    player.statDefense += 1;
-
-                player.endurance += 0.005f;
-            }
-            if (item.prefix == PrefixID.Armored)
-            {
-                /* Prehardmode = 3
-                 * Hardmode = 4
-                 * Post-Moon Lord = 5
-                 * Post-DoG = 6
-                 */
-
-                if (DownedBossSystem.downedDoG)
-                    player.statDefense += 3;
-                else if (NPC.downedMoonlord)
-                    player.statDefense += 2;
-                else if (Main.hardMode)
-                    player.statDefense += 1;
-
-                player.endurance += 0.0075f;
-            }
-            if (item.prefix == PrefixID.Warding)
-            {
-                /* Prehardmode = 4
-                 * Hardmode = 5
-                 * Post-Moon Lord = 6
-                 * Post-DoG = 7
-                 */
-
-                if (DownedBossSystem.downedDoG)
-                    player.statDefense += 3;
-                else if (NPC.downedMoonlord)
-                    player.statDefense += 2;
-                else if (Main.hardMode)
-                    player.statDefense += 1;
-
-                player.endurance += 0.01f;
-            }
-
-            if (item.prefix == PrefixID.Lucky)
-                player.luck += 0.05f;
         }
         #endregion
 
@@ -1800,7 +1737,6 @@ namespace CalamityMod.Items
         private static int storedPrefix = -1;
         public override void PreReforge(Item item)
         {
-            StealthGenBonus = 1f;
             StealthStrikePrefixBonus = 0f;
             storedPrefix = item.prefix;
         }

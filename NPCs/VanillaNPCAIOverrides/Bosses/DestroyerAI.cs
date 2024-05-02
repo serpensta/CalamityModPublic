@@ -75,8 +75,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float lifeRatio = npc.life / (float)npc.lifeMax;
 
             // Phases based on life percentage
-            bool phase2 = lifeRatio < 0.85f;
-            bool phase3 = lifeRatio < 0.7f;
+            bool phase2 = lifeRatio < 0.85f || masterMode;
+            bool phase3 = lifeRatio < 0.7f || masterMode;
             bool startFlightPhase = lifeRatio < 0.5f;
             bool phase4 = lifeRatio < (death ? 0.4f : 0.25f);
             bool phase5 = lifeRatio < (death ? 0.2f : 0.1f);
@@ -187,7 +187,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
             else
             {
-                if (masterMode && !bossRush)
+                if (masterMode && !bossRush && npc.localAI[3] != -1f)
                 {
                     for (int i = 0; i < Main.maxNPCs; i++)
                     {
@@ -197,6 +197,18 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             break;
                         }
                     }
+                }
+
+                // Set variable to force despawn when Prime dies in Master Rev+
+                // Set to -1f if Prime isn't alive when summoned
+                if (npc.localAI[3] == 0f)
+                {
+                    if (oblivionAlive)
+                        npc.localAI[3] = 1f;
+                    else
+                        npc.localAI[3] = -1f;
+
+                    npc.SyncExtraAI();
                 }
             }
 
@@ -223,11 +235,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             int noFlyZoneBoxHeight = masterMode ? 1600 : 1800;
 
             // Speed and movement variables
-            float speed = masterMode ? 0.125f : 0.1f;
-            float turnSpeed = masterMode ? 0.1875f : 0.15f;
+            float speed = masterMode ? 0.15f : 0.1f;
+            float turnSpeed = masterMode ? 0.3f : 0.15f;
 
             // Max velocity
-            float segmentVelocity = flyAtTarget ? 15f : 20f;
+            float segmentVelocity = flyAtTarget ? (masterMode ? 20f : 15f) : (masterMode ? 25f : 20f);
 
             // Increase velocity based on distance
             float velocityMultiplier = increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
@@ -474,7 +486,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 // Laser rate of fire
-                float shootProjectileTime = death ? 270f : 450f;
+                float shootProjectileTime = death ? (masterMode ? 210f : 270f) : (masterMode ? 300f : 450f);
                 float bodySegmentTime = npc.ai[0] * 30f;
                 float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
                 float laserTimerIncrement = (calamityGlobalNPC.newAI[0] > shootProjectileGateValue - LaserTelegraphTime) ? 1f : 2f;
@@ -559,7 +571,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         // Laser speed
-                        float projectileSpeed = 3.5f + Main.rand.NextFloat() * 1.5f;
+                        float projectileSpeed = (masterMode ? 4.5f : 3.5f) + Main.rand.NextFloat() * 1.5f;
                         projectileSpeed += enrageScale;
 
                         // Set projectile damage and type
@@ -784,7 +796,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Despawn
-            if (player.dead)
+            bool oblivionWasAlive = npc.localAI[3] == 1f && !oblivionAlive;
+            bool oblivionFightDespawn = (oblivionAlive && lifeRatio < 0.7f) || oblivionWasAlive;
+            if (player.dead || oblivionFightDespawn)
             {
                 shouldFly = false;
                 npc.velocity.Y += 2f;
@@ -858,7 +872,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (!shouldFly)
                 {
                     npc.velocity.Y += 0.15f;
-                    if (masterMode && npc.velocity.Y > 0f)
+                    if (masterMode && npc.velocity.Y > 0f && Math.Abs(npc.Center.Y - player.Center.Y) > 360f)
                         npc.velocity.Y += 0.05f;
 
                     if (npc.velocity.Y > segmentVelocity)
@@ -1754,6 +1768,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
         {
             bool bossRush = BossRushEvent.BossRushActive;
             bool masterMode = Main.masterMode || bossRush;
+            bool oblivionAlive = npc.ai[1] == 1f;
 
             // Get a target
             if (npc.target < 0 || npc.target == Main.maxPlayers || Main.player[npc.target].dead || !Main.player[npc.target].active)
@@ -1797,6 +1812,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             for (int i = 0; i < Main.maxNPCs; i++)
             {
+                if (masterMode && !bossRush && npc.ai[1] == 0f)
+                {
+                    if (Main.npc[i].active && (Main.npc[i].type == ModContent.NPCType<SkeletronPrime2>() || Main.npc[i].type == NPCID.SkeletronPrime))
+                        npc.ai[1] = 1f;
+                }
+
                 if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type)
                 {
                     Vector2 otherProbeDist = Main.npc[i].Center - npc.Center;
@@ -1924,7 +1945,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             damage = (int)(damage * secondMechMultiplier);
                     }
 
-                    int totalProjectiles = (CalamityWorld.death || bossRush) ? 3 : 1;
+                    int totalProjectiles = oblivionAlive ? 2 : (CalamityWorld.death || bossRush) ? 3 : 1;
                     Vector2 npcCenter = new Vector2(probeTargetX, probeTargetY);
                     if (NPC.IsMechQueenUp)
                     {
