@@ -19,7 +19,7 @@ namespace CalamityMod
         // Config based conditions
         //
 
-        public static readonly Condition PotionSellingConfig            = Create("Drops.PotionConfig",   () => CalamityConfig.Instance.PotionSelling);
+        public static readonly Condition PotionSellingConfig            = Create("PotionConfig",   () => CalamityConfig.Instance.PotionSelling);
 
         //
         // Player conditions
