@@ -1272,6 +1272,15 @@ ThePack: {
 	Tooltip: Fires large homing rockets that explode into more homing mini rockets when in proximity to an enemy
 }
 
+ThermoclineBlaster: {
+	DisplayName: Thermocline Blaster
+	Tooltip:
+		'''
+		Alternates between firing bullets imbued with fire and ice
+		Any bullet type can be imbued when fired from this gun
+		'''
+}
+
 TheSevensStriker: {
 	DisplayName: The Sevens Striker
 	Tooltip:
