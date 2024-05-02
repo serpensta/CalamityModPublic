@@ -1067,14 +1067,14 @@ namespace CalamityMod.NPCs
 
             bool happy = Main.LocalPlayer.currentShoppingSettings.PriceAdjustment <= 0.9;
 
-            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
+            Condition potionSells = CalamityConditions.PotionSellingConfig;
             Condition hasFlareGunUpgrade = new(CalamityUtils.GetText("Condition.HasFlareGun"), () => (Main.LocalPlayer.HasItem(ItemType<FirestormCannon>()) || Main.LocalPlayer.HasItem(ItemType<SpectralstormCannon>())) && !Main.LocalPlayer.HasItem(ItemID.FlareGun));
-            Condition roguePlayer = new(CalamityUtils.GetText("Condition.HasRogueArmor"), () => Main.LocalPlayer.Calamity().rogueStealthMax > 0f && Main.LocalPlayer.Calamity().wearingRogueArmor);
-            Condition wingedPlayer = new(CalamityUtils.GetText("Condition.HasWings"), () => Main.LocalPlayer.wingTimeMax > 0);
-            Condition revengeance = new(CalamityUtils.GetText("Condition.InRev"), () => CalamityWorld.revenge);
-            Condition drunk = new(CalamityUtils.GetText("Condition.AlcoholPoison"), () => Main.LocalPlayer.Calamity().alcoholPoisoning);
-            Condition downedPolterghast = new(CalamityUtils.GetText("Condition.PostPolter"), () => DownedBossSystem.downedPolterghast);
-            Condition downedDoG = new(CalamityUtils.GetText("Condition.PostDoG"), () => DownedBossSystem.downedDoG);
+            Condition roguePlayer = CalamityConditions.PlayerHasRogueArmor;
+            Condition wingedPlayer = CalamityConditions.PlayerHasWings;
+            Condition revengeance = CalamityConditions.InRevengeanceMode;
+            Condition drunk = CalamityConditions.PlayerAlcoholPoisoned;
+            Condition downedPolterghast = CalamityConditions.DownedPolterghast;
+            Condition downedDoG = CalamityConditions.DownedDevourerOfGods;
 
             if (type == NPCID.Merchant)
             {
