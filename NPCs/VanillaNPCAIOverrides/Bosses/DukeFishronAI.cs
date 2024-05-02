@@ -188,9 +188,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             if (masterMode)
             {
-                idlePhaseTimer /= 2;
-                idlePhaseAcceleration *= 1.3f;
-                idlePhaseVelocity *= 1.3f;
+                idlePhaseTimer -= 6;
+                idlePhaseAcceleration *= 1.2f;
+                idlePhaseVelocity *= 1.2f;
                 chargeTime -= 4;
                 chargeVelocity += 3f;
             }
@@ -1175,6 +1175,22 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.velocity.Y > 0f)
                 npc.velocity.Y -= 0.04f;
 
+            // Push Bubbles away from each other.
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type)
+                {
+                    Vector2 otherBubbleDist = Main.npc[i].Center - npc.Center;
+                    if (otherBubbleDist.Length() < (npc.width + npc.height))
+                    {
+                        otherBubbleDist = otherBubbleDist.SafeNormalize(Vector2.UnitY);
+                        otherBubbleDist *= -0.1f;
+                        npc.velocity += otherBubbleDist;
+                        Main.npc[i].velocity -= otherBubbleDist;
+                    }
+                }
+            }
+
             if (npc.ai[0] == 0f)
             {
                 int size = 40;
@@ -1199,7 +1215,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             if (npc.ai[0] == 0f)
             {
                 npc.ai[1] += 1f;
-                float timeBeforePopping = 450f;
+                float timeBeforePopping = 300f;
                 if (npc.ai[1] >= timeBeforePopping)
                 {
                     npc.ai[0] = 1f;
