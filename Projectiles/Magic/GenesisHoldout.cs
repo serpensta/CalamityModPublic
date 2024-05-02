@@ -13,7 +13,7 @@ namespace CalamityMod.Projectiles.Magic
     public class GenesisHoldout : BaseGunHoldoutProjectile
     {
         public override int AssociatedItemID => ModContent.ItemType<Genesis>();
-        public override Vector2 GunTipPosition => base.GunTipPosition - Vector2.UnitY.RotatedBy(Projectile.rotation) * 4f * Projectile.spriteDirection;
+        public override Vector2 GunTipPosition => base.GunTipPosition - Vector2.UnitY.RotatedBy(Projectile.rotation) * 2.5f * Projectile.spriteDirection;
         public override float MaxOffsetLengthFromArm => 10f;
         public override float OffsetXUpwards => -5f;
         public override float BaseOffsetY => -5f;
