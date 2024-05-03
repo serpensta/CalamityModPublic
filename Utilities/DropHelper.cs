@@ -549,16 +549,13 @@ namespace CalamityMod
             return trasherNearby;
         });
         // The text is a separate rule so it doesn't show up on the non-Trasher Fishing Rod drop which only occurs if the Angler is not fed to a Trasher
-        public static IItemDropRuleCondition TrasherText = If((info) => true, true, CalamityUtils.GetTextValue("Condition.Drops.TrasherKill"));
+        public static IItemDropRuleCondition TrasherText => CalamityConditions.TrasherTextCondition.ToDropCondition(ShowItemDropInUI.Always);
 
         // Get Fixed Boi seed drop rule
-        public static IItemDropRuleCondition GFB = If((info) => Main.zenithWorld, () => Main.zenithWorld, CalamityUtils.GetTextValue("Condition.Drops.IsGFB"));
+        public static IItemDropRuleCondition GFB => Condition.ZenithWorld.ToDropCondition(ShowItemDropInUI.WhenConditionSatisfied);
 
-        public static IItemDropRuleCondition RevNoMaster = If((info) => !Main.masterMode && CalamityWorld.revenge, () => !Main.masterMode && CalamityWorld.revenge, CalamityUtils.GetTextValue("Condition.Drops.IsRev"));
-        public static IItemDropRuleCondition RevAndMaster = If((info) => Main.masterMode || CalamityWorld.revenge, () => Main.masterMode || CalamityWorld.revenge, () =>
-		{
-			return Main.masterMode ? Language.GetTextValue("Bestiary_ItemDropConditions.IsMasterMode") : CalamityUtils.GetTextValue("Condition.Drops.IsRev");
-		});
+        public static IItemDropRuleCondition RevNoMaster => CalamityConditions.InRevengeanceModeNotMasterMode.ToDropCondition(ShowItemDropInUI.WhenConditionSatisfied);
+        public static IItemDropRuleCondition RevAndMaster => CalamityConditions.InRevengeanceModeOrMasterMode.ToDropCondition(ShowItemDropInUI.WhenConditionSatisfied);
 
         #region Boss Defeat Conditionals
         public static IItemDropRuleCondition PostKS(bool ui = true) => If(Condition.DownedKingSlime.Predicate, ui, CalamityUtils.GetTextValue("Condition.Drops.DownedKS"));

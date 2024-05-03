@@ -30,6 +30,13 @@ namespace CalamityMod
         public static readonly Condition PlayerAlcoholPoisoned          = Create("AlcoholPoison",        () => Main.LocalPlayer.Calamity().alcoholPoisoning);
 
         //
+        // NPC conditions
+        //
+
+        /// <summary>Don't use this. It's always `true`.</summary>
+        public static readonly Condition TrasherTextCondition           = Create("Drops.TrasherKill",    () => true);
+
+        //
         // Calamity Event Flag conditions
         //
 
@@ -72,7 +79,7 @@ namespace CalamityMod
         public static readonly Condition DownedGreatSandShark           = Create("Drops.DownedGSS",      () => DownedBossSystem.downedGSS);
 
         // Mixed
-        public static readonly Condition DownedHiveMindOrPerforator     = Create("Drops.TODO",           () => DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator);
+        public static readonly Condition DownedHiveMindOrPerforator     = Create("Drops.DownedHMOrPerfs",() => DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator);
         public static readonly Condition DownedCalamitasCloneOrPlantera = Create("Drops.DownedCalPlant", () => DownedBossSystem.downedCalamitasClone || Condition.DownedPlantera.IsMet());
 
         // Vanilla
@@ -91,6 +98,8 @@ namespace CalamityMod
         // World based conditions
         //
 
-        public static readonly Condition InRevengeanceMode              = Create("Condition.InRev",      () => CalamityWorld.revenge);
+        public static readonly Condition InRevengeanceMode              = Create("InRev",                () => CalamityWorld.revenge);
+        public static readonly Condition InRevengeanceModeNotMasterMode = Create("InRev",                () => !Main.masterMode && CalamityWorld.revenge);
+        public static readonly Condition InRevengeanceModeOrMasterMode  = Create("InRevOrMM",            () => Main.masterMode || CalamityWorld.revenge);
     }
 }
