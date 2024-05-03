@@ -598,11 +598,11 @@ DragonScales: {
 DynamoStemCells: {
 	DisplayName: Dynamo Stem Cells
 	Tooltip:
-		'''
-		10% increased movement speed
-		Ranged weapons have a chance to fire mini swarmers
-		Grants immunity to Dragonfire and Electrified
-		'''
+'''
+10% increased ranged damage and movement speed
+Ranged weapons fire a powerful mini swarmer every 3 seconds
+Reduces the damage of the Dragonfire and Electrified debuff
+'''
 }
 
 EclipseMirror: {
