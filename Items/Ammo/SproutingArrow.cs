@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Ammo
 {
+    [LegacyName("TerraArrow")]
     public class SproutingArrow : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Ammo";
