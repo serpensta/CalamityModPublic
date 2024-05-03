@@ -119,6 +119,8 @@ namespace CalamityMod.NPCs.Astral
             if (NPC.life <= 0)
             {
                 int type = ModContent.NPCType<Hiveling>();
+
+                // TODO: Should this use `Main.ActiveNPCs` iterator?
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     if (Main.npc[i].type == type)

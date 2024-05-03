@@ -1963,9 +1963,9 @@ namespace CalamityMod.NPCs
             {
                 npc.hide = false;
                 // I'd assume the Drakomire is drawn by the rider if it's present
-                for (int i = 0; i < Main.npc.Length; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].active && Main.npc[i].type == NPCID.SolarDrakomireRider && Main.npc[i].ai[0] == (float)npc.whoAmI)
+                    if (n.type == NPCID.SolarDrakomireRider && n.ai[0] == (float)npc.whoAmI)
                     {
                         npc.hide = true;
                         break;
@@ -2065,11 +2065,11 @@ namespace CalamityMod.NPCs
                         dust.customData = npc;
                     }
                     // Adjust velocity based on the other storm drivers who want to pump your face full of bullets
-                    for (int i = 0; i < Main.npc.Length; i++)
+                    foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npcType && Math.Abs(npc.position.X - Main.npc[i].position.X) + Math.Abs(npc.position.Y - Main.npc[i].position.Y) < (float)npc.width)
+                        if (n.whoAmI != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                         {
-                            if (npc.position.X < Main.npc[i].position.X)
+                            if (npc.position.X < n.position.X)
                             {
                                 npc.velocity.X -= 0.05f;
                             }
@@ -2077,7 +2077,7 @@ namespace CalamityMod.NPCs
                             {
                                 npc.velocity.X += 0.05f;
                             }
-                            if (npc.position.Y < Main.npc[i].position.Y)
+                            if (npc.position.Y < n.position.Y)
                             {
                                 npc.velocity.Y -= 0.05f;
                             }
@@ -2172,11 +2172,11 @@ namespace CalamityMod.NPCs
                             npc.velocity.Y += 0.25f;
                         }
                     }
-                    for (int i = 0; i < Main.npc.Length; i++)
+                    foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npcType && Math.Abs(npc.position.X - Main.npc[i].position.X) + Math.Abs(npc.position.Y - Main.npc[i].position.Y) < (float)npc.width)
+                        if (i != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                         {
-                            if (npc.position.X < Main.npc[i].position.X)
+                            if (npc.position.X < n.position.X)
                             {
                                 npc.velocity.X -= 0.05f;
                             }
@@ -2184,7 +2184,7 @@ namespace CalamityMod.NPCs
                             {
                                 npc.velocity.X += 0.05f;
                             }
-                            if (npc.position.Y < Main.npc[i].position.Y)
+                            if (npc.position.Y < n.position.Y)
                             {
                                 npc.velocity.Y -= 0.05f;
                             }
@@ -2248,11 +2248,11 @@ namespace CalamityMod.NPCs
                 {
                     npc.velocity.Y = -8f;
                 }
-                for (int i = 0; i < Main.npc.Length; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npcType && Math.Abs(npc.position.X - Main.npc[i].position.X) + Math.Abs(npc.position.Y - Main.npc[i].position.Y) < (float)npc.width)
+                    if (i != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                     {
-                        if (npc.position.X < Main.npc[i].position.X)
+                        if (npc.position.X < n.position.X)
                         {
                             npc.velocity.X -= 0.1f;
                         }
@@ -2260,7 +2260,7 @@ namespace CalamityMod.NPCs
                         {
                             npc.velocity.X += 0.1f;
                         }
-                        if (npc.position.Y < Main.npc[i].position.Y)
+                        if (npc.position.Y < n.position.Y)
                         {
                             npc.velocity.Y -= 0.1f;
                         }
@@ -7568,11 +7568,11 @@ namespace CalamityMod.NPCs
             {
                 turnAroundDelayMult = 3;
                 bool noYVelocity = npc.velocity.Y == 0f;
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type && Math.Abs(npc.position.X - Main.npc[i].position.X) + Math.Abs(npc.position.Y - Main.npc[i].position.Y) < (float)npc.width)
+                    if (n.whoAmI != npc.whoAmI && n.type == npc.type && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                     {
-                        if (npc.position.X < Main.npc[i].position.X)
+                        if (npc.position.X < n.position.X)
                         {
                             npc.velocity.X -= 0.05f;
                         }
@@ -7580,7 +7580,7 @@ namespace CalamityMod.NPCs
                         {
                             npc.velocity.X += 0.05f;
                         }
-                        if (npc.position.Y < Main.npc[i].position.Y)
+                        if (npc.position.Y < n.position.Y)
                         {
                             npc.velocity.Y -= 0.05f;
                         }
@@ -10598,12 +10598,12 @@ namespace CalamityMod.NPCs
             npc.noTileCollide = true;
             npc.knockBackResist = 0f;
 
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (i == npc.whoAmI || !Main.npc[i].active || Main.npc[i].type != npc.type)
+                if (i == npc.whoAmI || n.type != npc.type)
                     continue;
 
-                Vector2 targetDirection = Main.npc[i].Center - npc.Center;
+                Vector2 targetDirection = n.Center - npc.Center;
                 if (!(targetDirection.Length() < 50f))
                     continue;
 
@@ -10618,8 +10618,7 @@ namespace CalamityMod.NPCs
 
                 targetDirection *= 0.4f;
                 npc.velocity -= targetDirection;
-                NPC nPC = Main.npc[i];
-                nPC.velocity += targetDirection;
+                n.velocity += targetDirection;
             }
 
             if (npc.type == NPCID.ShadowFlameApparition)

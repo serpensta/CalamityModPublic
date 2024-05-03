@@ -224,10 +224,10 @@ namespace CalamityMod.CalPlayer
 
             if (hInferno)
             {
-                for (int x = 0; x < Main.maxNPCs; x++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[x].active && Main.npc[x].type == ModContent.NPCType<Providence>())
-                        Main.npc[x].active = false;
+                    if (n.type == ModContent.NPCType<Providence>())
+                        n.active = false;
                 }
             }
 
@@ -1434,15 +1434,13 @@ namespace CalamityMod.CalPlayer
             // This also strikes the NPCs as a side effect
             if (gSabatonFalling)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    NPC n = Main.npc[i];
-
                     // Ignore critters with the Guide to Critter Companionship
                     if (Player.dontHurtCritters && NPCID.Sets.CountsAsCritter[n.type])
                         continue;
 
-                    if (n.active && !n.dontTakeDamage && !n.friendly && n.Calamity().dashImmunityTime[Player.whoAmI] <= 0)
+                    if (!n.dontTakeDamage && !n.friendly && n.Calamity().dashImmunityTime[Player.whoAmI] <= 0)
                     {
                         Rectangle npcHitbox = n.getRect();
                         if ((Player.getRect()).Intersects(npcHitbox) && (n.noTileCollide || Collision.CanHit(Player.position, Player.width, Player.height, n.position, n.width, n.height)))
@@ -2219,10 +2217,9 @@ namespace CalamityMod.CalPlayer
                 if ((fBarrier || (aquaticHeart && NPC.downedBoss3)) && !areThereAnyDamnBosses)
                 {
                     SoundEngine.PlaySound(SoundID.Item27, Player.Center);
-                    for (int m = 0; m < Main.maxNPCs; m++)
+                    foreach (NPC npc in Main.ActiveNPCs)
                     {
-                        NPC npc = Main.npc[m];
-                        if (!npc.active || npc.friendly || npc.dontTakeDamage)
+                        if (npc.friendly || npc.dontTakeDamage)
                             continue;
 
                         float npcDist = (npc.Center - Player.Center).Length();
@@ -2250,10 +2247,9 @@ namespace CalamityMod.CalPlayer
                 // and also doesn't have random chance (why does Brain of Confusion not guarantee confusion on hit)
                 if (aBrain || amalgam)
                 {
-                    for (int m = 0; m < Main.maxNPCs; m++)
+                    foreach (NPC npc in Main.ActiveNPCs)
                     {
-                        NPC npc = Main.npc[m];
-                        if (!npc.active || npc.friendly || npc.dontTakeDamage)
+                        if (npc.friendly || npc.dontTakeDamage)
                             continue;
 
                         float npcDist = (npc.Center - Player.Center).Length();

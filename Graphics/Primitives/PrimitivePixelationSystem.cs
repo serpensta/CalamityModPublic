@@ -84,12 +84,10 @@ namespace CalamityMod.Graphics.Primitives
             }
 
             // Check every active NPC.
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC npc in Main.ActiveNPCs)
             {
-                var npc = Main.npc[i];
-
                 // If the NPC is active, a mod NPC, and uses the interface, add it to the list of primitives to draw this frame.
-                if (npc.active && npc.ModNPC != null && npc.ModNPC is IPixelatedPrimitiveRenderer pixelPrimitiveNPC)
+                if (npc.ModNPC != null && npc.ModNPC is IPixelatedPrimitiveRenderer pixelPrimitiveNPC)
                 {
                     var listToUse = pixelPrimitiveNPC.LayerToRenderTo switch
                     {

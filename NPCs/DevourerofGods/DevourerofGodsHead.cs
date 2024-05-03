@@ -2392,20 +2392,20 @@ namespace CalamityMod.NPCs.DevourerofGods
             if (NPC.netSpam >= 10)
                 NPC.netSpam = 9;
 
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (Main.npc[i].active && (Main.npc[i].type == ModContent.NPCType<DevourerofGodsBody>() || Main.npc[i].type == ModContent.NPCType<DevourerofGodsTail>()))
+                if (n.type == ModContent.NPCType<DevourerofGodsBody>() || n.type == ModContent.NPCType<DevourerofGodsTail>())
                 {
-                    Main.npc[i].position = newPosition;
+                    n.position = newPosition;
 
-                    if (Main.npc[i].type == ModContent.NPCType<DevourerofGodsTail>())
-                        ((DevourerofGodsTail)Main.npc[i].ModNPC).setInvulTime(720);
+                    if (n.type == ModContent.NPCType<DevourerofGodsTail>())
+                        ((DevourerofGodsTail)n.ModNPC).setInvulTime(720);
 
-                    Main.npc[i].netUpdate = true;
+                    n.netUpdate = true;
 
                     // Prevent netUpdate from being blocked by the spam counter.
-                    if (Main.npc[i].netSpam >= 10)
-                        Main.npc[i].netSpam = 9;
+                    if (n.netSpam >= 10)
+                        n.netSpam = 9;
                 }
             }
 
@@ -2436,28 +2436,28 @@ namespace CalamityMod.NPCs.DevourerofGods
                     ModContent.NPCType<DevourerofGodsBody>(),
                     ModContent.NPCType<DevourerofGodsTail>()
                 };
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (segments.Contains(Main.npc[i].type) && Main.npc[i].active &&
-                        (Main.npc[i].type == segments[1] || Main.npc[i].ModNPC<DevourerofGodsBody>().SegmentIndex == index))
+                    if (segments.Contains(n.type) && n.active &&
+                        (n.type == segments[1] || n.ModNPC<DevourerofGodsBody>().SegmentIndex == index))
                     {
                         for (int j = 0; j < 20; j++)
                         {
-                            Dust cosmicBurst = Dust.NewDustPerfect(Main.npc[i].Center + Main.rand.NextVector2Circular(25f, 25f), 234);
+                            Dust cosmicBurst = Dust.NewDustPerfect(n.Center + Main.rand.NextVector2Circular(25f, 25f), 234);
                             cosmicBurst.scale = 1.7f;
                             cosmicBurst.velocity = Main.rand.NextVector2Circular(9f, 9f);
                             cosmicBurst.noGravity = true;
                         }
 
-                        Main.npc[i].life = 0;
-                        Main.npc[i].HitEffect();
-                        Main.npc[i].active = false;
+                        n.life = 0;
+                        n.HitEffect();
+                        n.active = false;
 
-                        Main.npc[i].netUpdate = true;
+                        n.netUpdate = true;
 
                         // Prevent netUpdate from being blocked by the spam counter.
-                        if (Main.npc[i].netSpam >= 10)
-                            Main.npc[i].netSpam = 9;
+                        if (n.netSpam >= 10)
+                            n.netSpam = 9;
 
                         destroyedSegments++;
                         break;

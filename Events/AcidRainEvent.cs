@@ -65,10 +65,10 @@ namespace CalamityMod.Events
         {
             get
             {
-                for (int i = 0; i < Main.npc.Length; i++)
+                foreach (NPC npc in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].active && (PossibleMinibossesAS.Select(miniboss => miniboss.Key).Contains(Main.npc[i].type) ||
-                        PossibleMinibossesPolter.Select(miniboss => miniboss.Key).Contains(Main.npc[i].type)))
+                    if ((PossibleMinibossesAS.Select(miniboss => miniboss.Key).Contains(npc.type) ||
+                        PossibleMinibossesPolter.Select(miniboss => miniboss.Key).Contains(npc.type)))
                     {
                         return true;
                     }

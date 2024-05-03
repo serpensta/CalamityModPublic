@@ -52,9 +52,9 @@ namespace CalamityMod.NPCs.Abyss
 
             // Check if other segments are still alive, if not, die
             bool shouldDespawn = true;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (Main.npc[i].active && Main.npc[i].type == ModContent.NPCType<EidolonWyrmHead>())
+                if (n.type == ModContent.NPCType<EidolonWyrmHead>())
                 {
                     shouldDespawn = false;
                     break;

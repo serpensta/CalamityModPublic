@@ -336,9 +336,9 @@ namespace CalamityMod.NPCs
             if (!head)
             {
                 bool shouldDespawn = true;
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].active && Main.npc[i].type == ModContent.NPCType<AquaticScourgeHead>())
+                    if (n.type == ModContent.NPCType<AquaticScourgeHead>())
                     {
                         shouldDespawn = false;
                         break;
@@ -3621,12 +3621,8 @@ namespace CalamityMod.NPCs
                         // Despawns the other deus worm segments
                         int bodyID = ModContent.NPCType<AstrumDeusBody>();
                         int tailID = ModContent.NPCType<AstrumDeusTail>();
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC wormseg in Main.ActiveNPCs)
                         {
-                            NPC wormseg = Main.npc[i];
-                            if (!wormseg.active)
-                                continue;
-
                             if ((wormseg.type == bodyID || wormseg.type == tailID) && Main.npc[(int)wormseg.ai[2]].Calamity().newAI[0] != 3f)
                             {
                                 wormseg.life = 0;
@@ -3804,9 +3800,9 @@ namespace CalamityMod.NPCs
             {
                 bool shouldDespawn = true;
                 int headType = ModContent.NPCType<AstrumDeusHead>();
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].type != headType || !Main.npc[i].active)
+                    if (n.type != headType)
                         continue;
                     shouldDespawn = false;
                     break;
@@ -3968,17 +3964,17 @@ namespace CalamityMod.NPCs
                     int tailType = ModContent.NPCType<AstrumDeusBody>();
                     if ((double)npc.position.Y < Main.topWorld + 16f)
                     {
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC n in Main.ActiveNPCs)
                         {
-                            if (Main.npc[i].type == headType || Main.npc[i].type == bodyType || Main.npc[i].type == tailType)
+                            if (n.type == headType || n.type == bodyType || n.type == tailType)
                             {
-                                Main.npc[i].active = false;
+                                n.active = false;
 
-                                Main.npc[i].netUpdate = true;
+                                n.netUpdate = true;
 
                                 // Prevent netUpdate from being blocked by the spam counter.
-                                if (Main.npc[i].netSpam >= 10)
-                                    Main.npc[i].netSpam = 9;
+                                if (n.netSpam >= 10)
+                                    n.netSpam = 9;
                             }
                         }
                     }
@@ -4693,10 +4689,9 @@ namespace CalamityMod.NPCs
 
                 // Count up all Dark Energy HP values
                 int totalDarkEnergyHP = 0;
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC darkEnergy in Main.ActiveNPCs)
                 {
-                    NPC darkEnergy = Main.npc[i];
-                    if (darkEnergy.active && darkEnergy.type == ModContent.NPCType<DarkEnergy>())
+                    if (darkEnergy.type == ModContent.NPCType<DarkEnergy>())
                         totalDarkEnergyHP += darkEnergy.life;
                 }
 
@@ -5798,18 +5793,17 @@ namespace CalamityMod.NPCs
 
             if (npc.ai[0] == 0f || npc.ai[0] == 1f)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type)
+                    if (n.whoAmI != npc.whoAmI && n.type == npc.type)
                     {
-                        Vector2 otherSwarmerDirection = Main.npc[i].Center - npc.Center;
+                        Vector2 otherSwarmerDirection = n.Center - npc.Center;
                         if (otherSwarmerDirection.Length() < (npc.width + npc.height))
                         {
                             otherSwarmerDirection.Normalize();
                             otherSwarmerDirection *= -0.1f;
                             npc.velocity += otherSwarmerDirection;
-                            NPC nPC6 = Main.npc[i];
-                            nPC6.velocity -= otherSwarmerDirection;
+                            n.velocity -= otherSwarmerDirection;
                         }
                     }
                 }
@@ -7779,11 +7773,11 @@ namespace CalamityMod.NPCs
             if (!DogPhase1)
             {
                 bool noYVelocity = npc.velocity.Y == 0f;
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type && Math.Abs(npc.position.X - Main.npc[i].position.X) + Math.Abs(npc.position.Y - Main.npc[i].position.Y) < (float)npc.width)
+                    if (n.whoAmI != npc.whoAmI && n.active && n.type == npc.type && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                     {
-                        if (npc.position.X < Main.npc[i].position.X)
+                        if (npc.position.X < n.position.X)
                         {
                             npc.velocity.X -= 0.05f;
                         }
@@ -7791,7 +7785,7 @@ namespace CalamityMod.NPCs
                         {
                             npc.velocity.X += 0.05f;
                         }
-                        if (npc.position.Y < Main.npc[i].position.Y)
+                        if (npc.position.Y < n.position.Y)
                         {
                             npc.velocity.Y -= 0.05f;
                         }

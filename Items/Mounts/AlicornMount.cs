@@ -71,12 +71,12 @@ namespace CalamityMod.Items.Mounts
 
         public override void SetMount(Player player, ref bool skipDust)
         {
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC npc in Main.ActiveNPCs)
             {
-                if (Main.npc[i].type == ModContent.NPCType<FAP>())
+                if (npc.type == ModContent.NPCType<FAP>())
                 {
-                    Main.npc[i].active = false;
-                    Main.npc[i].netUpdate = true;
+                    npc.active = false;
+                    npc.netUpdate = true;
                     break;
                 }
             }

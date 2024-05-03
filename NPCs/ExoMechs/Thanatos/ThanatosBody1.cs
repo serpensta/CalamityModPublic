@@ -141,15 +141,7 @@ namespace CalamityMod.NPCs.ExoMechs.Thanatos
             bool expertMode = Main.expertMode || bossRush;
 
             // Check if other segments are still alive, if not, die
-            bool shouldDespawn = true;
-            for (int i = 0; i < Main.maxNPCs; i++)
-            {
-                if (Main.npc[i].active && Main.npc[i].type == ModContent.NPCType<ThanatosHead>())
-                {
-                    shouldDespawn = false;
-                    break;
-                }
-            }
+            bool shouldDespawn = !NPC.AnyNPCs(ModContent.NPCType<ThanatosHead>());
             if (!shouldDespawn)
             {
                 if (NPC.ai[1] <= 0f)

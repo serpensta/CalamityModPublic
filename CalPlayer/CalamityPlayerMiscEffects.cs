@@ -456,10 +456,9 @@ namespace CalamityMod.CalPlayer
                 float enemyDistance = maxProxRageDistance + 1f;
                 float bossDistance = maxProxRageDistance + 1f;
 
-                for (int i = 0; i < Main.maxNPCs; ++i)
+                foreach (NPC npc in Main.ActiveNPCs)
                 {
-                    NPC npc = Main.npc[i];
-                    if (npc is null || npc.type == 0 || !npc.IsAnEnemy() || !npc.Calamity().ProvidesProximityRage)
+                    if (npc.type == 0 || !npc.IsAnEnemy() || !npc.Calamity().ProvidesProximityRage)
                         continue;
 
                     // Take the longer of the two directions for the NPC's hitbox to be generous.
@@ -716,10 +715,9 @@ namespace CalamityMod.CalPlayer
             sigilDamage = Player.ApplyArmorAccDamageBonusesTo(sigilDamage);
 
             bool brightenedSigil = false;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC target in Main.ActiveNPCs)
             {
-                NPC target = Main.npc[i];
-                if (!target.active || !target.Hitbox.Intersects(sigilHitbox) || target.immortal || target.dontTakeDamage || target.townNPC || NPCID.Sets.ActsLikeTownNPC[target.type] || NPCID.Sets.CountsAsCritter[target.type])
+                if (!target.Hitbox.Intersects(sigilHitbox) || target.immortal || target.dontTakeDamage || target.townNPC || NPCID.Sets.ActsLikeTownNPC[target.type] || NPCID.Sets.CountsAsCritter[target.type])
                     continue;
 
                 // Brighten the sigil because it is dealing damage. This can only happen once per hit event.
@@ -731,7 +729,7 @@ namespace CalamityMod.CalPlayer
 
                 // Create a direct strike to hit this specific NPC.
                 var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<Calamity>()));
-                Projectile sigilStrike = Projectile.NewProjectileDirect(source, target.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), sigilDamage, 0f, Player.whoAmI, i);
+                Projectile sigilStrike = Projectile.NewProjectileDirect(source, target.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), sigilDamage, 0f, Player.whoAmI, target.whoAmI);
 
                 // Enable crits by setting the sigil's damage class to be whatever the player's strongest damage class is.
                 sigilStrike.DamageType = Player.GetBestClass();
@@ -868,16 +866,15 @@ namespace CalamityMod.CalPlayer
                     alreadyTargetedNPCs.Add((int)Main.projectile[i].ai[0]);
                 }
 
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC target in Main.ActiveNPCs)
                 {
-                    NPC target = Main.npc[i];
-                    if (!target.active || target.friendly || target.lifeMax < 5 || alreadyTargetedNPCs.Contains(i) || target.realLife >= 0 ||
+                    if (target.friendly || target.lifeMax < 5 || alreadyTargetedNPCs.Contains(target.whoAmI) || target.realLife >= 0 ||
                         target.dontTakeDamage || target.immortal || target.townNPC || NPCID.Sets.ActsLikeTownNPC[target.type] || NPCID.Sets.CountsAsCritter[target.type])
                         continue;
 
                     var source = Player.GetSource_Accessory(FindAccessory(ModContent.ItemType<DaawnlightSpiritOrigin>()));
-                    if (Main.myPlayer == Player.whoAmI && Main.npc[i].WithinRange(Player.Center, 2000f))
-                        Projectile.NewProjectile(source, Main.npc[i].Center, Vector2.Zero, bullseyeType, 0, 0f, Player.whoAmI, i);
+                    if (Main.myPlayer == Player.whoAmI && target.WithinRange(Player.Center, 2000f))
+                        Projectile.NewProjectile(source, target.Center, Vector2.Zero, bullseyeType, 0, 0f, Player.whoAmI, target.whoAmI);
                     if (spiritOriginBullseyeShootCountdown <= 0)
                         spiritOriginBullseyeShootCountdown = 45;
                 }
@@ -1240,14 +1237,13 @@ namespace CalamityMod.CalPlayer
                     {
                         float maxDistance = 300f;
                         int target = -1;
-                        for (int npcIndex = 0; npcIndex < Main.maxNPCs; npcIndex++)
+                        foreach (NPC npc in Main.ActiveNPCs)
                         {
-                            NPC npc = Main.npc[npcIndex];
                             float targetDist = Vector2.Distance(npc.Center, Player.Center);
                             if (targetDist < maxDistance && npc.Calamity().arcZapCooldown == 0 && npc.CanBeChasedBy())
                             {
                                 maxDistance = targetDist;
-                                target = npcIndex;
+                                target = npc.whoAmI;
                             }
                         }
 
@@ -1821,10 +1817,9 @@ namespace CalamityMod.CalPlayer
                 {
                     if (Main.rand.NextBool(5))
                     {
-                        for (int l = 0; l < Main.maxNPCs; l++)
+                        foreach (NPC npc in Main.ActiveNPCs)
                         {
-                            NPC npc = Main.npc[l];
-                            if (!npc.active || npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
+                            if (npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
                                 continue;
 
                             if (!npc.buffImmune[buffType] && Vector2.Distance(Player.Center, npc.Center) <= freezeDist)
@@ -2747,10 +2742,9 @@ namespace CalamityMod.CalPlayer
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient && !areThereAnyDamnBosses)
                 {
-                    for (int m = 0; m < Main.maxNPCs; m++)
+                    foreach (NPC npc in Main.ActiveNPCs)
                     {
-                        NPC npc = Main.npc[m];
-                        if (!npc.active || npc.friendly || npc.dontTakeDamage)
+                        if (npc.friendly || npc.dontTakeDamage)
                             continue;
                         float distance = (npc.Center - Player.Center).Length();
                         if (distance < 120f)
@@ -3115,14 +3109,13 @@ namespace CalamityMod.CalPlayer
                     var source = Player.GetSource_FromThis(TarragonHeadSummon.LifeAuraEntitySourceContext);
                     float range = 300f;
 
-                    for (int i = 0; i < Main.maxNPCs; ++i)
+                    foreach (NPC npc in Main.ActiveNPCs)
                     {
-                        NPC npc = Main.npc[i];
-                        if (!npc.active || npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
+                        if (npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
                             continue;
 
                         if (Vector2.Distance(Player.Center, npc.Center) <= range)
-                            Projectile.NewProjectileDirect(source, npc.Center, Vector2.Zero, ModContent.ProjectileType<TarragonAura>(), damage, 0f, Player.whoAmI, i);
+                            Projectile.NewProjectileDirect(source, npc.Center, Vector2.Zero, ModContent.ProjectileType<TarragonAura>(), damage, 0f, Player.whoAmI, npc.whoAmI);
                     }
                 }
             }
@@ -3143,14 +3136,13 @@ namespace CalamityMod.CalPlayer
                     var source = Player.GetSource_ItemUse(Player.ActiveItem());
                     float range = 200f;
 
-                    for (int i = 0; i < Main.maxNPCs; ++i)
+                    foreach (NPC npc in Main.ActiveNPCs)
                     {
-                        NPC npc = Main.npc[i];
-                        if (!npc.active || npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
+                        if (npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
                             continue;
 
                         if (Vector2.Distance(Player.Center, npc.Center) <= range)
-                            Projectile.NewProjectileDirect(source, npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), damage, 0f, Player.whoAmI, i);
+                            Projectile.NewProjectileDirect(source, npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), damage, 0f, Player.whoAmI, npc.whoAmI);
 
                         // Occasionally spawn cute sparks so it looks like an electrical aura
                         if (Main.rand.NextBool(10))
@@ -3186,17 +3178,16 @@ namespace CalamityMod.CalPlayer
                     var source = Player.GetSource_FromThis(HydrothermicArmor.InfernoPotionEntitySourceContext);
                     float range = 300f;
 
-                    for (int i = 0; i < Main.maxNPCs; ++i)
+                    foreach (NPC npc in Main.ActiveNPCs)
                     {
-                        NPC npc = Main.npc[i];
-                        if (!npc.active || npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
+                        if (npc.friendly || npc.damage <= 0 || npc.dontTakeDamage)
                             continue;
 
                         if (Vector2.Distance(Player.Center, npc.Center) <= range)
                         {
                             npc.AddBuff(ModContent.BuffType<BrimstoneFlames>(), 120);
                             if (brimLoreInfernoTimer == 0)
-                                Projectile.NewProjectileDirect(source, npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), damage, 0f, Player.whoAmI, i);
+                                Projectile.NewProjectileDirect(source, npc.Center, Vector2.Zero, ModContent.ProjectileType<DirectStrike>(), damage, 0f, Player.whoAmI, npc.whoAmI);
                         }
                     }
                 }
@@ -4183,12 +4174,8 @@ namespace CalamityMod.CalPlayer
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC npc in Main.ActiveNPCs)
             {
-                NPC npc = Main.npc[i];
-                if (npc is null || !npc.active)
-                    return;
-
                 bool holdingsol = ((Player.HeldItem.type >= ItemID.GreenSolution && Player.HeldItem.type <= ItemID.RedSolution) || (Player.HeldItem.type >= ItemID.SandSolution && Player.HeldItem.type <= ItemID.DirtSolution) || Player.HeldItem.type == ModContent.ItemType<AstralSolution>());
                 if (npc.Hitbox.Contains(Main.MouseWorld.ToPoint()) && holdingsol && Player.Distance(npc.Center) < 450)
                 {
@@ -4268,7 +4255,7 @@ namespace CalamityMod.CalPlayer
                                 }
                             }
                             if (Main.netMode == NetmodeID.Server)
-                                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, i);
+                                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc.whoAmI);
                         }
                     }
                 }
