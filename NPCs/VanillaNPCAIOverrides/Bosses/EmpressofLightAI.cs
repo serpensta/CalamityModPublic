@@ -651,7 +651,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                                 if (phase3)
                                 {
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), everlastingRainbowSpawn + spinningpoint.RotatedBy(-MathHelper.PiOver2) * 30f, spinningpoint * (masterMode ? 6f : 5f) * initialVelocity, projectileType2, projectileDamage2, 0f, Main.myPlayer, npc.target, projRotationMultiplier);
+                                        Projectile.NewProjectile(npc.GetSource_FromAI(), everlastingRainbowSpawn + spinningpoint.RotatedBy(-MathHelper.PiOver2) * 30f, spinningpoint * (masterMode ? 5f : 4f) * initialVelocity, projectileType2, projectileDamage2, 0f, Main.myPlayer, npc.target, projRotationMultiplier);
                                 }
                             }
 
@@ -1128,7 +1128,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         int projectileType = ProjectileID.HallowBossRainbowStreak;
                         int projectileDamage = npc.GetProjectileDamage(projectileType) * projectileDamageMultiplier;
 
-                        Vector2 vector = new Vector2(0f, (death ? -24f : -22f) - (phase3 ? ((masterMode ? 12f : 6f) * streakHomeTime) : 0f)).RotatedBy(MathHelper.TwoPi * streakHomeTime);
+                        Vector2 vector = new Vector2(0f, (death ? -24f : -22f) - (phase3 ? ((masterMode ? 9f : 6f) * streakHomeTime) : 0f)).RotatedBy(MathHelper.TwoPi * streakHomeTime);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + projRandomOffset, vector, projectileType, projectileDamage, 0f, Main.myPlayer, npc.target, streakHomeTime);
