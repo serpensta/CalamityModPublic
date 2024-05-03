@@ -2873,7 +2873,37 @@ namespace CalamityMod.Projectiles
                         projectile.velocity.Normalize();
                         projectile.velocity *= scaleFactor2;
 
-                        if (projectile.ai[0] % 60f == 0f && Main.netMode != NetmodeID.MultiplayerClient)
+                        // Fly away from other Ice Mists in Master
+                        if (masterMode)
+                        {
+                            float pushForce = 0.06f;
+                            float pushDistance = 120f;
+                            for (int k = 0; k < Main.maxProjectiles; k++)
+                            {
+                                Projectile otherProj = Main.projectile[k];
+                                // Short circuits to make the loop as fast as possible
+                                if (!otherProj.active || k == projectile.whoAmI)
+                                    continue;
+
+                                // If the other projectile is indeed the same owned by the same player and they're too close, nudge them away
+                                bool sameProjType = otherProj.type == projectile.type;
+                                float taxicabDist = Vector2.Distance(projectile.Center, otherProj.Center);
+                                if (sameProjType && taxicabDist < pushDistance)
+                                {
+                                    if (projectile.position.X < otherProj.position.X)
+                                        projectile.velocity.X -= pushForce;
+                                    else
+                                        projectile.velocity.X += pushForce;
+
+                                    if (projectile.position.Y < otherProj.position.Y)
+                                        projectile.velocity.Y -= pushForce;
+                                    else
+                                        projectile.velocity.Y += pushForce;
+                                }
+                            }
+                        }
+
+                        if (projectile.ai[0] % (masterMode ? 30f : 60f) == 0f && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Vector2 vector50 = projectile.rotation.ToRotationVector2();
                             Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector50, projectile.type, projectile.damage, projectile.knockBack, projectile.owner);
@@ -2887,9 +2917,12 @@ namespace CalamityMod.Projectiles
                     }
 
                     // Split projectiles
+                    // MOST WACK ASS JANK FUCKING SHIT EVER
+                    // WHAT THE FUCK
                     projectile.position -= projectile.velocity;
 
-                    if (projectile.ai[0] >= duration - 260f)
+                    float splitProjectileDuration = duration - 255f;
+                    if (projectile.ai[0] >= splitProjectileDuration - 5f)
                         projectile.alpha += 3;
                     else
                         projectile.alpha -= 40;
@@ -2899,14 +2932,14 @@ namespace CalamityMod.Projectiles
                     if (projectile.alpha > 255)
                         projectile.alpha = 255;
 
-                    if (projectile.ai[0] >= duration - 255f)
+                    if (projectile.ai[0] >= splitProjectileDuration)
                     {
                         projectile.Kill();
                         return false;
                     }
 
                     Vector2 value39 = new Vector2(0f, -720f).RotatedBy(projectile.velocity.ToRotation());
-                    float scaleFactor3 = projectile.ai[0] % (duration - 255f) / (duration - 255f);
+                    float scaleFactor3 = projectile.ai[0] % splitProjectileDuration / splitProjectileDuration;
                     Vector2 spinningpoint13 = value39 * scaleFactor3;
 
                     for (int num724 = 0; num724 < 6; num724++)
