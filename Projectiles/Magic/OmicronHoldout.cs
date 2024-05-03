@@ -130,7 +130,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
 
                 Owner.Calamity().GeneralScreenShakePower = 6.5f;
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<OmicronBeam>(), Projectile.damage * 38, Projectile.knockBack, Projectile.owner, 0, 0);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3, ModContent.ProjectileType<OmicronBeam>(), Projectile.damage * 32, Projectile.knockBack, Projectile.owner, 0, 0);
 
                 for (int i = 0; i < 8; i++)
                 {
