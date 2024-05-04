@@ -10,16 +10,12 @@ namespace CalamityMod.Projectiles.Magic
     {
         public new string LocalizationCategory => "Projectiles.Magic";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
-        public float dustAngle = 0f;
-        public bool growing = false;
-        public bool dustWave = false;
-        public float variance;
 
         public override void SetDefaults()
         {
             Projectile.width = 4;
             Projectile.height = 4;
-            Projectile.extraUpdates = 100;
+            Projectile.extraUpdates = 70;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
@@ -62,7 +58,7 @@ namespace CalamityMod.Projectiles.Magic
         {
             for (int i = 0; i <= 4; i++)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(4, 4), 226, Projectile.velocity * Main.rand.NextFloat(0.1f, 0.9f));
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(4, 4), 226, (Projectile.velocity * 2) * Main.rand.NextFloat(0.1f, 0.9f));
                 dust.scale = Main.rand.NextFloat(0.3f, 0.5f);
                 dust.noGravity = true;
             }

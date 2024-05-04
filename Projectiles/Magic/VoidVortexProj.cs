@@ -115,7 +115,7 @@ namespace CalamityMod.Projectiles.Magic
 
                 if (fireBeam && Projectile.ai[0] == -30 && Projectile.ai[2] <= 0 && target != null)
                 {
-                    CalamityUtils.MagnetSphereHitscan(Projectile, 1000f, 8f, 0, 2, ModContent.ProjectileType<ClimaxBeam>(), 1D, true);
+                    CalamityUtils.MagnetSphereHitscan(Projectile, Vector2.Distance(Projectile.Center, target.Center), 8f, 0, 1, ModContent.ProjectileType<ClimaxBeam>(), 1D, true);
                     fireBeam = false;
                 }
             }
@@ -145,7 +145,7 @@ namespace CalamityMod.Projectiles.Magic
 
                 for (int k = 0; k < 12; k++)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(10, 10).RotatedByRandom(100) * Main.rand.NextFloat(0.4f, 0.55f), ModContent.ProjectileType<VoidVortexProj>(), Projectile.damage / 8, 0f, Main.myPlayer, 0f, 0f, 3f);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(10, 10).RotatedByRandom(100) * Main.rand.NextFloat(0.4f, 0.55f), ModContent.ProjectileType<VoidVortexProj>(), Projectile.damage / 6, 0f, Main.myPlayer, 0f, 0f, 3f);
                 }
                 for (int k = 0; k < 40; k++)
                 {
@@ -155,7 +155,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
                 SoundStyle fire = new("CalamityMod/Sounds/Item/AuricBulletHit");
                 SoundEngine.PlaySound(fire with { Volume = 0.4f, Pitch = 0f }, Projectile.Center);
-                Particle bolt = new CustomPulse(Projectile.Center, Vector2.Zero, Color.Aqua, "CalamityMod/Particles/PlasmaExplosion", Vector2.One, Main.rand.NextFloat(-10f, 10f), 0, 0.2f, 14);
+                Particle bolt = new CustomPulse(Projectile.Center, Vector2.Zero, Color.Aqua, "CalamityMod/Particles/HighResFoggyCircleHardEdge", Vector2.One, Main.rand.NextFloat(-10f, 10f), 0.03f, 0.16f, 16);
                 GeneralParticleHandler.SpawnParticle(bolt);
             }
             if (Projectile.ai[2] == 3)

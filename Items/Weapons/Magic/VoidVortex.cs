@@ -13,7 +13,6 @@ namespace CalamityMod.Items.Weapons.Magic
     public class VoidVortex : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Magic";
-        public const int OrbFireRate = 15;
 
         public override void SetStaticDefaults()
         {
@@ -24,11 +23,11 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             Item.width = 130;
             Item.height = 130;
-            Item.damage = 90;
+            Item.damage = 225;
             Item.DamageType = DamageClass.Magic;
-            Item.mana = 30;
-            Item.useTime = 43;
-            Item.useAnimation = 43;
+            Item.mana = 60;
+            Item.useTime = 49;
+            Item.useAnimation = 49;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 0f;
@@ -54,12 +53,11 @@ namespace CalamityMod.Items.Weapons.Magic
                 Vector2 orbPos = clickPos + dir * orbDistance;
                 Vector2 vel = dir.RotatedBy(spinCoinflip * -MathHelper.PiOver2) * orbSpeed;
 
-                // Choose random firing stagger values for each orb to create a desynchronized barrage of lasers
                 Projectile.NewProjectile(source, orbPos, -vel, type, damage, knockback, player.whoAmI, i * 4, spinCoinflip);
                 dir = dir.RotatedBy(MathHelper.TwoPi / numOrbs);
             }
             // Big orb
-            Projectile.NewProjectile(source, clickPos, Vector2.Zero, type, damage * 9, 10, player.whoAmI, 0, spinCoinflip, 1);
+            Projectile.NewProjectile(source, clickPos, Vector2.Zero, type, damage * 4, 10, player.whoAmI, 0, spinCoinflip, 1);
             return false;
         }
 
