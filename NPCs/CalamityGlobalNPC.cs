@@ -4234,6 +4234,14 @@ namespace CalamityMod.NPCs
                         }
                         break;
 
+                    case NPCAIStyleID.TheHungry:
+                        switch (npc.type)
+                        {
+                            case NPCID.TheHungry:
+                                return WallOfFleshAI.BuffedHungryAI(npc, Mod);
+                        }
+                        break;
+
                     case NPCAIStyleID.GiantTortoise:
                         if (npc.type == NPCType<Plagueshell>())
                         {
