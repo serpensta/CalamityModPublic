@@ -456,27 +456,30 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 bool ableToFireLaser = calamityGlobalNPC.destroyerLaserColor != -1;
 
                 // Set laser color and type
-                if (calamityGlobalNPC.destroyerLaserColor == -1 && !probeLaunched && Main.rand.NextBool(masterMode ? OneInXChanceToFireLaser / 2 : OneInXChanceToFireLaser))
+                if (calamityGlobalNPC.destroyerLaserColor == -1 && !probeLaunched)
                 {
-                    int random = phase3 ? 4 : phase2 ? 3 : 2;
-                    switch (Main.rand.Next(random))
+                    if (Main.rand.NextBool(masterMode ? OneInXChanceToFireLaser / (phase5 ? 4 : phase4 ? 3 : 2) : OneInXChanceToFireLaser))
                     {
-                        case 0:
-                        case 1:
-                            calamityGlobalNPC.destroyerLaserColor = 0;
-                            break;
-                        case 2:
-                            calamityGlobalNPC.destroyerLaserColor = 1;
-                            break;
-                        case 3:
+                        int random = phase3 ? 4 : phase2 ? 3 : 2;
+                        switch (Main.rand.Next(random))
+                        {
+                            case 0:
+                            case 1:
+                                calamityGlobalNPC.destroyerLaserColor = 0;
+                                break;
+                            case 2:
+                                calamityGlobalNPC.destroyerLaserColor = 1;
+                                break;
+                            case 3:
+                                calamityGlobalNPC.destroyerLaserColor = 2;
+                                break;
+                        }
+
+                        if (calamityGlobalNPC.newAI[2] > 0f || bossRush)
                             calamityGlobalNPC.destroyerLaserColor = 2;
-                            break;
+
+                        npc.SyncDestroyerLaserColor();
                     }
-
-                    if (calamityGlobalNPC.newAI[2] > 0f || bossRush)
-                        calamityGlobalNPC.destroyerLaserColor = 2;
-
-                    npc.SyncDestroyerLaserColor();
                 }
 
                 if (probeLaunched && ableToFireLaser)
@@ -486,7 +489,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 // Laser rate of fire
-                float shootProjectileTime = death ? (masterMode ? 90f : 270f) : (masterMode ? 150f : 450f);
+                float shootProjectileTime = death ? (masterMode ? (phase5 ? 30f : phase4 ? 60f : 90f) : 270f) : (masterMode ? (phase5 ? 90f : phase4 ? 120f : 150f) : 450f);
                 float bodySegmentTime = npc.ai[0] * (masterMode ? 15f : 30f);
                 float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
                 float laserTimerIncrement = (calamityGlobalNPC.newAI[0] > shootProjectileGateValue - LaserTelegraphTime) ? 1f : 2f;
