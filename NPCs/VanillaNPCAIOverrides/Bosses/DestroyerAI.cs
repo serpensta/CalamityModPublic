@@ -232,14 +232,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool spitLaserSpreads = death;
 
             // Height of the box used to calculate whether The Destroyer should fly at its target or not
-            int noFlyZoneBoxHeight = masterMode ? 1600 : 1800;
+            int noFlyZoneBoxHeight = masterMode ? 1500 : 1800;
 
             // Speed and movement variables
-            float speed = masterMode ? 0.15f : 0.1f;
+            float speed = masterMode ? 0.2f : 0.1f;
             float turnSpeed = masterMode ? 0.3f : 0.15f;
 
             // Max velocity
-            float segmentVelocity = flyAtTarget ? (masterMode ? 20f : 15f) : (masterMode ? 25f : 20f);
+            float segmentVelocity = flyAtTarget ? (masterMode ? 22.5f : 15f) : (masterMode ? 30f : 20f);
 
             // Increase velocity based on distance
             float velocityMultiplier = increaseSpeedMore ? 2f : increaseSpeed ? 1.5f : 1f;
@@ -456,7 +456,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 bool ableToFireLaser = calamityGlobalNPC.destroyerLaserColor != -1;
 
                 // Set laser color and type
-                if (calamityGlobalNPC.destroyerLaserColor == -1 && !probeLaunched && Main.rand.NextBool(OneInXChanceToFireLaser))
+                if (calamityGlobalNPC.destroyerLaserColor == -1 && !probeLaunched && Main.rand.NextBool(masterMode ? OneInXChanceToFireLaser / 2 : OneInXChanceToFireLaser))
                 {
                     int random = phase3 ? 4 : phase2 ? 3 : 2;
                     switch (Main.rand.Next(random))
@@ -486,8 +486,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 // Laser rate of fire
-                float shootProjectileTime = death ? (masterMode ? 210f : 270f) : (masterMode ? 300f : 450f);
-                float bodySegmentTime = npc.ai[0] * 30f;
+                float shootProjectileTime = death ? (masterMode ? 90f : 270f) : (masterMode ? 150f : 450f);
+                float bodySegmentTime = npc.ai[0] * (masterMode ? 15f : 30f);
                 float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
                 float laserTimerIncrement = (calamityGlobalNPC.newAI[0] > shootProjectileGateValue - LaserTelegraphTime) ? 1f : 2f;
                 if (ableToFireLaser)
@@ -1058,6 +1058,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (((npc.velocity.X > 0f && npc.oldVelocity.X < 0f) || (npc.velocity.X < 0f && npc.oldVelocity.X > 0f) || (npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f) || (npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f)) && !npc.justHit)
                         npc.netUpdate = true;
                 }
+            }
+
+            // Force the fucker to turn around in ground phase in Master
+            if (npc.type == NPCID.TheDestroyer && masterMode && !flyAtTarget)
+            {
+                if (npc.Distance(player.Center) > 2000f)
+                    npc.velocity += (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * turnSpeed;
             }
 
             if (NPC.IsMechQueenUp && npc.type == NPCID.TheDestroyer)

@@ -2257,7 +2257,7 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.DemonSickle)
                 {
-                    if (Main.wofNPCIndex < 0 || !Main.npc[Main.wofNPCIndex].active || Main.npc[Main.wofNPCIndex].life <= 0)
+                    if (Main.wofNPCIndex < 0 || !Main.npc[Main.wofNPCIndex].active || Main.npc[Main.wofNPCIndex].life <= 0 || projectile.tileCollide)
                         return true;
 
                     if (projectile.ai[0] == 0f)
@@ -4433,6 +4433,26 @@ namespace CalamityMod.Projectiles
                 return RavenMinionAI.DoRavenMinionDrawing(projectile, ref lightColor);
 
             #endregion
+
+            if (projectile.type == ProjectileID.DemonSickle)
+            {
+                if (Main.wofNPCIndex < 0 || !Main.npc[Main.wofNPCIndex].active || Main.npc[Main.wofNPCIndex].life <= 0 || projectile.tileCollide)
+                    return true;
+
+                Texture2D texture = CalamityMod.WallOfFleshDemonSickleGlowmask.Value;
+                int frameHeight = texture.Height / Main.projFrames[projectile.type];
+                int frameY = frameHeight * projectile.frame;
+                Rectangle rectangle = new Rectangle(0, frameY, texture.Width, frameHeight);
+                Vector2 origin = rectangle.Size() / 2f;
+
+                SpriteEffects spriteEffects = SpriteEffects.None;
+                if (projectile.spriteDirection == -1)
+                    spriteEffects = SpriteEffects.FlipHorizontally;
+
+                Main.spriteBatch.Draw(texture, projectile.Center - Main.screenPosition + new Vector2(0f, projectile.gfxOffY), rectangle, projectile.GetAlpha(lightColor), projectile.rotation, origin, projectile.scale, spriteEffects, 0f);
+
+                return false;
+            }
 
             // Chlorophyte Crystal AI rework.
             if (projectile.type == ProjectileID.CrystalLeaf)
