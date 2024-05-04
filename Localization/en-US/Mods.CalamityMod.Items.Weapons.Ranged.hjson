@@ -810,6 +810,11 @@ NettlevineGreatbow: {
 		'''
 }
 
+NitroExpressRifle: {
+	DisplayName: Nitro Express Rifle
+	Tooltip: "[c/88354B:'The recoil feels strong enough to break your shoulder...']"
+}
+
 Norfleet: {
 	DisplayName: Norfleet
 	Tooltip:
