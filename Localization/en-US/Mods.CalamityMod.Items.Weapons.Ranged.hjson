@@ -85,7 +85,7 @@ Arietes41: {
 	Tooltip:
 		'''
 		Alternates between firing bullets imbued with lifesteal and electricity
-		Electric imbued bullets crate a small shockbast on impact, dealing additional damage to the enemy they hit
+		Electric imbued bullets create a small shockblast on impact, dealing additional damage to the enemy they hit
 		'''
 }
 
@@ -810,6 +810,11 @@ NettlevineGreatbow: {
 		'''
 }
 
+NitroExpressRifle: {
+	DisplayName: Nitro Express Rifle
+	Tooltip: "[c/88354B:'The recoil feels strong enough to break your shoulder...']"
+}
+
 Norfleet: {
 	DisplayName: Norfleet
 	Tooltip:
@@ -884,7 +889,7 @@ PearlGod: {
 	Tooltip:
 		'''
 		Alternates between firing a bullet imbued with lifesteal and 3 bullets imbued with pearlescence
-		Pearlescent imbued bullets crate a radiant flash on impact, dealing additional damage to the enemy they hit
+		Pearlescent imbued bullets create a radiant flash on impact, dealing additional damage to the enemy they hit
 		'''
 }
 

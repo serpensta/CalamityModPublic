@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Ammo
 {
+    [LegacyName("TerraBullet")]
     public class DryadsTear : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Ammo";
