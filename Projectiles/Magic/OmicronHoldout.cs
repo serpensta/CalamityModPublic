@@ -34,7 +34,8 @@ namespace CalamityMod.Projectiles.Magic
         {
             if (HeldItem.type != Owner.ActiveItem().type || Owner is null || !Owner.active || Owner.CCed || Owner.dead || Owner.noItems)
             {
-                Projectile.Kill();
+                if (PostFireCooldown <= 0)
+                    Projectile.Kill();
                 Projectile.netUpdate = true;
             }
         }
@@ -59,9 +60,9 @@ namespace CalamityMod.Projectiles.Magic
             {
                 if (Owner.CheckMana(Owner.ActiveItem(), (int)(heldItem.mana * Owner.manaCost) * 16, true, false))
                 {
+                    PostFireCooldown = 100;
                     Shoot(heldItem, true);
                     ShootingTimer = 0;
-                    PostFireCooldown = 100;
                 }
                 else
                 {
@@ -99,7 +100,7 @@ namespace CalamityMod.Projectiles.Magic
                         Windup = 10;
                     }
                 }
-                else
+                else if (PostFireCooldown <= 0)
                 {
                     SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = -0.5f }, Projectile.Center);
                     Projectile.Kill();

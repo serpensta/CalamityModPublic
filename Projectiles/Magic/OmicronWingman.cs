@@ -55,7 +55,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void AI()
         {
-            if (time > 1 && Owner.ownedProjectileCounts[ModContent.ProjectileType<OmicronHoldout>()] < 1)
+            if (time > 1 && Owner.ownedProjectileCounts[ModContent.ProjectileType<OmicronHoldout>()] < 1 && PostFireCooldown <= 0)
                 Projectile.Kill();
             Lighting.AddLight(Projectile.Center, StaticEffectsColor.ToVector3() * 0.2f);
             if (time == 0)
@@ -105,7 +105,7 @@ namespace CalamityMod.Projectiles.Magic
                         Shoot(heldItem, false);
                         ShootingTimer = 0;
                     }
-                    else
+                    else if (PostFireCooldown <= 0)
                     {
                         Projectile.Kill();
                     }
