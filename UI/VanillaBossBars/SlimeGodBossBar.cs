@@ -44,10 +44,9 @@ namespace CalamityMod.UI.VanillaBossBars
             lifeMax += FalseNPCSegment.lifeMax;
 
             // Determine the current health of each slime
-            for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC part = Main.npc[i];
-				if (part.active && SlimeGodSlimes.Contains(part.type))
+            foreach (NPC part in Main.ActiveNPCs)
+            {
+				if (SlimeGodSlimes.Contains(part.type))
 				{
 					life += part.life;
 				}

@@ -500,10 +500,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if ((int)(npc.ai[1] - 4f) / fireballFireRate == 2)
                     {
                         List<int> list4 = new List<int>();
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (var n in Main.ActiveNPCs)
                         {
-                            if (Main.npc[i].active && Main.npc[i].type == NPCID.CultistBossClone && Main.npc[i].ai[3] == npc.whoAmI)
-                                list4.Add(i);
+                            if (n.type == NPCID.CultistBossClone && n.ai[3] == npc.whoAmI)
+                                list4.Add(n.whoAmI);
                         }
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -822,9 +822,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if ((int)(npc.ai[1] - 4f) / ancientLightSpawnRate == 2)
                     {
                         List<int> list7 = new List<int>();
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC n in Main.ActiveNPCs)
                         {
-                            if (Main.npc[i].active && Main.npc[i].type == NPCID.CultistBossClone && Main.npc[i].ai[3] == npc.whoAmI)
+                            if (n.type == NPCID.CultistBossClone && n.ai[3] == npc.whoAmI)
                                 list7.Add(i);
                         }
 

@@ -79,10 +79,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
             if (Main.netMode != NetmodeID.MultiplayerClient && !Main.dayTime && !Main.player[npc.target].dead && npc.timeLeft < 10)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && (Main.npc[i].type == NPCID.Retinazer || Main.npc[i].type == NPCID.Spazmatism) && Main.npc[i].timeLeft - 1 > npc.timeLeft)
-                        npc.timeLeft = Main.npc[i].timeLeft - 1;
+                    if (n.whoAmI != npc.whoAmI && (n.type == NPCID.Retinazer || n.type == NPCID.Spazmatism) && n.timeLeft - 1 > npc.timeLeft)
+                        npc.timeLeft = n.timeLeft - 1;
 
                 }
             }
@@ -412,10 +412,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
             if (Main.netMode != NetmodeID.MultiplayerClient && !Main.player[npc.target].dead && npc.timeLeft < 10)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && (Main.npc[i].type == NPCID.Retinazer || Main.npc[i].type == NPCID.Spazmatism) && Main.npc[i].timeLeft - 1 > npc.timeLeft)
-                        npc.timeLeft = Main.npc[i].timeLeft - 1;
+                    if (n.whoAmI != npc.whoAmI && (n.type == NPCID.Retinazer || n.type == NPCID.Spazmatism) && n.timeLeft - 1 > npc.timeLeft)
+                        npc.timeLeft = n.timeLeft - 1;
 
                 }
             }
@@ -1236,10 +1236,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Despawn Twins at the same time
             if (Main.netMode != NetmodeID.MultiplayerClient && !Main.player[npc.target].dead && npc.timeLeft < 10)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && Main.npc[i].active && (Main.npc[i].type == NPCID.Retinazer || Main.npc[i].type == NPCID.Spazmatism) && Main.npc[i].timeLeft - 1 > npc.timeLeft)
-                        npc.timeLeft = Main.npc[i].timeLeft - 1;
+                    if (n.whoAmI != npc.whoAmI && (n.type == NPCID.Retinazer || n.type == NPCID.Spazmatism) && n.timeLeft - 1 > npc.timeLeft)
+                        npc.timeLeft = n.timeLeft - 1;
 
                 }
             }

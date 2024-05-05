@@ -443,10 +443,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         npc.HitEffect(0, 1337.0);
                         npc.checkDead();
 
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC nPC5 in Main.ActiveNPCs)
                         {
-                            NPC nPC5 = Main.npc[i];
-                            if (nPC5.active && (nPC5.type == NPCID.MoonLordHand || nPC5.type == NPCID.MoonLordHead))
+                            if (nPC5.type == NPCID.MoonLordHand || nPC5.type == NPCID.MoonLordHead)
                             {
                                 nPC5.active = false;
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -509,10 +508,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[1] >= 60f)
                     {
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC nPC5 in Main.ActiveNPCs)
                         {
-                            NPC nPC5 = Main.npc[i];
-                            if (nPC5.active && (nPC5.type == NPCID.MoonLordFreeEye || nPC5.type == NPCID.MoonLordHand || nPC5.type == NPCID.MoonLordHead))
+                            if (nPC5.type == NPCID.MoonLordFreeEye || nPC5.type == NPCID.MoonLordHand || nPC5.type == NPCID.MoonLordHead)
                             {
                                 nPC5.active = false;
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -584,13 +582,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         Main.npc[(int)npc.localAI[2]].netUpdate = true;
                     }
 
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    foreach (NPC nPC7 in Main.ActiveNPCs)
                     {
-                        NPC nPC7 = Main.npc[i];
                         if (nPC7.active && nPC7.type == NPCID.MoonLordFreeEye)
                         {
-                            NPC nPC6 = nPC7;
-                            nPC6.position += value8;
+                            nPC7.position += value8;
                             nPC7.netUpdate = true;
                         }
                     }
@@ -1594,26 +1590,23 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                     if (eyeCount > 1)
                     {
                         int eyesSynced = 1;
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC n in Main.ActiveNPCs)
                         {
-                            if (Main.npc[i].active)
+                            if (n.whoAmI != npc.whoAmI && n.type == npc.type)
                             {
-                                if (i != npc.whoAmI && Main.npc[i].type == npc.type)
-                                {
-                                    Main.npc[i].ai[0] = 0f;
-                                    Main.npc[i].ai[1] = 0f;
-                                    Main.npc[i].ai[2] = 0f;
-                                    Main.npc[i].localAI[0] = 0f;
-                                    Main.npc[i].localAI[1] = 0f;
-                                    Main.npc[i].localAI[2] = 0f;
-                                    calamityGlobalNPC.newAI[0] = 1f;
-                                    calamityGlobalNPC.newAI[1] = 0f;
-                                    npc.netUpdate = true;
+                                n.ai[0] = 0f;
+                                n.ai[1] = 0f;
+                                n.ai[2] = 0f;
+                                n.localAI[0] = 0f;
+                                n.localAI[1] = 0f;
+                                n.localAI[2] = 0f;
+                                calamityGlobalNPC.newAI[0] = 1f;
+                                calamityGlobalNPC.newAI[1] = 0f;
+                                npc.netUpdate = true;
 
-                                    eyesSynced++;
-                                    if (eyesSynced >= eyeCount)
-                                        break;
-                                }
+                                eyesSynced++;
+                                if (eyesSynced >= eyeCount)
+                                    break;
                             }
                         }
                     }
@@ -2151,14 +2144,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         int rightHandHeal = -1;
                         int headHeal = headNPCType;
 
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC n in Main.ActiveNPCs)
                         {
-                            if (Main.npc[i].active && Main.npc[i].ai[3] == k)
+                            if (n.ai[3] == k)
                             {
-                                if (leftHandHeal == -1 && Main.npc[i].type == NPCID.MoonLordHand && Main.npc[i].ai[2] == 0f)
-                                    leftHandHeal = i;
-                                if (rightHandHeal == -1 && Main.npc[i].type == NPCID.MoonLordHand && Main.npc[i].ai[2] == 1f)
-                                    rightHandHeal = i;
+                                if (leftHandHeal == -1 && n.type == NPCID.MoonLordHand && n.ai[2] == 0f)
+                                    leftHandHeal = n.whoAmI;
+                                if (rightHandHeal == -1 && n.type == NPCID.MoonLordHand && n.ai[2] == 1f)
+                                    rightHandHeal = n.whoAmI;
                                 if (leftHandHeal != -1 && rightHandHeal != -1 && headHeal != -1)
                                     break;
                             }

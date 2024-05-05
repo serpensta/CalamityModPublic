@@ -50,11 +50,10 @@ namespace CalamityMod.UI.VanillaBossBars
                 FalseNPCSegment.SetDefaults(NPCType<DarkEnergy>(), target.GetMatchingSpawnParams());
                 shieldMax = (int)(FalseNPCSegment.lifeMax * ExpectedBallsCounter * (1 - RatioToCombust));
                 shield -= (int)(FalseNPCSegment.lifeMax * ExpectedBallsCounter * RatioToCombust);
-                
-                for (int i = 0; i < Main.maxNPCs; i++)
-    			{
-			    	NPC part = Main.npc[i];
-		    		if (part.active && part.type == NPCType<DarkEnergy>())
+
+                foreach (NPC part in Main.ActiveNPCs)
+                {
+		    		if (part.type == NPCType<DarkEnergy>())
 	    				shield += part.life;				
     			}
             }

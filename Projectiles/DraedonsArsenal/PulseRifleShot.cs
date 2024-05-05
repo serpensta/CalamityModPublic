@@ -96,14 +96,14 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
                 else
                     alreadyTargetedNPCType = target.whoAmI;
 
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (!Main.npc[i].CanBeChasedBy(Projectile, false) || !Collision.CanHit(Projectile.Center, 1, 1, Main.npc[i].Center, 1, 1))
+                    if (!n.CanBeChasedBy(Projectile, false) || !Collision.CanHit(Projectile.Center, 1, 1, n.Center, 1, 1))
                         continue;
 
-                    if (alreadyTargetedNPCType != Main.npc[i].whoAmI && Projectile.Center.ManhattanDistance(Main.npc[i].Center) < 600f)
+                    if (alreadyTargetedNPCType != n.whoAmI && Projectile.Center.ManhattanDistance(n.Center) < 600f)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.SafeDirectionTo(Main.npc[i].Center) * 5f, Projectile.type, (int)(Projectile.damage * 0.4f), 0f, Projectile.owner, Main.npc[i].whoAmI, Projectile.ai[1] + 1f);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.SafeDirectionTo(n.Center) * 5f, Projectile.type, (int)(Projectile.damage * 0.4f), 0f, Projectile.owner, n.whoAmI, Projectile.ai[1] + 1f);
                         break;
                     }
                 }

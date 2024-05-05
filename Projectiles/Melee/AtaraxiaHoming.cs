@@ -52,19 +52,19 @@ namespace CalamityMod.Projectiles.Melee
             if (Projectile.ai[1] == 0f)
             {
                 // Find the closest target. The range decreases each time you find a closer target.
-                for (int i = 0; i < Main.maxNPCs; ++i)
+                foreach (var n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].CanBeChasedBy(Projectile, false))
+                    if (n.CanBeChasedBy(Projectile, false))
                     {
                         // Chlorophyte Bullets actually home in a diamond instead of a circle because they don't perform a square root here.
-                        float d = Math.Abs(Projectile.Center.X - Main.npc[i].Center.X) + Math.Abs(Projectile.Center.Y - Main.npc[i].Center.Y);
-                        if (d < homingRange && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[i].position, Main.npc[i].width, Main.npc[i].height))
+                        float d = Math.Abs(Projectile.Center.X - n.Center.X) + Math.Abs(Projectile.Center.Y - n.Center.Y);
+                        if (d < homingRange && Collision.CanHit(Projectile.Center, 1, 1, n.position, n.width, n.height))
                         {
                             homingRange = d;
-                            posX = Main.npc[i].Center.X;
-                            posY = Main.npc[i].Center.Y;
+                            posX = n.Center.X;
+                            posY = n.Center.Y;
                             foundTarget = true;
-                            targetIndex = i;
+                            targetIndex = n.whoAmI;
                         }
                     }
                 }

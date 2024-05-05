@@ -116,9 +116,8 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Kill all arms if Prime Head enters phase 2
             if (phase2 && !allArmsDead)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC nPC2 in Main.ActiveNPCs)
                 {
-                    NPC npc2 = Main.npc[i];
                     if (npc2.type == NPCID.PrimeCannon || npc2.type == NPCID.PrimeLaser || npc2.type == NPCID.PrimeSaw || npc2.type == NPCID.PrimeVice)
                     {
                         npc2.life = -1;

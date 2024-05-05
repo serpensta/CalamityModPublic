@@ -649,24 +649,21 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             if (death)
             {
                 float pushVelocity = 0.5f;
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].active)
+                    if (n.whoAmI != npc.whoAmI && n.type == npc.type)
                     {
-                        if (i != npc.whoAmI && Main.npc[i].type == npc.type)
+                        if (Vector2.Distance(npc.Center, n.Center) < 48f)
                         {
-                            if (Vector2.Distance(npc.Center, Main.npc[i].Center) < 48f)
-                            {
-                                if (npc.position.X < Main.npc[i].position.X)
-                                    npc.velocity.X -= pushVelocity;
-                                else
-                                    npc.velocity.X += pushVelocity;
+                            if (npc.position.X < n.position.X)
+                                npc.velocity.X -= pushVelocity;
+                            else
+                                npc.velocity.X += pushVelocity;
 
-                                if (npc.position.Y < Main.npc[i].position.Y)
-                                    npc.velocity.Y -= pushVelocity;
-                                else
-                                    npc.velocity.Y += pushVelocity;
-                            }
+                            if (npc.position.Y < n.position.Y)
+                                npc.velocity.Y -= pushVelocity;
+                            else
+                                npc.velocity.Y += pushVelocity;
                         }
                     }
                 }

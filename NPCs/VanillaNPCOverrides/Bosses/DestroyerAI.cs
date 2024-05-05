@@ -121,15 +121,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             // Check if other segments are still alive, if not, die
             if (npc.type > NPCID.TheDestroyer)
             {
-                bool shouldDespawn = true;
-                for (int i = 0; i < Main.maxNPCs; i++)
-                {
-                    if (Main.npc[i].active && Main.npc[i].type == NPCID.TheDestroyer)
-                    {
-                        shouldDespawn = false;
-                        break;
-                    }
-                }
+                bool shouldDespawn = !NPC.AnyNPCs(NPCID.TheDestroyer);
                 if (!shouldDespawn)
                 {
                     if (npc.ai[1] <= 0f)
@@ -696,17 +688,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 probeTargetY *= distanceFromTarget;
             }
 
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type)
+                if (n.whoAmI != npc.whoAmI && n.type == npc.type)
                 {
-                    Vector2 otherProbeDist = Main.npc[i].Center - npc.Center;
+                    Vector2 otherProbeDist = n.Center - npc.Center;
                     if (otherProbeDist.Length() < (npc.width + npc.height))
                     {
                         otherProbeDist = otherProbeDist.SafeNormalize(Vector2.UnitY);
                         otherProbeDist *= -0.1f;
                         npc.velocity += otherProbeDist;
-                        Main.npc[i].velocity -= otherProbeDist;
+                        n.velocity -= otherProbeDist;
                     }
                 }
             }

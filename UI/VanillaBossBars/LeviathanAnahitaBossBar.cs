@@ -36,11 +36,10 @@ namespace CalamityMod.UI.VanillaBossBars
             lifeMax = target.lifeMax;
 
             // Find the partner in question
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC wife in Main.ActiveNPCs)
             {
-                NPC wife = Main.npc[i];
                 int targetCouple = target.type == NPCType<Anahita>() ? NPCType<Leviathan>() : NPCType<Anahita>();
-                if (wife.active && wife.type == targetCouple)
+                if (wife.type == targetCouple)
                 {
                     life += wife.life;
                     lifeMax += wife.lifeMax;

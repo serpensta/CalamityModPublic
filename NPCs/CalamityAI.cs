@@ -3664,11 +3664,8 @@ namespace CalamityMod.NPCs
                         // Mark all existing body and tail segments as inactive. This instantly frees up their NPC slots for the freshly spawned worms.
                         int bodyID = ModContent.NPCType<AstrumDeusBody>();
                         int tailID = ModContent.NPCType<AstrumDeusTail>();
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (var wormseg in Main.ActiveNPCs)
                         {
-                            NPC wormseg = Main.npc[i];
-                            if (!wormseg.active)
-                                continue;
                             if (wormseg.type == bodyID || wormseg.type == tailID)
                             {
                                 wormseg.life = 0;
@@ -4707,10 +4704,9 @@ namespace CalamityMod.NPCs
                     SoundEngine.PlaySound(SoundID.NPCDeath44, npc.Center);
 
                     // Kill all Dark Energies
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    foreach (var darkEnergy in Main.ActiveNPCs)
                     {
-                        NPC darkEnergy = Main.npc[i];
-                        if (darkEnergy.active && darkEnergy.type == ModContent.NPCType<DarkEnergy>())
+                        if (darkEnergy.type == ModContent.NPCType<DarkEnergy>())
                         {
                             darkEnergy.HitEffect();
                             darkEnergy.active = false;

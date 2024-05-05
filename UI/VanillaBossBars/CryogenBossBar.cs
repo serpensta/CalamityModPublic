@@ -39,10 +39,9 @@ namespace CalamityMod.UI.VanillaBossBars
             shieldMax = 0f;
 
             // Determine the shield health
-            for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC part = Main.npc[i];
-				if (part.active && part.type == NPCType<CryogenShield>())
+            foreach (NPC part in Main.ActiveNPCs)
+            {
+				if (part.type == NPCType<CryogenShield>())
 				{
 					shield += part.life;
                     shieldMax += part.lifeMax;

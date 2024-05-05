@@ -1,4 +1,4 @@
-using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -141,10 +141,9 @@ namespace CalamityMod.Projectiles.Rogue
         {
             int target = -1;
             float minDist = HomingStartRange;
-            for (int i = 0; i < Main.maxNPCs; ++i)
+            foreach (var npc in Main.ActiveNPCs)
             {
-                NPC npc = Main.npc[i];
-                if (!npc.active || npc.type == NPCID.TargetDummy)
+                if (npc.type == NPCID.TargetDummy)
                     continue;
 
                 if (npc.CanBeChasedBy(Projectile, false))

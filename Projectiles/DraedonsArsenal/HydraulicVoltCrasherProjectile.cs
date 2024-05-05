@@ -129,19 +129,19 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             chargeCooldown = 60;
             TryToSuperchargeNPC(target);
             int extraZaps = 0;
-            for (int i = 0; i < Main.npc.Length; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (i != target.whoAmI &&
-                    Main.npc[i].CanBeChasedBy(Projectile, false) &&
-                    Main.npc[i].Distance(target.Center) < 240f &&
+                if (n.whoAmI != target.whoAmI &&
+                    n.CanBeChasedBy(Projectile, false) &&
+                    n.Distance(target.Center) < 240f &&
                     extraZaps < 3)
                 {
                         
-                    if (TryToSuperchargeNPC(Main.npc[i]))
+                    if (TryToSuperchargeNPC(n))
                     {
                         for (float increment = 0f; increment <= 1f; increment += 0.05f)
                         {
-                            Vector2 spawnPosition = Vector2.Lerp(target.Center, Main.npc[i].Center, increment);
+                            Vector2 spawnPosition = Vector2.Lerp(target.Center, n.Center, increment);
                             Dust dust = Dust.NewDustPerfect(spawnPosition, 226);
                             dust.velocity = Vector2.Zero;
                             dust.scale = 1.6f;

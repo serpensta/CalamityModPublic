@@ -115,12 +115,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
             }
 
             // Hand immunity
-            int numHandsAlive = 0;
-            for (int i = 0; i < Main.maxNPCs; i++)
-            {
-                if (Main.npc[i].active && Main.npc[i].type == NPCID.SkeletronHand)
-                    numHandsAlive++;
-            }
+            int numHandsAlive = NPC.CountNPCS(NPCID.SkeletronHand);
             bool handsDead = numHandsAlive == 0;
             npc.chaseable = handsDead;
             calamityGlobalNPC.DR = numHandsAlive > 0 ? 0.9999f : 0.05f;
