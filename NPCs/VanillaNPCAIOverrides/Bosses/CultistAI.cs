@@ -1117,10 +1117,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     target = Main.npc[(int)npc.ai[0]].target;
 
                 if (phase2 || death)
-                    rateOfChange = 2;
+                    rateOfChange++;
 
                 if (phase4 || death)
-                    rateOfChange = 3;
+                    rateOfChange++;
 
                 if (Main.npc[(int)npc.ai[0]].type == ModContent.NPCType<PrimordialWyrmHead>())
                     npc.dontTakeDamage = true;
