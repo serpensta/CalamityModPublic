@@ -62,7 +62,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float iceMistSpeed = (phase6 ? 12f : 10f) + (death ? 2f * (1f - lifeRatio) : 0f);
             int iceMistAmt = phase3 ? 2 : 1;
             int fireballFireRate = (phase5 ? 10 : 12) - (masterMode ? 6 : 0);
-            float fireballSpeed = (phase7 ? 9f : phase6 ? 7.5f : 6f) + (death ? 1.5f * (1f - lifeRatio) : 0f) - (isCultist ? 0f : 3f);
+            float fireballSpeed = ((phase7 ? 8f : phase6 ? 7f : 6f) + (death ? (1f - lifeRatio) : 0f)) * (isCultist ? 1f : 0.5f);
             int fireballAmt = masterMode ? 20 : 4;
             int lightningOrbPhaseTime = phase2 ? 90 : 120;
             int ancientLightSpawnRate = phase7 ? 20 : phase4 ? 25 : 30;
