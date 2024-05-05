@@ -2830,8 +2830,8 @@ namespace CalamityMod.Projectiles
 
                 else if (projectile.type == ProjectileID.AncientDoomProjectile)
                 {
-                    if (projectile.velocity.Length() < 8f)
-                        projectile.velocity *= 1.01f;
+                    if (projectile.velocity.Length() < 6f)
+                        projectile.velocity *= 1.005f;
                 }
 
                 else if (projectile.type == ProjectileID.CultistBossIceMist)
