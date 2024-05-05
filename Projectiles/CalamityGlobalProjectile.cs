@@ -1296,7 +1296,7 @@ namespace CalamityMod.Projectiles
                             Vector2 vector52 = array7[num735] - projectile.Center;
                             float ai = Main.rand.Next(100);
                             Vector2 vector53 = Vector2.Normalize(vector52.RotatedByRandom(MathHelper.PiOver4)) * 7f;
-                            Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector53, 466, projectile.damage, 0f, Main.myPlayer, vector52.ToRotation(), ai);
+                            Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, vector53, ProjectileID.CultistBossLightningOrbArc, projectile.damage, 0f, Main.myPlayer, vector52.ToRotation(), ai);
                         }
                     }
 

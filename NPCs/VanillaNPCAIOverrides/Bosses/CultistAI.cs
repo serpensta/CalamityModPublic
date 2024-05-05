@@ -59,7 +59,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             int lightningDamage = isCultist ? npc.GetProjectileDamage(ProjectileID.CultistBossLightningOrb) : 0;
 
             int iceMistFireRate = phase2 ? 50 : 60;
-            float iceMistSpeed = (phase6 ? 12f : 10f) + (death ? 2f * (1f - lifeRatio) : 0f);
+            float iceMistSpeed = (phase6 ? 12f : 10f) + (death ? (1f - lifeRatio) : 0f);
             int iceMistAmt = phase3 ? 2 : 1;
             int fireballFireRate = (phase5 ? 10 : 12) - (masterMode ? 6 : 0);
             float fireballSpeed = ((phase7 ? 8f : phase6 ? 7f : 6f) + (death ? (1f - lifeRatio) : 0f)) * (isCultist ? 1f : 0.5f);
