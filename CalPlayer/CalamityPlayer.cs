@@ -4096,7 +4096,7 @@ namespace CalamityMod.CalPlayer
             {
                 if (item.CountsAsClass<RangedDamageClass>() && !item.channel)
                 {
-                    int newDamage = (int)(damage * (6 - 4.5 * (item.useTime >= 25 ? 1 : item.useTime / 25)));
+                    int newDamage = (int)(damage * (6 - 5 * (item.useTime >= 25 ? 1 : item.useTime / 25)));
                     newDamage = Player.ApplyArmorAccDamageBonusesTo(newDamage);
                     Projectile.NewProjectile(source, position, velocity * 1.25f, ModContent.ProjectileType<MiniatureFolly>(), newDamage, 2f, Player.whoAmI);
 
