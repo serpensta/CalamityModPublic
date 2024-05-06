@@ -548,9 +548,9 @@ Omicron: {
 	DisplayName: Omicron
 	Tooltip:
 		'''
-		Fire an array of lasers and create two improved Wingman constructs that fly around you and fire lasers at your cursor
-		Press <right> when firing to shoot a Omicron Beam that splits upon hitting an enemy
-		After firing an Omnicron Beam your Wingmen will launch improved pairs of grenades
+		Fires a continuous array of lasers and spawns two Wingmen which orbit you and fire lasers at your cursor
+		Press <right> when firing to shoot an Omicron Beam that splits upon hitting an enemy
+		After firing an Omicron Beam your Wingmen will launch a pair of grenades
 		Hitting an enemy with an Omicron Beam right as it is fired will increase the damage done substantially and stop it from splitting
 		'''
 }
@@ -948,9 +948,9 @@ Wingman: {
 	DisplayName: Wingman
 	Tooltip:
 		'''
-		Creates two Wingman constructs that fly around you and fire lasers at your cursor
-		Press <right> when firing to make the Wingmen launch grenades and then go on cooldown
-		Launching grenades when the Wingmen are fully revved up will decrease the cooldown
+		Spawns two Wingmen which orbit you and fire lasers at your cursor
+		Press <right> while firing to order the Wingmen to launch grenades
+		Grenades have a cooldown which is shortened if the Wingmen are fully revved up
 		'''
 }
 
