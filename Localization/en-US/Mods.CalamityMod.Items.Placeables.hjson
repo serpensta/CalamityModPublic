@@ -455,7 +455,7 @@ OldDukeRelic: {
 
 PerforatorsRelic: {
 	DisplayName: Perforators Relic
-	Tooltip: A glimpse into what could have been...
+	Tooltip: ""
 }
 
 PlaguebringerGoliathRelic: {
