@@ -50,7 +50,11 @@ namespace CalamityMod.NPCs.DesertScourge
 
             NPC.width = 78;
             NPC.height = 78;
-            NPC.lifeMax = BossRushEvent.BossRushActive ? 35000 : (CalamityWorld.LegendaryMode && CalamityWorld.revenge) ? 4000 : 1300;
+
+            NPC.LifeMaxNERB(1300, 1560, 35000);
+            if (CalamityWorld.LegendaryMode && CalamityWorld.revenge)
+                NPC.lifeMax = 4000;
+
             double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
             NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
             NPC.aiStyle = -1;
