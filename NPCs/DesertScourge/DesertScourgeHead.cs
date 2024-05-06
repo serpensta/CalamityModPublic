@@ -654,7 +654,9 @@ namespace CalamityMod.NPCs.DesertScourge
             float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;
             float minimalDamageVelocity = maxChaseSpeed * 0.5f;
             if (hide)
+            {
                 NPC.damage = 0;
+            }
             else
             {
                 if (NPC.velocity.Length() <= minimalContactDamageVelocity)
