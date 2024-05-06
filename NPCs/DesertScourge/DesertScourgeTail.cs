@@ -2,6 +2,7 @@
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -51,6 +52,18 @@ namespace CalamityMod.NPCs.DesertScourge
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = true;
             NPC.Calamity().VulnerableToWater = true;
+        }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(NPC.alpha);
+            writer.Write(NPC.dontTakeDamage);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            NPC.alpha = reader.ReadInt32();
+            NPC.dontTakeDamage = reader.ReadBoolean();
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;

@@ -78,6 +78,9 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void SendExtraAI(BinaryWriter writer)
         {
+            writer.Write(NPC.alpha);
+            writer.Write(NPC.dontTakeDamage);
+
             // Frame syncs
             writer.Write(NPC.frame.X);
             writer.Write(NPC.frame.Y);
@@ -87,6 +90,9 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            NPC.alpha = reader.ReadInt32();
+            NPC.dontTakeDamage = reader.ReadBoolean();
+
             // Frame syncs
             Rectangle frame = new Rectangle(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
             if (frame.Width > 0 && frame.Height > 0)

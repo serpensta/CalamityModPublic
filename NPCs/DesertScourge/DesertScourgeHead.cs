@@ -134,6 +134,8 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void SendExtraAI(BinaryWriter writer)
         {
+            writer.Write(NPC.alpha);
+            writer.Write(NPC.dontTakeDamage);
             writer.Write(biomeEnrageTimer);
             writer.Write(playRoarSound);
             writer.Write(NPC.localAI[2]);
@@ -143,6 +145,8 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            NPC.alpha = reader.ReadInt32();
+            NPC.dontTakeDamage = reader.ReadBoolean();
             biomeEnrageTimer = reader.ReadInt32();
             playRoarSound = reader.ReadBoolean();
             NPC.localAI[2] = reader.ReadSingle();
