@@ -110,6 +110,9 @@ namespace CalamityMod.NPCs.DesertScourge
             bool revenge = CalamityWorld.revenge || bossRush;
             bool death = CalamityWorld.death || bossRush;
 
+            // Become angry when the other Nuisance dies.
+            bool getMad = !NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHeadYoung>()) && expertMode;
+
             // Enrage
             if (!Main.player[NPC.target].ZoneDesert && !bossRush)
             {
@@ -121,7 +124,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
             bool biomeEnraged = biomeEnrageTimer <= 0 || bossRush;
 
-            float enrageScale = bossRush ? 1f : 0f;
+            float enrageScale = bossRush ? 1f : getMad ? 0.5f : 0f;
             if (biomeEnraged)
             {
                 NPC.Calamity().CurrentlyEnraged = !bossRush;

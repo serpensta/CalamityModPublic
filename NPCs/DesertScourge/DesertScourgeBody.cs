@@ -165,6 +165,8 @@ namespace CalamityMod.NPCs.DesertScourge
             if (NPC.life > Main.npc[(int)NPC.ai[1]].life)
                 NPC.life = Main.npc[(int)NPC.ai[1]].life;
 
+            NPC.dontTakeDamage = Main.npc[(int)NPC.ai[1]].dontTakeDamage;
+
             // Percent life remaining
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
@@ -201,6 +203,8 @@ namespace CalamityMod.NPCs.DesertScourge
                 if (NPC.alpha < 0)
                     NPC.alpha = 0;
             }
+            else
+                NPC.alpha = Main.npc[(int)NPC.ai[1]].alpha;
 
             if (Main.player[NPC.target].dead)
                 NPC.TargetClosest(false);
@@ -287,7 +291,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     break;
             }
 
-            return minDist <= hitDistance * NPC.scale;
+            return minDist <= hitDistance * NPC.scale && NPC.alpha <= 0;
         }
 
         public override void FindFrame(int frameHeight)
