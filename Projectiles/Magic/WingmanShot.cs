@@ -81,33 +81,13 @@ namespace CalamityMod.Projectiles.Magic
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (Projectile.numHits > 0)
-                Projectile.damage = (int)(Projectile.damage * 0.9f);
-            if (Projectile.damage < 1)
-                Projectile.damage = 1;
-        }
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            for (int i = 0; i <= 4; i++)
+            if (Projectile.ai[1] != 2)
             {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(4) ? 264 : 66, new Vector2(4, 4).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f), 0, default, Main.rand.NextFloat(1.2f, 1.6f));
-                dust.noGravity = true;
-                dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
-                dust.noLightEmittence = true;
-                dust.noLight = true;
+                if (Projectile.numHits > 0)
+                    Projectile.damage = (int)(Projectile.damage * 0.9f);
+                if (Projectile.damage < 1)
+                    Projectile.damage = 1;
             }
-            BounceHits++;
-            if (Projectile.velocity.X != oldVelocity.X)
-            {
-                Projectile.velocity.X = -oldVelocity.X;
-            }
-            if (Projectile.velocity.Y != oldVelocity.Y)
-            {
-                Projectile.velocity.Y = -oldVelocity.Y;
-            }
-            if (BounceHits >= 4f)
-                Projectile.Kill();
-            return false;
         }
         public override void OnKill(int timeLeft)
         {

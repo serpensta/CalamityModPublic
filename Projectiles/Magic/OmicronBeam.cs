@@ -134,10 +134,6 @@ namespace CalamityMod.Projectiles.Magic
 
                 HitDirect = true;
             }
-            if (Projectile.numHits > 0)
-                Projectile.damage = (int)(Projectile.damage * 0.9f);
-            if (Projectile.damage < 1)
-                Projectile.damage = 1;
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => CalamityUtils.CircularHitboxCollision(Projectile.Center, time <= 7 ? 90 : 20, targetHitbox);
     }
