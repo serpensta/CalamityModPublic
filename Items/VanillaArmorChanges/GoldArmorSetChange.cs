@@ -50,7 +50,7 @@ namespace CalamityMod.Items.VanillaArmorChanges
                 // 13FEB2024: Ozzatron: this function doesn't cap at its second argument, it just stops counting if it exceeds that number
                 // so this can give up to 100 gold coins
                 int goldCoins = player.CountItem(ItemID.GoldCoin, 90);
-                critFromGold = Math.Max(goldCoins * SetBonusCritPerGoldCoin, MaximumCritBonus);
+                critFromGold = Math.Min(goldCoins * SetBonusCritPerGoldCoin, MaximumCritBonus);
             }
 
             player.GetCritChance<GenericDamageClass>() += critFromGold;
