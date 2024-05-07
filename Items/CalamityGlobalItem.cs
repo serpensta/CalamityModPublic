@@ -918,14 +918,11 @@ namespace CalamityMod.Items
             return MathHelper.Lerp(DischargeEnchantMinDamageFactor, DischargeEnchantMaxDamageFactor, interpolant);
         }
 
-        // This formula gives a slightly higher value than 1.0 above 85% charge, and a slightly lower value than 0.0 at 0% charge.
-        // Specifically, it gives 0.0 or less at 0.36% charge or lower. This is fine because the result is immediately clamped.
-        internal float ChargeDamageFormula()
-        {
-            float x = MathHelper.Clamp(ChargeRatio, 0f, 1f);
-            float y = 1.087f - 0.08f / (x + 0.07f);
-            return MathHelper.Clamp(y, 0f, 1f);
-        }
+        // This formula gives 1.0x damage above 50% charge.
+        // The value lerps between 0 and 2 and is then clamped between 0 and 1 to prevent ridiculous damage scaling and to keep the weapon dealing appropriate damage for longer.
+        // The square root allows the value to not immediately nose dive once it begins to fall off.
+        // Fabsol - I changed this formula because it was bad and confusing, and I had promised to do so a while ago.
+        internal float ChargeDamageFormula() => Math.Sqrt(MathHelper.Clamp(MathHelper.Lerp(0f, 2f, ChargeRatio), 0f, 1f));
         #endregion
 
         #region Armor Set Changes
