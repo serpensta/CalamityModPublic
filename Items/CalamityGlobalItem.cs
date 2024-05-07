@@ -922,7 +922,7 @@ namespace CalamityMod.Items
         // The value lerps between 0 and 2 and is then clamped between 0 and 1 to prevent ridiculous damage scaling and to keep the weapon dealing appropriate damage for longer.
         // The square root allows the value to not immediately nose dive once it begins to fall off.
         // Fabsol - I changed this formula because it was bad and confusing, and I had promised to do so a while ago.
-        internal float ChargeDamageFormula() => Math.Sqrt(MathHelper.Clamp(MathHelper.Lerp(0f, 2f, ChargeRatio), 0f, 1f));
+        internal float ChargeDamageFormula() => (float)Math.Sqrt(MathHelper.Clamp(MathHelper.Lerp(0f, 2f, ChargeRatio), 0f, 1f));
         #endregion
 
         #region Armor Set Changes
