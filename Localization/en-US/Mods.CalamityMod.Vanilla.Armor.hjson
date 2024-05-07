@@ -101,8 +101,9 @@ SetBonus: {
 		'''
 	Platinum:
 		'''
-		Every 10 defense gives you +0.5 HP/s life regen, 1% increased damage and 1% increased critical strike chance
-		These effects cap at 40 defense
+		Every 10 extra defense gives you 1% increased damage and 1% increased critical strike chance
+		The 20 defense from the Platinum Armor itself does not contribute to this effect
+		Bonus damage and critical strike chance cap at 40 extra defense
 		'''
 	Silver:
 		'''
