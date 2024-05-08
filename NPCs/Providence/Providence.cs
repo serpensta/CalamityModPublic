@@ -1749,11 +1749,11 @@ namespace CalamityMod.NPCs.Providence
                 DespawnSpecificProjectiles();
 
                 int laserType = ModContent.ProjectileType<ProvidenceHolyRay>();
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (!Main.projectile[i].active || Main.projectile[i].type != laserType)
+                    if (p.type != laserType)
                         continue;
-                    Main.projectile[i].Kill();
+                    p.Kill();
                 }
             }
 

@@ -315,19 +315,17 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[1] == 60f)
                     {
-                        for (int i = 0; i < Main.maxProjectiles; i++)
+                        foreach (Projectile projectile in Main.ActiveProjectiles)
                         {
-                            Projectile projectile = Main.projectile[i];
-                            if (projectile.active && (projectile.type == ProjectileID.MoonLeech || projectile.type == ProjectileID.PhantasmalBolt ||
+                            if ((projectile.type == ProjectileID.MoonLeech || projectile.type == ProjectileID.PhantasmalBolt ||
                                 projectile.type == ProjectileID.PhantasmalDeathray || projectile.type == ProjectileID.PhantasmalEye ||
                                 projectile.type == ProjectileID.PhantasmalSphere))
                                 projectile.Kill();
                         }
 
-                        for (int j = 0; j < Main.maxNPCs; j++)
+                        foreach (NPC nPC3 in Main.ActiveNPCs)
                         {
-                            NPC nPC3 = Main.npc[j];
-                            if (nPC3.active && nPC3.type == NPCID.MoonLordFreeEye)
+                            if (nPC3.type == NPCID.MoonLordFreeEye)
                             {
                                 nPC3.HitEffect(0, 9999.0);
                                 nPC3.active = false;
@@ -846,7 +844,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                                 if (targetLeechDist != Vector2.Zero)
                                     targetLeechDist.Normalize();
 
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), leechNPCCenter.X, leechNPCCenter.Y, targetLeechDist.X, targetLeechDist.Y, ProjectileID.MoonLeech, 0, 0f, Main.myPlayer, npc.whoAmI + 1, i);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), leechNPCCenter.X, leechNPCCenter.Y, targetLeechDist.X, targetLeechDist.Y, ProjectileID.MoonLeech, 0, 0f, Main.myPlayer, npc.whoAmI + 1, player6.whoAmI);
                             }
                         }
                     }
@@ -1384,10 +1382,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             }
 
                             sphereVelocity *= velocity;
-                            for (int i = 0; i < Main.maxProjectiles; i++)
+                            foreach (Projectile currentProjectile in Main.ActiveProjectiles)
                             {
-                                Projectile currentProjectile = Main.projectile[i];
-                                if (currentProjectile.active && currentProjectile.type == ProjectileID.PhantasmalSphere && currentProjectile.ai[1] == npc.whoAmI && currentProjectile.ai[0] != -1f)
+                                if (currentProjectile.type == ProjectileID.PhantasmalSphere && currentProjectile.ai[1] == npc.whoAmI && currentProjectile.ai[0] != -1f)
                                 {
                                     currentProjectile.ai[0] = -1f;
                                     currentProjectile.velocity = sphereVelocity;
@@ -1895,13 +1892,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                                 npc.velocity = Vector2.UnitY * -7f;
 
-                                for (int i = 0; i < Main.maxProjectiles; i++)
+                                foreach (Projectile trueEyeSpheres in Main.ActiveProjectiles)
                                 {
-                                    Projectile trueEyeSpheres = Main.projectile[i];
-                                    if (trueEyeSpheres.active && trueEyeSpheres.type == type && trueEyeSpheres.ai[1] == npc.whoAmI && trueEyeSpheres.ai[0] != -1f)
+                                    if (trueEyeSpheres.type == type && trueEyeSpheres.ai[1] == npc.whoAmI && trueEyeSpheres.ai[0] != -1f)
                                     {
-                                        Projectile trueEyeSphereVel = trueEyeSpheres;
-                                        trueEyeSphereVel.velocity += npc.velocity;
+                                        trueEyeSpheres.velocity += npc.velocity;
                                         trueEyeSpheres.netUpdate = true;
                                     }
                                 }
@@ -1927,10 +1922,9 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                             Vector2 trueEyeSphereVelocity = (npc.ai[2] - MathHelper.PiOver2).ToRotationVector2() * velocity;
                             npc.velocity = trueEyeSphereVelocity * 2f;
 
-                            for (int i = 0; i < Main.maxProjectiles; i++)
+                            foreach (Projectile trueEyeSphereProj in Main.ActiveProjectiles)
                             {
-                                Projectile trueEyeSphereProj = Main.projectile[i];
-                                if (trueEyeSphereProj.active && trueEyeSphereProj.type == type && trueEyeSphereProj.ai[1] == npc.whoAmI && trueEyeSphereProj.ai[0] != -1f)
+                                if (trueEyeSphereProj.type == type && trueEyeSphereProj.ai[1] == npc.whoAmI && trueEyeSphereProj.ai[0] != -1f)
                                 {
                                     trueEyeSphereProj.ai[0] = -1f;
                                     trueEyeSphereProj.damage = damage;

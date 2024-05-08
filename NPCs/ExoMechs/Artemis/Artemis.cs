@@ -1122,11 +1122,11 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                         {
                             calamityGlobalNPC.newAI[3] = 0f;
                             AIState = (float)Phase.Deathray;
-                            for (int i = 0; i < Main.maxProjectiles; i ++)
+                            foreach (Projectile p in Main.ActiveProjectiles)
                             {
-                                if (Main.projectile[i].type == ModContent.ProjectileType<ArtemisSpinLaserbeam>())
+                                if (p.type == ModContent.ProjectileType<ArtemisSpinLaserbeam>())
                                 {
-                                    Main.projectile[i].active = false;
+                                    p.active = false;
                                     continue;
                                 }
                             }

@@ -4884,17 +4884,13 @@ namespace CalamityMod.NPCs
                     }
 
                     // Despawn potentially hazardous projectiles when entering a new phase
-                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    foreach (Projectile projectile in Main.ActiveProjectiles)
                     {
-                        Projectile projectile = Main.projectile[i];
-                        if (projectile.active)
+                        if (projectile.type == ModContent.ProjectileType<DoGBeamPortal>() || projectile.type == ModContent.ProjectileType<DoGBeam>() ||
+                            projectile.type == ModContent.ProjectileType<DarkEnergyBall>() || projectile.type == ModContent.ProjectileType<DarkEnergyBall2>())
                         {
-                            if (projectile.type == ModContent.ProjectileType<DoGBeamPortal>() || projectile.type == ModContent.ProjectileType<DoGBeam>() ||
-                                projectile.type == ModContent.ProjectileType<DarkEnergyBall>() || projectile.type == ModContent.ProjectileType<DarkEnergyBall2>())
-                            {
-                                if (projectile.timeLeft > 30)
-                                    projectile.timeLeft = 30;
-                            }
+                            if (projectile.timeLeft > 30)
+                                projectile.timeLeft = 30;
                         }
                     }
                 }

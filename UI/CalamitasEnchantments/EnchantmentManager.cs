@@ -222,9 +222,9 @@ namespace CalamityMod.UI.CalamitasEnchants
                         player.Calamity().bladeArmEnchant = true;
                         bool armsArePresent = false;
                         int armType = ModContent.ProjectileType<TaintedBladeSlasher>();
-                        for (int i = 0; i < Main.maxProjectiles; i++)
+                        foreach (Projectile p in Main.ActiveProjectiles)
                         {
-                            if (Main.projectile[i].type != armType || Main.projectile[i].owner != player.whoAmI || !Main.projectile[i].active)
+                            if (p.type != armType || p.owner != player.whoAmI)
                                 continue;
 
                             armsArePresent = true;

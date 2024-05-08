@@ -326,9 +326,9 @@ namespace CalamityMod.NPCs.DevourerofGods
 
         private bool AnyTeleportRifts()
         {
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                if (Main.projectile[i].type == ModContent.ProjectileType<DoGTeleportRift>())
+                if (p.type == ModContent.ProjectileType<DoGTeleportRift>())
                     return true;
             }
             return false;

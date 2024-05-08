@@ -201,20 +201,20 @@ namespace CalamityMod.Projectiles.Damageable
         }
         public virtual bool ProjectileCollisionCheck()
         {
-            for (int i = 0; i < Main.projectile.Length; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                bool canBeHit = (Main.projectile[i].friendly && DamageSources.HasFlag(DamageSourceType.FriendlyProjectiles) ||
-                                 Main.projectile[i].hostile && DamageSources.HasFlag(DamageSourceType.HostileProjectiles)) &&
-                                 i != Projectile.whoAmI;
-                if (Main.projectile[i].active && canBeHit && Main.projectile[i].damage > 0)
+                bool canBeHit = (p.friendly && DamageSources.HasFlag(DamageSourceType.FriendlyProjectiles) ||
+                                 p.hostile && DamageSources.HasFlag(DamageSourceType.HostileProjectiles)) &&
+                                 p.whoAmI != Projectile.whoAmI;
+                if (canBeHit && p.damage > 0)
                 {
-                    if (Main.projectile[i].Colliding(Main.projectile[i].Hitbox, Projectile.Hitbox))
+                    if (p.Colliding(p.Hitbox, Projectile.Hitbox))
                     {
-                        int damage = Main.DamageVar(Main.projectile[i].damage) * 2;
+                        int damage = Main.DamageVar(p.damage) * 2;
                         damage = Main.expertMode ? (int)(damage * Main.RegisteredGameModes[GameModeID.Expert].EnemyDamageMultiplier) : damage;
                         CombatText.NewText(new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height), CombatText.DamagedFriendly, damage);
                         Life -= damage;
-                        HitEffectProjectile(damage, Main.projectile[i]);
+                        HitEffectProjectile(damage, p);
                         DamageImmunityFrames = MaxDamageImmunityFrames;
                         if (Projectile.usesIDStaticNPCImmunity)
                             DamageImmunityFrames = Projectile.idStaticNPCHitCooldown;

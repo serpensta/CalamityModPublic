@@ -61,10 +61,9 @@ namespace CalamityMod.Projectiles.Summon
             var live = false;
             Projectile nextSegment = new Projectile();
             WhiteDragonHead head = new WhiteDragonHead();
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile projectile in Main.ActiveProjectiles)
             {
-                var projectile = Main.projectile[i];
-                if (projectile.type == Type && projectile.owner == Projectile.owner && projectile.active)
+                if (projectile.type == Type && projectile.owner == Projectile.owner)
                 {
                     if (projectile.ModProjectile<WhiteDragonBody>().segmentIndex == segmentIndex - 1)
                     {
@@ -72,7 +71,7 @@ namespace CalamityMod.Projectiles.Summon
                         nextSegment = projectile;
                     }
                 }
-                if (projectile.type == ModContent.ProjectileType<WhiteDragonHead>() && projectile.owner == Projectile.owner && projectile.active)
+                if (projectile.type == ModContent.ProjectileType<WhiteDragonHead>() && projectile.owner == Projectile.owner)
                 {
                     if (segmentIndex == 1)
                     {
@@ -105,10 +104,9 @@ namespace CalamityMod.Projectiles.Summon
         {
             if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<WhiteDragonHead>()] > 0)
             {
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile projectile in Main.ActiveProjectiles)
                 {
-                    var projectile = Main.projectile[i];
-                    if (projectile.type == ModContent.ProjectileType<WhiteDragonHead>() && projectile.owner == Projectile.owner && projectile.active)
+                    if (projectile.type == ModContent.ProjectileType<WhiteDragonHead>() && projectile.owner == Projectile.owner)
                     {
                         projectile.Kill();
                     }

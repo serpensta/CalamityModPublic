@@ -2526,9 +2526,8 @@ namespace CalamityMod.NPCs.DevourerofGods
         private Vector2 GetRiftLocation(bool spawnDust)
         {
             Vector2 realSpot = default;
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile proj in Main.ActiveProjectiles)
             {
-                Projectile proj = Main.projectile[i];
                 if (proj.type == ModContent.ProjectileType<DoGTeleportRift>())
                 {
                     if (!spawnDust)

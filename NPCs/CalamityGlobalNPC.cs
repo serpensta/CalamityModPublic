@@ -4520,15 +4520,15 @@ namespace CalamityMod.NPCs
             {
                 int bullseyeType = ProjectileType<SpiritOriginBullseye>();
                 Projectile bullseye = null;
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].type != bullseyeType || !Main.projectile[i].active || Main.projectile[i].owner != player.whoAmI)
+                    if (p.type != bullseyeType || p.owner != player.whoAmI)
                         continue;
 
                     // Only choose a bullseye if it is attached to the NPC that is being hit.
-                    if (npc.whoAmI == (int)Main.projectile[i].ai[0])
+                    if (npc.whoAmI == (int)p.ai[0])
                     {
-                        bullseye = Main.projectile[i];
+                        bullseye = p;
                         break;
                     }
                 }
@@ -6313,12 +6313,11 @@ namespace CalamityMod.NPCs
                                     return;
 
                                 Projectile proj = null;
-                                for (int i = 0; i < Main.maxProjectiles; i++)
+                                foreach (Projectile p in Main.ActiveProjectiles)
                                 {
-                                    proj = Main.projectile[i];
-                                    if (Main.projectile[i].active && Main.projectile[i].bobber && Main.projectile[i].owner == player.whoAmI)
+                                    proj = p;
+                                    if (p.bobber && p.owner == player.whoAmI)
                                     {
-                                        proj = Main.projectile[i];
                                         break;
                                     }
                                 }

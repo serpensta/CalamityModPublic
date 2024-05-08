@@ -22,10 +22,9 @@ namespace CalamityMod
         {
             // Efficiently loop through all projectiles, using a specially designed continue continue that attempts to minimize the amount of OR
             // checks per iteration.
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                Projectile p = Main.projectile[i];
-                if (p.type != projectileID || !p.active)
+                if (p.type != projectileID)
                     continue;
 
                 return true;
@@ -37,10 +36,9 @@ namespace CalamityMod
         public static IEnumerable<Projectile> AllProjectilesByID(int projectileID)
         {
             // This uses the same efficient loop idea as AnyProjectiles.
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                Projectile p = Main.projectile[i];
-                if (p.type != projectileID || !p.active)
+                if (p.type != projectileID)
                     continue;
 
                 yield return p;
@@ -71,12 +69,12 @@ namespace CalamityMod
             if (Main.netMode == NetmodeID.SinglePlayer)
                 return Main.projectile[identity];
 
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                if (Main.projectile[i].identity != identity || Main.projectile[i].owner != ownerIndex || !Main.projectile[i].active)
+                if (p.identity != identity || p.owner != ownerIndex)
                     continue;
 
-                return Main.projectile[i];
+                return p;
             }
             return null;
         }
@@ -530,13 +528,12 @@ namespace CalamityMod
             int existingTurrets = player.ownedProjectileCounts[Type];
             if (existingTurrets > 0)
             {
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].type == Type &&
-                        Main.projectile[i].owner == player.whoAmI &&
-                        Main.projectile[i].active)
+                    if (p.type == Type &&
+                        p.owner == player.whoAmI)
                     {
-                        Main.projectile[i].Kill();
+                        p.Kill();
                         existingTurrets--;
                         if (existingTurrets <= 0)
                             break;

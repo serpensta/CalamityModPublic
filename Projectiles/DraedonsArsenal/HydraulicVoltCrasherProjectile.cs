@@ -160,13 +160,12 @@ namespace CalamityMod.Projectiles.DraedonsArsenal
             // No more than 3 enemies with streams
             if (Owner.ownedProjectileCounts[attackType] > 3)
                 return false;
-            
+
             // Prevent supercharging an enemy twice.
-            for (int i = 0; i < Main.projectile.Length; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                if (Main.projectile[i].active &&
-                    Main.projectile[i].type == attackType &&
-                    Main.projectile[i].ai[1] == i)
+                if (p.type == attackType &&
+                    p.ai[1] == p.whoAmI)
                 {
                     return false;
                 }

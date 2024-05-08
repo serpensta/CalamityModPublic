@@ -474,12 +474,11 @@ namespace CalamityMod
                 return;
 
             Projectile projectile = null;
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile p in Main.ActiveProjectiles)
             {
-                projectile = Main.projectile[i];
-                if (Main.projectile[i].active && Main.projectile[i].bobber && Main.projectile[i].owner == playerIndex)
+                if (p.bobber && p.owner == playerIndex)
                 {
-                    projectile = Main.projectile[i];
+                    projectile = p;
                     break;
                 }
             }

@@ -88,9 +88,8 @@ namespace CalamityMod.Projectiles.Melee
 
 
             //Check for launchable screws.
-            for (int i = 0; i < Main.maxProjectiles; i++)
+            foreach (Projectile proj in Main.ActiveProjectiles)
             {
-                Projectile proj = Main.projectile[i];
                 if (proj.ModProjectile != null && proj.owner == Projectile.owner && proj.ModProjectile is WulfrumScrew screw && screw.BazingaTime == 0)
                 {
                     float collisionPoint = 0f;
