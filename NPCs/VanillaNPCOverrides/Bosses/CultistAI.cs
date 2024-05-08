@@ -164,13 +164,13 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f, 0f, 0f, 0, 0, 0);
 
-                for (int j = 0; j < Main.maxNPCs; j++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[j].active && Main.npc[j].type == NPCID.CultistBossClone && Main.npc[j].ai[3] == npc.whoAmI)
+                    if (n.type == NPCID.CultistBossClone && n.ai[3] == npc.whoAmI)
                     {
-                        Main.npc[j].life = 0;
-                        Main.npc[j].HitEffect(0, 10.0);
-                        Main.npc[j].active = false;
+                        n.life = 0;
+                        n.HitEffect(0, 10.0);
+                        n.active = false;
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                             NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, npc.whoAmI, -1f, 0f, 0f, 0, 0, 0);
@@ -568,10 +568,10 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 if ((npc.ai[1] == 20f & isCultist) && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     List<int> list5 = new List<int>();
-                    for (int j = 0; j < Main.maxNPCs; j++)
+                    foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (Main.npc[j].active && Main.npc[j].type == NPCID.CultistBossClone && Main.npc[j].ai[3] == npc.whoAmI)
-                            list5.Add(j);
+                        if (n.type == NPCID.CultistBossClone && n.ai[3] == npc.whoAmI)
+                            list5.Add(n.whoAmI);
                     }
 
                     foreach (int current5 in list5)
@@ -825,7 +825,7 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                         foreach (NPC n in Main.ActiveNPCs)
                         {
                             if (n.type == NPCID.CultistBossClone && n.ai[3] == npc.whoAmI)
-                                list7.Add(i);
+                                list7.Add(n.whoAmI);
                         }
 
                         foreach (int current6 in list7)

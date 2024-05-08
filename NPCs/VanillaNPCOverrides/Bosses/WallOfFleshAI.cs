@@ -402,11 +402,11 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
                 {
                     int hungryAmt = 0;
                     float[] array = new float[10];
-                    for (int j = 0; j < Main.maxNPCs; j++)
+                    foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (hungryAmt < 10 && Main.npc[j].active && Main.npc[j].type == NPCID.TheHungry)
+                        if (hungryAmt < 10 && n.type == NPCID.TheHungry)
                         {
-                            array[hungryAmt] = Main.npc[j].ai[0];
+                            array[hungryAmt] = n.ai[0];
                             hungryAmt++;
                         }
                     }

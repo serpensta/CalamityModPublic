@@ -1726,24 +1726,21 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     // Fly towards Moon Lord Head and stay away from other True Eyes
                     float freeEyeAccel = 0.5f;
-                    for (int j = 0; j < Main.maxNPCs; j++)
+                    foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (Main.npc[j].active)
+                        if (n.whoAmI != npc.whoAmI && n.type == npc.type)
                         {
-                            if (j != npc.whoAmI && Main.npc[j].type == npc.type)
+                            if (Vector2.Distance(npc.Center, n.Center) < 150f)
                             {
-                                if (Vector2.Distance(npc.Center, Main.npc[j].Center) < 150f)
-                                {
-                                    if (npc.position.X < Main.npc[j].position.X)
-                                        npc.velocity.X = npc.velocity.X - freeEyeAccel;
-                                    else
-                                        npc.velocity.X = npc.velocity.X + freeEyeAccel;
-
-                                    if (npc.position.Y < Main.npc[j].position.Y)
-                                        npc.velocity.Y = npc.velocity.Y - freeEyeAccel;
-                                    else
-                                        npc.velocity.Y = npc.velocity.Y + freeEyeAccel;
-                                }
+                                if (npc.position.X < n.position.X)
+                                    npc.velocity.X = npc.velocity.X - freeEyeAccel;
+                                else
+                                    npc.velocity.X = npc.velocity.X + freeEyeAccel;
+                                
+                                if (npc.position.Y < n.position.Y)
+                                    npc.velocity.Y = npc.velocity.Y - freeEyeAccel;
+                                else
+                                    npc.velocity.Y = npc.velocity.Y + freeEyeAccel;
                             }
                         }
                     }

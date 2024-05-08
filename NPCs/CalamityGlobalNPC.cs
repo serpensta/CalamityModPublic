@@ -4846,10 +4846,9 @@ namespace CalamityMod.NPCs
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    for (int j = 0; j < Main.maxNPCs; j++)
+                    foreach (NPC nPC in Main.ActiveNPCs)
                     {
-                        NPC nPC = Main.npc[j];
-                        if (nPC.active && !nPC.buffImmune[BuffType<Plague>()] && npc.Distance(nPC.Center) < 100f && !nPC.dontTakeDamage && nPC.lifeMax > 5 && !nPC.friendly && !nPC.townNPC)
+                        if (!nPC.buffImmune[BuffType<Plague>()] && npc.Distance(nPC.Center) < 100f && !nPC.dontTakeDamage && nPC.lifeMax > 5 && !nPC.friendly && !nPC.townNPC)
                             nPC.AddBuff(BuffType<Plague>(), 300);
                     }
                 }

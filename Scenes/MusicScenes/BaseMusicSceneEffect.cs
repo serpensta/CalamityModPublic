@@ -71,12 +71,8 @@ namespace CalamityMod.Systems
 
             Rectangle screenRect = new Rectangle((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
             int musicDistance = MusicDistance * 2;
-            for (int j = 0; j < Main.maxNPCs; j++)
-			{
-				NPC npc = Main.npc[j];
-				if (!npc.active)
-					continue;
-
+            foreach (NPC npc in Main.ActiveNPCs)
+            {
 				bool inList = false;
                 if (npc.type == NPCType)
                 {
