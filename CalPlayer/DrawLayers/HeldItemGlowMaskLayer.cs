@@ -48,6 +48,8 @@ namespace CalamityMod.CalPlayer.DrawLayers
                 glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Ranged/AuroraBlazerGlow").Value;
             else if (itemType == ModContent.ItemType<CleansingBlaze>())
                 glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Ranged/CleansingBlazeGlow").Value;
+            else if (itemType == ModContent.ItemType<CosmicImmaterializer>())
+                glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Summon/CosmicImmaterializerGlow").Value;
             else if (itemType == ModContent.ItemType<DeathhailStaff>())
                 glowMask = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Magic/DeathhailStaffGlow").Value;
             else if (itemType == ModContent.ItemType<Deathwind>())
