@@ -85,9 +85,9 @@ namespace CalamityMod.Items.Weapons.Ranged
                 return false;
 
             //Otherwise, launch the guns
+            SoundEngine.PlaySound(LaunchSound, player.Center);
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
-                SoundEngine.PlaySound(LaunchSound, player.Center);
                 if (Main.projectile[i].type == HeadID && Main.projectile[i].owner == player.whoAmI && Main.projectile[i].active)
                     Main.projectile[i].ai[1] = -1f;
             }
