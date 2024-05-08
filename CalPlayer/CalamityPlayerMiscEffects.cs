@@ -1864,10 +1864,9 @@ namespace CalamityMod.CalPlayer
             // Ceaseless Hunger Potion buff
             if (ceaselessHunger)
             {
-                for (int j = 0; j < Main.maxItems; j++)
+                foreach (Item item in Main.ActiveItems)
                 {
-                    Item item = Main.item[j];
-                    if (item.active && item.noGrabDelay == 0 && item.playerIndexTheItemIsReservedFor == Player.whoAmI)
+                    if (item.noGrabDelay == 0 && item.playerIndexTheItemIsReservedFor == Player.whoAmI)
                     {
                         item.beingGrabbed = true;
                         if (Player.Center.X > item.Center.X)
