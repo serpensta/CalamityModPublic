@@ -472,16 +472,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if (npc.ai[1] == 40f)
                     {
-                        for (int j = 0; j < Main.maxProjectiles; j++)
+                        foreach (Projectile projectile2 in Main.ActiveProjectiles)
                         {
-                            Projectile projectile2 = Main.projectile[j];
-                            if (projectile2.active && (projectile2.type == ProjectileID.MoonLeech || projectile2.type == ProjectileID.PhantasmalBolt ||
+                            if ((projectile2.type == ProjectileID.MoonLeech || projectile2.type == ProjectileID.PhantasmalBolt ||
                                 projectile2.type == ProjectileID.PhantasmalDeathray || projectile2.type == ProjectileID.PhantasmalEye ||
                                 projectile2.type == ProjectileID.PhantasmalSphere))
                             {
                                 projectile2.active = false;
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, j, 0f, 0f, 0f, 0, 0, 0);
+                                    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile2.whoAmI, 0f, 0f, 0f, 0, 0, 0);
                             }
                         }
 
@@ -851,16 +850,15 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                     if ((attackTimer == 120f || attackTimer == 150f || attackTimer == 180f || attackTimer == 210f || attackTimer == 240f) && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        for (int j = 0; j < Main.maxProjectiles; j++)
+                        foreach (Projectile projectile6 in Main.ActiveProjectiles)
                         {
-                            Projectile projectile6 = Main.projectile[j];
-                            if (projectile6.active && projectile6.type == ProjectileID.MoonLeech && Main.player[(int)projectile6.ai[1]].FindBuffIndex(BuffID.MoonLeech) != -1)
+                            if (projectile6.type == ProjectileID.MoonLeech && Main.player[(int)projectile6.ai[1]].FindBuffIndex(BuffID.MoonLeech) != -1)
                             {
                                 Vector2 targetCenter = Main.player[npc.target].Center;
                                 int moonLeech = NPC.NewNPC(npc.GetSource_FromAI(), (int)targetCenter.X, (int)targetCenter.Y, NPCID.MoonLordLeechBlob);
                                 Main.npc[moonLeech].netUpdate = true;
                                 Main.npc[moonLeech].ai[0] = npc.whoAmI + 1;
-                                Main.npc[moonLeech].ai[1] = j;
+                                Main.npc[moonLeech].ai[1] = projectile6.whoAmI;
                             }
                         }
                     }

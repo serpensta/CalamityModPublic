@@ -588,11 +588,10 @@ namespace CalamityMod.NPCs
                     npc.lifeRegen = 0;
 
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active &&
-                        (Main.projectile[j].type == ProjectileType<LionfishProj>() || Main.projectile[j].type == ProjectileType<LeviathanTooth>() || Main.projectile[j].type == ProjectileType<JawsProjectile>()) &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if ((p.type == ProjectileType<LionfishProj>() || p.type == ProjectileType<LeviathanTooth>() || p.type == ProjectileType<JawsProjectile>()) &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
                         projectileCount++;
                     }
@@ -613,10 +612,10 @@ namespace CalamityMod.NPCs
                     npc.lifeRegen = 0;
 
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].type == ProjectileType<BonebreakerProjectile>() &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.type == ProjectileType<BonebreakerProjectile>() &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
                         projectileCount++;
                     }
@@ -635,12 +634,12 @@ namespace CalamityMod.NPCs
             {
                 int projectileCount = 0;
                 int owner = 255;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].type == ProjectileType<Shellfish>() &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.type == ProjectileType<Shellfish>() &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
-                        owner = Main.projectile[j].owner;
+                        owner = p.owner;
                         projectileCount++;
                         if (projectileCount >= 5)
                         {
@@ -677,13 +676,13 @@ namespace CalamityMod.NPCs
             if (clamDebuff > 0)
             {
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
-                        if (Main.projectile[j].type == ProjectileType<SnapClamProj>())
+                        if (p.type == ProjectileType<SnapClamProj>())
                             projectileCount += 2;
-                        if (Main.projectile[j].type == ProjectileType<SnapClamStealth>())
+                        if (p.type == ProjectileType<SnapClamStealth>())
                             projectileCount++;
                     }
                 }
@@ -694,10 +693,10 @@ namespace CalamityMod.NPCs
             if (irradiated > 0)
             {
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].type == ProjectileType<WaterLeechProj>() &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.type == ProjectileType<WaterLeechProj>() &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
                         projectileCount++;
                     }
