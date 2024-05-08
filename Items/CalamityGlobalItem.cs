@@ -918,11 +918,24 @@ namespace CalamityMod.Items
             return MathHelper.Lerp(DischargeEnchantMinDamageFactor, DischargeEnchantMaxDamageFactor, interpolant);
         }
 
-        // This formula gives 1.0x damage above 50% charge.
-        // The value lerps between 0 and 2 and is then clamped between 0 and 1 to prevent ridiculous damage scaling and to keep the weapon dealing appropriate damage for longer.
-        // The square root allows the value to not immediately nose dive once it begins to fall off.
+        // 07MAY2024: Ozzatron: adjusted charge formula again to more closely match previous behavior
+        // old formula: 1.087 - 0.08 / (x + 0.07)
+        // new formula: 1.08 - 0.04 / (x + 0.06)
+        //
+        // Intended behavior: Any charge above 50% guarantees 100% damage, so charge weapons are easy to use
+        // Actual behavior:
+        // 44%+ charge = 100% damage
+        // 20%  charge = 92.6% damage
+        // 10%  charge = 83% damage
+        // 0%   charge = 41.33% damage
+        //
         // Fabsol - I changed this formula because it was bad and confusing, and I had promised to do so a while ago.
-        internal float ChargeDamageFormula() => Math.Sqrt(MathHelper.Clamp(MathHelper.Lerp(0f, 2f, ChargeRatio), 0f, 1f));
+        internal float ChargeDamageFormula()
+        {
+            float x = MathHelper.Clamp(ChargeRatio, 0f, 1f);
+            float y = 1.08f - 0.04f / (x + 0.06f);
+            return MathHelper.Clamp(y, 0f, 1f);
+        }
         #endregion
 
         #region Armor Set Changes
