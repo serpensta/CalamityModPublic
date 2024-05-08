@@ -64,10 +64,9 @@ namespace CalamityMod.Projectiles.Rogue
                     int buffType = ModContent.BuffType<GlacialState>();
                     float radius = 112f; // 7 blocks
 
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    foreach (NPC nPC in Main.ActiveNPCs)
                     {
-                        NPC nPC = Main.npc[i];
-                        if (nPC.active && !nPC.dontTakeDamage && !nPC.buffImmune[buffType] && Vector2.Distance(Projectile.Center, nPC.Center) <= radius)
+                        if (!nPC.dontTakeDamage && !nPC.buffImmune[buffType] && Vector2.Distance(Projectile.Center, nPC.Center) <= radius)
                         {
                             if (nPC.FindBuffIndex(buffType) == -1)
                                 nPC.AddBuff(buffType, 60, false);

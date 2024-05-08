@@ -282,9 +282,9 @@ namespace CalamityMod.UI.CalamitasEnchants
 
                         bool orbIsPresent = false;
                         int orbType = ModContent.NPCType<LecherousOrb>();
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (NPC n in Main.ActiveNPCs)
                         {
-                            if (Main.npc[i].type != orbType || Main.npc[i].target != player.whoAmI || !Main.npc[i].active)
+                            if (n.type != orbType || n.target != player.whoAmI)
                                 continue;
 
                             orbIsPresent = true;

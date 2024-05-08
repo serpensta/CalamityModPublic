@@ -96,9 +96,8 @@ namespace CalamityMod.UI.VanillaBossBars
 
         public void ValidateAllMechs(ref BigProgressBarInfo info)
         {
-            for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC target = Main.npc[i];
+            foreach (NPC target in Main.ActiveNPCs)
+            {
                 // Find out first whether or not each of the mechs are in hiding
                 if (target.type == NPCType<AresBody>())
                     HideAres = target.Opacity < 0.5f;
@@ -119,33 +118,29 @@ namespace CalamityMod.UI.VanillaBossBars
 
         public bool FindMechsAgain(ref BigProgressBarInfo info)
         {
-            for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC target = Main.npc[i];
-                if (target.active)
+            foreach (NPC target in Main.ActiveNPCs)
+            {
+                // Get the index of the mech that's not hiding
+                if (target.type == NPCType<AresBody>() && !HideAres)
                 {
-                    // Get the index of the mech that's not hiding
-                    if (target.type == NPCType<AresBody>() && !HideAres)
-                    {
-                        info.npcIndexToAimAt = i;
-                        return true;
-                    }
-                    else if (target.type == NPCType<Artemis>() && !HideArtemis)
-                    {
-                        info.npcIndexToAimAt = i;
-                        return true;
-                    }
-                    else if (target.type == NPCType<ThanatosHead>() && !HideThanatos)
-                    {
-                        info.npcIndexToAimAt = i;
-                        return true;
-                    }
-                    // Failsafe
-                    else if (target.type == NPCType<AresBody>() || target.type == NPCType<Artemis>() || target.type == NPCType<ThanatosHead>())
-                    {
-                        info.npcIndexToAimAt = i;
-                        return true;
-                    }
+                    info.npcIndexToAimAt = target.whoAmI;
+                    return true;
+                }
+                else if (target.type == NPCType<Artemis>() && !HideArtemis)
+                {
+                    info.npcIndexToAimAt = target.whoAmI;
+                    return true;
+                }
+                else if (target.type == NPCType<ThanatosHead>() && !HideThanatos)
+                {
+                    info.npcIndexToAimAt = target.whoAmI;
+                    return true;
+                }
+                // Failsafe
+                else if (target.type == NPCType<AresBody>() || target.type == NPCType<Artemis>() || target.type == NPCType<ThanatosHead>())
+                {
+                    info.npcIndexToAimAt = target.whoAmI;
+                    return true;
                 }
 			}
             return false;

@@ -38,9 +38,9 @@ namespace CalamityMod
                 return 0;
 
             int count = 0;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (!typesToCheck.Contains(Main.npc[i].type) || !Main.npc[i].active)
+                if (!typesToCheck.Contains(n.type))
                     continue;
 
                 count++;
@@ -174,18 +174,14 @@ namespace CalamityMod
 
         public static bool AnyBossNPCS(bool checkForMechs = false)
         {
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC npc in Main.ActiveNPCs)
             {
-                if (Main.npc[i] != null)
+                if (npc.IsABoss())
                 {
-                    NPC npc = Main.npc[i];
-                    if (npc.IsABoss())
-                    {
-                        // Added due to the new mech boss ore progression, return true if any mech is alive and checkForMechs is true, reduces mech boss projectile damage if true.
-                        if (checkForMechs)
-                            return npc.type == NPCID.TheDestroyer || npc.type == NPCID.SkeletronPrime || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer;
-                        return true;
-                    }
+                    // Added due to the new mech boss ore progression, return true if any mech is alive and checkForMechs is true, reduces mech boss projectile damage if true.
+                    if (checkForMechs)
+                        return npc.type == NPCID.TheDestroyer || npc.type == NPCID.SkeletronPrime || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer;
+                    return true;
                 }
             }
             return FindFirstProjectile(ProjectileType<DeusRitualDrama>()) != -1;

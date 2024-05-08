@@ -212,16 +212,15 @@ namespace CalamityMod
 
             int r = wormHead.whoAmI;
             float minDist = 1E+06f;
-            for (int i = 0; i < Main.npc.Length; ++i)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                NPC n = Main.npc[i];
-                if (n != null && n.active && idsToCheck.Contains(n.type))
+                if (idsToCheck.Contains(n.type))
                 {
                     float dist = (n.Center - playerPos).Length();
                     if (dist < minDist)
                     {
                         minDist = dist;
-                        r = i;
+                        r = n.whoAmI;
                     }
                 }
             }
@@ -535,10 +534,9 @@ namespace CalamityMod
         public static IItemDropRuleCondition AnglerFedToTrasherCondition = If((info) =>
         {
             bool trasherNearby = false;
-            for (int i = 0; i < Main.maxNPCs; ++i)
+            foreach (NPC nearby in Main.ActiveNPCs)
             {
-                NPC nearby = Main.npc[i];
-                if (nearby is null || !nearby.active || nearby.type != ModContent.NPCType<Trasher>())
+                if (nearby.type != ModContent.NPCType<Trasher>())
                     continue;
                 if (info.npc.Distance(nearby.Center) < TrasherEatDistance)
                 {

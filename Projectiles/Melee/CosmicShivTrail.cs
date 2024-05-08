@@ -115,10 +115,9 @@ namespace CalamityMod.Projectiles.Melee
                 return;
             Player owner = Main.player[Projectile.owner];
 
-            for (int i = 0; i < Main.npc.Length; ++i)
+            foreach (NPC target in Main.ActiveNPCs)
             {
-                NPC target = Main.npc[i];
-                if (!target.active || target.dontTakeDamage || target.friendly)
+                if (target.dontTakeDamage || target.friendly)
                     continue;
 
                 // Shock any valid target within range. Check all four corners of their hitbox.
@@ -137,7 +136,7 @@ namespace CalamityMod.Projectiles.Melee
                     target.StrikeNPC(target.CalculateHitInfo(damage, 0, crit, 0));
 
                     if (Main.netMode != NetmodeID.SinglePlayer)
-                        NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, i, damage, 0f, 0f, crit ? 1 : 0, 0, 0);
+                        NetMessage.SendData(MessageID.DamageNPC, -1, -1, null, target.whoAmI, damage, 0f, 0f, crit ? 1 : 0, 0, 0);
                 }
             }
         }

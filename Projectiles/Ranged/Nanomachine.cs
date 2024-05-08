@@ -84,20 +84,20 @@ namespace CalamityMod.Projectiles.Ranged
             int targetID = 0;
             if (Projectile.ai[1] == 0f)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].CanBeChasedBy(Projectile, false) && (Projectile.ai[1] == 0f || Projectile.ai[1] == (float)(i + 1)))
+                    if (n.CanBeChasedBy(Projectile, false) && (Projectile.ai[1] == 0f || Projectile.ai[1] == (float)(i + 1)))
                     {
-                        float targetX = Main.npc[i].position.X + (float)(Main.npc[i].width / 2);
-                        float targetY = Main.npc[i].position.Y + (float)(Main.npc[i].height / 2);
+                        float targetX = n.position.X + (float)(n.width / 2);
+                        float targetY = n.position.Y + (float)(n.height / 2);
                         float targetDist = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - targetX) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - targetY);
-                        if (targetDist < constant && Collision.CanHit(new Vector2(Projectile.position.X + (float)(Projectile.width / 2), Projectile.position.Y + (float)(Projectile.height / 2)), 1, 1, Main.npc[i].position, Main.npc[i].width, Main.npc[i].height))
+                        if (targetDist < constant && Collision.CanHit(new Vector2(Projectile.position.X + (float)(Projectile.width / 2), Projectile.position.Y + (float)(Projectile.height / 2)), 1, 1, n.position, n.width, n.height))
                         {
                             constant = targetDist;
                             projX = targetX;
                             projY = targetY;
                             canHit = true;
-                            targetID = i;
+                            targetID = n.whoAmI;
                         }
                     }
                 }

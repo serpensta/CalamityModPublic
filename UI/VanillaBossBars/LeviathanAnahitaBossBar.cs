@@ -52,11 +52,10 @@ namespace CalamityMod.UI.VanillaBossBars
 
             // Determine Anahita's shield health only if she's solo (she can't just block Leviathan out of existence)
             if (target.type == NPCType<Anahita>() && !NPC.AnyNPCs(NPCType<Leviathan>()))
-            {       
-                for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                foreach (NPC part in Main.ActiveNPCs)
                 {
-                    NPC part = Main.npc[i];
-                    if (part.active && part.type == NPCType<AnahitasIceShield>())
+                    if (part.type == NPCType<AnahitasIceShield>())
                     {
                         shield += part.life;
                         shieldMax += part.lifeMax;
@@ -68,17 +67,16 @@ namespace CalamityMod.UI.VanillaBossBars
 
         public bool FindTheRightFish(ref BigProgressBarInfo info)
         {
-            for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC target = Main.npc[i];
+            foreach (NPC target in Main.ActiveNPCs)
+            {
 				if (target.active && target.type == NPCType<Anahita>())
 				{
-					info.npcIndexToAimAt = i;
+					info.npcIndexToAimAt = target.whoAmI;
 					return true;
 				}
                 else if (target.active && target.type == NPCType<Leviathan>())
                 {
-                    info.npcIndexToAimAt = i;
+                    info.npcIndexToAimAt = target.whoAmI;
                     return true;
                 }
 			}

@@ -76,9 +76,8 @@ namespace CalamityMod.Projectiles.Summon
             }
             else
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC nPC2 in Main.ActiveNPCs)
                 {
-                    NPC nPC2 = Main.npc[i];
                     if (nPC2.CanBeChasedBy(Projectile, false))
                     {
                         float maxTargetDist = Vector2.Distance(nPC2.Center, Projectile.Center);
@@ -87,7 +86,7 @@ namespace CalamityMod.Projectiles.Summon
                             targetDist = maxTargetDist;
                             projPos = nPC2.Center;
                             canAttack = true;
-                            target = i;
+                            target = nPC2.whoAmI;
                         }
                     }
                 }

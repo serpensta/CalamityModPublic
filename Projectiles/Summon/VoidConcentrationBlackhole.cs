@@ -166,14 +166,14 @@ namespace CalamityMod.Projectiles.Summon
             }
             Projectile.frameCounter++;
 
-                for (int i = 0; i < Main.npc.Length; i++)
+            foreach (NPC n in Main.ActiveNPCs)
+            {
+                if (!n.friendly && CalamityGlobalNPC.ShouldAffectNPC(n))
                 {
-                    if (Main.npc[i].active && !Main.npc[i].friendly && CalamityGlobalNPC.ShouldAffectNPC(Main.npc[i]))
-                    {
-                        if (Vector2.Distance(Projectile.Center, Main.npc[i].Center) <= radius)
-                            ApplySucc(Main.npc[i]);
-                    }
+                    if (Vector2.Distance(Projectile.Center, n.Center) <= radius)
+                        ApplySucc(n);
                 }
+            }
 
 
             if (Projectile.scale >= 2.5f) //it's boom o' clock

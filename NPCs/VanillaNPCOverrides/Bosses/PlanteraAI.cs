@@ -627,14 +627,14 @@ namespace CalamityMod.NPCs.VanillaNPCOverrides.Bosses
 
                         if (Main.getGoodWorld)
                         {
-                            for (int i = 0; i < Main.maxNPCs; i++)
+                            foreach (NPC n in Main.ActiveNPCs)
                             {
-                                if (Main.npc[i].active && Main.npc[i].aiStyle == NPCAIStyleID.PlanteraHook)
+                                if (n.aiStyle == NPCAIStyleID.PlanteraHook)
                                 {
                                     for (int j = 0; j < totalTentacles / 2 - 1; j++)
                                     {
                                         int hookIndex = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCID.PlanterasTentacle, npc.whoAmI);
-                                        Main.npc[hookIndex].ai[3] = i + 1;
+                                        Main.npc[hookIndex].ai[3] = n.whoAmI + 1;
                                     }
                                 }
                             }

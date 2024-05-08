@@ -233,9 +233,8 @@ namespace CalamityMod
             int[] array = new int[Main.maxNPCs];
             int targetArrayA = 0;
             int targetArrayB = 0;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC npc in Main.ActiveNPCs)
             {
-                NPC npc = Main.npc[i];
                 if (npc.CanBeChasedBy(projectile, false))
                 {
                     float enemyDist = Vector2.Distance(projectile.Center, npc.Center);
@@ -243,12 +242,12 @@ namespace CalamityMod
                     {
                         if (Collision.CanHit(projectile.position, 1, 1, npc.position, npc.width, npc.height) && enemyDist > 50f)
                         {
-                            array[targetArrayB] = i;
+                            array[targetArrayB] = npc.whoAmI;
                             targetArrayB++;
                         }
                         else if (targetArrayB == 0)
                         {
-                            array[targetArrayA] = i;
+                            array[targetArrayA] = npc.whoAmI;
                             targetArrayA++;
                         }
                     }
@@ -293,7 +292,7 @@ namespace CalamityMod
                         {
                             if (targetArrayIndex < maxTargets)
                             {
-                                targetArray[targetArrayIndex] = i;
+                                targetArray[targetArrayIndex] = n.whoAmI;
                                 targetArrayIndex++;
                                 homeIn = true;
                             }
