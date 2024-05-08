@@ -2307,11 +2307,11 @@ namespace CalamityMod.CalPlayer
 
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<DrataliornusBow>()] != 0)
             {
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach(Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].active && Main.projectile[i].type == ModContent.ProjectileType<DrataliornusBow>() && Main.projectile[i].owner == Player.whoAmI)
+                    if (p.type == ModContent.ProjectileType<DrataliornusBow>() && p.owner == Player.whoAmI)
                     {
-                        Main.projectile[i].Kill();
+                        p.Kill();
                         break;
                     }
                 }

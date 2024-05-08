@@ -724,12 +724,9 @@ namespace CalamityMod.ILEditing
                 Main.spriteBatch.SetBlendState(BlendState.Additive);
 
                 // Draw Projectiles.
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (!Main.projectile[i].active)
-                        continue;
-
-                    if (Main.projectile[i].ModProjectile is IAdditiveDrawer d)
+                    if (p.ModProjectile is IAdditiveDrawer d)
                         d.AdditiveDraw(Main.spriteBatch);
                 }
 

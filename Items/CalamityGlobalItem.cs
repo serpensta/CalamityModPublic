@@ -531,11 +531,11 @@ namespace CalamityMod.Items
             }
             if (item.type == ItemID.PearlwoodBow)
             {
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].active && (Main.projectile[i].type == ModContent.ProjectileType<RainbowFront>() || Main.projectile[i].type == ModContent.ProjectileType<RainbowTrail>()) && Main.projectile[i].owner == player.whoAmI)
+                    if ((p.type == ModContent.ProjectileType<RainbowFront>() || p.type == ModContent.ProjectileType<RainbowTrail>()) && p.owner == player.whoAmI)
                     {
-                        Main.projectile[i].Kill();
+                        p.Kill();
                     }
                 }
                 for (int i = -8; i <= 8; i += 8)
@@ -674,9 +674,9 @@ namespace CalamityMod.Items
             if (player.ActiveItem().type == ModContent.ItemType<IgneousExaltation>())
             {
                 bool hasBlades = false;
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].active && Main.projectile[i].type == ModContent.ProjectileType<IgneousBlade>() && Main.projectile[i].owner == player.whoAmI && Main.projectile[i].localAI[1] == 0f)
+                    if (p.type == ModContent.ProjectileType<IgneousBlade>() && p.owner == player.whoAmI && p.localAI[1] == 0f)
                     {
                         hasBlades = true;
                         break;
@@ -684,22 +684,22 @@ namespace CalamityMod.Items
                 }
                 if (hasBlades)
                 {
-                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    foreach (Projectile p in Main.ActiveProjectiles)
                     {
-                        if (Main.projectile[i].ModProjectile is IgneousBlade)
+                        if (p.ModProjectile is IgneousBlade)
                         {
-                            if (Main.projectile[i].ModProjectile<IgneousBlade>().Firing)
+                            if (p.ModProjectile<IgneousBlade>().Firing)
                                 continue;
                         }
-                        if (Main.projectile[i].active && Main.projectile[i].type == ModContent.ProjectileType<IgneousBlade>() && Main.projectile[i].owner == player.whoAmI && Main.projectile[i].localAI[1] == 0f)
+                        if (p.type == ModContent.ProjectileType<IgneousBlade>() && p.owner == player.whoAmI && p.localAI[1] == 0f)
                         {
-                            Main.projectile[i].rotation = MathHelper.PiOver2 + MathHelper.PiOver4;
-                            Main.projectile[i].velocity = Main.projectile[i].SafeDirectionTo(Main.MouseWorld, Vector2.UnitY) * 22f;
-                            Main.projectile[i].rotation += Main.projectile[i].velocity.ToRotation();
-                            Main.projectile[i].ai[0] = 180f;
-                            Main.projectile[i].ModProjectile<IgneousBlade>().Firing = true;
-                            Main.projectile[i].tileCollide = true;
-                            Main.projectile[i].netUpdate = true;
+                            p.rotation = MathHelper.PiOver2 + MathHelper.PiOver4;
+                            p.velocity = p.SafeDirectionTo(Main.MouseWorld, Vector2.UnitY) * 22f;
+                            p.rotation += p.velocity.ToRotation();
+                            p.ai[0] = 180f;
+                            p.ModProjectile<IgneousBlade>().Firing = true;
+                            p.tileCollide = true;
+                            p.netUpdate = true;
                         }
                     }
                 }
@@ -707,13 +707,13 @@ namespace CalamityMod.Items
             }
             if (player.ActiveItem().type == ModContent.ItemType<VoidConcentrationStaff>() && player.ownedProjectileCounts[ModContent.ProjectileType<VoidConcentrationBlackhole>()] == 0)
             {
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].ModProjectile is VoidConcentrationAura)
+                    if (p.ModProjectile is VoidConcentrationAura)
                     {
-                        if (Main.projectile[i].active && Main.projectile[i].owner == player.whoAmI)
+                        if (p.owner == player.whoAmI)
                         {
-                            Main.projectile[i].ModProjectile<VoidConcentrationAura>().HandleRightClick();
+                            p.ModProjectile<VoidConcentrationAura>().HandleRightClick();
                             break;
                         }
                     }
@@ -724,18 +724,18 @@ namespace CalamityMod.Items
             {
                 bool canContinue = true;
                 int count = 0;
-                for (int i = 0; i < Main.projectile.Length; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].active && Main.projectile[i].type == ModContent.ProjectileType<GlacialEmbracePointyThing>() && Main.projectile[i].owner == player.whoAmI)
+                    if (p.type == ModContent.ProjectileType<GlacialEmbracePointyThing>() && p.owner == player.whoAmI)
                     {
-                        if (Main.projectile[i].ai[1] > 1f)
+                        if (p.ai[1] > 1f)
                         {
                             canContinue = false;
                             break;
                         }
-                        else if (Main.projectile[i].ai[1] == 0f)
+                        else if (p.ai[1] == 0f)
                         {
-                            if (((GlacialEmbracePointyThing)Main.projectile[i].ModProjectile).circlingPlayer)
+                            if (((GlacialEmbracePointyThing)p.ModProjectile).circlingPlayer)
                                 count++;
                         }
                     }

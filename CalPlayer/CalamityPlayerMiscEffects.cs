@@ -858,12 +858,12 @@ namespace CalamityMod.CalPlayer
             {
                 int bullseyeType = ModContent.ProjectileType<SpiritOriginBullseye>();
                 List<int> alreadyTargetedNPCs = new List<int>();
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].type != bullseyeType || !Main.projectile[i].active || Main.projectile[i].owner != Player.whoAmI)
+                    if (p.type != bullseyeType || p.owner != Player.whoAmI)
                         continue;
 
-                    alreadyTargetedNPCs.Add((int)Main.projectile[i].ai[0]);
+                    alreadyTargetedNPCs.Add((int)p.ai[0]);
                 }
 
                 foreach (NPC target in Main.ActiveNPCs)
@@ -1131,10 +1131,9 @@ namespace CalamityMod.CalPlayer
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<OmegaBlueTentacle>()] < 6 && Main.myPlayer == Player.whoAmI)
                 {
                     bool[] tentaclesPresent = new bool[6];
-                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    foreach (Projectile projectile in Main.ActiveProjectiles)
                     {
-                        Projectile projectile = Main.projectile[i];
-                        if (projectile.active && projectile.type == ModContent.ProjectileType<OmegaBlueTentacle>() && projectile.owner == Main.myPlayer && projectile.ai[1] >= 0f && projectile.ai[1] < 6f)
+                        if (projectile.type == ModContent.ProjectileType<OmegaBlueTentacle>() && projectile.owner == Main.myPlayer && projectile.ai[1] >= 0f && projectile.ai[1] < 6f)
                             tentaclesPresent[(int)projectile.ai[1]] = true;
                     }
 
@@ -3347,11 +3346,11 @@ namespace CalamityMod.CalPlayer
             {
                 if (Player.whoAmI == Main.myPlayer)
                 {
-                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    foreach (Projectile p in Main.ActiveProjectiles)
                     {
-                        if (Main.projectile[i].active && Main.projectile[i].type == ModContent.ProjectileType<BlunderBoosterAura>() && Main.projectile[i].owner == Player.whoAmI)
+                        if (p.type == ModContent.ProjectileType<BlunderBoosterAura>() && p.owner == Player.whoAmI)
                         {
-                            Main.projectile[i].Kill();
+                            p.Kill();
                             break;
                         }
                     }
@@ -3383,12 +3382,12 @@ namespace CalamityMod.CalPlayer
                 if (Player.whoAmI == Main.myPlayer)
                 {
                     int auraType = ModContent.ProjectileType<TeslaAura>();
-                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    foreach (Projectile p in Main.ActiveProjectiles)
                     {
-                        if (Main.projectile[i].type != auraType || !Main.projectile[i].active || Main.projectile[i].owner != Player.whoAmI)
+                        if (p.type != auraType || p.owner != Player.whoAmI)
                             continue;
 
-                        Main.projectile[i].Kill();
+                        p.Kill();
                         break;
                     }
                 }
@@ -3406,12 +3405,12 @@ namespace CalamityMod.CalPlayer
             else if (Player.whoAmI == Main.myPlayer)
             {
                 int shieldType = ModContent.ProjectileType<CryonicShield>();
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].type != shieldType || !Main.projectile[i].active || Main.projectile[i].owner != Player.whoAmI)
+                    if (p.type != shieldType || p.owner != Player.whoAmI)
                         continue;
 
-                    Main.projectile[i].Kill();
+                    p.Kill();
                     break;
                 }
             }
