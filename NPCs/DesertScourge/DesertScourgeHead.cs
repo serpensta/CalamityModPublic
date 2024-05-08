@@ -139,6 +139,7 @@ namespace CalamityMod.NPCs.DesertScourge
             writer.Write(biomeEnrageTimer);
             writer.Write(playRoarSound);
             writer.Write(NPC.localAI[2]);
+            writer.Write(NPC.localAI[3]);
             for (int i = 0; i < 4; i++)
                 writer.Write(NPC.Calamity().newAI[i]);
         }
@@ -150,6 +151,7 @@ namespace CalamityMod.NPCs.DesertScourge
             biomeEnrageTimer = reader.ReadInt32();
             playRoarSound = reader.ReadBoolean();
             NPC.localAI[2] = reader.ReadSingle();
+            NPC.localAI[3] = reader.ReadSingle();
             for (int i = 0; i < 4; i++)
                 NPC.Calamity().newAI[i] = reader.ReadSingle();
         }
@@ -169,6 +171,7 @@ namespace CalamityMod.NPCs.DesertScourge
                 NPC.Calamity().newAI[0] = 0f;
                 NPC.Calamity().newAI[1] = 0f;
                 NPC.Calamity().newAI[3] = 0f;
+                NPC.localAI[3] = 0f;
                 playRoarSound = false;
             }
 
@@ -247,6 +250,94 @@ namespace CalamityMod.NPCs.DesertScourge
             {
                 speed *= 1.1f;
                 turnSpeed *= 1.2f;
+            }
+
+            // Sand splash
+            if (!quickFall)
+            {
+                if (lungeUpward)
+                {
+                    if (NPC.localAI[3] == 0f)
+                    {
+                        Vector2 topCenter = new Vector2(NPC.Center.X, NPC.Top.Y);
+                        Point headTileCenter = topCenter.ToTileCoordinates();
+                        Tile tileSafely = Framing.GetTileSafely(headTileCenter);
+                        bool inSolidTile = tileSafely.HasUnactuatedTile;
+                        bool finsInSolidTile = Framing.GetTileSafely(Main.npc[(int)NPC.ai[0]].Center.ToTileCoordinates()).HasUnactuatedTile;
+                        if (!inSolidTile && finsInSolidTile && Collision.CanHit(topCenter, 1, 1, player.Center, 1, 1))
+                        {
+                            NPC.localAI[3] = 1f;
+                            SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
+
+                            int bestY = headTileCenter.Y;
+                            for (int j = 0; j < 20; j++)
+                            {
+                                if (bestY < 10)
+                                    break;
+
+                                if (!WorldGen.SolidTile(headTileCenter.X, bestY))
+                                    break;
+
+                                bestY--;
+                            }
+
+                            for (int k = 0; k < 20; k++)
+                            {
+                                if (bestY > Main.maxTilesY - 10)
+                                    break;
+
+                                if (WorldGen.ActiveAndWalkableTile(headTileCenter.X, bestY))
+                                    break;
+
+                                bestY++;
+                            }
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(headTileCenter.X * 16 + 8, bestY * 16 - 40), Vector2.Zero, ModContent.ProjectileType<DesertScourgeDiveSplash>(), 0, 0f, Main.myPlayer);
+                        }
+                    }
+                }
+                else if (burrow)
+                {
+                    if (NPC.localAI[3] == 0f)
+                    {
+                        Vector2 topCenter = new Vector2(NPC.Center.X, NPC.Top.Y);
+                        Point headTileCenter = new Vector2(NPC.Center.X, NPC.Bottom.Y).ToTileCoordinates();
+                        Tile tileSafely = Framing.GetTileSafely(headTileCenter);
+                        bool inSolidTile = tileSafely.HasUnactuatedTile;
+                        if (inSolidTile && Collision.CanHit(topCenter, 1, 1, player.Center, 1, 1))
+                        {
+                            NPC.localAI[3] = 1f;
+                            SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
+
+                            int bestY = headTileCenter.Y;
+                            for (int j = 0; j < 20; j++)
+                            {
+                                if (bestY < 10)
+                                    break;
+
+                                if (!WorldGen.SolidTile(headTileCenter.X, bestY))
+                                    break;
+
+                                bestY--;
+                            }
+
+                            for (int k = 0; k < 20; k++)
+                            {
+                                if (bestY > Main.maxTilesY - 10)
+                                    break;
+
+                                if (WorldGen.ActiveAndWalkableTile(headTileCenter.X, bestY))
+                                    break;
+
+                                bestY++;
+                            }
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(headTileCenter.X * 16 + 8, bestY * 16 - 40), Vector2.Zero, ModContent.ProjectileType<DesertScourgeDiveSplash>(), 0, 0f, Main.myPlayer);
+                        }
+                    }
+                }
             }
 
             if (lungeUpward || burrow || hide)
@@ -451,6 +542,7 @@ namespace CalamityMod.NPCs.DesertScourge
             if (burrow && NPC.Center.Y >= burrowTarget - 16f)
             {
                 NPC.Calamity().newAI[1] = 1f;
+                NPC.localAI[3] = 0f;
                 if (!playRoarSound)
                 {
                     SoundEngine.PlaySound(RoarSound, player.Center);
@@ -486,6 +578,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
                 NPC.TargetClosest();
                 NPC.Calamity().newAI[1] = 2f;
+                NPC.localAI[3] = 0f;
                 playRoarSound = false;
             }
 
@@ -498,6 +591,7 @@ namespace CalamityMod.NPCs.DesertScourge
                     NPC.Calamity().newAI[0] = 0f;
                     NPC.Calamity().newAI[1] = 0f;
                     NPC.Calamity().newAI[3] = 0f;
+                    NPC.localAI[3] = 0f;
                     playRoarSound = false;
                 }
             }
@@ -507,6 +601,7 @@ namespace CalamityMod.NPCs.DesertScourge
             {
                 NPC.Calamity().newAI[0] = 0f;
                 NPC.Calamity().newAI[1] = 0f;
+                NPC.localAI[3] = 0f;
             }
 
             if (!shouldFly)
