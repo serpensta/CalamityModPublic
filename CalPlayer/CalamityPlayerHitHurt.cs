@@ -1621,7 +1621,7 @@ namespace CalamityMod.CalPlayer
                     SoundEngine.PlaySound(SoundID.NPCHit4, Player.Center); //metal hit noise
                     hurtSoundTimer = 10;
                 }
-                else if ((aquaticHeartPower || aquaticHeartForce) && !aquaticHeartHide)
+                else if (((aquaticHeartPower || aquaticHeartForce) && !aquaticHeartHide) || Player.GetModPlayer<CrystalHeartVodkaPlayer>().vanityEquipped)
                 {
                     modifiers.DisableSound();
                     SoundEngine.PlaySound(SoundID.FemaleHit, Player.Center); //female hit noise

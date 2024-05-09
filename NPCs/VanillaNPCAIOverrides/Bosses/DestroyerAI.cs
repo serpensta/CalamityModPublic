@@ -425,7 +425,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                             Vector2 projectileVelocity = (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * velocity;
                             int numProj = calamityGlobalNPC.newAI[0] % 60f == 0f ? (masterMode ? 9 : 7) : (masterMode ? 6 : 4);
-                            int spread = masterMode ? 75 : 54;
+                            int spread = masterMode ? 38 : 26;
                             float rotation = MathHelper.ToRadians(spread);
                             for (int i = 0; i < numProj; i++)
                             {
