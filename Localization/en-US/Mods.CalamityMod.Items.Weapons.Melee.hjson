@@ -239,6 +239,15 @@ BrokenBiomeBlade: {
 	DefaultFunction: Does nothing... yet
 }
 
+BurningRevelation: {
+	DisplayName: Burning Revelation
+	Tooltip:
+		'''
+		Emits large holy explosions on hit
+		An exceptionally agile yoyo
+		'''
+}
+
 BurntSienna: {
 	DisplayName: Burnt Sienna
 	Tooltip: Causes enemies to erupt into healing projectiles on death
@@ -1038,15 +1047,6 @@ Shimmerspark: {
 SmokingComet: {
 	DisplayName: Smoking Comet
 	Tooltip: Rains stars from the sky
-}
-
-SolarFlare: {
-	DisplayName: Solar Flare
-	Tooltip:
-		'''
-		Emits large holy explosions on hit
-		An exceptionally agile yoyo
-		'''
 }
 
 SolsticeClaymore: {

@@ -2071,7 +2071,7 @@ namespace CalamityMod.NPCs.Providence
                 int[] weapons = new int[]
                 {
                     ModContent.ItemType<HolyCollider>(),
-                    ModContent.ItemType<SolarFlare>(),
+                    ModContent.ItemType<BurningRevelation>(),
                     ModContent.ItemType<TelluricGlare>(),
                     ModContent.ItemType<BlissfulBombardier>(),
                     ModContent.ItemType<PurgeGuzzler>(),

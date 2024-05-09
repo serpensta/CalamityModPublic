@@ -528,7 +528,7 @@ namespace CalamityMod
 
             // Fallen Stars from Stardust
             Recipe.Create(ItemID.FallenStar).
-                AddIngredient<Stardust>(5).
+                AddIngredient<StarblightSoot>(5).
                 AddTile(TileID.Anvils).
                 Register()
                 .DisableDecraft();

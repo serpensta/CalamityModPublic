@@ -229,7 +229,7 @@ namespace CalamityMod.NPCs.AstrumDeus
             }
         }
 
-        public override void BossLoot(ref string name, ref int potionType) => potionType = ModContent.ItemType<Stardust>();
+        public override void BossLoot(ref string name, ref int potionType) => potionType = ModContent.ItemType<StarblightSoot>();
 
         public static bool ShouldNotDropThings(NPC npc) => npc.Calamity().newAI[0] == 0f || ((CalamityWorld.death || BossRushEvent.BossRushActive) && npc.Calamity().newAI[0] != 3f);
 
@@ -311,7 +311,7 @@ namespace CalamityMod.NPCs.AstrumDeus
 
                 // Materials
                 normalOnly.Add(ItemID.FallenStar, 1, 25, 40);
-                normalOnly.Add(ModContent.ItemType<Stardust>(), 1, 50, 80);
+                normalOnly.Add(ModContent.ItemType<StarblightSoot>(), 1, 50, 80);
             }
 
             npcLoot.DefineConditionalDropSet(() => true).Add(DropHelper.PerPlayer(ItemID.SuperHealingPotion, 1, 5, 15), hideLootReport: true); // Healing Potions don't show up in the Bestiary

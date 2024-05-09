@@ -155,8 +155,8 @@ namespace CalamityMod.NPCs.Astral
 
         public static void ModifyAstralachneaLoot(NPCLoot npcLoot)
         {
-            npcLoot.AddIf(() => !Main.expertMode, ModContent.ItemType<Stardust>(), 2, 2, 3);
-            npcLoot.AddIf(() => Main.expertMode, ModContent.ItemType<Stardust>(), 1, 1, 4);
+            npcLoot.AddIf(() => !Main.expertMode, ModContent.ItemType<StarblightSoot>(), 2, 2, 3);
+            npcLoot.AddIf(() => Main.expertMode, ModContent.ItemType<StarblightSoot>(), 1, 1, 4);
             npcLoot.AddIf(() => DownedBossSystem.downedAstrumAureus, ModContent.ItemType<AstralachneaStaff>(), 7);
         }
 
