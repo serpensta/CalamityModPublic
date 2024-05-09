@@ -1,4 +1,5 @@
-﻿using CalamityMod.CalPlayer;
+﻿using System;
+using CalamityMod.CalPlayer;
 using CalamityMod.Events;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
@@ -118,6 +119,8 @@ namespace CalamityMod.NPCs.NormalNPCs
             {
                 NPC.ai[0] = 0f;
 
+                SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+
                 for (int dusty = 0; dusty < 10; dusty++)
                 {
                     Vector2 dustVel = Main.rand.NextVector2CircularEdge(5f, 5f);
@@ -131,7 +134,52 @@ namespace CalamityMod.NPCs.NormalNPCs
                     }
                 }
 
-                SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+                int distanceFromKingSlime = 1;
+                Vector2 kingSlimeCenter = NPC.Center;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    if (Main.npc[i].active && Main.npc[i].type == NPCID.KingSlime)
+                    {
+                        distanceFromKingSlime = (int)NPC.Distance(Main.npc[i].Center);
+                        kingSlimeCenter = Main.npc[i].Center;
+                        break;
+                    }
+                }
+
+                int maxDustIterations = distanceFromKingSlime;
+                int maxDust = 100;
+                int dustDivisor = maxDustIterations / maxDust;
+                if (dustDivisor < 2)
+                    dustDivisor = 2;
+
+                Vector2 dustLineStart = NPC.Center;
+                Vector2 dustLineEnd = kingSlimeCenter;
+                Vector2 currentDustPos = default;
+                Vector2 spinningpoint = new Vector2(0f, -1f).RotatedByRandom(MathHelper.Pi);
+                int dustSpawned = 0;
+                for (int i = 0; i < maxDustIterations; i++)
+                {
+                    if (i % dustDivisor == 0)
+                    {
+                        currentDustPos = Vector2.Lerp(dustLineStart, dustLineEnd, i / (float)maxDustIterations);
+                        int dust = Dust.NewDust(currentDustPos, 0, 0, DustID.GemSapphire, 0f, 0f, 100, default, 1f);
+                        Main.dust[dust].position = currentDustPos;
+                        Main.dust[dust].velocity = spinningpoint.RotatedBy(MathHelper.TwoPi * i / maxDustIterations) * (0.9f + Main.rand.NextFloat() * 0.2f);
+                        Main.dust[dust].noGravity = true;
+                        if (Main.rand.NextBool())
+                        {
+                            Main.dust[dust].scale = 0.5f;
+                            Main.dust[dust].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
+                        }
+
+                        Dust dust2 = Dust.CloneDust(dust);
+                        Dust dust3 = dust2;
+                        dust3.scale *= 0.5f;
+                        dust3 = dust2;
+                        dust3.fadeIn *= 0.5f;
+                        dustSpawned++;
+                    }
+                }
 
                 NPC.netUpdate = true;
             }
