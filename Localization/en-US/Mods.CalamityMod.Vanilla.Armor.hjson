@@ -99,6 +99,7 @@ SetBonus: {
 		Increases minion damage by 15%
 		Grants immunity to fire blocks and temporary immunity to lava
 		'''
+	PlatinumChainmail: 3% increased critical strike chance
 	Platinum:
 		'''
 		Every 10 extra defense gives you 1% increased damage and 1% increased critical strike chance
