@@ -259,12 +259,11 @@ namespace CalamityMod.NPCs.DesertScourge
                 {
                     if (NPC.localAI[3] == 0f)
                     {
-                        Vector2 topCenter = new Vector2(NPC.Center.X, NPC.Top.Y);
-                        Point headTileCenter = topCenter.ToTileCoordinates();
+                        Point headTileCenter = NPC.Top.ToTileCoordinates();
                         Tile tileSafely = Framing.GetTileSafely(headTileCenter);
                         bool inSolidTile = tileSafely.HasUnactuatedTile;
                         bool finsInSolidTile = Framing.GetTileSafely(Main.npc[(int)NPC.ai[0]].Center.ToTileCoordinates()).HasUnactuatedTile;
-                        if (!inSolidTile && finsInSolidTile && Collision.CanHit(topCenter, 1, 1, player.Center, 1, 1))
+                        if (!inSolidTile && finsInSolidTile && Collision.CanHit(NPC.Top, 1, 1, player.Center, 1, 1))
                         {
                             NPC.localAI[3] = 1f;
                             SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
@@ -301,11 +300,10 @@ namespace CalamityMod.NPCs.DesertScourge
                 {
                     if (NPC.localAI[3] == 0f)
                     {
-                        Vector2 topCenter = new Vector2(NPC.Center.X, NPC.Top.Y);
-                        Point headTileCenter = new Vector2(NPC.Center.X, NPC.Bottom.Y).ToTileCoordinates();
+                        Point headTileCenter = NPC.Bottom.ToTileCoordinates();
                         Tile tileSafely = Framing.GetTileSafely(headTileCenter);
                         bool inSolidTile = tileSafely.HasUnactuatedTile;
-                        if (inSolidTile && Collision.CanHit(topCenter, 1, 1, player.Center, 1, 1))
+                        if (inSolidTile && Collision.CanHit(NPC.Top, 1, 1, player.Center, 1, 1))
                         {
                             NPC.localAI[3] = 1f;
                             SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
