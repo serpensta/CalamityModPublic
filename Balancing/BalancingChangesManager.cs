@@ -321,10 +321,6 @@ namespace CalamityMod.Balancing
             #endregion
 
             #region Old Duke
-            // 60% resist to The Last Mourning's projectiles.
-            // This will technically catch pumpkins from The Horseman's Blade but that shouldn't really matter.
-            NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<OldDuke>(), new ProjectileResistBalancingRule(0.4f, ProjectileType<MourningSkull>(), ProjectileID.FlamingJack)));
-
             // 20% resist to Time Bolt.
             NPCSpecificBalancingChanges.Add(new NPCBalancingChange(NPCType<OldDuke>(), new ProjectileResistBalancingRule(0.8f, ProjectileType<TimeBoltKnife>())));
             #endregion
