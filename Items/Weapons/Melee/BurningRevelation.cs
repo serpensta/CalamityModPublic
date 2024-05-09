@@ -32,7 +32,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.noUseGraphic = true;
             Item.noMelee = true;
 
-            Item.shoot = ModContent.ProjectileType<SolarFlareYoyo>();
+            Item.shoot = ModContent.ProjectileType<BurningRevelationYoyo>();
             Item.shootSpeed = 16f;
 
             Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
