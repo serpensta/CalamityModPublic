@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Materials
 {
+    [LegacyName("Stardust")]
     public class StarblightSoot : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Materials";
