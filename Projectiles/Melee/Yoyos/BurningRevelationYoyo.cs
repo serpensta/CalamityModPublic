@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Melee.Yoyos
 {
-    public class SolarFlareYoyo : ModProjectile
+    public class BurningRevelationYoyo : ModProjectile
     {
         public override LocalizedText DisplayName => CalamityUtils.GetItemName<BurningRevelation>();
         public const int MaxUpdates = 3;
