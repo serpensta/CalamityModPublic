@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Materials
 {
-    public class Stardust : ModItem, ILocalizedModType
+    public class StarblightSoot : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Materials";
         public override void SetStaticDefaults()
