@@ -11,7 +11,7 @@ namespace CalamityMod.Projectiles.Melee.Yoyos
 {
     public class SolarFlareYoyo : ModProjectile
     {
-        public override LocalizedText DisplayName => CalamityUtils.GetItemName<SolarFlare>();
+        public override LocalizedText DisplayName => CalamityUtils.GetItemName<BurningRevelation>();
         public const int MaxUpdates = 3;
 
         public override void SetStaticDefaults()
