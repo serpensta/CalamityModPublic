@@ -324,7 +324,7 @@ namespace CalamityMod.NPCs.Leviathan
                 {
                     NPC.alpha = 255;
                 }
-                else
+                else if (NPC.alpha < 255)
                 {
                     for (int k = 0; k < 3; k++)
                     {

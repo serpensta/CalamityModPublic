@@ -19,10 +19,10 @@ namespace CalamityMod.NPCs.DesertScourge
         public bool flies = false;
         private bool tailSpawned = false;
 
-        public const float SegmentVelocity_Expert = 12f;
-        public const float SegmentVelocity_Master = 15f;
-        public const float SegmentVelocity_GoodWorld = 18f;
-        public const float SegmentVelocity_ZenithSeed = 21f;
+        public const float SegmentVelocity_Expert = 14f;
+        public const float SegmentVelocity_Master = 16.5f;
+        public const float SegmentVelocity_GoodWorld = 19f;
+        public const float SegmentVelocity_ZenithSeed = 21.5f;
 
         public const float OpenMouthForBiteDistance = 220f;
 
@@ -115,7 +115,7 @@ namespace CalamityMod.NPCs.DesertScourge
             bool death = CalamityWorld.death || bossRush;
 
             // Become angry when the other Nuisance dies.
-            bool getMad = !NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHeadYoung>()) && expertMode;
+            bool getMad = (!NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHeadYoung>()) && revenge) || death;
 
             // Enrage
             if (!Main.player[NPC.target].ZoneDesert && !bossRush)
@@ -140,6 +140,8 @@ namespace CalamityMod.NPCs.DesertScourge
 
             float speed = death ? 0.2f : 0.17f;
             float turnSpeed = death ? 0.3f : 0.25f;
+            speed += speed * 0.4f * (1f - lifeRatio);
+            turnSpeed += turnSpeed * 0.4f * (1f - lifeRatio);
             speed += 0.17f * enrageScale;
             turnSpeed += 0.25f * enrageScale;
 
@@ -243,7 +245,7 @@ namespace CalamityMod.NPCs.DesertScourge
             {
                 NPC.localAI[1] = 1f;
                 Rectangle rectangle = new Rectangle((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height);
-                int directChaseDistance = 1000;
+                int directChaseDistance = revenge ? 500 : 1000;
                 bool shouldDirectlyChase = true;
                 if (NPC.position.Y > Main.player[NPC.target].position.Y)
                 {
@@ -276,8 +278,9 @@ namespace CalamityMod.NPCs.DesertScourge
                 Main.getGoodWorld ? SegmentVelocity_GoodWorld :
                 masterMode ? SegmentVelocity_Master :
                 SegmentVelocity_Expert;
+            maxChaseSpeed += maxChaseSpeed * 0.2f * (1f - lifeRatio);
             if (masterMode)
-                maxChaseSpeed += maxChaseSpeed * 0.5f * (1f - lifeRatio);
+                maxChaseSpeed += maxChaseSpeed * 0.2f * (1f - lifeRatio);
 
             if (Main.player[NPC.target].dead)
             {
@@ -450,6 +453,10 @@ namespace CalamityMod.NPCs.DesertScourge
                     }
                 }
             }
+
+            Vector2 destination = Main.player[NPC.target].Center;
+            if (NPC.Distance(destination) > 1000f)
+                NPC.velocity += (destination - NPC.Center).SafeNormalize(Vector2.UnitY) * turnSpeed;
 
             // Calculate contact damage based on velocity
             float minimalContactDamageVelocity = maxChaseSpeed * 0.25f;

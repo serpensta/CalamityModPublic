@@ -121,19 +121,6 @@ namespace CalamityMod.NPCs.NormalNPCs
 
                 SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
 
-                for (int dusty = 0; dusty < 10; dusty++)
-                {
-                    Vector2 dustVel = Main.rand.NextVector2CircularEdge(5f, 5f);
-                    int sapphire = Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.GemSapphire, 0f, 0f, 100, default, 2f);
-                    Main.dust[sapphire].velocity = dustVel * Main.rand.NextFloat(1f, 2f);
-                    Main.dust[sapphire].noGravity = true;
-                    if (Main.rand.NextBool())
-                    {
-                        Main.dust[sapphire].scale = 0.5f;
-                        Main.dust[sapphire].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
-                    }
-                }
-
                 int distanceFromKingSlime = 1;
                 Vector2 kingSlimeCenter = NPC.Center;
                 for (int i = 0; i < Main.maxNPCs; i++)
@@ -143,6 +130,19 @@ namespace CalamityMod.NPCs.NormalNPCs
                         distanceFromKingSlime = (int)NPC.Distance(Main.npc[i].Center);
                         kingSlimeCenter = Main.npc[i].Center;
                         break;
+                    }
+                }
+
+                for (int dusty = 0; dusty < 10; dusty++)
+                {
+                    Vector2 dustVel = (kingSlimeCenter - NPC.Center).SafeNormalize(Vector2.UnitY) * Main.rand.NextFloat(2f, 4f);
+                    int sapphire = Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.GemSapphire, 0f, 0f, 100, default, 2f);
+                    Main.dust[sapphire].velocity = dustVel * Main.rand.NextFloat(1f, 2f);
+                    Main.dust[sapphire].noGravity = true;
+                    if (Main.rand.NextBool())
+                    {
+                        Main.dust[sapphire].scale = 0.5f;
+                        Main.dust[sapphire].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
                     }
                 }
 

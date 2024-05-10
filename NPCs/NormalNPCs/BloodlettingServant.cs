@@ -92,6 +92,7 @@ namespace CalamityMod.NPCs.NormalNPCs
             Vector2 lookAt = target.Center - NPC.Center;
             float rateOfRotation = charging ? 0f : 0.1f;
             float chargeDuration = CalamityWorld.death ? ChargeDuration_Death : ChargeDuration;
+            NPC.Calamity().canBreakPlayerDefense = charging;
             if (charging)
             {
                 if (NPC.ai[1] == 0f)
