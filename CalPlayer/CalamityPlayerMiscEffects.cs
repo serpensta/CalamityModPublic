@@ -4165,11 +4165,6 @@ namespace CalamityMod.CalPlayer
                         CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Misc.WikiStatus2");
                     }
 
-                    if (CalamityMod.Instance.musicMod is null && CalamityConfig.Instance.MusicModReminderMessage)
-                    {
-                        CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Misc.MusicModReminder");
-                    }
-
                     // 04JAN2024: Ozzatron: Plushie message always appears.
                     CalamityUtils.DisplayLocalizedText("Mods.CalamityMod.Misc.GimmeSwagPlushieCampaign");
                 }

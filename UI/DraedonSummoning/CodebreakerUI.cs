@@ -117,6 +117,7 @@ namespace CalamityMod.UI.DraedonSummoning
                 DialogScroller.Reset();
                 TopicOptionsScroller.Reset();
                 DialogVerticalOffset = 0f;
+                DialogOffYCache = 0;
                 OptionsTextVerticalOffset = 0f;
                 DialogHeight = 0f;
                 LatestDialogHeightIncrease = 0f;
