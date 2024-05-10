@@ -4866,7 +4866,7 @@ namespace CalamityMod.CalPlayer
 
             // Set a random delay between 12 and 20 seconds. When this delay hits zero, startup messages display
             bool plushieMessage = true;
-            if (plushieMessage || (CalamityMod.Instance.musicMod is null && CalamityConfig.Instance.MusicModReminderMessage) || CalamityConfig.Instance.WikiStatusMessage)
+            if (plushieMessage || CalamityConfig.Instance.WikiStatusMessage)
             {
                 startMessageDisplayDelay = Main.rand.Next(CalamityUtils.SecondsToFrames(12), CalamityUtils.SecondsToFrames(20) + 1);
             }
