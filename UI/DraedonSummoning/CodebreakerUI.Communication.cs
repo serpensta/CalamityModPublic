@@ -109,6 +109,7 @@ namespace CalamityMod.UI.DraedonSummoning
             get;
             set;
         }
+        public static float DialogOffYCache = 0;
 
         /// <summary>
         /// The vertical offset as a result of scrolling for the topic options.
@@ -486,7 +487,7 @@ namespace CalamityMod.UI.DraedonSummoning
                         // Ensure that the player starts at the bottom of the scoller, now that new text is generating there.
                         Texture2D dialogOutline = ModContent.Request<Texture2D>("CalamityMod/UI/DraedonSummoning/DraedonDialogOutline").Value;
                         Rectangle dialogArea = Utils.CenteredRectangle(selectionCenter, dialogOutline.Size() * panelScale);
-                        DialogVerticalOffset = dialogArea.Height - DialogHeight * GeneralScale;
+                        DialogVerticalOffset = -DialogHeight * GeneralScale;
                         DialogScroller.PositionYInterpolant = 1f;
                         if (DialogVerticalOffset > 0f)
                             DialogVerticalOffset = 0f;
@@ -555,7 +556,10 @@ namespace CalamityMod.UI.DraedonSummoning
 
                 // Shift the text downward if it exceeds the current bottom.
                 if (DialogHeight * 1.2f >= textCutoffRegion.Height && !string.IsNullOrEmpty(nextLetter.ToString()) && LatestDialogHeightIncrease > 0f)
+                {
                     DialogVerticalOffset -= LatestDialogHeightIncrease;
+                    DialogVerticalOffset += DialogOffYCache;
+                }
 
                 // Move to the next index in the dialog history once Draedon is finished speaking.
                 if (WrittenDraedonText.Length >= FullDraedonText.Length)
@@ -566,12 +570,19 @@ namespace CalamityMod.UI.DraedonSummoning
                 }
 
                 // Play a small dialog sound, similar to that of Undertale.
-                if (DialogSoundDelay <= 0 && nextLetter != ' ' && nextLetter != '\n')
+                if (DialogSoundDelay <= 0 && nextLetter != ' ')
                 {
-                    SoundStyle playThisSound = Main.rand.Next(DraedonTalks);
-                    SoundEngine.PlaySound(playThisSound with { Volume = 0.4f }, Main.LocalPlayer.Center);
+                    if (nextLetter != '\n')
+                    {
+                        DialogHeight -= DialogOffYCache;
+                        DialogOffYCache = 0;
+                        SoundStyle playThisSound = Main.rand.Next(DraedonTalks);
+                        SoundEngine.PlaySound(playThisSound with { Volume = 0.4f }, Main.LocalPlayer.Center);
 
-                    DialogSoundDelay = 4;
+                        DialogSoundDelay = 4;
+                    }
+                    else
+                        DialogOffYCache += panelScale.Y * 10f;
                 }
             }
 
