@@ -581,7 +581,7 @@ namespace CalamityMod.UI.DraedonSummoning
 
                         DialogSoundDelay = 4;
                     }
-                    else
+                    else if (WrittenDraedonText.Length < FullDraedonText.Length - 1 && FullDraedonText[WrittenDraedonText.Length] == '\n')
                         DialogOffYCache += panelScale.Y * 10f;
                 }
             }
@@ -615,7 +615,7 @@ namespace CalamityMod.UI.DraedonSummoning
             foreach (var entry in dialogEntries)
             {
                 int lineIndex = 0;
-                foreach (string line in Utils.WordwrapString(entry.Dialog, DialogFont, 336, 100, out _))
+                foreach (string line in Utils.WordwrapString(entry.Dialog, DialogFont, 336, 1000, out _))
                 {
                     if (string.IsNullOrEmpty(line))
                         continue;
