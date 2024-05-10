@@ -159,8 +159,9 @@ DebuffSystem: {
 
 // Draedon Contact UI. Repeated newlines indicate pauses in Draedon's speaking. As a result, newline characters may be explicitly defined.
 // The code that interprets these strings will transform them.
-CommunicationStart: ...
-CommunicationStartRepeat: State your inquiry.
+CommunicationStartInitial: ...
+CommunicationStartNoForge: Craft something using my Forge, then return.
+CommunicationStartNormal: State your inquiry.
 
 Communication: {
 	WhoAreYou: {

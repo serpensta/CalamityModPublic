@@ -183,7 +183,15 @@ namespace CalamityMod.UI.DraedonSummoning
         /// <summary>
         /// The text Draedon starts off with when you interact with the codebreaker. The first time you see him he says nothing, but in successive calls he asks what your inquiry is.
         /// </summary>
-        public static string InquiryText => CalamityUtils.GetTextValue(Main.LocalPlayer.Calamity().HasTalkedAtCodebreaker ? "UI.CommunicationStartRepeat" : "UI.CommunicationStart");
+        public static string InquiryText
+        {
+            get
+            {
+                var mp = Main.LocalPlayer.Calamity();
+                string key = mp.HasTalkedAtCodebreaker ? (mp.HasCraftedDraedonsForge ? "UI.CommunicationStartNormal" : "UI.CommunicationStartNoForge") : "UI.CommunicationStartInitial";
+                return CalamityUtils.GetTextValue(key);
+            }
+        }
 
         /// <summary>
         /// The text of the previously hovered topic option. This is used to ensure hover clicking sounds only play if the sound type changes.
