@@ -5,11 +5,13 @@ using CalamityMod.NPCs.ExoMechs;
 using log4net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 using ReLogic.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
@@ -382,6 +384,8 @@ namespace CalamityMod.UI.DraedonSummoning
             float cutoffDistance = OptionsTextHeight / GeneralScale - selectionOutline.Height;
             if (cutoffDistance > 0f && OptionsTextOpacity > 0f)
             {
+                if (MouseScreenArea.Intersects(selectionArea))
+                    OptionsTextVerticalOffset += PlayerInput.ScrollWheelDeltaForUI * 0.1f;
                 TopicOptionsScroller.PositionYInterpolant = MathHelper.Clamp(OptionsTextVerticalOffset / -cutoffDistance, 0f, 1f);
                 TopicOptionsScroller.Draw(selectionArea.Top + GeneralScale * 62f, selectionArea.Bottom - GeneralScale * 62f, selectionArea.Right - GeneralScale * 12f, GeneralScale * 0.8f, OptionsTextOpacity);
                 OptionsTextVerticalOffset = TopicOptionsScroller.PositionYInterpolant * -cutoffDistance;
@@ -599,6 +603,8 @@ namespace CalamityMod.UI.DraedonSummoning
             float cutoffDistance = DialogHeight - dialogOutline.Height;
             if (cutoffDistance > 0f && OptionsTextOpacity > 0f)
             {
+                if (MouseScreenArea.Intersects(dialogArea))
+                    DialogVerticalOffset += PlayerInput.ScrollWheelDeltaForUI * 0.2f;
                 DialogScroller.PositionYInterpolant = MathHelper.Clamp(DialogVerticalOffset / -cutoffDistance, 0f, 1f);
                 DialogScroller.Draw(dialogArea.Top + GeneralScale * 66f, dialogArea.Bottom - GeneralScale * 66f, dialogArea.Right - GeneralScale * 12f, GeneralScale * 0.8f, OptionsTextOpacity);
                 DialogVerticalOffset = DialogScroller.PositionYInterpolant * -cutoffDistance;
