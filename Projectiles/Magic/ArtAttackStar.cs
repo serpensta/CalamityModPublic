@@ -1,9 +1,10 @@
-﻿using CalamityMod.Items.Weapons.Magic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CalamityMod.Graphics.Primitives;
+using CalamityMod.Items.Weapons.Magic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics.Shaders;
@@ -15,10 +16,13 @@ namespace CalamityMod.Projectiles.Magic
     public class ArtAttackStar : ModProjectile, ILocalizedModType
     {
         public new string LocalizationCategory => "Projectiles.Magic";
-        public PrimitiveTrail TrailDrawer = null;
+
         public Player Owner => Main.player[Projectile.owner];
+
         public ref float Time => ref Projectile.ai[0];
+
         public const int StarShapeCreationDelay = 12;
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
@@ -38,7 +42,6 @@ namespace CalamityMod.Projectiles.Magic
 
         public override void AI()
         {
-
             // Die if the holdout is gone.
             if (Owner.ownedProjectileCounts[ModContent.ProjectileType<ArtAttackHoldout>()] <= 0 && Time >= 2f)
             {
@@ -115,12 +118,10 @@ namespace CalamityMod.Projectiles.Magic
 
         public void EmitIdleDust()
         {
-
             for (int i = 0; i < 3; i++)
             {
                 Dust rainbowMagic = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(8f, 8f), 261);
-                rainbowMagic.velocity = Main.rand.NextVector2Circular(6f, 6f) - ((Projectile.position - Projectile.oldPos[1])/3f).RotatedByRandom(0.51f);
-
+                rainbowMagic.velocity = Main.rand.NextVector2Circular(6f, 6f) - ((Projectile.position - Projectile.oldPos[1]) / 3f).RotatedByRandom(0.51f);
                 rainbowMagic.color = Main.hslToRgb(Main.rand.NextFloat(), 1f, Main.rand.NextFloat(0.5f, 0.9f));
                 rainbowMagic.color.A = 128;
                 rainbowMagic.scale = Main.rand.NextFloat(1.3f, 1.6f);
@@ -217,10 +218,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (TrailDrawer is null)
-                TrailDrawer = new PrimitiveTrail(TrailWidth, TrailColor, null, GameShaders.Misc["CalamityMod:ArtAttack"]);
-
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
             Vector2 origin = texture.Size() * 0.5f;
 
@@ -228,7 +226,7 @@ namespace CalamityMod.Projectiles.Magic
             GameShaders.Misc["CalamityMod:ArtAttack"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/FabstaffStreak"));
             GameShaders.Misc["CalamityMod:ArtAttack"].Apply();
 
-            TrailDrawer.Draw(Projectile.oldPos, Projectile.Size * 0.5f - Main.screenPosition, 180);
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(TrailWidth, TrailColor, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ArtAttack"]), 180);
             Main.spriteBatch.ExitShaderRegion();
 
             Main.EntitySpriteDraw(texture, drawPosition, null, Projectile.GetAlpha(Color.White), Projectile.rotation, origin, Projectile.scale, 0, 0);
