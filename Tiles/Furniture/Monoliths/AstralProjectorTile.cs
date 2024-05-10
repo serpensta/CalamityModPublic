@@ -95,7 +95,7 @@ namespace CalamityMod.Tiles.Furniture.Monoliths
         {
             int x = i - Main.tile[i, j].TileFrameX / 18 % 2;
             int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
-            int tileXX18 = 54;
+            int tileXX18 = 56;
             for (int l = x; l < x + 2; l++)
             {
                 for (int m = y; m < y + 3; m++)
