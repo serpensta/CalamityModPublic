@@ -49,6 +49,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         {
             // Funny punishment for trying to cheeese with Norfleet
             bool cheater = (player.Calamity().NorfleetCounter >= 3 && player.Calamity().NorfleetCounter < 1000);
+            if (player.Calamity().NorfleetCounter >= 1000)
+                loadedShots = 1;
 
             if (cheater)
             {
