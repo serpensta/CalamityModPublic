@@ -490,6 +490,8 @@ namespace CalamityMod.CalPlayer
             if (Main.zenithWorld)
                 SoundEngine.PlaySound(LeonDeathNoiseRE4_ForGFB, Player.Center);
 
+            if (NorfleetCounter >= 3 && NorfleetCounter < 1000)
+                damageSource = PlayerDeathReason.ByCustomReason(CalamityUtils.GetText("Status.Death.Norfleet").Format(Player.name));
             NorfleetCounter = 0;
 
             if (NPC.AnyNPCs(ModContent.NPCType<SupremeCalamitas>()))

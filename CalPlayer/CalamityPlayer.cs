@@ -2147,11 +2147,13 @@ namespace CalamityMod.CalPlayer
             StellarTorus = false;
             LiliesOfFinalityBool = false;
 
+            /*
             disableVoodooSpawns = false;
             disablePerfCystSpawns = false;
             disableHiveCystSpawns = false;
             disableNaturalScourgeSpawns = false;
             disableAnahitaSpawns = false;
+            */
 
             abyssalDivingSuitPrevious = abyssalDivingSuit;
             abyssalDivingSuit = abyssalDivingSuitHide = abyssalDivingSuitForce = abyssalDivingSuitPower = false;
