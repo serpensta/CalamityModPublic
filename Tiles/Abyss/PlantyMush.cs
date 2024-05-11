@@ -204,9 +204,7 @@ namespace CalamityMod.Tiles.Abyss
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, thirdTileAdjacency, "CalamityMod/Tiles/Merges/AbyssGravelMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/StoneMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/DirtMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, new TileFraming.MergeFrameData(thirdTileAdjacency, "CalamityMod/Tiles/Merges/AbyssGravelMerge"), new TileFraming.MergeFrameData(secondTileAdjacency, "CalamityMod/Tiles/Merges/StoneMerge"), new TileFraming.MergeFrameData(tileAdjacency, "CalamityMod/Tiles/Merges/DirtMerge"));
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
