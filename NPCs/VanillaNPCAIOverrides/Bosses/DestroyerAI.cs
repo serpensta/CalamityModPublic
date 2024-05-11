@@ -800,7 +800,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Despawn
             bool oblivionWasAlive = npc.localAI[3] == 1f && !oblivionAlive;
-            bool oblivionFightDespawn = (oblivionAlive && lifeRatio < 0.7f) || oblivionWasAlive;
+            bool oblivionFightDespawn = (oblivionAlive && lifeRatio < 0.75f) || oblivionWasAlive;
             if (player.dead || oblivionFightDespawn)
             {
                 shouldFly = false;
@@ -1064,10 +1064,11 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Force the fucker to turn around in ground phase in Master
+            // Turns slower if Oblivion is alive, for fairness
             if (npc.type == NPCID.TheDestroyer && masterMode && !flyAtTarget)
             {
                 if (npc.Distance(player.Center) > 2000f)
-                    npc.velocity += (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * turnSpeed;
+                    npc.velocity += (player.Center - npc.Center).SafeNormalize(Vector2.UnitY) * (oblivionAlive ? speed : turnSpeed);
             }
 
             if (NPC.IsMechQueenUp && npc.type == NPCID.TheDestroyer)
