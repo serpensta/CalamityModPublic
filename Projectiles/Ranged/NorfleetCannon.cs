@@ -37,6 +37,7 @@ namespace CalamityMod.Projectiles.Ranged
         public Color mainColor = Color.White;
         public Color randomColor = Color.White;
         public int colorTimer = 0;
+        public bool PUNISHMENTMODE = false;
 
         public override void SetDefaults()
         {
@@ -50,7 +51,10 @@ namespace CalamityMod.Projectiles.Ranged
         {
             Item heldItem = Owner.ActiveItem();
 
-            randomColor = Main.rand.Next(3) switch
+            if (Owner.dead || Owner is null)
+                Projectile.Kill();
+
+                randomColor = Main.rand.Next(3) switch
             {
                 0 => Color.OrangeRed,
                 1 => Color.Aqua,
@@ -59,6 +63,8 @@ namespace CalamityMod.Projectiles.Ranged
             if (mainColor == Color.White)
             {
                 mainColor = randomColor;
+                if (Projectile.ai[1] == 1000)
+                    PUNISHMENTMODE = true;
             }
 
             if (ShootingTimer % 15 == 0)
@@ -86,16 +92,16 @@ namespace CalamityMod.Projectiles.Ranged
                 if (loadedShots > 1)
                 {
                     ShootRocket(heldItem);
-                    PostFireCooldown = 55;
+                    PostFireCooldown = PUNISHMENTMODE ? 1000 : 55;
                     ShootingTimer = 1;
-                    mainColor = Color.MediumOrchid;
+                    mainColor = PUNISHMENTMODE ? Color.Red : Color.MediumOrchid;
                 }
                 else
                 {
                     ShootRocket(heldItem);
-                    PostFireCooldown = 262;
+                    PostFireCooldown = PUNISHMENTMODE ? 1000 : 262;
                     ShootingTimer = 1;
-                    mainColor = Color.MediumOrchid;
+                    mainColor = PUNISHMENTMODE ? Color.Red : Color.MediumOrchid;
                 }
                     
 
@@ -183,7 +189,7 @@ namespace CalamityMod.Projectiles.Ranged
             for (int i = 0; i < 3; i++)
             {
                 Vector2 firingVelocity = shootDirection.RotatedByRandom((0.2f * i) + 0.02f) * 5f * Main.rand.NextFloat(0.7f, 1.3f);
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity, ModContent.ProjectileType<NorfleetComet>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 0, i);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), tipPosition, firingVelocity, ModContent.ProjectileType<NorfleetComet>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 0, i, PUNISHMENTMODE ? 1 : 0);
             }
 
             NetUpdate();
@@ -218,6 +224,9 @@ namespace CalamityMod.Projectiles.Ranged
         {
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 73f;
 
+            if (PUNISHMENTMODE)
+                PostFireCooldown = 1000;
+
             if (PostFireCooldown == 207)
             {
                 OffsetLength -= 24f;
@@ -228,12 +237,12 @@ namespace CalamityMod.Projectiles.Ranged
             if (PostFireCooldown > 0 && !recharging)
             {
                 Vector2 smokeVel = new Vector2(0, -8) * Main.rand.NextFloat(0.1f, 1.1f);
-                Particle smoke = new HeavySmokeParticle(tipPosition, smokeVel, StaticEffectsColor, Main.rand.Next(40, 60 + 1), Main.rand.NextFloat(0.3f, 0.6f), 0.5f, Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextBool(), required: true);
+                Particle smoke = new HeavySmokeParticle(tipPosition, smokeVel, PUNISHMENTMODE ? Color.Red : StaticEffectsColor, Main.rand.Next(40, 60 + 1), Main.rand.NextFloat(0.3f, 0.6f), 0.5f, Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextBool(), required: true);
                 GeneralParticleHandler.SpawnParticle(smoke);
 
                 Dust dust = Dust.NewDustPerfect(tipPosition, 303, smokeVel.RotatedByRandom(0.1f), 80, default, Main.rand.NextFloat(0.4f, 1.3f));
                 dust.noGravity = false;
-                dust.color = Color.White;
+                dust.color = PUNISHMENTMODE ? Color.Red : Color.White;
             }
             else if (!recharging)
             {
@@ -336,7 +345,7 @@ namespace CalamityMod.Projectiles.Ranged
             Texture2D rechargeTexture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
 
             Main.EntitySpriteDraw(texture, drawPosition, null, drawColor, drawRotation, rotationPoint, Projectile.scale, flipSprite);
-            Main.EntitySpriteDraw(glowTexture, drawPosition, null, mainColor, drawRotation, rotationPoint, Projectile.scale, flipSprite);
+            Main.EntitySpriteDraw(glowTexture, drawPosition, null, PUNISHMENTMODE ? Color.Red : mainColor, drawRotation, rotationPoint, Projectile.scale, flipSprite);
             if (PostFireCooldown > 15 && recharging)
             {
                 float randSize = Main.rand.NextFloat(0.8f, 1.2f);
