@@ -1968,6 +1968,10 @@ namespace CalamityMod
             
             foreach (var frame in mergeFrames)
             {
+                // If it hasn't yet been initialized somehow... for some reason.
+                if (frame is null)
+                    continue;
+                
                 DrawUniversalMergeFrames(x, y, frame, shadingColour, myTile);
             }
         }
