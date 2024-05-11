@@ -10,7 +10,7 @@ namespace CalamityMod.Tiles.Ores
 {
     public class HallowedOre : ModTile
     {
-        public byte[,] tileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
         public override void SetStaticDefaults()
         {
             Main.tileLighted[Type] = true;
@@ -32,7 +32,7 @@ namespace CalamityMod.Tiles.Ores
             HitSound = SoundID.Tink;
             Main.tileSpelunker[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Pearlstone, out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Pearlstone, "CalamityMod/Tiles/Merges/PearlstoneMerge", out tileAdjacency);
         }
 
         public override bool CanExplode(int i, int j)
@@ -46,11 +46,11 @@ namespace CalamityMod.Tiles.Ores
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/PearlstoneMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency);
         }
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, TileID.Pearlstone, out tileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, TileID.Pearlstone, tileAdjacency);
             return true;
         }
 

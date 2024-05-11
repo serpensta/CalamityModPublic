@@ -11,8 +11,8 @@ namespace CalamityMod.Tiles.AstralDesert
     [LegacyName("AstralFossil")]
     public class CelestialRemains : ModTile
     {
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -28,18 +28,17 @@ namespace CalamityMod.Tiles.AstralDesert
 
             TileID.Sets.ForAdvancedCollision.ForSandshark[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSand>(), out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSandstone>(), out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSand>(), "CalamityMod/Tiles/Merges/AstralSandMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSandstone>(), "CalamityMod/Tiles/Merges/AstralSandstoneMerge", out secondTileAdjacency);
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/AstralSandstoneMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/AstralSandMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
         }
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSand>(), out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSandstone>(), out secondTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSand>(), tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSandstone>(), secondTileAdjacency);
             return true;
         }
 

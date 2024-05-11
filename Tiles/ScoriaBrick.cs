@@ -14,8 +14,8 @@ namespace CalamityMod.Tiles
         int subsheetHeight = 72;
         internal static Texture2D GlowTexture;
 
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
         public override void SetStaticDefaults()
         {
             if (!Main.dedServ)
@@ -29,8 +29,8 @@ namespace CalamityMod.Tiles
             AddMapEntry(new Color(85, 87, 101));
             HitSound = SoundID.Tink;
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Stone, out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge", out secondTileAdjacency);
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -53,8 +53,8 @@ namespace CalamityMod.Tiles
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.Stone, out secondTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.Stone, secondTileAdjacency);
             TileFraming.CompactFraming(i, j, resetFrame);
             return false;
         }
@@ -73,8 +73,7 @@ namespace CalamityMod.Tiles
             Vector2 drawOffset = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
             Vector2 drawPosition = new Vector2(i * 16 - Main.screenPosition.X, j * 16 - Main.screenPosition.Y) + drawOffset;
             TileFraming.SlopedGlowmask(i, j, 0, GlowTexture, drawPosition + new Vector2(0f, 8f), new Rectangle?(new Rectangle(xPos, yPos, 18, 8)), GetDrawColour(i, j, drawColour), default);
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/StoneMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/DirtMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
         }
         private Color GetDrawColour(int i, int j, Color colour)
         {

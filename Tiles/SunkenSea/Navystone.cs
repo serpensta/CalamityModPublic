@@ -9,10 +9,10 @@ namespace CalamityMod.Tiles.SunkenSea
 {
     public class Navystone : ModTile
     {
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
-        public byte[,] thirdTileAdjacency;
-        public byte[,] fourthTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
+        public TileFraming.MergeFrameData thirdTileAdjacency;
+        public TileFraming.MergeFrameData fourthTileAdjacency;
 
         public override void SetStaticDefaults()
         {
@@ -27,10 +27,10 @@ namespace CalamityMod.Tiles.SunkenSea
             AddMapEntry(new Color(31, 92, 114));
             HitSound = SoundID.Tink;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<EutrophicSand>(), out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Sandstone, out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Sand, out thirdTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.HardenedSand, out fourthTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<EutrophicSand>(), "CalamityMod/Tiles/Merges/EutrophicSandMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Sandstone, "CalamityMod/Tiles/Merges/SandstoneMerge", out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Sand, "CalamityMod/Tiles/Merges/SandMerge", out thirdTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.HardenedSand, "CalamityMod/Tiles/Merges/HardenedSandMerge", out fourthTileAdjacency);
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -40,18 +40,15 @@ namespace CalamityMod.Tiles.SunkenSea
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/EutrophicSandMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/SandstoneMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, thirdTileAdjacency, "CalamityMod/Tiles/Merges/SandMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, fourthTileAdjacency, "CalamityMod/Tiles/Merges/HardenedSandMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, secondTileAdjacency, thirdTileAdjacency, fourthTileAdjacency);
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<EutrophicSand>(), out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.Sandstone, out secondTileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.Sand, out thirdTileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.HardenedSand, out thirdTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<EutrophicSand>(), tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.Sandstone, secondTileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.Sand, thirdTileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.HardenedSand, thirdTileAdjacency);
             return TileFraming.BrimstoneFraming(i, j, resetFrame);
         }
     }

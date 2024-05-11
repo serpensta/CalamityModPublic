@@ -14,7 +14,7 @@ namespace CalamityMod.Tiles.Astral
         private static int sheetWidth = 216;
         private static int sheetHeight = 72;
 
-        public byte[,] tileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
 
         public override void SetStaticDefaults()
         {
@@ -31,7 +31,7 @@ namespace CalamityMod.Tiles.Astral
 
             AddMapEntry(new Color(45, 36, 63));
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), "CalamityMod/Tiles/Merges/AstralDirtMerge", out tileAdjacency);
         }
 
         public override bool CreateDust(int i, int j, ref int type)
@@ -87,13 +87,13 @@ namespace CalamityMod.Tiles.Astral
                 Main.spriteBatch.Draw(glowmask, drawOffset + new Vector2(0f, 8f), new Rectangle?(new Rectangle(xPos, yPos, 18, 8)), drawColour, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
 
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/AstralDirtMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency);
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
 
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), out tileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), tileAdjacency);
             TileFraming.CompactFraming(i, j, resetFrame);
             return false;
         }

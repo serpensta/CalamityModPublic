@@ -15,10 +15,10 @@ namespace CalamityMod.Tiles.Ores
         public static readonly SoundStyle MineSound = new("CalamityMod/Sounds/Custom/MagicalRockMine", 3);
         internal static Texture2D GlowTexture;
 
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
-        public byte[,] thirdTileAdjacency;
-        public byte[,] fourthTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
+        public TileFraming.MergeFrameData thirdTileAdjacency;
+        public TileFraming.MergeFrameData fourthTileAdjacency;
         public override void SetStaticDefaults()
         {
             if (!Main.dedServ)
@@ -47,10 +47,10 @@ namespace CalamityMod.Tiles.Ores
             HitSound = MineSound;
             Main.tileSpelunker[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Cloud, out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.RainCloud, out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.SnowCloud, out thirdTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, out fourthTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Cloud, "CalamityMod/Tiles/Merges/CloudMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.RainCloud, "CalamityMod/Tiles/Merges/RainCloudMerge", out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.SnowCloud, "CalamityMod/Tiles/Merges/SnowCloudMerge", out thirdTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge", out fourthTileAdjacency);
         }
         public override void PostSetDefaults()
         {
@@ -65,10 +65,10 @@ namespace CalamityMod.Tiles.Ores
         }
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, TileID.Cloud, out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.RainCloud, out secondTileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.SnowCloud, out thirdTileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, out fourthTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, TileID.Cloud, tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.RainCloud, secondTileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.SnowCloud, thirdTileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, fourthTileAdjacency);
             return true;
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
@@ -276,10 +276,7 @@ namespace CalamityMod.Tiles.Ores
                 Main.spriteBatch.Draw(GlowTexture, drawOffset + new Vector2(0f, 8f), new Rectangle?(new Rectangle(xPos, yPos, 18, 8)), drawColour, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
 
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/CloudMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/RainCloudMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, thirdTileAdjacency, "CalamityMod/Tiles/Merges/SnowCloudMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, fourthTileAdjacency, "CalamityMod/Tiles/Merges/DirtMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, secondTileAdjacency, thirdTileAdjacency, fourthTileAdjacency);
         }
         private Color GetDrawColour(int i, int j, Color colour)
         {

@@ -11,7 +11,7 @@ namespace CalamityMod.Tiles.Ores
 {
     public class AstralOre : ModTile
     {
-        public byte[,] TileAdjacency;
+        public TileFraming.MergeFrameData TileAdjacency;
         public override void SetStaticDefaults()
         {
             Main.tileLighted[Type] = true;
@@ -37,7 +37,7 @@ namespace CalamityMod.Tiles.Ores
             TileID.Sets.ChecksForMerge[Type] = true;
             TileID.Sets.DoesntGetReplacedWithTileReplacement[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), out TileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), "CalamityMod/Tiles/Merges/AstralDirtMerge", out TileAdjacency);
         }
         public override void NearbyEffects(int i, int j, bool closer)
         {
@@ -87,12 +87,12 @@ namespace CalamityMod.Tiles.Ores
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, TileAdjacency, "CalamityMod/Tiles/Merges/AstralDirtMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, TileAdjacency);
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), out TileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), TileAdjacency);
             return true;
         }
     }
