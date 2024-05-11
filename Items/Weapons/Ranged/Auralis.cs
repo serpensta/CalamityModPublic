@@ -34,7 +34,7 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.UseSound = CommonCalamitySounds.PlasmaBlastSound;
-            Item.value = CalamityGlobalItem.Rarity12BuyPrice;
+            Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
             Item.rare = ModContent.RarityType<Turquoise>();
             Item.Calamity().donorItem = true;
             Item.Calamity().canFirePointBlankShots = true;
@@ -59,6 +59,8 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public override Vector2? HoldoutOffset() => new Vector2(-10, 0);
 
+        public override void HoldItem(Player player) => player.scope = true;
+
         public override bool CanConsumeAmmo(Item ammo, Player player) => Main.rand.Next(100) >= 50;
 
         public override void AddRecipes()
@@ -67,7 +69,7 @@ namespace CalamityMod.Items.Weapons.Ranged
                 AddIngredient(ItemID.SniperRifle).
                 AddIngredient<UelibloomBar>(5).
                 AddIngredient<AureusCell>(5).
-                AddIngredient<Stardust>(50).
+                AddIngredient<StarblightSoot>(50).
                 AddTile(TileID.LunarCraftingStation).
                 Register();
         }

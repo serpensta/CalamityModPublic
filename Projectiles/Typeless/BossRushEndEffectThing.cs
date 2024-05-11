@@ -1,10 +1,11 @@
 ﻿using CalamityMod.Events;
 using CalamityMod.Items;
+using CalamityMod.Systems;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.GameContent.Events;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Typeless
@@ -35,9 +36,15 @@ namespace CalamityMod.Projectiles.Typeless
             BossRushEvent.SyncEndTimer((int)Time);
 
             float currentShakePower = MathHelper.Lerp(1f, 20f, Utils.GetLerpValue(140f, 180f, Time, true) * Utils.GetLerpValue(10f, 40f, Projectile.timeLeft, true));
-            Main.LocalPlayer.Calamity().GeneralScreenShakePower = currentShakePower;
+            if (Projectile.timeLeft > 5)
+                Main.LocalPlayer.Calamity().GeneralScreenShakePower = currentShakePower;
 
             MoonlordDeathDrama.RequestLight(Utils.GetLerpValue(220f, 265f, Time, true) * Utils.GetLerpValue(10f, 30f, Projectile.timeLeft, true), Main.LocalPlayer.Center);
+
+            // Bit of an ugly solution, but this code prevents the end effect projectile from despawning while the end dialogue is playing.
+            // This fixes a bug where the first-time end dialogue did not play as intended.
+            if (Projectile.timeLeft < 5 && BossRushDialogueSystem.CurrentDialogueDelay != 0)
+                Projectile.timeLeft = 5;
 
             Time++;
         }

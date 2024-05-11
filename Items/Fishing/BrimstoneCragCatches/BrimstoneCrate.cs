@@ -14,6 +14,8 @@ namespace CalamityMod.Items.Fishing.BrimstoneCragCatches
         {
             Item.ResearchUnlockCount = 5;
             ItemID.Sets.IsFishingCrate[Type] = true;
+            ItemID.Sets.IsFishingCrateHardmode[Type] = true;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SlagCrate>();
         }
 
         public override void SetDefaults()
@@ -32,10 +34,10 @@ namespace CalamityMod.Items.Fishing.BrimstoneCragCatches
             Item.useStyle = ItemUseStyleID.Swing;
         }
 
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
-		}
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
+        }
 
         public override bool CanRightClick() => true;
         public override void ModifyItemLoot(ItemLoot itemLoot)

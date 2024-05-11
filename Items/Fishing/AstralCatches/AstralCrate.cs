@@ -24,6 +24,7 @@ namespace CalamityMod.Items.Fishing.AstralCatches
             Item.ResearchUnlockCount = 5;
             ItemID.Sets.IsFishingCrate[Type] = true;
             ItemID.Sets.IsFishingCrateHardmode[Type] = true;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MonolithCrate>();
         }
 
         public override void SetDefaults()
@@ -42,10 +43,10 @@ namespace CalamityMod.Items.Fishing.AstralCatches
             Item.useStyle = ItemUseStyleID.Swing;
         }
 
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
-		}
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
+        }
 
         public override bool CanRightClick() => true;
         public override void ModifyItemLoot(ItemLoot itemLoot)
@@ -54,7 +55,7 @@ namespace CalamityMod.Items.Fishing.AstralCatches
             var postAstrumDeus = itemLoot.DefineConditionalDropSet(() => DownedBossSystem.downedAstrumDeus);
 
             // Materials
-            itemLoot.Add(ModContent.ItemType<Stardust>(), 1, 5, 10);
+            itemLoot.Add(ModContent.ItemType<StarblightSoot>(), 1, 5, 10);
             itemLoot.Add(ItemID.FallenStar, 1, 5, 10);
             itemLoot.Add(ItemID.Meteorite, 5, 10, 20);
             itemLoot.Add(ItemID.MeteoriteBar, 10, 1, 3);

@@ -1,4 +1,8 @@
-﻿using CalamityMod.Balancing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using CalamityMod.Balancing;
 using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Demonshade;
@@ -12,10 +16,6 @@ using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -37,19 +37,12 @@ namespace CalamityMod.Items
             // Modify all vanilla tooltips before appending mod mechanics (if any).
             ModifyVanillaTooltips(item, tooltips);
 
-            // If the item has a stealth generation prefix, show that on the tooltip.
-            // This is placed between vanilla tooltip edits and mod mechanics because it can apply to vanilla items.
-            StealthGenAccessoryTooltip(item, tooltips);
-
             // Adds "Does extra damage to enemies shot at point-blank range" to weapons capable of it.
             if (canFirePointBlankShots)
             {
                 TooltipLine line = new TooltipLine(Mod, "PointBlankShot", "Does extra damage to enemies shot at point-blank range");
                 tooltips.Add(line);
             }
-
-            // If the item has a stealth strike damage prefix, show that on the tooltip.
-            StealthWeaponTooltip(item, tooltips);
 
             // If an item has an enchantment, show its prefix in the first tooltip line and append its description to the
             // tooltip list.
@@ -92,7 +85,13 @@ namespace CalamityMod.Items
         #region Rarity Coloration
         private void ApplyRarityColor(Item item, TooltipLine nameLine)
         {
-            #region Uniquely Colored Developer Items
+            #region Uniquely Colored Items
+            if (item.type == ModContent.ItemType<LiliesOfFinality>())
+                nameLine.OverrideColor = Color.Lerp(Color.Red, Color.White, (float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2f + 0.5f);
+            if (item.type == ModContent.ItemType<HeartoftheElements>() || item.type == ModContent.ItemType<TheCommunity>() || item.type == ModContent.ItemType<IridescentExcalibur>())
+                nameLine.OverrideColor = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
+
+            // Developer items
             if (item.type == ModContent.ItemType<Fabstaff>())
                 nameLine.OverrideColor = new Color(Main.DiscoR, 100, 255);
             if (item.type == ModContent.ItemType<StaffofBlushie>())
@@ -259,6 +258,10 @@ namespace CalamityMod.Items
             // Numerous random tooltip edits which don't fit into another category
             #region Various Tooltip Edits
 
+            // Lilies of Finality 512 edit
+            if (item.type == ModContent.ItemType<LiliesOfFinality>())
+                EditTooltipByName("Damage", (line) => line.Text = LiliesOfFinality.TheNumber + " summon damage");
+
             // Master Mode items also drop in Revengeance
             // Only affects vanilla and Calamity items
             if (item.master && (item.type < ItemID.Count || item.ModItem?.Mod is CalamityMod))
@@ -405,14 +408,18 @@ namespace CalamityMod.Items
             // Brain of Confusion, Black Belt and Master Ninja Gear have guaranteed dodges with a fixed cooldown.
             #region Guaranteed Dodge Tooltips
             string beltDodgeLine = "Grants the ability to dodge attacks\n" +
-                $"The dodge has a {BalancingConstants.BeltDodgeCooldown / 60} second cooldown which is shared with all other dodges and reflects";
+                "Attacks that deal less than 5% of your max life in damage will not be dodged\n" +
+                $"The dodge has a cooldown that ranges between {BalancingConstants.BeltDodgeCooldownMin / 60 } and {BalancingConstants.BeltDodgeCooldownMax / 60} seconds depending on the dodged attack's damage\n" +
+                "The cooldown is shared with all other dodges and reflects";
             if (item.type == ItemID.BlackBelt)
                 EditTooltipByNum(0, (line) => line.Text = beltDodgeLine);
             if (item.type == ItemID.MasterNinjaGear)
                 EditTooltipByNum(1, (line) => line.Text = beltDodgeLine);
 
             string brainDodgeLine = "Grants the ability to dodge attacks\n" +
-                $"The dodge has a {BalancingConstants.BrainDodgeCooldown / 60} second cooldown which is shared with all other dodges and reflects";
+                "Attacks that deal less than 5% of your max life in damage will not be dodged\n" +
+                $"The dodge has a cooldown that ranges between {BalancingConstants.BrainDodgeCooldownMin / 60} and {BalancingConstants.BrainDodgeCooldownMax / 60} seconds depending on the dodged attack's damage\n" +
+                "The cooldown is shared with all other dodges and reflects";
             if (item.type == ItemID.BrainOfConfusion)
                 EditTooltipByNum(0, (line) => line.Text = brainDodgeLine);
             #endregion
@@ -422,7 +429,7 @@ namespace CalamityMod.Items
 
             // Cobalt
             if (item.type == ItemID.CobaltSword || item.type == ItemID.CobaltNaginata)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nDecreases enemy defense by 25% on hit");
+                EditTooltipByName("Knockback", (line) => line.Text += "\nPermanently decreases enemy defense by 25% on hit");
 
             // Palladium
             if (item.type == ItemID.PalladiumSword || item.type == ItemID.PalladiumPike)
@@ -430,7 +437,7 @@ namespace CalamityMod.Items
 
             // Mythril
             if (item.type == ItemID.MythrilSword || item.type == ItemID.MythrilHalberd)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nDecreases enemy contact damage by 10% on hit");
+                EditTooltipByName("Knockback", (line) => line.Text += "\nPermanently decreases enemy contact damage by 10% on hit");
 
             // Orichalcum
             if (item.type == ItemID.OrichalcumSword || item.type == ItemID.OrichalcumHalberd)
@@ -464,7 +471,6 @@ namespace CalamityMod.Items
             // Stylish Scissors, all Phaseblades, and all Phasesabers ignore 100% of defense
             if (item.type == ItemID.StylistKilLaKillScissorsIWish || (item.type >= ItemID.BluePhasesaber && item.type <= ItemID.YellowPhasesaber) || item.type == ItemID.OrangePhasesaber)
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIgnores 100% of enemy defense");
-
             // Phaseblades are done separately to ensure it appears under the Material line
             if (item.type >= ItemID.BluePhaseblade && item.type <= ItemID.YellowPhaseblade || item.type == ItemID.OrangePhaseblade)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 100% of enemy defense");
@@ -472,14 +478,9 @@ namespace CalamityMod.Items
             // Bone Sword, Breaker Blade, and Mandible Blade ignore 50% of defense
             if (item.type == ItemID.BoneSword || item.type == ItemID.BreakerBlade)
                 EditTooltipByName("Knockback", (line) => line.Text += "\nIgnores 50% of enemy defense");
-
             // Mandible Blade is done separately to ensure it appears under the Material line
             if (item.type == ItemID.AntlionClaw)
                 EditTooltipByName("Material", (line) => line.Text += "\nIgnores 50% of enemy defense");
-
-            // Muramasa inflicts Nightwither
-            if (item.type == ItemID.Muramasa)
-                EditTooltipByName("Material", (line) => line.Text += "\nInflicts Nightwither on hit");
 
             // Death Sickle inflict Whispering Death
             if (item.type == ItemID.DeathSickle)
@@ -574,9 +575,13 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FrozenShield)
                 EditTooltipByNum(1, (line) => line.Text = "Puts a shell around the owner when below 50% life that reduces damage by 15%");
 
-            // Ale and Sake rebalance.
+            // Ale and Sake rebalance and Alcohol Poisoning.
             if (item.type == ItemID.Ale || item.type == ItemID.Sake)
-                EditTooltipByNum(0, (line) => line.Text = "Increases melee damage by 10% and reduces defense by 5%");
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Increases melee damage by 10% and reduces defense by 5%\n" + 
+                "Counts as an alcohol for Alcohol Poisoning\n" +
+                "Drinking more than 3 different alcohols might not end well with your liver");
+            }
 
             // Hellfire Treads buff.
             if (item.type == ItemID.HellfireTreads)
@@ -614,9 +619,13 @@ namespace CalamityMod.Items
                 EditTooltipByNum(2, (line) => line.Text = line.Text.Replace(" melee speed,", ""));
             }
 
-            // Arcane and Magnet Flower buffs.
-            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.MagnetFlower)
-                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana usage");
+            // Mana Flower tinker buffs.
+            if (item.type == ItemID.MagnetFlower)
+                EditTooltipByNum(0, (line) => line.Text = "10% reduced mana cost");
+            if (item.type == ItemID.ArcaneFlower || item.type == ItemID.ManaCloak)
+                EditTooltipByNum(0, (line) => line.Text = "12% reduced mana cost");
+            if (item.type == ItemID.ArcaneFlower)
+                EditTooltipByNum(2, (line) => line.Text += "\n5% increased magic damage");
 
             // Magiluminescence nerf and clear explanation of what it actually does.
             if (item.type == ItemID.Magiluminescence)
@@ -670,11 +679,34 @@ namespace CalamityMod.Items
 
             // Magic Hat nerf
             if (item.type == ItemID.MagicHat)
-                EditTooltipByNum(0, (line) => line.Text = "5% increased magic damage and critical strike chance");
+                EditTooltipByNum(0, (line) => line.Text = "6% increased magic critical strike chance");
 
-            // Worm Scarf only gives 10% DR instead of 17%
+            // Gem Robe nerfs
+            if (item.type == ItemID.AmethystRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("5%", "4%"));
+            if (item.type == ItemID.TopazRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("7%", "5%"));
+            }
+            if (item.type == ItemID.SapphireRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("9%", "6%"));
+            if (item.type == ItemID.EmeraldRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("60", "40"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("11%", "7%"));
+            }
+            if (item.type == ItemID.RubyRobe || item.type == ItemID.AmberRobe)
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("13%", "8%"));
+            if (item.type == ItemID.DiamondRobe)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("80", "60"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("15%", "9%"));
+            }
+
+            // Worm Scarf only gives 14% DR instead of 17%
             if (item.type == ItemID.WormScarf)
-                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("17%", "10%"));
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("17%", "14%"));
 
             // Feral Claws line melee speed and true melee damage changes
             if (item.type == ItemID.FeralClaws)
@@ -720,7 +752,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(3, (line) => line.Text += "\nImmunity to the On Fire! debuff");
 
             // Ozzatron 23NOV2023: Removed tooltip edits for Magma Skull and Molten Skull Rose, as they were invalid after vanilla tooltip changes.
-            
+
             // Yoyo Glove/Bag apply a 0.5x damage multiplier on the second yoyo
             if (item.type == ItemID.YoyoBag || item.type == ItemID.YoYoGlove)
                 EditTooltipByNum(0, (line) => line.Text += "\nSecondary yoyos will do 50% less damage");
@@ -788,7 +820,7 @@ namespace CalamityMod.Items
             if (item.type == ItemID.PlatinumHelmet)
                 AddTooltip("6% increased damage");
             if (item.type == ItemID.PlatinumChainmail)
-                AddTooltip("5% increased critical strike chance");
+                AddTooltip("3% increased critical strike chance");
             if (item.type == ItemID.PlatinumGreaves)
                 AddTooltip("10% increased movement speed");
 
@@ -796,12 +828,10 @@ namespace CalamityMod.Items
             if (item.type == ItemID.JungleHat || item.type == ItemID.AncientCobaltHelmet)
             {
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("40", "20"));
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
             }
-            if (item.type == ItemID.JungleShirt || item.type == ItemID.AncientCobaltBreastplate)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "4%"));
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
-                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "2%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
             // Shadow
             if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
@@ -810,8 +840,9 @@ namespace CalamityMod.Items
             // Crimson
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
-                EditTooltipByNum(0, (line) => {
-                    string newTooltip = line.Text.Replace("2%", "5%");
+                EditTooltipByNum(0, (line) =>
+                {
+                    string newTooltip = line.Text.Replace("3%", "5%");
                     newTooltip += "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });
@@ -822,7 +853,7 @@ namespace CalamityMod.Items
                 EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("9%", "8%"));
             #endregion
 
-            // Hardmode ore armor tooltip edits
+            // Hardmode armor tooltip edits
             #region Hardmode Ore Armor
             // Cobalt
             if (item.type == ItemID.CobaltHat)
@@ -849,6 +880,17 @@ namespace CalamityMod.Items
             // Titanium
             if (item.type == ItemID.TitaniumMask)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("9", "14"));
+
+            // Solar Flare
+            if (item.type == ItemID.SolarFlareHelmet)
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("26%", "20%"));
+
+            // Vortex
+            if (item.type == ItemID.VortexHelmet)
+            {
+                EditTooltipByNum(0, (line) => line.Text = line.Text.Replace("16%", "10%"));
+                EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("7%", "5%"));
+            }
             #endregion
 
             // DD2 armor tooltip edits
@@ -1257,69 +1299,8 @@ namespace CalamityMod.Items
         }
         #endregion
 
-        #region Stealth Generation Prefix Accessory Tooltip
-        private void StealthGenAccessoryTooltip(Item item, IList<TooltipLine> tooltips)
-        {
-            if (!item.accessory || item.social || item.prefix <= 0)
-                return;
-
-            float stealthGenBoost = item.Calamity().StealthGenBonus - 1f;
-            if (stealthGenBoost > 0)
-            {
-                TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Expert");
-                if (line == null)
-                    line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Price");
-
-                TooltipLine StealthGen = new TooltipLine(Mod, "PrefixStealthGenBoost", "+" + Math.Round(stealthGenBoost * 100f) + "% stealth generation")
-                {
-                    IsModifier = true
-                };
-
-                if (line == null)
-                    tooltips.Add(StealthGen);
-                else
-                    tooltips.Insert(tooltips.IndexOf(line), StealthGen);
-            }
-        }
-        #endregion
-
-        #region Stealth Strike Damage Prefix Weapon Tooltip
-        private void StealthWeaponTooltip(Item item, IList<TooltipLine> tooltips)
-        {
-            if (!item.CountsAsClass<RogueDamageClass>() || item.accessory || item.prefix <= 0)
-                return;
-
-            float stealthDmgBonus = item.Calamity().StealthStrikePrefixBonus - 1f;
-            if (stealthDmgBonus > 0)
-            {
-                TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "PrefixShootSpeed");
-                if (line == null)
-                    line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "PrefixCritChance");
-                else if (line == null)
-                    line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "PrefixSpeed");
-                else if (line == null)
-                    line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "PrefixDamage");
-                TooltipLine line2 = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Expert");
-                if (line2 == null)
-                    line2 = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Price");
-
-                TooltipLine StealthDmg = new TooltipLine(Mod, "PrefixStealthDamageBoost", "+" + Math.Round(stealthDmgBonus * 100f) + "% stealth strike damage")
-                {
-                    IsModifier = true
-                };
-
-                // If price/expert line doesn't exist, just add it to the end
-                if (line2 == null)
-                    tooltips.Add(StealthDmg);
-                // Otherwise, insert it right before the sell price (or expert line)
-                else
-                    tooltips.Insert(tooltips.IndexOf(line2), StealthDmg);
-            }
-        }
-        #endregion
-
         #region Speed Tooltips
-        
+
         // TODO: Investigate using a SortedDictionary instead? May be slower, but removes the need for carefully adding KVPs.
         /// <summary>
         /// This dictionary handles easily retrieving tooltip text based on a numerical threshold. <br />

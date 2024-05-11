@@ -15,7 +15,8 @@ namespace CalamityMod.Items.Weapons.Melee
         public const float DamagePerHealth = 0.001f; // 0.1 damage per additional health. 100 health = 10% damage.
         public new string LocalizationCategory => "Items.Weapons.Melee";
 
-        BloomRing ring;
+        [CloneByReference]
+        public BloomRing ring;
 
         public override void SetStaticDefaults()
         {
@@ -34,7 +35,7 @@ namespace CalamityMod.Items.Weapons.Melee
             Item.useTurn = true;
             Item.knockBack = 7f;
             Item.autoReuse = true;
-            Item.value = CalamityGlobalItem.Rarity4BuyPrice;
+            Item.value = CalamityGlobalItem.RarityLightRedBuyPrice;
             Item.rare = ItemRarityID.LightRed;
             Item.shoot = ModContent.ProjectileType<DarkMasterBeam>();
             Item.shootSpeed = 16f;
@@ -48,7 +49,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 // only fire beams at max health
                 if (player.statLife >= (player.statLifeMax2 * 0.75f))
                 {
-                    SoundEngine.PlaySound(SoundID.Item71, player.position);
+                    SoundEngine.PlaySound(SoundID.Item71, player.Center);
                     // increase the beam's damage by the player's additional health starting from the vanilla maximum amount with just life crystals
                     int baseMaxHealth = 400;
                     int bonusHealth = player.statLifeMax2 - baseMaxHealth;
@@ -58,7 +59,7 @@ namespace CalamityMod.Items.Weapons.Melee
                 // still play the sound if the clones are out since they always fire beams
                 else if (player.ownedProjectileCounts[ModContent.ProjectileType<DarkMasterClone>()] > 0)
                 {
-                    SoundEngine.PlaySound(SoundID.Item71, player.position);
+                    SoundEngine.PlaySound(SoundID.Item71, player.Center);
                 }
             }
             else

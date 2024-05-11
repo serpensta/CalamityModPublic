@@ -1,11 +1,11 @@
-﻿using CalamityMod.Projectiles.Typeless;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Items.Potions.Alcohol;
+using CalamityMod.Projectiles.Typeless;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Items.Potions.Alcohol;
+using Terraria.ModLoader;
 
 namespace CalamityMod.Items.Accessories
 {
@@ -20,7 +20,7 @@ namespace CalamityMod.Items.Accessories
             Item.height = 22;
             Item.defense = 30;
             Item.accessory = true;
-            Item.value = CalamityGlobalItem.Rarity15BuyPrice;
+            Item.value = CalamityGlobalItem.RarityVioletBuyPrice;
             Item.rare = ModContent.RarityType<Violet>();
         }
 
