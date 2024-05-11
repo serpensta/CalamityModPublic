@@ -571,6 +571,8 @@ namespace CalamityMod.UI.DraedonSummoning
                 {
                     DialogVerticalOffset -= LatestDialogHeightIncrease;
                     DialogVerticalOffset += DialogOffYCache;
+                    DialogHeight -= DialogOffYCache;
+                    DialogOffYCache = 0;
                 }
 
                 // Move to the next index in the dialog history once Draedon is finished speaking.
