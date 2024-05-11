@@ -30,17 +30,21 @@ namespace CalamityMod
             public int FrameOffsetX { get; }
 
             public int FrameOffsetY { get; }
-            
-            public Asset<Texture2D> BlendSheet => blendSheet.Value;
-            
-            private readonly Lazy<Asset<Texture2D>> blendSheet;
+
+            public Asset<Texture2D> BlendSheet { get; }
 
             public MergeFrameData(byte[,] adjacencyData, string blendSheetPath, int frameOffsetX = 0, int frameOffsetY = 0)
             {
                 AdjacencyData = adjacencyData;
                 FrameOffsetX = frameOffsetX;
                 FrameOffsetY = frameOffsetY;
-                blendSheet = new Lazy<Asset<Texture2D>>(() => ModContent.Request<Texture2D>(blendSheetPath));
+
+                if (!cachedBlendSheets.TryGetValue(blendSheetPath, out var blendSheet))
+                {
+                    blendSheet = cachedBlendSheets[blendSheetPath] = ModContent.Request<Texture2D>(blendSheetPath);
+                }
+                
+                BlendSheet = blendSheet;
             }
         }
         
