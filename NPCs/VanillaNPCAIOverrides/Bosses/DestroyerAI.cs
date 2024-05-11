@@ -489,8 +489,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 }
 
                 // Laser rate of fire
-                float shootProjectileTime = death ? (masterMode ? (phase5 ? 30f : phase4 ? 60f : 90f) : 270f) : (masterMode ? (phase5 ? 90f : phase4 ? 120f : 150f) : 450f);
-                float bodySegmentTime = npc.ai[0] * (masterMode ? 15f : 30f);
+                float shootProjectileTime = death ? (masterMode ? (phase5 ? 120f : phase4 ? 150f : 180f) : 270f) : (masterMode ? (phase5 ? 150f : phase4 ? 210f : 270f) : 450f);
+                float bodySegmentTime = npc.ai[0] * (masterMode ? 20f : 30f);
                 float shootProjectileGateValue = bodySegmentTime + shootProjectileTime;
                 float laserTimerIncrement = (calamityGlobalNPC.newAI[0] > shootProjectileGateValue - LaserTelegraphTime) ? 1f : 2f;
                 if (ableToFireLaser)
