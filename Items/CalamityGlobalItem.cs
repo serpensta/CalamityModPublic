@@ -1443,7 +1443,7 @@ namespace CalamityMod.Items
                     player.AddBuff(BuffID.DryadsWard, 5, true); // Dryad's Blessing
                 }
             }
-            else if (item.type == ItemID.FestiveWings) // Drop powerful homing christmas tree bulbs while in flight
+            else if (item.type == ItemID.FestiveWings) // Drop homing christmas tree bulbs while in flight
             {
                 player.noFallDmg = true;
                 player.statLifeMax2 += 40;
@@ -1452,13 +1452,13 @@ namespace CalamityMod.Items
                     var source = player.GetSource_Accessory(item);
                     if (player.controlJump && player.jump == 0 && player.velocity.Y != 0f && !player.mount.Active && !player.mount.Cart)
                     {
-                        int ornamentDamage = (int)player.GetBestClassDamage().ApplyTo(100);
+                        int ornamentDamage = (int)player.GetBestClassDamage().ApplyTo(50);
                         int p = Projectile.NewProjectile(source, player.Center, Vector2.UnitY * 2f, ProjectileID.OrnamentFriendly, ornamentDamage, 5f, player.whoAmI);
                         if (p.WithinBounds(Main.maxProjectiles))
                         {
                             Main.projectile[p].DamageType = DamageClass.Generic;
                             Main.projectile[p].Calamity().lineColor = 1;
-                            modPlayer.icicleCooldown = 10;
+                            modPlayer.icicleCooldown = 15;
                         }
                     }
                 }
