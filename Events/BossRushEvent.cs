@@ -593,7 +593,7 @@ namespace CalamityMod.Events
 
                     // Increase cooldown post-Moon Lord.
                     if (BossRushStage >= Bosses.FindIndex(boss => boss.EntityID == NPCID.MoonLordCore))
-                        BossRushSpawnCountdown += 300;
+                        BossRushSpawnCountdown += 180;
 
                     // Override the spawn countdown if specified.
                     if (BossRushStage < Bosses.Count - 1 && Bosses[BossRushStage + 1].SpecialSpawnCountdown != -1)
