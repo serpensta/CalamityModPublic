@@ -13,8 +13,8 @@ namespace CalamityMod.Tiles.Crags
         private int subsheetWidth = 450;
         private int subsheetHeight = 198;
 
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
 
         public override void SetStaticDefaults()
         {
@@ -30,8 +30,8 @@ namespace CalamityMod.Tiles.Crags
             HitSound = SoundID.Tink;
             DustType = 235;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<BrimstoneSlag>(), out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Ash, out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<BrimstoneSlag>(), "CalamityMod/Tiles/Merges/BrimstoneSlagMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Ash, "CalamityMod/Tiles/Merges/AshMerge", out secondTileAdjacency);
         }
 
         public override bool CanExplode(int i, int j)
@@ -51,13 +51,12 @@ namespace CalamityMod.Tiles.Crags
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/AshMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/BrimstoneSlagMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
         }
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<BrimstoneSlag>(), out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.Ash, out secondTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<BrimstoneSlag>(), tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.Ash, secondTileAdjacency);
             return TileFraming.BrimstoneFraming(i, j, resetFrame);
         }
     }

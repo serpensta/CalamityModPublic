@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CalamityMod.Tiles.Abyss;
 using CalamityMod.Tiles.Abyss.AbyssAmbient;
@@ -22,7 +23,26 @@ namespace CalamityMod
     // OnModLoad is guaranteed to be run after all content has autoloaded.
     public static class TileFraming
     {
-        internal record struct MergeFrameData(byte[,] AdjacencyData, string BlendSheetPath, int FrameOffsetX = 0, int FrameOffsetY = 0);
+        public sealed class MergeFrameData
+        {
+            public byte[,] AdjacencyData { get; }
+
+            public int FrameOffsetX { get; }
+
+            public int FrameOffsetY { get; }
+            
+            public Asset<Texture2D> BlendSheet => blendSheet.Value;
+            
+            private readonly Lazy<Asset<Texture2D>> blendSheet;
+
+            public MergeFrameData(byte[,] adjacencyData, string blendSheetPath, int frameOffsetX = 0, int frameOffsetY = 0)
+            {
+                AdjacencyData = adjacencyData;
+                FrameOffsetX = frameOffsetX;
+                FrameOffsetY = frameOffsetY;
+                blendSheet = new Lazy<Asset<Texture2D>>(() => ModContent.Request<Texture2D>(blendSheetPath));
+            }
+        }
         
         private static int[][] PlantCheckAgainst;
         private static Dictionary<ushort, ushort> VineToGrass;
@@ -1932,10 +1952,10 @@ namespace CalamityMod
         /// <summary>
         /// Call this in SetStaticDefaults. Used to set up the adjacency data array with the correct dimensions.
         /// </summary>
-        internal static void SetUpUniversalMerge(int myType, int mergeType, out byte[,] adjacencyData)
+        internal static void SetUpUniversalMerge(int myType, int mergeType, string blendSheetPath, out MergeFrameData adjacencyData)
         {
             CalamityUtils.SetMerge(myType, mergeType, true);
-            adjacencyData = new byte[Main.tile.Width, Main.tile.Height];
+            adjacencyData = new MergeFrameData(new byte[Main.tile.Width, Main.tile.Height], blendSheetPath);
         }
 
         /// <summary>
@@ -1955,16 +1975,9 @@ namespace CalamityMod
         internal static void DrawUniversalMergeFrames(int x, int y, MergeFrameData mergeFrameData, Color shadingColour, Tile myTile)
         {
             byte[,] adjacencyData = mergeFrameData.AdjacencyData;
-            string blendSheetPath = mergeFrameData.BlendSheetPath;
+            var blendLayer = mergeFrameData.BlendSheet.Value;
             int frameOffsetX = mergeFrameData.FrameOffsetX;
             int frameOffsetY = mergeFrameData.FrameOffsetY;
-
-            if (!cachedBlendSheets.TryGetValue(blendSheetPath, out var blendLayerAsset))
-            {
-                blendLayerAsset = cachedBlendSheets[blendSheetPath] = ModContent.Request<Texture2D>(blendSheetPath);
-            }
-
-            var blendLayer = blendLayerAsset.Value;
             
             Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
             Vector2 drawOffset = new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y) + zero;
@@ -2324,13 +2337,14 @@ namespace CalamityMod
         /// <summary>
         /// Call this in TileFrame. Used to generate adjacency data used in DrawUniversalMergeFrames. Tiles using this need a 2d byte array
         /// </summary>
-        internal static void GetAdjacencyData(int x, int y, int blendType, out byte adjacencyData)
+        internal static void GetAdjacencyData(int x, int y, int blendType, MergeFrameData data)
         {
             // bit to relative tile pos for reference
             // 4 0 5
             // 3 X 1
             // 7 2 6
             //                01234567
+            ref byte adjacencyData = ref data.AdjacencyData[x, y];
             adjacencyData = 0b00000000;
 
             if (x < 0 || x >= Main.maxTilesX)

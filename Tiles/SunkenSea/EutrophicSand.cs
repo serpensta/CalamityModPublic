@@ -11,9 +11,9 @@ namespace CalamityMod.Tiles.SunkenSea
 {
     public class EutrophicSand : ModTile
     {
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
-        public byte[,] thirdTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
+        public TileFraming.MergeFrameData thirdTileAdjacency;
 
         public override void SetStaticDefaults()
         {
@@ -33,9 +33,9 @@ namespace CalamityMod.Tiles.SunkenSea
             DustType = 108;
             AddMapEntry(new Color(92, 145, 167));
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Sandstone, out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Sand, out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.HardenedSand, out thirdTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Sandstone, "CalamityMod/Tiles/Merges/SandstoneMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.Sand, "CalamityMod/Tiles/Merges/SandMerge", out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, TileID.HardenedSand, "CalamityMod/Tiles/Merges/HardenedSandMerge", out thirdTileAdjacency);
         }
 
         public override void RandomUpdate(int i, int j)
@@ -67,16 +67,14 @@ namespace CalamityMod.Tiles.SunkenSea
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/SandstoneMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/SandMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, thirdTileAdjacency, "CalamityMod/Tiles/Merges/HardenedSandMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, secondTileAdjacency, thirdTileAdjacency);
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, TileID.Sandstone, out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.Sand, out secondTileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, TileID.HardenedSand, out thirdTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, TileID.Sandstone, tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.Sand, secondTileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, TileID.HardenedSand, thirdTileAdjacency);
             return TileFraming.BrimstoneFraming(i, j, resetFrame);
         }
     }

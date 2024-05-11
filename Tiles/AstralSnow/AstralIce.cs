@@ -10,8 +10,8 @@ namespace CalamityMod.Tiles.AstralSnow
 {
     public class AstralIce : ModTile
     {
-        public byte[,] tileAdjacency;
-        public byte[,] secondTileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
+        public TileFraming.MergeFrameData secondTileAdjacency;
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -36,8 +36,8 @@ namespace CalamityMod.Tiles.AstralSnow
             TileID.Sets.Conversion.Ice[Type] = true;
             TileID.Sets.CanBeClearedDuringOreRunner[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSnow>(), out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), out secondTileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSnow>(), "CalamityMod/Tiles/Merges/AstralSnowMerge", out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), "CalamityMod/Tiles/Merges/AstralDirtMerge", out secondTileAdjacency);
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -53,14 +53,13 @@ namespace CalamityMod.Tiles.AstralSnow
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, "CalamityMod/Tiles/Merges/AstralDirtMerge");
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/AstralSnowMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSnow>(), out tileAdjacency[i, j]);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), out secondTileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSnow>(), tileAdjacency);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), secondTileAdjacency);
             return true;
         }
 

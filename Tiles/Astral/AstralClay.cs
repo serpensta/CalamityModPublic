@@ -10,7 +10,7 @@ namespace CalamityMod.Tiles.Astral
 {
     public class AstralClay : ModTile
     {
-        public byte[,] tileAdjacency;
+        public TileFraming.MergeFrameData tileAdjacency;
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -29,16 +29,16 @@ namespace CalamityMod.Tiles.Astral
             TileID.Sets.CanBeDugByShovel[Type] = true;
 
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), out tileAdjacency);
+            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), "CalamityMod/Tiles/Merges/AstralDirtMerge", out tileAdjacency);
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency, "CalamityMod/Tiles/Merges/AstralDirtMerge");
+            TileFraming.DrawUniversalMergeFrames(i, j, tileAdjacency);
         }
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), out tileAdjacency[i, j]);
+            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), tileAdjacency);
             return true;
         }
 
