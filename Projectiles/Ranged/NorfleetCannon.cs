@@ -85,7 +85,7 @@ namespace CalamityMod.Projectiles.Ranged
             mainColor = Color.Lerp(mainColor, variedColor, (PostFireCooldown <= 20 || recharging) ? 0.07f : 0);
 
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
-            if (Owner.CantUseHoldout() && !HasLetGo || heldItem.type != ModContent.ItemType<Norfleet>())
+            if (Owner.CantUseHoldout() && !HasLetGo)
             {
                 if (SoundEngine.TryGetActiveSound(NorfleetRecharge, out var hum) && hum.IsPlaying)
                 {

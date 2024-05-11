@@ -36,18 +36,13 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void KillHoldoutLogic()
         {
-            if (HeldItem.type != ItemType<TheHive>())
-            {
-                Projectile.Kill();
-                Projectile.netUpdate = true;
-            }
-
             if (HasLetGo)
                 PostFiringCooldown();
         }
 
         public override void HoldoutAI()
         {
+
             FireNuke = ShootingTimer > MaxCharge;
 
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
@@ -57,7 +52,8 @@ namespace CalamityMod.Projectiles.Ranged
                 {
                     hum?.Stop();
                 }
-                ShootRocket();
+                if (HeldItem.type == ItemType<TheHive>())
+                    ShootRocket();
                 NetUpdate();
                 HasLetGo = true;
             }
