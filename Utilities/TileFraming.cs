@@ -11,6 +11,7 @@ using CalamityMod.Tiles.Ores;
 using CalamityMod.Tiles.SunkenSea;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -26,6 +27,8 @@ namespace CalamityMod
 
         // CONSIDER -- This is a triangle array, but does it need to be? Main.tileMerge is a triangle array as well
         public static bool[][] tileMergeTypes;
+
+        private static Dictionary<string, Asset<Texture2D>> cachedBlendSheets = new();
 
         #region Similarity Enum
         private enum Similarity
@@ -1938,7 +1941,13 @@ namespace CalamityMod
         /// </summary>
         internal static void DrawUniversalMergeFrames(int x, int y, byte[,] adjacencyData, string blendSheetPath, int frameOffsetX = 0, int frameOffsetY = 0)
         {
-            Texture2D blendLayer = ModContent.Request<Texture2D>(blendSheetPath).Value;
+            if (!cachedBlendSheets.TryGetValue(blendSheetPath, out var blendLayerAsset))
+            {
+                blendLayerAsset = cachedBlendSheets[blendSheetPath] = ModContent.Request<Texture2D>(blendSheetPath);
+            }
+
+            var blendLayer = blendLayerAsset.Value;
+            
             Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
             Vector2 drawOffset = new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y) + zero;
 
