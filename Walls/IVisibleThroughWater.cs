@@ -22,7 +22,7 @@ namespace CalamityMod.Walls
         public const float WaterTransparency = 0.5f;
         public static readonly Color WaterColor = new Color(9, 61, 191);
 
-        public static void AddEntries(this IVisibleThroughWater visibleThroughWater, Color baseColor, LocalizedText text = null)
+        public static void AddMapEntryWithWaterVisibility(this IVisibleThroughWater visibleThroughWater, Color baseColor, LocalizedText text = null)
         {
             AssertIsWall(visibleThroughWater, out var wall);
             wall.AddMapEntry(baseColor, text);
