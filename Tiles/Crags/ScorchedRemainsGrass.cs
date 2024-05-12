@@ -1,4 +1,5 @@
-﻿using CalamityMod.Dusts;
+﻿using System.Collections.Generic;
+using CalamityMod.Dusts;
 using CalamityMod.Tiles.Crags.Lily;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,15 +10,14 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.Crags
 {
-    public class ScorchedRemainsGrass : ModTile
+    public class ScorchedRemainsGrass : ModTile, IMergeableTile
     {
         private const short subsheetWidth = 234;
         private const short subsheetHeight = 90;
         private int extraFrameHeight = 36;
         private int extraFrameWidth = 90;
 
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
 
         public override void SetStaticDefaults()
         {
@@ -34,8 +34,8 @@ namespace CalamityMod.Tiles.Crags
             RegisterItemDrop(ModContent.ItemType<Items.Placeables.ScorchedRemains>());
             AddMapEntry(new Color(212, 82, 227));
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<BrimstoneSlag>(), "CalamityMod/Tiles/Merges/BrimstoneSlagMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Ash, "CalamityMod/Tiles/Merges/AshMerge", out secondTileAdjacency);
+            this.RegisterUniversalMerge(ModContent.TileType<BrimstoneSlag>(), "CalamityMod/Tiles/Merges/BrimstoneSlagMerge");
+            this.RegisterUniversalMerge(TileID.Ash, "CalamityMod/Tiles/Merges/AshMerge");
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
@@ -157,16 +157,6 @@ namespace CalamityMod.Tiles.Crags
             DrawExtraTop(i, j, leaves, drawOffset, drawColour);
             DrawExtraWallEnds(i, j, leaves, drawOffset, drawColour);
             DrawExtraDrapes(i, j, leaves, drawOffset, drawColour);
-        }
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
-        }
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<BrimstoneSlag>(), tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Ash, secondTileAdjacency);
-            return true;
         }
 
         #region 'Extra Drapes' Drawing

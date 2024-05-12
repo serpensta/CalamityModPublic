@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -7,13 +8,10 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.AstralDesert
 {
-    public class HardenedAstralSand : ModTile
+    public class HardenedAstralSand : ModTile, IMergeableTile
     {
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
-        public TileFraming.MergeFrameData thirdTileAdjacency;
-        public TileFraming.MergeFrameData fourthTileAdjacency;
-        public TileFraming.MergeFrameData fifthTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
+        
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -31,25 +29,11 @@ namespace CalamityMod.Tiles.AstralDesert
             TileID.Sets.Conversion.HardenedSand[Type] = true;
             TileID.Sets.ForAdvancedCollision.ForSandshark[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSand>(), "CalamityMod/Tiles/Merges/AstralSandMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSandstone>(), "CalamityMod/Tiles/Merges/AstralSandstoneMerge", out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Sandstone, "CalamityMod/Tiles/Merges/SandstoneMerge", out thirdTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.HardenedSand, "CalamityMod/Tiles/Merges/HardenedSandMerge", out fourthTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Sand, "CalamityMod/Tiles/Merges/SandMerge", out fifthTileAdjacency);
-        }
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency, thirdTileAdjacency, fourthTileAdjacency, fifthTileAdjacency);
-        }
-
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSand>(), tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSandstone>(), secondTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Sandstone, thirdTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.HardenedSand, fourthTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Sand, fifthTileAdjacency);
-            return true;
+            this.RegisterUniversalMerge(ModContent.TileType<AstralSand>(), "CalamityMod/Tiles/Merges/AstralSandMerge");
+            this.RegisterUniversalMerge(ModContent.TileType<AstralSandstone>(), "CalamityMod/Tiles/Merges/AstralSandstoneMerge");
+            this.RegisterUniversalMerge(TileID.Sandstone, "CalamityMod/Tiles/Merges/SandstoneMerge");
+            this.RegisterUniversalMerge(TileID.HardenedSand, "CalamityMod/Tiles/Merges/HardenedSandMerge");
+            this.RegisterUniversalMerge(TileID.Sand, "CalamityMod/Tiles/Merges/SandMerge");
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
