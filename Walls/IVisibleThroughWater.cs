@@ -21,7 +21,7 @@ namespace CalamityMod.Walls
     {
         private sealed class VisibleThroughWaterSystem : ModSystem
         {
-            public override void AddRecipes()
+            public override void PostSetupContent()
             {
                 InitializeWaterMapEntryLookups();
             }
