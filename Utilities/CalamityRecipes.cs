@@ -545,14 +545,14 @@ namespace CalamityMod
                 AddRecipeGroup("IronBar").
                 AddIngredient(ItemID.EmptyBullet, 100).
                 AddIngredient(ItemID.ExplosivePowder, 4).
-                AddTile(TileID.MythrilAnvil).
+                AddTile(TileID.Anvils).
                 Register();
             // and Rocket IIs (requires slightly more explosive powder)
             Recipe.Create(ItemID.RocketII, 100).
                 AddRecipeGroup("IronBar").
                 AddIngredient(ItemID.EmptyBullet, 100).
                 AddIngredient(ItemID.ExplosivePowder, 5).
-                AddTile(TileID.MythrilAnvil).
+                AddTile(TileID.Anvils).
                 Register();
 
             // Life Crystal

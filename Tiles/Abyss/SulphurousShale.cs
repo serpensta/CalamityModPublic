@@ -40,6 +40,14 @@ namespace CalamityMod.Tiles.Abyss
             this.RegisterUniversalMerge(ModContent.TileType<AbyssGravel>(), "CalamityMod/Tiles/Merges/AbyssGravelMerge");
         }
 
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            if (Main.LocalPlayer.InModBiome(ModContent.GetInstance<BiomeManagers.AbyssLayer1Biome>()))
+            {
+                Main.SceneMetrics.ActiveFountainColor = ModContent.Find<ModWaterStyle>("CalamityMod/SulphuricDepthsWater").Slot;
+            }
+        }
+
         public override bool CanExplode(int i, int j)
         {
             return false;

@@ -69,8 +69,6 @@ namespace CalamityMod.Items.Weapons.Ranged
             if (loadedShots <= 0)
             {
                 loadedShots = 3;
-                if (player.Calamity().NorfleetCounter < 1000)
-                    player.Calamity().NorfleetCounter = 0;
             }
             return false;
         }
