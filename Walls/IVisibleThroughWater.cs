@@ -19,6 +19,14 @@ namespace CalamityMod.Walls
 
     internal static class VisibleThroughWater
     {
+        private sealed class VisibleThroughWaterSystem : ModSystem
+        {
+            public override void AddRecipes()
+            {
+                InitializeWaterMapEntryLookups();
+            }
+        }
+        
         public const float WaterTransparency = 0.5f;
         public static readonly Color WaterColor = new Color(9, 61, 191);
 
