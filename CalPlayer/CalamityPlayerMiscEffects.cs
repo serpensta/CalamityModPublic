@@ -3952,62 +3952,51 @@ namespace CalamityMod.CalPlayer
             // Defense damage does not heal during iframes, and has a delay after they end before it starts recovering.
             if (totalDefenseDamage > 0)
             {
-                // If a Full Cleanse is in effect, then cleanse all defense damage and don't do anything else.
-                if (CleansingEffect == 1)
-                {
-                    totalDefenseDamage = 0;
-                    defenseDamageRecoveryFrames = 0;
-                    totalDefenseDamageRecoveryFrames = DefenseDamageBaseRecoveryTime;
-                    defenseDamageDelayFrames = 0;
-                    CleansingEffect = 0;
-                }
-                else
-                {
-                    // Defense damage is capped at your maximum defense, except in GFB.
-                    if (!Main.getGoodWorld && totalDefenseDamage > Player.statDefense)
-                        totalDefenseDamage = Player.statDefense;
+                // Defense damage is capped at your maximum defense, except in GFB.
+                if (!Main.getGoodWorld && totalDefenseDamage > Player.statDefense)
+                    totalDefenseDamage = Player.statDefense;
 
-                    // You cannot begin recovering from defense damage until your iframes wear off.
-                    if (!Player.HasIFrames())
+                // You cannot begin recovering from defense damage until your iframes wear off.
+                if (!Player.HasIFrames())
+                {
+                    // Delay before defense damage recovery can start. While this delay is ticking down, defense damage doesn't recover at all.
+                    if (defenseDamageDelayFrames > 0)
+                        --defenseDamageDelayFrames;
+
+                    // Once the delay is up, defense damage recovery actually occurs.
+                    else if (defenseDamageDelayFrames <= 0)
                     {
-                        // Delay before defense damage recovery can start. While this delay is ticking down, defense damage doesn't recover at all.
-                        if (defenseDamageDelayFrames > 0)
-                            --defenseDamageDelayFrames;
+                        // Make one frame's worth of progress towards recovery.
+                        --defenseDamageRecoveryFrames;
 
-                        // Once the delay is up, defense damage recovery actually occurs.
-                        else if (defenseDamageDelayFrames <= 0)
+                        // If completely recovered, reset defense damage to nothing.
+                        if (defenseDamageRecoveryFrames <= 0)
                         {
-                            // Make one frame's worth of progress towards recovery.
-                            --defenseDamageRecoveryFrames;
-
-                            // If completely recovered, reset defense damage to nothing.
-                            if (defenseDamageRecoveryFrames <= 0)
-                            {
-                                totalDefenseDamage = 0;
-                                defenseDamageRecoveryFrames = 0;
-                                totalDefenseDamageRecoveryFrames = DefenseDamageBaseRecoveryTime;
-                                defenseDamageDelayFrames = 0;
-                            }
+                            totalDefenseDamage = 0;
+                            defenseDamageRecoveryFrames = 0;
+                            totalDefenseDamageRecoveryFrames = DefenseDamageBaseRecoveryTime;
+                            defenseDamageDelayFrames = 0;
                         }
                     }
-
-                    // Get current amount of defense damage to apply this frame.
-                    int currentDefenseDamage = CurrentDefenseDamage;
-
-                    // Apply DR Damage.
-                    //
-                    // DR Damage is applied at exactly the same ratio as defense damage;
-                    // if you lose half your defense to defense damage, you also lose half your DR.
-                    // This is applied first because the math would be wrong if the player's defense was already reduced by defense damage.
-                    if (Player.statDefense > 0 && Player.endurance > 0f)
-                    {
-                        float drDamageRatio = currentDefenseDamage / (float)Player.statDefense;
-                        Player.endurance *= 1f - drDamageRatio;
-                    }
-
-                    // Apply defense damage
-                    Player.statDefense -= currentDefenseDamage;
                 }
+
+                // Get current amount of defense damage to apply this frame.
+                int currentDefenseDamage = CurrentDefenseDamage;
+
+                // Apply DR Damage.
+                //
+                // DR Damage is applied at exactly the same ratio as defense damage;
+                // if you lose half your defense to defense damage, you also lose half your DR.
+                // This is applied first because the math would be wrong if the player's defense was already reduced by defense damage.
+                if (Player.statDefense > 0 && Player.endurance > 0f)
+                {
+                    float drDamageRatio = currentDefenseDamage / (float)Player.statDefense;
+                    Player.endurance *= 1f - drDamageRatio;
+                }
+
+                // Apply defense damage
+                Player.statDefense -= currentDefenseDamage;
+                
             }
 
             // Defense can never be reduced below zero, no matter what
