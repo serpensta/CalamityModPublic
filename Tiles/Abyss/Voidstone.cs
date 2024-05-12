@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CalamityMod.Tiles.Abyss.AbyssAmbient;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,13 +11,12 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.Abyss
 {
-    public class Voidstone : ModTile
+    public class Voidstone : ModTile, IMergeableTile
     {
         public static readonly SoundStyle MineSound = new("CalamityMod/Sounds/Custom/VoidstoneMine", 3) { Volume = 0.4f };
         internal static Texture2D GlowTexture;
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
-        public TileFraming.MergeFrameData thirdTileAdjacency;
+        
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
 
         public override void SetStaticDefaults()
         {
@@ -36,9 +36,9 @@ namespace CalamityMod.Tiles.Abyss
             MinPick = 180;
             AddMapEntry(new Color(15, 15, 15));
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge", out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<PyreMantle>(), "CalamityMod/Tiles/Merges/PyreMantleMerge", out thirdTileAdjacency);
+            this.RegisterUniversalMerge(TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge");
+            this.RegisterUniversalMerge(TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge");
+            this.RegisterUniversalMerge(ModContent.TileType<PyreMantle>(), "CalamityMod/Tiles/Merges/PyreMantleMerge");
         }
 
         int animationFrameWidth = 234;
@@ -276,15 +276,6 @@ namespace CalamityMod.Tiles.Abyss
             drawColour *= brightness;
 
             TileFraming.SlopedGlowmask(i, j, 0, GlowTexture, drawOffset, null, GetDrawColour(i, j, drawColour), default);
-            TileFraming.DrawUniversalMergeFrames(i, j, thirdTileAdjacency, secondTileAdjacency, tileAdjacency);
-        }
-
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Stone, secondTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<PyreMantle>(), thirdTileAdjacency);
-            return true;
         }
 
         private Color GetDrawColour(int i, int j, Color colour)

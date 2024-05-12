@@ -1,4 +1,5 @@
-﻿using CalamityMod.Tiles.Astral;
+﻿using System.Collections.Generic;
+using CalamityMod.Tiles.Astral;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,10 +9,10 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.AstralSnow
 {
-    public class AstralIce : ModTile
+    public class AstralIce : ModTile, IMergeableTile
     {
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
+        
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -36,8 +37,8 @@ namespace CalamityMod.Tiles.AstralSnow
             TileID.Sets.Conversion.Ice[Type] = true;
             TileID.Sets.CanBeClearedDuringOreRunner[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSnow>(), "CalamityMod/Tiles/Merges/AstralSnowMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralDirt>(), "CalamityMod/Tiles/Merges/AstralDirtMerge", out secondTileAdjacency);
+            this.RegisterUniversalMerge(ModContent.TileType<AstralSnow>(), "CalamityMod/Tiles/Merges/AstralSnowMerge");
+            this.RegisterUniversalMerge(ModContent.TileType<AstralDirt>(), "CalamityMod/Tiles/Merges/AstralDirtMerge");
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -49,18 +50,6 @@ namespace CalamityMod.Tiles.AstralSnow
         {
             player.slippy = true;
             base.FloorVisuals(player);
-        }
-
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
-        }
-
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSnow>(), tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralDirt>(), secondTileAdjacency);
-            return true;
         }
 
         public override bool IsTileBiomeSightable(int i, int j, ref Color sightColor)

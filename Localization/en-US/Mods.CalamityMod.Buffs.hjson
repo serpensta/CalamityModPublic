@@ -1046,11 +1046,6 @@ BlackHawkBuff: {
 	Description: The fighter jet will protect you
 }
 
-BloodClot: {
-	DisplayName: Blood Clot
-	Description: The blood clot will protect you
-}
-
 BrimseekerBuff: {
 	DisplayName: Brimseeker
 	Description: Does it want something from you?
