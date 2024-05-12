@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CalamityMod.Tiles.Abyss.AbyssAmbient;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,15 +11,12 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles.Abyss
 {
-    public class PyreMantleMolten : ModTile
+    public class PyreMantleMolten : ModTile, IMergeableTile
     {
         public static readonly SoundStyle MineSound = new("CalamityMod/Sounds/Custom/VoidstoneMine", 3) { Volume = 0.4f };
         internal static Texture2D GlowTexture;
 
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
-        public TileFraming.MergeFrameData thirdTileAdjacency;
-        public TileFraming.MergeFrameData fourthTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
 
         public override void SetStaticDefaults()
         {
@@ -39,10 +37,10 @@ namespace CalamityMod.Tiles.Abyss
             MinPick = 180;
             AddMapEntry(new Color(113, 49, 16));
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge", out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AbyssGravel>(), "CalamityMod/Tiles/Merges/AbyssGravelMerge", out thirdTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<PyreMantle>(), "CalamityMod/Tiles/Merges/PyreMantleMerge", out fourthTileAdjacency);
+            this.RegisterUniversalMerge(TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge");
+            this.RegisterUniversalMerge(TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge");
+            this.RegisterUniversalMerge(ModContent.TileType<AbyssGravel>(), "CalamityMod/Tiles/Merges/AbyssGravelMerge");
+            this.RegisterUniversalMerge(ModContent.TileType<PyreMantle>(), "CalamityMod/Tiles/Merges/PyreMantleMerge");
         }
 
         public override bool CreateDust(int i, int j, ref int type)
@@ -97,8 +95,6 @@ namespace CalamityMod.Tiles.Abyss
 
             TileFraming.SlopedGlowmask(i, j, 0, GlowTexture, drawOffset, null, GetDrawColour(i, j, drawColour), default);
             glowbrightness += 0.3f;
-
-            TileFraming.DrawUniversalMergeFrames(i, j, fourthTileAdjacency, thirdTileAdjacency, secondTileAdjacency, tileAdjacency);
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
@@ -113,15 +109,6 @@ namespace CalamityMod.Tiles.Abyss
             r *= brightness;
             g *= brightness;
             b *= brightness;
-        }
-
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Stone, secondTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AbyssGravel>(), thirdTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<PyreMantle>(), fourthTileAdjacency);
-            return true;
         }
 
         private Color GetDrawColour(int i, int j, Color colour)

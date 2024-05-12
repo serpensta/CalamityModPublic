@@ -1,4 +1,5 @@
-﻿using CalamityMod.Tiles.Crags;
+﻿using System.Collections.Generic;
+using CalamityMod.Tiles.Crags;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -9,13 +10,12 @@ using Terraria.ModLoader;
 namespace CalamityMod.Tiles.Ores
 {
     [LegacyName("CharredOre")]
-    public class InfernalSuevite : ModTile
+    public class InfernalSuevite : ModTile, IMergeableTile
     {
         private int sheetWidth = 234;
         private int sheetHeight = 90;
 
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
 
         public override void SetStaticDefaults()
         {
@@ -36,8 +36,8 @@ namespace CalamityMod.Tiles.Ores
             DustType = 235;
             Main.tileSpelunker[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<BrimstoneSlag>(), "CalamityMod/Tiles/Merges/BrimstoneSlagMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Ash, "CalamityMod/Tiles/Merges/AshMerge", out secondTileAdjacency);
+            this.RegisterUniversalMerge(ModContent.TileType<BrimstoneSlag>(), "CalamityMod/Tiles/Merges/BrimstoneSlagMerge");
+            this.RegisterUniversalMerge(TileID.Ash, "CalamityMod/Tiles/Merges/AshMerge");
         }
 
         public override bool CanExplode(int i, int j)
@@ -61,18 +61,6 @@ namespace CalamityMod.Tiles.Ores
             r = 0.5f;
             g = 0f;
             b = 0f;
-        }
-
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
-        }
-
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<BrimstoneSlag>(), tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Ash, secondTileAdjacency);
-            return true;
         }
     }
 }

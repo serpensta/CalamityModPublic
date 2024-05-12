@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Intrinsics.X86;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
 using Humanizer;
@@ -240,7 +241,13 @@ namespace CalamityMod.Projectiles.Ranged
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 73f;
 
             if (PUNISHMENTMODE)
-                PostFireCooldown = 1000;
+            {
+                PostFireCooldown = 1000; 
+                Owner.AddBuff(ModContent.BuffType<MiracleBlight>(), 900);
+                Owner.AddBuff(ModContent.BuffType<VulnerabilityHex>(), 900);
+                if (Owner.statLife > 1)
+                    Owner.statLife = (int)(Owner.statLife * 0.99f);
+            }
 
             if (PostFireCooldown == 207)
             {
