@@ -1,4 +1,5 @@
-﻿using CalamityMod.Dusts;
+﻿using System.Collections.Generic;
+using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -9,10 +10,10 @@ using Terraria.ModLoader;
 namespace CalamityMod.Tiles.AstralDesert
 {
     [LegacyName("AstralFossil")]
-    public class CelestialRemains : ModTile
+    public class CelestialRemains : ModTile, IMergeableTile
     {
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
+        
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -28,18 +29,8 @@ namespace CalamityMod.Tiles.AstralDesert
 
             TileID.Sets.ForAdvancedCollision.ForSandshark[Type] = true;
 
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSand>(), "CalamityMod/Tiles/Merges/AstralSandMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, ModContent.TileType<AstralSandstone>(), "CalamityMod/Tiles/Merges/AstralSandstoneMerge", out secondTileAdjacency);
-        }
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TileFraming.DrawUniversalMergeFrames(i, j, secondTileAdjacency, tileAdjacency);
-        }
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSand>(), tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, ModContent.TileType<AstralSandstone>(), secondTileAdjacency);
-            return true;
+            this.RegisterUniversalMerge(ModContent.TileType<AstralSand>(), "CalamityMod/Tiles/Merges/AstralSandMerge");
+            this.RegisterUniversalMerge(ModContent.TileType<AstralSandstone>(), "CalamityMod/Tiles/Merges/AstralSandstoneMerge");
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)

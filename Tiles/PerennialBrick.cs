@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -7,11 +8,10 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Tiles
 {
-    public class PerennialBrick : ModTile
+    public class PerennialBrick : ModTile, IMergeableTile
     {
-        public TileFraming.MergeFrameData tileAdjacency;
-        public TileFraming.MergeFrameData secondTileAdjacency;
-        public TileFraming.MergeFrameData thirdTileAdjacency;
+        List<TileFraming.MergeFrameData> IMergeableTile.TileAdjacencies { get; } = [];
+        
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -25,9 +25,9 @@ namespace CalamityMod.Tiles
             AddMapEntry(new Color(17, 133, 46));
             AnimationFrameHeight = 90;
 
-            TileFraming.SetUpUniversalMerge(Type, TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge", out tileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge", out secondTileAdjacency);
-            TileFraming.SetUpUniversalMerge(Type, TileID.Mud, "CalamityMod/Tiles/Merges/MudMerge", out thirdTileAdjacency);
+            this.RegisterUniversalMerge(TileID.Dirt, "CalamityMod/Tiles/Merges/DirtMerge");
+            this.RegisterUniversalMerge(TileID.Stone, "CalamityMod/Tiles/Merges/StoneMerge");
+            this.RegisterUniversalMerge(TileID.Mud, "CalamityMod/Tiles/Merges/MudMerge");
         }
 
         public override bool CreateDust(int i, int j, ref int type)
@@ -35,17 +35,6 @@ namespace CalamityMod.Tiles
             Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.Chlorophyte, 0f, 0f, 1, new Color(255, 255, 255), 1f);
             Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.RedTorch, 0f, 0f, 1, new Color(255, 255, 255), 1f);
             return false;
-        }
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TileFraming.DrawUniversalMergeFrames(i, j, thirdTileAdjacency, secondTileAdjacency, tileAdjacency);
-        }
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-        {
-            TileFraming.GetAdjacencyData(i, j, TileID.Dirt, tileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Stone, secondTileAdjacency);
-            TileFraming.GetAdjacencyData(i, j, TileID.Mud, thirdTileAdjacency);
-            return true;
         }
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
