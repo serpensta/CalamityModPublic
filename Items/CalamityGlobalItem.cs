@@ -1186,11 +1186,15 @@ namespace CalamityMod.Items
             if (item.type == ItemID.FlameWakerBoots)
             {
                 modPlayer.flameWakerBoots = true;
+                if (modPlayer.bootLevel < 1)
+                    modPlayer.bootLevel = 1;
             }
 
             if (item.type == ItemID.HellfireTreads)
             {
                 modPlayer.hellfireTreads = true;
+                if (modPlayer.bootLevel < 2)
+                    modPlayer.bootLevel = 2;
                 player.buffImmune[BuffID.OnFire] = true;
             }
 

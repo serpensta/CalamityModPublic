@@ -595,6 +595,7 @@ namespace CalamityMod.CalPlayer
         public bool jellyfishNecklace = false;
         public bool fairyBoots = false;
         public bool flameWakerBoots = false;
+        public int bootLevel = 0; //Used to prevent Flame Waker and Hellfire Treads stacking
         public bool hellfireTreads = false;
         public bool abyssalAmulet = false;
         public bool lumenousAmulet = false;
