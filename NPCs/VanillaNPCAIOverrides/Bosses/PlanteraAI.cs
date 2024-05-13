@@ -145,7 +145,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             Vector2 npcCenterAccountingForHooks = new Vector2(hookPositionX, hookPositionY);
             float maxVelocityX = Main.player[npc.target].Center.X - npcCenterAccountingForHooks.X;
             float maxVelocityY = Main.player[npc.target].Center.Y - npcCenterAccountingForHooks.Y;
-            bool phase1MoveAway = !phase2 && Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 480f && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height);
+            bool phase1MoveAway = !phase2 && Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 240f;
             if (despawn)
             {
                 maxVelocityY *= -1f;
