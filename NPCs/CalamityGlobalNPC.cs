@@ -127,6 +127,7 @@ namespace CalamityMod.NPCs
         // Fireball, Cinnamon Roll and Hellfire Treads effects
         public bool IncreasedHeatEffects_Fireball = false;
         public bool IncreasedHeatEffects_CinnamonRoll = false;
+        public bool IncreasedHeatEffects_FlameWakerBoots = false;
         public bool IncreasedHeatEffects_HellfireTreads = false;
 
         // Toxic Heart effect
@@ -406,6 +407,7 @@ namespace CalamityMod.NPCs
             myClone.IncreasedElectricityEffects_Transformer = IncreasedElectricityEffects_Transformer;
             myClone.IncreasedHeatEffects_Fireball = IncreasedHeatEffects_Fireball;
             myClone.IncreasedHeatEffects_CinnamonRoll = IncreasedHeatEffects_CinnamonRoll;
+            myClone.IncreasedHeatEffects_FlameWakerBoots = IncreasedHeatEffects_FlameWakerBoots;
             myClone.IncreasedHeatEffects_HellfireTreads = IncreasedHeatEffects_HellfireTreads;
             myClone.IncreasedSicknessEffects_ToxicHeart = IncreasedSicknessEffects_ToxicHeart;
             myClone.IncreasedSicknessAndWaterEffects_EvergreenGin = IncreasedSicknessAndWaterEffects_EvergreenGin;
@@ -850,6 +852,8 @@ namespace CalamityMod.NPCs
                 electricityDamageMult += 0.5;
 
             if (IncreasedHeatEffects_Fireball)
+                heatDamageMult += 0.25;
+            if (IncreasedHeatEffects_FlameWakerBoots)
                 heatDamageMult += 0.25;
             if (IncreasedHeatEffects_CinnamonRoll)
                 heatDamageMult += 0.5;

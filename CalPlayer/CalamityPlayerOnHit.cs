@@ -77,6 +77,7 @@ namespace CalamityMod.CalPlayer
 
             target.Calamity().IncreasedHeatEffects_Fireball = fireball;
             target.Calamity().IncreasedHeatEffects_CinnamonRoll = cinnamonRoll;
+            target.Calamity().IncreasedHeatEffects_FlameWakerBoots = flameWakerBoots;
             target.Calamity().IncreasedHeatEffects_HellfireTreads = hellfireTreads;
 
             target.Calamity().IncreasedSicknessEffects_ToxicHeart = toxicHeart;
@@ -154,6 +155,9 @@ namespace CalamityMod.CalPlayer
                     // TODO: find an EPIC lightsaber sound
                     break;
             }
+
+            if (flameWakerBoots)
+                target.AddBuff(BuffID.OnFire, 120);
 
             if (hellfireTreads)
             {
@@ -304,6 +308,9 @@ namespace CalamityMod.CalPlayer
                     target.AddBuff(BuffID.Frostburn, 60);
                     break;
             }
+
+            if (flameWakerBoots)
+                target.AddBuff(BuffID.OnFire, 120);
 
             if ((proj.arrow && Player.hasMoltenQuiver) || hellfireTreads)
             {

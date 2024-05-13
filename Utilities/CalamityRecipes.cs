@@ -839,6 +839,7 @@ namespace CalamityMod
                 { r => r.HasResult(ItemID.HorseshoeBundle) && !r.HasIngredient(ItemID.BundleofBalloons), AddIngredient(ModContent.ItemType<AerialiteBar>(), 3) },
                 { Vanilla(ItemID.NightsEdge), AddIngredient(ModContent.ItemType<PurifiedGel>(), 5) },
                 { Vanilla(ItemID.FairyBoots), AddIngredient(ItemID.SoulofLight, 5) },
+                { Vanilla(ItemID.HellfireTreads), AddIngredient(ModContent.ItemType<EssenceofHavoc>(), 4) },
                 { Vanilla(ItemID.SpiritFlame), AddGroup(AnyAdamantiteBar, 2) },
                 { Vanilla(ItemID.TerraBlade), AddIngredient(ModContent.ItemType<LivingShard>(), 12) },
                 { Vanilla(ItemID.FireGauntlet), AddIngredient(ModContent.ItemType<ScoriaBar>(), 5) },
@@ -1593,8 +1594,9 @@ namespace CalamityMod
             // Flame Waker Boots
             r = Recipe.Create(ItemID.FlameWakerBoots);
             r.AddIngredient(ItemID.Silk, 8);
-            r.AddIngredient(ItemID.Obsidian, 2);
-            r.AddTile(TileID.Loom);
+            r.AddIngredient(ItemID.HellstoneBar, 5);
+            r.AddIngredient(ItemID.Obsidian, 4);
+            r.AddTile(TileID.Anvils);
             r.Register();
             r.DisableDecraft();
 

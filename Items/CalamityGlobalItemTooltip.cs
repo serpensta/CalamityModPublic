@@ -583,6 +583,14 @@ namespace CalamityMod.Items
                 "Drinking more than 3 different alcohols might not end well with your liver");
             }
 
+            //Flame Waker Boots buff.
+            if (item.type == ItemID.FlameWakerBoots)
+            {
+                EditTooltipByNum(0, (line) => line.Text = "Multiplies all fire-based debuff damage by 1.25\n" +
+                "All attacks light enemies on fire\n" +
+                "'Never get cold feet again'\n");
+            }
+
             // Hellfire Treads buff.
             if (item.type == ItemID.HellfireTreads)
             {

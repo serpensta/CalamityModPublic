@@ -160,6 +160,10 @@ namespace CalamityMod.Items
             if (item.type == ItemID.PearlwoodBow || item.type == ItemID.PearlwoodHammer || item.type == ItemID.PearlwoodSword)
                 item.rare = ItemRarityID.LightRed;
 
+            //Flame Waker Boots are no longer just vanity and therefore lose the vanity tooltip.
+            if (item.type == ItemID.FlameWakerBoots)
+                item.vanity = false;
+
             // Volatile Gelatin is pre-mech post-WoF so it should use the pink rarity.
             if (item.type == ItemID.VolatileGelatin)
                 item.rare = ItemRarityID.Pink;
@@ -1178,6 +1182,11 @@ namespace CalamityMod.Items
             // Ankh Shield Mighty Wind immunity.
             if (item.type == ItemID.AnkhShield)
                 player.buffImmune[BuffID.WindPushed] = true;
+
+            if (item.type == ItemID.FlameWakerBoots)
+            {
+                modPlayer.flameWakerBoots = true;
+            }
 
             if (item.type == ItemID.HellfireTreads)
             {
