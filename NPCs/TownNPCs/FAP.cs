@@ -883,8 +883,8 @@ namespace CalamityMod.NPCs.TownNPCs
 
         public override void AddShops()
         {
-            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
-            Condition downedAureus = new(CalamityUtils.GetText("Condition.PostAureus"), () => DownedBossSystem.downedAstrumAureus);
+            Condition potionSells = CalamityConditions.PotionSellingConfig;
+            Condition downedAureus = CalamityConditions.DownedAstrumAureus;
 
             NPCShop shop = new(Type);
             shop.AddWithCustomValue(ItemID.LovePotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
