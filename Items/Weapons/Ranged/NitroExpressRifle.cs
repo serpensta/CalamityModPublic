@@ -29,13 +29,13 @@ namespace CalamityMod.Items.Weapons.Ranged
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 7.5f;
-            Item.value = CalamityGlobalItem.RarityPureGreenBuyPrice;
+            Item.value = CalamityGlobalItem.RarityLightRedBuyPrice;
             Item.UseSound = FireSound;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<NitroShot>();
             Item.shootSpeed = 12f;
             Item.useAmmo = AmmoID.Bullet;
-            Item.rare = ModContent.RarityType<PureGreen>();
+            Item.rare = ItemRarityID.LightRed;
             Item.Calamity().canFirePointBlankShots = true;
         }
 
