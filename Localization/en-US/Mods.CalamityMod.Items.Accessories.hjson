@@ -923,8 +923,8 @@ HideofAstrumDeus: {
 	Tooltip:
 		'''
 		Taking damage, or inflicting a true melee strike, drops an immense amount of astral stars from the sky
-		Taking damage boosts true melee damage by 50%
-		Boost duration is based on the amount of damage you took, the higher the damage the longer the boost
+		Taking damage boosts true melee damage by 30%
+		Boost duration scales with the amount of damage you took, up to 10 seconds
 		Provides immunity to the astral infection, cursed inferno, on fire, and frostburn debuffs
 		Enemies take damage when they hit you and are inflicted with the astral infection debuff
 		'''
