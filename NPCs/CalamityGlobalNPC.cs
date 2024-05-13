@@ -3199,7 +3199,7 @@ namespace CalamityMod.NPCs
             if (CalamityLists.EaterofWorldsIDs.Contains(npc.type))
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(BossRushEvent.BossRushActive ? 0.8f : 0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / EaterOfWorldsAI.DRIncreaseTime, 0f, 1f));
             if (CalamityLists.DestroyerIDs.Contains(npc.type))
-                modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / DestroyerAI.DRIncraeseTime, 0f, 1f));
+                modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / DestroyerAI.DRIncreaseTime, 0f, 1f));
             if (CalamityLists.AstrumDeusIDs.Contains(npc.type))
                 modifiers.FinalDamage *= 1f - MathHelper.Lerp(0f, 0.99f, MathHelper.Clamp(1f - newAI[1] / (newAI[0] != 0f ? 300f : 600f), 0f, 1f));
         }
@@ -6972,7 +6972,7 @@ namespace CalamityMod.NPCs
                     bool phase5 = destroyerLifeRatio < (death ? 0.2f : 0.1f);
 
                     // Spawn DR check
-                    bool hasSpawnDR = newAI[1] < DestroyerAI.DRIncraeseTime && newAI[1] > 60f;
+                    bool hasSpawnDR = newAI[1] < DestroyerAI.DRIncreaseTime && newAI[1] > 60f;
 
                     // Gradual color transition from ground to flight and vice versa
                     // 0f = Red, 1f = Purple

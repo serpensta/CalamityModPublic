@@ -16,7 +16,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 {
     public static class DestroyerAI
     {
-        public const float DRIncraeseTime = 600f;
+        public const float DRIncreaseTime = 600f;
         public const float DeathModeLaserBreathGateValue = 600f;
         public const float LaserTelegraphTime = 120f;
         public const float SparkTelegraphTime = 30f;
@@ -66,10 +66,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             bool death = CalamityWorld.death || bossRush;
 
             // 10 seconds of resistance to prevent spawn killing
-            if (calamityGlobalNPC.newAI[1] < DRIncraeseTime)
+            if (calamityGlobalNPC.newAI[1] < DRIncreaseTime)
                 calamityGlobalNPC.newAI[1] += 1f;
 
-            calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = calamityGlobalNPC.newAI[1] < DRIncraeseTime;
+            calamityGlobalNPC.CurrentlyIncreasingDefenseOrDR = calamityGlobalNPC.newAI[1] < DRIncreaseTime;
 
             // Percent life remaining
             float lifeRatio = npc.life / (float)npc.lifeMax;
@@ -98,7 +98,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // Spawn DR check
-            bool hasSpawnDR = calamityGlobalNPC.newAI[1] < DRIncraeseTime && calamityGlobalNPC.newAI[1] > 60f;
+            bool hasSpawnDR = calamityGlobalNPC.newAI[1] < DRIncreaseTime && calamityGlobalNPC.newAI[1] > 60f;
 
             // Gradual color transition from ground to flight and vice versa
             // 0f = Red, 1f = Purple
@@ -1148,10 +1148,10 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             }
 
             // 10 seconds of resistance to prevent spawn killing
-            if (npc.Calamity().newAI[1] < DRIncraeseTime)
+            if (npc.Calamity().newAI[1] < DRIncreaseTime)
                 npc.Calamity().newAI[1] += 1f;
 
-            npc.Calamity().CurrentlyIncreasingDefenseOrDR = npc.Calamity().newAI[1] < DRIncraeseTime;
+            npc.Calamity().CurrentlyIncreasingDefenseOrDR = npc.Calamity().newAI[1] < DRIncreaseTime;
 
             if (npc.ai[3] > 0f)
                 npc.realLife = (int)npc.ai[3];
