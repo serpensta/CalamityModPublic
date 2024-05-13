@@ -926,6 +926,9 @@ namespace CalamityMod.NPCs.HiveMind
                     {
                         if (!dashStarted)
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             dashStarted = true;
                             SoundEngine.PlaySound(RoarSound, NPC.Center);
                             NPC.velocity.X = MathHelper.Pi * teleportRadius / arcTime;
@@ -935,6 +938,9 @@ namespace CalamityMod.NPCs.HiveMind
                         }
                         else
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             NPC.velocity = NPC.velocity.RotatedBy(MathHelper.Pi / arcTime * -rotationDirection);
 
                             phase2timer++;
@@ -988,6 +994,9 @@ namespace CalamityMod.NPCs.HiveMind
                     {
                         if (!dashStarted)
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             dashStarted = true;
                             SoundEngine.PlaySound(RoarSound, NPC.Center);
                             NPC.velocity.X = teleportRadius / arcTime * 3;
@@ -997,6 +1006,9 @@ namespace CalamityMod.NPCs.HiveMind
                         }
                         else
                         {
+                            // Set damage
+                            NPC.damage = NPC.defDamage;
+
                             phase2timer++;
                             if (phase2timer == (int)arcTime / 20)
                             {
