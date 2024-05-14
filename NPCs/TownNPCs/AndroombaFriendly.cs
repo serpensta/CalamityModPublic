@@ -113,12 +113,8 @@ namespace CalamityMod.NPCs.TownNPCs
                     break;
             }
 
-            for (int i = 0; i < Main.maxPlayers; i++)
+            foreach (Player player in Main.ActivePlayers)
             {
-                Player player = Main.player[i];
-                if (player is null || !player.active)
-                    continue;
-
                 if (NPC.Hitbox.Intersects(player.HitboxForBestiaryNearbyCheck))
                 {
                     Main.BestiaryTracker.Chats.RegisterChatStartWith(NPC);

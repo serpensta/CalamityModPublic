@@ -528,21 +528,17 @@ namespace CalamityMod.NPCs.DesertScourge
                 {
                     int rectWidth = directChaseDistance * 2;
                     int rectHeight = directChaseDistance * 2;
-                    for (int m = 0; m < Main.maxPlayers; m++)
+                    foreach (Player plr in Main.ActivePlayers)
                     {
-                        if (Main.player[m].active)
+                        int rectX = (int)plr.position.X - directChaseDistance;
+                        int rectY = (int)plr.position.Y - directChaseDistance;
+                        Rectangle directChaseRect = new Rectangle(rectX, rectY, rectWidth, rectHeight);
+                        if (rectangle.Intersects(directChaseRect))
                         {
-                            int rectX = (int)Main.player[m].position.X - directChaseDistance;
-                            int rectY = (int)Main.player[m].position.Y - directChaseDistance;
-                            Rectangle directChaseRect = new Rectangle(rectX, rectY, rectWidth, rectHeight);
-                            if (rectangle.Intersects(directChaseRect))
-                            {
-                                shouldDirectlyChase = false;
-                                break;
-                            }
+                            shouldDirectlyChase = false;
+                            break;
                         }
                     }
-
                     if (shouldDirectlyChase)
                         shouldFly = true;
                 }

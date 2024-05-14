@@ -107,13 +107,13 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float hookPositionX = 0f;
             float hookPositionY = 0f;
             int numHooksSpawned = 0;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                if (Main.npc[i].active && Main.npc[i].aiStyle == NPCAIStyleID.PlanteraHook)
+                if (n.aiStyle == NPCAIStyleID.PlanteraHook)
                 {
-                    hookPositionX += Main.npc[i].Center.X;
-                    hookPositionY += Main.npc[i].Center.Y;
-                    hookArray[numHooksSpawned] = i;
+                    hookPositionX += n.Center.X;
+                    hookPositionY += n.Center.Y;
+                    hookArray[numHooksSpawned] = n.whoAmI;
 
                     numHooksSpawned++;
                     if (numHooksSpawned >= maxHooks)
@@ -680,14 +680,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         if (Main.getGoodWorld)
                         {
-                            for (int i = 0; i < Main.maxNPCs; i++)
+                            foreach (NPC n in Main.ActiveNPCs)
                             {
-                                if (Main.npc[i].active && Main.npc[i].aiStyle == NPCAIStyleID.PlanteraHook)
+                                if (n.aiStyle == NPCAIStyleID.PlanteraHook)
                                 {
                                     for (int j = 0; j < totalTentacles / 2 - 1; j++)
                                     {
                                         int hookIndex = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y, NPCID.PlanterasTentacle, npc.whoAmI);
-                                        Main.npc[hookIndex].ai[3] = i + 1;
+                                        Main.npc[hookIndex].ai[3] = n.whoAmI + 1;
                                     }
                                 }
                             }
@@ -948,9 +948,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 // Set timer to new amount if a different hook is currently moving
                 if (!despawn && npc.localAI[0] <= 0f && npc.ai[0] != 0f)
                 {
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (i != npc.whoAmI && Main.npc[i].active && Main.npc[i].type == npc.type && (Main.npc[i].velocity.X != 0f || Main.npc[i].velocity.Y != 0f))
+                        if (n.whoAmI != npc.whoAmI && n.type == npc.type && (n.velocity.X != 0f || n.velocity.Y != 0f))
                             npc.localAI[0] = Main.rand.Next(60, 301);
                     }
                 }

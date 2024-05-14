@@ -1455,10 +1455,9 @@ namespace CalamityMod.CalPlayer
 
                         float lowestHealthCheck = 0f;
                         int healTarget = Player.whoAmI;
-                        for (int i = 0; i < Main.maxPlayers; i++)
+                        foreach (Player otherPlayer in Main.ActivePlayers)
                         {
-                            Player otherPlayer = Main.player[i];
-                            if (otherPlayer.active && !otherPlayer.dead && ((!Player.hostile && !otherPlayer.hostile) || Player.team == otherPlayer.team))
+                            if (!otherPlayer.dead && ((!Player.hostile && !otherPlayer.hostile) || Player.team == otherPlayer.team))
                             {
                                 float playerDist = Vector2.Distance(target.Center, otherPlayer.Center);
                                 if (playerDist < BalancingConstants.LifeStealRange && (otherPlayer.statLifeMax2 - otherPlayer.statLife) > lowestHealthCheck)
@@ -1506,7 +1505,7 @@ namespace CalamityMod.CalPlayer
                                 if (playerDist < BalancingConstants.LifeStealRange && (otherPlayer.statLifeMax2 - otherPlayer.statLife) > lowestHealthCheck)
                                 {
                                     lowestHealthCheck = otherPlayer.statLifeMax2 - otherPlayer.statLife;
-                                    healTarget = i;
+                                    healTarget = otherPlayer.whoAmI;
                                 }
                             }
                         }

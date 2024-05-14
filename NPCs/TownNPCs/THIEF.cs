@@ -91,11 +91,10 @@ namespace CalamityMod.NPCs.TownNPCs
             if (CalamityWorld.spawnedBandit)
                 return true;
 
-            for (int k = 0; k < Main.maxPlayers; k++)
+            foreach (Player player in Main.ActivePlayers)
             {
-                Player player = Main.player[k];
                 bool rich = player.InventoryHas(ItemID.PlatinumCoin) || player.PortableStorageHas(ItemID.PlatinumCoin);
-                if (player.active && rich)
+                if (rich)
                     return NPC.downedBoss3;
             }
             return false;

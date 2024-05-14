@@ -669,11 +669,10 @@ namespace CalamityMod.NPCs.TownNPCs
             if (CalamityWorld.spawnedCirrus)
                 return true;
 
-            for (int k = 0; k < Main.maxPlayers; k++)
+            foreach (Player player in Main.ActivePlayers)
             {
-                Player player = Main.player[k];
                 bool hasVodka = player.InventoryHas(ModContent.ItemType<FabsolsVodka>()) || player.PortableStorageHas(ModContent.ItemType<FabsolsVodka>());
-                if (player.active && hasVodka)
+                if (hasVodka)
                     return Main.hardMode;
             }
             return false;

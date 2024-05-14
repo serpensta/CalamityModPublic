@@ -1142,11 +1142,11 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
                         {
                             calamityGlobalNPC.newAI[3] = 0f;
                             AIState = (float)Phase.Deathray;
-                            for (int i = 0; i < Main.maxProjectiles; i ++)
+                            foreach (Projectile p in Main.ActiveProjectiles)
                             {
-                                if (Main.projectile[i].type == ModContent.ProjectileType<ArtemisSpinLaserbeam>())
+                                if (p.type == ModContent.ProjectileType<ArtemisSpinLaserbeam>())
                                 {
-                                    Main.projectile[i].active = false;
+                                    p.active = false;
                                     continue;
                                 }
                             }
@@ -1602,10 +1602,9 @@ namespace CalamityMod.NPCs.ExoMechs.Artemis
         public override bool CheckDead()
         {
             // Kill Apollo if he's still alive when Artemis dies
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC nPC in Main.ActiveNPCs)
             {
-                NPC nPC = Main.npc[i];
-                if (nPC.active && nPC.type == ModContent.NPCType<Apollo.Apollo>() && nPC.life > 0)
+                if (nPC.type == ModContent.NPCType<Apollo.Apollo>() && nPC.life > 0)
                 {
                     nPC.life = 0;
                     nPC.HitEffect();

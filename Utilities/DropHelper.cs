@@ -212,16 +212,15 @@ namespace CalamityMod
 
             int r = wormHead.whoAmI;
             float minDist = 1E+06f;
-            for (int i = 0; i < Main.npc.Length; ++i)
+            foreach (NPC n in Main.ActiveNPCs)
             {
-                NPC n = Main.npc[i];
-                if (n != null && n.active && idsToCheck.Contains(n.type))
+                if (idsToCheck.Contains(n.type))
                 {
                     float dist = (n.Center - playerPos).Length();
                     if (dist < minDist)
                     {
                         minDist = dist;
-                        r = i;
+                        r = n.whoAmI;
                     }
                 }
             }
@@ -545,10 +544,9 @@ namespace CalamityMod
         public static IItemDropRuleCondition AnglerFedToTrasherCondition = If((info) =>
         {
             bool trasherNearby = false;
-            for (int i = 0; i < Main.maxNPCs; ++i)
+            foreach (NPC nearby in Main.ActiveNPCs)
             {
-                NPC nearby = Main.npc[i];
-                if (nearby is null || !nearby.active || nearby.type != ModContent.NPCType<Trasher>())
+                if (nearby.type != ModContent.NPCType<Trasher>())
                     continue;
                 if (info.npc.Distance(nearby.Center) < TrasherEatDistance)
                 {
@@ -1161,9 +1159,8 @@ namespace CalamityMod
                     NPC npc = info.npc;
                     int idx = Item.NewItem(npc.GetSource_Loot(), npc.Center, itemId, stack, true, -1);
                     Main.timeItemSlotCannotBeReusedFor[idx] = protectionTime;
-                    for (int i = 0; i < Main.maxPlayers; ++i)
-                        if (Main.player[i].active)
-                            NetMessage.SendData(MessageID.InstancedItem, i, -1, null, idx);
+                    foreach (Player player in Main.ActivePlayers)
+                        NetMessage.SendData(MessageID.InstancedItem, player.whoAmI, -1, null, idx);
                     Main.item[idx].active = false;
                 }
 

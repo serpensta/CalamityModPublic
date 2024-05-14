@@ -253,10 +253,9 @@ namespace CalamityMod.NPCs.AstrumDeus
                 return;
 
             // Killing ANY split Deus makes all other Deus heads die immediately.
-            for (int i = 0; i < Main.maxNPCs; ++i)
+            foreach (NPC otherWormHead in Main.ActiveNPCs)
             {
-                NPC otherWormHead = Main.npc[i];
-                if (otherWormHead.active && otherWormHead.type == NPC.type)
+                if (otherWormHead.type == NPC.type)
                 {
                     // Kill the other worm head after setting it to not drop loot.
                     otherWormHead.Calamity().newAI[0] = 0f;

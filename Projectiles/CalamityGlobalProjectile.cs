@@ -3587,17 +3587,17 @@ namespace CalamityMod.Projectiles
                 float maxDistance = 460f;
                 bool homeIn = false;
 
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (Main.npc[i].CanBeChasedBy(projectile, false))
+                    if (n.CanBeChasedBy(projectile, false))
                     {
-                        float extraDistance = (float)(Main.npc[i].width / 2) + (Main.npc[i].height / 2);
+                        float extraDistance = (float)(n.width / 2) + (n.height / 2);
 
-                        bool canHit = Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1);
+                        bool canHit = Collision.CanHit(projectile.Center, 1, 1, n.Center, 1, 1);
 
-                        if (Vector2.Distance(Main.npc[i].Center, projectile.Center) < (maxDistance + extraDistance) && canHit)
+                        if (Vector2.Distance(n.Center, projectile.Center) < (maxDistance + extraDistance) && canHit)
                         {
-                            center = Main.npc[i].Center;
+                            center = n.Center;
                             homeIn = true;
                             break;
                         }
@@ -4856,10 +4856,9 @@ namespace CalamityMod.Projectiles
 
             float lowestHealthCheck = 0f;
             int healTarget = projectile.owner;
-            for (int i = 0; i < Main.maxPlayers; i++)
+            foreach (Player otherPlayer in Main.ActivePlayers)
             {
-                Player otherPlayer = Main.player[i];
-                if (otherPlayer.active && !otherPlayer.dead && ((!player.hostile && !otherPlayer.hostile) || player.team == otherPlayer.team))
+                if (!otherPlayer.dead && ((!player.hostile && !otherPlayer.hostile) || player.team == otherPlayer.team))
                 {
                     float playerDist = Vector2.Distance(projectile.Center, otherPlayer.Center);
                     if (playerDist < distanceRequired && (otherPlayer.statLifeMax2 - otherPlayer.statLife) > lowestHealthCheck)
