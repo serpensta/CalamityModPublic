@@ -4434,6 +4434,40 @@ namespace CalamityMod.Projectiles
 
             #endregion
 
+            if (projectile.type == ProjectileID.DeerclopsIceSpike && (CalamityWorld.revenge || BossRushEvent.BossRushActive))
+            {
+                bool masterMode = Main.masterMode || BossRushEvent.BossRushActive;
+                bool death = CalamityWorld.death || BossRushEvent.BossRushActive;
+
+                Texture2D texture = TextureAssets.Projectile[projectile.type].Value;
+                Rectangle value26 = texture.Frame(1, 5, 0, projectile.frame);
+                Vector2 origin12 = new Vector2(16f, value26.Height / 2);
+                Color alpha5 = projectile.GetAlpha(lightColor);
+                Vector2 vector39 = new Vector2(projectile.scale);
+                float fadeOutGateValue = masterMode ? 80f : death ? 50f : 10f;
+                float killGateValue = masterMode ? 90f : death ? 60f : 20f;
+                float lerpValue5 = Utils.GetLerpValue(killGateValue, killGateValue - 10f, projectile.ai[0], clamped: true);
+                vector39.Y *= lerpValue5;
+                Vector4 vector40 = lightColor.ToVector4();
+                Vector4 vector41 = new Color(67, 17, 17).ToVector4();
+                vector41 *= vector40;
+
+                SpriteEffects spriteEffects = SpriteEffects.None;
+                if (projectile.spriteDirection == -1)
+                    spriteEffects = SpriteEffects.FlipHorizontally;
+
+                Main.EntitySpriteDraw(TextureAssets.Extra[98].Value, projectile.Center - Main.screenPosition + new Vector2(0f, projectile.gfxOffY) - projectile.velocity * projectile.scale * 0.5f, null, projectile.GetAlpha(new Color(vector41.X, vector41.Y, vector41.Z, vector41.W)), projectile.rotation + MathHelper.PiOver2, TextureAssets.Extra[98].Value.Size() / 2f, projectile.scale * 0.9f, spriteEffects);
+                Color color49 = projectile.GetAlpha(Color.White) * Utils.Remap(projectile.ai[0], 0f, killGateValue, 0.5f, 0f);
+                color49.A = 0;
+
+                for (int i = 0; i < 4; i++)
+                    Main.EntitySpriteDraw(texture, projectile.Center - Main.screenPosition + new Vector2(0f, projectile.gfxOffY) + projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2 * (float)i) * 2f * vector39, value26, color49, projectile.rotation, origin12, vector39, spriteEffects);
+
+                Main.EntitySpriteDraw(texture, projectile.Center - Main.screenPosition + new Vector2(0f, projectile.gfxOffY), value26, alpha5, projectile.rotation, origin12, vector39, spriteEffects);
+
+                return false;
+            }
+
             if (projectile.type == ProjectileID.DemonSickle)
             {
                 if (Main.wofNPCIndex < 0 || !Main.npc[Main.wofNPCIndex].active || Main.npc[Main.wofNPCIndex].life <= 0 || projectile.tileCollide)
