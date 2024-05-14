@@ -87,7 +87,7 @@ namespace CalamityMod.Projectiles.Summon
                         float dist = (Projectile.Center - npc.Center).Length();
                         if (dist < maxHomingRange)
                         {
-                            targetIdx = i;
+                            targetIdx = npc.whoAmI;
                             maxHomingRange = dist;
                             hasHomingTarget = true;
                         }

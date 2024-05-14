@@ -33,18 +33,6 @@ namespace CalamityMod
             return false;
         }
 
-        public static IEnumerable<Projectile> AllProjectilesByID(int projectileID)
-        {
-            // This uses the same efficient loop idea as AnyProjectiles.
-            foreach (Projectile p in Main.ActiveProjectiles)
-            {
-                if (p.type != projectileID)
-                    continue;
-
-                yield return p;
-            }
-        }
-
         public static int CountProjectiles(int projectileID) => Main.projectile.Count(proj => proj.type == projectileID && proj.active);
 
         public static int CountHookProj() => Main.projectile.Count(proj => Main.projHook[proj.type] && proj.ai[0] == 2f && proj.active && proj.owner == Main.myPlayer);
@@ -107,17 +95,17 @@ namespace CalamityMod
             // Find the closest target.
             float npcDistCompare = 25000f; // Initializing the value to a large number so the first entry is basically guaranteed to replace it.
             int index = -1;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            foreach (NPC n in Main.ActiveNPCs)
             {
                 float extraDistance = (n.width / 2) + (n.height / 2);
                 if (!n.CanBeChasedBy(projectile, false) || !projectile.WithinRange(n.Center, maxDistance + extraDistance))
                     continue;
 
-                float currentNPCDist = Vector2.Distance(Main.npc[i].Center, projectile.Center);
-                if ((currentNPCDist < npcDistCompare) && (ignoreTiles || Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1)))
+                float currentNPCDist = Vector2.Distance(n.Center, projectile.Center);
+                if ((currentNPCDist < npcDistCompare) && (ignoreTiles || Collision.CanHit(projectile.Center, 1, 1, n.Center, 1, 1)))
                 {
                     npcDistCompare = currentNPCDist;
-                    index = i;
+                    index = n.whoAmI;
                 }
             }
             // If the index was never changed, don't do anything. Otherwise, tell the projectile where to home.

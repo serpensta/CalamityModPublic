@@ -92,7 +92,6 @@ namespace CalamityMod.NPCs.PlagueEnemies
             {
                 if (NPC.timeLeft < 750)
                     NPC.timeLeft = 750;
-                }
             }
 
             int playerAmt = Main.CurrentFrameFlags.ActivePlayersCount;
