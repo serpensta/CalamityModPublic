@@ -146,12 +146,12 @@ namespace CalamityMod.Projectiles.Rogue
             if (Projectile.Calamity().stealthStrike)
             {
                 Player player = Main.player[Projectile.owner];
-                long money = Utils.CoinsCount(out bool overflow, player.inventory);
+                double money = Utils.CoinsCount(out bool overflow, player.inventory);
                 if (money >= 2000000)
                     money = 2000000;
                 if (money != 0)
                 {
-                    modifiers.SourceDamage *= money / 500000 + 1;
+                    modifiers.SourceDamage *= (float)(money / 500000 + 1);
                     SoundEngine.PlaySound(TheSevensStriker.JackpotSound, Projectile.Center);
                     for (int j = 0; j < 8; j++)
                     {
