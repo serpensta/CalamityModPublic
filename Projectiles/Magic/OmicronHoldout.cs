@@ -182,6 +182,7 @@ namespace CalamityMod.Projectiles.Magic
         }
         private void PostFiringCooldown()
         {
+            Owner.channel = true;
             if (PostFireCooldown > 0 && Main.rand.NextBool())
             {
                 Vector2 smokeVel = new Vector2(0, -8) * Main.rand.NextFloat(0.1f, 1.1f);
