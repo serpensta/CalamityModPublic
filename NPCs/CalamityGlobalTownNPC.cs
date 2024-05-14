@@ -17,6 +17,7 @@ using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.NPCs.TownNPCs;
+using CalamityMod.Projectiles.Rogue;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -1063,6 +1064,14 @@ namespace CalamityMod.NPCs
                 damageMult += 0.6f;
                 defense += 20;
             }
+        }
+
+        public override bool? CanBeHitByProjectile(NPC npc, Projectile projectile)
+        {
+            //Not an axe but close enough
+            if (npc.type == NPCID.TaxCollector && projectile.type == ModContent.ProjectileType<SlickCaneProjectile>())
+                return true;
+            return base.CanBeHitByProjectile(npc, projectile);
         }
         #endregion
 

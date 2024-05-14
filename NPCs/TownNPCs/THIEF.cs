@@ -282,7 +282,7 @@ namespace CalamityMod.NPCs.TownNPCs
                 .Add(ItemID.TigerClimbingGear)
                 .AddWithCustomValue(ItemID.InvisibilityPotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
                 .AddWithCustomValue(ItemID.NightOwlPotion, Item.buyPrice(silver: 25), potionSells, Condition.HappyEnough)
-                .AddWithCustomValue(ModContent.ItemType<SlickCane>(), Item.buyPrice(gold: 25), Condition.Hardmode)
+                .AddWithCustomValue(ModContent.ItemType<SlickCane>(), Item.buyPrice(gold: 25))
                 .Add(ModContent.ItemType<ThiefsDime>(), Condition.DownedPirates)
                 .AddWithCustomValue(ModContent.ItemType<MomentumCapacitor>(), Item.buyPrice(gold: 60), Condition.DownedMechBossAll)
                 .Add(ModContent.ItemType<DeepWounder>(), downedCalclone)
