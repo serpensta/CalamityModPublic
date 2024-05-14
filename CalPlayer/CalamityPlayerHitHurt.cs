@@ -1509,7 +1509,12 @@ namespace CalamityMod.CalPlayer
             // The dodges will only trigger if the player has taken greater than or equal to 5% of their max HP in damage
             double dodgeDamageGateValuePercent = 0.05;
             int dodgeDamageGateValue = (int)Math.Round(Player.statLifeMax2 * dodgeDamageGateValuePercent);
-            if (!Player.HasCooldown(GlobalDodge.ID) && info.Damage >= dodgeDamageGateValue)
+
+            // 14MAY2024: Ozzatron: Chalice of the Blood God now works with dodges
+            int actualDamageTaken = chaliceOfTheBloodGod ? chaliceHitOriginalDamage : info.Damage;
+            bool sufficientDamageForDodging = actualDamageTaken >= dodgeDamageGateValue;
+
+            if (!Player.HasCooldown(GlobalDodge.ID) && sufficientDamageForDodging)
             {
                 double maxCooldownDurationDamagePercent = 0.5;
                 int maxCooldownDurationDamageValue = (int)Math.Round(Player.statLifeMax2 * (maxCooldownDurationDamagePercent - dodgeDamageGateValuePercent));
@@ -1518,7 +1523,7 @@ namespace CalamityMod.CalPlayer
                 if (maxCooldownDurationDamageValue <= 0)
                     maxCooldownDurationDamageValue = 1;
 
-                float cooldownDurationScalar = MathHelper.Clamp((info.Damage - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
+                float cooldownDurationScalar = MathHelper.Clamp((actualDamageTaken - dodgeDamageGateValue) / (float)maxCooldownDurationDamageValue, 0f, 1f);
 
                 // Re-implementation of vanilla item Black Belt as a consumable dodge
                 if (Player.whoAmI == Main.myPlayer && Player.blackBelt)
@@ -1969,22 +1974,14 @@ namespace CalamityMod.CalPlayer
             //
             // Chalice of the Blood God does nothing to a hit that was just fully blocked by shields.
             // Otherwise, it reduces the damage of any hit to 5, which allows for full iframes.
-            // It then applies the full hit (minus that 5 damage) to its own bleedout buffer.
+            // It then applies the full hit (minus that 5 damage) to its own bleedout buffer in OnHurt (see below).
             // Hits for less than 5 damage are ignored entirely and allowed to strike the player as normal.
             if (chaliceOfTheBloodGod && !shieldsFullyAbsorbedHit && info.Damage > ChaliceOfTheBloodGod.MinAllowedDamage)
             {
-                int bleedoutToApply = info.Damage - ChaliceOfTheBloodGod.MinAllowedDamage;
-                chaliceBleedoutBuffer += bleedoutToApply;
+                chaliceBleedoutToApplyOnHurt = info.Damage - ChaliceOfTheBloodGod.MinAllowedDamage;
+
                 chaliceHitOriginalDamage = info.Damage;
                 info.Damage = ChaliceOfTheBloodGod.MinAllowedDamage;
-
-                // Defense damage is applied here.
-                DealDefenseDamage(info, bleedoutToApply);
-
-                // Display text indicating that damage was transferred to bleedout.
-                string text = $"({-bleedoutToApply})";
-                Rectangle location = new Rectangle((int)Player.position.X + 4, (int)Player.position.Y - 3, Player.width - 4, Player.height - 4);
-                CombatText.NewText(location, ChaliceOfTheBloodGod.BleedoutBufferDamageTextColor, Language.GetTextValue(text), dot: true);
             }
         }
         #endregion
@@ -2006,7 +2003,7 @@ namespace CalamityMod.CalPlayer
             // This function will be ignored if the player is wearing Chalice, as it handles its defense damage elsewhere.
             bool hitCanApplyDefenseDamage = nextHitDealsDefenseDamage || bloodflareCore;
 
-            if (hitCanApplyDefenseDamage && !chaliceOfTheBloodGod && !hasIFrames && !Player.creativeGodMode)
+            if (hitCanApplyDefenseDamage && !hasIFrames && !Player.creativeGodMode)
             {
                 double halfDefense = Player.statDefense / 2.0;
                 int netMitigation = hurtInfo.SourceDamage - hurtInfo.Damage;
@@ -2037,11 +2034,35 @@ namespace CalamityMod.CalPlayer
                         Dust.CloneDust(d).velocity = dustVel.RotatedBy(MathHelper.Pi * 1.5f);
                     }
                 }
+
+                // Chalice of the Blood God has to compensate for the "mitigation" provided by its bleedout buffer
+                else if (chaliceOfTheBloodGod)
+                    DealDefenseDamage(hurtInfo, chaliceBleedoutToApplyOnHurt);
+
+                // Otherwise, just deal regular defense damage.
                 else
                     DealDefenseDamage(hurtInfo);
             }
 
             nextHitDealsDefenseDamage = false;
+            #endregion
+
+            #region Chalice of the Blood God Bleed Application
+            // This is handled in OnHurt so that Chalice hits can still be dodged based on their appropriate normal damage
+            // Defense damage based on the "total lethality of the hit" is applied immediately prior to this
+            // 
+            // 1 - Actually apply bleedout to the player based on the damage they would have taken
+            // 2 - Display an indicator of how much damage was dealt as bleedout instead of regular damage
+            if (chaliceOfTheBloodGod)
+            {
+                int bleedoutToApply = chaliceBleedoutToApplyOnHurt;
+                chaliceBleedoutBuffer += bleedoutToApply;
+
+                // Display text indicating that damage was transferred to bleedout.
+                string text = $"({-bleedoutToApply})";
+                Rectangle location = new Rectangle((int)Player.position.X + 4, (int)Player.position.Y - 3, Player.width - 4, Player.height - 4);
+                CombatText.NewText(location, ChaliceOfTheBloodGod.BleedoutBufferDamageTextColor, Language.GetTextValue(text), dot: true);
+            }
             #endregion
 
             #region Shattered Community Rage Gain
@@ -2760,9 +2781,8 @@ namespace CalamityMod.CalPlayer
 
             // Under typical circumstances, defense damage scales with "net mitigation", aka how much damage the player DIDN'T take.
             // Thematically, this means it scales with how much damage the player's defense took instead of them.
-
-            CalamityPlayer modPlayer = Player.Calamity();
-
+            // Chalice of the Blood God makes you take much less direct damage than you should, which would catastrophically inflate defense damage.
+            //
             // Subtract the bleedout applied on this hit from the net mitigation.
             // This prevents Chalice from making the player take much more defense damage than intended.
             int netMitigation = hurtInfo.SourceDamage - (hurtInfo.Damage + bleedoutApplied);
@@ -2808,6 +2828,10 @@ namespace CalamityMod.CalPlayer
         // Actually applies defense damage. Cannot be called externally.
         private void ApplyDefenseDamageInternal(int defenseDamage, bool showVisuals = true)
         {
+            // If zero defense damage is being dealt, don't waste your time or display a grey 0.
+            if (defenseDamage <= 0)
+                return;
+            
             // Can be dynamically reduced by Adamantite set bonus and maybe other future effects.
             int defenseDamageTaken = defenseDamage;
 
