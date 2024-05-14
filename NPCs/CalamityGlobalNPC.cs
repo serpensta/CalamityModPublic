@@ -1245,7 +1245,7 @@ namespace CalamityMod.NPCs
                     break;
 
                 case NPCID.AncientCultistSquidhead:
-                    npc.lifeMax = 4000;
+                    npc.lifeMax = 3200;
                     break;
 
                 case NPCID.DukeFishron:
