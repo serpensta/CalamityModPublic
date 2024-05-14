@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Items.Placeables.Furniture;
 using CalamityMod.Systems;
 using Terraria;
-using Terraria.Graphics.Effects;
+using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,6 +10,7 @@ namespace CalamityMod.BiomeManagers
     public class AstralInfectionBiome : ModBiome
     {
         public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("CalamityMod/AstralWater");
+
         public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle
         {
             get
@@ -42,11 +43,28 @@ namespace CalamityMod.BiomeManagers
         }
 
         public override int BiomeTorchItemType => ModContent.ItemType<AstralTorch>();
-        public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
+
+        public override SceneEffectPriority Priority
+        {
+            get
+            {
+                if (Main.LocalPlayer.ZoneDesert && Sandstorm.Happening && !(Main.LocalPlayer.ZoneSnow || Main.slimeRain || Main.eclipse))
+                {
+                    return SceneEffectPriority.Environment;
+                }
+                else
+                {
+                    return SceneEffectPriority.BiomeHigh;
+                }
+            }
+        }
+
         public override string BestiaryIcon => "CalamityMod/BiomeManagers/AbovegroundAstralBiomeIcon";
+
         public override string BackgroundPath 
         { 
-            get {
+            get
+            {
                 if (Main.LocalPlayer.ZoneDesert && !Main.LocalPlayer.ZoneSnow)
                 {
                     //desert

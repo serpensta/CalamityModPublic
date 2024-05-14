@@ -269,10 +269,10 @@ namespace CalamityMod.NPCs.TownNPCs
         }
         public override void AddShops()
         {
-            Condition potionSells = new(CalamityUtils.GetText("Condition.PotionConfig"), () => CalamityConfig.Instance.PotionSelling);
-            Condition downedCalclone = new(CalamityUtils.GetText("Condition.PostCal"), () => DownedBossSystem.downedCalamitasClone);
-            Condition downedDoG = new(CalamityUtils.GetText("Condition.PostDoG"), () => DownedBossSystem.downedDoG);
-            Condition downedYharon = new(CalamityUtils.GetText("Condition.PostYharon"), () => DownedBossSystem.downedYharon);
+            Condition potionSells = CalamityConditions.PotionSellingConfig;
+            Condition downedCalclone = CalamityConditions.DownedCalamitasClone;
+            Condition downedDoG = CalamityConditions.DownedDevourerOfGods;
+            Condition downedYharon = CalamityConditions.DownedYharon;
 
             NPCShop shop = new(Type);
             shop.AddWithCustomValue(ModContent.ItemType<Cinquedea>(), Item.buyPrice(gold: 9))

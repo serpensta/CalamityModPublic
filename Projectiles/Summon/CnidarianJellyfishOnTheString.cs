@@ -13,6 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static CalamityMod.CalamityUtils;
 using static Terraria.ModLoader.ModContent;
+using CalamityMod.Graphics.Primitives;
 
 namespace CalamityMod.Projectiles.Summon
 {
