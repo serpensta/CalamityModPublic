@@ -4898,7 +4898,7 @@ namespace CalamityMod.Projectiles
                     if (playerDist < distanceRequired && (otherPlayer.statLifeMax2 - otherPlayer.statLife) > lowestHealthCheck)
                     {
                         lowestHealthCheck = otherPlayer.statLifeMax2 - otherPlayer.statLife;
-                        healTarget = i;
+                        healTarget = otherPlayer.whoAmI;
                     }
                 }
             }

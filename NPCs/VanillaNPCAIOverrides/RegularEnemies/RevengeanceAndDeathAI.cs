@@ -2186,7 +2186,7 @@ PrepareToShoot:
                     }
                     foreach (NPC n in Main.ActiveNPCs)
                     {
-                        if (i != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
+                        if (n.whoAmI != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                         {
                             if (npc.position.X < n.position.X)
                             {
@@ -2262,7 +2262,7 @@ PrepareToShoot:
                 }
                 foreach (NPC n in Main.ActiveNPCs)
                 {
-                    if (i != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
+                    if (n.whoAmI != npc.whoAmI && n.type == npcType && Math.Abs(npc.position.X - n.position.X) + Math.Abs(npc.position.Y - n.position.Y) < (float)npc.width)
                     {
                         if (npc.position.X < n.position.X)
                         {
@@ -10706,7 +10706,7 @@ PrepareToShoot:
 
             foreach (NPC n in Main.ActiveNPCs)
             {
-                if (i == npc.whoAmI || n.type != npc.type)
+                if (n.whoAmI == npc.whoAmI || n.type != npc.type)
                     continue;
 
                 Vector2 targetDirection = n.Center - npc.Center;
@@ -10716,7 +10716,7 @@ PrepareToShoot:
                 targetDirection.Normalize();
                 if (targetDirection.X == 0f && targetDirection.Y == 0f)
                 {
-                    if (i > npc.whoAmI)
+                    if (n.whoAmI > npc.whoAmI)
                         targetDirection.X = 1f;
                     else
                         targetDirection.X = -1f;

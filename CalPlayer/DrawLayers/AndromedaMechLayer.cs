@@ -38,7 +38,7 @@ namespace CalamityMod.CalPlayer.DrawLayers
             {
                 if (p.type == andromedaMechID && p.owner == drawPlayer.whoAmI)
                 {
-                    robot = i;
+                    robot = p.whoAmI;
                     break;
                 }
             }
