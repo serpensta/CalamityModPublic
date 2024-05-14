@@ -226,9 +226,10 @@ namespace CalamityMod.NPCs
         public const int knockbackResistanceMin = 180;
         public int knockbackResistanceTimer = 0;
 
-        // Used for particle drawing on NPCs affected by vanilla Cobalt/Mythril weapons
-        public bool isNerfedByCobalt = false;
-        public bool isNerfedByMythril = false;
+        // Used for NPCs affected by vanilla Cobalt/Mythril weapons
+        public const int cobaltAndMythrilNerfTime = 600;
+        public int cobaltNerfTimer = 0;
+        public int mythrilNerfTimer = 0;
 
         // Debuffs
         public int vaporfied = 0;
@@ -447,8 +448,8 @@ namespace CalamityMod.NPCs
             myClone.bossCanBeKnockedBack = bossCanBeKnockedBack;
             myClone.knockbackResistanceTimer = knockbackResistanceTimer;
 
-            myClone.isNerfedByCobalt = isNerfedByCobalt;
-            myClone.isNerfedByMythril = isNerfedByMythril;
+            myClone.cobaltNerfTimer = cobaltNerfTimer;
+            myClone.mythrilNerfTimer = mythrilNerfTimer;
 
             myClone.vaporfied = vaporfied;
             myClone.timeSlow = timeSlow;
@@ -5083,6 +5084,11 @@ namespace CalamityMod.NPCs
             if (RancorBurnTime > 0)
                 RancorBurnTime--;
 
+            if (cobaltNerfTimer > 0)
+                cobaltNerfTimer--;
+            if (mythrilNerfTimer > 0)
+                mythrilNerfTimer--;
+
             if (veriumDoomTimer > 0)
                 veriumDoomTimer--;
             if (veriumDoomTimer == 0 && veriumDoomMarked)
@@ -6378,9 +6384,12 @@ namespace CalamityMod.NPCs
                 }
             }
 
-            // Cobalt and Mythril weapon particle effects
-            if (isNerfedByCobalt)
+            // Cobalt weapons reduce NPC defense
+            if (cobaltNerfTimer > 0)
             {
+                miscDefenseLoss = (int)(npc.defense * 0.25);
+
+                // Particle effects
                 if (Main.rand.NextBool(5))
                 {
                     Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
@@ -6391,8 +6400,16 @@ namespace CalamityMod.NPCs
                 }
             }
 
-            if (isNerfedByMythril)
+            // Mythril weapons reduce NPC contact damage
+            if (mythrilNerfTimer > 0)
             {
+                // Ensure that it isn't trying to set a non-zero damage value if the NPC's damage is currently 0
+                if (npc.damage == 0)
+                    npc.damage = 0;
+                else
+                    npc.damage = (int)(npc.defDamage * 0.9);
+
+                // Particle effects
                 if (Main.rand.NextBool(5))
                 {
                     Vector2 spawnLocation = new Vector2(Main.rand.NextFloat(npc.position.X, npc.position.X + npc.width), Main.rand.NextFloat(npc.position.Y, npc.position.Y + npc.height));
