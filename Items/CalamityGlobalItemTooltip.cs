@@ -429,7 +429,7 @@ namespace CalamityMod.Items
 
             // Cobalt
             if (item.type == ItemID.CobaltSword || item.type == ItemID.CobaltNaginata)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nPermanently decreases enemy defense by 25% on hit");
+                EditTooltipByName("Knockback", (line) => line.Text += "\nDecreases enemy defense by 25% on hit\nThis effect lasts for 10 seconds");
 
             // Palladium
             if (item.type == ItemID.PalladiumSword || item.type == ItemID.PalladiumPike)
@@ -437,7 +437,7 @@ namespace CalamityMod.Items
 
             // Mythril
             if (item.type == ItemID.MythrilSword || item.type == ItemID.MythrilHalberd)
-                EditTooltipByName("Knockback", (line) => line.Text += "\nPermanently decreases enemy contact damage by 10% on hit");
+                EditTooltipByName("Knockback", (line) => line.Text += "\nDecreases enemy contact damage by 10% on hit\nThis effect lasts for 10 seconds");
 
             // Orichalcum
             if (item.type == ItemID.OrichalcumSword || item.type == ItemID.OrichalcumHalberd)
