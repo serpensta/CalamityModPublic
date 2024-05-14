@@ -87,8 +87,7 @@ namespace CalamityMod.CalPlayer
             switch (item.type)
             {
                 case ItemID.CobaltSword:
-                    target.Calamity().miscDefenseLoss = (int)(target.defense * 0.25);
-                    target.Calamity().isNerfedByCobalt = true;
+                    target.Calamity().cobaltNerfTimer = CalamityGlobalNPC.cobaltAndMythrilNerfTime;
                     break;
 
                 case ItemID.PalladiumSword:
@@ -98,13 +97,7 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ItemID.MythrilSword:
-
-                    if (target.damage > 0)
-                    {
-                        target.damage = (int)(target.defDamage * 0.9);
-                        target.Calamity().isNerfedByMythril = true;
-                    }
-
+                    target.Calamity().mythrilNerfTimer = CalamityGlobalNPC.cobaltAndMythrilNerfTime;
                     break;
 
                 case ItemID.OrichalcumSword:
@@ -226,8 +219,7 @@ namespace CalamityMod.CalPlayer
             switch (proj.type)
             {
                 case ProjectileID.CobaltNaginata:
-                    target.Calamity().miscDefenseLoss = (int)(target.defense * 0.25);
-                    target.Calamity().isNerfedByCobalt = true;
+                    target.Calamity().cobaltNerfTimer = CalamityGlobalNPC.cobaltAndMythrilNerfTime;
                     break;
 
                 case ProjectileID.PalladiumPike:
@@ -237,13 +229,7 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ProjectileID.MythrilHalberd:
-
-                    if (target.damage > 0)
-                    {
-                        target.damage = (int)(target.defDamage * 0.9);
-                        target.Calamity().isNerfedByMythril = true;
-                    }
-
+                    target.Calamity().mythrilNerfTimer = CalamityGlobalNPC.cobaltAndMythrilNerfTime;
                     break;
 
                 case ProjectileID.OrichalcumHalberd:

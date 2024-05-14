@@ -168,7 +168,7 @@ namespace CalamityMod.Projectiles.Ranged
 
             // Rumble (only while channeling)
             float rumble = 1f;
-            if (!Owner.CantUseHoldout())
+            if (!Owner.CantUseHoldout() && PostFireCooldown <= 0)
                 Projectile.Center += Main.rand.NextVector2Circular(rumble, rumble);
             if (PostFireCooldown < 297 && PostFireCooldown > 15 && recharging)
             {
@@ -238,6 +238,7 @@ namespace CalamityMod.Projectiles.Ranged
         }
         private void PostFiringCooldown()
         {
+            Owner.channel = true;
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 73f;
 
             if (PUNISHMENTMODE)

@@ -212,6 +212,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         private void PostFiringCooldown()
         {
+            Owner.channel = true;
             if (PostFireCooldown > 0)
             {
                 PostFireCooldown--;
@@ -263,7 +264,7 @@ namespace CalamityMod.Projectiles.Ranged
             Vector2 rotationPoint = texture.Size() * 0.5f;
             SpriteEffects flipSprite = (Projectile.spriteDirection * Owner.gravDir == -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            if (!Owner.CantUseHoldout())
+            if (!Owner.CantUseHoldout() && PostFireCooldown <= 0)
             {
                 float rumble = Utils.GetLerpValue(0f, MaxCharge, ShootingTimer, true) * ShootingTimer >= MaxCharge ? 2 : 0.8f;
                 drawPosition += Main.rand.NextVector2Circular(rumble, rumble);

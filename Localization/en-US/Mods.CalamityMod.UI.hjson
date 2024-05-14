@@ -145,7 +145,11 @@ ArtemisApolloIcon: Artemis and Apollo, a pair of extremely persistent automatons
 // Debuff System
 DebuffSystem: {
 	Title: Debuff Resistances
-	Description: NPCs take increased or decreased damage from certain debuff types
+	Description:
+		'''
+		NPCs take 2x damage from vulnerable debuff types,
+		and 0.5x damage from resisted debuff types
+		'''
 	Heat: Heat
 	Cold: Cold
 	Sickness: Sickness

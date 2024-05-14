@@ -229,6 +229,7 @@ namespace CalamityMod.Projectiles.Magic
         }
         private void PostFiringCooldown()
         {
+            Owner.channel = true;
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 12f;
 
             if (PostFireCooldown > 0 && Main.rand.NextBool())
