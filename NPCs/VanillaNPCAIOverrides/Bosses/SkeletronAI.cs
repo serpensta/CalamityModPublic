@@ -407,7 +407,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                         int skullProjectile = Projectile.NewProjectile(npc.GetSource_FromAI(), skullFiringPos, skullProjDirection, type, damage, 0f, Main.myPlayer, -1f);
                         Main.projectile[skullProjectile].timeLeft = 600;
-                        if (masterMode)
+                        if (masterMode && handsDead)
                         {
                             skullProjDirection = new Vector2(skullProjTargetX, skullProjTargetY).SafeNormalize(Vector2.UnitY);
                             skullProjDirection *= skullProjSpeed * 2f;
