@@ -628,11 +628,10 @@ namespace CalamityMod.NPCs
                     npc.lifeRegen = 0;
 
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active &&
-                        (Main.projectile[j].type == ProjectileType<LionfishProj>() || Main.projectile[j].type == ProjectileType<LeviathanTooth>() || Main.projectile[j].type == ProjectileType<JawsProjectile>()) &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if ((p.type == ProjectileType<LionfishProj>() || p.type == ProjectileType<LeviathanTooth>() || p.type == ProjectileType<JawsProjectile>()) &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
                         projectileCount++;
                     }
@@ -653,10 +652,10 @@ namespace CalamityMod.NPCs
                     npc.lifeRegen = 0;
 
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].type == ProjectileType<BonebreakerProjectile>() &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.type == ProjectileType<BonebreakerProjectile>() &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
                         projectileCount++;
                     }
@@ -675,12 +674,12 @@ namespace CalamityMod.NPCs
             {
                 int projectileCount = 0;
                 int owner = 255;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].type == ProjectileType<Shellfish>() &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.type == ProjectileType<Shellfish>() &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
-                        owner = Main.projectile[j].owner;
+                        owner = p.owner;
                         projectileCount++;
                         if (projectileCount >= 5)
                         {
@@ -717,13 +716,13 @@ namespace CalamityMod.NPCs
             if (clamDebuff > 0)
             {
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
-                        if (Main.projectile[j].type == ProjectileType<SnapClamProj>())
+                        if (p.type == ProjectileType<SnapClamProj>())
                             projectileCount += 2;
-                        if (Main.projectile[j].type == ProjectileType<SnapClamStealth>())
+                        if (p.type == ProjectileType<SnapClamStealth>())
                             projectileCount++;
                     }
                 }
@@ -734,10 +733,10 @@ namespace CalamityMod.NPCs
             if (irradiated > 0)
             {
                 int projectileCount = 0;
-                for (int j = 0; j < Main.maxProjectiles; j++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[j].active && Main.projectile[j].type == ProjectileType<WaterLeechProj>() &&
-                        Main.projectile[j].ai[0] == 1f && Main.projectile[j].ai[1] == npc.whoAmI)
+                    if (p.type == ProjectileType<WaterLeechProj>() &&
+                        p.ai[0] == 1f && p.ai[1] == npc.whoAmI)
                     {
                         projectileCount++;
                     }
@@ -5473,15 +5472,15 @@ namespace CalamityMod.NPCs
             {
                 int bullseyeType = ProjectileType<SpiritOriginBullseye>();
                 Projectile bullseye = null;
-                for (int i = 0; i < Main.maxProjectiles; i++)
+                foreach (Projectile p in Main.ActiveProjectiles)
                 {
-                    if (Main.projectile[i].type != bullseyeType || !Main.projectile[i].active || Main.projectile[i].owner != player.whoAmI)
+                    if (p.type != bullseyeType || p.owner != player.whoAmI)
                         continue;
 
                     // Only choose a bullseye if it is attached to the NPC that is being hit.
-                    if (npc.whoAmI == (int)Main.projectile[i].ai[0])
+                    if (npc.whoAmI == (int)p.ai[0])
                     {
-                        bullseye = Main.projectile[i];
+                        bullseye = p;
                         break;
                     }
                 }
@@ -5823,10 +5822,9 @@ namespace CalamityMod.NPCs
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    for (int j = 0; j < Main.maxNPCs; j++)
+                    foreach (NPC nPC in Main.ActiveNPCs)
                     {
-                        NPC nPC = Main.npc[j];
-                        if (nPC.active && !nPC.buffImmune[BuffType<Plague>()] && npc.Distance(nPC.Center) < 100f && !nPC.dontTakeDamage && nPC.lifeMax > 5 && !nPC.friendly && !nPC.townNPC)
+                        if (!nPC.buffImmune[BuffType<Plague>()] && npc.Distance(nPC.Center) < 100f && !nPC.dontTakeDamage && nPC.lifeMax > 5 && !nPC.friendly && !nPC.townNPC)
                             nPC.AddBuff(BuffType<Plague>(), 300);
                     }
                 }
@@ -7810,9 +7808,9 @@ namespace CalamityMod.NPCs
         #region Player Counts
         public static bool AnyLivingPlayers()
         {
-            for (int i = 0; i < Main.maxPlayers; i++)
+            foreach (Player player in Main.ActivePlayers)
             {
-                if (Main.player[i] != null && Main.player[i].active && !Main.player[i].dead && !Main.player[i].ghost)
+                if (!player.dead && !player.ghost)
                 {
                     return true;
                 }
@@ -7827,15 +7825,7 @@ namespace CalamityMod.NPCs
                 return 1;
             }
 
-            int players = 0;
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                if (Main.player[i] != null && Main.player[i].active)
-                {
-                    players++;
-                }
-            }
-            return players;
+            return Main.CurrentFrameFlags.ActivePlayersCount;
         }
         #endregion
 
@@ -7901,12 +7891,11 @@ namespace CalamityMod.NPCs
                                     return;
 
                                 Projectile proj = null;
-                                for (int i = 0; i < Main.maxProjectiles; i++)
+                                foreach (Projectile p in Main.ActiveProjectiles)
                                 {
-                                    proj = Main.projectile[i];
-                                    if (Main.projectile[i].active && Main.projectile[i].bobber && Main.projectile[i].owner == player.whoAmI)
+                                    proj = p;
+                                    if (p.bobber && p.owner == player.whoAmI)
                                     {
-                                        proj = Main.projectile[i];
                                         break;
                                     }
                                 }
