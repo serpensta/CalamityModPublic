@@ -98,8 +98,13 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ItemID.MythrilSword:
-                    target.damage = (int)(target.defDamage * 0.9);
-                    target.Calamity().isNerfedByMythril = true;
+
+                    if (target.damage > 0)
+                    {
+                        target.damage = (int)(target.defDamage * 0.9);
+                        target.Calamity().isNerfedByMythril = true;
+                    }
+
                     break;
 
                 case ItemID.OrichalcumSword:
@@ -232,8 +237,13 @@ namespace CalamityMod.CalPlayer
                     break;
 
                 case ProjectileID.MythrilHalberd:
-                    target.damage = (int)(target.defDamage * 0.9);
-                    target.Calamity().isNerfedByMythril = true;
+
+                    if (target.damage > 0)
+                    {
+                        target.damage = (int)(target.defDamage * 0.9);
+                        target.Calamity().isNerfedByMythril = true;
+                    }
+
                     break;
 
                 case ProjectileID.OrichalcumHalberd:
