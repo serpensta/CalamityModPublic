@@ -871,7 +871,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             {
                 npc.velocity.Y = MathHelper.Clamp(npc.velocity.Y + yVelocityIncrease, yVelocityMin, 0f);
             }
-            else if (npc.velocity.Y == 0f && moveUp)
+            else if (npc.velocity.Y == 0f && moveUp && npc.localAI[0] == 0f)
             {
                 npc.velocity.Y = yVelocity;
                 npc.localAI[0] = 1f;
