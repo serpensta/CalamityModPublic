@@ -6077,7 +6077,7 @@ namespace CalamityMod.NPCs
             if (spawnInfo.Player.ZoneUnderworldHeight && !calamityBiomeZone && CalamityConfig.Instance.RemoveLavaDropsFromLavaSlimes && Main.expertMode)
             {
                 pool.Add(NPCType<LavaSlimeNoLavaDrop>(), SpawnCondition.Underworld.Chance);
-                pool[NPCID.LavaSlime] = 0f;
+                pool.Remove(NPCID.LavaSlime);
             }
 
             // Spawn Green Jellyfish in prehm and Blue Jellyfish in hardmode
