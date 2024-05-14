@@ -112,7 +112,7 @@ namespace CalamityMod.Projectiles.Summon
                 Projectile.penetrate = 1;
 
                 for (int dustIndex = 0; dustIndex < 20; dustIndex++)
-                    Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 40);
+                    Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants);
 
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
 
@@ -182,7 +182,7 @@ namespace CalamityMod.Projectiles.Summon
         public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 10; i++)
-                Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 40);
+                Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.JunglePlants);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -249,7 +249,7 @@ namespace CalamityMod.Projectiles.Summon
             if (Projectile.type != ModContent.ProjectileType<PlantationStaffTentacle>() || !MainMinion.active || MainMinion.type != ModContent.ProjectileType<PlantationStaffSummon>())
                 return;
 
-            Texture2D texture = TextureAssets.Projectile[MainMinion.type].Value;
+            Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[MainMinion.type].Value;
             int height = texture.Height / Main.projFrames[MainMinion.type];
             int frameHeight = height * MainMinion.frame;
             SpriteEffects spriteEffects = SpriteEffects.None;

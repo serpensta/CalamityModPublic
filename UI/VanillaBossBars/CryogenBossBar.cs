@@ -1,10 +1,10 @@
-﻿using CalamityMod.NPCs.Cryogen;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.Cryogen;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
@@ -27,13 +27,13 @@ namespace CalamityMod.UI.VanillaBossBars
         public override bool? ModifyInfo(ref BigProgressBarInfo info, ref float life, ref float lifeMax, ref float shield, ref float shieldMax)
         {
             NPC target = Main.npc[info.npcIndexToAimAt];
-			if (!target.active)
-				return false;
+            if (!target.active)
+                return false;
 
             // Get the boss health, obviously
             life = target.life;
             lifeMax = target.lifeMax;
-            
+
             // Reset the shield
             shield = 0f;
             shieldMax = 0f;
@@ -41,12 +41,12 @@ namespace CalamityMod.UI.VanillaBossBars
             // Determine the shield health
             foreach (NPC part in Main.ActiveNPCs)
             {
-				if (part.type == NPCType<CryogenShield>())
-				{
-					shield += part.life;
+                if (part.type == NPCType<CryogenShield>())
+                {
+                    shield += part.life;
                     shieldMax += part.lifeMax;
-				}
-			}
+                }
+            }
             return true;
         }
     }

@@ -1,9 +1,9 @@
-﻿using CalamityMod.NPCs.Leviathan;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.Leviathan;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
@@ -28,8 +28,8 @@ namespace CalamityMod.UI.VanillaBossBars
         {
             NPC target = Main.npc[info.npcIndexToAimAt];
 
-			if (!target.active && !FindTheRightFish(ref info))
-				return false;
+            if (!target.active && !FindTheRightFish(ref info))
+                return false;
 
             // Immediately grab the boss's health, whichever one it is. We will check later.
             life = target.life;
@@ -69,18 +69,18 @@ namespace CalamityMod.UI.VanillaBossBars
         {
             foreach (NPC target in Main.ActiveNPCs)
             {
-				if (target.active && target.type == NPCType<Anahita>())
-				{
-					info.npcIndexToAimAt = target.whoAmI;
-					return true;
-				}
+                if (target.active && target.type == NPCType<Anahita>())
+                {
+                    info.npcIndexToAimAt = target.whoAmI;
+                    return true;
+                }
                 else if (target.active && target.type == NPCType<Leviathan>())
                 {
                     info.npcIndexToAimAt = target.whoAmI;
                     return true;
                 }
-			}
-			return false;
+            }
+            return false;
         }
     }
 }

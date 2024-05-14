@@ -1,8 +1,8 @@
-﻿using CalamityMod.NPCs;
+﻿using System;
+using CalamityMod.NPCs;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Renderers;

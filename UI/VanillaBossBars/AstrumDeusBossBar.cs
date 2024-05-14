@@ -1,10 +1,10 @@
-﻿using CalamityMod.NPCs.AstrumDeus;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.AstrumDeus;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
@@ -21,8 +21,8 @@ namespace CalamityMod.UI.VanillaBossBars
         public override bool? ModifyInfo(ref BigProgressBarInfo info, ref float life, ref float lifeMax, ref float shield, ref float shieldMax)
         {
             NPC target = Main.npc[info.npcIndexToAimAt];
-			if (!target.active && !FindMoreWorms(ref info))
-				return false;
+            if (!target.active && !FindMoreWorms(ref info))
+                return false;
 
             // Reset the health
             life = 0f;
@@ -31,8 +31,8 @@ namespace CalamityMod.UI.VanillaBossBars
             // Determine the real health by finding more of itself
             foreach (NPC worm in Main.ActiveNPCs)
             {
-				if (worm.type == target.type)
-				{
+                if (worm.type == target.type)
+                {
                     // In Death Mode, every worm must be killed
                     if (CalamityWorld.death)
                     {
@@ -49,15 +49,15 @@ namespace CalamityMod.UI.VanillaBossBars
 
                         lifeMax = worm.lifeMax;
                     }
-				}
-			}
+                }
+            }
             return true;
         }
 
         public bool FindMoreWorms(ref BigProgressBarInfo info)
         {
             info.npcIndexToAimAt = NPC.FindFirstNPC(ModContent.NPCType<AstrumDeusHead>());
-			return info.npcIndexToAimAt != -1;
+            return info.npcIndexToAimAt != -1;
         }
     }
 }

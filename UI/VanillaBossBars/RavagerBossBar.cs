@@ -1,9 +1,9 @@
-﻿using CalamityMod.NPCs.Ravager;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.Ravager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
@@ -31,8 +31,8 @@ namespace CalamityMod.UI.VanillaBossBars
         public override bool? ModifyInfo(ref BigProgressBarInfo info, ref float life, ref float lifeMax, ref float shield, ref float shieldMax)
         {
             NPC target = Main.npc[info.npcIndexToAimAt];
-			if (!target.active && !FindRavagerBody(ref info))
-				return false;
+            if (!target.active && !FindRavagerBody(ref info))
+                return false;
 
             life = target.life;
             lifeMax = target.lifeMax;
@@ -48,11 +48,11 @@ namespace CalamityMod.UI.VanillaBossBars
             // Determine the current health of the parts
             foreach (NPC part in Main.ActiveNPCs)
             {
-				if (RavagerParts.Contains(part.type))
-				{
-					life += part.life;
-				}
-			}
+                if (RavagerParts.Contains(part.type))
+                {
+                    life += part.life;
+                }
+            }
             return true;
         }
 

@@ -1,11 +1,11 @@
-﻿using CalamityMod.NPCs.ExoMechs.Ares;
+﻿using System;
+using System.Collections.Generic;
+using CalamityMod.NPCs.ExoMechs.Ares;
 using CalamityMod.NPCs.ExoMechs.Artemis;
 using CalamityMod.NPCs.ExoMechs.Thanatos;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.BigProgressBar;
@@ -51,7 +51,7 @@ namespace CalamityMod.UI.VanillaBossBars
             ValidateAllMechs(ref info);
             NPC target = Main.npc[info.npcIndexToAimAt];
 
-			if (!target.active && !FindMechsAgain(ref info))
+            if (!target.active && !FindMechsAgain(ref info))
             {
                 // Reset the spawning bool for refights
                 AllBossesSpawned = false;
@@ -105,7 +105,7 @@ namespace CalamityMod.UI.VanillaBossBars
                     HideArtemis = target.Opacity < 0.5f;
                 if (target.type == NPCType<ThanatosHead>())
                     HideThanatos = target.Opacity < 0.5f;
-			}
+            }
 
             // Manually re-hide bosses once they commit die
             if (!NPC.AnyNPCs(NPCType<AresBody>()))
@@ -118,31 +118,35 @@ namespace CalamityMod.UI.VanillaBossBars
 
         public bool FindMechsAgain(ref BigProgressBarInfo info)
         {
-            foreach (NPC target in Main.ActiveNPCs)
+            for (int i = 0; i < Main.maxNPCs; i++)
             {
-                // Get the index of the mech that's not hiding
-                if (target.type == NPCType<AresBody>() && !HideAres)
+                NPC target = Main.npc[i];
+                if (target.active)
                 {
-                    info.npcIndexToAimAt = target.whoAmI;
-                    return true;
+                    // Get the index of the mech that's not hiding
+                    if (target.type == NPCType<AresBody>() && !HideAres)
+                    {
+                        info.npcIndexToAimAt = i;
+                        return true;
+                    }
+                    else if (target.type == NPCType<Artemis>() && !HideArtemis)
+                    {
+                        info.npcIndexToAimAt = i;
+                        return true;
+                    }
+                    else if (target.type == NPCType<ThanatosHead>() && !HideThanatos)
+                    {
+                        info.npcIndexToAimAt = i;
+                        return true;
+                    }
+                    // Failsafe
+                    else if (target.type == NPCType<AresBody>() || target.type == NPCType<Artemis>() || target.type == NPCType<ThanatosHead>())
+                    {
+                        info.npcIndexToAimAt = i;
+                        return true;
+                    }
                 }
-                else if (target.type == NPCType<Artemis>() && !HideArtemis)
-                {
-                    info.npcIndexToAimAt = target.whoAmI;
-                    return true;
-                }
-                else if (target.type == NPCType<ThanatosHead>() && !HideThanatos)
-                {
-                    info.npcIndexToAimAt = target.whoAmI;
-                    return true;
-                }
-                // Failsafe
-                else if (target.type == NPCType<AresBody>() || target.type == NPCType<Artemis>() || target.type == NPCType<ThanatosHead>())
-                {
-                    info.npcIndexToAimAt = target.whoAmI;
-                    return true;
-                }
-			}
+            }
             return false;
         }
     }
