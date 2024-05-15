@@ -4390,15 +4390,15 @@ namespace CalamityMod.Projectiles
 
             if (projectile.type == ProjectileID.ThornBall)
             {
-                float startTurningBrownGateValue = 420f;
-                float timeToReachFullBrown = 180f;
-                float timeToReachThornExplosion = startTurningBrownGateValue + timeToReachFullBrown;
+                float startWarningColorGateValue = 420f;
+                float timeToReachFullIntensity = 180f;
+                float timeToReachThornExplosion = startWarningColorGateValue + timeToReachFullIntensity;
                 Color initialColor = lightColor;
-                Color finalColor = new Color(125, 75, 75);
+                Color finalColor = Color.Lerp(new Color(125, 75, 75), Color.Red, (float)Math.Abs(Math.Sin((projectile.ai[1] - startWarningColorGateValue) * (MathHelper.Pi / 45))));
                 finalColor.A = (byte)(255 - projectile.alpha);
-                if (projectile.ai[1] > startTurningBrownGateValue)
+                if (projectile.ai[1] > startWarningColorGateValue)
                 {
-                    float colorTransitionRatio = (projectile.ai[1] - startTurningBrownGateValue) / timeToReachFullBrown;
+                    float colorTransitionRatio = (projectile.ai[1] - startWarningColorGateValue) / timeToReachFullIntensity;
                     Color dehydratedColor = Color.Lerp(initialColor, finalColor, colorTransitionRatio);
                     return dehydratedColor;
                 }
