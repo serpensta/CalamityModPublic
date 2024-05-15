@@ -326,7 +326,7 @@ namespace CalamityMod.Items
             // There are no item sets for tombstones wtf
             if (item.type == ItemID.Tombstone || item.type == ItemID.GraveMarker || item.type == ItemID.CrossGraveMarker || item.type == ItemID.Headstone || item.type == ItemID.Gravestone || item.type == ItemID.Obelisk
                 || item.type == ItemID.RichGravestone1 || item.type == ItemID.RichGravestone2 || item.type == ItemID.RichGravestone3 || item.type == ItemID.RichGravestone4 || item.type == ItemID.RichGravestone5)
-                EditTooltipByName("Material", (line) => line.Text += "\n20 of any tombstone turns the surrounding area into a graveyard"
+                EditTooltipByName("Material", (line) => line.Text += "\n13 of any tombstone turns the surrounding area into a graveyard"
                 + "\nGraveyards have various new item sales and recipes");
 
             // Eternity Crystal notifies the player that they can accelerate the invasion
