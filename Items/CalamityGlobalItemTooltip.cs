@@ -846,8 +846,9 @@ namespace CalamityMod.Items
             {
                 EditTooltipByNum(0, (line) =>
                 {
-                    string newTooltip = line.Text.Replace("3%", "5%");
-                    newTooltip += "\n+0.5 HP/s life regen";
+                    string newTooltip = line.Text.Replace("3%", "6%");
+                    // Chest piece has 2 regen instead of 1
+                    newTooltip += item.type == ItemID.CrimsonScalemail ? "\n+1 HP/s life regen" : "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });
             }
