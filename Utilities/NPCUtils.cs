@@ -147,7 +147,7 @@ namespace CalamityMod
             // "Non-enemies" (e.g. butterflies or projectile enemies) with near zero max health,
             // or anything but the strongest enemies with no contact damage (e.g. Celestial Pillars, Providence)
             // do not generate rage.
-            if (npc.lifeMax <= BalancingConstants.TinyHealthThreshold || (npc.damage <= BalancingConstants.TinyDamageThreshold && npc.lifeMax <= BalancingConstants.NoContactDamageHealthThreshold))
+            if (npc.lifeMax <= BalancingConstants.TinyHealthThreshold || (npc.defDamage <= BalancingConstants.TinyDamageThreshold && npc.lifeMax <= BalancingConstants.NoContactDamageHealthThreshold))
                 return false;
             // Also explicitly exclude dummies and anything with a ridiculous health pool (dummies from Fargo's for example).
             if (npc.type == NPCID.TargetDummy || npc.type == NPCType<SuperDummyNPC>() || npc.lifeMax > BalancingConstants.UnreasonableHealthThreshold)

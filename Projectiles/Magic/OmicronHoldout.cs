@@ -83,7 +83,7 @@ namespace CalamityMod.Projectiles.Magic
                     if (maxFirerateShots == 5)
                     {
                         Windup = 60;
-                        maxFirerateShots = 0;
+                        maxFirerateShots = 1;
                     }
 
                     Shoot(heldItem, false);
@@ -146,12 +146,12 @@ namespace CalamityMod.Projectiles.Magic
 
                 for (int i = 0; i < 5; i++)
                 {
-                    firingVelocity3 = (shootDirection * 10).RotatedBy((0.04f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
+                    firingVelocity3 = (shootDirection * 10).RotatedBy((0.035f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3 * (1 - i * 0.1f), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
                 }
                 for (int i = 0; i < 5; i++)
                 {
-                    firingVelocity3 = (shootDirection * 10).RotatedBy((-0.04f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
+                    firingVelocity3 = (shootDirection * 10).RotatedBy((-0.035f * (i + 1)) * Utils.GetLerpValue(0, 55, Windup, true));
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), GunTipPosition, firingVelocity3 * (1 - i * 0.1f), ModContent.ProjectileType<WingmanShot>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, 2);
                 }
 
