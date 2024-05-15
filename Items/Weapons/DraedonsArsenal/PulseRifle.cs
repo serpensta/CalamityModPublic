@@ -27,7 +27,7 @@ namespace CalamityMod.Items.Weapons.DraedonsArsenal
         {
             CalamityGlobalItem modItem = Item.Calamity();
 
-            Item.width = 98;
+            Item.width = 100;
             Item.height = 32;
             Item.DamageType = DamageClass.Ranged;
             Item.damage = BaseDamage;

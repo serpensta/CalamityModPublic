@@ -286,7 +286,7 @@ namespace CalamityMod.Projectiles.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (time <= 0)
+            if (time <= 0 && !Main.dedServ)
                 return false;
 
             Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Items/Weapons/Magic/Wingman").Value;
