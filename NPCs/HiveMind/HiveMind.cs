@@ -256,6 +256,9 @@ namespace CalamityMod.NPCs.HiveMind
 
             if (phase2)
             {
+                if (frameY >= maxFramesY_Phase2)
+                    frameY = 0;
+
                 NPC.frameCounter++;
                 if (NPC.frameCounter >= 6D)
                 {
@@ -276,6 +279,8 @@ namespace CalamityMod.NPCs.HiveMind
                     if ((frameX * maxFramesY_Phase2) + frameY > 15)
                         frameX = frameY = 0;
                 }
+
+                NPC.frame = new Rectangle(NPC.width * frameX, NPC.height * frameY, NPC.width, NPC.height);
             }
             else
             {
@@ -295,7 +300,6 @@ namespace CalamityMod.NPCs.HiveMind
             {
                 SpriteEffects spriteEffects = NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                 Texture2D texture = Phase2Texture.Value;
-                Rectangle frame = new Rectangle(NPC.width * frameX, NPC.height * frameY, NPC.width, NPC.height);
                 Vector2 vector = new Vector2(NPC.width / 2, NPC.height / 2);
                 Color afterimageBaseColor = Color.White;
                 int numAfterimages = 5;
@@ -316,7 +320,7 @@ namespace CalamityMod.NPCs.HiveMind
                 }
 
                 Vector2 center = NPC.Center - screenPos;
-                spriteBatch.Draw(texture, center, frame, NPC.GetAlpha(drawColor), NPC.rotation, vector, NPC.scale, spriteEffects, 0f);
+                spriteBatch.Draw(texture, center, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, vector, NPC.scale, spriteEffects, 0f);
 
                 return false;
             }
@@ -455,7 +459,6 @@ namespace CalamityMod.NPCs.HiveMind
                     NPC.height = height_Phase2;
                     NPC.position -= NPC.Size * 0.5f;
 
-                    NPC.frame.Y = 0;
                     NPC.noGravity = true;
                     NPC.noTileCollide = true;
                     NPC.scale = 1f;
@@ -465,8 +468,6 @@ namespace CalamityMod.NPCs.HiveMind
                     NPC.netSpam = 0;
                     NPC.netUpdate = true;
                 }
-
-                NPC.frame = new Rectangle(NPC.width * frameX, NPC.height * frameY, NPC.width, NPC.height);
             }
             else
             {

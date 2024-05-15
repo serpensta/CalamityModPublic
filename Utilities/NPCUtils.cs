@@ -263,6 +263,7 @@ namespace CalamityMod
                     // If we've found a valid boss target, ignore ALL targets which aren't bosses.
                     if (bossFound && !(Main.npc[index].boss || Main.npc[index].type == NPCID.WallofFleshEye))
                         continue;
+
                     if (Main.npc[index].CanBeChasedBy(null, false))
                     {
                         float extraDistance = (Main.npc[index].width / 2) + (Main.npc[index].height / 2);
@@ -271,10 +272,11 @@ namespace CalamityMod
                         if (extraDistance < distance && !ignoreTiles)
                             canHit = Collision.CanHit(origin, 1, 1, Main.npc[index].Center, 1, 1);
 
-                        if (Vector2.Distance(origin, Main.npc[index].Center) < (distance + extraDistance) && canHit)
+                        if (Vector2.Distance(origin, Main.npc[index].Center) < distance && canHit)
                         {
                             if (Main.npc[index].boss || Main.npc[index].type == NPCID.WallofFleshEye)
                                 bossFound = true;
+
                             distance = Vector2.Distance(origin, Main.npc[index].Center);
                             closestTarget = Main.npc[index];
                         }
@@ -293,7 +295,7 @@ namespace CalamityMod
                         if (extraDistance < distance && !ignoreTiles)
                             canHit = Collision.CanHit(origin, 1, 1, Main.npc[index].Center, 1, 1);
 
-                        if (Vector2.Distance(origin, Main.npc[index].Center) < (distance + extraDistance) && canHit)
+                        if (Vector2.Distance(origin, Main.npc[index].Center) < distance && canHit)
                         {
                             distance = Vector2.Distance(origin, Main.npc[index].Center);
                             closestTarget = Main.npc[index];
