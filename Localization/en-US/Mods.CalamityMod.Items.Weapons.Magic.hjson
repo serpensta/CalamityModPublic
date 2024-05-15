@@ -864,7 +864,6 @@ UltraLiquidator: {
 	Tooltip:
 		'''
 		Summons liquidation blades that summon more blades on enemy hits
-		The blades inflict ichor, cursed inferno and brimstone flames
 		'''
 }
 
