@@ -208,7 +208,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     else
                         npc.localAI[3] = -1f;
 
-                    //npc.SyncExtraAI();
+                    npc.SyncExtraAI();
                 }
             }
 
@@ -338,7 +338,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
 
                         npc.localAI[2] = 0f;
-                        //npc.SyncVanillaLocalAI();
+                        npc.SyncVanillaLocalAI();
                     }
                 }
             }
@@ -377,7 +377,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (calamityGlobalNPC.destroyerLaserColor == -1)
                     {
                         calamityGlobalNPC.destroyerLaserColor = phase3 ? 3 : phase2 ? 2 : 1;
-                        //npc.SyncDestroyerLaserColor();
+                        npc.SyncDestroyerLaserColor();
                     }
 
                     float laserBreathGateValue = DeathModeLaserBreathGateValue;
@@ -385,8 +385,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         calamityGlobalNPC.newAI[0] += 1f;
 
                     // Sync newAI every 20 frames for the new telegraph
-                    /*if (calamityGlobalNPC.newAI[0] % 20f == 0f)
-                        npc.SyncExtraAI();*/
+                    if (calamityGlobalNPC.newAI[0] % 20f == 0f)
+                        npc.SyncExtraAI();
 
                     if ((player.Center - npc.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(npc.velocity.ToRotation(), MathHelper.PiOver4) == npc.velocity.ToRotation() &&
                         calamityGlobalNPC.newAI[0] >= laserBreathGateValue && Vector2.Distance(npc.Center, player.Center) > 480f &&
@@ -443,8 +443,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         {
                             calamityGlobalNPC.newAI[0] = 0f;
                             calamityGlobalNPC.destroyerLaserColor = -1;
-                            //npc.SyncDestroyerLaserColor();
-                            //npc.SyncExtraAI();
+                            npc.SyncDestroyerLaserColor();
+                            npc.SyncExtraAI();
                         }
                     }
                 }
@@ -478,14 +478,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (calamityGlobalNPC.newAI[2] > 0f || bossRush)
                             calamityGlobalNPC.destroyerLaserColor = 2;
 
-                        //npc.SyncDestroyerLaserColor();
+                        npc.SyncDestroyerLaserColor();
                     }
                 }
 
                 if (probeLaunched && ableToFireLaser)
                 {
                     calamityGlobalNPC.destroyerLaserColor = -1;
-                    //npc.SyncDestroyerLaserColor();
+                    npc.SyncDestroyerLaserColor();
                 }
 
                 // Laser rate of fire
@@ -497,8 +497,8 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     calamityGlobalNPC.newAI[0] += laserTimerIncrement;
 
                 // Sync newAI every 20 frames for the new telegraph
-                /*if (calamityGlobalNPC.newAI[0] % 20f == 0f && ableToFireLaser)
-                    npc.SyncExtraAI();*/
+                if (calamityGlobalNPC.newAI[0] % 20f == 0f && ableToFireLaser)
+                    npc.SyncExtraAI();
 
                 Color telegraphColor = Color.Transparent;
                 switch (calamityGlobalNPC.destroyerLaserColor)
@@ -552,7 +552,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         float lerpAmount = MathHelper.Clamp(numProbeSegments / (float)totalSegments, 0f, 1f);
                         float laserShootTimeBonus = (int)MathHelper.Lerp(0f, (shootProjectileTime + bodySegmentTime * lerpAmount) - LaserTelegraphTime, 1f - lerpAmount);
                         calamityGlobalNPC.newAI[0] = laserShootTimeBonus;
-                        //npc.SyncExtraAI();
+                        npc.SyncExtraAI();
                         npc.TargetClosest();
                     }
 
@@ -569,7 +569,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             float lerpAmount = MathHelper.Clamp(numProbeSegments / (float)totalSegments, 0f, 1f);
                             float laserShootTimeBonus = (int)MathHelper.Lerp(0f, (shootProjectileTime + bodySegmentTime * lerpAmount) - LaserTelegraphTime, 1f - lerpAmount);
                             calamityGlobalNPC.newAI[0] = laserShootTimeBonus;
-                            //npc.SyncExtraAI();
+                            npc.SyncExtraAI();
                             npc.TargetClosest();
                         }
 
@@ -623,14 +623,14 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         if (masterMode)
                         {
                             calamityGlobalNPC.destroyerLaserColor = -1;
-                            //npc.SyncDestroyerLaserColor();
+                            npc.SyncDestroyerLaserColor();
                         }
                     }
 
                     if (!masterMode)
                     {
                         calamityGlobalNPC.destroyerLaserColor = -1;
-                        //npc.SyncDestroyerLaserColor();
+                        npc.SyncDestroyerLaserColor();
                     }
                 }
             }
