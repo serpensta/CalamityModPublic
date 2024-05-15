@@ -248,7 +248,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
         #endregion
 
-        #region Syncying
+        #region Syncing
 
         public sealed override void SendExtraAI(BinaryWriter writer)
         {
