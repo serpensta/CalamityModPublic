@@ -32,7 +32,10 @@ namespace CalamityMod.Projectiles.Magic
         public override void AI()
         {
             if (isSplit == 0)
+            {
+                Projectile.netUpdate = true;
                 splitShot = true;
+            }
             if (time == 0)
             {
                 if (splitShot)
@@ -57,7 +60,7 @@ namespace CalamityMod.Projectiles.Magic
         public override void OnKill(int timeLeft)
         {
             int numProj = 2;
-            float rotation = MathHelper.ToRadians(20);
+            float rotation = MathHelper.ToRadians(12);
             if (splitShot)
             {
                 for (int i = 0; i < numProj; i++)
