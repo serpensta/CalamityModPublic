@@ -19,6 +19,7 @@ namespace CalamityMod.Walls
 
     internal static class VisibleThroughWater
     {
+        [Autoload(Side = ModSide.Client)]
         private sealed class VisibleThroughWaterSystem : ModSystem
         {
             public override void AddRecipes()
