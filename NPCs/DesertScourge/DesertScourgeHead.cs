@@ -121,7 +121,7 @@ namespace CalamityMod.NPCs.DesertScourge
 
         public override void BossHeadSlot(ref int index)
         {
-            if (NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHead>()) || NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHeadYoung>()))
+            if ((NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHead>()) || NPC.AnyNPCs(ModContent.NPCType<DesertNuisanceHeadYoung>())) && !Main.masterMode)
                 index = -1;
         }
 
