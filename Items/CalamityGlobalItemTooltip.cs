@@ -841,10 +841,6 @@ namespace CalamityMod.Items
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
-            // Shadow
-            if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
-                EditTooltipByNum(0, (line) => line.Text = "5% increased damage and 7% increased jump speed");
-
             // Crimson
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
