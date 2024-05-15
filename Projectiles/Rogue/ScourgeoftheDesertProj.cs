@@ -101,19 +101,28 @@ namespace CalamityMod.Projectiles.Rogue
             }
             if (InsideTiles)
             {
-                foreach (NPC n in Main.ActiveNPCs)
-                {
-                    if (n.CanBeChasedBy(Projectile.GetSource_FromThis(), false))
-                        NPCDestination = n.Center + n.velocity * 5f;
-                }
-
                 TimeUnderground++;
                 Vector3 DustLight = new Vector3(0.171f, 0.124f, 0.086f);
-                Lighting.AddLight(Projectile.Center + Projectile.velocity, DustLight * 4);
+                Lighting.AddLight(Projectile.Center + Projectile.velocity, DustLight * 1.5f);
                 if (Time % 15 == 0 && TimeUnderground < 120)
                 {
                     SoundEngine.PlaySound(SoundID.WormDig with { Volume = 0.7f, Pitch = 0.2f }, Projectile.Center);
                 }
+
+
+                NPC target = Projectile.Center.ClosestNPCAt(1800, true);
+                if (target == null)
+                {
+                    if (Projectile.velocity.Y < 0)
+                    {
+                        Projectile.velocity.Y *= 0.98f;
+                    }
+                    Projectile.velocity.Y += 0.08f;
+                    Projectile.velocity.X *= 0.99f;
+                    return;
+                }
+                NPCDestination = target.Center + target.velocity * 5f;
+
                 float returnSpeed = 10;
                 float acceleration = 0.2f;
                 float xDist = NPCDestination.X - Projectile.Center.X;
