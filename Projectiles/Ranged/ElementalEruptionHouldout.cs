@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
+﻿using System.IO;
+using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -20,7 +21,7 @@ namespace CalamityMod.Projectiles.Ranged
         private ref float ShotCooldown => ref Projectile.ai[0];
         private ref float ShotsFired => ref Projectile.ai[1];
         private ref float ShootTimer => ref Projectile.ai[2];
-        public int FireBlobs = 0;
+        private int FireBlobs { get; set; }
 
         public override void KillHoldoutLogic()
         {
@@ -65,6 +66,8 @@ namespace CalamityMod.Projectiles.Ranged
                     }
                     else
                         FireBlobs--;
+
+                    Projectile.netUpdate = true;
                 }
                 else
                     ShotCooldown--;
@@ -91,5 +94,9 @@ namespace CalamityMod.Projectiles.Ranged
             base.OnSpawn(source);
             SoundEngine.PlaySound(SoundID.Item73 with { Volume = 0.7f }, Projectile.Center);
         }
+
+        public override void SendExtraAIHoldout(BinaryWriter writer) => writer.Write(FireBlobs);
+
+        public override void ReceiveExtraAIHoldout(BinaryReader reader) => FireBlobs = reader.ReadInt32();
     }
 }
