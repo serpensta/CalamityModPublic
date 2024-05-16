@@ -12,6 +12,9 @@ namespace CalamityMod.Items.Weapons.Magic
 {
     public class Omicron : ModItem, ILocalizedModType
     {
+        public static float FireRate = 15f;
+        public static float StarterWinup = 60f;
+        
         public new string LocalizationCategory => "Items.Weapons.Magic";
 
         public override void SetDefaults()

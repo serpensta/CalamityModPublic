@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Magic
@@ -11,11 +10,17 @@ namespace CalamityMod.Projectiles.Magic
     {
         public new string LocalizationCategory => "Projectiles.Magic";
         public override string Texture => "CalamityMod/Projectiles/InvisibleProj";
-        public ref float time => ref Projectile.ai[0];
-        public ref float isSplit => ref Projectile.ai[1];
-        public bool splitShot = false;
 
-        public Color mainColor = Color.MediumSlateBlue;
+        public ref float Time => ref Projectile.ai[0];
+        public ref float IsSplit => ref Projectile.ai[1];
+        public bool SplitShot
+        {
+            get => Projectile.ai[2] == 1f;
+            set => Projectile.ai[2] = value == true ? 1f : 0f;
+        }
+
+        public Color MainColor { get; set; } = Color.MediumSlateBlue;
+
         public override void SetDefaults()
         {
             Projectile.width = 12;
@@ -29,47 +34,50 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.extraUpdates = 75;
             Projectile.timeLeft = 20;
         }
+
         public override void AI()
         {
-            if (isSplit == 0)
+            if (IsSplit == 0)
+                SplitShot = true;
+
+            if (Time == 0)
             {
-                Projectile.netUpdate = true;
-                splitShot = true;
-            }
-            if (time == 0)
-            {
-                if (splitShot)
+                if (SplitShot)
                     Projectile.penetrate = 1;
                 else
                     Projectile.timeLeft = 50;
             }
 
-            if (Projectile.timeLeft % 2 == 0 && (!splitShot && time > 2 || (splitShot && time > 3 && Projectile.timeLeft > 2)))
+            if (Projectile.timeLeft % 2 == 0 && (!SplitShot && Time > 2 || (SplitShot && Time > 3 && Projectile.timeLeft > 2)))
             {
-                Particle spark = new GlowSparkParticle(Projectile.Center, -Projectile.velocity * 0.05f, false, 17, 0.06f, mainColor, new Vector2(0.5f, 1.3f));
+                Particle spark = new GlowSparkParticle(Projectile.Center, -Projectile.velocity * 0.05f, false, 17, 0.06f, MainColor, new Vector2(0.5f, 1.3f));
                 GeneralParticleHandler.SpawnParticle(spark);
             }
 
             Vector2 dustVel = new Vector2(2, 2).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f);
             Dust dust = Dust.NewDustPerfect(Projectile.Center + dustVel, Main.rand.NextBool(4) ? 264 : 66, dustVel, 0, default, Main.rand.NextFloat(0.9f, 1.2f));
             dust.noGravity = true;
-            dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
+            dust.color = Main.rand.NextBool() ? Color.Lerp(MainColor, Color.White, 0.5f) : MainColor;
 
-            time++;
+            Time++;
         }
+
         public override void OnKill(int timeLeft)
         {
             int numProj = 2;
             float rotation = MathHelper.ToRadians(12);
-            if (splitShot)
+            if (SplitShot)
             {
                 for (int i = 0; i < numProj; i++)
                 {
                     Vector2 perturbedSpeed = Projectile.velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numProj - 1)));
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<GenesisBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 1f);
+
+                    if (Main.myPlayer == Projectile.owner)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<GenesisBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 1f);
+
                     for (int k = 0; k < 3; k++)
                     {
-                        Particle blastRing = new CustomPulse(Projectile.Center, Vector2.Zero, mainColor, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.5f, 0.4f, 35);
+                        Particle blastRing = new CustomPulse(Projectile.Center, Vector2.Zero, MainColor, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.5f, 0.4f, 35);
                         GeneralParticleHandler.SpawnParticle(blastRing);
                         Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.4f, 0.3f, 35);
                         GeneralParticleHandler.SpawnParticle(blastRing2);
@@ -81,7 +89,7 @@ namespace CalamityMod.Projectiles.Magic
                     Vector2 dustVel = new Vector2(13, 13).RotatedByRandom(100) * Main.rand.NextFloat(0.1f, 0.8f);
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + dustVel, Main.rand.NextBool(4) ? 264 : 66, dustVel, 0, default, Main.rand.NextFloat(0.9f, 1.2f));
                     dust.noGravity = true;
-                    dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
+                    dust.color = Main.rand.NextBool() ? Color.Lerp(MainColor, Color.White, 0.5f) : MainColor;
                 }
             }
             else
@@ -91,13 +99,17 @@ namespace CalamityMod.Projectiles.Magic
                     Vector2 dustVel = Projectile.velocity * Main.rand.NextFloat(0.1f, 1.5f);
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + dustVel + Main.rand.NextVector2Circular(6, 6), Main.rand.NextBool(4) ? 264 : 66, dustVel, 0, default, Main.rand.NextFloat(0.9f, 1.2f));
                     dust.noGravity = true;
-                    dust.color = Main.rand.NextBool() ? Color.Lerp(mainColor, Color.White, 0.5f) : mainColor;
+                    dust.color = Main.rand.NextBool() ? Color.Lerp(MainColor, Color.White, 0.5f) : MainColor;
                 }
             }
+
+            Projectile.netSpam = 0;
+            Projectile.netUpdate = true;
         }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (splitShot) // This is the sweet spot
+            if (SplitShot) // This is the sweet spot
             {
                 modifiers.SourceDamage *= 1.5f;
 
@@ -108,7 +120,7 @@ namespace CalamityMod.Projectiles.Magic
                 for (int k = 0; k < points; k++)
                 {
                     Vector2 velocity = spinningPoint.RotatedBy(radians * k).RotatedBy(-0.45f * rotRando);
-                    Particle subTrail = new GlowSparkParticle(Projectile.Center + velocity * 10.5f, velocity * 5, false, 10, 0.045f, mainColor, new Vector2(2, 0.4f), true);
+                    Particle subTrail = new GlowSparkParticle(Projectile.Center + velocity * 10.5f, velocity * 5, false, 10, 0.045f, MainColor, new Vector2(2, 0.4f), true);
                     GeneralParticleHandler.SpawnParticle(subTrail);
                 }
 
