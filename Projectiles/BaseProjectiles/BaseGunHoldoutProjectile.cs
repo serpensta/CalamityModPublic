@@ -146,13 +146,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
             Projectile.netImportant = true;
         }
 
-        public override void OnSpawn(IEntitySource source)
-        {
-            Owner = Main.player[Projectile.owner];
-            OffsetLengthFromArm = MaxOffsetLengthFromArm;
-            HeldItem = Owner.ActiveItem();
-            Projectile.velocity = Owner.Calamity().mouseWorld - Owner.RotatedRelativePoint(Owner.MountedCenter);
-        }
+        public override void OnSpawn(IEntitySource source) => OffsetLengthFromArm = MaxOffsetLengthFromArm;
 
         public override bool ShouldUpdatePosition() => false;
 
@@ -164,6 +158,10 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
         public override void AI()
         {
+            // Multiplayer null-checking.
+            Owner ??= Main.player[Projectile.owner];
+            HeldItem ??= Owner.ActiveItem();
+
             KillHoldoutLogic();
             ManageHoldout();
             HoldoutAI();
