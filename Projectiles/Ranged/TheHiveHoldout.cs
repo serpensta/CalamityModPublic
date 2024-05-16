@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using static CalamityMod.Items.Weapons.Ranged.TheHive;
 using static Terraria.ModLoader.ModContent;
 
 namespace CalamityMod.Projectiles.Ranged
@@ -25,14 +26,18 @@ namespace CalamityMod.Projectiles.Ranged
         // It'll carry over to the projectiles that it shoots.
         public static int DustEffectsID { get; set; }
         public static Color EffectsColor { get; set; }
-        public static Color StaticEffectsColor = Color.Lime;
+        public static Color StaticEffectsColor { get; set; } = Color.Lime;
 
         private ref float ShootingTimer => ref Projectile.ai[0];
-        private bool FireNuke;
-        private float PostFireCooldown = 0;
-        private bool HasLetGo = false;
-        private SlotId HiveHum;
-        private const float MaxCharge = 90f;
+        private ref float PostFireCooldown => ref Projectile.ai[1];
+        private bool HasLetGo
+        {
+            get => Projectile.ai[2] == 1f;
+            set => Projectile.ai[2] = value == true ? 1f : 0f;
+        }
+
+        private bool FireNuke => ShootingTimer > MaxCharge;
+        private SlotId HiveHum { get; set; }
 
         public override void KillHoldoutLogic()
         {
@@ -42,9 +47,6 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void HoldoutAI()
         {
-
-            FireNuke = ShootingTimer > MaxCharge;
-
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
             if (Owner.CantUseHoldout() && !HasLetGo)
             {
@@ -54,8 +56,8 @@ namespace CalamityMod.Projectiles.Ranged
                 }
                 if (HeldItem.type == ItemType<TheHive>())
                     ShootRocket();
-                NetUpdate();
                 HasLetGo = true;
+                NetUpdate();
             }
 
             if (!HasLetGo)
