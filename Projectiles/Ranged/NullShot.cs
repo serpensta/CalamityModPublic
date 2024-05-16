@@ -1,4 +1,5 @@
 ﻿using CalamityMod.CalPlayer;
+using CalamityMod.NPCs;
 using CalamityMod.NPCs.NormalNPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -44,7 +45,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (target.type == NPCID.TargetDummy || CalamityPlayer.areThereAnyDamnBosses)
+            if (target.type == NPCID.TargetDummy || CalamityPlayer.areThereAnyDamnBosses || CalamityLists.AquaticScourgeIDs.Contains(target.type))
             {
                 return;
             }

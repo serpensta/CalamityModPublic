@@ -45,7 +45,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (target.type == NPCID.TargetDummy || CalamityPlayer.areThereAnyDamnBosses)
+            if (target.type == NPCID.TargetDummy || CalamityPlayer.areThereAnyDamnBosses || CalamityLists.AquaticScourgeIDs.Contains(target.type))
             {
                 return;
             }
