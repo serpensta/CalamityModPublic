@@ -133,8 +133,6 @@ namespace CalamityMod.NPCs.SlimeGod
                     NPC.netUpdate = true;
                 }
             }
-            else if (NPC.timeLeft < 1800)
-                NPC.timeLeft = 1800;
 
             bool enraged = true;
             bool hyperMode = NPC.localAI[1] == 1f;
@@ -599,8 +597,14 @@ namespace CalamityMod.NPCs.SlimeGod
                 NPC.noTileCollide = true;
                 NPC.Opacity -= 0.03f;
 
-                if (NPC.timeLeft > 10)
-                    NPC.timeLeft = 10;
+                //the game loves to set by default to 937, even if you set it to be otherwise on SetDefaults
+                if (NPC.timeLeft > 300)
+                    NPC.timeLeft = 300;
+                NPC.timeLeft--; //it doesnt decrease automatically on NPCs
+
+                //you should despawn NOW!
+                if (NPC.timeLeft <= 0)
+                    NPC.active = false;
 
                 if (NPC.Opacity < 0f)
                     NPC.Opacity = 0f;
