@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -126,6 +127,8 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
         private Type AssociatedItemType => ItemLoader.GetItem(AssociatedItemID).GetType();
 
+        private Asset<Texture2D> ItemTexture => TextureAssets.Item[AssociatedItemID];
+
         #endregion
 
         #region Overridden Members
@@ -138,7 +141,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = TextureAssets.Item[AssociatedItemID].Width();
+            Projectile.width = Projectile.height = ItemTexture is null ? 0 : ItemTexture.Width();
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
         }
