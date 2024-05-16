@@ -216,11 +216,6 @@ namespace CalamityMod.NPCs.HiveMind
             writer.Write(reelCount);
             writer.Write(frameX);
             writer.Write(frameY);
-
-            writer.Write(NPC.frame.X);
-            writer.Write(NPC.frame.Y);
-            writer.Write(NPC.frame.Width);
-            writer.Write(NPC.frame.Height);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -243,10 +238,6 @@ namespace CalamityMod.NPCs.HiveMind
             reelCount = reader.ReadInt32();
             frameX = reader.ReadInt32();
             frameY = reader.ReadInt32();
-
-            Rectangle frame = new Rectangle(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
-            if (frame.Width > 0 && frame.Height > 0)
-                NPC.frame = frame;
         }
 
         public override void FindFrame(int frameHeight)
