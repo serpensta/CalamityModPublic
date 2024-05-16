@@ -1,4 +1,5 @@
-﻿using CalamityMod.NPCs.NormalNPCs;
+﻿using CalamityMod.CalPlayer;
+using CalamityMod.NPCs.NormalNPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -43,7 +44,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (target.type == NPCID.TargetDummy)
+            if (target.type == NPCID.TargetDummy || CalamityPlayer.areThereAnyDamnBosses)
             {
                 return;
             }
