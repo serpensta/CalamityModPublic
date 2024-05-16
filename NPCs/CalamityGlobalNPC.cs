@@ -6950,14 +6950,6 @@ namespace CalamityMod.NPCs
                 if (npc.spriteDirection == 1)
                     spriteEffects = SpriteEffects.FlipHorizontally;
 
-                /*if (npc.type == NPCID.TheDestroyerBody)
-                {
-                    if (npc.ai[2] == 0f)
-                        npc.frame.Y = 0;
-                    else
-                        npc.frame.Y = frameHeight;
-                }*/
-
                 Color segmentDrawColor = npc.GetAlpha(drawColor);
 
                 // Check if Destroyer is behind tiles and, if so, how much of the segment is behind tiles and adjust color accordingly
