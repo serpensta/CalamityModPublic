@@ -20,19 +20,16 @@ namespace CalamityMod.Projectiles.Ranged
         public override float BaseOffsetY => -5f;
         public override float OffsetYDownwards => 5f;
 
-        private ref float ShotCooldown => ref Projectile.ai[0];
-        private ref float ShotsFired => ref Projectile.ai[1];
-        private ref float ShootTimer => ref Projectile.ai[2];
+        public ref float ShotCooldown => ref Projectile.ai[0];
+        public ref float ShotsFired => ref Projectile.ai[1];
+        public ref float ShootTimer => ref Projectile.ai[2];
         public int FireBlobs { get; set; }
 
         public override void KillHoldoutLogic()
         {
             base.KillHoldoutLogic();
             if (ShotsFired >= 16)
-            {
                 Projectile.Kill();
-                Projectile.netUpdate = true;
-            }
         }
 
         public override void HoldoutAI()
@@ -58,8 +55,6 @@ namespace CalamityMod.Projectiles.Ranged
                     }
                     else
                         FireBlobs--;
-
-                    Projectile.netUpdate = true;
                 }
                 else
                     ShotCooldown--;

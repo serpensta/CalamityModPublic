@@ -28,16 +28,16 @@ namespace CalamityMod.Projectiles.Ranged
         public static Color EffectsColor { get; set; }
         public static Color StaticEffectsColor { get; set; } = Color.Lime;
 
-        private ref float ShootingTimer => ref Projectile.ai[0];
-        private ref float PostFireCooldown => ref Projectile.ai[1];
-        private bool HasLetGo
+        public ref float ShootingTimer => ref Projectile.ai[0];
+        public ref float PostFireCooldown => ref Projectile.ai[1];
+        public bool HasLetGo
         {
             get => Projectile.ai[2] == 1f;
             set => Projectile.ai[2] = value == true ? 1f : 0f;
         }
 
-        private bool FireNuke => ShootingTimer > MaxCharge;
-        private SlotId HiveHum { get; set; }
+        public bool FireNuke => ShootingTimer > MaxCharge;
+        public SlotId HiveHum { get; set; }
 
         public override void KillHoldoutLogic()
         {
@@ -57,7 +57,6 @@ namespace CalamityMod.Projectiles.Ranged
                 if (HeldItem.type == ItemType<TheHive>())
                     ShootRocket();
                 HasLetGo = true;
-                NetUpdate();
             }
 
             if (!HasLetGo)
@@ -104,7 +103,7 @@ namespace CalamityMod.Projectiles.Ranged
             }
         }
 
-        private void ShootRocket()
+        public void ShootRocket()
         {
             // We use the velocity of this projectile as its direction vector.
             Vector2 shootDirection = Projectile.velocity.SafeNormalize(Vector2.Zero);
@@ -175,8 +174,6 @@ namespace CalamityMod.Projectiles.Ranged
                 PostFireCooldown = 30;
             }
 
-            NetUpdate();
-
             // Inside here go all the things that dedicated servers shouldn't spend resources on.
             // Like visuals and sounds.
             if (Main.dedServ)
@@ -212,7 +209,7 @@ namespace CalamityMod.Projectiles.Ranged
             OffsetLengthFromArm -= FireNuke ? 16f : 6f;
         }
 
-        private void PostFiringCooldown()
+        public void PostFiringCooldown()
         {
             Owner.channel = true;
             if (PostFireCooldown > 0)
@@ -229,19 +226,9 @@ namespace CalamityMod.Projectiles.Ranged
             else
             {
                 if (SoundEngine.TryGetActiveSound(HiveHum, out var hum) && hum.IsPlaying)
-                {
                     hum?.Stop();
-                }
                 Projectile.Kill();
-                NetUpdate();
             }
-        }
-
-        private void NetUpdate()
-        {
-            Projectile.netUpdate = true;
-            if (Projectile.netSpam >= 10)
-                Projectile.netSpam = 9;
         }
 
         public override void OnSpawn(IEntitySource source)

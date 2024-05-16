@@ -34,10 +34,7 @@ namespace CalamityMod.Projectiles.Magic
         public override void KillHoldoutLogic()
         {
             if (HeldItem.type != Owner.ActiveItem().type || Owner.CantUseHoldout())
-            {
                 Projectile.Kill();
-                Projectile.netUpdate = true;
-            }
         }
 
         public override void HoldoutAI()
@@ -50,7 +47,6 @@ namespace CalamityMod.Projectiles.Magic
                     {
                         FireYBeam = true;
                         Windup = 60f;
-                        Projectile.netUpdate = true;
                     }
 
                     if (FireYBeam)
@@ -61,11 +57,8 @@ namespace CalamityMod.Projectiles.Magic
                     else
                         Shoot(false);
 
-                    if (Windup > 10f)
-                    {
-                        if (!FireYBeam)
-                            Windup -= 12f;
-                    }
+                    if (Windup > 10f && !FireYBeam)
+                        Windup -= 12f;
                     else
                         Windup = 10f;
 
@@ -77,14 +70,13 @@ namespace CalamityMod.Projectiles.Magic
                 {
                     SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = -0.5f }, Projectile.Center);
                     Projectile.Kill();
-                    Projectile.netUpdate = true;
                 }
             }
 
             ShootingTimer++;
         }
 
-        private void Shoot(bool yBeam)
+        public void Shoot(bool yBeam)
         {
             Vector2 shootDirection = Projectile.velocity.SafeNormalize(Vector2.Zero);
 
@@ -128,8 +120,6 @@ namespace CalamityMod.Projectiles.Magic
                 Particle pulse3 = new GlowSparkParticle(GunTipPosition, shootDirection * 18, false, 6, 0.057f, EffectsColor, new Vector2(1.7f, 0.8f), true);
                 GeneralParticleHandler.SpawnParticle(pulse3);
             }
-
-            Projectile.netUpdate = true;
 
             // Inside here go all the things that dedicated servers shouldn't spend resources on.
             // Like visuals and sounds.

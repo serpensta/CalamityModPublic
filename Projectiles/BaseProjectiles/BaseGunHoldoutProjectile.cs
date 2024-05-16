@@ -141,7 +141,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = ItemTexture is null ? 0 : ItemTexture.Width();
+            Projectile.width = Projectile.height = ItemTexture is null ? 1 : ItemTexture.Width();
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
         }
@@ -171,15 +171,12 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
         /// <summary>
         /// Here goes the code for when the holdout needs to despawn.<br/>
-        /// Defaults to despawning when the owner isn't holding or isn't using the correspondent weapon.
+        /// Defaults to despawning when the owner isn't using the correspondent weapon.
         /// </summary>
         public virtual void KillHoldoutLogic()
         {
             if (Owner.CantUseHoldout())
-            {
-                Projectile.netUpdate = true;
                 Projectile.Kill();
-            }
         }
 
         /// <summary>
@@ -225,6 +222,9 @@ namespace CalamityMod.Projectiles.BaseProjectiles
 
             if (OffsetLengthFromArm != MaxOffsetLengthFromArm)
                 OffsetLengthFromArm = MathHelper.Lerp(OffsetLengthFromArm, MaxOffsetLengthFromArm, RecoilResolveSpeed);
+
+            Projectile.netUpdate = true;
+            Projectile.netSpam = 0;
         }
 
         /// <summary>
@@ -258,6 +258,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
             writer.Write(Projectile.rotation);
             writer.Write(KeepRefreshingLifetime);
             writer.Write(OffsetLengthFromArm);
+            writer.Write(Projectile.spriteDirection);
             SendExtraAIHoldout(writer);
         }
 
@@ -266,6 +267,7 @@ namespace CalamityMod.Projectiles.BaseProjectiles
             Projectile.rotation = reader.ReadSingle();
             KeepRefreshingLifetime = reader.ReadBoolean();
             OffsetLengthFromArm = reader.ReadSingle();
+            Projectile.spriteDirection = reader.ReadInt32();
             ReceiveExtraAIHoldout(reader);
         }
 
