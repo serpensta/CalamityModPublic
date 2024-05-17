@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace CalamityMod.Projectiles.Magic
 {
@@ -31,7 +32,7 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.usesIDStaticNPCImmunity = true;
             Projectile.idStaticNPCHitCooldown = 31;
             Projectile.penetrate = -1;
-            Projectile.extraUpdates = 75;
+            Projectile.extraUpdates = 10;
             Projectile.timeLeft = 20;
         }
 
@@ -48,7 +49,7 @@ namespace CalamityMod.Projectiles.Magic
                     Projectile.timeLeft = 50;
             }
 
-            if (Projectile.timeLeft % 2 == 0 && (!SplitShot && Time > 2 || (SplitShot && Time > 3 && Projectile.timeLeft > 2)))
+            if (Projectile.timeLeft < (SplitShot ? 20 : 50))
             {
                 Particle spark = new GlowSparkParticle(Projectile.Center, -Projectile.velocity * 0.05f, false, 17, 0.06f, MainColor, new Vector2(0.5f, 1.3f));
                 GeneralParticleHandler.SpawnParticle(spark);
@@ -74,14 +75,14 @@ namespace CalamityMod.Projectiles.Magic
 
                     if (Main.myPlayer == Projectile.owner)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<GenesisBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 1f);
+                }
 
-                    for (int k = 0; k < 3; k++)
-                    {
-                        Particle blastRing = new CustomPulse(Projectile.Center, Vector2.Zero, MainColor, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.5f, 0.4f, 35);
-                        GeneralParticleHandler.SpawnParticle(blastRing);
-                        Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.4f, 0.3f, 35);
-                        GeneralParticleHandler.SpawnParticle(blastRing2);
-                    }
+                for (int k = 0; k < 3; k++)
+                {
+                    Particle blastRing = new CustomPulse(Projectile.Center, Vector2.Zero, MainColor, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.5f, 0.4f, 35);
+                    GeneralParticleHandler.SpawnParticle(blastRing);
+                    Particle blastRing2 = new CustomPulse(Projectile.Center, Vector2.Zero, Color.White, "CalamityMod/Particles/BloomCircle", Vector2.One, Main.rand.NextFloat(-10, 10), 0.4f, 0.3f, 35);
+                    GeneralParticleHandler.SpawnParticle(blastRing2);
                 }
 
                 for (int i = 0; i < 20; i++)
@@ -107,12 +108,10 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.netUpdate = true;
         }
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        public void OnHitEffects()
         {
             if (SplitShot) // This is the sweet spot
             {
-                modifiers.SourceDamage *= 1.5f;
-
                 int points = 10;
                 float radians = MathHelper.TwoPi / points;
                 Vector2 spinningPoint = Vector2.Normalize(new Vector2(-1f, -1f));
@@ -127,6 +126,17 @@ namespace CalamityMod.Projectiles.Magic
                 SoundStyle fire = new("CalamityMod/Sounds/Item/ArcNovaDiffuserChargeImpact");
                 SoundEngine.PlaySound(fire with { Volume = 1.25f, Pitch = 0.4f, PitchVariance = 0.15f }, Projectile.Center);
             }
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => OnHitEffects();
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) => OnHitEffects();
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (SplitShot)
+                modifiers.SourceDamage *= 1.5f;
+
             if (Projectile.numHits > 0)
                 Projectile.damage = (int)(Projectile.damage * 0.95f);
             if (Projectile.damage < 1)
