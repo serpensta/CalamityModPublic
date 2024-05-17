@@ -28,7 +28,7 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.UseSound = null;
             Item.autoReuse = true;
             Item.shootSpeed = 25f;
-            Item.shoot = ModContent.ProjectileType<WingmanGun>();
+            Item.shoot = ModContent.ProjectileType<WingmanHoldout>();
             Item.channel = true;
         }
 
@@ -46,7 +46,7 @@ namespace CalamityMod.Items.Weapons.Magic
         {
             for (int i = 0; i < 2; i++)
             {
-                Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<WingmanGun>(), damage, knockback, player.whoAmI, 0, 0, i == 0 ? 1 : -1);
+                Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<WingmanHoldout>(), damage, knockback, player.whoAmI, 0, 0, i == 0 ? 1 : -1);
                 holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
             }
 

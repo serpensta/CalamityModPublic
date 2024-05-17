@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace CalamityMod.Projectiles.Magic
 {
-    public class WingmanGun : ModProjectile
+    public class WingmanHoldout : ModProjectile
     {
         public override LocalizedText DisplayName => CalamityUtils.GetItemName<Wingman>();
         public override string Texture => "CalamityMod/Items/Weapons/Magic/Wingman";
@@ -54,8 +54,9 @@ namespace CalamityMod.Projectiles.Magic
             Lighting.AddLight(Projectile.Center, StaticEffectsColor.ToVector3() * 0.2f);
 
             if (time == 0)
-                MovingUp = Projectile.ai[2] == 1;
-
+            {
+                MovingUp = Projectile.ai[2] == 1 ? true : false;
+            }
             firingDelay--;
 
             Item heldItem = Owner.ActiveItem();
@@ -64,7 +65,9 @@ namespace CalamityMod.Projectiles.Magic
             Projectile.damage = heldItem is null ? 0 : Owner.GetWeaponDamage(heldItem);
 
             if (PostFireCooldown > 0)
+            {
                 PostFiringCooldown();
+            }
 
             Vector2 tipPosition = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-0.05f * Projectile.direction) * 12f;
             // If there's no player, or the player is the server, or the owner's stunned, there'll be no holdout.
@@ -78,7 +81,7 @@ namespace CalamityMod.Projectiles.Magic
                 // If the player's pressing RMB, it'll shoot the grenade.
                 if (Owner.Calamity().mouseRight)
                 {
-                    if (Owner.CheckMana(Owner.ActiveItem(), (int)(heldItem.mana * Owner.manaCost) * 5, true, false))
+                    if ((Owner.CheckMana(Owner.ActiveItem(), (int)(heldItem.mana * Owner.manaCost) * 5, true, false)))
                     {
                         Shoot(true);
                         PostFireCooldown = 35 + 55 * Utils.GetLerpValue(10, 40, FiringTime, true);
@@ -97,7 +100,7 @@ namespace CalamityMod.Projectiles.Magic
                 }
                 else if (ShootingTimer >= FiringTime)
                 {
-                    if (Owner.CheckMana(Owner.ActiveItem(), -1, true, false))
+                    if (Owner.CheckMana(Owner.ActiveItem(), (int)(heldItem.mana * Owner.manaCost), true, false))
                     {
                         Shoot(false);
                         ShootingTimer = 0;
@@ -116,6 +119,7 @@ namespace CalamityMod.Projectiles.Magic
                         }
                         ShootingTimer = 0;
                     }
+
                 }
             }
 
@@ -163,6 +167,10 @@ namespace CalamityMod.Projectiles.Magic
 
             Projectile.spriteDirection = Projectile.direction = direction;
             Owner.ChangeDir(direction);
+
+            Owner.heldProj = Projectile.whoAmI;
+            Owner.itemTime = Owner.itemAnimation = 2;
+            Owner.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
 
             float armRotation = (Projectile.rotation - MathHelper.PiOver2); // -Pi/2 because the arms rotation starts with arms pointing down.
             if (Projectile.ai[2] == 1)
