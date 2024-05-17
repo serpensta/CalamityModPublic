@@ -260,7 +260,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
                 // Start other phases; if arms are dead, start with spin phase
                 bool otherHeadChargingOrSpinning = Main.npc[(int)npc.ai[0]].ai[1] == 5f || Main.npc[(int)npc.ai[0]].ai[1] == 1f;
-                if (phase2 || CalamityWorld.LegendaryMode || allArmsDead)
+                if (phase2 || CalamityWorld.LegendaryMode || allArmsDead || masterMode)
                 {
                     // Start spin phase after 1.5 seconds
                     npc.ai[2] += phase3 ? 1.5f : 1f;
@@ -269,7 +269,15 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         bool shouldSpinAround = npc.ai[1] == 4f && npc.position.Y < Main.player[npc.target].position.Y - 400f &&
                             Vector2.Distance(Main.player[npc.target].Center, npc.Center) < 600f && Vector2.Distance(Main.player[npc.target].Center, npc.Center) > 400f;
 
-                        if (shouldSpinAround || npc.ai[1] != 4f)
+                        bool shouldCharge = masterMode && !phase2 && !allArmsDead && !CalamityWorld.LegendaryMode;
+                        if (shouldCharge)
+                        {
+                            npc.ai[2] = 0f;
+                            npc.ai[1] = 1f;
+                            npc.TargetClosest();
+                            npc.netUpdate = true;
+                        }
+                        else if (shouldSpinAround || npc.ai[1] != 4f)
                         {
                             if (shouldSpinAround)
                             {
