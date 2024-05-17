@@ -326,7 +326,7 @@ namespace CalamityMod.Items
             // There are no item sets for tombstones wtf
             if (item.type == ItemID.Tombstone || item.type == ItemID.GraveMarker || item.type == ItemID.CrossGraveMarker || item.type == ItemID.Headstone || item.type == ItemID.Gravestone || item.type == ItemID.Obelisk
                 || item.type == ItemID.RichGravestone1 || item.type == ItemID.RichGravestone2 || item.type == ItemID.RichGravestone3 || item.type == ItemID.RichGravestone4 || item.type == ItemID.RichGravestone5)
-                EditTooltipByName("Material", (line) => line.Text += "\n20 of any tombstone turns the surrounding area into a graveyard"
+                EditTooltipByName("Material", (line) => line.Text += "\n13 of any tombstone turns the surrounding area into a graveyard"
                 + "\nGraveyards have various new item sales and recipes");
 
             // Eternity Crystal notifies the player that they can accelerate the invasion
@@ -841,17 +841,14 @@ namespace CalamityMod.Items
             if (item.type == ItemID.JunglePants || item.type == ItemID.AncientCobaltLeggings)
                 EditTooltipByNum(1, (line) => line.Text = line.Text.Replace("6%", "3%"));
 
-            // Shadow
-            if (item.type == ItemID.ShadowHelmet || item.type == ItemID.AncientShadowHelmet || item.type == ItemID.ShadowScalemail || item.type == ItemID.AncientShadowScalemail || item.type == ItemID.ShadowGreaves || item.type == ItemID.AncientShadowGreaves)
-                EditTooltipByNum(0, (line) => line.Text = "5% increased damage and 7% increased jump speed");
-
             // Crimson
             if (item.type == ItemID.CrimsonHelmet || item.type == ItemID.CrimsonScalemail || item.type == ItemID.CrimsonGreaves)
             {
                 EditTooltipByNum(0, (line) =>
                 {
-                    string newTooltip = line.Text.Replace("3%", "5%");
-                    newTooltip += "\n+0.5 HP/s life regen";
+                    string newTooltip = line.Text.Replace("3%", "6%");
+                    // Chest piece has 2 regen instead of 1
+                    newTooltip += item.type == ItemID.CrimsonScalemail ? "\n+1 HP/s life regen" : "\n+0.5 HP/s life regen";
                     line.Text = newTooltip;
                 });
             }

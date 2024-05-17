@@ -129,12 +129,17 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float distance = Vector2.Distance(Main.player[npc.target].Center, npc.Center);
 
             // Despawn
-            int despawnDistanceInTiles = 500;
-            if (Main.player[npc.target].dead || Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) / 16f > despawnDistanceInTiles)
+            if (npc.ai[1] != 3f)
             {
-                npc.TargetClosest();
+                int despawnDistanceInTiles = 500;
                 if (Main.player[npc.target].dead || Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) / 16f > despawnDistanceInTiles)
-                    npc.ai[1] = 3f;
+                {
+                    npc.TargetClosest();
+                    if (Main.player[npc.target].dead || Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) / 16f > despawnDistanceInTiles)
+                        npc.ai[1] = 3f;
+                }
+                else if (npc.timeLeft < 1800)
+                    npc.timeLeft = 1800;
             }
 
             // Daytime enrage

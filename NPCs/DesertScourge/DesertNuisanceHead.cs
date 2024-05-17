@@ -138,12 +138,12 @@ namespace CalamityMod.NPCs.DesertScourge
             // Percent life remaining.
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
 
-            float speed = death ? 0.2f : 0.17f;
-            float turnSpeed = death ? 0.3f : 0.25f;
+            float speed = death ? 0.16f : 0.14f;
+            float turnSpeed = death ? 0.24f : 0.2f;
             speed += speed * 0.4f * (1f - lifeRatio);
             turnSpeed += turnSpeed * 0.4f * (1f - lifeRatio);
-            speed += 0.17f * enrageScale;
-            turnSpeed += 0.25f * enrageScale;
+            speed += 0.14f * enrageScale;
+            turnSpeed += 0.2f * enrageScale;
 
             if (Main.getGoodWorld)
             {
