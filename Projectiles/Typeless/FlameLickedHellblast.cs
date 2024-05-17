@@ -29,7 +29,7 @@ namespace CalamityMod.Projectiles.Typeless
             Projectile.tileCollide = false;
             Projectile.penetrate = 5;
             Projectile.timeLeft = 255;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.localNPCHitCooldown = -1;
             Projectile.usesLocalNPCImmunity = true;
         }
 
