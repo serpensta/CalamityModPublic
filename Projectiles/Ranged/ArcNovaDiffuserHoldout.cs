@@ -32,7 +32,7 @@ namespace CalamityMod.Projectiles.Ranged
 
         public override void KillHoldoutLogic()
         {
-            if (HeldItem.type != Owner.ActiveItem().type || Owner is null || !Owner.active || Owner.CCed || Owner.dead || Owner.noItems)
+            if (Owner.CantUseHoldout(false) || HeldItem.type != Owner.ActiveItem().type)
                 Projectile.Kill();
         }
 
