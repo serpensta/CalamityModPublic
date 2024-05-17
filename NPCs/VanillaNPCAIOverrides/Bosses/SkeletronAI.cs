@@ -34,6 +34,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
             float phase3LifeRatio = masterMode ? 0.9f : 0.7f;
             float respawnHandsLifeRatio = 0.5f;
             float phase4LifeRatio = masterMode ? 0.4f : 0.3f;
+            float useSkullSpreadsAfterChargeLifeRatio = masterMode ? 0.3f : 0.2f;
             float phase5LifeRatio = masterMode ? 0.2f : 0.1f;
 
             // Begin firing spreads of skulls phase
@@ -47,6 +48,9 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
 
             // Fire giant cursed skull projectiles (yes, these curse you if you get hit) during charge attack and hands fire skulls phase
             bool phase4 = lifeRatio < phase4LifeRatio;
+
+            // Self-explanatory
+            bool useSkullSpreadsAfterCharge = lifeRatio < useSkullSpreadsAfterChargeLifeRatio;
 
             // Rapid teleport and charge, stop using idle phase
             bool phase5 = lifeRatio < phase5LifeRatio;
@@ -699,7 +703,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                         }
                     }
 
-                    if (respawnHands && !disableSkullsAfterCharge && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
+                    if (useSkullSpreadsAfterCharge && !disableSkullsAfterCharge && Collision.CanHit(npc.Center, 1, 1, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height))
                     {
                         // Spawn projectiles
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -707,7 +711,7 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                             int chargeSkullAmt = death ? 5 : 3;
                             int chargeSkullSpread = death ? 80 : 60;
                             float rotation = MathHelper.ToRadians(chargeSkullSpread);
-                            float skullProjSpeed = phase4 ? (6f + (death ? 2f * ((phase4LifeRatio - lifeRatio) / phase4LifeRatio) : 0f)) : 4f;
+                            float skullProjSpeed = phase5 ? (6f + (death ? 2f * ((phase5LifeRatio - lifeRatio) / phase5LifeRatio) : 0f)) : 4f;
                             Vector2 initialProjectileVelocity = npc.Center.DirectionTo(Main.player[npc.target].Center) * skullProjSpeed;
                             int type = ProjectileID.Skull;
                             int damage = npc.GetProjectileDamage(type);
