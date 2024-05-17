@@ -39,13 +39,21 @@ namespace CalamityMod.Projectiles.Melee
 
         public override void AI()
         {
-            CalamityUtils.HomeInOnNPC(Projectile, true, 600f, 24f, 20f);
+            CalamityUtils.HomeInOnNPC(Projectile, true, 400f, 24f, 20f);
             Projectile.scale = Utils.GetLerpValue(0f, 8f, Projectile.timeLeft, true);
+
+            Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(5) ? 131 : 294, -Projectile.velocity * Main.rand.NextFloat(0.05f, 0.3f));
+            dust.noGravity = true;
+            dust.scale = Main.rand.NextFloat(0.75f, 0.95f);
+            if (dust.type == 131)
+                dust.scale = Main.rand.NextFloat(0.55f, 0.75f);
+            else
+                dust.fadeIn = 0.5f;
         }
 
         public float SlashWidthFunction(float _) => Projectile.width * Projectile.scale * Utils.GetLerpValue(0f, 0.1f, _, true);
 
-        public Color SlashColorFunction(float _) => Color.Lime * Projectile.Opacity;
+        public Color SlashColorFunction(float _) => Color.Turquoise;
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

@@ -437,8 +437,8 @@ namespace CalamityMod.Items
                     modPlayer.canFireAtaxiaRogueProjectile = false;
                     int flareID = ModContent.ProjectileType<HydrothermicFlareRogue>();
 
-                    // Ataxia Rogue Flares: 6 x 50%, soft cap starts at 90 base damage
-                    int flareDamage = CalamityUtils.DamageSoftCap(damage * 0.5, 90);
+                    // Hydrothermic Rogue Flares: 6 x (50 + 15%), soft cap starts at 90 base damage
+                    int flareDamage = CalamityUtils.DamageSoftCap(50 + damage * 0.15, 90);
                     flareDamage = player.ApplyArmorAccDamageBonusesTo(flareDamage);
 
                     if (player.whoAmI == Main.myPlayer)
