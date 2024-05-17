@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Materials;
+﻿using CalamityMod.CalPlayer;
+using CalamityMod.Items.Materials;
 using CalamityMod.Projectiles.Ranged;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -26,10 +27,8 @@ namespace CalamityMod.Items.Weapons.Ranged
 
         public new string LocalizationCategory => "Items.Weapons.Ranged";
 
-        public override void SetStaticDefaults()
-        {
-            ItemID.Sets.IsRangedSpecialistWeapon[Item.type] = true;
-        }
+        public override void SetStaticDefaults() => ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
+
         public override void SetDefaults()
         {
             Item.width = 58;
@@ -52,6 +51,8 @@ namespace CalamityMod.Items.Weapons.Ranged
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
+
+        public override void HoldItem(Player player) => player.Calamity().mouseWorldListener = true;
 
         public override void AddRecipes()
         {
