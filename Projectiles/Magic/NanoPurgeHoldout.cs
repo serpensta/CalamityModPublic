@@ -34,9 +34,8 @@ namespace CalamityMod.Projectiles.Magic
         public override void KillHoldoutLogic()
         {
             base.KillHoldoutLogic();
-
             bool actuallyShoot = DeployedFrames >= (HeldItem?.useAnimation ?? NanoPurge.UseTime);
-            bool manaOK = !actuallyShoot || Owner.CheckMana(Owner.ActiveItem(), -1, true, false);
+            bool manaOK = !actuallyShoot || Owner.CheckMana(Owner.ActiveItem());
             if (!manaOK)
                 Projectile.Kill();
         }
