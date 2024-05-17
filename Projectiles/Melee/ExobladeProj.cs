@@ -504,9 +504,10 @@ namespace CalamityMod.Projectiles.Melee
 
             // Exoblade tracks 120 positions in oldPos.
             // Provide 60 points for smoothing, but only render 30
-            int numPoints = 30;
-            var positionsToUse = Projectile.oldPos.Take(numPoints * 2).ToArray();
-            PrimitiveRenderer.RenderTrail(positionsToUse, new(PierceWidthFunction, PierceColorFunction, (_) => trailOffset, shader: GameShaders.Misc["CalamityMod:ExobladePierce"]), numPoints);
+            int numPointsRendered = 30;
+            int numPointsProvided = 60;
+            var positionsToUse = Projectile.oldPos.Take(numPointsProvided).ToArray();
+            PrimitiveRenderer.RenderTrail(positionsToUse, new(PierceWidthFunction, PierceColorFunction, (_) => trailOffset, shader: GameShaders.Misc["CalamityMod:ExobladePierce"]), numPointsRendered);
 
             Main.spriteBatch.ExitShaderRegion();
         }
