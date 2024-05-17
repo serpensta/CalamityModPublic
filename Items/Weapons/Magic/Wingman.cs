@@ -28,20 +28,25 @@ namespace CalamityMod.Items.Weapons.Magic
             Item.UseSound = null;
             Item.autoReuse = true;
             Item.shootSpeed = 25f;
-            Item.shoot = ModContent.ProjectileType<WingmanHoldout>();
+            Item.shoot = ModContent.ProjectileType<WingmanGun>();
             Item.channel = true;
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] < 2;
 
         // Makes the rotation of the mouse around the player sync in multiplayer.
-        public override void HoldItem(Player player) => player.Calamity().mouseRotationListener = true;
+        public override void HoldItem(Player player)
+        {
+            var modPlayer = player.Calamity();
+            modPlayer.mouseRotationListener = true;
+            modPlayer.rightClickListener = true;
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             for (int i = 0; i < 2; i++)
             {
-                Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<WingmanHoldout>(), damage, knockback, player.whoAmI, 0, 0, i == 0 ? 1 : -1);
+                Projectile holdout = Projectile.NewProjectileDirect(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<WingmanGun>(), damage, knockback, player.whoAmI, 0, 0, i == 0 ? 1 : -1);
                 holdout.velocity = (player.Calamity().mouseWorld - player.MountedCenter).SafeNormalize(Vector2.Zero);
             }
 
