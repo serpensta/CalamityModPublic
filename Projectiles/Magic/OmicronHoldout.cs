@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Weapons.Magic;
+﻿using System.IO;
+using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Microsoft.Xna.Framework;
@@ -90,9 +91,6 @@ namespace CalamityMod.Projectiles.Magic
         public void Shoot(bool yBeam)
         {
             Vector2 shootDirection = Projectile.velocity.SafeNormalize(Vector2.Zero);
-
-            // Spawns the projectile.
-
             Vector2 firingVelocity1 = (shootDirection * 8).RotatedBy(0.1f * Utils.GetLerpValue(10, 55, Windup, true));
             Vector2 firingVelocity2 = (shootDirection * 8).RotatedBy(-0.1f * Utils.GetLerpValue(10, 55, Windup, true));
             Vector2 firingVelocity3 = (shootDirection * 10);
@@ -175,5 +173,9 @@ namespace CalamityMod.Projectiles.Magic
             ShootingTimer = 0;
             PostFireCooldown--;
         }
+
+        public override void SendExtraAIHoldout(BinaryWriter writer) => writer.Write(Windup);
+
+        public override void ReceiveExtraAIHoldout(BinaryReader reader) => Windup = reader.ReadSingle();
     }
 }
