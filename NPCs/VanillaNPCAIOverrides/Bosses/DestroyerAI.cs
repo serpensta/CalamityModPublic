@@ -381,9 +381,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                     if (calamityGlobalNPC.newAI[0] < laserBreathGateValue)
                         calamityGlobalNPC.newAI[0] += 1f;
 
-                    // Sync newAI every 20 frames for the new telegraph
-                    if (calamityGlobalNPC.newAI[0] % 20f == 0f)
-                        npc.SyncExtraAI();
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        // Sync newAI every 20 frames for the new telegraph
+                        if (calamityGlobalNPC.newAI[0] % 20f == 10f)
+                            npc.SyncExtraAI();
+                    }
 
                     if ((player.Center - npc.Center).SafeNormalize(Vector2.UnitY).ToRotation().AngleTowards(npc.velocity.ToRotation(), MathHelper.PiOver4) == npc.velocity.ToRotation() &&
                         calamityGlobalNPC.newAI[0] >= laserBreathGateValue && Vector2.Distance(npc.Center, player.Center) > 480f &&
@@ -493,9 +496,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (ableToFireLaser)
                     calamityGlobalNPC.newAI[0] += laserTimerIncrement;
 
-                // Sync newAI every 20 frames for the new telegraph
-                if (calamityGlobalNPC.newAI[0] % 20f == 0f && ableToFireLaser)
-                    npc.SyncExtraAI();
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    // Sync newAI every 20 frames for the new telegraph
+                    if (calamityGlobalNPC.newAI[0] % 20f == 10f && ableToFireLaser)
+                        npc.SyncExtraAI();
+                }
 
                 Color telegraphColor = Color.Transparent;
                 switch (calamityGlobalNPC.destroyerLaserColor)
@@ -1228,9 +1234,12 @@ namespace CalamityMod.NPCs.VanillaNPCAIOverrides.Bosses
                 if (ableToFireLaser)
                     npc.localAI[0] += laserTimerIncrement;
 
-                // Sync newAI every 20 frames for the new telegraph
-                if (npc.localAI[0] % 20f == 0f && ableToFireLaser)
-                    npc.SyncVanillaLocalAI();
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    // Sync newAI every 20 frames for the new telegraph
+                    if (npc.localAI[0] % 20f == 10f && ableToFireLaser)
+                        npc.SyncVanillaLocalAI();
+                }
 
                 Color telegraphColor = Color.Transparent;
                 switch (npc.Calamity().destroyerLaserColor)
